@@ -131,5 +131,5 @@ void wiiuse_set_ir_sensitivity(struct wiimote_t* wm, int level) {
 	wiiuse_write_data(wm, WM_REG_IR_BLOCK1, (byte*)block1, 9);
 	wiiuse_write_data(wm, WM_REG_IR_BLOCK2, (byte*)block2, 2);
 
-	WIIUSE_DEBUG("Set IR sensitivity to level %i (unid %i)", level, wm->unid);
+	DEBUG_LOG(WIIMOTE, "Set IR sensitivity to level %i (unid %i)", level, wm->unid);
 }

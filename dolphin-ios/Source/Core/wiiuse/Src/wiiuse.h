@@ -185,63 +185,37 @@ typedef struct wiimote_t {
  *
  *****************************************/
 
-#define WIIUSE_COMPILE_LIB
-
-#ifdef _WIN32
-	#define WIIUSE_EXPORT_DECL __declspec(dllexport)
-	#define WIIUSE_IMPORT_DECL __declspec(dllimport)
-#else
-	#define WIIUSE_EXPORT_DECL
-	#define WIIUSE_IMPORT_DECL
-#endif
-
-#ifdef WIIUSE_COMPILE_LIB
-	#define WIIUSE_EXPORT WIIUSE_EXPORT_DECL
-#else
-	#define WIIUSE_EXPORT WIIUSE_IMPORT_DECL
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* wiiuse.c */
-WIIUSE_EXPORT extern const char* wiiuse_version();
+extern const char* wiiuse_version();
 
-WIIUSE_EXPORT extern struct wiimote_t** wiiuse_init(int wiimotes);
-WIIUSE_EXPORT extern void wiiuse_disconnected(struct wiimote_t* wm);
-WIIUSE_EXPORT extern void wiiuse_cleanup(struct wiimote_t** wm, int wiimotes);
-WIIUSE_EXPORT extern void wiiuse_rumble(struct wiimote_t* wm, int status);
-WIIUSE_EXPORT extern void wiiuse_set_leds(struct wiimote_t* wm, int leds);
-WIIUSE_EXPORT extern int wiiuse_write_data(struct wiimote_t* wm, unsigned int addr, byte* data, byte len);
+extern struct wiimote_t** wiiuse_init(int wiimotes);
+extern void wiiuse_disconnected(struct wiimote_t* wm);
+extern void wiiuse_cleanup(struct wiimote_t** wm, int wiimotes);
+extern void wiiuse_rumble(struct wiimote_t* wm, int status);
+extern void wiiuse_set_leds(struct wiimote_t* wm, int leds);
+extern int wiiuse_write_data(struct wiimote_t* wm, unsigned int addr, byte* data, byte len);
 
 /* connect.c / io_win.c */
 #ifdef _WIN32
-WIIUSE_EXPORT extern int wiiuse_find(struct wiimote_t** wm, int max_wiimotes, int wiimotes);
+extern int wiiuse_find(struct wiimote_t** wm, int max_wiimotes, int wiimotes);
 #else
-WIIUSE_EXPORT extern int wiiuse_find(struct wiimote_t** wm, int max_wiimotes, int timeout);
+extern int wiiuse_find(struct wiimote_t** wm, int max_wiimotes, int timeout);
 #endif
-WIIUSE_EXPORT extern int wiiuse_connect(struct wiimote_t** wm, int wiimotes);
-WIIUSE_EXPORT extern void wiiuse_disconnect(struct wiimote_t* wm);
-WIIUSE_EXPORT extern void wiiuse_set_timeout(struct wiimote_t** wm, int wiimotes, byte timeout);
+extern int wiiuse_connect(struct wiimote_t** wm, int wiimotes);
+extern void wiiuse_disconnect(struct wiimote_t* wm);
+extern void wiiuse_set_timeout(struct wiimote_t** wm, int wiimotes, byte timeout);
 
 #ifdef _WIN32
-WIIUSE_EXPORT extern int wiiuse_check_system_notification(unsigned int nMsg, WPARAM wParam, LPARAM lParam);
-WIIUSE_EXPORT extern int wiiuse_register_system_notification(HWND hwnd);
+extern int wiiuse_check_system_notification(unsigned int nMsg, WPARAM wParam, LPARAM lParam);
+extern int wiiuse_register_system_notification(HWND hwnd);
 #endif
 
 /* ir.c */
-WIIUSE_EXPORT extern void wiiuse_set_ir_sensitivity(struct wiimote_t* wm, int level);
+extern void wiiuse_set_ir_sensitivity(struct wiimote_t* wm, int level);
 
 /* io.c */
-WIIUSE_EXPORT extern int wiiuse_io_read(struct wiimote_t* wm);
-WIIUSE_EXPORT extern int wiiuse_io_write(struct wiimote_t* wm, byte* buf, int len);
-
-
-#ifdef __cplusplus
-}
-#endif
-
+extern int wiiuse_io_read(struct wiimote_t* wm);
+extern int wiiuse_io_write(struct wiimote_t* wm, byte* buf, int len);
 
 #endif /* WIIUSE_H_INCLUDED */
 
