@@ -43,7 +43,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Source\Core\Common\Src"
+				AdditionalIncludeDirectories="..\Common\Src"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_SECURE_SCL=0;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -61,9 +62,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="hid.lib setupapi.lib Common.lib"
-				OutputFile="$(PlatformName)\$(ProjectName)d.lib"
-				AdditionalLibraryDirectories="&quot;..\..\Source\Core\Common\$(OutDir)&quot;"
+				AdditionalDependencies="setupapi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -107,7 +108,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Source\Core\Common\Src"
+				AdditionalIncludeDirectories="..\Common\Src"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_SECURE_SCL=0;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -125,9 +127,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="hid.lib setupapi.lib Common.lib"
-				OutputFile="$(PlatformName)\$(ProjectName)d.lib"
-				AdditionalLibraryDirectories="&quot;..\..\Source\Core\Common\$(OutDir)&quot;"
+				AdditionalDependencies="setupapi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -172,7 +174,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\Source\Core\Common\Src"
+				AdditionalIncludeDirectories="..\Common\Src"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_SECURE_SCL=0;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -189,9 +192,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="hid.lib setupapi.lib Common.lib"
-				OutputFile="$(PlatformName)\$(ProjectName).lib"
-				AdditionalLibraryDirectories="&quot;..\..\Source\Core\Common\$(PlatformName)\Release&quot;"
+				AdditionalDependencies="setupapi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -237,7 +240,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\Source\Core\Common\Src"
+				AdditionalIncludeDirectories="..\Common\Src"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_SECURE_SCL=0;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -254,9 +258,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Ws2_32.lib hid.lib setupapi.lib Common.lib"
-				OutputFile="$(PlatformName)\$(ProjectName).lib"
-				AdditionalLibraryDirectories="&quot;..\..\Source\Core\Common\$(PlatformName)\Release&quot;"
+				AdditionalDependencies="setupapi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -366,7 +370,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Src\io_win.c"
+				RelativePath=".\Src\io_win.cpp"
 				>
 			</File>
 		</Filter>
@@ -374,7 +378,7 @@
 			Name="Wiimote Data"
 			>
 			<File
-				RelativePath=".\Src\ir.c"
+				RelativePath=".\Src\ir.cpp"
 				>
 			</File>
 		</Filter>
@@ -383,7 +387,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Src\wiiuse.c"
+			RelativePath=".\Src\wiiuse.cpp"
 			>
 		</File>
 		<File

@@ -156,16 +156,8 @@
 
 #include "wiiuse.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* not part of the api */
 int wiiuse_set_report_type(struct wiimote_t* wm);
 int wiiuse_send(struct wiimote_t* wm, byte report_type, byte* msg, int len);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* WIIUSE_INTERNAL_H_INCLUDED */

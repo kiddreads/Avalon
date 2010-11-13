@@ -99,7 +99,7 @@ int wiiuse_find(struct wiimote_t** wm, int max_wiimotes, int timeout)
 			return 0;
 		}
 
-		WIIUSE_INFO("Found %i bluetooth device(s).", found_devices);
+		NOTICE_LOG(WIIMOTE, "Found %i bluetooth device(s).", found_devices);
 
 		// display discovered devices
 		for (i = 0; (i < found_devices) && (found_wiimotes < max_wiimotes); ++i)
@@ -123,7 +123,7 @@ int wiiuse_find(struct wiimote_t** wm, int max_wiimotes, int timeout)
 					// found a new device
 					ba2str(&scan_info[i].bdaddr, wm[found_wiimotes]->bdaddr_str);
 
-					WIIUSE_INFO("Found wiimote (%s) [id %i].",
+					NOTICE_LOG(WIIMOTE, "Found wiimote (%s) [id %i].",
 					   	wm[found_wiimotes]->bdaddr_str, wm[found_wiimotes]->unid);
 
 					wm[found_wiimotes]->bdaddr = scan_info[i].bdaddr;
@@ -225,7 +225,7 @@ static int wiiuse_connect_single(struct wiimote_t* wm, char* address)
 		return 0;
 	}
 
-	WIIUSE_INFO("Connected to wiimote [id %i].", wm->unid);
+	NOTICE_LOG(WIIMOTE, "Connected to wiimote [id %i].", wm->unid);
 	// do the handshake
 	WIIMOTE_ENABLE_STATE(wm, WIIMOTE_STATE_CONNECTED);
 
@@ -278,7 +278,7 @@ int wiiuse_io_read(struct wiimote_t* wm)
 
 	if (select(wm->in_sock + 1, &fds, NULL, NULL, &tv) == -1)
 	{
-		WIIUSE_ERROR("Unable to select() the wiimote interrupt socket(s).");
+		ERROR_LOG(WIIMOTE, "Unable to select() the wiimote interrupt socket(s).");
 		perror("Error Details");
 		return 0;
 	}
@@ -295,13 +295,13 @@ int wiiuse_io_read(struct wiimote_t* wm)
 		if (r == -1)
 		{
 			// error reading data
-			WIIUSE_ERROR("Receiving wiimote data (id %i).", wm->unid);
+			ERROR_LOG(WIIMOTE, "Receiving wiimote data (id %i).", wm->unid);
 			perror("Error Details");
 
 			if (errno == ENOTCONN)
 			{
 				// this can happen if the bluetooth dongle is disconnected
-				WIIUSE_ERROR("Bluetooth appears to be disconnected.  Wiimote unid %i will be disconnected.", wm->unid);
+				ERROR_LOG(WIIMOTE, "Bluetooth appears to be disconnected.  Wiimote unid %i will be disconnected.", wm->unid);
 				wiiuse_disconnect(wm);
 				wm->event = WIIUSE_UNEXPECTED_DISCONNECT;
 			}

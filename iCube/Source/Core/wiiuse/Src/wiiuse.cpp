@@ -68,7 +68,7 @@ void wiiuse_cleanup(struct wiimote_t** wm, int wiimotes) {
 	if (!wm)
 		return;
 
-	WIIUSE_INFO("wiiuse clean up...");
+	NOTICE_LOG(WIIMOTE, "wiiuse clean up...");
 
 	for (; i < wiimotes; ++i) {
 		wiiuse_disconnect(wm[i]);
@@ -150,7 +150,7 @@ struct wiimote_t** wiiuse_init(int wiimotes) {
 void wiiuse_disconnected(struct wiimote_t* wm) {
 	if (!wm)	return;
 
-	WIIUSE_INFO("Wiimote disconnected [id %i].", wm->unid);
+	NOTICE_LOG(WIIMOTE, "Wiimote disconnected [id %i].", wm->unid);
 
 	/* disable the connected flag */
 	WIIMOTE_DISABLE_STATE(wm, WIIMOTE_STATE_CONNECTED);
@@ -188,11 +188,11 @@ void wiiuse_rumble(struct wiimote_t* wm, int status) {
 	buf = wm->leds;
 
 	if (status) {
-		WIIUSE_DEBUG("Starting rumble...");
+		DEBUG_LOG(WIIMOTE, "Starting rumble...");
 		WIIMOTE_ENABLE_STATE(wm, WIIMOTE_STATE_RUMBLE);
 		buf |= 0x01;
 	} else {
-		WIIUSE_DEBUG("Stopping rumble...");
+		DEBUG_LOG(WIIMOTE, "Stopping rumble...");
 		WIIMOTE_DISABLE_STATE(wm, WIIMOTE_STATE_RUMBLE);
 	}
 
@@ -261,7 +261,7 @@ int wiiuse_set_report_type(struct wiimote_t* wm) {
 	buf[1] = 0x30;
 
 
-	WIIUSE_DEBUG("Setting report type: 0x%x", buf[1]);
+	DEBUG_LOG(WIIMOTE, "Setting report type: 0x%x", buf[1]);
 
 	expansion = wiiuse_send(wm, WM_CMD_REPORT_TYPE, buf, 2);
 	if (expansion <= 0)
@@ -288,7 +288,7 @@ int wiiuse_write_data(struct wiimote_t* wm, unsigned int addr, byte* data, byte 
 	if (!data || !len)
 		return 0;
 
-	WIIUSE_DEBUG("Writing %i bytes to memory location 0x%x...", len, addr);
+	DEBUG_LOG(WIIMOTE, "Writing %i bytes to memory location 0x%x...", len, addr);
 
 	#ifdef WITH_WIIUSE_DEBUG
 	{

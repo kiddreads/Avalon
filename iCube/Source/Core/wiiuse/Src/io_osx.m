@@ -72,7 +72,7 @@ volatile int reader, writer, outstanding, watermark;
 - (void) deviceInquiryDeviceFound: (IOBluetoothDeviceInquiry *) sender
 	device: (IOBluetoothDevice *) device
 {
-	WIIUSE_INFO("Discovered bluetooth device at %s: %s",
+	NOTICE_LOG(WIIMOTE, "Discovered bluetooth device at %s: %s",
 		[[device getAddressString] UTF8String],
 		[[device getName] UTF8String]);
 
@@ -92,12 +92,12 @@ volatile int reader, writer, outstanding, watermark;
 	//	IOBluetoothDevice *device = [l2capChannel getDevice];
 
 	if (length > MAX_PAYLOAD) {
-		WIIUSE_WARNING("Dropping wiimote packet - too large");
+		WARN_LOG(WIIMOTE, "Dropping wiimote packet - too large");
 		return;
 	}
 
 	if (queue[writer].len != 0) {
-		WIIUSE_WARNING("Dropping wiimote packet - queue full");
+		WARN_LOG(WIIMOTE, "Dropping wiimote packet - queue full");
 		return;
 	}
 
@@ -111,7 +111,7 @@ volatile int reader, writer, outstanding, watermark;
 
 	if (outstanding > watermark) {
 		watermark = outstanding;
-		WIIUSE_WARNING("New wiimote queue watermark %d", watermark);
+		WARN_LOG(WIIMOTE, "New wiimote queue watermark %d", watermark);
 	}
 
 	CFRunLoopStop(CFRunLoopGetCurrent());
@@ -123,7 +123,7 @@ volatile int reader, writer, outstanding, watermark;
 {
 	//	IOBluetoothDevice *device = [l2capChannel getDevice];
 
-	WIIUSE_WARNING("L2CAP channel was closed");
+	WARN_LOG(WIIMOTE, "L2CAP channel was closed");
 
 	if (l2capChannel == cchan)
 		cchan = nil;
@@ -161,7 +161,7 @@ int wiiuse_find(struct wiimote_t **wm, int max_wiimotes, int timeout)
 	bth = [[IOBluetoothHostController alloc] init];
 	if ([bth addressAsString] == nil)
 	{
-		WIIUSE_WARNING("No bluetooth host controller");
+		WARN_LOG(WIIMOTE, "No bluetooth host controller");
 		[bth release];
 		return 0;
 	}
@@ -181,14 +181,14 @@ int wiiuse_find(struct wiimote_t **wm, int max_wiimotes, int timeout)
 	if (ret == kIOReturnSuccess)
 		[bti retain];
 	else
-		WIIUSE_ERROR("Unable to do bluetooth discovery");
+		ERROR_LOG(WIIMOTE, "Unable to do bluetooth discovery");
 
 	CFRunLoopRun();
 
 	[bti stop];
 	found_devices = [[bti foundDevices] count];
 
-	WIIUSE_INFO("Found %i bluetooth device(s).", found_devices);
+	NOTICE_LOG(WIIMOTE, "Found %i bluetooth device(s).", found_devices);
 
 	en = [[bti foundDevices] objectEnumerator];
 	for (i = 0; i < found_devices; i++) {
@@ -258,11 +258,11 @@ static int wiiuse_connect_single(struct wiimote_t *wm, char *address)
 	[btd openL2CAPChannelSync: &ichan
 		withPSM: kBluetoothL2CAPPSMHIDInterrupt delegate: cbt];
 	if (ichan == NULL || cchan == NULL) {
-		WIIUSE_ERROR("Unable to open L2CAP channels");
+		ERROR_LOG(WIIMOTE, "Unable to open L2CAP channels");
 		wiiuse_disconnect(wm);
 	}
 
-	WIIUSE_INFO("Connected to wiimote [id %i].", wm->unid);
+	NOTICE_LOG(WIIMOTE, "Connected to wiimote [id %i].", wm->unid);
 
 	WIIMOTE_ENABLE_STATE(wm, WIIMOTE_STATE_CONNECTED);
 	wiiuse_set_report_type(wm);
@@ -289,7 +289,7 @@ void wiiuse_disconnect(struct wiimote_t *wm)
 	if (wm == NULL)
 		return;
 
-	WIIUSE_INFO("Disconnecting wiimote [id %i]", wm->unid);
+	NOTICE_LOG(WIIMOTE, "Disconnecting wiimote [id %i]", wm->unid);
 
 	WIIMOTE_DISABLE_STATE(wm, WIIMOTE_STATE_CONNECTED);
 	WIIMOTE_DISABLE_STATE(wm, WIIMOTE_STATE_HANDSHAKE);
