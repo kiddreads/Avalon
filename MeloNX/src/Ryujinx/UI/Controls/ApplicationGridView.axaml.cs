@@ -2,12 +2,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Ryujinx.Ava.UI.Helpers;
+using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Utilities.AppLibrary;
 using System;
 
 namespace Ryujinx.Ava.UI.Controls
 {
-    public partial class ApplicationGridView : UserControl
+    public partial class ApplicationGridView : RyujinxControl<MainWindowViewModel>
     {
         public static readonly RoutedEvent<ApplicationOpenedEventArgs> ApplicationOpenedEvent =
             RoutedEvent.Register<ApplicationGridView, ApplicationOpenedEventArgs>(nameof(ApplicationOpened), RoutingStrategies.Bubble);

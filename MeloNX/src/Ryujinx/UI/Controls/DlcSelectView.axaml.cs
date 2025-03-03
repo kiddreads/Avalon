@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ryujinx.Ava.UI.Controls
 {
-    public partial class DlcSelectView : UserControl
+    public partial class DlcSelectView : RyujinxControl<DlcSelectViewModel>
     {
         public DlcSelectView()
         {
@@ -28,7 +28,7 @@ namespace Ryujinx.Ava.UI.Controls
                 PrimaryButtonText = LocaleManager.Instance[LocaleKeys.Continue],
                 SecondaryButtonText = string.Empty,
                 CloseButtonText = string.Empty,
-                Content = new DlcSelectView { DataContext = viewModel }
+                Content = new DlcSelectView { ViewModel = viewModel }
             };
 
             Style closeButton = new(x => x.Name("CloseButton"));

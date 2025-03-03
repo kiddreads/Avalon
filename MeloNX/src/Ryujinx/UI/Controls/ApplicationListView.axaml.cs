@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Ryujinx.Ava.UI.Controls
 {
-    public partial class ApplicationListView : UserControl
+    public partial class ApplicationListView : RyujinxControl<MainWindowViewModel>
     {
         public static readonly RoutedEvent<ApplicationOpenedEventArgs> ApplicationOpenedEvent =
             RoutedEvent.Register<ApplicationListView, ApplicationOpenedEventArgs>(nameof(ApplicationOpened), RoutingStrategies.Bubble);
@@ -32,9 +32,6 @@ namespace Ryujinx.Ava.UI.Controls
         
         private async void PlayabilityStatus_OnClick(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not MainWindowViewModel mwvm)
-                return;
-            
             if (sender is not Button { Content: TextBlock playabilityLabel })
                 return;
 
@@ -43,16 +40,13 @@ namespace Ryujinx.Ava.UI.Controls
 
         private async void IdString_OnClick(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not MainWindowViewModel mwvm)
-                return;
-            
             if (sender is not Button { Content: TextBlock idText })
                 return;
 
             if (!RyujinxApp.IsClipboardAvailable(out IClipboard clipboard))
                 return;
             
-            ApplicationData appData = mwvm.Applications.FirstOrDefault(it => it.IdString == idText.Text);
+            ApplicationData appData = ViewModel.Applications.FirstOrDefault(it => it.IdString == idText.Text);
             if (appData is null)
                 return;
             

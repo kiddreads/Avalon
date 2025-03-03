@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Ryujinx.Ava.UI.Controls
 {
-    public partial class ApplicationDataView : UserControl
+    public partial class ApplicationDataView : RyujinxControl<ApplicationDataViewModel>
     {
         public static async Task Show(ApplicationData appData)
         {
@@ -25,7 +25,7 @@ namespace Ryujinx.Ava.UI.Controls
                 SecondaryButtonText = string.Empty,
                 CloseButtonText = LocaleManager.Instance[LocaleKeys.SettingsButtonClose],
                 MinWidth = 256,
-                Content = new ApplicationDataView { DataContext = new ApplicationDataViewModel(appData) }
+                Content = new ApplicationDataView { ViewModel = new ApplicationDataViewModel(appData) }
             };
 
             Style closeButton = new(x => x.Name("CloseButton"));

@@ -6,6 +6,7 @@ using Gommon;
 using LibHac.Common;
 using LibHac.Ns;
 using Ryujinx.Ava.Common.Locale;
+using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.UI.Windows;
@@ -25,10 +26,9 @@ using System.Threading.Tasks;
 
 namespace Ryujinx.Ava.UI.Views.Main
 {
-    public partial class MainMenuBarView : UserControl
+    public partial class MainMenuBarView : RyujinxControl<MainWindowViewModel>
     {
         public MainWindow Window { get; private set; }
-        public MainWindowViewModel ViewModel { get; private set; }
 
         public MainMenuBarView()
         {
