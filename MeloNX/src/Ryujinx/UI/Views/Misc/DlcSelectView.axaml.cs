@@ -3,12 +3,13 @@ using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Common.Models;
+using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Utilities.AppLibrary;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Ava.UI.Controls
+namespace Ryujinx.Ava.UI.Views.Misc
 {
     public partial class DlcSelectView : RyujinxControl<DlcSelectViewModel>
     {

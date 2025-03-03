@@ -9,9 +9,15 @@ namespace Ryujinx.Ava.UI.Controls
     {
         public TViewModel ViewModel
         {
-            get => (TViewModel)DataContext ?? throw new InvalidOperationException(
-                $"Underlying DataContext is not of type {typeof(TViewModel).AsPrettyString()}; " +
-                $"Actual type is {DataContext?.GetType().AsPrettyString()}");
+            get
+            {
+                if (DataContext is not TViewModel viewModel)
+                    throw new InvalidOperationException(
+                        $"Underlying DataContext is not of type {typeof(TViewModel).AsPrettyString()}; " +
+                        $"Actual type is {DataContext?.GetType().AsPrettyString()}");
+
+                return viewModel;
+            }
             set => DataContext = value;
         }
     }

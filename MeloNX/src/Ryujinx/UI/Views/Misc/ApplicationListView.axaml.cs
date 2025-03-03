@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
+using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Utilities.AppLibrary;
@@ -9,7 +10,7 @@ using Ryujinx.Ava.Utilities.Compat;
 using System;
 using System.Linq;
 
-namespace Ryujinx.Ava.UI.Controls
+namespace Ryujinx.Ava.UI.Views.Misc
 {
     public partial class ApplicationListView : RyujinxControl<MainWindowViewModel>
     {

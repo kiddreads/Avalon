@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using Ryujinx.Ava.Common.Locale;
+using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.UI.Windows;
@@ -12,7 +13,7 @@ using Ryujinx.Ava.Utilities.Compat;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Ava.UI.Controls
+namespace Ryujinx.Ava.UI.Views.Misc
 {
     public partial class ApplicationDataView : RyujinxControl<ApplicationDataViewModel>
     {
