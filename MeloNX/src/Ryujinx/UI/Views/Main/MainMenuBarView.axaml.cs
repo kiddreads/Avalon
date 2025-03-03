@@ -73,7 +73,7 @@ namespace Ryujinx.Ava.UI.Views.Main
                     {
                         Content = $".{it.FileName}",
                         IsChecked = it.FileType.GetConfigValue(ConfigurationState.Instance.UI.ShownFileTypes),
-                        Command = MiniCommand.Create(() => Window.ToggleFileType(it.FileName))
+                        Command = Commands.Create(() => Window.ToggleFileType(it.FileName))
                     }
                 );
 
@@ -108,7 +108,7 @@ namespace Ryujinx.Ava.UI.Views.Main
                     Margin = new Thickness(3, 0, 3, 0),
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     Header = languageName,
-                    Command = MiniCommand.Create(() => MainWindowViewModel.ChangeLanguage(language))
+                    Command = Commands.Create(() => MainWindowViewModel.ChangeLanguage(language))
                 };
 
                 yield return menuItem;
