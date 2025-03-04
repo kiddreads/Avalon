@@ -902,16 +902,6 @@ namespace Ryujinx.Ava
                 _ => new OpenGLRenderer()
             };
 
-            BackendThreading threadingMode = ConfigurationState.Instance.Graphics.BackendThreading;
-
-            bool isGALThreaded = threadingMode == BackendThreading.On || (threadingMode == BackendThreading.Auto && renderer.PreferThreading);
-            if (isGALThreaded)
-            {
-                renderer = new ThreadedRenderer(renderer);
-            }
-
-            Logger.Info?.PrintMsg(LogClass.Gpu, $"Backend Threading ({threadingMode}): {isGALThreaded}");
-
             // Initialize Configuration.
             Device = new Switch(ConfigurationState.Instance.CreateHleConfiguration()
                 .Configure(
@@ -920,7 +910,7 @@ namespace Ryujinx.Ava
                     ContentManager,
                     _accountManager,
                     _userChannelPersistence,
-                    renderer,
+                    renderer.TryMakeThreaded(ConfigurationState.Instance.Graphics.BackendThreading),
                     InitializeAudio(),
                     _viewModel.UiHandler
                 )

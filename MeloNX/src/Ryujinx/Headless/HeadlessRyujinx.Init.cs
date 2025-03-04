@@ -312,18 +312,8 @@ namespace Ryujinx.Headless
             return new OpenGLRenderer();
         }
 
-        private static Switch InitializeEmulationContext(WindowBase window, IRenderer renderer, Options options)
-        {
-            BackendThreading threadingMode = options.BackendThreading;
-
-            bool threadedGAL = threadingMode == BackendThreading.On || (threadingMode == BackendThreading.Auto && renderer.PreferThreading);
-
-            if (threadedGAL)
-            {
-                renderer = new ThreadedRenderer(renderer);
-            }
-
-            return new Switch(
+        private static Switch InitializeEmulationContext(WindowBase window, IRenderer renderer, Options options) =>
+            new(
                 new HleConfiguration(
                         options.DramSize,
                         options.SystemLanguage,
@@ -354,11 +344,10 @@ namespace Ryujinx.Headless
                         _contentManager,
                         _accountManager,
                         _userChannelPersistence,
-                        renderer,
+                        renderer.TryMakeThreaded(options.BackendThreading),
                         new SDL2HardwareDeviceDriver(),
                         window
                     )
             );
-        }
     }
 }
