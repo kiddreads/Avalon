@@ -323,38 +323,42 @@ namespace Ryujinx.Headless
                 renderer = new ThreadedRenderer(renderer);
             }
 
-            HLEConfiguration configuration = new(_virtualFileSystem,
-                _libHacHorizonManager,
-                _contentManager,
-                _accountManager,
-                _userChannelPersistence,
-                renderer,
-                new SDL2HardwareDeviceDriver(),
-                options.DramSize,
-                window,
-                options.SystemLanguage,
-                options.SystemRegion,
-                options.VSyncMode,
-                !options.DisableDockedMode,
-                !options.DisablePTC,
-                options.EnableInternetAccess,
-                !options.DisableFsIntegrityChecks ? IntegrityCheckLevel.ErrorOnInvalid : IntegrityCheckLevel.None,
-                options.FsGlobalAccessLogMode,
-                options.SystemTimeOffset,
-                options.SystemTimeZone,
-                options.MemoryManagerMode,
-                options.IgnoreMissingServices,
-                options.AspectRatio,
-                options.AudioVolume,
-                options.UseHypervisor ?? true,
-                options.MultiplayerLanInterfaceId,
-                Common.Configuration.Multiplayer.MultiplayerMode.Disabled,
-                false,
-                string.Empty,
-                string.Empty,
-                options.CustomVSyncInterval);
-
-            return new Switch(configuration);
+            return new Switch(
+                new HleConfiguration(
+                        options.DramSize,
+                        options.SystemLanguage,
+                        options.SystemRegion,
+                        options.VSyncMode,
+                        !options.DisableDockedMode,
+                        !options.DisablePTC,
+                        options.EnableInternetAccess,
+                        !options.DisableFsIntegrityChecks ? IntegrityCheckLevel.ErrorOnInvalid : IntegrityCheckLevel.None,
+                        options.FsGlobalAccessLogMode,
+                        options.SystemTimeOffset,
+                        options.SystemTimeZone,
+                        options.MemoryManagerMode,
+                        options.IgnoreMissingServices,
+                        options.AspectRatio,
+                        options.AudioVolume,
+                        options.UseHypervisor ?? true,
+                        options.MultiplayerLanInterfaceId,
+                        Common.Configuration.Multiplayer.MultiplayerMode.Disabled,
+                        false,
+                        string.Empty,
+                        string.Empty,
+                        options.CustomVSyncInterval
+                    )
+                    .Configure(
+                        _virtualFileSystem,
+                        _libHacHorizonManager,
+                        _contentManager,
+                        _accountManager,
+                        _userChannelPersistence,
+                        renderer,
+                        new SDL2HardwareDeviceDriver(),
+                        window
+                    )
+            );
         }
     }
 }
