@@ -1,4 +1,5 @@
 using Gommon;
+using Ryujinx.Ava.Systems;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Common;
@@ -55,6 +56,8 @@ namespace Ryujinx.Ava.Common.Locale
             SetDynamicValues(LocaleKeys.RyujinxConfirm, RyujinxApp.FullAppName);
             SetDynamicValues(LocaleKeys.RyujinxUpdater, RyujinxApp.FullAppName);
             SetDynamicValues(LocaleKeys.RyujinxRebooter, RyujinxApp.FullAppName);
+            SetDynamicValues(LocaleKeys.CompatibilityListSearchBoxWatermarkWithCount, CompatibilityCsv.Entries.Length);
+            
         }
 
         public string this[LocaleKeys key]

@@ -44,7 +44,7 @@ namespace Ryujinx.Ava.UI.Views.Misc
             if (RyujinxApp.AppLifetime.Windows.TryGetFirst(x => x is ContentDialogOverlayWindow, out Window window))
                 window.Close(ContentDialogResult.None);
             
-            await CompatibilityList.Show((string)playabilityLabel.Tag);
+            await CompatibilityListWindow.Show((string)playabilityLabel.Tag);
         }
 
         private async void IdString_OnClick(object sender, RoutedEventArgs e)

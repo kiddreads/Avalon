@@ -51,7 +51,7 @@ namespace Ryujinx.Ava.UI.Views.Main
             UninstallFileTypesMenuItem.Command = Commands.Create(UninstallFileTypes);
             XciTrimmerMenuItem.Command = Commands.Create(XCITrimmerWindow.Show);
             AboutWindowMenuItem.Command = Commands.Create(AboutWindow.Show);
-            CompatibilityListMenuItem.Command = Commands.Create(() => CompatibilityList.Show());
+            CompatibilityListMenuItem.Command = Commands.Create(() => CompatibilityListWindow.Show());
 
             UpdateMenuItem.Command = MainWindowViewModel.UpdateCommand;
 

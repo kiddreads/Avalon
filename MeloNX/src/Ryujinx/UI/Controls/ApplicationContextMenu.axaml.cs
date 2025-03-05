@@ -407,7 +407,7 @@ namespace Ryujinx.Ava.UI.Controls
         public async void OpenApplicationCompatibility_Click(object sender, RoutedEventArgs args)
         {
             if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await CompatibilityList.Show(viewModel.SelectedApplication.IdString);
+                await CompatibilityListWindow.Show(viewModel.SelectedApplication.IdString);
         }
                
         public async void OpenApplicationData_Click(object sender, RoutedEventArgs args)
