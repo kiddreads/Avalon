@@ -76,7 +76,7 @@ namespace Ryujinx.Ava.UI.Windows
         public readonly double StatusBarHeight;
         public readonly double MenuBarHeight;
 
-        public MainWindow()
+        public MainWindow() : base(useCustomTitleBar: true)
         {
             DataContext = ViewModel = new MainWindowViewModel
             {
@@ -89,9 +89,6 @@ namespace Ryujinx.Ava.UI.Windows
             UiHandler = new AvaHostUIHandler(this);
 
             ViewModel.Title = RyujinxApp.FormatTitle();
-
-            TitleBar.ExtendsContentIntoTitleBar = !ConfigurationState.Instance.ShowTitleBar;
-            TitleBar.TitleBarHitTestType = (ConfigurationState.Instance.ShowTitleBar) ? TitleBarHitTestType.Simple : TitleBarHitTestType.Complex;
 
             // NOTE: Height of MenuBar and StatusBar is not usable here, since it would still be 0 at this point.
             StatusBarHeight = StatusBarView.StatusBar.MinHeight;
