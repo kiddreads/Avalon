@@ -57,7 +57,7 @@ namespace Ryujinx.Ava.Common.Locale
             SetDynamicValues(LocaleKeys.RyujinxUpdater, RyujinxApp.FullAppName);
             SetDynamicValues(LocaleKeys.RyujinxRebooter, RyujinxApp.FullAppName);
             SetDynamicValues(LocaleKeys.CompatibilityListSearchBoxWatermarkWithCount, CompatibilityCsv.Entries.Length);
-            
+            SetDynamicValues(LocaleKeys.CompatibilityListTitle, CompatibilityCsv.Entries.Length);
         }
 
         public string this[LocaleKeys key]
