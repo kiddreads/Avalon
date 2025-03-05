@@ -1,6 +1,6 @@
 using Gommon;
 using Ryujinx.Ava.UI.ViewModels;
-using Ryujinx.Ava.Utilities.Configuration;
+using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Common;
 using Ryujinx.Common.Utilities;
 using System;

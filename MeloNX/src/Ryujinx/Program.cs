@@ -8,7 +8,7 @@ using Projektanker.Icons.Avalonia.MaterialDesign;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.Windows;
 using Ryujinx.Ava.Utilities;
-using Ryujinx.Ava.Utilities.Configuration;
+using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Ava.Utilities.SystemInfo;
 using Ryujinx.Common;
 using Ryujinx.Common.Configuration;
@@ -284,14 +284,14 @@ namespace Ryujinx.Ava
             if (CommandLineState.OverrideSystemRegion is not null)
                 if (Enum.TryParse(CommandLineState.OverrideSystemRegion, true, out Ryujinx.HLE.HOS.SystemState.RegionCode result))
                 {
-                    ConfigurationState.Instance.System.Region.Value = (Utilities.Configuration.System.Region)result;
+                    ConfigurationState.Instance.System.Region.Value = (Systems.Configuration.System.Region)result;
                 }
 
             //Check if language was overridden. 
             if (CommandLineState.OverrideSystemLanguage is not null)
                 if (Enum.TryParse(CommandLineState.OverrideSystemLanguage, true, out Ryujinx.HLE.HOS.SystemState.SystemLanguage result))
                 {
-                    ConfigurationState.Instance.System.Language.Value = (Utilities.Configuration.System.Language)result;
+                    ConfigurationState.Instance.System.Language.Value = (Systems.Configuration.System.Language)result;
                 }
 
             // Check if hardware-acceleration was overridden.

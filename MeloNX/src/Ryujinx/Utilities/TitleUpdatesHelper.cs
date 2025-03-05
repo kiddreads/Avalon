@@ -7,7 +7,7 @@ using LibHac.Ns;
 using LibHac.Tools.FsSystem;
 using LibHac.Tools.FsSystem.NcaUtils;
 using Ryujinx.Ava.Common.Models;
-using Ryujinx.Ava.Utilities.Configuration;
+using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Utilities;

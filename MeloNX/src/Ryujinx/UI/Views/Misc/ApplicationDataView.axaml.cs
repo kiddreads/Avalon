@@ -2,15 +2,13 @@
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.UI.Windows;
-using Ryujinx.Ava.Utilities.AppLibrary;
-using Ryujinx.Ava.Utilities.Compat;
+using Ryujinx.Ava.Systems.AppLibrary;
 using System.Linq;
 using System.Threading.Tasks;
 
