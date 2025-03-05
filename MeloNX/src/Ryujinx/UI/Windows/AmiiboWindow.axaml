@@ -23,7 +23,27 @@
         <viewModels:AmiiboWindowViewModel />
     </Design.DataContext>
     <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-        <Grid ColumnDefinitions="*,*" Grid.Row="1" HorizontalAlignment="Stretch" >
+        <Grid Name="FlushControls" ColumnDefinitions="Auto,Auto" Grid.Row="1" Margin="-15">
+            <Image 
+                Grid.Column="0"
+                Name="RyuLogo"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="8, 8, 7, 0"
+                Height="25"
+                Width="25" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0, 0, 0, 100">
+                <StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock VerticalAlignment="Center" Text="{ext:Locale AmiiboSeriesLabel}" />
+                    <ComboBox Margin="0, 8, 0, 0" SelectedIndex="{Binding SeriesSelectedIndex}" ItemsSource="{Binding AmiiboSeries}" MinWidth="100" />
+                </StackPanel>
+                <StackPanel Margin="15, 0, 0, 0" Spacing="10" Orientation="Horizontal" >
+                    <TextBlock VerticalAlignment="Center" Text="{ext:Locale AmiiboCharacterLabel}" />
+                    <ComboBox Margin="0, 8, 0, 0" SelectedIndex="{Binding AmiiboSelectedIndex}" MinWidth="100" ItemsSource="{Binding AmiiboList}" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Name="NormalControls" ColumnDefinitions="*,*" Grid.Row="1" HorizontalAlignment="Stretch" >
             <StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock VerticalAlignment="Center" Text="{ext:Locale AmiiboSeriesLabel}" />
                 <ComboBox SelectedIndex="{Binding SeriesSelectedIndex}" ItemsSource="{Binding AmiiboSeries}" MinWidth="100" />
