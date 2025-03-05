@@ -273,11 +273,7 @@ namespace Ryujinx.Ava.UI.Windows
             LibHacHorizonManager.InitializeBcatServer();
             LibHacHorizonManager.InitializeSystemClients();
 
-            IntegrityCheckLevel checkLevel = ConfigurationState.Instance.System.EnableFsIntegrityChecks
-                ? IntegrityCheckLevel.ErrorOnInvalid
-                : IntegrityCheckLevel.None;
-
-            ApplicationLibrary = new ApplicationLibrary(VirtualFileSystem, checkLevel)
+            ApplicationLibrary = new ApplicationLibrary(VirtualFileSystem, ConfigurationState.Instance.System.IntegrityCheckLevel)
             {
                 DesiredLanguage = ConfigurationState.Instance.System.Language,
             };

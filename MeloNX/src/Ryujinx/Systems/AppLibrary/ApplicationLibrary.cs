@@ -618,15 +618,11 @@ namespace Ryujinx.Ava.Systems.AppLibrary
                     case ".xci":
                     case ".nsp":
                         {
-                            IntegrityCheckLevel checkLevel = ConfigurationState.Instance.System.EnableFsIntegrityChecks
-                                ? IntegrityCheckLevel.ErrorOnInvalid
-                                : IntegrityCheckLevel.None;
-
                             using IFileSystem pfs =
                                 PartitionFileSystemUtils.OpenApplicationFileSystem(filePath, _virtualFileSystem);
 
                             Dictionary<ulong, ContentMetaData> updates =
-                                pfs.GetContentData(ContentMetaType.Patch, _virtualFileSystem, checkLevel);
+                                pfs.GetContentData(ContentMetaType.Patch, _virtualFileSystem, ConfigurationState.Instance.System.IntegrityCheckLevel);
 
                             if (updates.Count == 0)
                             {

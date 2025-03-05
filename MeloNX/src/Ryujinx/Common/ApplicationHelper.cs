@@ -216,11 +216,7 @@ namespace Ryujinx.Ava.Common
                     return;
                 }
 
-                IntegrityCheckLevel checkLevel = ConfigurationState.Instance.System.EnableFsIntegrityChecks
-                    ? IntegrityCheckLevel.ErrorOnInvalid
-                    : IntegrityCheckLevel.None;
-
-                (Nca updatePatchNca, _) = mainNca.GetUpdateData(_virtualFileSystem, checkLevel, programIndex, out _);
+                (Nca updatePatchNca, _) = mainNca.GetUpdateData(_virtualFileSystem, ConfigurationState.Instance.System.IntegrityCheckLevel, programIndex, out _);
                 if (updatePatchNca is not null)
                 {
                     patchNca = updatePatchNca;

@@ -38,12 +38,9 @@ namespace Ryujinx.Ava.UI.Windows
             MinHeight = 650;
             
             LoadedCheats = [];
-            IntegrityCheckLevel checkLevel = ConfigurationState.Instance.System.EnableFsIntegrityChecks
-                ? IntegrityCheckLevel.ErrorOnInvalid
-                : IntegrityCheckLevel.None;
 
             Heading = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.CheatWindowHeading, titleName, titleId.ToUpper());
-            BuildId = ApplicationData.GetBuildId(virtualFileSystem, checkLevel, titlePath);
+            BuildId = ApplicationData.GetBuildId(virtualFileSystem, ConfigurationState.Instance.System.IntegrityCheckLevel, titlePath);
 
             InitializeComponent();
 

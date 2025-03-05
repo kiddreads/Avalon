@@ -352,6 +352,10 @@ namespace Ryujinx.Ava.Systems.Configuration
             /// </summary>
             public ReactiveObject<bool> EnableFsIntegrityChecks { get; private set; }
 
+            public IntegrityCheckLevel IntegrityCheckLevel => EnableFsIntegrityChecks
+                ? IntegrityCheckLevel.ErrorOnInvalid
+                : IntegrityCheckLevel.None;
+
             /// <summary>
             /// Enables FS access log output to the console. Possible modes are 0-3
             /// </summary>
@@ -843,8 +847,8 @@ namespace Ryujinx.Ava.Systems.Configuration
         public HleConfiguration CreateHleConfiguration() =>
             new(
                 System.DramSize,
-                (SystemLanguage)System.Language.Value,
-                (RegionCode)System.Region.Value,
+                System.Language.Value.ToHLE(),
+                System.Region.Value.ToHLE(),
                 Graphics.VSyncMode,
                 System.EnableDockedMode,
                 System.EnablePtc,
