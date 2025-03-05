@@ -49,16 +49,13 @@ namespace Ryujinx.Ava.UI.Views.Misc
 
         private async void IdString_OnClick(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not MainWindowViewModel mwvm)
-                return;
-            
             if (sender is not Button { Content: TextBlock idText })
                 return;
 
             if (!RyujinxApp.IsClipboardAvailable(out IClipboard clipboard))
                 return;
             
-            ApplicationData appData = mwvm.Applications.FirstOrDefault(it => it.IdString == idText.Text);
+            ApplicationData appData = RyujinxApp.MainWindow.ViewModel.Applications.FirstOrDefault(it => it.IdString == idText.Text);
             if (appData is null)
                 return;
             

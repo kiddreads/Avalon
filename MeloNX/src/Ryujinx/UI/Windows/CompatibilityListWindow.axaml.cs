@@ -36,6 +36,8 @@ namespace Ryujinx.Ava.UI.Windows
             NormalControls.IsVisible = ConfigurationState.Instance.ShowTitleBar;
         }
 
+        // ReSharper disable once UnusedMember.Local
+        // its referenced in the axaml but rider keeps yelling at me that its unused so
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (DataContext is not CompatibilityViewModel cvm)
