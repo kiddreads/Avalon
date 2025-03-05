@@ -25,4 +25,13 @@ namespace Ryujinx.Ava.Systems.Configuration.System
         TraditionalChinese,
         BrazilianPortuguese,
     }
+
+    public static class LanguageEnumHelper
+    {
+        public static Language ToUI(this HLE.HOS.SystemState.SystemLanguage hleLanguage)
+            => (Language)hleLanguage;
+
+        public static HLE.HOS.SystemState.SystemLanguage ToHLE(this Language uiLanguage)
+            => (HLE.HOS.SystemState.SystemLanguage)uiLanguage;
+    }
 }

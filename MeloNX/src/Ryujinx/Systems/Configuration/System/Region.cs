@@ -14,4 +14,13 @@ namespace Ryujinx.Ava.Systems.Configuration.System
         Korea,
         Taiwan,
     }
+    
+    public static class RegionEnumHelper
+    {
+        public static Region ToUI(this HLE.HOS.SystemState.RegionCode hleRegion)
+            => (Region)hleRegion;
+
+        public static HLE.HOS.SystemState.RegionCode ToHLE(this Region uiRegion)
+            => (HLE.HOS.SystemState.RegionCode)uiRegion;
+    }
 }
