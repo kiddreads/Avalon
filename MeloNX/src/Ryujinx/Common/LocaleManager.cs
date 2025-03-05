@@ -26,7 +26,21 @@ namespace Ryujinx.Ava.Common.Locale
         public LocaleManager()
         {
             _localeStrings = new Dictionary<LocaleKeys, string>();
-            _dynamicValues = new ConcurrentDictionary<LocaleKeys, object[]>();
+            _dynamicValues = new ConcurrentDictionary<LocaleKeys, object[]>(new Dictionary<LocaleKeys, object[]>
+            {
+                { LocaleKeys.DialogConfirmationTitle, [RyujinxApp.FullAppName] },
+                { LocaleKeys.DialogUpdaterTitle, [RyujinxApp.FullAppName] },
+                { LocaleKeys.DialogErrorTitle, [RyujinxApp.FullAppName] },
+                { LocaleKeys.DialogWarningTitle, [RyujinxApp.FullAppName] },
+                { LocaleKeys.DialogExitTitle, [RyujinxApp.FullAppName] },
+                { LocaleKeys.DialogStopEmulationTitle, [RyujinxApp.FullAppName] },
+                { LocaleKeys.RyujinxInfo, [RyujinxApp.FullAppName] },
+                { LocaleKeys.RyujinxConfirm, [RyujinxApp.FullAppName] },
+                { LocaleKeys.RyujinxUpdater, [RyujinxApp.FullAppName] },
+                { LocaleKeys.RyujinxRebooter, [RyujinxApp.FullAppName] },
+                { LocaleKeys.CompatibilityListSearchBoxWatermarkWithCount, [CompatibilityCsv.Entries.Length] },
+                { LocaleKeys.CompatibilityListTitle, [CompatibilityCsv.Entries.Length] }
+            });
 
             Load();
         }
@@ -45,19 +59,6 @@ namespace Ryujinx.Ava.Common.Locale
 
                 ConfigurationState.Instance.ToFileFormat().SaveConfig(Program.ConfigurationPath);
             }
-            
-            SetDynamicValues(LocaleKeys.DialogConfirmationTitle, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.DialogUpdaterTitle, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.DialogErrorTitle, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.DialogWarningTitle, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.DialogExitTitle, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.DialogStopEmulationTitle, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.RyujinxInfo, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.RyujinxConfirm, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.RyujinxUpdater, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.RyujinxRebooter, RyujinxApp.FullAppName);
-            SetDynamicValues(LocaleKeys.CompatibilityListSearchBoxWatermarkWithCount, CompatibilityCsv.Entries.Length);
-            SetDynamicValues(LocaleKeys.CompatibilityListTitle, CompatibilityCsv.Entries.Length);
         }
 
         public string this[LocaleKeys key]
