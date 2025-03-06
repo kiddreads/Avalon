@@ -8,20 +8,20 @@ using Ryujinx.Ava.UI.ViewModels;
 using System;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Ava.UI.Windows
+namespace Ryujinx.Ava.UI.Views.Dialog
 {
-    public partial class XCITrimmerWindow : UserControl
+    public partial class XciTrimmerView : UserControl
     {
         public XCITrimmerViewModel ViewModel;
 
-        public XCITrimmerWindow()
+        public XciTrimmerView()
         {
             DataContext = this;
 
             InitializeComponent();
         }
 
-        public XCITrimmerWindow(MainWindowViewModel mainWindowViewModel)
+        public XciTrimmerView(MainWindowViewModel mainWindowViewModel)
         {
             DataContext = ViewModel = new XCITrimmerViewModel(mainWindowViewModel);
 
@@ -35,7 +35,7 @@ namespace Ryujinx.Ava.UI.Windows
                 PrimaryButtonText = string.Empty,
                 SecondaryButtonText = string.Empty,
                 CloseButtonText = string.Empty,
-                Content = new XCITrimmerWindow(RyujinxApp.MainWindow.ViewModel),
+                Content = new XciTrimmerView(RyujinxApp.MainWindow.ViewModel),
                 Title = LocaleManager.Instance[LocaleKeys.XCITrimmerWindowTitle]
             };
 

@@ -9,20 +9,20 @@ using Ryujinx.Ava.Systems.AppLibrary;
 using Ryujinx.Common.Helper;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Ava.UI.Windows
+namespace Ryujinx.Ava.UI.Views.Dialog
 {
-    public partial class TitleUpdateWindow : UserControl
+    public partial class TitleUpdateManagerView : UserControl
     {
         public readonly TitleUpdateViewModel ViewModel;
 
-        public TitleUpdateWindow()
+        public TitleUpdateManagerView()
         {
             DataContext = this;
 
             InitializeComponent();
         }
 
-        public TitleUpdateWindow(ApplicationLibrary applicationLibrary, ApplicationData applicationData)
+        public TitleUpdateManagerView(ApplicationLibrary applicationLibrary, ApplicationData applicationData)
         {
             DataContext = ViewModel = new TitleUpdateViewModel(applicationLibrary, applicationData);
 
@@ -36,7 +36,7 @@ namespace Ryujinx.Ava.UI.Windows
                 PrimaryButtonText = string.Empty,
                 SecondaryButtonText = string.Empty,
                 CloseButtonText = string.Empty,
-                Content = new TitleUpdateWindow(applicationLibrary, applicationData),
+                Content = new TitleUpdateManagerView(applicationLibrary, applicationData),
                 Title = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.GameUpdateWindowHeading, applicationData.Name, applicationData.IdBaseString),
             };
 
