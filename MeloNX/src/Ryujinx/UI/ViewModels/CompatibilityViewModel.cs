@@ -1,14 +1,15 @@
 ﻿using Gommon;
 using Ryujinx.Ava.Systems;
 using Ryujinx.Ava.Systems.AppLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Ryujinx.Ava.UI.ViewModels
 {
-    public class CompatibilityViewModel : BaseModel
+    public class CompatibilityViewModel : BaseModel, IDisposable
     {
-        private bool _onlyShowOwnedGames = true;
+        private readonly ApplicationLibrary _appLibrary;
 
         private IEnumerable<CompatibilityEntry> _currentEntries = CompatibilityDatabase.Entries;
         private string[] _ownedGameTitleIds = [];
@@ -19,14 +20,26 @@ namespace Ryujinx.Ava.UI.ViewModels
             : _currentEntries;
 
         public CompatibilityViewModel() {}
+        
+        private void AppCountUpdated(object _, ApplicationCountUpdatedEventArgs __)
+            => _ownedGameTitleIds = _appLibrary.Applications.Keys.Select(x => x.ToString("X16")).ToArray();
 
         public CompatibilityViewModel(ApplicationLibrary appLibrary)
         {
-            appLibrary.ApplicationCountUpdated += (_, _) 
-                => _ownedGameTitleIds = appLibrary.Applications.Keys.Select(x => x.ToString("X16")).ToArray();
+            _appLibrary = appLibrary;
             
-            _ownedGameTitleIds = appLibrary.Applications.Keys.Select(x => x.ToString("X16")).ToArray();
+            AppCountUpdated(null, null);
+
+            _appLibrary.ApplicationCountUpdated += AppCountUpdated;
         }
+
+        void IDisposable.Dispose()
+        {
+            GC.SuppressFinalize(this);
+            _appLibrary.ApplicationCountUpdated -= AppCountUpdated;
+        }
+        
+        private bool _onlyShowOwnedGames = true;
 
         public bool OnlyShowOwnedGames
         {

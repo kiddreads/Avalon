@@ -8,13 +8,17 @@ namespace Ryujinx.Ava.UI.Windows
 {
     public partial class CompatibilityListWindow : StyleableAppWindow
     {
-        public static Task Show(string titleId = null) =>
-            ShowAsync(new CompatibilityListWindow
+        public static async Task Show(string titleId = null)
+        {
+            using CompatibilityViewModel compatWindow = new(RyujinxApp.MainWindow.ViewModel.ApplicationLibrary);
+            
+            await ShowAsync(new CompatibilityListWindow
             {
-                DataContext = new CompatibilityViewModel(RyujinxApp.MainWindow.ViewModel.ApplicationLibrary),
+                DataContext = compatWindow,
                 SearchBoxFlush = { Text = titleId ?? string.Empty },
                 SearchBoxNormal = { Text = titleId ?? string.Empty }
             });
+        }
 
         public CompatibilityListWindow() : base(useCustomTitleBar: true, 37)
         {
