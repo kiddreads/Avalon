@@ -6,26 +6,16 @@ using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Common.Models;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Systems.AppLibrary;
+using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Common.Helper;
 using System.Threading.Tasks;
 
 namespace Ryujinx.Ava.UI.Views.Dialog
 {
-    public partial class TitleUpdateManagerView : UserControl
+    public partial class TitleUpdateManagerView : RyujinxControl<TitleUpdateViewModel>
     {
-        public readonly TitleUpdateViewModel ViewModel;
-
         public TitleUpdateManagerView()
         {
-            DataContext = this;
-
-            InitializeComponent();
-        }
-
-        public TitleUpdateManagerView(ApplicationLibrary applicationLibrary, ApplicationData applicationData)
-        {
-            DataContext = ViewModel = new TitleUpdateViewModel(applicationLibrary, applicationData);
-
             InitializeComponent();
         }
 
@@ -36,8 +26,11 @@ namespace Ryujinx.Ava.UI.Views.Dialog
                 PrimaryButtonText = string.Empty,
                 SecondaryButtonText = string.Empty,
                 CloseButtonText = string.Empty,
-                Content = new TitleUpdateManagerView(applicationLibrary, applicationData),
                 Title = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.GameUpdateWindowHeading, applicationData.Name, applicationData.IdBaseString),
+                Content = new TitleUpdateManagerView
+                {
+                    ViewModel = new TitleUpdateViewModel(applicationLibrary, applicationData)
+                }
             };
 
             Style bottomBorder = new(x => x.OfType<Grid>().Name("DialogSpace").Child().OfType<Border>());
