@@ -6,6 +6,7 @@
     xmlns:window="clr-namespace:Ryujinx.Ava.UI.Windows"
     xmlns:viewModels="clr-namespace:Ryujinx.Ava.UI.ViewModels"
     xmlns:ext="clr-namespace:Ryujinx.Ava.Common.Markup"
+    xmlns:controls="clr-namespace:Ryujinx.Ava.UI.Controls"
     mc:Ignorable="d"
     d:DesignWidth="400"
     d:DesignHeight="350"
@@ -24,14 +25,12 @@
     </Design.DataContext>
     <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Grid Name="FlushControls" ColumnDefinitions="Auto,Auto" Grid.Row="1" Margin="-15">
-            <Image 
+            <controls:RyujinxLogo 
                 Grid.Column="0"
-                Name="RyuLogo"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="8, 8, 7, 0"
-                Height="25"
-                Width="25" />
+                ToolTip.Tip="{ext:WindowTitle Amiibo}" />
             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0, 0, 0, 100">
                 <StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Left">
                     <TextBlock VerticalAlignment="Center" Text="{ext:Locale AmiiboSeriesLabel}" />

@@ -17,9 +17,8 @@ namespace Ryujinx.Ava.UI.Windows
 
             InitializeComponent();
 
-            FlushControls.IsVisible = !ConfigurationState.Instance.ShowTitleBar;
-            NormalControls.IsVisible = ConfigurationState.Instance.ShowTitleBar;
-            RyuLogo.Source = MainWindowViewModel.IconBitmap;
+            FlushControls.IsVisible = !ConfigurationState.Instance.ShowOldUI;
+            NormalControls.IsVisible = ConfigurationState.Instance.ShowOldUI;
 
             Title = RyujinxApp.FormatTitle(LocaleKeys.Amiibo);
         }
