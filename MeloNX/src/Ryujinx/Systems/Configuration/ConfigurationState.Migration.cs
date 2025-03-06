@@ -441,6 +441,8 @@ namespace Ryujinx.Ava.Systems.Configuration
                 (65, static cff => cff.UpdateCheckerType = cff.CheckUpdatesOnStart ? UpdaterType.PromptAtStartup : UpdaterType.Off),
                 (66, static cff => cff.DisableInputWhenOutOfFocus = false),
                 (67, static cff => cff.FocusLostActionType = cff.DisableInputWhenOutOfFocus ? FocusLostType.BlockInput : FocusLostType.DoNothing)
+                // 68 was the version that added per-game configs; the file structure did not change
+                // the version was increased so external tools could know that your Ryujinx version has per-game config capabilities.
             );
     }
 }
