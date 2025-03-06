@@ -11,24 +11,9 @@ using System.Text;
 
 namespace Ryujinx.Ava.Systems
 {
-    public struct ColumnIndices(Func<ReadOnlySpan<char>, int> getIndex)
+    public class CompatibilityDatabase
     {
-        public const string TitleIdCol = "\"title_id\"";
-        public const string GameNameCol = "\"game_name\"";
-        public const string LabelsCol = "\"labels\"";
-        public const string StatusCol = "\"status\"";
-        public const string LastUpdatedCol = "\"last_updated\"";
-        
-        public readonly int TitleId = getIndex(TitleIdCol);
-        public readonly int GameName = getIndex(GameNameCol);
-        public readonly int Labels = getIndex(LabelsCol);
-        public readonly int Status = getIndex(StatusCol);
-        public readonly int LastUpdated = getIndex(LastUpdatedCol);
-    }
-    
-    public class CompatibilityCsv
-    {
-        static CompatibilityCsv() => Load();
+        static CompatibilityDatabase() => Load();
 
         public static void Load()
         {
@@ -204,5 +189,20 @@ namespace Ryujinx.Ava.Systems
 
             return $"{char.ToUpper(firstChar)}{rest}";
         }
+    }
+    
+    public struct ColumnIndices(Func<ReadOnlySpan<char>, int> getIndex)
+    {
+        public const string TitleIdCol = "\"title_id\"";
+        public const string GameNameCol = "\"game_name\"";
+        public const string LabelsCol = "\"labels\"";
+        public const string StatusCol = "\"status\"";
+        public const string LastUpdatedCol = "\"last_updated\"";
+        
+        public readonly int TitleId = getIndex(TitleIdCol);
+        public readonly int GameName = getIndex(GameNameCol);
+        public readonly int Labels = getIndex(LabelsCol);
+        public readonly int Status = getIndex(StatusCol);
+        public readonly int LastUpdated = getIndex(LastUpdatedCol);
     }
 }

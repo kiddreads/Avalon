@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Ava
+namespace Ryujinx.Ava.Systems
 {
     internal static class Rebooter
     {

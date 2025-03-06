@@ -59,7 +59,7 @@ using Size = Avalonia.Size;
 using Switch = Ryujinx.HLE.Switch;
 using VSyncMode = Ryujinx.Common.Configuration.VSyncMode;
 
-namespace Ryujinx.Ava
+namespace Ryujinx.Ava.Systems
 {
     internal class AppHost
     {

@@ -10,7 +10,7 @@ namespace Ryujinx.Ava.UI.ViewModels
     {
         private bool _onlyShowOwnedGames = true;
 
-        private IEnumerable<CompatibilityEntry> _currentEntries = CompatibilityCsv.Entries;
+        private IEnumerable<CompatibilityEntry> _currentEntries = CompatibilityDatabase.Entries;
         private string[] _ownedGameTitleIds = [];
 
         public IEnumerable<CompatibilityEntry> CurrentEntries => OnlyShowOwnedGames
@@ -45,11 +45,11 @@ namespace Ryujinx.Ava.UI.ViewModels
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                SetEntries(CompatibilityCsv.Entries);
+                SetEntries(CompatibilityDatabase.Entries);
                 return;
             }
 
-            SetEntries(CompatibilityCsv.Entries.Where(x =>
+            SetEntries(CompatibilityDatabase.Entries.Where(x =>
                 x.GameName.ContainsIgnoreCase(searchTerm)
                 || x.TitleId.Check(tid => tid.ContainsIgnoreCase(searchTerm))));
         }

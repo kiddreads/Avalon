@@ -2,6 +2,7 @@ using DiscordRPC;
 using LibHac.Tools.FsSystem;
 using Ryujinx.Audio.Backends.SDL2;
 using Ryujinx.Ava;
+using Ryujinx.Ava.Systems;
 using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Configuration.Hid;
