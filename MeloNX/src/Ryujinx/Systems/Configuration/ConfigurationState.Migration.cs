@@ -160,9 +160,7 @@ namespace Ryujinx.Ava.Systems.Configuration
                 DirtyHacks hacks = new (cff.DirtyHacks ?? []);
 
                 Hacks.Xc2MenuSoftlockFix.Value = hacks.IsEnabled(DirtyHack.Xc2MenuSoftlockFix);
-
-                Hacks.EnableShaderTranslationDelay.Value = hacks.IsEnabled(DirtyHack.ShaderTranslationDelay);
-                Hacks.ShaderTranslationDelay.Value = hacks[DirtyHack.ShaderTranslationDelay].CoerceAtLeast(0);
+                
             }
 
             if (configurationFileUpdated)
