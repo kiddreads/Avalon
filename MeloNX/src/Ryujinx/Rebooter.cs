@@ -1,8 +1,6 @@
 using FluentAvalonia.UI.Controls;
 using Ryujinx.Ava.Common.Locale;
-using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Utilities;
-using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

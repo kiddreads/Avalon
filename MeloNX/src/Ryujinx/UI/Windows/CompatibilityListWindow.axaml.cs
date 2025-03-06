@@ -1,12 +1,7 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Styling;
-using FluentAvalonia.UI.Controls;
-using FluentAvalonia.UI.Windowing;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Systems.Configuration;
-using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
-using Ryujinx.Ava.UI.Windows;
 using System.Threading.Tasks;
 
 namespace Ryujinx.Ava.UI.Windows

@@ -1,7 +1,6 @@
 ﻿using Gommon;
 using Ryujinx.Ava.Systems;
 using Ryujinx.Ava.Systems.AppLibrary;
-using Ryujinx.Ava.UI.Windows;
 using System.Collections.Generic;
 using System.Linq;
 

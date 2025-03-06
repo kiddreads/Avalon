@@ -7,7 +7,6 @@ using Ryujinx.Ava.UI.Controls;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Utilities;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

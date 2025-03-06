@@ -11,7 +11,6 @@ using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Utilities;
 using Ryujinx.HLE;
-using Ryujinx.HLE.HOS.SystemState;
 using System.Collections.Generic;
 using System.Linq;
 using RyuLogger = Ryujinx.Common.Logging.Logger;
