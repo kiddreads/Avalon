@@ -59,7 +59,7 @@ jobs:
           body: |            
             # Canary builds:
             
-            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ env.RYUJINX_TARGET_RELEASE_CHANNEL_OWNER }}/${{ env.RYUJINX_TARGET_RELEASE_CHANNEL_REPO }}/releases/latest) instead if that sounds like something you don't want to deal with.
+            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ env.RYUJINX_TARGET_RELEASE_CHANNEL_OWNER }}/Stable-Releases/releases/latest) instead if that sounds like something you don't want to deal with.
             
             | Platform | Artifact |
             |--|--|
