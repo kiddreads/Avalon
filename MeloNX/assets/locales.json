@@ -4942,7 +4942,7 @@
         "sv_SE": "Multiplikator för turboläge:",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Множник Турборежиму:",
         "zh_CN": "涡轮模式倍数:",
         "zh_TW": ""
       }
@@ -4967,7 +4967,7 @@
         "sv_SE": "Målvärdet för multiplikatorn i turboläget. \n\nLämna den på 200 om du är osäker.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Цільове значення коефіцієнта Турборежиму.\n\nЗалиште 200, якщо не впевнені",
         "zh_CN": "涡轮模式倍数的目标值。\n\n如果不确定请保留为 200。",
         "zh_TW": ""
       }
@@ -4992,7 +4992,7 @@
         "sv_SE": "Turboläget är en emulatorfunktion som effektivt ökar eller sänker hastigheten när ett spel inte är känsligt för bildfrekvens.\nDu kan växla denna funktion i spelet med en snabbtangent, konfigurerbar i Ryujinx inställningar för snabbtangenter.\n\nLämna den på 200 om du är osäker.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Турборежим – це функція емулятора, яка ефективно прискорює або сповільнює гру, якщо та не чутлива до частоти кадрів. Цю функцію можна ввімкнути/вимкнути безпосередньо під час гри за допомогою гарячої клавіші, яку можна налаштувати в меню Гарячі клавіші в налаштуваннях.",
         "zh_CN": "涡轮模式是一种模拟器功能当游戏对帧率不敏感时它可以有效地导致加速或降速。\n您可以在游戏中使用热键切换此功能,它可以在 Ryujinx 的键盘热键设置进行设置。\n\n如果不确定则保留为 200。",
         "zh_TW": ""
       }
@@ -8667,7 +8667,7 @@
         "sv_SE": "Färg",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Колір",
         "zh_CN": "颜色",
         "zh_TW": "顏色"
       }
@@ -8742,7 +8742,7 @@
         "sv_SE": "Okänd",
         "th_TH": "ไม่รู้จัก",
         "tr_TR": "",
-        "uk_UA": "Невідома",
+        "uk_UA": "Назначити",
         "zh_CN": "未知",
         "zh_TW": "未知"
       }
@@ -18067,7 +18067,7 @@
         "sv_SE": "Processor",
         "th_TH": "ซีพียู",
         "tr_TR": "İşlemci",
-        "uk_UA": "ЦП",
+        "uk_UA": "Процесор",
         "zh_CN": "",
         "zh_TW": ""
       }
@@ -18167,7 +18167,7 @@
         "sv_SE": "CPU-cache",
         "th_TH": "แคชซีพียู",
         "tr_TR": "İşlemci Belleği",
-        "uk_UA": "Кеш CPU",
+        "uk_UA": "Кеш процесора (CPU Cache)",
         "zh_CN": "CPU 缓存",
         "zh_TW": "CPU 快取"
       }
@@ -18192,7 +18192,7 @@
         "sv_SE": "CPU-läge",
         "th_TH": "โหมดซีพียู",
         "tr_TR": "CPU Hafızası",
-        "uk_UA": "Режим CPU",
+        "uk_UA": "Режим процесора (CPU Mode)",
         "zh_CN": "CPU 模式",
         "zh_TW": "CPU 模式"
       }
@@ -18217,7 +18217,7 @@
         "sv_SE": "Uppdateringar inaktiverade!",
         "th_TH": "ปิดใช้งานการอัปเดตแล้ว!",
         "tr_TR": "Güncelleyici Devre Dışı!",
-        "uk_UA": "Програму оновлення вимкнено!",
+        "uk_UA": "Оновлення вимкнено!",
         "zh_CN": "已禁用更新！",
         "zh_TW": "更新已停用!"
       }
@@ -18267,7 +18267,7 @@
         "sv_SE": "{0} bilder/s ({1}ms), Turbo ({2}%)",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "{0} FPS ({1}ms), Турбо ({2}%)",
         "zh_CN": "{0} FPS ({1}ms), 涡轮 ({2}%)",
         "zh_TW": ""
       }
@@ -19914,7 +19914,7 @@
         "pl_PL": "Skróty Klawiszowe Klawiatury",
         "pt_BR": "Atalhos do Teclado",
         "ru_RU": "Горячие клавиши",
-        "sv_SE": "Snabbtangenter",
+        "sv_SE": "Snabbtangenter för tangentbord",
         "th_TH": "ปุ่มลัดของคีย์บอร์ด",
         "tr_TR": "Klavye Kısayolları",
         "uk_UA": "Гарячі клавіші",
@@ -21867,7 +21867,7 @@
         "sv_SE": "Grafikbakände",
         "th_TH": "กราฟิกเบื้องหลัง",
         "tr_TR": "Grafik Arka Ucu",
-        "uk_UA": "Графічний сервер",
+        "uk_UA": "Графічний рушій",
         "zh_CN": "图形渲染引擎：",
         "zh_TW": "圖形後端"
       }
@@ -22042,7 +22042,7 @@
         "sv_SE": "Välj grafikkortet som ska användas med Vulkan-grafikbakänden.\n\nPåverkar inte GPU:n som OpenGL använder.\n\nStäll in till den GPU som flaggats som \"dGPU\" om osäker. Om det inte finns någon, lämna orörd.",
         "th_TH": "เลือกการ์ดจอที่จะใช้กับแบ็กเอนด์กราฟิก Vulkan\n\nไม่ส่งผลต่อ GPU ที่ OpenGL จะใช้\n\nตั้งค่าเป็น GPU ที่ถูกตั้งค่าสถานะเป็น \"dGPU\" ถ้าหากคุณไม่แน่ใจ ,หากไม่มีก็ปล่อยทิ้งไว้โดยไม่ต้องแตะต้องมัน",
         "tr_TR": "Vulkan Grafik Arka Ucu ile kullanılacak Ekran Kartını Seçin.\n\nOpenGL'nin kullanacağı GPU'yu etkilemez.\n\n Emin değilseniz \"dGPU\" olarak işaretlenmiş GPU'ya ayarlayın.  Eğer yoksa, dokunmadan bırakın.\n",
-        "uk_UA": "Виберіть відеокарту, яка використовуватиметься з графічним сервером Vulkan.\n\nНе впливає на графічний процесор, який використовуватиме OpenGL.\n\nВстановіть графічний процесор, позначений як «dGPU», якщо не впевнені. Якщо такого немає, не чіпайте.",
+        "uk_UA": "Виберіть відеокарту, яка використовуватиметься з графічним рушієм Vulkan.\n\nНалаштування не впливає на відеоадаптер (GPU), що використовуватиме рушій OpenGL.\n\nВстановіть графічний рушій, позначений як «dGPU», якщо не впевнені. Якщо такого пункту немає, то залиште як є.",
         "zh_CN": "选择 Vulkan 图形引擎使用的 GPU。\n\n此选项不会影响 OpenGL 使用的 GPU。\n\n如果不确定，建议选择\"独立显卡(dGPU)\"。如果没有独立显卡，则无需改动此选项。",
         "zh_TW": "選擇將與 Vulkan 圖形後端一起使用的顯示卡。\n\n不會影響 OpenGL 將使用的 GPU。\n\n如果不確定，請設定為標記為「dGPU」的 GPU。如果沒有，則保持原狀。"
       }
@@ -22642,7 +22642,7 @@
         "sv_SE": "Tillämpar anti-aliasing på spelrenderaren.\n\nFXAA kommer att sudda det mesta av bilden, medan SMAA kommer att försöka hitta taggiga kanter och släta ut dem.\n\nRekommenderas inte att använda tillsammans med skalfiltret FSR.\n\nDet här alternativet kan ändras medan ett spel körs genom att klicka på \"Tillämpa\" nedan. Du kan helt enkelt flytta inställningsfönstret åt sidan och experimentera tills du hittar ditt föredragna utseende för ett spel.\n\nLämna som INGEN om du är osäker.",
         "th_TH": "ใช้การลดรอยหยักกับการเรนเดอร์เกม\n\nFXAA จะเบลอภาพส่วนใหญ่ ในขณะที่ SMAA จะพยายามค้นหารอยหยักและปรับให้เรียบ\n\nไม่แนะนำให้ใช้ร่วมกับตัวกรองสเกล FSR\n\nตัวเลือกนี้สามารถเปลี่ยนแปลงได้ในขณะที่เกมกำลังทำงานอยู่โดยคลิก \"นำไปใช้\" ด้านล่าง คุณสามารถย้ายหน้าต่างการตั้งค่าไปด้านข้างและทดลองจนกว่าคุณจะพบรูปลักษณ์ที่คุณต้องการสำหรับเกม\n\nปล่อยไว้ที่ NONE หากไม่แน่ใจ",
         "tr_TR": "",
-        "uk_UA": "Застосовує згладження до рендера гри.\n\nFXAA розмиє більшість зображення, а SMAA спробує знайти нерівні краї та згладити їх.\n\nНе рекомендується використовувати разом з фільтром масштабування FSR.\n\nЦю опцію можна міняти коли гра запущена кліком на \"Застосувати; ви можете відсунути вікно налаштувань і поекспериментувати з видом гри.\n\nЗалиште \"Немає\", якщо не впевнені.",
+        "uk_UA": "Вмикає згладжування.\n\nFXAA розмиє краї зображення, тоді як SMAA спробує згладити їх. FXAA (продуктивність) вимагає менше обчислювальних ресурсів, ніж SMAA (якість).\n\nНе рекомендується використовувати разом з фільтром масштабування FSR.\n\nЦю опцію можна міняти під час гри натисканням \"Застосувати\" в цьому вікні; щоб знайти найкращий варіант, просто відсуньте вікно налаштувань і поекспериментуйте.\n\nЗалиште \"Немає\", якщо не впевнені.",
         "zh_CN": "抗锯齿是一种图形处理技术，用于减少图像边缘的锯齿状现象，使图像更加平滑。\n\nFXAA（快速近似抗锯齿）是一种性能开销相对较小的抗锯齿方法，但可能会使得整体图像看起来有些模糊。\n\nSMAA（增强型子像素抗锯齿）则更加精细，它会尝试找到锯齿边缘并平滑它们，相比 FXAA 有更好的图像质量，但性能开销可能会稍大一些。\n\n如果开启了 FSR（FidelityFX Super Resolution，超级分辨率锐画技术）来提高性能或图像质量，不建议再启用抗锯齿，因为它们会产生不必要的图形处理开销，或者相互之间效果不协调。\n\n在游戏运行时，通过点击下面的“应用”按钮可以使设置生效；你可以将设置窗口移开，并试验找到您喜欢的游戏画面效果。\n\n如果不确定，请保持为“无”。",
         "zh_TW": "對遊戲繪製進行反鋸齒處理。\n\nFXAA 會模糊大部分圖像，而 SMAA 則會嘗試找出鋸齒邊緣並將其平滑化。\n\n不建議與 FSR 縮放濾鏡一起使用。\n\n此選項可在遊戲執行時透過點選下方的「套用」進行變更；您只需將設定視窗移到一旁，然後進行試驗，直到找到您喜歡的遊戲效果。\n\n如果不確定，請選擇無狀態。"
       }
@@ -22717,7 +22717,7 @@
         "sv_SE": "Välj det skalfilter som ska tillämpas vid användning av upplösningsskala.\n\nBilinjär fungerar bra för 3D-spel och är ett säkert standardalternativ.\n\nNärmast rekommenderas för pixel art-spel.\n\nFSR 1.0 är bara ett skarpningsfilter, rekommenderas inte för FXAA eller SMAA.\n\nOmrådesskalning rekommenderas vid nedskalning av upplösning som är större än utdatafönstret. Det kan användas för att uppnå en supersamplad anti-alias-effekt vid nedskalning med mer än 2x.\n\nDetta alternativ kan ändras medan ett spel körs genom att klicka på \"Tillämpa\" nedan. du kan helt enkelt flytta inställningsfönstret åt sidan och experimentera tills du hittar ditt föredragna utseende för ett spel.\n\nLämna som BILINJÄR om du är osäker.",
         "th_TH": "เลือกตัวกรองสเกลที่จะใช้เมื่อใช้สเกลความละเอียด\n\nBilinear ทำงานได้ดีกับเกม 3D และเป็นตัวเลือกเริ่มต้นที่ปลอดภัย\n\nแนะนำให้ใช้เกมภาพพิกเซลที่ใกล้เคียงที่สุด\n\nFSR 1.0 เป็นเพียงตัวกรองความคมชัด ไม่แนะนำให้ใช้กับ FXAA หรือ SMAA\n\nตัวเลือกนี้สามารถเปลี่ยนแปลงได้ในขณะที่เกมกำลังทำงานอยู่โดยคลิก \"นำไปใช้\" ด้านล่าง คุณสามารถย้ายหน้าต่างการตั้งค่าไปด้านข้างและทดลองจนกว่าคุณจะพบรูปลักษณ์ที่คุณต้องการสำหรับเกม",
         "tr_TR": "Choose the scaling filter that will be applied when using resolution scale.\n\nBilinear works well for 3D games and is a safe default option.\n\nNearest is recommended for pixel art games.\n\nFSR 1.0 is merely a sharpening filter, not recommended for use with FXAA or SMAA.\n\nThis option can be changed while a game is running by clicking \"Apply\" below; you can simply move the settings window aside and experiment until you find your preferred look for a game.\n\nLeave on BILINEAR if unsure.",
-        "uk_UA": "Виберіть фільтр масштабування, що використається при збільшенні роздільної здатності.\n\n\"Білінійний\" добре виглядає в 3D іграх, і хороше налаштування за умовчуванням.\n\n\"Найближчий\" рекомендується для ігор з піксель-артом.\n\n\"FSR 1.0\" - фільтр різкості. Не варто використовувати разом з FXAA або SMAA.\n\nЦю опцію можна змінювати під час гри кліком на \"Застосувати\" нижче; ви можете відсунути вікно налаштувань і поекспериментувати з тим, як відображатиметься гра.\n\nЗалиште \"Білінійний\", якщо не впевнені.",
+        "uk_UA": "Оберіть фільтр масштабування, який буде використовуватися при збільшенні роздільної здатності.\n\n\"Білінійний\" добре виглядає в 3D іграх, і хороше налаштування за умовчуванням.\n\n\"Найближчий\" рекомендується для ігор з піксель-артом.\n\n\"FSR 1.0\" - фільтр різкості. Не варто використовувати разом з FXAA або SMAA.\n\nЦю опцію можна міняти під час гри натисканням \"Застосувати\" в цьому вікні; щоб знайти найкращий варіант, просто відсуньте вікно налаштувань і поекспериментуйте.\n\nЗалиште \"Білінійний\", якщо не впевнені.",
         "zh_CN": "选择在分辨率缩放时将使用的缩放过滤器。\n\nBilinear（双线性过滤）对于3D游戏效果较好，是一个安全的默认选项。\n\nNearest（最近邻过滤）推荐用于像素艺术游戏。\n\nFSR（超级分辨率锐画）只是一个锐化过滤器，不推荐与 FXAA 或 SMAA 抗锯齿一起使用。\n\nArea（局部过滤），当渲染分辨率大于窗口实际分辨率，推荐该选项。该选项在渲染比例大于2.0的情况下，可以实现超采样的效果。\n\n在游戏运行时，通过点击下面的“应用”按钮可以使设置生效；你可以将设置窗口移开，并试验找到您喜欢的游戏画面效果。\n\n如果不确定，请保持为“Bilinear（双线性过滤）”。",
         "zh_TW": "選擇使用解析度縮放時套用的縮放過濾器。\n\n雙線性 (Bilinear) 濾鏡適用於 3D 遊戲，是一個安全的預設選項。\n\n建議像素美術遊戲使用近鄰性 (Nearest) 濾鏡。\n\nFSR 1.0 只是一個銳化濾鏡，不建議與 FXAA 或 SMAA 一起使用。\n\n此選項可在遊戲執行時透過點選下方的「套用」進行變更；您只需將設定視窗移到一旁，然後進行試驗，直到找到您喜歡的遊戲效果。\n\n如果不確定，請保持雙線性 (Bilinear) 狀態。"
       }
@@ -22817,7 +22817,7 @@
         "sv_SE": "Yta",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Зональна",
         "zh_CN": "Area（区域过滤）",
         "zh_TW": "區域"
       }
@@ -23767,7 +23767,7 @@
         "sv_SE": "Emulerad vertikal synk. 'Switch' emulerar Switchens uppdateringsfrekvens på 60Hz. 'Obunden' är en obegränsad uppdateringsfrekvens. 'Anpassad uppdateringsfrekvens' emulerar den angivna anpassade uppdateringsfrekvensen.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Емульована вертикальна синхронізація кадрів. 'Switch' емулює частоту оновлення консолі Nintendo Switch (60 Гц). 'Необмежена' — частота оновлення не матиме обмежень. 'Користувацька' емулює вказану користувацьку частоту оновлення.",
+        "uk_UA": "Емульована вертикальна синхронізація кадрів. 'Switch' емулює частоту оновлення консолі Nintendo Switch (60 Гц). 'Необмежена' — частота оновлення не матиме обмежень. 'Користувацька' емулює вказану користувачем частоту оновлення.",
         "zh_CN": "模拟垂直同步。“Switch”模拟了 Switch 的 60Hz 刷新率。“无限制”没有刷新率限制。“自定义刷新率”模拟指定的自定义刷新率。",
         "zh_TW": "模擬垂直同步。「Switch」 模擬 Nintendo Switch 的 60Hz 重新整理頻率。「沒有限制」是沒有限制的重新整理頻率。「自訂的重新整理頻率」模擬所自訂的重新整理頻率。"
       }
@@ -24017,7 +24017,7 @@
         "sv_SE": "Turboläge:",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Турбомод:",
         "zh_CN": "涡轮模式: ",
         "zh_TW": ""
       }
@@ -24042,7 +24042,7 @@
         "sv_SE": "Snabbtangenten för turboläge.\nKonfigurera beteendet för turboläge i Ryujinx CPU-inställningar.\n\nLämna Obunden om du är osäker.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Гаряча клавіша Турборежиму.\nКонфігурація поведінки турборежиму в налаштуваннях Процесору Ryujinx.\n\nНе прив'язуйте, якщо не впевнені.",
         "zh_CN": "涡轮模式热键。\n可以在 Ryujinx CPU 设置中配置涡轮模式的行为。\n\n如果不确定请保留为未绑定。",
         "zh_TW": ""
       }
@@ -24067,7 +24067,7 @@
         "sv_SE": "Endast när du trycker ner",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Тільки під час натискання",
         "zh_CN": "仅在按下时",
         "zh_TW": ""
       }
