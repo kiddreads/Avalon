@@ -562,26 +562,29 @@ search_path = [
 
 
 for path in content_directory.rglob("**/*.dylib"):
-    current_search_path = [path.parent]
-    current_search_path.extend(search_path)
+    if not path.name.startswith("._"):
+        current_search_path = [path.parent]
+        current_search_path.extend(search_path)
 
-    fixup_dylib(
-        path,
-        get_path_related_to_target_exec(content_directory, path),
-        current_search_path,
-        content_directory,
-    )
+        print(f"Fixing path '{path}' using search path of '{current_search_path}' for context of '{content_directory}'.")
+        fixup_dylib(
+            path,
+            get_path_related_to_target_exec(content_directory, path),
+            current_search_path,
+            content_directory,
+        )
 
 for path in content_directory.rglob("**/*.so"):
-    current_search_path = [path.parent]
-    current_search_path.extend(search_path)
+    if not path.name.startswith("._"):
+        current_search_path = [path.parent]
+        current_search_path.extend(search_path)
 
-    fixup_dylib(
-        path,
-        get_path_related_to_target_exec(content_directory, path),
-        current_search_path,
-        content_directory,
-    )
+        fixup_dylib(
+            path,
+            get_path_related_to_target_exec(content_directory, path),
+            current_search_path,
+            content_directory,
+        )
 
 
 with open(executable_path, "rb") as input:

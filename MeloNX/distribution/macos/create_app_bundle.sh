@@ -30,9 +30,14 @@ cp -r "$PUBLISH_DIRECTORY/THIRDPARTY.md" "$APP_BUNDLE_DIRECTORY/Contents/Resourc
 echo -n "APPL????" > "$APP_BUNDLE_DIRECTORY/Contents/PkgInfo"
 
 # Fixup libraries and executable
+echo "Running bundle fix up python script"
 python3 bundle_fix_up.py "$APP_BUNDLE_DIRECTORY" MacOS/Ryujinx
 
+# Resign all dyplib files as ad-hoc after changing them
+find "$APP_BUNDLE_DIRECTORY/Contents/Frameworks" -type f -name "*.dylib" -exec codesign --force --sign - {} \;
+
 # Now sign it
+echo "Starting signing process"
 if ! [ -x "$(command -v codesign)" ];
 then
     if ! [ -x "$(command -v rcodesign)" ];
@@ -42,9 +47,9 @@ then
     fi
 
     # cargo install apple-codesign
-    echo "Usign rcodesign for ad-hoc signing"
+    echo "Using rcodesign for ad-hoc signing"
     rcodesign sign --entitlements-xml-path "$ENTITLEMENTS_FILE_PATH" "$APP_BUNDLE_DIRECTORY"
 else
-    echo "Usign codesign for ad-hoc signing"
+    echo "Using codesign for ad-hoc signing"
     codesign --entitlements "$ENTITLEMENTS_FILE_PATH" -f -s - "$APP_BUNDLE_DIRECTORY"
 fi
