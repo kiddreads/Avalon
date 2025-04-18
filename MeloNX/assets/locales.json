@@ -4992,7 +4992,7 @@
         "sv_SE": "Turboläget är en emulatorfunktion som effektivt ökar eller sänker hastigheten när ett spel inte är känsligt för bildfrekvens.\nDu kan växla denna funktion i spelet med en snabbtangent, konfigurerbar i Ryujinx inställningar för snabbtangenter.\n\nLämna den på 200 om du är osäker.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Турборежим – це функція емулятора, яка ефективно прискорює або сповільнює гру, якщо та не чутлива до частоти кадрів. Цю функцію можна ввімкнути/вимкнути безпосередньо під час гри за допомогою гарячої клавіші, яку можна налаштувати в меню Гарячі клавіші в налаштуваннях.",
+        "uk_UA": "Турборежим (Turbo mode) – функція емулятора, що ефективно прискорює або сповільнює гру, якщо та не чутлива до частоти кадрів. Цю функцію можна ввімкнути/вимкнути безпосередньо під час гри за допомогою гарячої клавіші, яку можна прив'язати в меню \"Гарячі клавіші\" в налаштуваннях.",
         "zh_CN": "涡轮模式是一种模拟器功能当游戏对帧率不敏感时它可以有效地导致加速或降速。\n您可以在游戏中使用热键切换此功能,它可以在 Ryujinx 的键盘热键设置进行设置。\n\n如果不确定则保留为 200。",
         "zh_TW": "加速模式是一種模擬器功能，其目的為加速或減速對不是以影格速率為速度 (frame-rate sensitive) 的遊戲。\n你可以在遊戲中以快捷鍵切換此功能，而快捷鍵可於 Ryujinx 鍵盤快捷鍵中設置。\n\n如果不確定，請保持數值為 200。"
       }
@@ -8742,7 +8742,7 @@
         "sv_SE": "Okänd",
         "th_TH": "ไม่รู้จัก",
         "tr_TR": "",
-        "uk_UA": "Назначити",
+        "uk_UA": "Невизначено",
         "zh_CN": "未知",
         "zh_TW": "未知"
       }
@@ -17667,7 +17667,7 @@
         "sv_SE": "Öppna Om-fönstret",
         "th_TH": "เปิดหน้าต่าง เกี่ยวกับ",
         "tr_TR": "Hakkında penceresini açar",
-        "uk_UA": "Відкриває вікно «Про програму».",
+        "uk_UA": "Відкриває вікно «Про застосунок»",
         "zh_CN": "打开关于窗口",
         "zh_TW": "開啟關於視窗"
       }
@@ -17867,7 +17867,7 @@
         "sv_SE": "Tillåter det emulerade programmet att ansluta till internet.\n\nSpel med ett LAN-läge kan ansluta till varandra när detta är aktiverat och systemen är anslutna till samma åtkomstpunkt. Detta inkluderar riktiga konsoler också.\n\nTillåter INTE anslutning till Nintendo-servrar. Kan orsaka kraschar i vissa spel som försöker ansluta till internet.\n\nLämna AV om du är osäker.",
         "th_TH": "อนุญาตให้แอปพลิเคชันจำลองเชื่อมต่ออินเทอร์เน็ต\n\nเกมที่มีโหมด LAN สามารถเชื่อมต่อระหว่างกันได้เมื่อเปิดใช้งานและระบบเชื่อมต่อกับจุดเชื่อมต่อเดียวกัน รวมถึงคอนโซลจริงด้วย\n\nไม่อนุญาตให้มีการเชื่อมต่อกับเซิร์ฟเวอร์ Nintendo อาจทำให้เกิดการหยุดทำงานในบางเกมที่พยายามเชื่อมต่ออินเทอร์เน็ต\n\nปล่อยให้ปิดหากคุณไม่แน่ใจ",
         "tr_TR": "Emüle edilen uygulamanın internete bağlanmasını sağlar.\n\nLAN modu bulunan oyunlar bu seçenek ile birbirine bağlanabilir ve sistemler aynı access point'e bağlanır. Bu gerçek konsolları da kapsar.\n\nNintendo sunucularına bağlanmayı sağlaMAZ. Internete bağlanmaya çalışan baz oyunların çökmesine sebep olabilr.\n\nEmin değilseniz devre dışı bırakın.",
-        "uk_UA": "Дозволяє емульованій програмі підключатися до Інтернету.\n\nІгри з режимом локальної мережі можуть підключатися одна до одної, якщо це увімкнено, і системи підключені до однієї точки доступу. Сюди входять і справжні консолі.\n\nНЕ дозволяє підключатися до серверів Nintendo.  Може призвести до збою в деяких іграх, які намагаються підключитися до Інтернету.\n\nЗалиште вимкненим, якщо не впевнені.",
+        "uk_UA": "Дозволяє емульованому застосунку підключатися до Інтернету.\n\nІгри з режимом локальної мережі (LAN) можуть підключатися одна до одної за умови, якщо опція увімкнена і системи підключені до однієї точки доступу (це також працює і зі справжніми консолями).\n\nНЕ дозволяє підключатися до серверів Nintendo. Може призвести до збою в деяких іграх, які намагаються підключитися до Інтернету.\n\nЗалиште вимкненим, якщо не впевнені.",
         "zh_CN": "允许模拟的游戏程序访问网络。\n\n当多个模拟器或实体 Switch 连接到同一个网络时，带有局域网模式的游戏便可以相互通信。\n\n即使开启此选项也无法访问 Nintendo 服务器，有可能导致某些尝试联网的游戏闪退。\n\n如果不确定，请保持关闭状态。",
         "zh_TW": "允許模擬應用程式連線網際網路。\n\n當啟用此功能且系統連線到同一接入點時，具有區域網路模式的遊戲可相互連線。這也包括真正的遊戲機。\n\n不允許連接 Nintendo 伺服器。可能會導致某些嘗試連線網際網路的遊戲崩潰。\n\n如果不確定，請保持關閉狀態。"
       }
@@ -20517,7 +20517,7 @@
         "sv_SE": "XCI-filen är skrivskyddad och kunde inte göras skrivbar. Kontrollera loggen för mer information",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "XCI файл Тільки для Читання і не може бути прочитаним. Перевірте журнали (logs) для отримання додаткової інформації",
+        "uk_UA": "XCI файл \"Тільки для Читання\" і не може бути прочитаним. Перевірте журнали (logs) для отримання додаткової інформації",
         "zh_CN": "XCI 文件是只读的，且不可以被标记为可读取的。查看日志以获得更多细节。",
         "zh_TW": "XCI 檔案是唯讀，並且無法改成可寫入。檢查日誌以取得更多資訊"
       }
@@ -21767,7 +21767,7 @@
         "sv_SE": "Öka upplösning:",
         "th_TH": "เพิ่มความละเอียด:",
         "tr_TR": "Çözünürlüğü artır:",
-        "uk_UA": "Збільшити роздільність:",
+        "uk_UA": "Збільшити роздільну здатність:",
         "zh_CN": "提高分辨率：",
         "zh_TW": "提高解析度:"
       }
@@ -21792,7 +21792,7 @@
         "sv_SE": "Sänk upplösning:",
         "th_TH": "ลดความละเอียด:",
         "tr_TR": "Çözünürlüğü azalt:",
-        "uk_UA": "Зменшити роздільність:",
+        "uk_UA": "Зменшити роздільну здатність:",
         "zh_CN": "降低分辨率：",
         "zh_TW": "降低解析度:"
       }
@@ -21867,7 +21867,7 @@
         "sv_SE": "Grafikbakände",
         "th_TH": "กราฟิกเบื้องหลัง",
         "tr_TR": "Grafik Arka Ucu",
-        "uk_UA": "Графічний рушій",
+        "uk_UA": "Графічний API",
         "zh_CN": "图形渲染引擎：",
         "zh_TW": "圖形後端"
       }
@@ -21892,7 +21892,7 @@
         "sv_SE": "Väljer den grafikbakände som ska användas i emulatorn.\n\nVulkan är oftast bättre för alla moderna grafikkort, så länge som deras drivrutiner är uppdaterade. Vulkan har också funktioner för snabbare shader compilation (mindre stuttering) för alla GPU-tillverkare.\n\nOpenGL kan nå bättre resultat på gamla Nvidia GPU:er, på äldre AMD GPU:er på Linux, eller på GPU:er med lägre VRAM, även om shader compilation stuttering kommer att vara större.\n\nStäll in till Vulkan om du är osäker. Ställ in till OpenGL om du GPU inte har stöd för Vulkan även med de senaste grafikdrivrutinerna.",
         "th_TH": "เลือกกราฟิกเบื้องหลังที่จะใช้ในโปรแกรมจำลอง\n\nโดยรวมแล้ว Vulkan นั้นดีกว่าสำหรับการ์ดจอรุ่นใหม่ทั้งหมด ตราบใดที่ไดรเวอร์ยังอัพเดทอยู่เสมอ Vulkan ยังมีคุณสมบัติการคอมไพล์เชเดอร์ที่เร็วขึ้น(และลดอาการกระตุก) สำหรับ GPU อื่นๆทุกอัน\n\nOpenGL อาจได้รับผลลัพธ์ที่ดีกว่าบน Nvidia GPU รุ่นเก่า, AMD GPU รุ่นเก่าบน Linux หรือบน GPU ที่มี VRAM น้อย แม้ว่าการคอมไพล์เชเดอร์ จะทำให้อาการกระตุกมากขึ้นก็ตาม\n\nตั้งค่าเป็น Vulkan หากไม่แน่ใจ ตั้งค่าเป็น OpenGL หาก GPU ของคุณไม่รองรับ Vulkan แม้จะมีไดรเวอร์กราฟิกล่าสุดก็ตาม",
         "tr_TR": "",
-        "uk_UA": "Виберіть backend графіки, що буде використовуватись в емуляторі.\n\n\"Vulkan\" краще для всіх сучасних відеокарт, якщо драйвери вчасно оновлюються. У Vulkan також швидше компілюються шейдери (менше \"заїкання\" зображення) на відеокартах всіх компаній.\n\n\"OpenGL\" може дати кращі результати на старих відеокартах Nvidia, старих відеокартах AMD на Linux, або на відеокартах з маленькою кількістю VRAM, але \"заїкання\" через компіляцію шейдерів будуть частіші.\n\nЯкщо не впевнені, встановіть на \"Vulkan\". Встановіть на \"OpenGL\", якщо Ваша відеокарта не підтримує Vulkan навіть на останніх драйверах.",
+        "uk_UA": "Оберіть графічний API (Graphics Backend), який буде використовуватись емулятором.\n\n\"Vulkan\" є найкращим вибором для всіх сучасних графічних процесорів (GPU) за умови наявності актуальних драйверів. Vulkan також забезпечує швидшу компіляцію шейдерів, що зменшує кількість фризів (т.зв. \"заїкань\" зображення), незалежно від виробника GPU.\n\n\"OpenGL\" може дати кращі результати на старих відеокартах Nvidia, старих відеокартах AMD на Linux або на відеокартах з меншою кількістю VRAM, але \"заїкання\" через компіляцію шейдерів будуть частіші.\n\nЯкщо не впевнені, встановіть на \"Vulkan\". Встановіть на \"OpenGL\", якщо ваша відеокарта не підтримує Vulkan навіть на останніх драйверах.",
         "zh_CN": "选择模拟器中使用的图像渲染引擎。\n\n安装了最新显卡驱动程序的所有现代显卡基本都支持 Vulkan，Vulkan 能够提供更快的着色器编译（较少的卡顿）。\n\n在旧版 Nvidia 显卡上、Linux 上的旧版 AMD 显卡，或者显存较低的显卡上，OpenGL 可能会取得更好的效果，但着色器编译更慢（更多的卡顿）。\n\n如果不确定，请设置为“Vulkan”。如果您的 GPU 已安装了最新显卡驱动程序也不支持 Vulkan，那请设置为“OpenGL”。",
         "zh_TW": "選擇模擬器將使用的圖形後端。\n\n只要驅動程式是最新的，Vulkan 對所有現代顯示卡來說都更好用。Vulkan 還能在所有 GPU 廠商上實現更快的著色器編譯 (減少卡頓)。\n\nOpenGL 在舊式 Nvidia GPU、Linux 上的舊式 AMD GPU 或 VRAM 較低的 GPU 上可能會取得更好的效果，不過著色器編譯的卡頓會更嚴重。\n\n如果不確定，請設定為 Vulkan。如果您的 GPU 使用最新的圖形驅動程式也不支援 Vulkan，請設定為 OpenGL。"
       }
@@ -21942,7 +21942,7 @@
         "sv_SE": "Använder Vulkan.\nPå en ARM Mac och vid spel som körs bra på den så används Metal-bakänden.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Використовує Vulkan.\nНа Mac з ARM-архітектурою, якщо гра добре працює з Vulkan, використовується графічний рушій Metal.",
+        "uk_UA": "Використовує Vulkan.\nНа Mac з процесором ARM використовується графічний API Metal, якщо гра під нього оптимізована.",
         "zh_CN": "使用 Vulkan。\n在 ARM Mac 上，当玩在其下运行良好的游戏时，使用 Metal 后端。",
         "zh_TW": "使用Vulkan。\n在 ARM Mac 上，如果遊戲執行性能良好時，則將使用 Metal 後端。"
       }
@@ -21992,7 +21992,7 @@
         "sv_SE": "Komprimerar ASTC-texturer för att minska VRAM-användning.\n\nSpel som använder detta texturformat inkluderar Astral Chain, Bayonetta 3, Fire Emblem Engage, Metroid Prime Remastered, Super Mario Bros. Wonder och The Legend of Zelda: Tears of the Kingdom.\n\nGrafikkort med 4GiB VRAM eller mindre kommer sannolikt krascha någon gång när du kör dessa spel.\n\nAktivera endast om du har slut på VRAM på ovan nämnda spel. Lämna AV om du är osäker.",
         "th_TH": "บีบอัดพื้นผิว ASTC เพื่อลดการใช้งาน VRAM\n\nเกมที่ใช้รูปแบบพื้นผิวนี้ ได้แก่ Astral Chain, Bayonetta 3, Fire Emblem Engage, Metroid Prime Remastered, Super Mario Bros. Wonder และ The Legend of Zelda: Tears of the Kingdom\n\nการ์ดจอที่มี 4GiB VRAM หรือน้อยกว่ามีแนวโน้มที่จะพังในบางจุดขณะเล่นเกมเหล่านี้\n\nเปิดใช้งานเฉพาะในกรณีที่ VRAM ของคุณใกล้หมดในเกมที่กล่าวมาข้างต้น ปล่อยให้ปิดหากไม่แน่ใจ",
         "tr_TR": "",
-        "uk_UA": "Стискає текстури ASTC, щоб зменшити використання VRAM.\n\nЦим форматом текстур користуються такі ігри, як Astral Chain, Bayonetta 3, Fire Emblem Engage, Metroid Prime Remastered, Super Mario Bros. Wonder і The Legend of Zelda: Tears of the Kingdom.\n\nЦі ігри, скоріше всього крашнуться на відеокартах з розміром VRAM в 4 Гб і менше.\n\nВмикайте тільки якщо у Вас закінчується VRAM на цих іграх. Залиште на \"Вимкнути\", якщо не впевнені.",
+        "uk_UA": "Стискає текстури ASTC, щоб зменшити використання VRAM.\n\nЦим форматом текстур користуються такі ігри, як: Astral Chain, Bayonetta 3, Fire Emblem Engage, Metroid Prime Remastered, Super Mario Bros. Wonder та The Legend of Zelda: Tears of the Kingdom.\n\nІснує висока ймовірність збоїв при запуску цих ігор на відеокартах з 4ГБ VRAM або менше.\n\nВмикайте тільки якщо у вас закінчується VRAM на зазначених іграх. Залиште на \"Вимкнути\", якщо не впевнені.",
         "zh_CN": "压缩 ASTC 纹理以减少 VRAM (显存)的占用。\n\n使用此纹理格式的游戏包括：异界锁链(Astral Chain)，蓓优妮塔3(Bayonetta 3)，火焰纹章Engage(Fire Emblem Engage)，密特罗德 究极(Metroid Prime Remased)，超级马力欧兄弟 惊奇(Super Mario Bros. Wonder)以及塞尔达传说 王国之泪(The Legend of Zelda: Tears of the Kingdom)。\n\n显存小于4GB的显卡在运行这些游戏时可能会偶发闪退。\n\n只有当您在上述游戏中的显存不足时才需要启用此选项。\n\n如果不确定，请保持关闭状态。",
         "zh_TW": "壓縮 ASTC 紋理，以減少 VRAM 占用。\n\n使用這種紋理格式的遊戲包括 Astral Chain、Bayonetta 3、Fire Emblem Engage、Metroid Prime Remastered、Super Mario Bros. Wonder 和 The Legend of Zelda: Tears of the Kingdom。\n\n使用 4GB 或更低 VRAM 的顯示卡在執行這些遊戲時可能會崩潰。\n\n只有在上述遊戲的 VRAM 即將耗盡時才啟用。如果不確定，請保持關閉狀態。"
       }
@@ -22042,7 +22042,7 @@
         "sv_SE": "Välj grafikkortet som ska användas med Vulkan-grafikbakänden.\n\nPåverkar inte GPU:n som OpenGL använder.\n\nStäll in till den GPU som flaggats som \"dGPU\" om osäker. Om det inte finns någon, lämna orörd.",
         "th_TH": "เลือกการ์ดจอที่จะใช้กับแบ็กเอนด์กราฟิก Vulkan\n\nไม่ส่งผลต่อ GPU ที่ OpenGL จะใช้\n\nตั้งค่าเป็น GPU ที่ถูกตั้งค่าสถานะเป็น \"dGPU\" ถ้าหากคุณไม่แน่ใจ ,หากไม่มีก็ปล่อยทิ้งไว้โดยไม่ต้องแตะต้องมัน",
         "tr_TR": "Vulkan Grafik Arka Ucu ile kullanılacak Ekran Kartını Seçin.\n\nOpenGL'nin kullanacağı GPU'yu etkilemez.\n\n Emin değilseniz \"dGPU\" olarak işaretlenmiş GPU'ya ayarlayın.  Eğer yoksa, dokunmadan bırakın.\n",
-        "uk_UA": "Виберіть відеокарту, яка використовуватиметься з графічним рушієм Vulkan.\n\nНалаштування не впливає на відеоадаптер (GPU), що використовуватиме рушій OpenGL.\n\nВстановіть графічний рушій, позначений як «dGPU», якщо не впевнені. Якщо такого пункту немає, то залиште як є.",
+        "uk_UA": "Виберіть відеоадаптер (GPU), який використовуватиметься з графічним API Vulkan.\n\nНалаштування не впливає на відеоадаптер, що використовуватиме API OpenGL.\n\nОберіть «dGPU», якщо не впевнені. Якщо такого пункту немає, то залиште налаштування за замовчуванням.",
         "zh_CN": "选择 Vulkan 图形引擎使用的 GPU。\n\n此选项不会影响 OpenGL 使用的 GPU。\n\n如果不确定，建议选择\"独立显卡(dGPU)\"。如果没有独立显卡，则无需改动此选项。",
         "zh_TW": "選擇將與 Vulkan 圖形後端一起使用的顯示卡。\n\n不會影響 OpenGL 將使用的 GPU。\n\n如果不確定，請設定為標記為「dGPU」的 GPU。如果沒有，則保持原狀。"
       }
@@ -22642,7 +22642,7 @@
         "sv_SE": "Tillämpar anti-aliasing på spelrenderaren.\n\nFXAA kommer att sudda det mesta av bilden, medan SMAA kommer att försöka hitta taggiga kanter och släta ut dem.\n\nRekommenderas inte att använda tillsammans med skalfiltret FSR.\n\nDet här alternativet kan ändras medan ett spel körs genom att klicka på \"Tillämpa\" nedan. Du kan helt enkelt flytta inställningsfönstret åt sidan och experimentera tills du hittar ditt föredragna utseende för ett spel.\n\nLämna som INGEN om du är osäker.",
         "th_TH": "ใช้การลดรอยหยักกับการเรนเดอร์เกม\n\nFXAA จะเบลอภาพส่วนใหญ่ ในขณะที่ SMAA จะพยายามค้นหารอยหยักและปรับให้เรียบ\n\nไม่แนะนำให้ใช้ร่วมกับตัวกรองสเกล FSR\n\nตัวเลือกนี้สามารถเปลี่ยนแปลงได้ในขณะที่เกมกำลังทำงานอยู่โดยคลิก \"นำไปใช้\" ด้านล่าง คุณสามารถย้ายหน้าต่างการตั้งค่าไปด้านข้างและทดลองจนกว่าคุณจะพบรูปลักษณ์ที่คุณต้องการสำหรับเกม\n\nปล่อยไว้ที่ NONE หากไม่แน่ใจ",
         "tr_TR": "",
-        "uk_UA": "Вмикає згладжування.\n\nFXAA розмиє краї зображення, тоді як SMAA спробує згладити їх. FXAA (продуктивність) вимагає менше обчислювальних ресурсів, ніж SMAA (якість).\n\nНе рекомендується використовувати разом з фільтром масштабування FSR.\n\nЦю опцію можна міняти під час гри натисканням \"Застосувати\" в цьому вікні; щоб знайти найкращий варіант, просто відсуньте вікно налаштувань і поекспериментуйте.\n\nЗалиште \"Немає\", якщо не впевнені.",
+        "uk_UA": "Вмикає згладжування (Anti-aliasing).\n\nFXAA розмиє зображення, тоді як SMAA намагається згладжувати нерівні краї зображення. FXAA (продуктивність) вимагатиме менше обчислювальних ресурсів, аніж SMAA (якість).\n\nНе рекомендується використовувати разом з фільтром масштабування FSR.\n\nЦю опцію можна міняти під час гри натисканням \"Застосувати\" в цьому вікні; щоб знайти найкращий варіант, просто відсуньте вікно налаштувань і поекспериментуйте.\n\nЗалиште \"Немає\", якщо не впевнені.",
         "zh_CN": "抗锯齿是一种图形处理技术，用于减少图像边缘的锯齿状现象，使图像更加平滑。\n\nFXAA（快速近似抗锯齿）是一种性能开销相对较小的抗锯齿方法，但可能会使得整体图像看起来有些模糊。\n\nSMAA（增强型子像素抗锯齿）则更加精细，它会尝试找到锯齿边缘并平滑它们，相比 FXAA 有更好的图像质量，但性能开销可能会稍大一些。\n\n如果开启了 FSR（FidelityFX Super Resolution，超级分辨率锐画技术）来提高性能或图像质量，不建议再启用抗锯齿，因为它们会产生不必要的图形处理开销，或者相互之间效果不协调。\n\n在游戏运行时，通过点击下面的“应用”按钮可以使设置生效；你可以将设置窗口移开，并试验找到您喜欢的游戏画面效果。\n\n如果不确定，请保持为“无”。",
         "zh_TW": "對遊戲繪製進行反鋸齒處理。\n\nFXAA 會模糊大部分圖像，而 SMAA 則會嘗試找出鋸齒邊緣並將其平滑化。\n\n不建議與 FSR 縮放濾鏡一起使用。\n\n此選項可在遊戲執行時透過點選下方的「套用」進行變更；您只需將設定視窗移到一旁，然後進行試驗，直到找到您喜歡的遊戲效果。\n\n如果不確定，請選擇無狀態。"
       }
@@ -22717,7 +22717,7 @@
         "sv_SE": "Välj det skalfilter som ska tillämpas vid användning av upplösningsskala.\n\nBilinjär fungerar bra för 3D-spel och är ett säkert standardalternativ.\n\nNärmast rekommenderas för pixel art-spel.\n\nFSR 1.0 är bara ett skarpningsfilter, rekommenderas inte för FXAA eller SMAA.\n\nOmrådesskalning rekommenderas vid nedskalning av upplösning som är större än utdatafönstret. Det kan användas för att uppnå en supersamplad anti-alias-effekt vid nedskalning med mer än 2x.\n\nDetta alternativ kan ändras medan ett spel körs genom att klicka på \"Tillämpa\" nedan. du kan helt enkelt flytta inställningsfönstret åt sidan och experimentera tills du hittar ditt föredragna utseende för ett spel.\n\nLämna som BILINJÄR om du är osäker.",
         "th_TH": "เลือกตัวกรองสเกลที่จะใช้เมื่อใช้สเกลความละเอียด\n\nBilinear ทำงานได้ดีกับเกม 3D และเป็นตัวเลือกเริ่มต้นที่ปลอดภัย\n\nแนะนำให้ใช้เกมภาพพิกเซลที่ใกล้เคียงที่สุด\n\nFSR 1.0 เป็นเพียงตัวกรองความคมชัด ไม่แนะนำให้ใช้กับ FXAA หรือ SMAA\n\nตัวเลือกนี้สามารถเปลี่ยนแปลงได้ในขณะที่เกมกำลังทำงานอยู่โดยคลิก \"นำไปใช้\" ด้านล่าง คุณสามารถย้ายหน้าต่างการตั้งค่าไปด้านข้างและทดลองจนกว่าคุณจะพบรูปลักษณ์ที่คุณต้องการสำหรับเกม",
         "tr_TR": "Choose the scaling filter that will be applied when using resolution scale.\n\nBilinear works well for 3D games and is a safe default option.\n\nNearest is recommended for pixel art games.\n\nFSR 1.0 is merely a sharpening filter, not recommended for use with FXAA or SMAA.\n\nThis option can be changed while a game is running by clicking \"Apply\" below; you can simply move the settings window aside and experiment until you find your preferred look for a game.\n\nLeave on BILINEAR if unsure.",
-        "uk_UA": "Оберіть фільтр масштабування, який буде використовуватися при збільшенні роздільної здатності.\n\n\"Білінійний\" добре виглядає в 3D іграх, і хороше налаштування за умовчуванням.\n\n\"Найближчий\" рекомендується для ігор з піксель-артом.\n\n\"FSR 1.0\" - фільтр різкості. Не варто використовувати разом з FXAA або SMAA.\n\nЦю опцію можна міняти під час гри натисканням \"Застосувати\" в цьому вікні; щоб знайти найкращий варіант, просто відсуньте вікно налаштувань і поекспериментуйте.\n\nЗалиште \"Білінійний\", якщо не впевнені.",
+        "uk_UA": "Оберіть фільтр масштабування, який буде використовуватися при збільшенні роздільної здатності.\n\n\"Білінійний (Bilinear)\" добре виглядає в 3D іграх та є хорошим варіантом за замовчуванням.\n\n\"Найближчий (Nearest)\" рекомендується для піксельних ігор.\n\n\"FSR 1.0\" - фільтр різкості. Не варто використовувати разом з FXAA або SMAA.\n\nЦю опцію можна міняти під час гри натисканням \"Застосувати\" в цьому вікні; щоб знайти найкращий варіант, просто відсуньте вікно налаштувань і поекспериментуйте.\n\nЗалиште \"Білінійний\", якщо не впевнені.",
         "zh_CN": "选择在分辨率缩放时将使用的缩放过滤器。\n\nBilinear（双线性过滤）对于3D游戏效果较好，是一个安全的默认选项。\n\nNearest（最近邻过滤）推荐用于像素艺术游戏。\n\nFSR（超级分辨率锐画）只是一个锐化过滤器，不推荐与 FXAA 或 SMAA 抗锯齿一起使用。\n\nArea（局部过滤），当渲染分辨率大于窗口实际分辨率，推荐该选项。该选项在渲染比例大于2.0的情况下，可以实现超采样的效果。\n\n在游戏运行时，通过点击下面的“应用”按钮可以使设置生效；你可以将设置窗口移开，并试验找到您喜欢的游戏画面效果。\n\n如果不确定，请保持为“Bilinear（双线性过滤）”。",
         "zh_TW": "選擇使用解析度縮放時套用的縮放過濾器。\n\n雙線性 (Bilinear) 濾鏡適用於 3D 遊戲，是一個安全的預設選項。\n\n建議像素美術遊戲使用近鄰性 (Nearest) 濾鏡。\n\nFSR 1.0 只是一個銳化濾鏡，不建議與 FXAA 或 SMAA 一起使用。\n\n此選項可在遊戲執行時透過點選下方的「套用」進行變更；您只需將設定視窗移到一旁，然後進行試驗，直到找到您喜歡的遊戲效果。\n\n如果不確定，請保持雙線性 (Bilinear) 狀態。"
       }
@@ -22742,7 +22742,7 @@
         "sv_SE": "Bilinjär",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Білінійний",
+        "uk_UA": "Білінійний (Bilinear)",
         "zh_CN": "Bilinear（双线性过滤）",
         "zh_TW": "雙線性 (Bilinear)"
       }
@@ -22767,7 +22767,7 @@
         "sv_SE": "Närmaste",
         "th_TH": "ใกล้สุด",
         "tr_TR": "",
-        "uk_UA": "Найближчий",
+        "uk_UA": "Найближчий (Nearest)",
         "zh_CN": "Nearest（邻近过滤）",
         "zh_TW": "近鄰性 (Nearest)"
       }
@@ -22867,7 +22867,7 @@
         "sv_SE": "Ställ in nivå för FSR 1.0 sharpening. Högre är skarpare.",
         "th_TH": "ตั้งค่าระดับความคมชัด FSR 1.0 ยิ่งสูงกว่าจะยิ่งคมชัดกว่า",
         "tr_TR": "",
-        "uk_UA": "Встановити рівень різкості FSR 1.0. Чим вище - тим різкіше.",
+        "uk_UA": "Встановити рівень різкості FSR 1.0. Чим вище значення - тим різкіша картинка.",
         "zh_CN": "设置 FSR 1.0 的锐化等级，数值越高，图像越锐利。",
         "zh_TW": "設定 FSR 1.0 銳化等級。越高越清晰。"
       }
@@ -23167,7 +23167,7 @@
         "sv_SE": "Klicka för att öppna ändringsloggen för denna version i din standardwebbläsare.",
         "th_TH": "คลิกเพื่อเปิดประวัติการเปลี่ยนแปลงสำหรับเวอร์ชั่นนี้ บนเบราว์เซอร์เริ่มต้นของคุณ",
         "tr_TR": "Kullandığınız versiyon için olan değişiklikleri varsayılan tarayıcınızda görmek için tıklayın",
-        "uk_UA": "Клацніть, щоб відкрити журнал змін для цієї версії у стандартному браузері.",
+        "uk_UA": "Натисніть, щоб відкрити список змін для цієї версії.",
         "zh_CN": "点击这里在浏览器中打开此版本的更新日志。",
         "zh_TW": "在預設瀏覽器中開啟此版本的更新日誌。"
       }
@@ -23692,7 +23692,7 @@
         "sv_SE": "Obunden",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Безмежна",
+        "uk_UA": "Необмежена",
         "zh_CN": "无限制",
         "zh_TW": "沒有限制"
       }
@@ -23742,7 +23742,7 @@
         "sv_SE": "Emulerad vertikal synk. 'Switch' emulerar Switchens uppdateringsfrekvens på 60Hz. 'Obunden' är en obegränsad uppdateringsfrekvens.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Емульована вертикальна синхронізація кадрів. 'Switch' емулює частоту оновлення консолі Nintendo Switch (60 Гц). 'Необмежена' — частота оновлення не матиме обмежень.",
+        "uk_UA": "Емульована вертикальна синхронізація кадрів. \"Switch\" емулює частоту оновлення консолі Nintendo Switch (60 Гц). \"Необмежена\" — частота оновлення не матиме обмежень.",
         "zh_CN": "模拟垂直同步。“Switch”模拟了 Switch 的 60Hz 刷新率。“无限制”没有刷新率限制。",
         "zh_TW": "模擬垂直同步。「Switch」 模擬 Nintendo Switch 的 60Hz 重新整理頻率。「沒有限制」是沒有限制的重新整理頻率。"
       }
@@ -23767,7 +23767,7 @@
         "sv_SE": "Emulerad vertikal synk. 'Switch' emulerar Switchens uppdateringsfrekvens på 60Hz. 'Obunden' är en obegränsad uppdateringsfrekvens. 'Anpassad uppdateringsfrekvens' emulerar den angivna anpassade uppdateringsfrekvensen.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Емульована вертикальна синхронізація кадрів. 'Switch' емулює частоту оновлення консолі Nintendo Switch (60 Гц). 'Необмежена' — частота оновлення не матиме обмежень. 'Користувацька' емулює вказану користувачем частоту оновлення.",
+        "uk_UA": "Емульована вертикальна синхронізація кадрів. \"Switch\" емулює частоту оновлення консолі Nintendo Switch (60 Гц). \"Необмежена\" — частота оновлення не матиме обмежень. \"Користувацька\" емулює вказану користувачем частоту оновлення.",
         "zh_CN": "模拟垂直同步。“Switch”模拟了 Switch 的 60Hz 刷新率。“无限制”没有刷新率限制。“自定义刷新率”模拟指定的自定义刷新率。",
         "zh_TW": "模擬垂直同步。「Switch」 模擬 Nintendo Switch 的 60Hz 重新整理頻率。「沒有限制」是沒有限制的重新整理頻率。「自訂的重新整理頻率」模擬所自訂的重新整理頻率。"
       }
@@ -24017,7 +24017,7 @@
         "sv_SE": "Turboläge:",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Турбомод:",
+        "uk_UA": "Турборежим:",
         "zh_CN": "涡轮模式: ",
         "zh_TW": "加速模式："
       }
@@ -24042,7 +24042,7 @@
         "sv_SE": "Snabbtangenten för turboläge.\nKonfigurera beteendet för turboläge i Ryujinx CPU-inställningar.\n\nLämna Obunden om du är osäker.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Гаряча клавіша Турборежиму.\nКонфігурація поведінки турборежиму в налаштуваннях Процесору Ryujinx.\n\nНе прив'язуйте, якщо не впевнені.",
+        "uk_UA": "Гаряча клавіша Турборежиму.\nКонфігурацію поведінки турборежиму можна знайти в пункті меню \"Процесор\" в налаштуваннях Ryujinx.\n\nЗалиште неприв'язаною, якщо не впевнені.",
         "zh_CN": "涡轮模式热键。\n可以在 Ryujinx CPU 设置中配置涡轮模式的行为。\n\n如果不确定请保留为未绑定。",
         "zh_TW": "加速模式快捷鍵。\n可以在 Ryujinx CPU 設定中設定加速模式的倍數。\n\n如果不確定，請保持為「未分配」。"
       }
@@ -24067,7 +24067,7 @@
         "sv_SE": "Endast när du trycker ner",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Тільки під час натискання",
+        "uk_UA": "Лише під час натискання",
         "zh_CN": "仅在按下时",
         "zh_TW": "只在按下時"
       }
