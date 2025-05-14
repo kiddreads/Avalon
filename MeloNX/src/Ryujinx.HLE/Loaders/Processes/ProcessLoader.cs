@@ -195,16 +195,22 @@ namespace Ryujinx.HLE.Loaders.Processes
                     nacpStorage.Read(0, nacpData.ByteSpan);
 
                     programName = nacpData.Value.Title[(int)_device.System.State.DesiredTitleLanguage].NameString.ToString();
+                    
+                    if (string.IsNullOrWhiteSpace(programName))
+                    {
+                        foreach (ApplicationControlProperty.ApplicationTitle nacpTitles in nacpData.Value.Title)
+                        {
+                            if (nacpTitles.Name[0] != 0)
+                                continue;
+
+                            programName = nacpTitles.NameString.ToString();
+                        }
+                    }
 
                     if ("Switch Verification" ==
                         nacpData.Value.Title[(int)TitleLanguage.AmericanEnglish].NameString.ToString())
                         throw new InvalidOperationException();
-
-                    if (string.IsNullOrWhiteSpace(programName))
-                    {
-                        programName = Array.Find(nacpData.Value.Title.ItemsRo.ToArray(), x => x.Name[0] != 0).NameString.ToString();
-                    }
-
+                    
                     if (nacpData.Value.PresenceGroupId != 0)
                     {
                         programId = nacpData.Value.PresenceGroupId;

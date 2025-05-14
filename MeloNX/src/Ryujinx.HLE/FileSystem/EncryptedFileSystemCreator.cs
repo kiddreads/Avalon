@@ -3,13 +3,14 @@ using LibHac.Common;
 using LibHac.Fs;
 using LibHac.Fs.Fsa;
 using LibHac.FsSrv.FsCreator;
+using System.Runtime.CompilerServices;
 
 namespace Ryujinx.HLE.FileSystem
 {
     public class EncryptedFileSystemCreator : IEncryptedFileSystemCreator
     {
         public Result Create(ref SharedRef<IFileSystem> outEncryptedFileSystem,
-            ref SharedRef<IFileSystem> baseFileSystem, IEncryptedFileSystemCreator.KeyId idIndex,
+            ref readonly SharedRef<IFileSystem> baseFileSystem, IEncryptedFileSystemCreator.KeyId idIndex,
             in EncryptionSeed encryptionSeed)
         {
             if (idIndex < IEncryptedFileSystemCreator.KeyId.Save || idIndex > IEncryptedFileSystemCreator.KeyId.CustomStorage)
@@ -18,7 +19,7 @@ namespace Ryujinx.HLE.FileSystem
             }
 
             // TODO: Reenable when AesXtsFileSystem is fixed.
-            outEncryptedFileSystem = SharedRef<IFileSystem>.CreateMove(ref baseFileSystem);
+            outEncryptedFileSystem = SharedRef<IFileSystem>.CreateMove(ref baseFileSystem.Ref);
 
             return Result.Success;
         }
