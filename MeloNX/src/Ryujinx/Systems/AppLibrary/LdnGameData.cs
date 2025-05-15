@@ -20,11 +20,10 @@ namespace Ryujinx.Ava.Systems.AppLibrary
         public static Array GetArrayForApp(
             LdnGameData[] receivedData, ref ApplicationControlProperty acp)
         {
-            ReadOnlySpan<ulong> communicationId = acp.LocalCommunicationId;
-            ulong[] allowedTitleIds = communicationId.ToArray();
-            
+            LibHac.Common.FixedArrays.Array8<ulong> communicationId = acp.LocalCommunicationId;
+
             return new Array(receivedData.Where(game =>
-                allowedTitleIds.Contains(game.TitleId.ToULong())
+                communicationId.Items.Contains(game.TitleId.ToULong())
             ));
         }
 

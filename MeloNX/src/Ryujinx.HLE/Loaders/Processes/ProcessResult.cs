@@ -59,13 +59,7 @@ namespace Ryujinx.HLE.Loaders.Processes
 
                 if (string.IsNullOrWhiteSpace(Name))
                 {
-                    foreach (ApplicationControlProperty.ApplicationTitle nacpTitles in ApplicationControlProperties.Title)
-                    {
-                        if (nacpTitles.Name[0] != 0)
-                            continue;
-
-                        Name = nacpTitles.NameString.ToString();
-                    }
+                    Name = Array.Find(ApplicationControlProperties.Title.ItemsRo.ToArray(), x => x.Name[0] != 0).NameString.ToString();
                 }
 
                 DisplayVersion = ApplicationControlProperties.DisplayVersionString.ToString();

@@ -346,9 +346,9 @@ namespace Ryujinx.HLE.HOS.Services.Ldn.UserServiceCreator.LdnRyu
             }
         }
 
-        public void SetGameVersion(ReadOnlySpan<byte> versionString)
+        public void SetGameVersion(byte[] versionString)
         {
-            _gameVersion = versionString.ToArray();
+            _gameVersion = versionString;
 
             if (_gameVersion.Length < 0x10)
             {
