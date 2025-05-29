@@ -1,7 +1,7 @@
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.Input;
 using LibHac.Fs;
 using LibHac.Tools.FsSystem.NcaUtils;
 using Ryujinx.Ava.Common;
@@ -26,7 +26,6 @@ namespace Ryujinx.Ava.UI.Controls
 {
     public class ApplicationContextMenu : MenuFlyout
     {
-        
         public ApplicationContextMenu()
         {
             InitializeComponent();
@@ -36,39 +35,35 @@ namespace Ryujinx.Ava.UI.Controls
         {
             AvaloniaXamlLoader.Load(this);
         }
+        
+        public static RelayCommand<MainWindowViewModel> ToggleFavorite { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null,
+                viewModel =>
+                {
+                    viewModel.SelectedApplication.Favorite = !viewModel.SelectedApplication.Favorite;
 
-        public void ToggleFavorite_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
+                    ApplicationLibrary.LoadAndSaveMetaData(viewModel.SelectedApplication.IdString, appMetadata =>
+                    {
+                        appMetadata.Favorite = viewModel.SelectedApplication.Favorite;
+                    });
 
-            viewModel.SelectedApplication.Favorite = !viewModel.SelectedApplication.Favorite;
-
-            ApplicationLibrary.LoadAndSaveMetaData(viewModel.SelectedApplication.IdString, appMetadata =>
-            {
-                appMetadata.Favorite = viewModel.SelectedApplication.Favorite;
-            });
-
-            viewModel.RefreshView();
-        }
-
-        public void OpenUserSaveDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                OpenSaveDirectory(viewModel, SaveDataType.Account, new UserId((ulong)viewModel.AccountManager.LastOpenedUser.UserId.High, (ulong)viewModel.AccountManager.LastOpenedUser.UserId.Low));
-        }
-
-        public void OpenDeviceSaveDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                OpenSaveDirectory(viewModel, SaveDataType.Device, default);
-        }
-
-        public void OpenBcatSaveDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                OpenSaveDirectory(viewModel, SaveDataType.Bcat, default);
-        }
+                    viewModel.RefreshView();
+                }
+            );
+        
+        public static RelayCommand<MainWindowViewModel> OpenUserSaveDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel =>
+                    OpenSaveDirectory(viewModel, SaveDataType.Account, new UserId((ulong)viewModel.AccountManager.LastOpenedUser.UserId.High, (ulong)viewModel.AccountManager.LastOpenedUser.UserId.Low))
+                );
+        
+        public static RelayCommand<MainWindowViewModel> OpenDeviceSaveDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null,
+                viewModel => OpenSaveDirectory(viewModel, SaveDataType.Device, default));
+        
+        public static RelayCommand<MainWindowViewModel> OpenBcatSaveDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => OpenSaveDirectory(viewModel, SaveDataType.Bcat, default));
 
         private static void OpenSaveDirectory(MainWindowViewModel viewModel, SaveDataType saveDataType, UserId userId)
         {
@@ -76,159 +71,151 @@ namespace Ryujinx.Ava.UI.Controls
 
             ApplicationHelper.OpenSaveDir(in saveDataFilter, viewModel.SelectedApplication.Id, viewModel.SelectedApplication.ControlHolder, viewModel.SelectedApplication.Name);
         }
-
-        public async void OpenTitleUpdateManager_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await TitleUpdateManagerView.Show(viewModel.ApplicationLibrary, viewModel.SelectedApplication);
-        }
-
-        public async void OpenDownloadableContentManager_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await DownloadableContentManagerView.Show(viewModel.ApplicationLibrary, viewModel.SelectedApplication);
-        }
-
-        public async void OpenCheatManager_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await StyleableAppWindow.ShowAsync(
+        
+        public static AsyncRelayCommand<MainWindowViewModel> OpenTitleUpdateManager { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => TitleUpdateManagerView.Show(viewModel.ApplicationLibrary, viewModel.SelectedApplication)
+            );
+        
+        public static AsyncRelayCommand<MainWindowViewModel> OpenDownloadableContentManager { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => DownloadableContentManagerView.Show(viewModel.ApplicationLibrary, viewModel.SelectedApplication)
+            );
+        
+        public static AsyncRelayCommand<MainWindowViewModel> OpenCheatManager { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => StyleableAppWindow.ShowAsync(
                     new CheatWindow(
                         viewModel.VirtualFileSystem,
                         viewModel.SelectedApplication.IdString,
                         viewModel.SelectedApplication.Name,
                         viewModel.SelectedApplication.Path
                     )
-                );
-        }
+                ));
+        
+        public static RelayCommand<MainWindowViewModel> OpenModsDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel =>
+                {
+                    string modsBasePath = ModLoader.GetModsBasePath();
+                    string titleModsPath = ModLoader.GetApplicationDir(modsBasePath, viewModel.SelectedApplication.IdString);
 
-        public void OpenModsDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
+                    OpenHelper.OpenFolder(titleModsPath);
+                });
+        
+        public static RelayCommand<MainWindowViewModel> OpenSdModsDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel =>
+            {
+                string sdModsBasePath = ModLoader.GetSdModsBasePath();
+                string titleModsPath = ModLoader.GetApplicationDir(sdModsBasePath, viewModel.SelectedApplication.IdString);
 
-            string modsBasePath = ModLoader.GetModsBasePath();
-            string titleModsPath = ModLoader.GetApplicationDir(modsBasePath, viewModel.SelectedApplication.IdString);
+                OpenHelper.OpenFolder(titleModsPath);
+            });
 
-            OpenHelper.OpenFolder(titleModsPath);
-        }
-
-        public void OpenSdModsDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
-            string sdModsBasePath = ModLoader.GetSdModsBasePath();
-            string titleModsPath = ModLoader.GetApplicationDir(sdModsBasePath, viewModel.SelectedApplication.IdString);
-
-            OpenHelper.OpenFolder(titleModsPath);
-        }
-
-        public async void OpenModManager_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
+        public static AsyncRelayCommand<MainWindowViewModel> OpenModManager { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+            {
                 await ModManagerView.Show(
-                    viewModel.SelectedApplication.Id, 
-                    viewModel.SelectedApplication.IdBase, 
-                    viewModel.ApplicationLibrary, 
+                    viewModel.SelectedApplication.Id,
+                    viewModel.SelectedApplication.IdBase,
+                    viewModel.ApplicationLibrary,
                     viewModel.SelectedApplication.Name);
-        }
-
-        public async void PurgePtcCache_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
-            UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
-                LocaleManager.Instance[LocaleKeys.DialogWarning],
-                LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCDeletionMessage, viewModel.SelectedApplication.Name)
-            );
-
-            if (result == UserResult.Yes)
+            });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> PurgePtcCache { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
             {
-                DirectoryInfo mainDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "0"));
-                DirectoryInfo backupDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "1"));
+                UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
+                    LocaleManager.Instance[LocaleKeys.DialogWarning],
+                    LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCDeletionMessage, viewModel.SelectedApplication.Name)
+                );
 
-                List<FileInfo> cacheFiles = [];
-
-                if (mainDir.Exists)
+                if (result == UserResult.Yes)
                 {
-                    cacheFiles.AddRange(mainDir.EnumerateFiles("*.cache"));
-                }
+                    DirectoryInfo mainDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "0"));
+                    DirectoryInfo backupDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "1"));
 
-                if (backupDir.Exists)
-                {
-                    cacheFiles.AddRange(backupDir.EnumerateFiles("*.cache"));
-                }
+                    List<FileInfo> cacheFiles = [];
 
-                if (cacheFiles.Count > 0)
-                {
-                    foreach (FileInfo file in cacheFiles)
+                    if (mainDir.Exists)
                     {
-                        try
+                        cacheFiles.AddRange(mainDir.EnumerateFiles("*.cache"));
+                    }
+
+                    if (backupDir.Exists)
+                    {
+                        cacheFiles.AddRange(backupDir.EnumerateFiles("*.cache"));
+                    }
+
+                    if (cacheFiles.Count > 0)
+                    {
+                        foreach (FileInfo file in cacheFiles)
                         {
-                            file.Delete();
-                        }
-                        catch (Exception ex)
-                        {
-                            await ContentDialogHelper.CreateErrorDialog(LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCDeletionErrorMessage, file.Name, ex));
+                            try
+                            {
+                                file.Delete();
+                            }
+                            catch (Exception ex)
+                            {
+                                await ContentDialogHelper.CreateErrorDialog(LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCDeletionErrorMessage, file.Name, ex));
+                            }
                         }
                     }
                 }
-            }
-        }
-
-        public async void NukePtcCache_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
-            UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
-                LocaleManager.Instance[LocaleKeys.DialogWarning],
-                LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCNukeMessage, viewModel.SelectedApplication.Name)
-            );
-
-            if (result == UserResult.Yes)
+            });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> NukePtcCache { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
             {
-                DirectoryInfo mainDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "0"));
-                DirectoryInfo backupDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "1"));
+                UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
+                    LocaleManager.Instance[LocaleKeys.DialogWarning],
+                    LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCNukeMessage, viewModel.SelectedApplication.Name)
+                );
 
-                List<FileInfo> cacheFiles = [];
-
-                if (mainDir.Exists)
+                if (result == UserResult.Yes)
                 {
-                    cacheFiles.AddRange(mainDir.EnumerateFiles("*.cache"));
-                    cacheFiles.AddRange(mainDir.EnumerateFiles("*.info"));
-                }
+                    DirectoryInfo mainDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "0"));
+                    DirectoryInfo backupDir = new(Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu", "1"));
 
-                if (backupDir.Exists)
-                {
-                    cacheFiles.AddRange(backupDir.EnumerateFiles("*.cache"));
-                    cacheFiles.AddRange(backupDir.EnumerateFiles("*.info"));
-                }
+                    List<FileInfo> cacheFiles = [];
 
-                if (cacheFiles.Count > 0)
-                {
-                    foreach (FileInfo file in cacheFiles)
+                    if (mainDir.Exists)
                     {
-                        try
+                        cacheFiles.AddRange(mainDir.EnumerateFiles("*.cache"));
+                        cacheFiles.AddRange(mainDir.EnumerateFiles("*.info"));
+                    }
+
+                    if (backupDir.Exists)
+                    {
+                        cacheFiles.AddRange(backupDir.EnumerateFiles("*.cache"));
+                        cacheFiles.AddRange(backupDir.EnumerateFiles("*.info"));
+                    }
+
+                    if (cacheFiles.Count > 0)
+                    {
+                        foreach (FileInfo file in cacheFiles)
                         {
-                            file.Delete();
-                        }
-                        catch (Exception ex)
-                        {
-                            await ContentDialogHelper.CreateErrorDialog(LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCDeletionErrorMessage, file.Name, ex));
+                            try
+                            {
+                                file.Delete();
+                            }
+                            catch (Exception ex)
+                            {
+                                await ContentDialogHelper.CreateErrorDialog(LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogPPTCDeletionErrorMessage, file.Name, ex));
+                            }
                         }
                     }
                 }
-            }
-        }
-
-        public async void PurgeShaderCache_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
+            });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> PurgeShaderCache { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+            {
             UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
                 LocaleManager.Instance[LocaleKeys.DialogWarning],
                 LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogShaderDeletionMessage, viewModel.SelectedApplication.Name)
@@ -274,158 +261,143 @@ namespace Ryujinx.Ava.UI.Controls
                         }
                     }
                 }
-            }
-        }
-
-        public void OpenPtcDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
-            string ptcDir = Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu");
-            string mainDir = Path.Combine(ptcDir, "0");
-            string backupDir = Path.Combine(ptcDir, "1");
-
-            if (!Directory.Exists(ptcDir))
+            } 
+            });
+        
+        public static RelayCommand<MainWindowViewModel> OpenPtcDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel =>
             {
-                Directory.CreateDirectory(ptcDir);
-                Directory.CreateDirectory(mainDir);
-                Directory.CreateDirectory(backupDir);
-            }
+                string ptcDir = Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString, "cache", "cpu");
+                string mainDir = Path.Combine(ptcDir, "0");
+                string backupDir = Path.Combine(ptcDir, "1");
 
-            OpenHelper.OpenFolder(ptcDir);
-        }
-
-        public void OpenShaderCacheDirectory_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-            {
-                string shaderCacheDir = Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString.ToLower(), "cache", "shader");
-
-                if (!Directory.Exists(shaderCacheDir))
+                if (!Directory.Exists(ptcDir))
                 {
-                    Directory.CreateDirectory(shaderCacheDir);
+                    Directory.CreateDirectory(ptcDir);
+                    Directory.CreateDirectory(mainDir);
+                    Directory.CreateDirectory(backupDir);
                 }
 
-                OpenHelper.OpenFolder(shaderCacheDir);
-            }
-        }
-
-        public async void ExtractApplicationExeFs_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-            {
-                await ApplicationHelper.ExtractSection(
-                    viewModel.StorageProvider,
-                    NcaSectionType.Code,
-                    viewModel.SelectedApplication.Path,
-                    viewModel.SelectedApplication.Name);
-            }
-        }
-
-        public async void ExtractApplicationRomFs_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await ApplicationHelper.ExtractSection(
-                    viewModel.StorageProvider,
-                    NcaSectionType.Data,
-                    viewModel.SelectedApplication.Path,
-                    viewModel.SelectedApplication.Name);
-        }
-        
-        public async void ExtractAocRomFs_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
-            DownloadableContentModel selectedDlc = await DlcSelectView.Show(viewModel.SelectedApplication.Id, viewModel.ApplicationLibrary);
-            
-            if (selectedDlc is not null)
-            {
-                await ApplicationHelper.ExtractAoc(
-                    viewModel.StorageProvider,
-                    selectedDlc.ContainerPath,
-                    selectedDlc.FileName);
-            }
-        }
-
-        public async void ExtractApplicationLogo_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is not MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                return;
-
-            IReadOnlyList<IStorageFolder> result = await viewModel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = LocaleManager.Instance[LocaleKeys.FolderDialogExtractTitle],
-                AllowMultiple = false,
+                OpenHelper.OpenFolder(ptcDir);
             });
+        
+        public static RelayCommand<MainWindowViewModel> OpenShaderCacheDirectory { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel =>
+                {
+                    string shaderCacheDir = Path.Combine(AppDataManager.GamesDirPath, viewModel.SelectedApplication.IdString.ToLower(), "cache", "shader");
 
-            if (result.Count == 0)
-                return;
+                    if (!Directory.Exists(shaderCacheDir))
+                    {
+                        Directory.CreateDirectory(shaderCacheDir);
+                    }
 
-            ApplicationHelper.ExtractSection(
-                result[0].Path.LocalPath,
-                NcaSectionType.Logo,
-                viewModel.SelectedApplication.Path,
-                viewModel.SelectedApplication.Name);
+                    OpenHelper.OpenFolder(shaderCacheDir);
+                });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> ExtractApplicationExeFs { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+                {
+                    await ApplicationHelper.ExtractSection(
+                        viewModel.StorageProvider,
+                        NcaSectionType.Code,
+                        viewModel.SelectedApplication.Path,
+                        viewModel.SelectedApplication.Name);
+                });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> ExtractApplicationRomFs { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+                {
+                    await ApplicationHelper.ExtractSection(
+                        viewModel.StorageProvider,
+                        NcaSectionType.Data,
+                        viewModel.SelectedApplication.Path,
+                        viewModel.SelectedApplication.Name);
+                });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> ExtractApplicationAocRomFs { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+                {
+                    DownloadableContentModel selectedDlc = await DlcSelectView.Show(viewModel.SelectedApplication.Id, viewModel.ApplicationLibrary);
+            
+                    if (selectedDlc is not null)
+                    {
+                        await ApplicationHelper.ExtractAoc(
+                            viewModel.StorageProvider,
+                            selectedDlc.ContainerPath,
+                            selectedDlc.FileName);
+                    }
+                });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> ExtractApplicationLogo { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+                {
+                    IReadOnlyList<IStorageFolder> result = await viewModel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+                    {
+                        Title = LocaleManager.Instance[LocaleKeys.FolderDialogExtractTitle],
+                        AllowMultiple = false,
+                    });
 
-            IStorageFile iconFile = await result[0].CreateFileAsync($"{viewModel.SelectedApplication.IdString}.png");
-            await using Stream fileStream = await iconFile.OpenWriteAsync();
+                    if (result.Count == 0)
+                        return;
 
-            using SKBitmap bitmap = SKBitmap.Decode(viewModel.SelectedApplication.Icon)
-                .Resize(new SKSizeI(512, 512), SKFilterQuality.High);
+                    ApplicationHelper.ExtractSection(
+                        result[0].Path.LocalPath,
+                        NcaSectionType.Logo,
+                        viewModel.SelectedApplication.Path,
+                        viewModel.SelectedApplication.Name);
 
-            using SKData png = bitmap.Encode(SKEncodedImageFormat.Png, 100);
+                    IStorageFile iconFile = await result[0].CreateFileAsync($"{viewModel.SelectedApplication.IdString}.png");
+                    await using Stream fileStream = await iconFile.OpenWriteAsync();
 
-            png.SaveTo(fileStream);
-        }
+                    using SKBitmap bitmap = SKBitmap.Decode(viewModel.SelectedApplication.Icon)
+                        .Resize(new SKSizeI(512, 512), SKFilterQuality.High);
 
-        public void CreateApplicationShortcut_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                ShortcutHelper.CreateAppShortcut(
+                    using SKData png = bitmap.Encode(SKEncodedImageFormat.Png, 100);
+
+                    png.SaveTo(fileStream);
+                });
+        
+        public static RelayCommand<MainWindowViewModel> CreateApplicationShortcut { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => ShortcutHelper.CreateAppShortcut(
                     viewModel.SelectedApplication.Path,
                     viewModel.SelectedApplication.Name,
                     viewModel.SelectedApplication.IdString,
                     viewModel.SelectedApplication.Icon
-                );
-        }
+                ));
+        
+        public static AsyncRelayCommand<MainWindowViewModel> EditGameConfiguration { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                async viewModel =>
+                {
+                    await StyleableAppWindow.ShowAsync(new GameSpecificSettingsWindow(viewModel));
 
-        public async void EditGameConfiguration_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-            {
-                await StyleableAppWindow.ShowAsync(new GameSpecificSettingsWindow(viewModel));
+                    // just checking for file presence
+                    viewModel.SelectedApplication.HasIndependentConfiguration = File.Exists(Program.GetDirGameUserConfig(viewModel.SelectedApplication.IdString,false,false));
 
-                // just checking for file presence
-                viewModel.SelectedApplication.HasIndependentConfiguration = File.Exists(Program.GetDirGameUserConfig(viewModel.SelectedApplication.IdString,false,false));
-
-                viewModel.RefreshView();
-            }
-        }
-
-        public async void OpenApplicationCompatibility_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await CompatibilityListWindow.Show(viewModel.SelectedApplication.IdString);
-        }
-               
-        public async void OpenApplicationData_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await ApplicationDataView.Show(viewModel.SelectedApplication);
-        }
-
-        public async void RunApplication_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await viewModel.LoadApplication(viewModel.SelectedApplication);
-        }
-
-        public async void TrimXCI_Click(object sender, RoutedEventArgs args)
-        {
-            if (sender is MenuItem { DataContext: MainWindowViewModel { SelectedApplication: not null } viewModel })
-                await viewModel.TrimXCIFile(viewModel.SelectedApplication.Path);
-        }
+                    viewModel.RefreshView();
+                });
+        
+        public static AsyncRelayCommand<MainWindowViewModel> OpenApplicationCompatibility { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => CompatibilityListWindow.Show(viewModel.SelectedApplication.IdString));
+        
+        public static AsyncRelayCommand<MainWindowViewModel> OpenApplicationData { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => ApplicationDataView.Show(viewModel.SelectedApplication));
+        
+        public static AsyncRelayCommand<MainWindowViewModel> RunApplication { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => viewModel.LoadApplication(viewModel.SelectedApplication));
+        
+        public static AsyncRelayCommand<MainWindowViewModel> TrimXci { get; } =
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null, 
+                viewModel => viewModel.TrimXCIFile(viewModel.SelectedApplication.Path));
     }
 }
