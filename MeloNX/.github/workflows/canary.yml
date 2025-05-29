@@ -22,7 +22,6 @@ env:
   RYUJINX_BASE_VERSION: "1.3"
   RYUJINX_TARGET_RELEASE_CHANNEL_NAME: "canary"
   RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: "Ryubing"
-  RYUJINX_TARGET_RELEASE_CHANNEL_SOURCE_REPO: "Ryujinx"
   RYUJINX_TARGET_RELEASE_CHANNEL_REPO: "Canary-Releases"
   RELEASE: 1
 
@@ -59,7 +58,7 @@ jobs:
           body: |
             # Canary builds:
             
-            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ env.RYUJINX_TARGET_RELEASE_CHANNEL_OWNER }}/Stable-Releases/releases/latest) instead if that sounds like something you don't want to deal with.
+            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_STABLE_NAME }}/releases/latest) instead if that sounds like something you don't want to deal with.
             
             | Platform | Artifact |
             |--|--|
@@ -186,7 +185,7 @@ jobs:
           body: |
             # Canary builds:
             
-            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ env.RYUJINX_TARGET_RELEASE_CHANNEL_OWNER }}/Stable-Releases/releases/latest) instead if that sounds like something you don't want to deal with.
+            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_STABLE_NAME }}/releases/latest) instead if that sounds like something you don't want to deal with.
             
             | Platform | Artifact |
             |--|--|
