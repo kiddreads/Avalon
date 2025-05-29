@@ -13,7 +13,6 @@ rm -rf pkgs
 mkdir pkgs
 
 package ARMeilleure
-package Ryujinx.Common
 package Ryujinx.Memory
 
 dotnet nuget push pkgs/*.nupkg --source RyubingPkgs
