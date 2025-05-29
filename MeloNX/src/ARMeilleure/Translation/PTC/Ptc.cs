@@ -193,7 +193,7 @@ namespace ARMeilleure.Translation.PTC
             _infosStream.Seek(0L, SeekOrigin.Begin);
             bool foundBadFunction = false;
 
-            for (int index = 0; index < _infosStream.Length; index++)
+            for (int index = 0; index < GetEntriesCount(); index++)
             {
                 InfoEntry infoEntry = DeserializeStructure<InfoEntry>(_infosStream);
                 foreach (ulong address in blacklist)
@@ -201,7 +201,7 @@ namespace ARMeilleure.Translation.PTC
                     if (infoEntry.Address == address)
                     {
                         containsBlacklistedFunctions = true;
-                        Logger.Warning?.Print(LogClass.Ptc, "Translation cache invalidated: Found blacklisted functions");
+                        Logger.Warning?.Print(LogClass.Ptc, "PPTC cache invalidated: Found blacklisted functions in PPTC cache");
                         foundBadFunction = true;
                         break;
                     }
