@@ -21,10 +21,7 @@ namespace Ryujinx.Ava.Systems
         private static string VersionString
             => (ReleaseInformation.IsCanaryBuild ? "Canary " : string.Empty) + $"v{ReleaseInformation.Version}";
 
-        private static readonly string _description =
-            ReleaseInformation.IsValid
-                ? $"{VersionString} {ReleaseInformation.ReleaseChannelOwner}/{ReleaseInformation.ReleaseChannelRepo}"
-                : "dev build";
+        private static readonly string _description = ReleaseInformation.IsValid ? VersionString : "dev build";
 
         private const string ApplicationId = "1293250299716173864";
 
