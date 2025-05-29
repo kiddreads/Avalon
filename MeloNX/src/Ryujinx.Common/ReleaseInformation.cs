@@ -1,6 +1,7 @@
 using Ryujinx.Common.Utilities;
 using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -14,22 +15,15 @@ namespace Ryujinx.Common
         private const string ReleaseChannel = "release";
 
         private const string BuildVersion = "%%RYUJINX_BUILD_VERSION%%";
-        public const string BuildGitHash = "%%RYUJINX_BUILD_GIT_HASH%%";
+        private const string BuildGitHash = "%%RYUJINX_BUILD_GIT_HASH%%";
         private const string ReleaseChannelName = "%%RYUJINX_TARGET_RELEASE_CHANNEL_NAME%%";
         private const string ConfigFileName = "%%RYUJINX_CONFIG_FILE_NAME%%";
-
-        public const string ReleaseChannelOwner = "%%RYUJINX_TARGET_RELEASE_CHANNEL_OWNER%%";
-        public const string ReleaseChannelSourceRepo = "%%RYUJINX_TARGET_RELEASE_CHANNEL_SOURCE_REPO%%";
-        public const string ReleaseChannelRepo = "%%RYUJINX_TARGET_RELEASE_CHANNEL_REPO%%";
 
         public static string ConfigName => !ConfigFileName.StartsWith("%%") ? ConfigFileName : "Config.json";
 
         public static bool IsValid =>
             !BuildGitHash.StartsWith("%%") &&
             !ReleaseChannelName.StartsWith("%%") &&
-            !ReleaseChannelOwner.StartsWith("%%") &&
-            !ReleaseChannelSourceRepo.StartsWith("%%") &&
-            !ReleaseChannelRepo.StartsWith("%%") &&
             !ConfigFileName.StartsWith("%%");
 
         public static bool IsCanaryBuild => IsValid && ReleaseChannelName.Equals(CanaryChannel);
@@ -48,7 +42,7 @@ namespace Ryujinx.Common
         
         public static async Task<ReleaseChannels> GetReleaseChannelsAsync(HttpClient httpClient)
         {
-            ReleaseChannelPair releaseChannelPair = JsonHelper.Deserialize(await httpClient.GetStringAsync("https://ryujinx.app/api/release-channels"), ReleaseChannelPairContext.Default.ReleaseChannelPair);
+            ReleaseChannelPair releaseChannelPair = await httpClient.GetFromJsonAsync("https://ryujinx.app/api/release-channels", ReleaseChannelPairContext.Default.ReleaseChannelPair);
             return new ReleaseChannels(releaseChannelPair);
         }
     }
