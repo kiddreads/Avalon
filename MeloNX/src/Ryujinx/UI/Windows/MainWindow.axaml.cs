@@ -419,7 +419,7 @@ namespace Ryujinx.Ava.UI.Windows
                         .Catch(task => Logger.Error?.Print(LogClass.Application, $"Updater Error: {task.Exception}"));
                     break;
                 case UpdaterType.CheckInBackground:
-                    if ((await Updater.CheckVersionAsync()).TryGet(out (Version Current, Version Incoming) versions))
+                    if ((await Updater.CheckForUpdateAsync()).TryGet(out (Version Current, Version Incoming) versions))
                     {
                         Dispatcher.UIThread.Post(() => RyujinxApp.MainWindow.ViewModel.UpdateAvailable = versions.Current < versions.Incoming);
                     }

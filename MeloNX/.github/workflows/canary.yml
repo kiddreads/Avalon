@@ -79,7 +79,7 @@ jobs:
       matrix:
         platform:
           - { name: win-x64,     os: windows-latest, zip_os_name: win_x64     }
-          - { name: win-arm64,   os: windows-latest, zip_os_name: win_arm64   }
+          #- { name: win-arm64,   os: windows-latest, zip_os_name: win_arm64   }
           - { name: linux-x64,   os: ubuntu-latest,  zip_os_name: linux_x64   }
           - { name: linux-arm64, os: ubuntu-latest,  zip_os_name: linux_arm64 }
     steps:
@@ -91,6 +91,16 @@ jobs:
 
       - name: Overwrite csc problem matcher
         run: echo "::add-matcher::.github/csc.json"
+        
+      - name: Install GitLabCli
+        run: |
+          mkdir -p $HOME/.bin
+          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
+          chmod +x gli
+          mv gli $HOME/.bin/
+          echo "$HOME/.bin" >> $GITHUB_PATH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get version info
         id: version_info
@@ -106,7 +116,7 @@ jobs:
           sed -r --in-place 's/\%\%RYUJINX_BUILD_GIT_HASH\%\%/${{ steps.version_info.outputs.git_short_hash }}/g;' src/Ryujinx.Common/ReleaseInformation.cs
           sed -r --in-place 's/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_NAME\%\%/${{ env.RYUJINX_TARGET_RELEASE_CHANNEL_NAME }}/g;' src/Ryujinx.Common/ReleaseInformation.cs
           sed -r --in-place 's/\%\%RYUJINX_CONFIG_FILE_NAME\%\%/Config\.json/g;' src/Ryujinx.Common/ReleaseInformation.cs
-          sed -r --in-place '/^Name=Ryujinx$/s/Name=Ryujinx/Name=Ryujinx-Canary/' distribution/linux/Ryujinx.desktop          
+          sed -r --in-place '/^Name=Ryujinx$/s/Name=Ryujinx/Name=Ryujinx-Canary/' distribution/linux/Ryujinx.desktop
         shell: bash
 
       - name: Create output dir
@@ -123,7 +133,24 @@ jobs:
           rm libarmeilleure-jitsupport.dylib
           7z a ../release_output/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.zip ../publish
           popd
+          
+          gh release download -R GreemDev/GLI -O gli.exe -p 'GitLabCli-win_x64.exe'
+          
+          ./gli.exe --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.zip"
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Install GitLabCli
+        if: matrix.platform.os == 'ubuntu-latest'
+        run: |
+          mkdir -p $HOME/.bin
+          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
+          chmod +x gli
+          mv gli $HOME/.bin/
+          echo "$HOME/.bin" >> $GITHUB_PATH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Packing Linux builds
         if: matrix.platform.os == 'ubuntu-latest'
@@ -133,6 +160,8 @@ jobs:
           chmod +x Ryujinx.sh Ryujinx
           tar -czvf ../release_output/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz ../publish
           popd
+          
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz"
         shell: bash
       
       - name: Build AppImage (Linux)
@@ -169,7 +198,10 @@ jobs:
           pushd publish_appimage
           mv Ryujinx.AppImage ../release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage
           mv Ryujinx.AppImage.zsync ../release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync
-          popd          
+          popd
+          
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync"
         shell: bash 
 
       - name: Pushing new release
@@ -214,6 +246,16 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 17
+          
+      - name: Install GitLabCli
+        run: |
+          mkdir -p $HOME/.bin
+          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
+          chmod +x gli
+          mv gli $HOME/.bin/
+          echo "$HOME/.bin" >> $GITHUB_PATH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install rcodesign
         run: |
@@ -246,6 +288,7 @@ jobs:
       - name: Publish macOS Ryujinx
         run: |
           ./distribution/macos/create_macos_build_ava.sh . publish_tmp_ava publish_ava ./distribution/macos/entitlements.xml "${{ steps.version_info.outputs.build_version }}" "${{ steps.version_info.outputs.git_short_hash }}" Release 1
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|publish_ava/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-macos_universal.app.tar.gz"
 
       - name: Pushing new release
         uses: ncipollo/release-action@v1
@@ -260,3 +303,33 @@ jobs:
           owner: ${{ secrets.RC_OWNER }}
           repo: ${{ secrets.RC_CANARY_NAME }}
           token: ${{ secrets.ALT_RELEASE_TOKEN }}
+
+  create_gitlab_release:
+    name: Create GitLab Release
+    runs-on: ubuntu-24.04
+    needs: 
+      - tag
+      - macos_release
+      - release
+    steps:
+      - name: Get version info
+        id: version_info
+        run: |
+          echo "build_version=${{ env.RYUJINX_BASE_VERSION }}.${{ github.run_number }}" >> $GITHUB_OUTPUT
+          echo "prev_build_version=${{ env.RYUJINX_BASE_VERSION }}.$((${{ github.run_number }} - 1))" >> $GITHUB_OUTPUT
+          echo "git_short_hash=$(git rev-parse --short "${{ github.sha }}")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Install GitLabCli
+        run: |
+          mkdir -p $HOME/.bin
+          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
+          chmod +x gli
+          mv gli $HOME/.bin/
+          echo "$HOME/.bin" >> $GITHUB_PATH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create release
+        run: |
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=CreateReleaseFromGenericPackageFiles "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|main|Canary ${{ steps.version_info.outputs.build_version }}|**[Full Changelog](https://git.ryujinx.app/ryubing/ryujinx/-/compare/Canary-${{ steps.version_info.outputs.prev_build_version }}...Canary-${{ steps.version_info.outputs.build_version }})**"

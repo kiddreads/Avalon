@@ -67,8 +67,21 @@ jobs:
           
           gh release download -R GreemDev/GLI -O gli.exe -p 'GitLabCli-win_x64.exe'
           
-          ./gli.exe --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.zip"
+          ./gli.exe --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "Ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.zip"
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install GitLabCli
+        if: matrix.platform.os == 'ubuntu-latest'
+        run: |
+          mkdir -p $HOME/.bin
+          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
+          chmod +x gli
+          mv gli $HOME/.bin/
+          echo "$HOME/.bin" >> $GITHUB_PATH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Packing Linux builds
         if: matrix.platform.os == 'ubuntu-latest'
@@ -79,13 +92,7 @@ jobs:
           tar -czvf ../release_output/ryujinx-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz ../publish
           popd
           
-          mkdir -p $HOME/.bin
-          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
-          chmod +x gli
-          mv gli $HOME/.bin/
-          echo "$HOME/.bin" >> $GITHUB_PATH
-          
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "Ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz"
         shell: bash
       
       - name: Build AppImage (Linux)
@@ -124,8 +131,8 @@ jobs:
           mv Ryujinx.AppImage.zsync ../release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync
           popd
           
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage"
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "Ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "Ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync"
         shell: bash
 
   macos_release:
@@ -183,7 +190,7 @@ jobs:
       - name: Publish macOS Ryujinx
         run: |
           ./distribution/macos/create_macos_build_ava.sh . publish_tmp_ava publish ./distribution/macos/entitlements.xml "${{ steps.version_info.outputs.build_version }}" "${{ steps.version_info.outputs.git_short_hash }}" Release 0
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "ryubing|${{ steps.version_info.outputs.build_version }}|publish_ava/ryujinx-${{ steps.version_info.outputs.build_version }}-macos_universal.app.tar.gz"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "Ryubing|${{ steps.version_info.outputs.build_version }}|publish/ryujinx-${{ steps.version_info.outputs.build_version }}-macos_universal.app.tar.gz"
 
   create_gitlab_release:
     name: Create GitLab Release
@@ -192,6 +199,8 @@ jobs:
       - macos_release
       - release
     steps:
+      - uses: actions/checkout@v4
+
       - name: Get version info
         id: version_info
         run: |
@@ -212,4 +221,4 @@ jobs:
 
       - name: Create release
         run: |
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateReleaseFromGenericPackageFiles "ryubing|${{ steps.version_info.outputs.build_version }}|${{ steps.version_info.outputs.git_short_hash }}|test|THIS IS NOT INTENDED FOR END USER USAGE"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateReleaseFromGenericPackageFiles "Ryubing|${{ steps.version_info.outputs.build_version }}|${{ steps.version_info.outputs.git_short_hash }}|test|THIS IS NOT INTENDED FOR END USER USAGE"

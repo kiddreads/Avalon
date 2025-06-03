@@ -32,59 +32,11 @@ namespace Ryujinx.Common
 
         public static string Version => IsValid ? BuildVersion : Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
-        public static string GetChangelogUrl(Version currentVersion, Version newVersion, ReleaseChannels.Channel releaseChannel) =>
+        public static string GetChangelogUrl(Version currentVersion, Version newVersion) =>
             IsCanaryBuild
                 ? $"https://git.ryujinx.app/ryubing/ryujinx/-/compare/Canary-{currentVersion}...Canary-{newVersion}"
-                : GetChangelogForVersion(newVersion, releaseChannel);
-
-        public static string GetChangelogForVersion(Version version, ReleaseChannels.Channel releaseChannel) =>
-            $"https://github.com/{releaseChannel}/releases/{version}";
-
-        public static async Task<ReleaseChannels> GetReleaseChannelsAsync(HttpClient httpClient)
-        {
-            ReleaseChannelPair releaseChannelPair = await httpClient.GetFromJsonAsync("https://ryujinx.app/api/release-channels", ReleaseChannelPairContext.Default.ReleaseChannelPair);
-            return new ReleaseChannels(releaseChannelPair);
-        }
+                : $"https://git.ryujinx.app/ryubing/ryujinx/-/releases/{newVersion}";
     }
 
-    public readonly struct ReleaseChannels
-    {
-        internal ReleaseChannels(ReleaseChannelPair channelPair)
-        {
-            Stable = new Channel(channelPair.Stable);
-            Canary = new Channel(channelPair.Canary);
-        }
 
-        public readonly Channel Stable;
-        public readonly Channel Canary;
-
-        public readonly struct Channel
-        {
-            public Channel(string raw)
-            {
-                string[] parts = raw.Split('/');
-                Owner = parts[0];
-                Repo = parts[1];
-            }
-
-            public readonly string Owner;
-            public readonly string Repo;
-
-            public override string ToString() => $"{Owner}/{Repo}";
-
-            public string GetLatestReleaseApiUrl() =>
-                $"https://api.github.com/repos/{ToString()}/releases/latest";
-        }
-    }
-
-    [JsonSerializable(typeof(ReleaseChannelPair))]
-    partial class ReleaseChannelPairContext : JsonSerializerContext;
-
-    class ReleaseChannelPair
-    {
-        [JsonPropertyName("stable")]
-        public string Stable { get; set; }
-        [JsonPropertyName("canary")]
-        public string Canary { get; set; }
-    }
 }
