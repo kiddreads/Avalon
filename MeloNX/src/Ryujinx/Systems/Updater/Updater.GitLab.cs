@@ -131,7 +131,7 @@ namespace Ryujinx.Ava.Systems
                 public override string ToString() => $"{Group}/{Project}";
 
                 public string GetLatestReleaseApiUrl() =>
-                    $"https://git.ryujinx.app/api/v4/{Id}/releases/permalink/latest";
+                    $"https://git.ryujinx.app/api/v4/projects/{Id}/releases/permalink/latest";
             }
         }
     }
