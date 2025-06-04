@@ -295,3 +295,7 @@ jobs:
       - name: Create release
         run: |
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateReleaseFromGenericPackageFiles "Ryubing|${{ steps.version_info.outputs.build_version }}|${{ steps.version_info.outputs.git_short_hash }}|${{ steps.version_info.outputs.build_version }}|**[Full Changelog](https://git.ryujinx.app/ryubing/ryujinx/-/compare/${{ steps.version_info.outputs.prev_build_version }}...${{ steps.version_info.outputs.build_version }})**"
+          
+      - name: Send notification webhook
+        run: |
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=SendUpdateMessage "${{ steps.version_info.outputs.build_version }}|32cd32|${{ secrets.STABLE_DISCORD_WEBHOOK }}|https://avatars.githubusercontent.com/u/192939710?s=200&v=4|false"
