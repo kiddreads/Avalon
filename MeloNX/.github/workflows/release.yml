@@ -294,7 +294,7 @@ jobs:
 
       - name: Create release
         run: |
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateReleaseFromGenericPackageFiles "Ryubing|${{ steps.version_info.outputs.build_version }}|${{ steps.version_info.outputs.git_short_hash }}|${{ steps.version_info.outputs.build_version }}|**[Full Changelog](https://git.ryujinx.app/ryubing/ryujinx/-/compare/${{ steps.version_info.outputs.prev_build_version }}...${{ steps.version_info.outputs.build_version }})**"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateReleaseFromGenericPackageFiles "Ryubing|${{ steps.version_info.outputs.build_version }}|${{ steps.version_info.outputs.git_short_hash }}|${{ steps.version_info.outputs.build_version }}|msd:${{ steps.version_info.outputs.build_version }}"
           
       - name: Send notification webhook
         run: |
