@@ -34,19 +34,6 @@ jobs:
           echo "build_version=${{ env.RYUJINX_BASE_VERSION }}.${{ github.run_number }}" >> $GITHUB_OUTPUT
           echo "prev_build_version=${{ env.RYUJINX_BASE_VERSION }}.$((${{ github.run_number }} - 1))" >> $GITHUB_OUTPUT
         shell: bash
-        
-      - name: Install GitLabCli
-        run: |
-          mkdir -p $HOME/.bin
-          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
-          chmod +x gli
-          mv gli $HOME/.bin/
-          echo "$HOME/.bin" >> $GITHUB_PATH
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Create GitLab tag
-        run: gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateTag "Canary-${{ steps.version_info.outputs.build_version }}|master"
 
       - name: Create release
         uses: ncipollo/release-action@v1
@@ -329,6 +316,10 @@ jobs:
           echo "$HOME/.bin" >> $GITHUB_PATH
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create tag
+        run: |
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=CreateTag "Canary-${{ steps.version_info.outputs.build_version }}|${{ steps.version_info.outputs.git_short_hash }}"
           
       - name: Create release
         run: |
