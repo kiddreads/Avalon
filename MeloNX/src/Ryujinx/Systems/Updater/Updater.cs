@@ -55,7 +55,7 @@ namespace Ryujinx.Ava.Systems
         
         private static string _changelogUrlFormat = null;
 
-        public static async Task<Optional<(Version, Version)>> CheckForUpdateAsync(bool showVersionUpToDate = false)
+        public static async Task<Optional<(Version, Version)>> CheckVersionAsync(bool showVersionUpToDate = false)
         {
             Optional<(Version, Version)> versionTuple;
 
@@ -83,7 +83,7 @@ namespace Ryujinx.Ava.Systems
 
             _running = true;
 
-            Optional<(Version, Version)> versionTuple = await CheckForUpdateAsync(showVersionUpToDate);
+            Optional<(Version, Version)> versionTuple = await CheckVersionAsync(showVersionUpToDate);
 
             if (_running is false || !versionTuple.HasValue)
                 return;

@@ -88,7 +88,7 @@ namespace Ryujinx.Ava.Systems
                     }
                 }
 
-                // If build not done, assume no new update are available.
+                // If build not done, assume no new update is available.
                 if (_buildUrl is null)
                 {
                     if (showVersionUpToDate)

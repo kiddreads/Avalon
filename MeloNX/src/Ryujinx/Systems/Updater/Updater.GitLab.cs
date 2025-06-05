@@ -65,7 +65,7 @@ namespace Ryujinx.Ava.Systems
                     link.AssetName.StartsWith("ryujinx") && link.AssetName.EndsWith(_platformExt)
                 )?.Url;
 
-            // If build URL not found, assume no new update are available.
+            // If build URL not found, assume no new update is available.
             if (_buildUrl is null)
             {
                 if (showVersionUpToDate)
