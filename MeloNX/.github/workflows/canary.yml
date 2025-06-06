@@ -326,7 +326,7 @@ jobs:
           
       - name: Create release
         run: |
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=CreateReleaseFromGenericPackageFiles "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|main|Canary ${{ steps.version_info.outputs.build_version }}|**[Full Changelog](https://git.ryujinx.app/ryubing/ryujinx/-/compare/Canary-${{ steps.version_info.outputs.prev_build_version }}...Canary-${{ steps.version_info.outputs.build_version }})**"
+          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=CreateReleaseFromGenericPackageFiles "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|main|Canary ${{ steps.version_info.outputs.build_version }}|**Full Changelog:** [`${{ steps.version_info.outputs.prev_build_version }}...${{ steps.version_info.outputs.build_version }}`](https://git.ryujinx.app/ryubing/ryujinx/-/compare/Canary-${{ steps.version_info.outputs.prev_build_version }}...Canary-${{ steps.version_info.outputs.build_version }})"
 
       - name: Send notification webhook
         run: |
