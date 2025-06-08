@@ -6,7 +6,6 @@ using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Common.Models.Github;
-using Ryujinx.Ava.Common.Models.GitLab;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
@@ -33,19 +32,14 @@ namespace Ryujinx.Ava.Systems
     internal static partial class Updater
     {
         private static readonly GithubReleasesJsonSerializerContext _ghSerializerContext = new(JsonHelper.GetDefaultSerializerOptions());
-        private static readonly GitLabReleasesJsonSerializerContext _glSerializerContext = new(JsonHelper.GetDefaultSerializerOptions());
-        
 
+        private static readonly string _platformExt = BuildPlatformExtension();
         private static readonly string _homeDir = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string _updateDir = Path.Combine(Path.GetTempPath(), "Ryujinx", "update");
         private static readonly string _updatePublishDir = Path.Combine(_updateDir, "publish");
         private const int ConnectionCount = 4;
 
         private static string _buildVer;
-
-
-        private static readonly string _platformExt = BuildPlatformExtension();
-
         private static string _buildUrl;
         private static long _buildSize;
         private static bool _updateSuccessful;
@@ -168,7 +162,7 @@ namespace Ryujinx.Ava.Systems
             HttpClient result = new();
 
             // Required by GitHub to interact with APIs.
-            result.DefaultRequestHeaders.Add("User-Agent", "Ryujinx-Updater/1.0.0");
+            result.DefaultRequestHeaders.Add("User-Agent", $"Ryujinx-Updater/{ReleaseInformation.Version}");
 
             return result;
         }

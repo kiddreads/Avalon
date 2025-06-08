@@ -1,15 +1,13 @@
 ﻿using Gommon;
 using Ryujinx.Ava.Common.Locale;
-using Ryujinx.Ava.Common.Models.GitLab;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Common;
 using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
-using Ryujinx.Common.Utilities;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -17,7 +15,31 @@ namespace Ryujinx.Ava.Systems
 {
     internal static partial class Updater
     {
-        private static GitLabReleaseChannels.ChannelType _currentGitLabReleaseChannel;
+        private static string CreateUpdateQueryUrl()
+        {
+#pragma warning disable CS8524
+            var os = RunningPlatform.CurrentOS switch
+#pragma warning restore CS8524
+            {
+                OperatingSystemType.MacOS => "mac",
+                OperatingSystemType.Linux => "linux",
+                OperatingSystemType.Windows => "win"
+            };
+
+            var arch = RunningPlatform.Architecture switch
+            {
+                Architecture.Arm64 => "arm",
+                Architecture.X64 => "amd64",
+                _ => null
+            };
+
+            if (arch is null)
+                return null;
+
+            var rc = ReleaseInformation.IsCanaryBuild ? "canary" : "stable";
+
+            return $"https://update.ryujinx.app/latest/query?os={os}&arch={arch}&rc={rc}";
+        }
 
         private static async Task<Optional<(Version Current, Version Incoming)>> CheckGitLabVersionAsync(bool showVersionUpToDate = false)
         {
@@ -35,38 +57,42 @@ namespace Ryujinx.Ava.Systems
                 return default;
             }
 
-            Logger.Info?.Print(LogClass.Application, "Checking for updates from https://git.ryujinx.app.");
+            if (CreateUpdateQueryUrl() is not {} updateUrl)
+            {
+                Logger.Error?.Print(LogClass.Application, "Could not determine URL for updates.");
+                
+                _running = false;
+
+                return default;
+            }
+
+            Logger.Info?.Print(LogClass.Application, $"Checking for updates from {updateUrl}.");
 
             // Get latest version number from GitLab API
             using HttpClient jsonClient = ConstructHttpClient();
 
             // GitLab instance is located in Ukraine. Connection times will vary across the world.
-            jsonClient.Timeout = TimeSpan.FromSeconds(10); 
+            jsonClient.Timeout = TimeSpan.FromSeconds(10);
 
-            if (_currentGitLabReleaseChannel == null)
+            try
             {
-                GitLabReleaseChannels releaseChannels = await GitLabReleaseChannels.GetAsync(jsonClient);
+                UpdaterResponse response =
+                    await jsonClient.GetFromJsonAsync(updateUrl, UpdaterResponseJsonContext.Default.UpdaterResponse);
 
-                _currentGitLabReleaseChannel = ReleaseInformation.IsCanaryBuild
-                    ? releaseChannels.Canary
-                    : releaseChannels.Stable;
+                _buildVer = response.Tag;
+                _buildUrl = response.DownloadUrl;
+                _changelogUrlFormat = response.ReleaseUrlFormat;
+            }
+            catch (Exception e)
+            {
+                Logger.Error?.Print(LogClass.Application, $"An error occurred when parsing JSON response from API ({e.GetType().AsFullNamePrettyString()}): {e.Message}");
                 
-                Logger.Info?.Print(LogClass.Application, $"Loaded GitLab release channel for '{(ReleaseInformation.IsCanaryBuild ? "canary" : "stable")}'");
-
-                _changelogUrlFormat = _currentGitLabReleaseChannel.UrlFormat;
+                _running = false;
+                return default;
             }
 
-            string fetchedJson = await jsonClient.GetStringAsync(_currentGitLabReleaseChannel.GetLatestReleaseApiUrl());
-            GitLabReleasesJsonResponse fetched = JsonHelper.Deserialize(fetchedJson, _glSerializerContext.GitLabReleasesJsonResponse);
-
-            _buildVer = fetched.TagName;
-            _buildUrl = fetched.Assets.Links
-                .FirstOrDefault(link =>
-                    link.AssetName.StartsWith("ryujinx") && link.AssetName.EndsWith(_platformExt)
-                )?.Url;
-
             // If build URL not found, assume no new update is available.
-            if (_buildUrl is null)
+            if (_buildUrl is null or "")
             {
                 if (showVersionUpToDate)
                 {
@@ -104,35 +130,17 @@ namespace Ryujinx.Ava.Systems
 
             return (currentVersion, newVersion);
         }
+        
+        [JsonSerializable(typeof(UpdaterResponse))]
+        partial class UpdaterResponseJsonContext : JsonSerializerContext;
 
-        [JsonSerializable(typeof(GitLabReleaseChannels))]
-        partial class GitLabReleaseChannelPairContext : JsonSerializerContext;
-
-        public class GitLabReleaseChannels
+        public class UpdaterResponse
         {
-            public static async Task<GitLabReleaseChannels> GetAsync(HttpClient httpClient)
-                => await httpClient.GetFromJsonAsync(
-                    "https://git.ryujinx.app/ryubing/ryujinx/-/snippets/1/raw/main/meta.json",
-                    GitLabReleaseChannelPairContext.Default.GitLabReleaseChannels);
+            [JsonPropertyName("tag")] public string Tag { get; set; }
+            [JsonPropertyName("download_url")] public string DownloadUrl { get; set; }
+            [JsonPropertyName("web_url")] public string ReleaseUrl { get; set; }
 
-            [JsonPropertyName("stable")] public ChannelType Stable { get; set; }
-            [JsonPropertyName("canary")] public ChannelType Canary { get; set; }
-
-            public class ChannelType
-            {
-                [JsonPropertyName("id")] public long Id { get; set; }
-
-                [JsonPropertyName("group")] public string Group { get; set; }
-
-                [JsonPropertyName("project")] public string Project { get; set; }
-
-                public string UrlFormat => $"https://git.ryujinx.app/{ToString()}/-/releases/{{0}}";
-
-                public override string ToString() => $"{Group}/{Project}";
-
-                public string GetLatestReleaseApiUrl() =>
-                    $"https://git.ryujinx.app/api/v4/projects/{Id}/releases/permalink/latest";
-            }
+            [JsonIgnore] public string ReleaseUrlFormat => ReleaseUrl.Replace(Tag, "{0}");
         }
     }
 }
