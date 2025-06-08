@@ -24,41 +24,6 @@ env:
   RELEASE: 1
 
 jobs:
-  tag:
-    name: Create tag
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Get version info
-        id: version_info
-        run: |
-          echo "build_version=${{ env.RYUJINX_BASE_VERSION }}.${{ github.run_number }}" >> $GITHUB_OUTPUT
-          echo "prev_build_version=${{ env.RYUJINX_BASE_VERSION }}.$((${{ github.run_number }} - 1))" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - name: Create release
-        uses: ncipollo/release-action@v1
-        with:
-          name: "Canary ${{ steps.version_info.outputs.build_version }}"
-          tag: ${{ steps.version_info.outputs.build_version }}
-          body: |
-            # Canary builds:
-            
-            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_STABLE_NAME }}/releases/latest) instead if that sounds like something you don't want to deal with.
-            
-            | Platform | Artifact |
-            |--|--|
-            | Windows 64-bit | [Canary Windows Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-win_x64.zip) |
-            | Windows ARM 64-bit | [Canary Windows ARM Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-win_arm64.zip) |
-            | Linux 64-bit | [Canary Linux Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-linux_x64.tar.gz) |
-            | Linux ARM 64-bit | [Canary Linux ARM Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-linux_arm64.tar.gz) |
-            | macOS | [Canary macOS Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-macos_universal.app.tar.gz) |
-            
-            **[Full Changelog](https://git.ryujinx.app/ryubing/ryujinx/-/compare/Canary-${{ steps.version_info.outputs.prev_build_version }}...Canary-${{ steps.version_info.outputs.build_version }})**
-          omitBodyDuringUpdate: true
-          owner: ${{ secrets.RC_OWNER }}
-          repo: ${{ secrets.RC_CANARY_NAME }}
-          token: ${{ secrets.ALT_RELEASE_TOKEN }}
-
   release:
     name: Release for ${{ matrix.platform.name }}
     runs-on: ${{ matrix.platform.os }}
@@ -189,34 +154,7 @@ jobs:
           
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage"
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync"
-        shell: bash 
-
-      - name: Pushing new release
-        uses: ncipollo/release-action@v1
-        with:
-          name: ${{ steps.version_info.outputs.build_version }}
-          artifacts: "release_output/*.tar.gz,release_output/*.zip,release_output/*AppImage*"
-          tag: ${{ steps.version_info.outputs.build_version }}
-          body: |
-            # Canary builds:
-            
-            These builds are experimental and may sometimes not work, use [regular builds](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_STABLE_NAME }}/releases/latest) instead if that sounds like something you don't want to deal with.
-            
-            | Platform | Artifact |
-            |--|--|
-            | Windows 64-bit | [Canary Windows Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-win_x64.zip) |
-            | Windows ARM 64-bit | [Canary Windows ARM Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-win_arm64.zip) |
-            | Linux 64-bit | [Canary Linux Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-linux_x64.tar.gz) |
-            | Linux ARM 64-bit | [Canary Linux ARM Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-linux_arm64.tar.gz) |
-            | macOS | [Canary macOS Artifact](https://github.com/${{ secrets.RC_OWNER }}/${{ secrets.RC_CANARY_NAME }}/releases/download/${{ steps.version_info.outputs.build_version }}/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-macos_universal.app.tar.gz) |
-            
-            **[Full Changelog](https://git.ryujinx.app/ryubing/ryujinx/-/compare/Canary-${{ steps.version_info.outputs.prev_build_version }}...Canary-${{ steps.version_info.outputs.build_version }})**
-          omitBodyDuringUpdate: true
-          allowUpdates: true
-          replacesArtifacts: true
-          owner: ${{ secrets.RC_OWNER }}
-          repo: ${{ secrets.RC_CANARY_NAME }}
-          token: ${{ secrets.ALT_RELEASE_TOKEN }}
+        shell: bash
 
   macos_release:
     name: Release MacOS universal
@@ -277,31 +215,15 @@ jobs:
           ./distribution/macos/create_macos_build_ava.sh . publish_tmp_ava publish_ava ./distribution/macos/entitlements.xml "${{ steps.version_info.outputs.build_version }}" "${{ steps.version_info.outputs.git_short_hash }}" Release 1
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|publish_ava/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-macos_universal.app.tar.gz"
 
-      - name: Pushing new release
-        uses: ncipollo/release-action@v1
-        with:
-          name: "Canary ${{ steps.version_info.outputs.build_version }}"
-          artifacts: "publish_ava/*.tar.gz"
-          tag: ${{ steps.version_info.outputs.build_version }}
-          body: ""
-          omitBodyDuringUpdate: true
-          allowUpdates: true
-          replacesArtifacts: true
-          owner: ${{ secrets.RC_OWNER }}
-          repo: ${{ secrets.RC_CANARY_NAME }}
-          token: ${{ secrets.ALT_RELEASE_TOKEN }}
-
   create_gitlab_release:
     name: Create GitLab Release
     runs-on: ubuntu-24.04
     needs: 
-      - tag
       - macos_release
       - release
     steps:
       - uses: actions/checkout@v4
       
-
       - name: Get version info
         id: version_info
         run: |
