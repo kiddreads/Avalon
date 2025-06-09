@@ -85,10 +85,9 @@ namespace Ryujinx.Ava.Systems
             }
             catch (Exception e)
             {
-                Logger.Error?.Print(LogClass.Application, $"An error occurred when parsing JSON response from API ({e.GetType().AsFullNamePrettyString()}): {e.Message}");
-                
-                _running = false;
-                return default;
+                throw new AggregateException(
+                    $"An error occurred when parsing JSON response from API ({e.GetType().AsFullNamePrettyString()}): {e.Message}",
+                    e);
             }
 
             // If build URL not found, assume no new update is available.
