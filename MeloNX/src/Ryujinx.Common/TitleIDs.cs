@@ -133,7 +133,6 @@ namespace Ryujinx.Common
             "0100c1f0051b6000", // Donkey Kong Country: Tropical Freeze
             "0100ed000d390000", // Dr. Kawashima's Brain Training
             "010067b017588000", // Endless Ocean Luminous
-            "0100d2f00d5c0000", // Nintendo Switch Sports
             "01006b5012b32000", // Part Time UFO
             "0100704000B3A000", // Snipperclips
             "01006a800016e000", // Super Smash Bros. Ultimate
@@ -169,6 +168,8 @@ namespace Ryujinx.Common
             "010056e00853a000", // A Hat in Time
             "0100fd1014726000", // Baldurs Gate: Dark Alliance
             "01008c2019598000", // Bluey: The Video Game
+            "010096f00ff22000", // Borderlands 2: Game of the Year Edition
+            "010007400ff24000", // Borderlands: The Pre-Sequel Ultimate Edition
             "0100c6800b934000", // Brawlhalla
             "0100dbf01000a000", // Burnout Paradise Remastered
             "0100744001588000", // Cars 3: Driven to Win
