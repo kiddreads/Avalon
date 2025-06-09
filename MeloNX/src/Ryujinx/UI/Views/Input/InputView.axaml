@@ -203,7 +203,6 @@
         </StackPanel>
         <ContentControl IsVisible="{Binding NotificationIsVisible}">
             <ContentControl.Content>
-
                 <StackPanel>
                     <TextBlock 
                         Margin="5,20,0,0"

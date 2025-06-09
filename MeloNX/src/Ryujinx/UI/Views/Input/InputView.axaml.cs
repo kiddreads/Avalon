@@ -15,7 +15,7 @@ namespace Ryujinx.Ava.UI.Views.Input
 
         public InputView()
         {
-            ViewModel = new InputViewModel(this, ConfigurationState.Instance.System.UseInputGlobalConfig.Value);
+            ViewModel = new InputViewModel(this, ConfigurationState.Instance.System.UseInputGlobalConfig);
 
             InitializeComponent();
         }
@@ -27,9 +27,8 @@ namespace Ryujinx.Ava.UI.Views.Input
 
         public void ToggleLocalGlobalInput(bool enableConfigGlobal)
         {
-
             Dispose();
-            ViewModel = new InputViewModel(this, enableConfigGlobal); // Create new Input Page with other input configs
+            ViewModel = new InputViewModel(this, enableConfigGlobal); // Create new Input Page with global input configs
             InitializeComponent();
         }
 

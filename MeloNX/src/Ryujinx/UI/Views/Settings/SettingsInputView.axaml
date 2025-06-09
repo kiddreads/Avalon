@@ -44,7 +44,7 @@
                             <CheckBox                          
                                 ToolTip.Tip="{ext:Locale UseGlobalInputTooltip}"
                                 MinWidth="0"
-                                IsChecked="{Binding EnableConfigGlobal}">
+                                IsChecked="{Binding UseGlobalInputConfig}">
                                 <TextBlock
                                     Text="{ext:Locale SettingsTabInputUseGlobalInput}" />
                             </CheckBox>

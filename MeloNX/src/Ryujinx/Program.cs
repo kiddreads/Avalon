@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Silk.NET.Vulkan;
 
 namespace Ryujinx.Ava
 {
@@ -36,7 +35,7 @@ namespace Ryujinx.Ava
         public static string Version { get; private set; }
         public static string ConfigurationPath { get; private set; }
         public static string GlobalConfigurationPath { get; private set; }
-        public static bool UseExtraConfig{ get; private set; }
+        public static bool UseExtraConfig { get; set; }
         public static bool PreviewerDetached { get; private set; }
         public static bool UseHardwareAcceleration { get; private set; }
         public static string BackendThreadingArg { get; private set; }
@@ -162,7 +161,7 @@ namespace Ryujinx.Ava
         }
 
 
-        public static string GetDirGameUserConfig(string gameId, bool rememberGlobalDir = false, bool changeFolderForGame = false)
+        public static string GetDirGameUserConfig(string gameId, bool changeFolderForGame = false)
         {
             if (string.IsNullOrEmpty(gameId))
             {
@@ -180,12 +179,7 @@ namespace Ryujinx.Ava
             return gameDir;
         }
 
-        public static void SetUseExtraConfig(bool value) 
-        {
-            UseExtraConfig = value;
-        }
-
-        public static void ReloadConfig(bool rememberGlobalDir = false)
+        public static void ReloadConfig()
         {
 
             string localConfigurationPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ReleaseInformation.ConfigName);

@@ -556,7 +556,7 @@ namespace Ryujinx.Ava.Systems.AppLibrary
                     data.Favorite = appMetadata.Favorite;
                     data.TimePlayed = appMetadata.TimePlayed;
                     data.LastPlayed = appMetadata.LastPlayed;
-                    data.HasIndependentConfiguration = File.Exists(Program.GetDirGameUserConfig(data.IdBaseString, false, false)); // Just check user config
+                    data.HasIndependentConfiguration = File.Exists(Program.GetDirGameUserConfig(data.IdBaseString)); // Just check user config
                 }
 
                 data.FileExtension = Path.GetExtension(applicationPath).TrimStart('.').ToUpper();

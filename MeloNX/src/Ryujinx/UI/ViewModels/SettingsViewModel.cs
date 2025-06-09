@@ -147,19 +147,19 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool DisableInputWhenOutOfFocus { get; set; }        
         public int FocusLostActionType { get; set; }
 
-        public bool EnableConfigGlobal
+        public bool UseGlobalInputConfig
         { 
             get => _useInputGlobalConfig;
             set
             {
                 _useInputGlobalConfig = value;
                 LocalGlobalInputSwitchEvent?.Invoke(_useInputGlobalConfig);
-                OnPropertyChanged(nameof(PanelOpacityInput));
+                OnPropertyChanged(nameof(InputPanelOpacity));
                 OnPropertyChanged();
             }
         }
 
-        public double PanelOpacityInput => EnableConfigGlobal ? 0.5 : 1;
+        public double InputPanelOpacity => UseGlobalInputConfig ? 0.5 : 1;
 
         public VSyncMode VSyncMode
         {
@@ -387,7 +387,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public bool IsInvalidLdnPassphraseVisible { get; set; }
 
-        public SettingsViewModel(VirtualFileSystem virtualFileSystem, ContentManager contentManager) : this(false)
+        public SettingsViewModel(VirtualFileSystem virtualFileSystem, ContentManager contentManager) : this()
         {
             _virtualFileSystem = virtualFileSystem;
             _contentManager = contentManager;
@@ -408,7 +408,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             string gameName,
             string gameId,
             byte[] gameIconData,
-            bool enableToLoadCustomConfig) : this(enableToLoadCustomConfig)
+            bool customConfig) : this()
         {
             _virtualFileSystem = virtualFileSystem;
             _contentManager = contentManager;
@@ -424,11 +424,11 @@ namespace Ryujinx.Ava.UI.ViewModels
             _gameTitle = gameName;
             _gameId = gameId;
 
-            if (enableToLoadCustomConfig) // During the game. If there is no user config, then load the global config window
+            if (customConfig) // During the game. If there is no user config, then load the global config window
             {
-                string gameDir = Program.GetDirGameUserConfig(gameId, true, true);
+                string gameDir = Program.GetDirGameUserConfig(gameId, true);
 
-                Program.SetUseExtraConfig(true);
+                Program.UseExtraConfig = true;
 
                 if (ConfigurationFileFormat.TryLoad(Program.GlobalConfigurationPath, out ConfigurationFileFormat configurationFileFormatExtra))
                 {
@@ -451,7 +451,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public SettingsViewModel(bool noLoadGlobalConfig = false)
+        public SettingsViewModel()
         {
             GameDirectories = [];
             AutoloadDirectories = [];
@@ -603,7 +603,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             };
 
             // Input
-            EnableConfigGlobal = config.System.UseInputGlobalConfig;
+            UseGlobalInputConfig = config.System.UseInputGlobalConfig;
             EnableDockedMode = config.System.EnableDockedMode;
             EnableKeyboard = config.Hid.EnableKeyboard;
             EnableMouse = config.Hid.EnableMouse;
@@ -710,7 +710,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             };
 
             // Input
-            config.System.UseInputGlobalConfig.Value = EnableConfigGlobal;
+            config.System.UseInputGlobalConfig.Value = UseGlobalInputConfig;
             config.System.EnableDockedMode.Value = EnableDockedMode;
             config.Hid.EnableKeyboard.Value = EnableKeyboard;
             config.Hid.EnableMouse.Value = EnableMouse;
@@ -840,7 +840,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public void DeleteConfigGame()
         {
-            string gameDir = Program.GetDirGameUserConfig(GameId, false, false);
+            string gameDir = Program.GetDirGameUserConfig(GameId);
 
             if (File.Exists(gameDir))
             {

@@ -1575,16 +1575,14 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool InitializeUserConfig(ApplicationData application)
         {
             // Code where conditions will be met before loading the user configuration (Global Config)
-            string BackendThreadingInit = Program.BackendThreadingArg;
-
-            BackendThreadingInit ??= ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString();
+            string backendThreadingInit = Program.BackendThreadingArg ?? ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString();
 
             // If a configuration is found in the "/games/xxxxxxxxxxxxxx" folder, the program will load the user setting. 
             string idGame = application.IdBaseString;
             if (ConfigurationFileFormat.TryLoad(Program.GetDirGameUserConfig(idGame), out ConfigurationFileFormat configurationFileFormat))
             {
                 // Loads the user configuration, having previously changed the global configuration to the user configuration              
-                ConfigurationState.Instance.Load(configurationFileFormat, Program.GetDirGameUserConfig(idGame, true, true), idGame);
+                ConfigurationState.Instance.Load(configurationFileFormat, Program.GetDirGameUserConfig(idGame, true), idGame);
 
                 if (ConfigurationFileFormat.TryLoad(Program.GlobalConfigurationPath, out ConfigurationFileFormat configurationFileFormatExtra))
                 {
@@ -1595,15 +1593,13 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
 
             // Code where conditions will be executed after loading user configuration
-            if (ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString() != BackendThreadingInit)
+            if (ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString() != backendThreadingInit)
             {
-
-                List<string> Arguments = new()
-                {
-                    "--bt", ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString() // BackendThreading
-                };
-
-                Rebooter.RebootAppWithGame(application.Path, Arguments);
+                Rebooter.RebootAppWithGame(application.Path, 
+                [
+                    "--bt", 
+                    ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString()
+                ]);
 
                 return true;
             }
@@ -1998,7 +1994,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
                     // just checking for file presence
                     viewModel.SelectedApplication.HasIndependentConfiguration = File.Exists(
-                        Program.GetDirGameUserConfig(viewModel.SelectedApplication.IdString, false, false));
+                        Program.GetDirGameUserConfig(viewModel.SelectedApplication.IdString));
 
                     viewModel.RefreshView();
                 });

@@ -50,6 +50,9 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
         private string _controllerImage;
         private int _device;
         private object _configViewModel;
+        private bool _isChangeTrackingActive;
+        private string _chosenProfile;
+        [ObservableProperty] private bool _isModified;
         [ObservableProperty] private string _profileName;
         [ObservableProperty] private bool _notificationIsVisible; // Automatically call the NotificationView property with OnPropertyChanged()
         [ObservableProperty] private string _notificationText; // Automatically call the NotificationText property with OnPropertyChanged()
@@ -84,9 +87,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
         public AvaloniaList<string> ProfilesList { get; set; }
         public AvaloniaList<string> DeviceList { get; set; }
 
-        public bool _useExtraConfig;
-
-        public bool _useGlobalInput;
+        public bool UseGlobalConfig;
 
         // XAML Flags
         public bool ShowSettings => _device > 0;
@@ -98,31 +99,16 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
         public bool HasLed => SelectedGamepad.Features.HasFlag(GamepadFeaturesFlag.Led);
         public bool CanClearLed => SelectedGamepad.Name.ContainsIgnoreCase("DualSense");
 
-        public bool _isChangeTrackingActive;
-
-        public bool _isModified;
-
-        public bool IsModified
-        {
-            get => _isModified;
-            set
-            {
-                _isModified = value;
-                OnPropertyChanged();
-            }
-        }
-
         public event Action NotifyChangesEvent;
-
-        public string _profileChoose;
+        
         public string ProfileChoose
         {
-            get => _profileChoose;
+            get => _chosenProfile;
             set
             {
                 // When you select a profile, the settings from the profile will be applied.
                 // To save the settings, you still need to click the apply button
-                _profileChoose = value;
+                _chosenProfile = value;
                 LoadProfile();
                 OnPropertyChanged();
             }
@@ -294,13 +280,11 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
         public InputConfig Config { get; set; }
 
-        public InputViewModel(UserControl owner, bool UseGlobalInput = false) : this()
+        public InputViewModel(UserControl owner, bool useGlobal = false) : this()
         {
             if (Program.PreviewerDetached)
             {
                 _mainWindow = RyujinxApp.MainWindow;
-
-                _useExtraConfig = Program.UseExtraConfig;
 
                 AvaloniaKeyboardDriver = new AvaloniaKeyboardDriver(owner);
 
@@ -309,7 +293,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
                 _mainWindow.ViewModel.AppHost?.NpadManager.BlockInputUpdates();
 
-                _useGlobalInput = UseGlobalInput;
+                UseGlobalConfig = useGlobal;
 
                 _isLoaded = false;
 
@@ -347,7 +331,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
         private void LoadConfiguration(InputConfig inputConfig = null)
         {
-            if (_useGlobalInput && _useExtraConfig)
+            if (UseGlobalConfig && Program.UseExtraConfig)
             {
                 Config = inputConfig ?? ConfigurationState.InstanceExtra.Hid.InputConfig.Value.FirstOrDefault(inputConfig => inputConfig.PlayerIndex == _playerId);            
             }
@@ -983,7 +967,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
             List<InputConfig> newConfig = [];
 
-            if (_useGlobalInput && _useExtraConfig)
+            if (UseGlobalConfig && Program.UseExtraConfig)
             {
                 newConfig.AddRange(ConfigurationState.InstanceExtra.Hid.InputConfig.Value);
             }
@@ -1035,7 +1019,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
             // NOTE: Do not modify InputConfig.Value directly as other code depends on the on-change event.
             _mainWindow.ViewModel.AppHost?.NpadManager.ReloadConfiguration(newConfig, ConfigurationState.Instance.Hid.EnableKeyboard, ConfigurationState.Instance.Hid.EnableMouse);
 
-            if (_useGlobalInput && _useExtraConfig)
+            if (UseGlobalConfig && Program.UseExtraConfig)
             {
                 // In User Settings when "Use Global Input" is enabled, it saves global input to global setting
                 ConfigurationState.InstanceExtra.Hid.InputConfig.Value = newConfig;
@@ -1046,12 +1030,6 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
                 ConfigurationState.Instance.Hid.InputConfig.Value = newConfig;
                 ConfigurationState.Instance.ToFileFormat().SaveConfig(Program.ConfigurationPath);
             }
-
-        }
-
-        public void NotifyChange(string property)
-        {
-            OnPropertyChanged(property);
         }
 
         public void NotifyChanges()
