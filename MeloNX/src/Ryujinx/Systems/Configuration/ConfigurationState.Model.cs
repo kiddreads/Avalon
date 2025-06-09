@@ -326,6 +326,12 @@ namespace Ryujinx.Ava.Systems.Configuration
             /// </summary>
             public ReactiveObject<bool> MatchSystemTime { get; private set; }
 
+
+            /// <summary>
+            /// Enable or disable use global input config  (Independent from controllers binding)
+            /// </summary>
+            public ReactiveObject<bool> UseInputGlobalConfig { get; private set; }
+
             /// <summary>
             /// Enables or disables Docked Mode
             /// </summary>
@@ -417,6 +423,8 @@ namespace Ryujinx.Ava.Systems.Configuration
                 SystemTimeOffset.LogChangesToValue(nameof(SystemTimeOffset));
                 MatchSystemTime = new ReactiveObject<bool>();
                 MatchSystemTime.LogChangesToValue(nameof(MatchSystemTime));
+                UseInputGlobalConfig = new ReactiveObject<bool>();
+                UseInputGlobalConfig.LogChangesToValue(nameof(UseInputGlobalConfig));
                 EnableDockedMode = new ReactiveObject<bool>();
                 EnableDockedMode.LogChangesToValue(nameof(EnableDockedMode));
                 EnablePtc = new ReactiveObject<bool>();
@@ -760,6 +768,8 @@ namespace Ryujinx.Ava.Systems.Configuration
         /// The default configuration instance
         /// </summary>
         public static ConfigurationState Instance { get; private set; }
+
+        public static ConfigurationState InstanceExtra{ get; private set; }
 
         /// <summary>
         /// The UI section
