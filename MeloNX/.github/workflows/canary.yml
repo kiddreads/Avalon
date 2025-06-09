@@ -43,16 +43,6 @@ jobs:
 
       - name: Overwrite csc problem matcher
         run: echo "::add-matcher::.github/csc.json"
-        
-      - name: Install GitLabCli
-        run: |
-          mkdir -p $HOME/.bin
-          gh release download -R GreemDev/GLI -O gli -p 'GitLabCli-linux_x64'
-          chmod +x gli
-          mv gli $HOME/.bin/
-          echo "$HOME/.bin" >> $GITHUB_PATH
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get version info
         id: version_info
