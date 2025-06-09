@@ -101,7 +101,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
         public event Action NotifyChangesEvent;
         
-        public string ProfileChoose
+        public string ChosenProfile
         {
             get => _chosenProfile;
             set
@@ -903,7 +903,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
                     LoadProfiles();
 
-                    ProfileChoose = ProfileName; // Show new profile
+                    ChosenProfile = ProfileName; // Show new profile
                 }
                 else
                 {
@@ -937,7 +937,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
                 LoadProfiles();
 
-                ProfileChoose = ProfilesList[0].ToString(); // Show default profile
+                ChosenProfile = ProfilesList[0].ToString(); // Show default profile
             }
         }
 

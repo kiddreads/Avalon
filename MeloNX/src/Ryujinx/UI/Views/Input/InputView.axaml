@@ -100,7 +100,7 @@
                         Name="ProfileBox"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
-                        SelectedItem="{Binding ProfileChoose, Mode=TwoWay}"
+                        SelectedItem="{Binding ChosenProfile, Mode=TwoWay}"
                         SelectionChanged="ComboBox_SelectionChanged"
                         ItemsSource="{Binding ProfilesList}"
                         Text="{Binding ProfileName, Mode=TwoWay}" />
