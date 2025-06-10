@@ -2,20 +2,17 @@
 
 All updates to this Ryujinx branch will be documented in this file.
 
+## [1.3.2](<https://git.ryujinx.app/ryubing/ryujinx/-/releases/1.3.2>) - 2025-06-09
+
 ## [1.3.1](<https://git.ryujinx.app/ryubing/ryujinx/-/releases/1.3.1>) - 2025-04-23
-A list of notable changes can be found on the release linked in the version number above.
 
 ## [1.2.86](<https://github.com/Ryubing/Stable-Releases/releases/tag/1.2.86>) - 2025-03-13
-A list of notable changes can be found on the release linked in the version number above.
 
 ## [1.2.82](<https://web.archive.org/web/20250312010534/https://github.com/Ryubing/Ryujinx/releases/tag/1.2.82>) - 2025-02-16
-A list of notable changes can be found on the release linked in the version number above.
 
 ## [1.2.80-81](<https://web.archive.org/web/20250302064257/https://github.com/Ryubing/Ryujinx/releases/tag/1.2.81>) - 2025-01-22
-A list of notable changes can be found on the release linked in the version number above.
 
 ## [1.2.78](<https://web.archive.org/web/20250301174537/https://github.com/Ryubing/Ryujinx/releases/tag/1.2.78>) - 2024-12-19
-A list of notable changes can be found on the release linked in the version number above.
 
 ## [1.2.73-1.2.76](<https://web.archive.org/web/20250209202612/https://github.com/Ryubing/Ryujinx/releases/tag/1.2.76>) - 2024-11-19
 A list of notable changes can be found on the release linked in the version number above.
