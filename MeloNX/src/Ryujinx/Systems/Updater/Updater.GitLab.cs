@@ -41,7 +41,7 @@ namespace Ryujinx.Ava.Systems
             return $"https://update.ryujinx.app/latest/query?os={os}&arch={arch}&rc={rc}";
         }
 
-        private static async Task<Optional<(Version Current, Version Incoming)>> CheckGitLabVersionAsync(bool showVersionUpToDate = false)
+        public static async Task<Optional<(Version Current, Version Incoming)>> CheckVersionAsync(bool showVersionUpToDate = false)
         {
             if (!Version.TryParse(Program.Version, out Version currentVersion))
             {
@@ -68,11 +68,8 @@ namespace Ryujinx.Ava.Systems
 
             Logger.Info?.Print(LogClass.Application, $"Checking for updates from {updateUrl}.");
 
-            // Get latest version number from GitLab API
+            // Get latest version number from update.ryujinx.app API
             using HttpClient jsonClient = ConstructHttpClient();
-
-            // GitLab instance is located in Ukraine. Connection times will vary across the world.
-            jsonClient.Timeout = TimeSpan.FromSeconds(10);
 
             try
             {
@@ -85,9 +82,10 @@ namespace Ryujinx.Ava.Systems
             }
             catch (Exception e)
             {
-                throw new AggregateException(
-                    $"An error occurred when parsing JSON response from API ({e.GetType().AsFullNamePrettyString()}): {e.Message}",
-                    e);
+                Logger.Error?.Print(LogClass.Application, $"An error occurred when parsing JSON response from API ({e.GetType().AsFullNamePrettyString()}): {e.Message}");
+
+                _running = false;
+                return default;
             }
 
             // If build URL not found, assume no new update is available.
@@ -116,10 +114,10 @@ namespace Ryujinx.Ava.Systems
             if (!Version.TryParse(_buildVer, out Version newVersion))
             {
                 Logger.Error?.Print(LogClass.Application,
-                    $"Failed to convert the received {RyujinxApp.FullAppName} version from GitLab!");
+                    $"Failed to convert the received {RyujinxApp.FullAppName} version from the update server!");
 
                 await ContentDialogHelper.CreateWarningDialog(
-                    LocaleManager.Instance[LocaleKeys.DialogUpdaterConvertFailedGithubMessage],
+                    LocaleManager.Instance[LocaleKeys.DialogUpdaterConvertFailedServerMessage],
                     LocaleManager.Instance[LocaleKeys.DialogUpdaterCancelUpdateMessage]);
 
                 _running = false;

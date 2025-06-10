@@ -31,9 +31,6 @@ namespace Ryujinx.Ava.Systems
 {
     internal static partial class Updater
     {
-        private static readonly GithubReleasesJsonSerializerContext _ghSerializerContext = new(JsonHelper.GetDefaultSerializerOptions());
-
-        private static readonly string _platformExt = BuildPlatformExtension();
         private static readonly string _homeDir = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string _updateDir = Path.Combine(Path.GetTempPath(), "Ryujinx", "update");
         private static readonly string _updatePublishDir = Path.Combine(_updateDir, "publish");
@@ -48,25 +45,6 @@ namespace Ryujinx.Ava.Systems
         private static readonly string[] _windowsDependencyDirs = [];
         
         private static string _changelogUrlFormat = null;
-
-        public static async Task<Optional<(Version, Version)>> CheckVersionAsync(bool showVersionUpToDate = false)
-        {
-            Optional<(Version, Version)> versionTuple;
-
-            try
-            {
-                versionTuple = await CheckGitLabVersionAsync(showVersionUpToDate);
-            }
-            catch (Exception e)
-            {
-                Logger.Error?.PrintMsg(LogClass.Application, "Update checking from GitLab failed; falling back to GitHub.");
-                Logger.Error?.PrintMsg(LogClass.Application, e.Message);
-                versionTuple = await CheckGitHubVersionAsync(showVersionUpToDate);
-            }
-
-            return versionTuple;
-        }
-        
         
         public static async Task BeginUpdateAsync(bool showVersionUpToDate = false)
         {
