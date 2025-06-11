@@ -14,7 +14,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
         {
             _infoTable = new InstInfo[(int)Instruction.Count];
 
-#pragma warning disable IDE0055 // Disable formatting
+            #pragma warning disable IDE0055 // Disable formatting
             Add(Instruction.AtomicAdd,                InstType.AtomicBinary,   "atomicAdd");
             Add(Instruction.AtomicAnd,                InstType.AtomicBinary,   "atomicAnd");
             Add(Instruction.AtomicCompareAndSwap,     InstType.AtomicTernary,  "atomicCompSwap");

@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using static Spv.Specification;
+using SpvInstruction = Spv.Generator.Instruction;
+using SpvInstructionPool = Spv.Generator.GeneratorPool<Spv.Generator.Instruction>;
+using SpvLiteralInteger = Spv.Generator.LiteralInteger;
+using SpvLiteralIntegerPool = Spv.Generator.GeneratorPool<Spv.Generator.LiteralInteger>;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {
-    using SpvInstruction = Spv.Generator.Instruction;
-    using SpvInstructionPool = Spv.Generator.GeneratorPool<Spv.Generator.Instruction>;
-    using SpvLiteralInteger = Spv.Generator.LiteralInteger;
-    using SpvLiteralIntegerPool = Spv.Generator.GeneratorPool<Spv.Generator.LiteralInteger>;
-
     static class SpirvGenerator
     {
         // Resource pools for Spirv generation. Note: Increase count when more threads are being used.

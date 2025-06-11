@@ -257,7 +257,7 @@ namespace Ryujinx.Ava.UI.Models.Input
                 Led = new LedConfigController
                 {
                     EnableLed = EnableLedChanging,
-                    TurnOffLed = this.TurnOffLed,
+                    TurnOffLed = TurnOffLed,
                     UseRainbow = UseRainbowLed,
                     LedColor = LedColor.ToUInt32()
                 },

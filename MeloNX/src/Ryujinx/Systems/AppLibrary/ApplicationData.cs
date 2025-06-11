@@ -86,18 +86,16 @@ namespace Ryujinx.Ava.Systems.AppLibrary
 
         public string LocalizedStatusTooltip =>
             Compatibility.Convert(x =>
-#pragma warning disable CS8509 // It is exhaustive for all possible values this can contain.
                 LocaleManager.Instance[x.Status switch
-#pragma warning restore CS8509
                 {
                     LocaleKeys.CompatibilityListPlayable => LocaleKeys.CompatibilityListPlayableTooltip,
                     LocaleKeys.CompatibilityListIngame => LocaleKeys.CompatibilityListIngameTooltip,
                     LocaleKeys.CompatibilityListMenus => LocaleKeys.CompatibilityListMenusTooltip,
                     LocaleKeys.CompatibilityListBoots => LocaleKeys.CompatibilityListBootsTooltip,
                     LocaleKeys.CompatibilityListNothing => LocaleKeys.CompatibilityListNothingTooltip,
+                    _ => throw new ArgumentOutOfRangeException(nameof(x.Status), "Unknown playability status.")
                 }]
             ).OrElse(string.Empty);
-
 
         [JsonIgnore] public string IdString => Id.ToString("x16");
 

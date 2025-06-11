@@ -6,11 +6,11 @@ namespace Ryujinx.Cpu.AppleHv
 {
     struct HvVcpuExitException
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public ulong Syndrome;
         public ulong VirtualAddress;
         public ulong PhysicalAddress;
-#pragma warning restore CS0649
+
     }
 
     enum HvExitReason : uint
@@ -23,10 +23,10 @@ namespace Ryujinx.Cpu.AppleHv
 
     struct HvVcpuExit
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public HvExitReason Reason;
         public HvVcpuExitException Exception;
-#pragma warning restore CS0649
+
     }
 
     enum HvReg : uint

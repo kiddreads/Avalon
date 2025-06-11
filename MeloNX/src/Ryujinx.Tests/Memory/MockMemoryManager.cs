@@ -11,9 +11,7 @@ namespace Ryujinx.Tests.Memory
 
         public MemoryManagerType Type => MemoryManagerType.HostMappedUnsafe;
 
-#pragma warning disable CS0067 // The event is never used
         public event Action<ulong, ulong> UnmapEvent;
-#pragma warning restore CS0067
 
         public ref T GetRef<T>(ulong va) where T : unmanaged
         {
@@ -48,6 +46,13 @@ namespace Ryujinx.Tests.Memory
         public void Write<T>(ulong va, T value) where T : unmanaged
         {
             throw new NotImplementedException();
+        }
+
+        // Since the mock never unmaps memory, the UnmapEvent is never used and this causes a warning.
+        // This method is provided to allow the mock to trigger the event if needed.
+        public void Unmap(ulong va, ulong size)
+        {
+            UnmapEvent?.Invoke(va, size);
         }
     }
 }

@@ -339,7 +339,6 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.AmiiboDecryption
 
         public static bool HasAmiiboKeyFile => File.Exists(GetKeyRetailBinPath());
 
-
         public static DateTime DateTimeFromTag(ushort dateTimeTag)
         {
             try

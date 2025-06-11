@@ -7,7 +7,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Dma
     /// </summary>
     struct DmaTexture
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public MemoryLayout MemoryLayout;
         public int Width;
         public int Height;
@@ -15,6 +15,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Dma
         public int RegionZ;
         public ushort RegionX;
         public ushort RegionY;
-#pragma warning restore CS0649
+
     }
 }

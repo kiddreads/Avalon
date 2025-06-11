@@ -486,10 +486,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Twod
     /// </summary>
     struct RenderSolidPrimPoint
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint SetX;
         public uint Y;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -497,7 +497,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Twod
     /// </summary>
     unsafe struct TwodClassState : IShadowState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint SetObject;
         public readonly int SetObjectClassId => (int)(SetObject & 0xFFFF);
         public readonly int SetObjectEngineId => (int)((SetObject >> 16) & 0x1F);
@@ -811,6 +811,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Twod
         public readonly bool MmeDmaWriteMethodBarrierV => (MmeDmaWriteMethodBarrier & 0x1) != 0;
         public fixed uint ReservedDF0[2436];
         public Array256<uint> SetMmeShadowScratch;
-#pragma warning restore CS0649
+
     }
 }

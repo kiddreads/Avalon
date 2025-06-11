@@ -146,11 +146,15 @@ namespace Ryujinx.Horizon.Kernel.Generators
             generator.AppendLine();
 
             List<SyscallIdAndName> syscalls = [];
+            Dictionary<string, bool> isStaticMethod = new();
 
             foreach (MethodDeclarationSyntax method in syntaxReceiver.SvcImplementations)
             {
-                GenerateMethod32(generator, context.Compilation, method);
-                GenerateMethod64(generator, context.Compilation, method);
+                bool isStatic = method.Modifiers.Any(SyntaxKind.StaticKeyword);
+                isStaticMethod[method.Identifier.Text] = isStatic;
+
+                GenerateMethod32(generator, context.Compilation, method, isStatic);
+                GenerateMethod64(generator, context.Compilation, method, isStatic);
 
                 foreach (AttributeSyntax attribute in method.AttributeLists.SelectMany(attributeList =>
                              attributeList.Attributes.Where(attribute =>
@@ -166,9 +170,9 @@ namespace Ryujinx.Horizon.Kernel.Generators
 
             syscalls.Sort();
 
-            GenerateDispatch(generator, syscalls, A32Suffix);
+            GenerateDispatch(generator, syscalls, A32Suffix, isStaticMethod);
             generator.AppendLine();
-            GenerateDispatch(generator, syscalls, A64Suffix);
+            GenerateDispatch(generator, syscalls, A64Suffix, isStaticMethod);
 
             generator.LeaveScope();
             generator.LeaveScope();
@@ -193,9 +197,12 @@ namespace Ryujinx.Horizon.Kernel.Generators
             generator.LeaveScope();
         }
 
-        private static void GenerateMethod32(CodeGenerator generator, Compilation compilation, MethodDeclarationSyntax method)
+        private static void GenerateMethod32(CodeGenerator generator, Compilation compilation, MethodDeclarationSyntax method, bool isStatic)
         {
-            generator.EnterScope($"private static void {method.Identifier.Text}{A32Suffix}(Syscall syscall, {TypeExecutionContext} context)");
+            string methodParams = isStatic
+                ? $"{TypeExecutionContext} context"
+                : $"Syscall syscall, {TypeExecutionContext} context";
+            generator.EnterScope($"private static void {method.Identifier.Text}{A32Suffix}({methodParams})");
 
             string[] args = new string[method.ParameterList.Parameters.Count];
             int index = 0;
@@ -266,9 +273,10 @@ namespace Ryujinx.Horizon.Kernel.Generators
             string result = null;
             string canonicalReturnTypeName = null;
 
+            string callPrefix = isStatic ? $"{(method.Parent is ClassDeclarationSyntax cls ? cls.Identifier.Text + "." : "")}{method.Identifier.Text}" : $"syscall.{method.Identifier.Text}";
             if (method.ReturnType.ToString() != "void")
             {
-                generator.AppendLine($"var {ResultVariableName} = syscall.{method.Identifier.Text}({argsList});");
+                generator.AppendLine($"var {ResultVariableName} = {callPrefix}({argsList});");
                 canonicalReturnTypeName = GetCanonicalTypeName(compilation, method.ReturnType);
 
                 if (canonicalReturnTypeName == TypeResult)
@@ -289,7 +297,7 @@ namespace Ryujinx.Horizon.Kernel.Generators
             }
             else
             {
-                generator.AppendLine($"syscall.{method.Identifier.Text}({argsList});");
+                generator.AppendLine($"{callPrefix}({argsList});");
             }
 
             foreach (OutParameter outParameter in outParameters)
@@ -313,9 +321,12 @@ namespace Ryujinx.Horizon.Kernel.Generators
             generator.AppendLine();
         }
 
-        private static void GenerateMethod64(CodeGenerator generator, Compilation compilation, MethodDeclarationSyntax method)
+        private static void GenerateMethod64(CodeGenerator generator, Compilation compilation, MethodDeclarationSyntax method, bool isStatic)
         {
-            generator.EnterScope($"private static void {method.Identifier.Text}{A64Suffix}(Syscall syscall, {TypeExecutionContext} context)");
+            string methodParams = isStatic
+                ? $"{TypeExecutionContext} context"
+                : $"Syscall syscall, {TypeExecutionContext} context";
+            generator.EnterScope($"private static void {method.Identifier.Text}{A64Suffix}({methodParams})");
 
             string[] args = new string[method.ParameterList.Parameters.Count];
             int registerIndex = 0;
@@ -356,9 +367,10 @@ namespace Ryujinx.Horizon.Kernel.Generators
             string result = null;
             string canonicalReturnTypeName = null;
 
+            string callPrefix = isStatic ? $"{(method.Parent is ClassDeclarationSyntax cls ? cls.Identifier.Text + "." : "")}{method.Identifier.Text}" : $"syscall.{method.Identifier.Text}";
             if (method.ReturnType.ToString() != "void")
             {
-                generator.AppendLine($"var {ResultVariableName} = syscall.{method.Identifier.Text}({argsList});");
+                generator.AppendLine($"var {ResultVariableName} = {callPrefix}({argsList});");
                 canonicalReturnTypeName = GetCanonicalTypeName(compilation, method.ReturnType);
 
                 if (canonicalReturnTypeName == TypeResult)
@@ -374,7 +386,7 @@ namespace Ryujinx.Horizon.Kernel.Generators
             }
             else
             {
-                generator.AppendLine($"syscall.{method.Identifier.Text}({argsList});");
+                generator.AppendLine($"{callPrefix}({argsList});");
             }
 
             foreach (OutParameter outParameter in outParameters)
@@ -391,6 +403,55 @@ namespace Ryujinx.Horizon.Kernel.Generators
 
             generator.LeaveScope();
             generator.AppendLine();
+        }
+
+        private static void GenerateMethod32(CodeGenerator generator, Compilation compilation, MethodDeclarationSyntax method)
+        {
+            GenerateMethod32(generator, compilation, method, false);
+        }
+
+        private static void GenerateMethod64(CodeGenerator generator, Compilation compilation, MethodDeclarationSyntax method)
+        {
+            GenerateMethod64(generator, compilation, method, false);
+        }
+
+        private static void GenerateDispatch(CodeGenerator generator, List<SyscallIdAndName> syscalls, string suffix, Dictionary<string, bool> isStaticMethod)
+        {
+            generator.EnterScope($"public static void Dispatch{suffix}(Syscall syscall, {TypeExecutionContext} context, int id)");
+            generator.EnterScope("switch (id)");
+
+            foreach (SyscallIdAndName syscall in syscalls)
+            {
+                generator.AppendLine($"case {syscall.Id}:");
+                generator.IncreaseIndentation();
+
+                if (isStaticMethod.TryGetValue(syscall.Name, out bool isStatic) && isStatic)
+                {
+                    generator.AppendLine($"{syscall.Name}{suffix}(context);");
+                }
+                else
+                {
+                    generator.AppendLine($"{syscall.Name}{suffix}(syscall, context);");
+                }
+
+                generator.AppendLine("break;");
+
+                generator.DecreaseIndentation();
+            }
+
+            generator.AppendLine($"default:");
+            generator.IncreaseIndentation();
+
+            generator.AppendLine("throw new NotImplementedException($\"SVC 0x{id:X4} is not implemented.\");");
+
+            generator.DecreaseIndentation();
+
+            generator.LeaveScope();
+            generator.LeaveScope();
+        }
+
+        private static void GenerateDispatch(CodeGenerator generator, List<SyscallIdAndName> syscalls, string suffix)
+        {
         }
 
         private static string GetFormattedLogValue(string value, string canonicalTypeName)
@@ -461,33 +522,6 @@ namespace Ryujinx.Horizon.Kernel.Generators
         private static void GenerateLogPrint(CodeGenerator generator, string logLevel, string logClass, string log)
         {
             generator.AppendLine($"Logger.{logLevel}?.PrintMsg(LogClass.{logClass}, $\"{log}\");");
-        }
-
-        private static void GenerateDispatch(CodeGenerator generator, List<SyscallIdAndName> syscalls, string suffix)
-        {
-            generator.EnterScope($"public static void Dispatch{suffix}(Syscall syscall, {TypeExecutionContext} context, int id)");
-            generator.EnterScope("switch (id)");
-
-            foreach (SyscallIdAndName syscall in syscalls)
-            {
-                generator.AppendLine($"case {syscall.Id}:");
-                generator.IncreaseIndentation();
-
-                generator.AppendLine($"{syscall.Name}{suffix}(syscall, context);");
-                generator.AppendLine("break;");
-
-                generator.DecreaseIndentation();
-            }
-
-            generator.AppendLine($"default:");
-            generator.IncreaseIndentation();
-
-            generator.AppendLine("throw new NotImplementedException($\"SVC 0x{id:X4} is not implemented.\");");
-
-            generator.DecreaseIndentation();
-
-            generator.LeaveScope();
-            generator.LeaveScope();
         }
 
         private static bool Is32BitInteger(string canonicalTypeName)

@@ -23,9 +23,9 @@ namespace Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Npad
         public RingLifo<SixAxisSensorState> JoyLeftSixAxisSensor;
         public RingLifo<SixAxisSensorState> JoyRightSixAxisSensor;
         public DeviceType DeviceType;
-#pragma warning disable IDE0051 // Remove unused private member
+
         private readonly uint _reserved1;
-#pragma warning restore IDE0051
+
         public NpadSystemProperties SystemProperties;
         public NpadSystemButtonProperties SystemButtonProperties;
         public NpadBatteryLevel BatteryLevelJoyDual;
@@ -33,9 +33,9 @@ namespace Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Npad
         public NpadBatteryLevel BatteryLevelJoyRight;
         public uint AppletFooterUiAttributes;
         public AppletFooterUiType AppletFooterUiType;
-#pragma warning disable IDE0051 // Remove unused private member
+
         private readonly Reserved2Struct _reserved2;
-#pragma warning restore IDE0051
+
         public RingLifo<NpadGcTriggerState> GcTrigger;
         public NpadLarkType LarkTypeLeftAndMain;
         public NpadLarkType LarkTypeRight;

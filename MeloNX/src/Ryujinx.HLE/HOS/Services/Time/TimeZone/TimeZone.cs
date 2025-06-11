@@ -649,22 +649,8 @@ namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
                         }
                     }
 
-                    long theirDstOffset;
-                    for (int i = 0; i < outRules.TimeCount; i++)
-                    {
-                        int j = outRules.Types[i];
-                        if (outRules.Ttis[j].IsDaySavingTime)
-                        {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-                            theirDstOffset = -outRules.Ttis[j].GmtOffset;
-#pragma warning restore IDE0059
-                        }
-                    }
-
                     bool isDaySavingTime = false;
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-                    long theirOffset = theirStdOffset;
-#pragma warning restore IDE0059
+
                     for (int i = 0; i < outRules.TimeCount; i++)
                     {
                         int j = outRules.Types[i];
@@ -681,16 +667,9 @@ namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
                             }
                         }
 
-                        theirOffset = -outRules.Ttis[j].GmtOffset;
-                        if (outRules.Ttis[j].IsDaySavingTime)
+                        if (!outRules.Ttis[j].IsDaySavingTime)
                         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-                            theirDstOffset = theirOffset;
-#pragma warning restore IDE0059
-                        }
-                        else
-                        {
-                            theirStdOffset = theirOffset;
+                            theirStdOffset = -outRules.Ttis[j].GmtOffset;
                         }
                     }
 

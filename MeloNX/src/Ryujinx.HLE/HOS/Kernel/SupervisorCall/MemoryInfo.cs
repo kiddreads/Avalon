@@ -1,7 +1,9 @@
 using Ryujinx.HLE.HOS.Kernel.Memory;
+using System.Runtime.InteropServices;
 
 namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     struct MemoryInfo
     {
         public ulong Address;
@@ -11,9 +13,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         public KMemoryPermission Permission;
         public int IpcRefCount;
         public int DeviceRefCount;
-#pragma warning disable CS0414, IDE0052 // Remove unread private member
         private readonly int _padding;
-#pragma warning restore CS0414, IDE0052
 
         public MemoryInfo(
             ulong address,

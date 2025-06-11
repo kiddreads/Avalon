@@ -9,7 +9,7 @@ namespace Ryujinx.Graphics.Gpu.Image
     /// </summary>
     struct TextureDescriptor : ITextureDescriptor, IEquatable<TextureDescriptor>
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint Word0;
         public uint Word1;
         public uint Word2;
@@ -18,7 +18,6 @@ namespace Ryujinx.Graphics.Gpu.Image
         public uint Word5;
         public uint Word6;
         public uint Word7;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks Maxwell texture format integer.

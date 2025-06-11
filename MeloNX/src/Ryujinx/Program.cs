@@ -119,7 +119,6 @@ namespace Ryujinx.Ava
                 => ProcessUnhandledException(sender, e.Exception, false);
             AppDomain.CurrentDomain.ProcessExit += (_, _) => Exit();
 
-
             // Setup base data directory.
             AppDataManager.Initialize(CommandLineState.BaseDirPathArg);
 
@@ -159,7 +158,6 @@ namespace Ryujinx.Ava
                 MainWindow.DeferLoadApplication(CommandLineState.LaunchPathArg, CommandLineState.LaunchApplicationId, CommandLineState.StartFullscreenArg);
             }
         }
-
 
         public static string GetDirGameUserConfig(string gameId, bool changeFolderForGame = false)
         {
@@ -221,10 +219,7 @@ namespace Ryujinx.Ava
             }
 
             // When you first load the program, copy to remember the path for the global configuration
-            if (GlobalConfigurationPath == null)
-            {
-                GlobalConfigurationPath = ConfigurationPath;
-            }
+            GlobalConfigurationPath ??= ConfigurationPath;
 
             UseHardwareAcceleration = ConfigurationState.Instance.EnableHardwareAcceleration;
 
@@ -341,7 +336,6 @@ namespace Ryujinx.Ava
                 else
                     log.PrintMsg(LogClass.Application, message);
             }
-
 
             if (isTerminating)
                 Exit();

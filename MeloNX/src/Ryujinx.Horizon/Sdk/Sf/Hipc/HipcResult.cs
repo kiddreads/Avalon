@@ -16,6 +16,6 @@ namespace Ryujinx.Horizon.Sdk.Sf.Hipc
         public static Result InvalidCmifRequest    => new(ModuleId, 420);
         public static Result TargetNotDomain       => new(ModuleId, 491);
         public static Result DomainObjectNotFound  => new(ModuleId, 492);
-        #pragma warning restore IDE0055
+#pragma warning restore IDE0055
     }
 }

@@ -1,13 +1,14 @@
 using Ryujinx.Common.Memory;
 using Ryujinx.Graphics.Video;
+using System.Runtime.InteropServices;
 
 namespace Ryujinx.Graphics.Nvdec.Types.H264
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct PictureInfo
     {
-#pragma warning disable IDE0051, CS0169, CS0649 // Remove unused private member
         Array18<uint> Unknown0;
-#pragma warning restore IDE0051
+
         public uint BitstreamSize;
         public uint NumSlices;
         public uint Unknown50;
@@ -49,7 +50,6 @@ namespace Ryujinx.Graphics.Nvdec.Types.H264
         public Array16<byte> MvcextViewRefMasksL1;
         public uint Flags2;
         public Array10<uint> Unknown2D4;
-#pragma warning restore CS0169, CS0649
 
         public readonly bool MbAdaptiveFrameFieldFlag => (Flags & (1 << 0)) != 0;
         public readonly bool Direct8x8InferenceFlag => (Flags & (1 << 1)) != 0;

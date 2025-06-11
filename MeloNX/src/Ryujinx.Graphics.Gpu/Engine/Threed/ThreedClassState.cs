@@ -26,9 +26,8 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct TessMode
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint Packed;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks the tessellation abstract patch type.
@@ -63,7 +62,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct TfBufferState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 Enable;
         public GpuVa Address;
         public int Size;
@@ -71,7 +70,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public uint Padding0;
         public uint Padding1;
         public uint Padding2;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -79,12 +78,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct TfState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public int BufferIndex;
         public int VaryingsCount;
         public int Stride;
         public uint Padding;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -92,7 +91,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct RtColorState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public GpuVa Address;
         public int WidthOrStride;
         public int Height;
@@ -108,7 +107,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public int Padding3;
         public int Padding4;
         public int Padding5;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -116,7 +115,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct ViewportTransform
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public float ScaleX;
         public float ScaleY;
         public float ScaleZ;
@@ -125,7 +124,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public float TranslateZ;
         public uint Swizzle;
         public uint SubpixelPrecisionBias;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks viewport swizzle of the position X component.
@@ -169,14 +167,14 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct ViewportExtents
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public ushort X;
         public ushort Width;
         public ushort Y;
         public ushort Height;
         public float DepthNear;
         public float DepthFar;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -184,10 +182,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct VertexBufferDrawState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public int First;
         public int Count;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -195,12 +193,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct ClearColors
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public float Red;
         public float Green;
         public float Blue;
         public float Alpha;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -208,11 +206,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct DepthBiasState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 PointEnable;
         public Boolean32 LineEnable;
         public Boolean32 FillEnable;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -231,14 +229,14 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct ScissorState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 Enable;
         public ushort X1;
         public ushort X2;
         public ushort Y1;
         public ushort Y2;
         public uint Padding;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -246,11 +244,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct StencilBackMasks
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public int FuncRef;
         public int Mask;
         public int FuncMask;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -258,12 +256,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct RtDepthStencilState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public GpuVa Address;
         public ZetaFormat Format;
         public MemoryLayout MemoryLayout;
         public int LayerSize;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -271,12 +269,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct ScreenScissorState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public ushort X;
         public ushort Width;
         public ushort Y;
         public ushort Height;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -319,9 +317,8 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct VertexAttribState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint Attribute;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks the index of the vertex buffer this attribute belongs to.
@@ -383,9 +380,8 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct RtControl
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint Packed;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks the number of active draw buffers.
@@ -412,7 +408,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct Size3D
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public int Width;
         public int Height;
         public ushort Depth;
@@ -422,7 +418,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         {
             return (Flags & 1) == 0;
         }
-#pragma warning restore CS0649
     }
 
     /// <summary>
@@ -430,7 +425,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct StencilTestState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 Enable;
         public StencilOp FrontSFail;
         public StencilOp FrontDpFail;
@@ -439,7 +434,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public int FrontFuncRef;
         public int FrontFuncMask;
         public int FrontMask;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -457,12 +452,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct RgbHalf
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint R;
         public uint G;
         public uint B;
         public uint Padding;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks the red color component as a 16-bit float value.
@@ -512,10 +506,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct PoolState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public GpuVa Address;
         public int MaximumId;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -523,13 +517,13 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct StencilBackTestState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 TwoSided;
         public StencilOp BackSFail;
         public StencilOp BackDpFail;
         public StencilOp BackDpPass;
         public CompareOp BackFunc;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -537,10 +531,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct PrimitiveRestartState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 Enable;
         public int Index;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -549,12 +543,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct IndexBufferState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public GpuVa Address;
         public GpuVa EndAddress;
         public IndexType Type;
         public int First;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -562,11 +556,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct FaceState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 CullEnable;
         public FrontFace FrontFace;
         public Face CullFace;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -584,10 +578,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct LogicalOpState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 Enable;
         public LogicalOp LogicalOp;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -645,11 +639,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct VertexBufferState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint Control;
         public GpuVa Address;
         public int Divisor;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Vertex buffer stride, defined as the number of bytes occupied by each vertex in memory.
@@ -675,7 +668,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct BlendStateCommon
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 SeparateAlpha;
         public BlendOp ColorOp;
         public BlendFactor ColorSrcFactor;
@@ -684,7 +677,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public BlendFactor AlphaSrcFactor;
         public uint Unknown0x1354;
         public BlendFactor AlphaDstFactor;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -692,7 +685,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct BlendState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Boolean32 SeparateAlpha;
         public BlendOp ColorOp;
         public BlendFactor ColorSrcFactor;
@@ -701,7 +694,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public BlendFactor AlphaSrcFactor;
         public BlendFactor AlphaDstFactor;
         public uint Padding;
-#pragma warning restore CS0649
+
     }
 
     /// <summary>
@@ -709,7 +702,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct ShaderState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint Control;
         public uint Offset;
         public uint Unknown0x8;
@@ -726,7 +719,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public uint Unknown0x34;
         public uint Unknown0x38;
         public uint Unknown0x3c;
-#pragma warning restore CS0649
 
         /// <summary>
         /// Unpacks shader enable information.
@@ -744,16 +736,16 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
     /// </summary>
     struct UniformBufferState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public int Size;
         public GpuVa Address;
         public int Offset;
-#pragma warning restore CS0649
+
     }
 
     unsafe struct ThreedClassState : IShadowState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint SetObject;
         public readonly int SetObjectClassId => (int)(SetObject & 0xFFFF);
         public readonly int SetObjectEngineId => (int)((SetObject >> 16) & 0x1F);
@@ -1052,6 +1044,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         public Array4<Array32<uint>> TfVaryingLocations;
         public fixed uint Reserved2A00[640];
         public Array256<uint> SetMmeShadowScratch;
-#pragma warning restore CS0649
+
     }
 }

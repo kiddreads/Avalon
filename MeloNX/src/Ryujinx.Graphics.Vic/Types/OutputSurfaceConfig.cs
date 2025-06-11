@@ -4,10 +4,9 @@ namespace Ryujinx.Graphics.Vic.Types
 {
     readonly struct OutputSurfaceConfig
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         private readonly long _word0;
         private readonly long _word1;
-#pragma warning restore CS0649
 
         public PixelFormat OutPixelFormat => (PixelFormat)_word0.Extract(0, 7);
         public int OutChromaLocHoriz => (int)_word0.Extract(7, 2);

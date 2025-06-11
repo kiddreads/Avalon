@@ -11,7 +11,6 @@ namespace Ryujinx.HLE.HOS.Services.Pctl.ParentalControlServiceFactory
         private readonly int _permissionFlag;
         private ulong _titleId;
         private ParentalControlFlagValue _parentalControlFlag;
-#pragma warning disable IDE0052, CS0414 // Remove unread private member
         private int[] _ratingAge;
 
         // TODO: Find where they are set.
@@ -20,7 +19,6 @@ namespace Ryujinx.HLE.HOS.Services.Pctl.ParentalControlServiceFactory
         private bool _freeCommunicationEnabled = false;
         private readonly bool _stereoVisionRestrictionConfigurable = true;
         private bool _stereoVisionRestriction = false;
-#pragma warning restore IDE0052, CS0414
 
         public IParentalControlService(ServiceCtx context, ulong pid, bool withInitialize, int permissionFlag)
         {
@@ -178,7 +176,6 @@ namespace Ryujinx.HLE.HOS.Services.Pctl.ParentalControlServiceFactory
                 return ResultCode.PermissionDenied;
             }
 
-#pragma warning disable // Remove unnecessary value assignment
             bool stereoVisionRestriction = false;
 
             if (_stereoVisionRestrictionConfigurable)

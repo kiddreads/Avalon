@@ -1,14 +1,12 @@
 using Ryujinx.Common.Utilities;
-using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Ryujinx.Graphics.Texture.Astc
 {
     public struct BitStream128
     {
-#pragma warning disable IDE0044 // Make field readonly
         private Buffer16 _data;
-#pragma warning restore IDE0044
         public int BitsLeft { get; set; }
 
         public BitStream128(Buffer16 data)
@@ -27,13 +25,11 @@ namespace Ryujinx.Graphics.Texture.Astc
             }
 
             int mask = (1 << bitCount) - 1;
-            int value = _data.As<int>() & mask;
+            int value = Unsafe.As<Buffer16, int>(ref _data) & mask;
 
-            Span<ulong> span = _data.AsSpan<ulong>();
-
-            ulong carry = span[1] << (64 - bitCount);
-            span[0] = (span[0] >> bitCount) | carry;
-            span[1] >>= bitCount;
+            ulong carry = _data.High << (64 - bitCount);
+            _data.Low = (_data.Low >> bitCount) | carry;
+            _data.High >>= bitCount;
 
             BitsLeft -= bitCount;
 
@@ -51,23 +47,21 @@ namespace Ryujinx.Graphics.Texture.Astc
 
             ulong maskedValue = (uint)(value & ((1 << bitCount) - 1));
 
-            Span<ulong> span = _data.AsSpan<ulong>();
-
             if (BitsLeft < 64)
             {
                 ulong lowMask = maskedValue << BitsLeft;
-                span[0] |= lowMask;
+                _data.Low |= lowMask;
             }
 
             if (BitsLeft + bitCount > 64)
             {
                 if (BitsLeft > 64)
                 {
-                    span[1] |= maskedValue << (BitsLeft - 64);
+                    _data.High |= maskedValue << (BitsLeft - 64);
                 }
                 else
                 {
-                    span[1] |= maskedValue >> (64 - BitsLeft);
+                    _data.High |= maskedValue >> (64 - BitsLeft);
                 }
             }
 

@@ -4,7 +4,7 @@ namespace Ryujinx.Graphics.Nvdec.FFmpeg.Native
 {
     struct AVFrame
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public Array8<nint> Data;
         public Array8<int> LineSize;
         public nint ExtendedData;
@@ -29,7 +29,6 @@ namespace Ryujinx.Graphics.Nvdec.FFmpeg.Native
         public long ReorderedOpaque;
         public int SampleRate;
         public ulong ChannelLayout;
-#pragma warning restore CS0649
 
         // NOTE: There is more after, but the layout kind of changed a bit and we don't need more than this. This is safe as we only manipulate this behind a reference.
     }

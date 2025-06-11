@@ -1129,7 +1129,6 @@ namespace ARMeilleure.CodeGen.Arm64
             };
         }
 
-#pragma warning disable IDE0051 // Remove unused private member
         private void WriteInt16(short value)
         {
             WriteUInt16((ushort)value);
@@ -1144,7 +1143,6 @@ namespace ARMeilleure.CodeGen.Arm64
         {
             _stream.WriteByte(value);
         }
-#pragma warning restore IDE0051
 
         private void WriteUInt16(ushort value)
         {

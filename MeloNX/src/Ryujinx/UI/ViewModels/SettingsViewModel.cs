@@ -86,7 +86,6 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool IsGameTitleNotNull => !string.IsNullOrEmpty(GameTitle);
         public double PanelOpacity => IsGameTitleNotNull ? 0.5 : 1;
 
-
         public int ResolutionScale
         {
             get => _resolutionScale;
@@ -144,11 +143,11 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool EnableDockedMode { get; set; }
         public bool EnableKeyboard { get; set; }
         public bool EnableMouse { get; set; }
-        public bool DisableInputWhenOutOfFocus { get; set; }        
+        public bool DisableInputWhenOutOfFocus { get; set; }
         public int FocusLostActionType { get; set; }
 
         public bool UseGlobalInputConfig
-        { 
+        {
             get => _useInputGlobalConfig;
             set
             {
@@ -163,7 +162,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public VSyncMode VSyncMode
         {
-            get => _vSyncMode;  
+            get => _vSyncMode;
             set
             {
                 if (value is VSyncMode.Custom or VSyncMode.Switch or VSyncMode.Unbounded)
@@ -225,7 +224,6 @@ namespace Ryujinx.Ava.UI.ViewModels
         }
         public bool EnablePptc { get; set; }
         public bool EnableLowPowerPptc { get; set; }
-
 
         public long TurboMultiplier
         {
@@ -577,7 +575,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public void LoadCurrentConfiguration(bool global = false)
         {
-            ConfigurationState config = global ? ConfigurationState.InstanceExtra: ConfigurationState.Instance;
+            ConfigurationState config = global ? ConfigurationState.InstanceExtra : ConfigurationState.Instance;
 
             // User Interface
             EnableDiscordIntegration = config.EnableDiscordIntegration;
@@ -688,7 +686,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public void SaveSettings(bool global = false)
         {
-            ConfigurationState config = global ? ConfigurationState.InstanceExtra: ConfigurationState.Instance;
+            ConfigurationState config = global ? ConfigurationState.InstanceExtra : ConfigurationState.Instance;
 
             // User Interface
             config.EnableDiscordIntegration.Value = EnableDiscordIntegration;

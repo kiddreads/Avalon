@@ -57,7 +57,6 @@ using Key = Ryujinx.Input.Key;
 using MissingKeyException = LibHac.Common.Keys.MissingKeyException;
 using Path = System.IO.Path;
 using ShaderCacheLoadingState = Ryujinx.Graphics.Gpu.Shader.ShaderCacheState;
-using UserId = Ryujinx.HLE.HOS.Services.Account.Acc.UserId;
 
 namespace Ryujinx.Ava.UI.ViewModels
 {
@@ -1595,9 +1594,9 @@ namespace Ryujinx.Ava.UI.ViewModels
             // Code where conditions will be executed after loading user configuration
             if (ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString() != backendThreadingInit)
             {
-                Rebooter.RebootAppWithGame(application.Path, 
+                Rebooter.RebootAppWithGame(application.Path,
                 [
-                    "--bt", 
+                    "--bt",
                     ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString()
                 ]);
 

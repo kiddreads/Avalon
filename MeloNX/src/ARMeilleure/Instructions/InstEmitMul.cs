@@ -2,7 +2,6 @@ using ARMeilleure.Decoders;
 using ARMeilleure.IntermediateRepresentation;
 using ARMeilleure.Translation;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using static ARMeilleure.Instructions.InstEmitHelper;
 
 namespace ARMeilleure.Instructions

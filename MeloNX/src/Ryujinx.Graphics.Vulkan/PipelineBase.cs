@@ -701,7 +701,9 @@ namespace Ryujinx.Graphics.Vulkan
             _vertexBufferUpdater.Commit(Cbs);
         }
 
+#pragma warning disable CA1822 // Mark members as static
         public void SetAlphaTest(bool enable, float reference, CompareOp op)
+#pragma warning restore CA1822 // Mark members as static
         {
             // This is currently handled using shader specialization, as Vulkan does not support alpha test.
             // In the future, we may want to use this to write the reference value into the support buffer,
@@ -900,6 +902,7 @@ namespace Ryujinx.Graphics.Vulkan
             // TODO: Default levels (likely needs emulation on shaders?)
         }
 
+#pragma warning disable CA1822 // Mark members as static
         public void SetPointParameters(float size, bool isProgramPointSize, bool enablePointSprite, Origin origin)
         {
             // TODO.
@@ -909,6 +912,7 @@ namespace Ryujinx.Graphics.Vulkan
         {
             // TODO.
         }
+#pragma warning restore CA1822 // Mark members as static
 
         public void SetPrimitiveRestart(bool enable, int index)
         {
@@ -1153,10 +1157,12 @@ namespace Ryujinx.Graphics.Vulkan
             _descriptorSetUpdater.SetUniformBuffers(CommandBuffer, buffers);
         }
 
+#pragma warning disable CA1822 // Mark members as static
         public void SetUserClipDistance(int index, bool enableClip)
         {
             // TODO.
         }
+#pragma warning restore CA1822 // Mark members as static
 
         public void SetVertexAttribs(ReadOnlySpan<VertexAttribDescriptor> vertexAttribs)
         {

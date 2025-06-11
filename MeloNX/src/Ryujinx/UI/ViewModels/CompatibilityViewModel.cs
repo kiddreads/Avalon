@@ -1,10 +1,10 @@
 using Gommon;
+using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Systems;
 using Ryujinx.Ava.Systems.AppLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ryujinx.Ava.Common.Locale;
 
 namespace Ryujinx.Ava.UI.ViewModels
 {
@@ -30,19 +30,18 @@ namespace Ryujinx.Ava.UI.ViewModels
         public string BootsInfoText { get; set; }
         public string NothingInfoText { get; set; }
 
-
         private IEnumerable<CompatibilityEntry> _currentEntries = CompatibilityDatabase.Entries;
 
         private string[] _ownedGameTitleIds = [];
 
-        private Func<CompatibilityEntry, object> _sortKeySelector = x => x.GameName; // Default sort by GameName
+        private readonly Func<CompatibilityEntry, object> _sortKeySelector = x => x.GameName; // Default sort by GameName
 
         public IEnumerable<CompatibilityEntry> CurrentEntries => OnlyShowOwnedGames
             ? _currentEntries.Where(x =>
                 x.TitleId.Check(tid => _ownedGameTitleIds.ContainsIgnoreCase(tid)))
             : _currentEntries;
 
-        public CompatibilityViewModel() {}
+        public CompatibilityViewModel() { }
 
         private void AppCountUpdated(object _, ApplicationCountUpdatedEventArgs __)
             => _ownedGameTitleIds = _appLibrary.Applications.Keys.Select(x => x.ToString("X16")).ToArray();
@@ -57,11 +56,11 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public void CountByStatus()
         {
-            PlayableInfoText =  LocaleManager.Instance[LocaleKeys.CompatibilityListPlayable]  + ": " +   CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListPlayable);
-            InGameInfoText =    LocaleManager.Instance[LocaleKeys.CompatibilityListIngame]    + ": " +   CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListIngame);
-            MenusInfoText =     LocaleManager.Instance[LocaleKeys.CompatibilityListMenus]     + ": " +   CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListMenus);
-            BootsInfoText =     LocaleManager.Instance[LocaleKeys.CompatibilityListBoots]     + ": " +   CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListBoots);
-            NothingInfoText =   LocaleManager.Instance[LocaleKeys.CompatibilityListNothing]   + ": " +   CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListNothing);
+            PlayableInfoText = LocaleManager.Instance[LocaleKeys.CompatibilityListPlayable] + ": " + CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListPlayable);
+            InGameInfoText = LocaleManager.Instance[LocaleKeys.CompatibilityListIngame] + ": " + CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListIngame);
+            MenusInfoText = LocaleManager.Instance[LocaleKeys.CompatibilityListMenus] + ": " + CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListMenus);
+            BootsInfoText = LocaleManager.Instance[LocaleKeys.CompatibilityListBoots] + ": " + CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListBoots);
+            NothingInfoText = LocaleManager.Instance[LocaleKeys.CompatibilityListNothing] + ": " + CurrentEntries.Count(x => x.Status == LocaleKeys.CompatibilityListNothing);
 
             _onlyShowOwnedGames = true;
         }
@@ -86,7 +85,6 @@ namespace Ryujinx.Ava.UI.ViewModels
                 OnPropertyChanged(nameof(CurrentEntries));
             }
         }
-
 
         public void NameSorting(int nameSort = 0)
         {
@@ -162,6 +160,5 @@ namespace Ryujinx.Ava.UI.ViewModels
                 };
             }
         }
-
     }
 }

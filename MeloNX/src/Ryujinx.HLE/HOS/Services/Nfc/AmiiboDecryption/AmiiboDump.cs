@@ -22,10 +22,10 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.AmiiboDecryption
             if (dumpData.Length < 540)
                 throw new ArgumentException("Incomplete dump. Amiibo data is at least 540 bytes.");
 
-            this.data = new byte[540];
-            Array.Copy(dumpData, this.data, dumpData.Length);
-            this.dataMasterKey = dataKey;
-            this.tagMasterKey = tagKey;
+            data = new byte[540];
+            Array.Copy(dumpData, data, dumpData.Length);
+            dataMasterKey = dataKey;
+            tagMasterKey = tagKey;
             this.isLocked = isLocked;
 
             if (!isLocked)
@@ -44,7 +44,7 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.AmiiboDecryption
             // Append data based on magic size
             int append = 16 - key.MagicSize;
             byte[] extract = new byte[16];
-            Array.Copy(this.data, 0x011, extract, 0, 2); // Extract two bytes from user data section
+            Array.Copy(data, 0x011, extract, 0, 2); // Extract two bytes from user data section
             for (int i = 2; i < 16; i++)
             {
                 extract[i] = 0x00;
@@ -57,13 +57,13 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.AmiiboDecryption
 
             // Extract the UID (UID is 8 bytes)
             byte[] uid = new byte[8];
-            Array.Copy(this.data, 0x000, uid, 0, 8);
+            Array.Copy(data, 0x000, uid, 0, 8);
             seed.AddRange(uid);
             seed.AddRange(uid);
 
             // Extract some tag data (pages 0x20 - 0x28)
             byte[] user = new byte[32];
-            Array.Copy(this.data, 0x060, user, 0, 32);
+            Array.Copy(data, 0x060, user, 0, 32);
 
             // XOR it with the key padding (XorPad)
             byte[] paddedUser = new byte[32];
@@ -137,10 +137,10 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.AmiiboDecryption
         private void DeriveKeysAndCipher()
         {
             // Derive HMAC Tag Key
-            this.hmacTagKey = DeriveKey(this.tagMasterKey, false, out _, out _);
+            hmacTagKey = DeriveKey(tagMasterKey, false, out _, out _);
 
             // Derive HMAC Data Key and AES Key/IV
-            this.hmacDataKey = DeriveKey(this.dataMasterKey, true, out aesKey, out aesIv);
+            hmacDataKey = DeriveKey(dataMasterKey, true, out aesKey, out aesIv);
         }
 
         private void DecryptData()

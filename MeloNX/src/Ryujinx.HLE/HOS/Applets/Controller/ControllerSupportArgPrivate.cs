@@ -1,6 +1,6 @@
 namespace Ryujinx.HLE.HOS.Applets
 {
-#pragma warning disable CS0649 // Field is never assigned to
+
     struct ControllerSupportArgPrivate
     {
         public uint PrivateSize;
@@ -12,5 +12,4 @@ namespace Ryujinx.HLE.HOS.Applets
         public uint NpadStyleSet;
         public uint NpadJoyHoldType;
     }
-#pragma warning restore CS0649
 }

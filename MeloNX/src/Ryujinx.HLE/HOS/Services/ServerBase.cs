@@ -377,9 +377,8 @@ namespace Ryujinx.HLE.HOS.Services
             else if (request.Type is IpcMessageType.CmifControl or
                      IpcMessageType.CmifControlWithContext)
             {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-                uint magic = (uint)_requestDataReader.ReadUInt64();
-#pragma warning restore IDE0059
+                _ = (uint)_requestDataReader.ReadUInt64(); // magic
+
                 uint cmdId = (uint)_requestDataReader.ReadUInt64();
 
                 switch (cmdId)

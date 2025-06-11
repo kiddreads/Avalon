@@ -23,9 +23,8 @@ namespace Ryujinx.HLE.HOS.Services.Caps
         public ResultCode SetShimLibraryVersion(ServiceCtx context)
         {
             ulong shimLibraryVersion = context.RequestData.ReadUInt64();
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            ulong appletResourceUserId = context.RequestData.ReadUInt64();
-#pragma warning restore IDE0059
+
+            _ = context.RequestData.ReadUInt64(); // applet Resource user id
 
             // TODO: Service checks if the pid is present in an internal list and returns ResultCode.BlacklistedPid if it is.
             //       The list contents needs to be determined.

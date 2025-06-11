@@ -1,4 +1,4 @@
-﻿using Gommon;
+using Gommon;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Common;
@@ -57,10 +57,10 @@ namespace Ryujinx.Ava.Systems
                 return default;
             }
 
-            if (CreateUpdateQueryUrl() is not {} updateUrl)
+            if (CreateUpdateQueryUrl() is not { } updateUrl)
             {
                 Logger.Error?.Print(LogClass.Application, "Could not determine URL for updates.");
-                
+
                 _running = false;
 
                 return default;
@@ -110,7 +110,6 @@ namespace Ryujinx.Ava.Systems
                 return default;
             }
 
-
             if (!Version.TryParse(_buildVer, out Version newVersion))
             {
                 Logger.Error?.Print(LogClass.Application,
@@ -127,7 +126,7 @@ namespace Ryujinx.Ava.Systems
 
             return (currentVersion, newVersion);
         }
-        
+
         [JsonSerializable(typeof(UpdaterResponse))]
         partial class UpdaterResponseJsonContext : JsonSerializerContext;
 

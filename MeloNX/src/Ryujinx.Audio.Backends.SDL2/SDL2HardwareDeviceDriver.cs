@@ -12,7 +12,7 @@ using static SDL2.SDL;
 
 namespace Ryujinx.Audio.Backends.SDL2
 {
-    public class SDL2HardwareDeviceDriver : IHardwareDeviceDriver
+    public partial class SDL2HardwareDeviceDriver : IHardwareDeviceDriver
     {
         private readonly ManualResetEvent _updateRequiredEvent;
         private readonly ManualResetEvent _pauseEvent;
@@ -22,10 +22,36 @@ namespace Ryujinx.Audio.Backends.SDL2
 
         public float Volume { get; set; }
 
-        // TODO: Add this to SDL2-CS
-        // NOTE: We use a DllImport here because of marshaling issue for spec.
-        [DllImport("SDL2")]
-        private static extern int SDL_GetDefaultAudioInfo(nint name, out SDL_AudioSpec spec, int isCapture);
+        // A safe method to get default audio information.
+        private static int GetDefaultAudioInfo(nint name, out SDL_AudioSpec spec, int isCapture)
+        {
+            int result;
+            spec = new SDL_AudioSpec();
+            IntPtr specPtr = IntPtr.Zero;
+
+            try
+            {
+                // Reserve memory
+                specPtr = Marshal.AllocHGlobal(Marshal.SizeOf<SDL_AudioSpec>());
+                // Call method
+                result = SDL_GetDefaultAudioInfo(name, specPtr, isCapture);
+                // Copy result to managed structure
+                spec = Marshal.PtrToStructure<SDL_AudioSpec>(specPtr);
+            }
+            finally
+            {
+                // Free the unmanaged memory to prevent memory leaks
+                if (specPtr != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(specPtr);
+                }
+            }
+
+            return result;
+        }
+
+        [LibraryImport("SDL2")]
+        private static partial int SDL_GetDefaultAudioInfo(nint name, nint spec, int isCapture);
 
         public SDL2HardwareDeviceDriver()
         {
@@ -35,7 +61,7 @@ namespace Ryujinx.Audio.Backends.SDL2
 
             SDL2Driver.Instance.Initialize();
 
-            int res = SDL_GetDefaultAudioInfo(nint.Zero, out SDL_AudioSpec spec, 0);
+            int res = GetDefaultAudioInfo(nint.Zero, out SDL_AudioSpec spec, 0);
 
             if (res != 0)
             {

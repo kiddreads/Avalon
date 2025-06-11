@@ -607,7 +607,7 @@ namespace Ryujinx.Graphics.Vulkan
                         srcHolder.SetDataUnchecked(0, data);
 
                         Auto<DisposableBuffer> srcBuffer = srcHolder.GetBuffer();
-                        Auto<DisposableBuffer> dstBuffer = this.GetBuffer(cbs.Value.CommandBuffer, true);
+                        Auto<DisposableBuffer> dstBuffer = GetBuffer(cbs.Value.CommandBuffer, true);
 
                         Copy(_gd, cbs.Value, srcBuffer, dstBuffer, 0, offset, dataSize);
 

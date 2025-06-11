@@ -103,7 +103,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
                 this.BranchIfFalse(lblVertexInBounds, isVertexOob);
                 this.Return();
-                this.MarkLabel(lblVertexInBounds);
+                MarkLabel(lblVertexInBounds);
 
                 Operand outputInstanceOffset = this.Load(StorageKind.Input, IoVariable.GlobalId, Const(1));
                 Operand instanceCount = this.Load(StorageKind.ConstantBuffer, vertexInfoCbBinding, Const((int)VertexInfoBufferField.VertexCounts), Const(1));
@@ -116,7 +116,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
                 this.BranchIfFalse(lblInstanceInBounds, isInstanceOob);
                 this.Return();
-                this.MarkLabel(lblInstanceInBounds);
+                MarkLabel(lblInstanceInBounds);
 
                 if (TranslatorContext.Stage == ShaderStage.Vertex)
                 {
@@ -469,7 +469,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
                         this.BranchIfTrue(alphaPassLabel, alphaPass);
                         this.Discard();
-                        this.MarkLabel(alphaPassLabel);
+                        MarkLabel(alphaPassLabel);
                     }
                 }
 
@@ -556,7 +556,7 @@ namespace Ryujinx.Graphics.Shader.Translation
                     Operand lblLoopHead = Label();
                     Operand lblExit = Label();
 
-                    this.MarkLabel(lblLoopHead);
+                    MarkLabel(lblLoopHead);
 
                     Operand writtenIndices = this.Load(StorageKind.LocalMemory, ResourceManager.LocalGeometryOutputIndexCountMemoryId);
 
@@ -581,7 +581,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
                     this.Branch(lblLoopHead);
 
-                    this.MarkLabel(lblExit);
+                    MarkLabel(lblExit);
                 }
             }
 
@@ -617,7 +617,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
             this.BranchIfTrue(a2cDitherEndLabel, opaque);
             this.Discard();
-            this.MarkLabel(a2cDitherEndLabel);
+            MarkLabel(a2cDitherEndLabel);
         }
 
         public Operation[] GetOperations()

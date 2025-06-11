@@ -147,9 +147,9 @@ namespace Ryujinx.Common.Collections
 
             Queue<Node<TKey, TValue>> nodes = new();
 
-            if (this.Root != null)
+            if (Root != null)
             {
-                nodes.Enqueue(this.Root);
+                nodes.Enqueue(Root);
             }
 
             while (nodes.TryDequeue(out Node<TKey, TValue> node))
@@ -522,7 +522,7 @@ namespace Ryujinx.Common.Collections
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            if (arrayIndex < 0 || array.Length - arrayIndex < this.Count)
+            if (arrayIndex < 0 || array.Length - arrayIndex < Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex));
             }

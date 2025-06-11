@@ -33,9 +33,9 @@ namespace Ryujinx.HLE.HOS.Services.Hid
 
         private long _npadCommunicationMode;
         private uint _accelerometerPlayMode;
-#pragma warning disable CS0649 // Field is never assigned to
+
         private readonly long _vibrationGcErmCommand;
-#pragma warning restore CS0649
+
         private float _sevenSixAxisSensorFusionStrength;
 
         private SensorFusionParameters _sensorFusionParams;
@@ -64,9 +64,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // CreateAppletResource(nn::applet::AppletResourceUserId) -> object<nn::hid::IAppletResource>
         public ResultCode CreateAppletResource(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             MakeObject(context, new IAppletResource(context.Device.System.HidSharedMem));
 
@@ -735,9 +733,6 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // GetSupportedNpadStyleSet(pid, nn::applet::AppletResourceUserId) -> uint nn::hid::NpadStyleTag
         public ResultCode GetSupportedNpadStyleSet(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            ulong pid = context.Request.HandleDesc.PId;
-#pragma warning restore IDE0059
             long appletResourceUserId = context.RequestData.ReadInt64();
 
             context.ResponseData.Write((int)context.Device.Hid.Npads.SupportedStyleSets);
@@ -751,9 +746,8 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // SetSupportedNpadIdType(nn::applet::AppletResourceUserId, array<NpadIdType, 9>)
         public ResultCode SetSupportedNpadIdType(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
+
             ulong arrayPosition = context.Request.PtrBuff[0].Position;
             ulong arraySize = context.Request.PtrBuff[0].Size;
 
@@ -904,9 +898,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // SetNpadJoyHoldType(nn::applet::AppletResourceUserId, ulong NpadJoyHoldType)
         public ResultCode SetNpadJoyHoldType(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             NpadJoyHoldType npadJoyHoldType = (NpadJoyHoldType)context.RequestData.ReadUInt64();
 
@@ -932,9 +924,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // GetNpadJoyHoldType(nn::applet::AppletResourceUserId) -> ulong NpadJoyHoldType
         public ResultCode GetNpadJoyHoldType(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             foreach (PlayerIndex playerIndex in context.Device.Hid.Npads.GetSupportedPlayers())
             {
@@ -955,9 +945,8 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         {
             NpadIdType npadIdType = (NpadIdType)context.RequestData.ReadUInt32();
             context.RequestData.BaseStream.Position += 4; // Padding
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             if (HidUtils.IsValidNpadIdType(npadIdType))
             {
@@ -990,9 +979,8 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         {
             NpadIdType npadIdType = (NpadIdType)context.RequestData.ReadUInt32();
             context.RequestData.BaseStream.Position += 4; // Padding
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             if (HidUtils.IsValidNpadIdType(npadIdType))
             {
@@ -1231,9 +1219,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
                 FrequencyHigh = context.RequestData.ReadSingle(),
             };
 
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             Dictionary<byte, VibrationValue> dualVibrationValues = new()
             {
@@ -1257,9 +1243,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
                 Reserved = context.RequestData.ReadByte(),
             };
 
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             VibrationValue vibrationValue = context.Device.Hid.Npads.GetLastVibrationValue((PlayerIndex)deviceHandle.PlayerId, deviceHandle.Position);
 
@@ -1304,9 +1288,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // SendVibrationValues(nn::applet::AppletResourceUserId, buffer<array<nn::hid::VibrationDeviceHandle>, type: 9>, buffer<array<nn::hid::VibrationValue>, type: 9>)
         public ResultCode SendVibrationValues(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             byte[] vibrationDeviceHandleBuffer = new byte[context.Request.PtrBuff[0].Size];
 
@@ -1396,10 +1378,8 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         // IsVibrationDeviceMounted(nn::hid::VibrationDeviceHandle, nn::applet::AppletResourceUserId)
         public ResultCode IsVibrationDeviceMounted(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            int vibrationDeviceHandle = context.RequestData.ReadInt32();
-            long appletResourceUserId = context.RequestData.ReadInt64();
-#pragma warning restore IDE0059
+            _ = context.RequestData.ReadInt32(); // VibrationDeviceHandle
+            _ = context.RequestData.ReadInt64(); // appletResourceUserId
 
             // NOTE: Service use vibrationDeviceHandle to get the PlayerIndex.
             //       And return false if (npadIdType >= (NpadIdType)8 && npadIdType != NpadIdType.Handheld && npadIdType != NpadIdType.Unknown)

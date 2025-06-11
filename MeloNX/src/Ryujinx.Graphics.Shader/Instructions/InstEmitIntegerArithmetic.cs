@@ -510,9 +510,8 @@ namespace Ryujinx.Graphics.Shader.Instructions
                 aLow = context.BitwiseNot(aLow);
                 aHigh = context.BitwiseNot(aHigh);
 
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-                aLow = AddWithCarry(context, aLow, Const(1), out Operand aLowCOut);
-#pragma warning restore IDE0059
+                _ = AddWithCarry(context, aLow, Const(1), out Operand aLowCOut);
+
                 aHigh = context.IAdd(aHigh, aLowCOut);
             }
 

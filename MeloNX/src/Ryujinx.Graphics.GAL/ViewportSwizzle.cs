@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Ryujinx.Graphics.GAL
 {
     public enum ViewportSwizzle

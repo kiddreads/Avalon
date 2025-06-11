@@ -1,6 +1,6 @@
 using Avalonia.Controls;
-using Ryujinx.Ava.Common.Locale;
 using Avalonia.Interactivity;
+using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Ava.UI.ViewModels;
 using System.Threading.Tasks;
@@ -51,7 +51,7 @@ namespace Ryujinx.Ava.UI.Windows
                 if (DataContext is not CompatibilityViewModel cvm)
                     return;
 
-                 cvm.NameSorting(int.Parse(sortStrategy));
+                cvm.NameSorting(int.Parse(sortStrategy));
             }
         }
 
@@ -65,6 +65,5 @@ namespace Ryujinx.Ava.UI.Windows
                 cvm.StatusSorting(int.Parse(sortStrategy));
             }
         }
-
     }
 }

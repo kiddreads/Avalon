@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using static Spv.Specification;
+using SpvInstruction = Spv.Generator.Instruction;
+using SpvLiteralInteger = Spv.Generator.LiteralInteger;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {
-    using SpvInstruction = Spv.Generator.Instruction;
-    using SpvLiteralInteger = Spv.Generator.LiteralInteger;
-
     static class Instructions
     {
         private const MemorySemanticsMask DefaultMemorySemantics =
@@ -27,7 +26,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
         {
             _instTable = new Func<CodeGenContext, AstOperation, OperationResult>[(int)Instruction.Count];
 
-#pragma warning disable IDE0055 // Disable formatting
+            #pragma warning disable IDE0055 // Disable formatting
             Add(Instruction.Absolute,                 GenerateAbsolute);
             Add(Instruction.Add,                      GenerateAdd);
             Add(Instruction.AtomicAdd,                GenerateAtomicAdd);

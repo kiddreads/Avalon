@@ -20,9 +20,7 @@ namespace Ryujinx.Audio.Renderer.Common
         public uint Unknown24;
         public uint RenderInfoSize;
 
-#pragma warning disable IDE0051, CS0169 // Remove unused field
         private Array4<int> _reserved;
-#pragma warning restore IDE0051, CS0169
 
         public uint TotalSize;
 

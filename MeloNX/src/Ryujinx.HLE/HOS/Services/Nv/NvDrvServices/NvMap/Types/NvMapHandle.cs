@@ -4,10 +4,10 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvMap
 {
     class NvMapHandle
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public int Handle;
         public int Id;
-#pragma warning restore CS0649
+
         public uint Size;
         public int Align;
         public int Kind;

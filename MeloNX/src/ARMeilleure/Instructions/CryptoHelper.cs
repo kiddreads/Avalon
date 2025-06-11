@@ -8,8 +8,8 @@ namespace ARMeilleure.Instructions
     static class CryptoHelper
     {
         #region "LookUp Tables"
-#pragma warning disable IDE1006 // Naming rule violation
-        private static ReadOnlySpan<byte> _sBox =>
+
+        private static ReadOnlySpan<byte> SBox =>
         [
             0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
             0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
@@ -29,7 +29,7 @@ namespace ARMeilleure.Instructions
             0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
         ];
 
-        private static ReadOnlySpan<byte> _invSBox =>
+        private static ReadOnlySpan<byte> InvSBox =>
         [
             0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb,
             0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb,
@@ -49,7 +49,7 @@ namespace ARMeilleure.Instructions
             0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
         ];
 
-        private static ReadOnlySpan<byte> _gfMul02 =>
+        private static ReadOnlySpan<byte> GfMul02 =>
         [
             0x00, 0x02, 0x04, 0x06, 0x08, 0x0a, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e,
             0x20, 0x22, 0x24, 0x26, 0x28, 0x2a, 0x2c, 0x2e, 0x30, 0x32, 0x34, 0x36, 0x38, 0x3a, 0x3c, 0x3e,
@@ -69,7 +69,7 @@ namespace ARMeilleure.Instructions
             0xfb, 0xf9, 0xff, 0xfd, 0xf3, 0xf1, 0xf7, 0xf5, 0xeb, 0xe9, 0xef, 0xed, 0xe3, 0xe1, 0xe7, 0xe5
         ];
 
-        private static ReadOnlySpan<byte> _gfMul03 =>
+        private static ReadOnlySpan<byte> GfMul03 =>
         [
             0x00, 0x03, 0x06, 0x05, 0x0c, 0x0f, 0x0a, 0x09, 0x18, 0x1b, 0x1e, 0x1d, 0x14, 0x17, 0x12, 0x11,
             0x30, 0x33, 0x36, 0x35, 0x3c, 0x3f, 0x3a, 0x39, 0x28, 0x2b, 0x2e, 0x2d, 0x24, 0x27, 0x22, 0x21,
@@ -89,7 +89,7 @@ namespace ARMeilleure.Instructions
             0x0b, 0x08, 0x0d, 0x0e, 0x07, 0x04, 0x01, 0x02, 0x13, 0x10, 0x15, 0x16, 0x1f, 0x1c, 0x19, 0x1a
         ];
 
-        private static ReadOnlySpan<byte> _gfMul09 =>
+        private static ReadOnlySpan<byte> GfMul09 =>
         [
             0x00, 0x09, 0x12, 0x1b, 0x24, 0x2d, 0x36, 0x3f, 0x48, 0x41, 0x5a, 0x53, 0x6c, 0x65, 0x7e, 0x77,
             0x90, 0x99, 0x82, 0x8b, 0xb4, 0xbd, 0xa6, 0xaf, 0xd8, 0xd1, 0xca, 0xc3, 0xfc, 0xf5, 0xee, 0xe7,
@@ -109,7 +109,7 @@ namespace ARMeilleure.Instructions
             0x31, 0x38, 0x23, 0x2a, 0x15, 0x1c, 0x07, 0x0e, 0x79, 0x70, 0x6b, 0x62, 0x5d, 0x54, 0x4f, 0x46
         ];
 
-        private static ReadOnlySpan<byte> _gfMul0B =>
+        private static ReadOnlySpan<byte> GfMul0B =>
         [
             0x00, 0x0b, 0x16, 0x1d, 0x2c, 0x27, 0x3a, 0x31, 0x58, 0x53, 0x4e, 0x45, 0x74, 0x7f, 0x62, 0x69,
             0xb0, 0xbb, 0xa6, 0xad, 0x9c, 0x97, 0x8a, 0x81, 0xe8, 0xe3, 0xfe, 0xf5, 0xc4, 0xcf, 0xd2, 0xd9,
@@ -129,7 +129,7 @@ namespace ARMeilleure.Instructions
             0xca, 0xc1, 0xdc, 0xd7, 0xe6, 0xed, 0xf0, 0xfb, 0x92, 0x99, 0x84, 0x8f, 0xbe, 0xb5, 0xa8, 0xa3
         ];
 
-        private static ReadOnlySpan<byte> _gfMul0D =>
+        private static ReadOnlySpan<byte> GfMul0D =>
         [
             0x00, 0x0d, 0x1a, 0x17, 0x34, 0x39, 0x2e, 0x23, 0x68, 0x65, 0x72, 0x7f, 0x5c, 0x51, 0x46, 0x4b,
             0xd0, 0xdd, 0xca, 0xc7, 0xe4, 0xe9, 0xfe, 0xf3, 0xb8, 0xb5, 0xa2, 0xaf, 0x8c, 0x81, 0x96, 0x9b,
@@ -149,7 +149,7 @@ namespace ARMeilleure.Instructions
             0xdc, 0xd1, 0xc6, 0xcb, 0xe8, 0xe5, 0xf2, 0xff, 0xb4, 0xb9, 0xae, 0xa3, 0x80, 0x8d, 0x9a, 0x97
         ];
 
-        private static ReadOnlySpan<byte> _gfMul0E =>
+        private static ReadOnlySpan<byte> GfMul0E =>
         [
             0x00, 0x0e, 0x1c, 0x12, 0x38, 0x36, 0x24, 0x2a, 0x70, 0x7e, 0x6c, 0x62, 0x48, 0x46, 0x54, 0x5a,
             0xe0, 0xee, 0xfc, 0xf2, 0xd8, 0xd6, 0xc4, 0xca, 0x90, 0x9e, 0x8c, 0x82, 0xa8, 0xa6, 0xb4, 0xba,
@@ -169,16 +169,16 @@ namespace ARMeilleure.Instructions
             0xd7, 0xd9, 0xcb, 0xc5, 0xef, 0xe1, 0xf3, 0xfd, 0xa7, 0xa9, 0xbb, 0xb5, 0x9f, 0x91, 0x83, 0x8d
         ];
 
-        private static ReadOnlySpan<byte> _srPerm =>
+        private static ReadOnlySpan<byte> SrPerm =>
         [
             0, 13, 10, 7, 4, 1, 14, 11, 8, 5, 2, 15, 12, 9, 6, 3
         ];
 
-        private static ReadOnlySpan<byte> _isrPerm =>
+        private static ReadOnlySpan<byte> IsrPerm =>
         [
             0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11
         ];
-#pragma warning restore IDE1006
+
         #endregion
 
         public static V128 AesInvMixColumns(V128 op)
@@ -195,10 +195,10 @@ namespace ARMeilleure.Instructions
                 byte row2 = inState[idx + 2]; // C, G, K, O: [row2, col0-col3]
                 byte row3 = inState[idx + 3]; // D, H, L, P: [row3, col0-col3]
 
-                outState[idx + 0] = (byte)((uint)_gfMul0E[row0] ^ _gfMul0B[row1] ^ _gfMul0D[row2] ^ _gfMul09[row3]);
-                outState[idx + 1] = (byte)((uint)_gfMul09[row0] ^ _gfMul0E[row1] ^ _gfMul0B[row2] ^ _gfMul0D[row3]);
-                outState[idx + 2] = (byte)((uint)_gfMul0D[row0] ^ _gfMul09[row1] ^ _gfMul0E[row2] ^ _gfMul0B[row3]);
-                outState[idx + 3] = (byte)((uint)_gfMul0B[row0] ^ _gfMul0D[row1] ^ _gfMul09[row2] ^ _gfMul0E[row3]);
+                outState[idx + 0] = (byte)((uint)GfMul0E[row0] ^ GfMul0B[row1] ^ GfMul0D[row2] ^ GfMul09[row3]);
+                outState[idx + 1] = (byte)((uint)GfMul09[row0] ^ GfMul0E[row1] ^ GfMul0B[row2] ^ GfMul0D[row3]);
+                outState[idx + 2] = (byte)((uint)GfMul0D[row0] ^ GfMul09[row1] ^ GfMul0E[row2] ^ GfMul0B[row3]);
+                outState[idx + 3] = (byte)((uint)GfMul0B[row0] ^ GfMul0D[row1] ^ GfMul09[row2] ^ GfMul0E[row3]);
             }
 
             return new V128(outState);
@@ -211,7 +211,7 @@ namespace ARMeilleure.Instructions
 
             for (int idx = 0; idx <= 15; idx++)
             {
-                outState[_isrPerm[idx]] = inState[idx];
+                outState[IsrPerm[idx]] = inState[idx];
             }
 
             return new V128(outState);
@@ -224,7 +224,7 @@ namespace ARMeilleure.Instructions
 
             for (int idx = 0; idx <= 15; idx++)
             {
-                outState[idx] = _invSBox[inState[idx]];
+                outState[idx] = InvSBox[inState[idx]];
             }
 
             return new V128(outState);
@@ -244,10 +244,10 @@ namespace ARMeilleure.Instructions
                 byte row2 = inState[idx + 2]; // C, G, K, O: [row2, col0-col3]
                 byte row3 = inState[idx + 3]; // D, H, L, P: [row3, col0-col3]
 
-                outState[idx + 0] = (byte)((uint)_gfMul02[row0] ^ _gfMul03[row1] ^ row2 ^ row3);
-                outState[idx + 1] = (byte)((uint)row0 ^ _gfMul02[row1] ^ _gfMul03[row2] ^ row3);
-                outState[idx + 2] = (byte)((uint)row0 ^ row1 ^ _gfMul02[row2] ^ _gfMul03[row3]);
-                outState[idx + 3] = (byte)((uint)_gfMul03[row0] ^ row1 ^ row2 ^ _gfMul02[row3]);
+                outState[idx + 0] = (byte)((uint)GfMul02[row0] ^ GfMul03[row1] ^ row2 ^ row3);
+                outState[idx + 1] = (byte)((uint)row0 ^ GfMul02[row1] ^ GfMul03[row2] ^ row3);
+                outState[idx + 2] = (byte)((uint)row0 ^ row1 ^ GfMul02[row2] ^ GfMul03[row3]);
+                outState[idx + 3] = (byte)((uint)GfMul03[row0] ^ row1 ^ row2 ^ GfMul02[row3]);
             }
 
             return new V128(outState);
@@ -260,7 +260,7 @@ namespace ARMeilleure.Instructions
 
             for (int idx = 0; idx <= 15; idx++)
             {
-                outState[_srPerm[idx]] = inState[idx];
+                outState[SrPerm[idx]] = inState[idx];
             }
 
             return new V128(outState);
@@ -273,7 +273,7 @@ namespace ARMeilleure.Instructions
 
             for (int idx = 0; idx <= 15; idx++)
             {
-                outState[idx] = _sBox[inState[idx]];
+                outState[idx] = SBox[inState[idx]];
             }
 
             return new V128(outState);

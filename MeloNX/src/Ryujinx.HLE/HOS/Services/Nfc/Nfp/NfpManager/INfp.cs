@@ -18,10 +18,10 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp
 {
     class INfp : IpcService
     {
-#pragma warning disable IDE0052 // Remove unread private member
+
         private ulong _appletResourceUserId;
         private ulong _mcuVersionData;
-#pragma warning restore IDE0052
+
         private byte[] _mcuData;
 
         private State _state = State.NonInitialized;
@@ -482,9 +482,8 @@ namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp
         // Flush(bytes<8, 4>)
         public ResultCode Flush(ServiceCtx context)
         {
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-            uint deviceHandle = (uint)context.RequestData.ReadUInt64();
-#pragma warning restore IDE0059
+            _ = (uint)context.RequestData.ReadUInt64(); // Device handle
+
             if (context.Device.System.NfpDevices.Count == 0)
             {
                 return ResultCode.DeviceNotFound;

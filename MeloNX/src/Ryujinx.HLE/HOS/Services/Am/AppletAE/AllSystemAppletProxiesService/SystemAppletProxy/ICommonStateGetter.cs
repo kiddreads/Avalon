@@ -18,10 +18,8 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.Sys
         private readonly Apm.SystemManagerServer _apmSystemManagerServer;
 
         private bool _vrModeEnabled;
-#pragma warning disable CS0414, IDE0052 // Remove unread private member
         private bool _lcdBacklighOffEnabled;
         private bool _requestExitToLibraryAppletAtExecuteNextProgramEnabled;
-#pragma warning restore CS0414, IDE0052
         private int _messageEventHandle;
         private int _displayResolutionChangedEventHandle;
 

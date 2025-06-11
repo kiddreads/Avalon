@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Ryujinx.HLE.HOS.Applets
 {
-#pragma warning disable CS0649 // Field is never assigned to
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct ControllerSupportResultInfo
     {
@@ -12,5 +12,4 @@ namespace Ryujinx.HLE.HOS.Applets
         public uint SelectedId;
         public uint Result;
     }
-#pragma warning restore CS0649
 }

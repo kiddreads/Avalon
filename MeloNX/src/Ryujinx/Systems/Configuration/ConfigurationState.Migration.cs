@@ -44,7 +44,6 @@ namespace Ryujinx.Ava.Systems.Configuration
                 configurationFileUpdated = true;
             }
 
-
             EnableDiscordIntegration.Value = cff.EnableDiscordIntegration;
             UpdateCheckerType.Value = shouldLoadFromFile ? cff.UpdateCheckerType : UpdateCheckerType.Value; // Get from global config only
             FocusLostActionType.Value = cff.FocusLostActionType;
@@ -147,7 +146,7 @@ namespace Ryujinx.Ava.Systems.Configuration
             Hid.EnableMouse.Value = cff.EnableMouse;
             Hid.DisableInputWhenOutOfFocus.Value = shouldLoadFromFile ? cff.DisableInputWhenOutOfFocus : Hid.DisableInputWhenOutOfFocus.Value; // Get from global config only
             Hid.Hotkeys.Value = shouldLoadFromFile ? cff.Hotkeys : Hid.Hotkeys.Value; // Get from global config only
-            Hid.InputConfig.Value = cff.InputConfig ?? [] ;
+            Hid.InputConfig.Value = cff.InputConfig ?? [];
             Hid.RainbowSpeed.Value = cff.RainbowSpeed;
 
             Multiplayer.LanInterfaceId.Value = cff.MultiplayerLanInterfaceId;

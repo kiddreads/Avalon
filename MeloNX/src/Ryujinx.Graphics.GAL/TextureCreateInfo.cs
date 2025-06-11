@@ -143,7 +143,7 @@ namespace Ryujinx.Graphics.GAL
 
         public override bool Equals(object obj)
         {
-            return obj is TextureCreateInfo info && this.Equals(info);
+            return obj is TextureCreateInfo info && Equals(info);
         }
 
         public static bool operator ==(TextureCreateInfo left, TextureCreateInfo right)

@@ -63,7 +63,7 @@ namespace Ryujinx.Graphics.Vulkan.MoltenVK
         public static implicit operator Bool32(bool val) => new(val);
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct MVKConfiguration
     {
         public Bool32 DebugMode;

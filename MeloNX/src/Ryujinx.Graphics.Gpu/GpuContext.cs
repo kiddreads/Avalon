@@ -98,7 +98,6 @@ namespace Ryujinx.Graphics.Gpu
         /// </summary>
         internal DirtyHacks DirtyHacks { get; }
 
-
         /// <summary>
         /// Host hardware capabilities.
         /// </summary>

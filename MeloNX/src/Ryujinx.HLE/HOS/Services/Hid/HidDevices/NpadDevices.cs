@@ -254,6 +254,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
 
             switch (type)
             {
+
 #pragma warning disable IDE0055 // Disable formatting
                 case ControllerType.ProController:
                     controller.StyleSet           = NpadStyleTag.FullKey;

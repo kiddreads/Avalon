@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
@@ -36,7 +35,7 @@ namespace Ryujinx.Ava.UI.Helpers
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate nint WindowProc(nint hWnd, WindowsMessages msg, nint wParam, nint lParam);
 
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct WndClassEx
         {
             public int cbSize;

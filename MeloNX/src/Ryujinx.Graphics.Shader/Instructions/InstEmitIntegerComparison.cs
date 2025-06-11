@@ -219,9 +219,8 @@ namespace Ryujinx.Graphics.Shader.Instructions
             else
             {
                 res = context.ISubtract(srcA, srcB);
-#pragma warning disable IDE0059 // Remove unnecessary value assignment
-                res = context.IAdd(res, context.BitwiseNot(GetCF()));
-#pragma warning restore IDE0059
+
+                _ = context.IAdd(res, context.BitwiseNot(GetCF()));
 
                 switch (cond)
                 {

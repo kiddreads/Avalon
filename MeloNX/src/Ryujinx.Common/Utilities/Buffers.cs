@@ -9,8 +9,8 @@ namespace Ryujinx.Common.Utilities
     [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct Buffer16
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private readonly ulong _dummy0;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private readonly ulong _dummy1;
+        public ulong Low { get; set; }
+        public ulong High { get; set; }
 
         public byte this[int i]
         {

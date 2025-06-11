@@ -2,17 +2,15 @@ using Avalonia.Logging;
 using Avalonia.Utilities;
 using Gommon;
 using Ryujinx.Ava.Systems.Configuration;
-using Ryujinx.Common.Logging;
 using System;
 using System.Text;
+using AvaLogger = Avalonia.Logging.Logger;
+using AvaLogLevel = Avalonia.Logging.LogEventLevel;
+using RyuLogClass = Ryujinx.Common.Logging.LogClass;
+using RyuLogger = Ryujinx.Common.Logging.Logger;
 
 namespace Ryujinx.Ava.UI.Helpers
 {
-    using AvaLogger = Avalonia.Logging.Logger;
-    using AvaLogLevel = LogEventLevel;
-    using RyuLogClass = LogClass;
-    using RyuLogger = Ryujinx.Common.Logging.Logger;
-
     internal class LoggerAdapter : ILogSink
     {
         private static bool _avaloniaLogsEnabled = ConfigurationState.Instance.Logger.EnableAvaloniaLog;

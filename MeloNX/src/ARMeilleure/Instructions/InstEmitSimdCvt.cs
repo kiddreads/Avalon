@@ -8,11 +8,10 @@ using System.Reflection;
 using static ARMeilleure.Instructions.InstEmitHelper;
 using static ARMeilleure.Instructions.InstEmitSimdHelper;
 using static ARMeilleure.IntermediateRepresentation.Operand.Factory;
+using Func1I = System.Func<ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand>;
 
 namespace ARMeilleure.Instructions
 {
-    using Func1I = Func<Operand, Operand>;
-
     static partial class InstEmit
     {
         public static void Fcvt_S(ArmEmitterContext context)

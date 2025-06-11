@@ -36,8 +36,6 @@ namespace Ryujinx.Common.Configuration
             };
         }
 
-
-
         public static float ToFloatY(this AspectRatio aspectRatio)
         {
             return aspectRatio switch

@@ -1,8 +1,8 @@
+using Arm64HardwareCapabilities = ARMeilleure.CodeGen.Arm64.HardwareCapabilities;
+using X86HardwareCapabilities = ARMeilleure.CodeGen.X86.HardwareCapabilities;
+
 namespace ARMeilleure
 {
-    using Arm64HardwareCapabilities = ARMeilleure.CodeGen.Arm64.HardwareCapabilities;
-    using X86HardwareCapabilities = ARMeilleure.CodeGen.X86.HardwareCapabilities;
-
     public static class Optimizations
     {
         // low-core count PPTC

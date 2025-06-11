@@ -98,7 +98,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Compute
     /// </summary>
     unsafe struct ComputeClassState
     {
-#pragma warning disable CS0649 // Field is never assigned to
+
         public uint SetObject;
         public readonly int SetObjectClassId => (int)(SetObject & 0xFFFF);
         public readonly int SetObjectEngineId => (int)((SetObject >> 16) & 0x1F);
@@ -430,6 +430,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Compute
         public readonly int StopShaderPerformanceCounterCounterMask => (int)(StopShaderPerformanceCounter & 0xFF);
         public fixed uint Reserved33E8[6];
         public Array256<uint> SetMmeShadowScratch;
-#pragma warning restore CS0649
+
     }
 }

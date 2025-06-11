@@ -36,11 +36,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using TimeServiceManager = Ryujinx.HLE.HOS.Services.Time.TimeManager;
 
 namespace Ryujinx.HLE.HOS
 {
-    using TimeServiceManager = Services.Time.TimeManager;
-
     public class Horizon : IDisposable
     {
         internal const int HidSize = 0x40000;

@@ -1,6 +1,5 @@
 using Ryujinx.Graphics.GAL;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Ryujinx.Graphics.Gpu.Image
 {
@@ -555,7 +554,6 @@ namespace Ryujinx.Graphics.Gpu.Image
             { VertexAttributeFormat.A2B10G10R10Uscaled,  Format.R10G10B10A2Uscaled  },
             { VertexAttributeFormat.A2B10G10R10Sscaled,  Format.R10G10B10A2Sscaled  },
         };
-#pragma warning restore IDE0055
 
         // Note: Some of those formats have been changed and requires conversion on the shader,
         // as GPUs don't support them when used as buffer texture format.
@@ -640,6 +638,7 @@ namespace Ryujinx.Graphics.Gpu.Image
             { VertexAttributeFormat.A2B10G10R10Sint,     (Format.R10G10B10A2Uint, 4)  }, // Sint -> Uint
             { VertexAttributeFormat.A2B10G10R10Uscaled,  (Format.R10G10B10A2Uint, 4)  }, // Uscaled -> Uint
             { VertexAttributeFormat.A2B10G10R10Sscaled,  (Format.R10G10B10A2Sint, 4)  }  // Sscaled -> Sint
+#pragma warning restore IDE0055
         };
 
         /// <summary>

@@ -32,7 +32,6 @@ namespace Ryujinx.Common.Utilities
             CyclingEnabled = false;
         }
 
-
         public static float Speed { get; set; } = 1;
 
         private static readonly Lock _lock = new();

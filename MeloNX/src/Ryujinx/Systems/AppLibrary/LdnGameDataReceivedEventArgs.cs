@@ -11,7 +11,6 @@ namespace Ryujinx.Ava.Systems.AppLibrary
             LdnData = ldnData ?? [];
         }
 
-
         public LdnGameData[] LdnData { get; set; }
     }
 }

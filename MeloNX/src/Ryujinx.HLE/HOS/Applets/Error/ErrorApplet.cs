@@ -78,7 +78,7 @@ namespace Ryujinx.HLE.HOS.Applets.Error
         {
             return systemLanguage switch
             {
-#pragma warning disable IDE0055 // Disable formatting
+                #pragma warning disable IDE0055 // Disable formatting
                 SystemLanguage.Japanese             => "ja",
                 SystemLanguage.AmericanEnglish      => "en-US",
                 SystemLanguage.French               => "fr",
