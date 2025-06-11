@@ -110,5 +110,8 @@ namespace Ryujinx.Ava.UI.Helpers
 
         [LibraryImport("user32.dll", SetLastError = true)]
         public static partial nint SetWindowLongPtrW(nint hWnd, int nIndex, nint value);
+
+        [LibraryImport("user32.dll", SetLastError = true)]
+        public static partial ushort GetAsyncKeyState(int nVirtKey);
     }
 }
