@@ -228,3 +228,7 @@ jobs:
       - name: Send notification webhook
         run: |
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=SendUpdateMessage "${{ steps.version_info.outputs.build_version }}|32cd32|${{ secrets.STABLE_DISCORD_WEBHOOK }}|https://avatars.githubusercontent.com/u/192939710?s=200&v=4|false"
+          
+      - name: Notify update server of new builds
+        run: |
+          curl 'https://update.ryujinx.app/api/v1/admin/refresh_cache?rc=stable' -X PATCH -H 'accept: */*' -H 'Authorization: ${{ secrets.UPDATE_SERVER_ADMIN_TOKEN }}'
