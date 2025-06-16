@@ -195,6 +195,7 @@ namespace Ryujinx.Common
             "01008d100d43e000", // Saints Row IV
             "0100de600beee000", // Saints Row: The Third - The Full Package
             "01001180021fa000", // Shovel Knight: Specter of Torment
+            "0100e1D01eb2e000", // Squeakross: Home Squeak Home
             "0100e65002bb8000", // Stardew Valley
             "0100d7a01b7a2000", // Star Wars: Bounty Hunter
             "0100800015926000", // Suika Game
