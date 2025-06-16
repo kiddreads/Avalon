@@ -20,13 +20,15 @@ namespace Ryujinx.HLE.HOS.Services.Caps
         public ResultCode SaveScreenShotEx0(ServiceCtx context)
         {
             // TODO: Use the ScreenShotAttribute.
-            _ = context.RequestData.ReadStruct<ScreenShotAttribute>(); // screenShotAttribute
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            ScreenShotAttribute screenShotAttribute = context.RequestData.ReadStruct<ScreenShotAttribute>();
 
-            _ = context.RequestData.ReadUInt32(); // unknown
-
+            uint unknown = context.RequestData.ReadUInt32();
+#pragma warning restore IDE0059
             ulong appletResourceUserId = context.RequestData.ReadUInt64();
-
-            _ = context.RequestData.ReadUInt64(); // pid
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            ulong pidPlaceholder = context.RequestData.ReadUInt64();
+#pragma warning restore IDE0059
 
             ulong screenshotDataPosition = context.Request.SendBuff[0].Position;
             ulong screenshotDataSize = context.Request.SendBuff[0].Size;

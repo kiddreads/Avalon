@@ -101,6 +101,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
             result |= (rightStick.Dy < -StickButtonThreshold) ? ControllerKeys.RStickDown  : result;
             result |= (rightStick.Dy > StickButtonThreshold)  ? ControllerKeys.RStickUp    : result;
 #pragma warning restore IDE0055
+
             return result;
         }
 

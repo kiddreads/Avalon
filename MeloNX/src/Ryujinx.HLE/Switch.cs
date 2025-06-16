@@ -77,13 +77,11 @@ namespace Ryujinx.HLE
             Hid               = new Hid(this, System.HidStorage);
             Processes         = new ProcessLoader(this);
             TamperMachine     = new TamperMachine();
-#pragma warning restore IDE0055
 
             System.InitializeServices();
             System.State.SetLanguage(Configuration.SystemLanguage);
             System.State.SetRegion(Configuration.Region);
-            
-#pragma warning disable IDE0055 // Disable formatting
+
             VSyncMode                               = Configuration.VSyncMode;
             CustomVSyncInterval                     = Configuration.CustomVSyncInterval;
             TickScalar                              = TurboMode ? Configuration.TickScalar : ITickSource.RealityTickScalar;
@@ -92,9 +90,9 @@ namespace Ryujinx.HLE
             System.EnablePtc                        = Configuration.EnablePtc;
             System.FsIntegrityCheckLevel            = Configuration.FsIntegrityCheckLevel;
             System.GlobalAccessLogMode              = Configuration.FsGlobalAccessLogMode;
-#pragma warning restore IDE0055
             
             UpdateVSyncInterval();
+#pragma warning restore IDE0055
 
             Shared = this;
         }

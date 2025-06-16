@@ -5,7 +5,7 @@ namespace Ryujinx.Graphics.Nvdec.Types.Vp9
 {
     struct PictureInfo
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public Array12<uint> Unknown0;
         public uint BitstreamSize;
         public uint IsEncrypted;
@@ -42,6 +42,7 @@ namespace Ryujinx.Graphics.Nvdec.Types.Vp9
         public uint UnknownF4;
         public uint UnknownF8;
         public uint UnknownFC;
+#pragma warning restore CS0649
 
         public readonly uint BitDepth => (SurfaceParams >> 1) & 0xf;
 

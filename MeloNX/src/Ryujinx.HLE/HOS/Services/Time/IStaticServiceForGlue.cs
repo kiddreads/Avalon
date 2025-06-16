@@ -83,7 +83,9 @@ namespace Ryujinx.HLE.HOS.Services.Time
                 return ResultCode.PermissionDenied;
             }
 
-            _ = context.RequestData.ReadStruct<TimeSpanType>(); // internalOffset
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            TimeSpanType internalOffset = context.RequestData.ReadStruct<TimeSpanType>();
+#pragma warning restore IDE0059
 
             // TODO: set:sys SetExternalSteadyClockInternalOffset(internalOffset.ToSeconds())
 

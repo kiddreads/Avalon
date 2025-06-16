@@ -5,7 +5,7 @@ namespace Ryujinx.Graphics.Nvdec.Types.Vp8
 {
     struct PictureInfo
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public Array13<uint> Unknown0;
         public uint GpTimerTimeoutValue;
         public ushort FrameWidth;
@@ -58,6 +58,7 @@ namespace Ryujinx.Graphics.Nvdec.Types.Vp8
         public uint ResultValue; // ucode return result
         public Array8<uint> PartitionOffset;
         public Array3<uint> Reserved4;
+#pragma warning restore CS0649
 
         public Vp8PictureInfo Convert()
         {

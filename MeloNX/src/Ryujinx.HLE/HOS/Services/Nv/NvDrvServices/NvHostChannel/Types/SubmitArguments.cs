@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostChannel.Types
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct CommandBuffer
     {
         public int Mem;
@@ -10,7 +10,7 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostChannel.Types
         public int WordsCount;
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct Reloc
     {
         public int CmdbufMem;
@@ -19,7 +19,7 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostChannel.Types
         public int TargetOffset;
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct SyncptIncr
     {
         public uint Id;
@@ -29,7 +29,7 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostChannel.Types
         public uint Reserved3;
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct SubmitArguments
     {
         public int CmdBufsCount;

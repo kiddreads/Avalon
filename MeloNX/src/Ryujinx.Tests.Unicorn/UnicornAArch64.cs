@@ -102,7 +102,7 @@ namespace Ryujinx.Tests.Unicorn
         public void RunForCount(ulong count)
         {
             // FIXME: untilAddr should be 0xFFFFFFFFFFFFFFFFul
-            Uc.EmuStart((long)PC, -1, 0, (long)count);
+            Uc.EmuStart((long)this.PC, -1, 0, (long)count);
         }
 
         public void Step()

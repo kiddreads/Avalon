@@ -8,8 +8,9 @@ namespace Ryujinx.HLE.HOS.Services.Arp
         public int Version;
         public byte BaseGameStorageId;
         public byte UpdateGameStorageId;
-
+#pragma warning disable CS0649 // Field is never assigned to
         public short Padding;
+#pragma warning restore CS0649
 
         public static ApplicationLaunchProperty Default
         {

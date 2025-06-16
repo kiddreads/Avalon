@@ -15,7 +15,7 @@ namespace Ryujinx.Graphics.Vulkan
             _table = new VkFormat[Enum.GetNames<Format>().Length];
             _reverseMap = new Dictionary<VkFormat, Format>();
 
-            #pragma warning disable IDE0055 // Disable formatting
+#pragma warning disable IDE0055 // Disable formatting
             Add(Format.R8Unorm,             VkFormat.R8Unorm);
             Add(Format.R8Snorm,             VkFormat.R8SNorm);
             Add(Format.R8Uint,              VkFormat.R8Uint);

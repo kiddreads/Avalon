@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CS0169, IDE0051 // Remove unused private member
 namespace Ryujinx.Common.Memory
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array1<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -15,7 +15,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array2<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -27,7 +26,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array3<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -39,7 +37,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array4<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -51,7 +48,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array5<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -63,7 +59,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array6<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -75,7 +70,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array7<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -87,7 +81,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array8<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -99,7 +92,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array9<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -111,7 +103,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array10<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -123,7 +114,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array11<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -135,7 +125,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array12<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -147,7 +136,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array13<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -159,7 +147,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array14<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -171,7 +158,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array15<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -183,7 +169,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array16<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -195,7 +180,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array17<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -207,7 +191,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array18<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -219,7 +202,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array19<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -231,7 +213,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array20<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -243,7 +224,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array21<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -255,7 +235,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array22<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -267,7 +246,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array23<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -279,7 +257,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array24<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -292,7 +269,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array25<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -305,7 +281,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array26<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -318,7 +293,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array27<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -331,7 +305,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array28<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -344,7 +317,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array29<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -357,7 +329,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array30<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -370,7 +341,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array31<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -383,7 +353,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array32<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -396,7 +365,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array33<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -409,7 +377,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array34<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -422,7 +389,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array35<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -435,7 +401,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array36<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -448,7 +413,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array37<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -461,7 +425,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array38<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -474,7 +437,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array39<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -487,7 +449,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array40<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -500,7 +461,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array41<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -513,7 +473,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array42<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -526,7 +485,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array43<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -539,7 +497,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array44<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -552,7 +509,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array45<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -565,7 +521,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array46<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -578,7 +533,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array47<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -591,7 +545,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array48<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -604,7 +557,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array49<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -617,7 +569,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array50<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -630,7 +581,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array51<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -643,7 +593,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array52<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -656,7 +605,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array53<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -669,7 +617,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array54<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -682,7 +629,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array55<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -695,7 +641,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array56<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -708,7 +653,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array57<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -721,7 +665,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array58<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -734,7 +677,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array59<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -747,7 +689,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array60<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -759,7 +700,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array61<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -771,7 +711,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array62<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -783,7 +722,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array63<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -795,7 +733,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array64<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -807,7 +744,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array65<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -819,7 +755,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array73<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -832,7 +767,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array96<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -845,7 +779,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array127<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -858,7 +791,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array128<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -871,7 +803,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array140<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -885,7 +816,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array256<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -898,7 +828,6 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Array384<T> : IArray<T> where T : unmanaged
     {
         T _e0;
@@ -915,4 +844,4 @@ namespace Ryujinx.Common.Memory
         public Span<T> AsSpan() => MemoryMarshal.CreateSpan(ref _e0, Length);
     }
 }
-
+#pragma warning restore CS0169, IDE0051

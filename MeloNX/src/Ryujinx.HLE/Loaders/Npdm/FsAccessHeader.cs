@@ -30,8 +30,9 @@ namespace Ryujinx.HLE.Loaders.Npdm
             {
                 throw new InvalidNpdmException("FsAccessHeader is corrupted!");
             }
-
-            _ = reader.ReadInt32(); // contentOwnerId size
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            int contentOwnerIdSize = reader.ReadInt32();
+#pragma warning restore IDE0059
             int dataAndContentOwnerIdSize = reader.ReadInt32();
 
             if (dataAndContentOwnerIdSize != 0x1c)

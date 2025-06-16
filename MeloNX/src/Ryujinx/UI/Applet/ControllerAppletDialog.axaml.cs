@@ -118,7 +118,7 @@ namespace Ryujinx.Ava.UI.Applet
 
                     await ContentDialogHelper.ShowWindowAsync(_mainWindow.SettingsWindow, _mainWindow);
                     _mainWindow.SettingsWindow = null;
-                    Close();
+                    this.Close();
                 });
             }
         }

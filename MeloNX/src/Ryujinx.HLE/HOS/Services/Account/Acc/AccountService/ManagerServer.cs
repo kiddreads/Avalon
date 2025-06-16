@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,9 @@ namespace Ryujinx.HLE.HOS.Services.Account.Acc.AccountService
         // TODO: Determine where and how NetworkServiceAccountId is set.
         private const long NetworkServiceAccountId = 0xcafe;
 
+#pragma warning disable IDE0052 // Remove unread private member
         private readonly UserId _userId;
+#pragma warning restore IDE0052
 
         private byte[] _cachedTokenData;
         private DateTime _cachedTokenExpiry;
@@ -125,8 +128,9 @@ namespace Ryujinx.HLE.HOS.Services.Account.Acc.AccountService
         public ResultCode LoadIdTokenCache(ServiceCtx context)
         {
             ulong bufferPosition = context.Request.ReceiveBuff[0].Position;
-
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
             ulong bufferSize = context.Request.ReceiveBuff[0].Size;
+#pragma warning restore IDE0059
 
             // NOTE: This opens the file at "su/cache/USERID_IN_UUID_STRING.dat" (where USERID_IN_UUID_STRING is formatted as "%08x-%04x-%04x-%02x%02x-%08x%04x")
             //       in the "account:/" savedata and writes some data in the buffer.
@@ -151,11 +155,6 @@ namespace Ryujinx.HLE.HOS.Services.Account.Acc.AccountService
             }
 
             byte[] tokenData = _cachedTokenData;
-
-            if ((ulong)tokenData.Length > bufferSize)
-            {
-                return ResultCode.InvalidIdTokenCacheBufferSize;
-            }
 
             context.Memory.Write(bufferPosition, tokenData);
             context.ResponseData.Write(tokenData.Length);

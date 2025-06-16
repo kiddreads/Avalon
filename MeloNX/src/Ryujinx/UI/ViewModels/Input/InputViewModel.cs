@@ -1,6 +1,7 @@
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Svg.Skia;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gommon;
 using Ryujinx.Ava.Common.Locale;
@@ -99,7 +100,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
         public bool CanClearLed => SelectedGamepad.Name.ContainsIgnoreCase("DualSense");
 
         public event Action NotifyChangesEvent;
-
+        
         public string ChosenProfile
         {
             get => _chosenProfile;
@@ -326,11 +327,13 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
             PlayerIndexes.Add(new(PlayerIndex.Handheld, LocaleManager.Instance[LocaleKeys.ControllerSettingsHandheld]));
         }
 
+
+
         private void LoadConfiguration(InputConfig inputConfig = null)
         {
             if (UseGlobalConfig && Program.UseExtraConfig)
             {
-                Config = inputConfig ?? ConfigurationState.InstanceExtra.Hid.InputConfig.Value.FirstOrDefault(inputConfig => inputConfig.PlayerIndex == _playerId);
+                Config = inputConfig ?? ConfigurationState.InstanceExtra.Hid.InputConfig.Value.FirstOrDefault(inputConfig => inputConfig.PlayerIndex == _playerId);            
             }
             else
             {
@@ -977,7 +980,7 @@ namespace Ryujinx.Ava.UI.ViewModels.Input
 
             if (Device == 0)
             {
-                newConfig.Remove(newConfig.FirstOrDefault(x => x.PlayerIndex == PlayerId));
+                newConfig.Remove(newConfig.FirstOrDefault(x => x.PlayerIndex == this.PlayerId));
             }
             else
             {

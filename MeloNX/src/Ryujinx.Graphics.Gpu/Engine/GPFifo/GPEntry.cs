@@ -36,15 +36,15 @@ namespace Ryujinx.Graphics.Gpu.Engine.GPFifo
 
     struct GPEntry
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public uint Entry0;
-
+#pragma warning restore CS0649
         public readonly Entry0Fetch Entry0Fetch => (Entry0Fetch)(Entry0 & 0x1);
         public readonly int Entry0Get => (int)((Entry0 >> 2) & 0x3FFFFFFF);
         public readonly int Entry0Operand => (int)(Entry0);
-
+#pragma warning disable CS0649 // Field is never assigned to
         public uint Entry1;
-
+#pragma warning restore CS0649
         public readonly int Entry1GetHi => (int)(Entry1 & 0xFF);
         public readonly Entry1Priv Entry1Priv => (Entry1Priv)((Entry1 >> 8) & 0x1);
         public readonly Entry1Level Entry1Level => (Entry1Level)((Entry1 >> 9) & 0x1);

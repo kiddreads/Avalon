@@ -1,3 +1,4 @@
+using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS.Kernel.Common;
 using Ryujinx.HLE.HOS.Services.Spl.Types;
 
@@ -60,6 +61,9 @@ namespace Ryujinx.HLE.HOS.Services.Spl
         {
             configValue = default;
 
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            SystemVersion version = context.Device.System.ContentManager.GetCurrentFirmwareVersion();
+#pragma warning restore IDE0059
             MemorySize memorySize = context.Device.Configuration.MemoryConfiguration.ToKernelMemorySize();
 
             switch (configItem)

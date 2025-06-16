@@ -2,15 +2,17 @@ using ARMeilleure.Decoders;
 using ARMeilleure.IntermediateRepresentation;
 using ARMeilleure.State;
 using ARMeilleure.Translation;
+using System;
 
 using static ARMeilleure.Instructions.InstEmitHelper;
 using static ARMeilleure.Instructions.InstEmitSimdHelper;
 using static ARMeilleure.Instructions.InstEmitSimdHelper32;
 using static ARMeilleure.IntermediateRepresentation.Operand.Factory;
-using Func2I = System.Func<ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand>;
 
 namespace ARMeilleure.Instructions
 {
+    using Func2I = Func<Operand, Operand, Operand>;
+
     static partial class InstEmit32
     {
         public static void Vceq_V(ArmEmitterContext context)

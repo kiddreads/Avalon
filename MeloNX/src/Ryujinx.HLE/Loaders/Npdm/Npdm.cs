@@ -68,10 +68,11 @@ namespace Ryujinx.HLE.Loaders.Npdm
             stream.Seek(0x30, SeekOrigin.Current);
 
             int aci0Offset = reader.ReadInt32();
-
-            _ = reader.ReadInt32(); // aci0 size
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            int aci0Size = reader.ReadInt32();
             int acidOffset = reader.ReadInt32();
-            _ = reader.ReadInt32(); // acid size
+            int acidSize = reader.ReadInt32();
+#pragma warning restore IDE0059
 
             Aci0 = new Aci0(stream, aci0Offset);
             Acid = new Acid(stream, acidOffset);

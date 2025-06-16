@@ -8,12 +8,13 @@ using System.Diagnostics;
 using System.Reflection;
 using static ARMeilleure.Instructions.InstEmitHelper;
 using static ARMeilleure.IntermediateRepresentation.Operand.Factory;
-using Func1I = System.Func<ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand>;
-using Func2I = System.Func<ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand>;
-using Func3I = System.Func<ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand, ARMeilleure.IntermediateRepresentation.Operand>;
 
 namespace ARMeilleure.Instructions
 {
+    using Func1I = Func<Operand, Operand>;
+    using Func2I = Func<Operand, Operand, Operand>;
+    using Func3I = Func<Operand, Operand, Operand, Operand>;
+
     static class InstEmitSimdHelper
     {
         #region "Masks"

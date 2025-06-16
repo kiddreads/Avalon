@@ -5,10 +5,11 @@ using Spv.Generator;
 using System;
 using System.Collections.Generic;
 using Instruction = Spv.Generator.Instruction;
-using IrOperandType = Ryujinx.Graphics.Shader.IntermediateRepresentation.OperandType;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {
+    using IrOperandType = IntermediateRepresentation.OperandType;
+
     partial class CodeGenContext : Module
     {
         private const uint SpirvVersionMajor = 1;

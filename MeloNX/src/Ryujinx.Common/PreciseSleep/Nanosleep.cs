@@ -94,7 +94,7 @@ namespace Ryujinx.Common.PreciseSleep
             Bias = GetBias(0);
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         private struct Timespec
         {
             public long tv_sec;  // Seconds

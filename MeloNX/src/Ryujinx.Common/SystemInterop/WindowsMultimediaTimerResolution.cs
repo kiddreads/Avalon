@@ -12,7 +12,7 @@ namespace Ryujinx.Common.SystemInterop
     [SupportedOSPlatform("windows")]
     public partial class WindowsMultimediaTimerResolution : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct TimeCaps
         {
             public uint wPeriodMin;

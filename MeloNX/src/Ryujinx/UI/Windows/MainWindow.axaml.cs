@@ -108,7 +108,7 @@ namespace Ryujinx.Ava.UI.Windows
                 InputManager = new InputManager(new AvaloniaKeyboardDriver(this), new SDL2GamepadDriver());
 
                 _ = this.GetObservable(IsActiveProperty).Subscribe(it => ViewModel.IsActive = it);
-                ScalingChanged += OnScalingChanged;
+                this.ScalingChanged += OnScalingChanged;
             }
         }
 
@@ -157,7 +157,7 @@ namespace Ryujinx.Ava.UI.Windows
 
         private void OnScalingChanged(object sender, EventArgs e)
         {
-            Program.DesktopScaleFactor = RenderScaling;
+            Program.DesktopScaleFactor = this.RenderScaling;
         }
 
         private void ApplicationLibrary_ApplicationCountUpdated(object sender, ApplicationCountUpdatedEventArgs e)
@@ -563,16 +563,16 @@ namespace Ryujinx.Ava.UI.Windows
 
         public static void UpdateGraphicsConfig()
         {
-
-            GraphicsConfig.ResScale = ConfigurationState.Instance.Graphics.ResScale == -1
-                ? ConfigurationState.Instance.Graphics.ResScaleCustom
+#pragma warning disable IDE0055 // Disable formatting
+            GraphicsConfig.ResScale                   = ConfigurationState.Instance.Graphics.ResScale == -1 
+                ? ConfigurationState.Instance.Graphics.ResScaleCustom 
                 : ConfigurationState.Instance.Graphics.ResScale;
-            GraphicsConfig.MaxAnisotropy = ConfigurationState.Instance.Graphics.MaxAnisotropy;
-            GraphicsConfig.ShadersDumpPath = ConfigurationState.Instance.Graphics.ShadersDumpPath;
-            GraphicsConfig.EnableShaderCache = ConfigurationState.Instance.Graphics.EnableShaderCache;
+            GraphicsConfig.MaxAnisotropy              = ConfigurationState.Instance.Graphics.MaxAnisotropy;
+            GraphicsConfig.ShadersDumpPath            = ConfigurationState.Instance.Graphics.ShadersDumpPath;
+            GraphicsConfig.EnableShaderCache          = ConfigurationState.Instance.Graphics.EnableShaderCache;
             GraphicsConfig.EnableTextureRecompression = ConfigurationState.Instance.Graphics.EnableTextureRecompression;
-            GraphicsConfig.EnableMacroHLE = ConfigurationState.Instance.Graphics.EnableMacroHLE;
-
+            GraphicsConfig.EnableMacroHLE             = ConfigurationState.Instance.Graphics.EnableMacroHLE;
+#pragma warning restore IDE0055
         }
 
         private void VolumeStatus_CheckedChanged(object sender, RoutedEventArgs e)

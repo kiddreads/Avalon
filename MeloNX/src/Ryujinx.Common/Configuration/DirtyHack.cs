@@ -18,6 +18,8 @@ namespace Ryujinx.Common.Configuration
         public DirtyHack Hack => hack;
         public int Value => value;
 
+
+
         public ulong Pack() => Raw.PackBitFields(PackedFormat);
 
         public static EnabledDirtyHack Unpack(ulong packedHack)

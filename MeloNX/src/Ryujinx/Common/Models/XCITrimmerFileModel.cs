@@ -44,12 +44,12 @@ namespace Ryujinx.Ava.Common.Models
             if (obj == null)
                 return false;
 
-            return Path == obj.Path;
+            return this.Path == obj.Path;
         }
 
         public override int GetHashCode()
         {
-            return Path.GetHashCode();
+            return this.Path.GetHashCode();
         }
     }
 }

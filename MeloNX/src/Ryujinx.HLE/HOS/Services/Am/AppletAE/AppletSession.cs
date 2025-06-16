@@ -36,7 +36,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
 
         public void Push(byte[] item)
         {
-            if (!TryPush(item))
+            if (!this.TryPush(item))
             {
                 // TODO(jduncanator): Throw a proper exception
                 throw new InvalidOperationException();
@@ -50,7 +50,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
 
         public byte[] Pop()
         {
-            if (TryPop(out byte[] item))
+            if (this.TryPop(out byte[] item))
             {
                 return item;
             }
@@ -71,7 +71,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
         /// </summary>
         public AppletSession GetConsumer()
         {
-            return new AppletSession(_outputData, _inputData);
+            return new AppletSession(this._outputData, this._inputData);
         }
     }
 }

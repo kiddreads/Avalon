@@ -248,6 +248,9 @@ namespace Ryujinx.HLE.HOS.Services.Time.StaticService
             if (resultCode == ResultCode.Success)
             {
                 ulong outBufferPosition = context.Request.RecvListBuff[0].Position;
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+                ulong outBufferSize = context.Request.RecvListBuff[0].Size;
+#pragma warning restore IDE0059
 
                 context.Memory.Write(outBufferPosition, posixTime);
                 context.ResponseData.Write(1);
@@ -267,6 +270,9 @@ namespace Ryujinx.HLE.HOS.Services.Time.StaticService
             if (resultCode == ResultCode.Success)
             {
                 ulong outBufferPosition = context.Request.RecvListBuff[0].Position;
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+                ulong outBufferSize = context.Request.RecvListBuff[0].Size;
+#pragma warning restore IDE0059
 
                 context.Memory.Write(outBufferPosition, posixTime);
 

@@ -21,8 +21,9 @@ namespace Ryujinx.Input.SDL2
 
         private readonly Lock _userMappingLock = new();
 
+#pragma warning disable IDE0052 // Remove unread private member
         private readonly SDL2KeyboardDriver _driver;
-
+#pragma warning restore IDE0052
         private StandardKeyboardInputConfig _configuration;
         private readonly List<ButtonMappingEntry> _buttonsUserMapping;
 

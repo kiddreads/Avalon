@@ -4,7 +4,7 @@ namespace Ryujinx.Graphics.Host1x
 {
     struct Host1xClassRegisters
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public uint IncrSyncpt;
         public uint IncrSyncptCntrl;
         public uint IncrSyncptError;
@@ -38,6 +38,6 @@ namespace Ryujinx.Graphics.Host1x
         public uint Xrefctrl;
         public uint ChannelXrefHi;
         public uint ChannelXrefLo;
-
+#pragma warning restore CS0649
     }
 }

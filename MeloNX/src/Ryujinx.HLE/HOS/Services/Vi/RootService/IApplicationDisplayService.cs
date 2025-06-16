@@ -231,10 +231,14 @@ namespace Ryujinx.HLE.HOS.Services.Vi.RootService
         public ResultCode OpenLayer(ServiceCtx context)
         {
             // TODO: support multi display.
-            _ = context.RequestData.ReadBytes(0x40); // display name
-            long layerId = context.RequestData.ReadInt64();
-            _ = context.RequestData.ReadInt64(); // user id
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            byte[] displayName = context.RequestData.ReadBytes(0x40);
+#pragma warning restore IDE0059
 
+            long layerId = context.RequestData.ReadInt64();
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            long userId = context.RequestData.ReadInt64();
+#pragma warning restore IDE0059
             ulong parcelPtr = context.Request.ReceiveBuff[0].Position;
 
             ResultCode result = context.Device.System.SurfaceFlinger.OpenLayer(context.Request.HandleDesc.PId, layerId, out IBinder producer);
@@ -272,8 +276,10 @@ namespace Ryujinx.HLE.HOS.Services.Vi.RootService
         // CreateStrayLayer(u32, u64) -> (u64, u64, buffer<bytes, 6>)
         public ResultCode CreateStrayLayer(ServiceCtx context)
         {
-            _ = context.RequestData.ReadInt64(); // layerFlags
-            _ = context.RequestData.ReadInt64(); // displayId
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            long layerFlags = context.RequestData.ReadInt64();
+            long displayId = context.RequestData.ReadInt64();
+#pragma warning restore IDE0059
 
             ulong parcelPtr = context.Request.ReceiveBuff[0].Position;
 

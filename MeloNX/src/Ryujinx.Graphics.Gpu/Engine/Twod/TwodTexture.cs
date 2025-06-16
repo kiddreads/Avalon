@@ -7,7 +7,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Twod
     /// </summary>
     struct TwodTexture
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public ColorFormat Format;
         public Boolean32 LinearLayout;
         public MemoryLayout MemoryLayout;
@@ -17,6 +17,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.Twod
         public int Width;
         public int Height;
         public GpuVa Address;
-
+#pragma warning restore CS0649
     }
 }

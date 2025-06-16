@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Ryujinx.Common.Extensions;
-using Ryujinx.Common.Utilities;
 using Ryujinx.Memory;
 using System;
 using System.Buffers;
@@ -275,12 +274,11 @@ namespace Ryujinx.Tests.Common.Extensions
             public short EffectsSize;
             public int RenderInfoSize;
 
-            //public unsafe fixed byte Reserved[16];
-            public Buffer16 Reserved;
+            public unsafe fixed byte Reserved[16];
 
             public static readonly int SizeOf = Unsafe.SizeOf<MyUnmanagedStruct>();
 
-            public static MyUnmanagedStruct Generate(Random rng)
+            public static unsafe MyUnmanagedStruct Generate(Random rng)
             {
                 const int BaseInt32Value = 0x1234abcd;
                 const short BaseInt16Value = 0x5678;
@@ -295,8 +293,7 @@ namespace Ryujinx.Tests.Common.Extensions
                     RenderInfoSize = BaseInt32Value ^ rng.Next(),
                 };
 
-                Span<byte> reservedSpan = result.Reserved.Bytes;
-                rng.NextBytes(reservedSpan);
+                Unsafe.Write(result.Reserved, rng.NextInt64());
 
                 return result;
             }
@@ -310,7 +307,14 @@ namespace Ryujinx.Tests.Common.Extensions
                 assert(expected.EffectsSize, actual.EffectsSize);
                 assert(expected.RenderInfoSize, actual.RenderInfoSize);
 
-                assert(expected.Reserved, actual.Reserved);
+                fixed (void* expectedReservedPtr = expected.Reserved)
+                fixed (void* actualReservedPtr = actual.Reserved)
+                {
+                    long expectedReservedLong = Unsafe.Read<long>(expectedReservedPtr);
+                    long actualReservedLong = Unsafe.Read<long>(actualReservedPtr);
+
+                    assert(expectedReservedLong, actualReservedLong);
+                }
             }
         }
 

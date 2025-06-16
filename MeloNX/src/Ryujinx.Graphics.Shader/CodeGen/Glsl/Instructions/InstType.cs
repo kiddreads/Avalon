@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
 {

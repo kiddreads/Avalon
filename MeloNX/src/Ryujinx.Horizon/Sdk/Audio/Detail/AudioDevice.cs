@@ -233,8 +233,6 @@ namespace Ryujinx.Horizon.Sdk.Audio.Detail
             return Result.Success;
         }
 
-        // Remove this pragma warning when the methods are implemented
-#pragma warning disable CA1822 // Mark members as static
         [CmifCommand(15)] // 17.0.0+
         public Result AcquireAudioOutputDeviceNotification([CopyHandle] out int eventHandle, ulong deviceId)
         {
@@ -276,7 +274,6 @@ namespace Ryujinx.Horizon.Sdk.Audio.Detail
 
             return AudioResult.NotImplemented;
         }
-#pragma warning restore CA1822 // Mark members as static
 
         protected virtual void Dispose(bool disposing)
         {

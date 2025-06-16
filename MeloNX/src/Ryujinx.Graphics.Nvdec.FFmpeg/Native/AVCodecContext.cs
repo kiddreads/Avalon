@@ -4,7 +4,7 @@ namespace Ryujinx.Graphics.Nvdec.FFmpeg.Native
 {
     struct AVCodecContext
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public unsafe nint AvClass;
         public int LogLevelOffset;
         public int CodecType;
@@ -165,6 +165,6 @@ namespace Ryujinx.Graphics.Nvdec.FFmpeg.Native
         public long MaxSamples;
         public int ExportSideData;
         public nint GetEncodeBuffer;
-
+#pragma warning restore CS0649
     }
 }

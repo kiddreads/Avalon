@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrlGpu.Types
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct GpuCharacteristics
     {
         public int Arch;
@@ -44,13 +44,13 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrlGpu.Types
 
     struct CharacteristicsHeader
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public long BufferSize;
         public long BufferAddress;
-
+#pragma warning restore CS0649
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct GetCharacteristicsArguments
     {
         public CharacteristicsHeader Header;

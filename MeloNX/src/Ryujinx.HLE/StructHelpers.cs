@@ -17,6 +17,7 @@ namespace Ryujinx.HLE
             const int SizeOfApplicationTitle = 0x300;
             const int OffsetOfApplicationPublisherStrings = 0x200;
 
+
             BlitStruct<ApplicationControlProperty> nacpData = new(1);
 
             // name and publisher buffer

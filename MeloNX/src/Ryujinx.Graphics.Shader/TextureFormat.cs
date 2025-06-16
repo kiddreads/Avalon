@@ -52,7 +52,7 @@ namespace Ryujinx.Graphics.Shader
         {
             return format switch
             {
-                #pragma warning disable IDE0055 // Disable formatting
+#pragma warning disable IDE0055 // Disable formatting
                 TextureFormat.R8Unorm           => "r8",
                 TextureFormat.R8Snorm           => "r8_snorm",
                 TextureFormat.R8Uint            => "r8ui",

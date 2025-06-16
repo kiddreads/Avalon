@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ryujinx.Graphics.Gpu.Engine.Threed
 {
     /// <summary>

@@ -42,7 +42,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
         {
             try
             {
-                Push(item);
+                this.Push(item);
 
                 return true;
             }
@@ -69,7 +69,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
 
         public bool TryTake(out T item)
         {
-            return TryPop(out item);
+            return this.TryPop(out item);
         }
 
         public T Peek()
@@ -104,7 +104,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
 
         public void CopyTo(Array array, int index)
         {
-            CopyTo((T[])array, index);
+            this.CopyTo((T[])array, index);
         }
 
         public IEnumerator<T> GetEnumerator()

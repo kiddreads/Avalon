@@ -1,7 +1,6 @@
 using LibHac.Ncm;
 using LibHac.Tools.FsSystem.NcaUtils;
 using Ryujinx.HLE.FileSystem;
-using System;
 using System.Text;
 using static Ryujinx.HLE.Utilities.StringUtils;
 
@@ -229,15 +228,11 @@ namespace Ryujinx.HLE.HOS.Services.Ncm.Lr.LocationResolverManager
             if (!string.IsNullOrWhiteSpace(contentPath))
             {
                 ulong position = context.Request.RecvListBuff[0].Position;
-
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
                 ulong size = context.Request.RecvListBuff[0].Size;
+#pragma warning restore IDE0059
 
                 byte[] contentPathBuffer = Encoding.UTF8.GetBytes(contentPath);
-
-                if ((ulong)contentPathBuffer.Length > size)
-                {
-                    throw new InvalidOperationException("Content path buffer size is too small.");
-                }
 
                 context.Memory.Write(position, contentPathBuffer);
             }
@@ -252,8 +247,9 @@ namespace Ryujinx.HLE.HOS.Services.Ncm.Lr.LocationResolverManager
         private void DeleteContentPath(ServiceCtx context, ulong titleId, NcaContentType contentType)
         {
             ContentManager contentManager = context.Device.System.ContentManager;
-
-            //string contentPath = contentManager.GetInstalledContentPath(titleId, _storageId, NcaContentType.Manual);
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            string contentPath = contentManager.GetInstalledContentPath(titleId, _storageId, NcaContentType.Manual);
+#pragma warning restore IDE0059
 
             contentManager.ClearEntry(titleId, NcaContentType.Manual, _storageId);
         }

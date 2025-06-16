@@ -43,11 +43,11 @@ namespace Ryujinx.HLE.HOS.Applets
         private SoftwareKeyboardConfig _keyboardForegroundConfig;
 
         // Configuration for background (inline) mode.
-
+#pragma warning disable IDE0052 // Remove unread private member
         private SoftwareKeyboardInitialize _keyboardBackgroundInitialize;
         private SoftwareKeyboardCustomizeDic _keyboardBackgroundDic;
         private SoftwareKeyboardDictSet _keyboardBackgroundDictSet;
-
+#pragma warning restore IDE0052
         private SoftwareKeyboardUserWord[] _keyboardBackgroundUserWords;
 
         private byte[] _transferMemory;

@@ -21,8 +21,9 @@ namespace Ryujinx.HLE.HOS.Services.Ssl
         public ResultCode CreateContext(ServiceCtx context)
         {
             SslVersion sslVersion = (SslVersion)context.RequestData.ReadUInt32();
-
-            _ = context.RequestData.ReadUInt64(); // pid
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            ulong pidPlaceholder = context.RequestData.ReadUInt64();
+#pragma warning restore IDE0059
 
             MakeObject(context, new ISslContext(context.Request.HandleDesc.PId, sslVersion));
 

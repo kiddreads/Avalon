@@ -15,6 +15,7 @@ namespace Ryujinx.Cpu
         /// <inheritdoc/>
         public ulong Counter => (ulong)(ElapsedSeconds * Frequency);
 
+
         public long TickScalar { get; set; }
 
         private static long _acumElapsedTicks;

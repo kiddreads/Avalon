@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Ryujinx.Graphics.Texture.Astc
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     struct AstcPixel
     {
         internal const int StructSize = 12;

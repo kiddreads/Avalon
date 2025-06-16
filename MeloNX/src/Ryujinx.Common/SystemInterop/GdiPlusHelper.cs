@@ -28,10 +28,12 @@ namespace Ryujinx.Common.SystemInterop
         {
             public int GdiplusVersion;
 
+#pragma warning disable CS0649 // Field is never assigned to
             public nint DebugEventCallback;
             public int SuppressBackgroundThread;
             public int SuppressExternalCodecs;
             public int StartupParameters;
+#pragma warning restore CS0649
 
             public static StartupInputEx Default => new()
             {

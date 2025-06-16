@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ryujinx.HLE.HOS.Services.Loader
 {
     enum ResultCode

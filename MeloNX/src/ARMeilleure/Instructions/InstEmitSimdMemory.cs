@@ -40,36 +40,34 @@ namespace ARMeilleure.Instructions
 
             long offset = 0;
 
-            for (int rep = 0; rep < op.Reps; rep++)
+#pragma warning disable IDE0055 // Disable formatting
+            for (int rep   = 0; rep   < op.Reps;   rep++)
+            for (int elem  = 0; elem  < op.Elems;  elem++)
+            for (int sElem = 0; sElem < op.SElems; sElem++)
             {
-                for (int elem = 0; elem < op.Elems; elem++)
+                int rtt = (op.Rt + rep + sElem) & 0x1f;
+
+                Operand tt = GetVec(rtt);
+
+                Operand address = context.Add(n, Const(offset));
+
+                if (isLoad)
                 {
-                    for (int sElem = 0; sElem < op.SElems; sElem++)
+                    EmitLoadSimd(context, address, tt, rtt, elem, op.Size);
+
+                    if (op.RegisterSize == RegisterSize.Simd64 && elem == op.Elems - 1)
                     {
-                        int rtt = (op.Rt + rep + sElem) & 0x1f;
-
-                        Operand tt = GetVec(rtt);
-
-                        Operand address = context.Add(n, Const(offset));
-
-                        if (isLoad)
-                        {
-                            EmitLoadSimd(context, address, tt, rtt, elem, op.Size);
-
-                            if (op.RegisterSize == RegisterSize.Simd64 && elem == op.Elems - 1)
-                            {
-                                context.Copy(tt, context.VectorZeroUpper64(tt));
-                            }
-                        }
-                        else
-                        {
-                            EmitStoreSimd(context, address, rtt, elem, op.Size);
-                        }
-
-                        offset += 1 << op.Size;
+                        context.Copy(tt, context.VectorZeroUpper64(tt));
                     }
                 }
+                else
+                {
+                    EmitStoreSimd(context, address, rtt, elem, op.Size);
+                }
+
+                offset += 1 << op.Size;
             }
+#pragma warning restore IDE0055
 
             if (op.WBack)
             {

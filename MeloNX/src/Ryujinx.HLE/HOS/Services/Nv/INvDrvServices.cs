@@ -93,8 +93,9 @@ namespace Ryujinx.HLE.HOS.Services.Nv
         private NvResult GetIoctlArgument(ServiceCtx context, NvIoctl ioctlCommand, out Span<byte> arguments)
         {
             (ulong inputDataPosition, ulong inputDataSize) = context.Request.GetBufferType0x21(0);
-
-            (_, ulong outputDataSize) = context.Request.GetBufferType0x22(0);
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            (ulong outputDataPosition, ulong outputDataSize) = context.Request.GetBufferType0x22(0);
+#pragma warning restore IDE0059
 
             NvIoctl.Direction ioctlDirection = ioctlCommand.DirectionValue;
             uint ioctlSize = ioctlCommand.Size;
@@ -306,8 +307,9 @@ namespace Ryujinx.HLE.HOS.Services.Nv
         // Initialize(u32 transfer_memory_size, handle<copy, process> current_process, handle<copy, transfer_memory> transfer_memory) -> u32 error_code
         public ResultCode Initialize(ServiceCtx context)
         {
-            _ = context.RequestData.ReadInt64(); // transfer memory size
-
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            long transferMemSize = context.RequestData.ReadInt64();
+#pragma warning restore IDE0059
             int transferMemHandle = context.Request.HandleDesc.ToCopy[1];
 
             // TODO: When transfer memory will be implemented, this could be removed.
@@ -429,7 +431,9 @@ namespace Ryujinx.HLE.HOS.Services.Nv
         // SetClientPID(u64, pid) -> u32 error_code
         public ResultCode SetClientPid(ServiceCtx context)
         {
-            _ = context.RequestData.ReadInt64(); // pid
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            long pid = context.RequestData.ReadInt64();
+#pragma warning restore IDE0059
 
             context.ResponseData.Write(0);
 

@@ -10,7 +10,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Ryujinx.Common
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Hash128(ulong low, ulong high) : IEquatable<Hash128>
     {
         public ulong Low = low;

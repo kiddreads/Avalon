@@ -37,6 +37,7 @@ namespace Ryujinx.Ava.UI.Renderer
                 _ => throw new NotImplementedException()
             };
 
+
         private void Initialize()
         {
             EmbeddedWindow.WindowCreated += CurrentWindow_WindowCreated;

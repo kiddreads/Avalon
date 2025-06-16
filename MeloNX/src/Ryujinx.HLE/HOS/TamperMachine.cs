@@ -25,7 +25,7 @@ namespace Ryujinx.HLE.HOS
         {
             if (_tamperThread == null || !_tamperThread.IsAlive)
             {
-                _tamperThread = new Thread(TamperRunner)
+                _tamperThread = new Thread(this.TamperRunner)
                 {
                     Name = "HLE.TamperMachine",
                 };

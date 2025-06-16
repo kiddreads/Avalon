@@ -46,7 +46,7 @@ namespace Ryujinx.HLE.HOS.Services.Ldn.UserServiceCreator.LdnMitm.Proxy
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
-            _protocol.Read(ref _buffer, ref _bufferEnd, buffer, (int)offset, (int)size, Socket.RemoteEndPoint);
+            _protocol.Read(ref _buffer, ref _bufferEnd, buffer, (int)offset, (int)size, this.Socket.RemoteEndPoint);
         }
 
         protected override void OnError(SocketError error)
@@ -66,7 +66,7 @@ namespace Ryujinx.HLE.HOS.Services.Ldn.UserServiceCreator.LdnMitm.Proxy
         {
             try
             {
-                if (endPoint.Equals(Socket.RemoteEndPoint))
+                if (endPoint.Equals(this.Socket.RemoteEndPoint))
                 {
                     NodeInfo = info;
                     _protocol.InvokeAccept(this);

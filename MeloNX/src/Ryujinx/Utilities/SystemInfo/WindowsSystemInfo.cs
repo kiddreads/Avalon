@@ -43,7 +43,7 @@ namespace Ryujinx.Ava.Utilities.SystemInfo
             return Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")?.Trim();
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         private struct MemoryStatusEx
         {
             public uint Length;

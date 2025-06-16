@@ -19,7 +19,7 @@ namespace Ryujinx.Horizon.Sdk.Codec.Detail
             OpusCodecFactory.AttemptToUseNativeLibrary = false;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         private struct OpusPacketHeader
         {
             public uint Length;

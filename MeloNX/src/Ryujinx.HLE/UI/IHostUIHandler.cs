@@ -63,6 +63,7 @@ namespace Ryujinx.HLE.UI
         /// </summary>
         IHostUITheme HostUITheme { get; }
 
+
         /// <summary>
         /// Displays the player select dialog and returns the selected profile.
         /// </summary>

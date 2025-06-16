@@ -113,7 +113,7 @@ namespace Ryujinx.Tests.Unicorn
         public void RunForCount(ulong count)
         {
             // FIXME: untilAddr should be 0xFFFFFFFFFFFFFFFFu
-            Uc.EmuStart(PC, -1, 0, (long)count);
+            Uc.EmuStart(this.PC, -1, 0, (long)count);
         }
 
         public void Step()
@@ -141,6 +141,7 @@ namespace Ryujinx.Tests.Unicorn
             Arm.UC_ARM_REG_R15
         ];
 
+#pragma warning disable IDE0051, IDE0052 // Remove unused private member
         private static readonly int[] _qRegisters =
         [
             Arm.UC_ARM_REG_Q0,
@@ -160,6 +161,7 @@ namespace Ryujinx.Tests.Unicorn
             Arm.UC_ARM_REG_Q14,
             Arm.UC_ARM_REG_Q15
         ];
+#pragma warning restore IDE0051, IDE0052
 
         public uint GetX(int index)
         {

@@ -23,7 +23,7 @@ namespace Ryujinx.Audio.Backends.SoundIo.Native
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void JackCallbackDelegate(nint msg);
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct SoundIoStruct
         {
             public nint UserData;

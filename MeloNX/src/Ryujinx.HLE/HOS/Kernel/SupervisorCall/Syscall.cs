@@ -184,7 +184,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x5f)]
-        public static Result FlushProcessDataCache(int processHandle, ulong address, ulong size)
+        public Result FlushProcessDataCache(int processHandle, ulong address, ulong size)
         {
             // FIXME: This needs to be implemented as ARMv7 doesn't have any way to do cache maintenance operations on EL0.
             // As we don't support (and don't actually need) to flush the cache, this is stubbed.
@@ -263,7 +263,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x22)]
-        public static Result SendSyncRequestWithUserBuffer(
+        public Result SendSyncRequestWithUserBuffer(
             [PointerSized] ulong messagePtr,
             [PointerSized] ulong messageSize,
             int handle)
@@ -901,7 +901,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(2)]
-        public static Result SetMemoryPermission([PointerSized] ulong address, [PointerSized] ulong size, KMemoryPermission permission)
+        public Result SetMemoryPermission([PointerSized] ulong address, [PointerSized] ulong size, KMemoryPermission permission)
         {
             if (!PageAligned(address))
             {
@@ -934,7 +934,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(3)]
-        public static Result SetMemoryAttribute(
+        public Result SetMemoryAttribute(
             [PointerSized] ulong address,
             [PointerSized] ulong size,
             MemoryAttribute attributeMask,
@@ -983,7 +983,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(4)]
-        public static Result MapMemory([PointerSized] ulong dst, [PointerSized] ulong src, [PointerSized] ulong size)
+        public Result MapMemory([PointerSized] ulong dst, [PointerSized] ulong src, [PointerSized] ulong size)
         {
             if (!PageAligned(src | dst))
             {
@@ -1020,7 +1020,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(5)]
-        public static Result UnmapMemory([PointerSized] ulong dst, [PointerSized] ulong src, [PointerSized] ulong size)
+        public Result UnmapMemory([PointerSized] ulong dst, [PointerSized] ulong src, [PointerSized] ulong size)
         {
             if (!PageAligned(src | dst))
             {
@@ -1057,7 +1057,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(6)]
-        public static Result QueryMemory([PointerSized] ulong infoPtr, [PointerSized] out ulong pageInfo, [PointerSized] ulong address)
+        public Result QueryMemory([PointerSized] ulong infoPtr, [PointerSized] out ulong pageInfo, [PointerSized] ulong address)
         {
             Result result = QueryMemory(out MemoryInfo info, out pageInfo, address);
 
@@ -1092,7 +1092,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x13)]
-        public static Result MapSharedMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size, KMemoryPermission permission)
+        public Result MapSharedMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size, KMemoryPermission permission)
         {
             if (!PageAligned(address))
             {
@@ -1139,7 +1139,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x14)]
-        public static Result UnmapSharedMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size)
+        public Result UnmapSharedMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size)
         {
             if (!PageAligned(address))
             {
@@ -1244,7 +1244,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x51)]
-        public static Result MapTransferMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size, KMemoryPermission permission)
+        public Result MapTransferMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size, KMemoryPermission permission)
         {
             if (!PageAligned(address))
             {
@@ -1291,7 +1291,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x52)]
-        public static Result UnmapTransferMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size)
+        public Result UnmapTransferMemory(int handle, [PointerSized] ulong address, [PointerSized] ulong size)
         {
             if (!PageAligned(address))
             {
@@ -1332,7 +1332,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x2c)]
-        public static Result MapPhysicalMemory([PointerSized] ulong address, [PointerSized] ulong size)
+        public Result MapPhysicalMemory([PointerSized] ulong address, [PointerSized] ulong size)
         {
             if (!PageAligned(address))
             {
@@ -1368,7 +1368,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x2d)]
-        public static Result UnmapPhysicalMemory([PointerSized] ulong address, [PointerSized] ulong size)
+        public Result UnmapPhysicalMemory([PointerSized] ulong address, [PointerSized] ulong size)
         {
             if (!PageAligned(address))
             {
@@ -1445,7 +1445,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x4c)]
-        public static Result ControlCodeMemory(
+        public Result ControlCodeMemory(
             int handle,
             CodeMemoryOperation op,
             ulong address,
@@ -1524,7 +1524,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x73)]
-        public static Result SetProcessMemoryPermission(
+        public Result SetProcessMemoryPermission(
             int handle,
             ulong src,
             ulong size,
@@ -1566,7 +1566,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x74)]
-        public static Result MapProcessMemory(
+        public Result MapProcessMemory(
             [PointerSized] ulong dst,
             int handle,
             ulong src,
@@ -1623,7 +1623,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x75)]
-        public static Result UnmapProcessMemory(
+        public Result UnmapProcessMemory(
             [PointerSized] ulong dst,
             int handle,
             ulong src,
@@ -1669,7 +1669,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x77)]
-        public static Result MapProcessCodeMemory(int handle, ulong dst, ulong src, ulong size)
+        public Result MapProcessCodeMemory(int handle, ulong dst, ulong src, ulong size)
         {
             if (!PageAligned(dst) || !PageAligned(src))
             {
@@ -1707,7 +1707,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x78)]
-        public static Result UnmapProcessCodeMemory(int handle, ulong dst, ulong src, ulong size)
+        public Result UnmapProcessCodeMemory(int handle, ulong dst, ulong src, ulong size)
         {
             if (!PageAligned(dst) || !PageAligned(src))
             {
@@ -1752,7 +1752,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         // System
 
         [Svc(0x7b)]
-        public static Result TerminateProcess(int handle)
+        public Result TerminateProcess(int handle)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -1782,7 +1782,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(7)]
-        public static void ExitProcess()
+        public void ExitProcess()
         {
             KernelStatic.GetCurrentProcess().TerminateCurrentProcess();
         }
@@ -1878,7 +1878,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x26)]
-        public static void Break(ulong reason)
+        public void Break(ulong reason)
         {
             KThread currentThread = KernelStatic.GetCurrentThread();
 
@@ -1905,7 +1905,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x27)]
-        public static void OutputDebugString([PointerSized] ulong strPtr, [PointerSized] ulong size)
+        public void OutputDebugString([PointerSized] ulong strPtr, [PointerSized] ulong size)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -2371,7 +2371,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x30)]
-        public static Result GetResourceLimitLimitValue(out long limitValue, int handle, LimitableResource resource)
+        public Result GetResourceLimitLimitValue(out long limitValue, int handle, LimitableResource resource)
         {
             limitValue = 0;
 
@@ -2393,7 +2393,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x31)]
-        public static Result GetResourceLimitCurrentValue(out long limitValue, int handle, LimitableResource resource)
+        public Result GetResourceLimitCurrentValue(out long limitValue, int handle, LimitableResource resource)
         {
             limitValue = 0;
 
@@ -2415,7 +2415,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x37)]
-        public static Result GetResourceLimitPeakValue(out long peak, int handle, LimitableResource resource)
+        public Result GetResourceLimitPeakValue(out long peak, int handle, LimitableResource resource)
         {
             peak = 0;
 
@@ -2447,7 +2447,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x7e)]
-        public static Result SetResourceLimitLimitValue(int handle, LimitableResource resource, long limitValue)
+        public Result SetResourceLimitLimitValue(int handle, LimitableResource resource, long limitValue)
         {
             if (resource >= LimitableResource.Count)
             {
@@ -2542,7 +2542,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(9)]
-        public static Result StartThread(int handle)
+        public Result StartThread(int handle)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -2570,7 +2570,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0xa)]
-        public static void ExitThread()
+        public void ExitThread()
         {
             KThread currentThread = KernelStatic.GetCurrentThread();
 
@@ -2602,7 +2602,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0xc)]
-        public static Result GetThreadPriority(out int priority, int handle)
+        public Result GetThreadPriority(out int priority, int handle)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -2623,7 +2623,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0xd)]
-        public static Result SetThreadPriority(int handle, int priority)
+        public Result SetThreadPriority(int handle, int priority)
         {
             // TODO: NPDM check.
 
@@ -2642,7 +2642,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0xe)]
-        public static Result GetThreadCoreMask(out int preferredCore, out ulong affinityMask, int handle)
+        public Result GetThreadCoreMask(out int preferredCore, out ulong affinityMask, int handle)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -2665,7 +2665,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0xf)]
-        public static Result SetThreadCoreMask(int handle, int preferredCore, ulong affinityMask)
+        public Result SetThreadCoreMask(int handle, int preferredCore, ulong affinityMask)
         {
             KProcess currentProcess = KernelStatic.GetCurrentProcess();
 
@@ -2714,13 +2714,13 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x10)]
-        public static int GetCurrentProcessorNumber()
+        public int GetCurrentProcessorNumber()
         {
             return KernelStatic.GetCurrentThread().CurrentCore;
         }
 
         [Svc(0x25)]
-        public static Result GetThreadId(out ulong threadUid, int handle)
+        public Result GetThreadId(out ulong threadUid, int handle)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -2741,7 +2741,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x32)]
-        public static Result SetThreadActivity(int handle, bool pause)
+        public Result SetThreadActivity(int handle, bool pause)
         {
             KProcess process = KernelStatic.GetCurrentProcess();
 
@@ -2766,7 +2766,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x33)]
-        public static Result GetThreadContext3([PointerSized] ulong address, int handle)
+        public Result GetThreadContext3([PointerSized] ulong address, int handle)
         {
             KProcess currentProcess = KernelStatic.GetCurrentProcess();
             KThread currentThread = KernelStatic.GetCurrentThread();
@@ -2931,7 +2931,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x1a)]
-        public static Result ArbitrateLock(int ownerHandle, [PointerSized] ulong mutexAddress, int requesterHandle)
+        public Result ArbitrateLock(int ownerHandle, [PointerSized] ulong mutexAddress, int requesterHandle)
         {
             if (IsPointingInsideKernel(mutexAddress))
             {
@@ -2949,7 +2949,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x1b)]
-        public static Result ArbitrateUnlock([PointerSized] ulong mutexAddress)
+        public Result ArbitrateUnlock([PointerSized] ulong mutexAddress)
         {
             if (IsPointingInsideKernel(mutexAddress))
             {
@@ -2967,7 +2967,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x1c)]
-        public static Result WaitProcessWideKeyAtomic(
+        public Result WaitProcessWideKeyAtomic(
             [PointerSized] ulong mutexAddress,
             [PointerSized] ulong condVarAddress,
             int handle,
@@ -2998,7 +2998,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x1d)]
-        public static Result SignalProcessWideKey([PointerSized] ulong address, int count)
+        public Result SignalProcessWideKey([PointerSized] ulong address, int count)
         {
             KProcess currentProcess = KernelStatic.GetCurrentProcess();
 
@@ -3008,7 +3008,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x34)]
-        public static Result WaitForAddress([PointerSized] ulong address, ArbitrationType type, int value, long timeout)
+        public Result WaitForAddress([PointerSized] ulong address, ArbitrationType type, int value, long timeout)
         {
             if (IsPointingInsideKernel(address))
             {
@@ -3040,7 +3040,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x35)]
-        public static Result SignalToAddress([PointerSized] ulong address, SignalType type, int value, int count)
+        public Result SignalToAddress([PointerSized] ulong address, SignalType type, int value, int count)
         {
             if (IsPointingInsideKernel(address))
             {
@@ -3067,7 +3067,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
         }
 
         [Svc(0x36)]
-        public static Result SynchronizePreemptionState()
+        public Result SynchronizePreemptionState()
         {
             KernelStatic.GetCurrentThread().SynchronizePreemptionState();
 

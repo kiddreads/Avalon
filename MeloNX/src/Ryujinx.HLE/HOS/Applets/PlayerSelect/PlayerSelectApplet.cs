@@ -12,8 +12,9 @@ namespace Ryujinx.HLE.HOS.Applets
         private readonly Horizon _system;
 
         private AppletSession _normalSession;
-
+#pragma warning disable IDE0052 // Remove unread private member
         private AppletSession _interactiveSession;
+#pragma warning restore IDE0052
 
         public event EventHandler AppletStateChanged;
 

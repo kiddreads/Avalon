@@ -1,18 +1,20 @@
 using Ryujinx.Common.Memory;
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Common
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct RingLifo<T> where T : unmanaged, ISampledDataStruct
     {
         private const ulong MaxEntries = 17;
 
+#pragma warning disable IDE0051, CS0169 // Remove unused private member
         private readonly ulong _unused;
+#pragma warning restore IDE0051, CS0169
+#pragma warning disable CS0414, IDE0052 // Remove unread private member
         private ulong _bufferCount;
+#pragma warning restore CS0414, IDE0052
         private ulong _index;
         private ulong _count;
         private Array17<AtomicStorage<T>> _storage;

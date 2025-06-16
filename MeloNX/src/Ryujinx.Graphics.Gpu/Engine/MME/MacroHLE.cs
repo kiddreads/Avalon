@@ -469,11 +469,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.MME
             for (int i = 0; i < maxDrawCount; i++)
             {
                 FifoWord count = FetchParam();
-
-                _ = FetchParam(); // Instance count
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+                FifoWord instanceCount = FetchParam();
                 FifoWord firstIndex = FetchParam();
-                _ = FetchParam(); // First vertex
-                _ = FetchParam(); // First instance
+                FifoWord firstVertex = FetchParam();
+                FifoWord firstInstance = FetchParam();
+#pragma warning restore IDE0059
 
                 if (i == 0)
                 {

@@ -151,7 +151,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.GPFifo
     /// </summary>
     struct GPFifoClassState
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         public uint SetObject;
         public readonly int SetObjectNvclass => (int)(SetObject & 0xFFFF);
         public readonly int SetObjectEngine => (int)((SetObject >> 16) & 0x1F);
@@ -228,6 +228,6 @@ namespace Ryujinx.Graphics.Gpu.Engine.GPFifo
         public uint LoadMmeStartAddressRamPointer;
         public uint LoadMmeStartAddressRam;
         public uint SetMmeShadowRamControl;
-
+#pragma warning restore CS0649
     }
 }

@@ -155,6 +155,9 @@ namespace Ryujinx.HLE.HOS.Services.Nifm.StaticService
         public ResultCode IsAnyInternetRequestAccepted(ServiceCtx context)
         {
             ulong position = context.Request.PtrBuff[0].Position;
+#pragma warning disable IDE0059 // Remove unnecessary value assignment
+            ulong size = context.Request.PtrBuff[0].Size;
+#pragma warning restore IDE0059
 
             int clientId = context.Memory.Read<int>(position);
 

@@ -139,7 +139,7 @@ namespace Ryujinx.HLE.HOS.Services.Fatal
 
             Logger.Info?.Print(LogClass.ServiceFatal, errorReport.ToString());
 
-            Kernel.SupervisorCall.Syscall.Break((ulong)resultCode);
+            context.Device.System.KernelContext.Syscall.Break((ulong)resultCode);
 
             return ResultCode.Success;
         }

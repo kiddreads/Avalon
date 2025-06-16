@@ -241,7 +241,7 @@ namespace Ryujinx.Common.Utilities
 
             public IndentedStringBuilder Append(object value)
             {
-                Append(value.ToString());
+                this.Append(value.ToString());
 
                 return this;
             }
@@ -271,7 +271,7 @@ namespace Ryujinx.Common.Utilities
             {
                 _builder.Append(value);
 
-                AppendLine();
+                this.AppendLine();
 
                 return this;
             }

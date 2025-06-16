@@ -21,11 +21,11 @@ namespace Spv.Generator
         {
             if (Count > InternalCount)
             {
-                return MemoryMarshal.CreateSpan(ref Overflow[0], Count);
+                return MemoryMarshal.CreateSpan(ref this.Overflow[0], Count);
             }
             else
             {
-                return MemoryMarshal.CreateSpan(ref Operand1, Count);
+                return MemoryMarshal.CreateSpan(ref this.Operand1, Count);
             }
         }
 
@@ -33,7 +33,7 @@ namespace Spv.Generator
         {
             if (Count < InternalCount)
             {
-                MemoryMarshal.CreateSpan(ref Operand1, Count + 1)[Count] = operand;
+                MemoryMarshal.CreateSpan(ref this.Operand1, Count + 1)[Count] = operand;
                 Count++;
             }
             else
@@ -41,7 +41,7 @@ namespace Spv.Generator
                 if (Overflow == null)
                 {
                     Overflow = new IOperand[InternalCount * 2];
-                    MemoryMarshal.CreateSpan(ref Operand1, InternalCount).CopyTo(Overflow.AsSpan());
+                    MemoryMarshal.CreateSpan(ref this.Operand1, InternalCount).CopyTo(Overflow.AsSpan());
                 }
                 else if (Count == Overflow.Length)
                 {

@@ -218,28 +218,18 @@ namespace ARMeilleure.Translation
             {
                 switch (condition)
                 {
-
-                    case Condition.Eq:
-                        return ICompareEqual(n, m);
-                    case Condition.Ne:
-                        return ICompareNotEqual(n, m);
-                    case Condition.GeUn:
-                        return ICompareGreaterOrEqualUI(n, m);
-                    case Condition.LtUn:
-                        return ICompareLessUI(n, m);
-                    case Condition.GtUn:
-                        return ICompareGreaterUI(n, m);
-                    case Condition.LeUn:
-                        return ICompareLessOrEqualUI(n, m);
-                    case Condition.Ge:
-                        return ICompareGreaterOrEqual(n, m);
-                    case Condition.Lt:
-                        return ICompareLess(n, m);
-                    case Condition.Gt:
-                        return ICompareGreater(n, m);
-                    case Condition.Le:
-                        return ICompareLessOrEqual(n, m);
-
+#pragma warning disable IDE0055 // Disable formatting
+                    case Condition.Eq:   return ICompareEqual           (n, m);
+                    case Condition.Ne:   return ICompareNotEqual        (n, m);
+                    case Condition.GeUn: return ICompareGreaterOrEqualUI(n, m);
+                    case Condition.LtUn: return ICompareLessUI          (n, m);
+                    case Condition.GtUn: return ICompareGreaterUI       (n, m);
+                    case Condition.LeUn: return ICompareLessOrEqualUI   (n, m);
+                    case Condition.Ge:   return ICompareGreaterOrEqual  (n, m);
+                    case Condition.Lt:   return ICompareLess            (n, m);
+                    case Condition.Gt:   return ICompareGreater         (n, m);
+                    case Condition.Le:   return ICompareLessOrEqual     (n, m);
+#pragma warning restore IDE0055
                 }
             }
             else if (cmpName == InstName.Adds && _optOpLastCompare is IOpCodeAluImm op)
@@ -264,20 +254,14 @@ namespace ARMeilleure.Translation
 
                 switch (condition)
                 {
-
-                    case Condition.Eq:
-                        return ICompareEqual(n, m);
-                    case Condition.Ne:
-                        return ICompareNotEqual(n, m);
-                    case Condition.Ge:
-                        return ICompareGreaterOrEqual(n, m);
-                    case Condition.Lt:
-                        return ICompareLess(n, m);
-                    case Condition.Gt:
-                        return ICompareGreater(n, m);
-                    case Condition.Le:
-                        return ICompareLessOrEqual(n, m);
-
+#pragma warning disable IDE0055 // Disable formatting
+                    case Condition.Eq: return ICompareEqual         (n, m);
+                    case Condition.Ne: return ICompareNotEqual      (n, m);
+                    case Condition.Ge: return ICompareGreaterOrEqual(n, m);
+                    case Condition.Lt: return ICompareLess          (n, m);
+                    case Condition.Gt: return ICompareGreater       (n, m);
+                    case Condition.Le: return ICompareLessOrEqual   (n, m);
+#pragma warning restore IDE0055
                 }
             }
 

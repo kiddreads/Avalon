@@ -5,16 +5,19 @@ using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using Ryujinx.Ava.Common.Locale;
+using Ryujinx.Ava.Common.Models.Github;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
 using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
+using Ryujinx.Common.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -40,9 +43,9 @@ namespace Ryujinx.Ava.Systems
         private static bool _running;
 
         private static readonly string[] _windowsDependencyDirs = [];
-
+        
         private static string _changelogUrlFormat = null;
-
+        
         public static async Task BeginUpdateAsync(bool showVersionUpToDate = false)
         {
             if (_running)
@@ -85,7 +88,7 @@ namespace Ryujinx.Ava.Systems
             try
             {
                 buildSizeClient.DefaultRequestHeaders.Add("Range", "bytes=0-0");
-
+                
                 // GitLab instance is located in Ukraine. Connection times will vary across the world.
                 buildSizeClient.Timeout = TimeSpan.FromSeconds(10);
 
@@ -242,7 +245,7 @@ namespace Ryujinx.Ava.Systems
             }
         }
 
-        private static async void DoUpdateWithMultipleThreads(TaskDialog taskDialog, string downloadUrl, string updateFile)
+        private static void DoUpdateWithMultipleThreads(TaskDialog taskDialog, string downloadUrl, string updateFile)
         {
             // Multi-Threaded Updater
             long chunkSize = _buildSize / ConnectionCount;
@@ -253,95 +256,111 @@ namespace Ryujinx.Ava.Systems
             int[] progressPercentage = new int[ConnectionCount];
 
             List<byte[]> list = new(ConnectionCount);
+            List<WebClient> webClients = new(ConnectionCount);
+
             for (int i = 0; i < ConnectionCount; i++)
             {
                 list.Add([]);
             }
 
-            using HttpClient httpClient = ConstructHttpClient();
-            List<Task> downloadTasks = new();
-
             for (int i = 0; i < ConnectionCount; i++)
             {
-                int index = i;
-                long start = chunkSize * index;
-                long end = (index == ConnectionCount - 1) ? (chunkSize * (index + 1) - 1 + remainderChunk) : (chunkSize * (index + 1) - 1);
+#pragma warning disable SYSLIB0014
+                // TODO: WebClient is obsolete and need to be replaced with a more complex logic using HttpClient.
+                using WebClient client = new();
+#pragma warning restore SYSLIB0014
 
-                downloadTasks.Add(Task.Run(async () =>
+                webClients.Add(client);
+
+                if (i == ConnectionCount - 1)
                 {
-                    try
+                    client.Headers.Add("Range", $"bytes={chunkSize * i}-{(chunkSize * (i + 1) - 1) + remainderChunk}");
+                }
+                else
+                {
+                    client.Headers.Add("Range", $"bytes={chunkSize * i}-{chunkSize * (i + 1) - 1}");
+                }
+
+                client.DownloadProgressChanged += (_, args) =>
+                {
+                    int index = (int)args.UserState;
+
+                    Interlocked.Add(ref totalProgressPercentage, -1 * progressPercentage[index]);
+                    Interlocked.Exchange(ref progressPercentage[index], args.ProgressPercentage);
+                    Interlocked.Add(ref totalProgressPercentage, args.ProgressPercentage);
+
+                    taskDialog.SetProgressBarState(totalProgressPercentage / ConnectionCount, TaskDialogProgressState.Normal);
+                };
+
+                client.DownloadDataCompleted += (_, args) =>
+                {
+                    int index = (int)args.UserState;
+
+                    if (args.Cancelled)
                     {
-                        HttpRequestMessage request = new(HttpMethod.Get, downloadUrl);
-                        request.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(start, end);
+                        webClients[index].Dispose();
 
-                        using HttpResponseMessage response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                        response.EnsureSuccessStatusCode();
+                        taskDialog.Hide();
 
-                        using Stream contentStream = await response.Content.ReadAsStreamAsync();
-                        using MemoryStream memoryStream = new();
+                        return;
+                    }
 
-                        byte[] buffer = new byte[32 * 1024];
-                        int bytesRead;
-                        long totalRead = 0;
-                        long totalSize = end - start + 1;
+                    list[index] = args.Result;
+                    Interlocked.Increment(ref completedRequests);
 
-                        while ((bytesRead = await contentStream.ReadAsync(buffer)) > 0)
+                    if (Equals(completedRequests, ConnectionCount))
+                    {
+                        byte[] mergedFileBytes = new byte[_buildSize];
+                        for (int connectionIndex = 0, destinationOffset = 0; connectionIndex < ConnectionCount; connectionIndex++)
                         {
-                            memoryStream.Write(buffer, 0, bytesRead);
-                            totalRead += bytesRead;
-
-                            int progress = (int)(100 * totalRead / totalSize);
-                            Interlocked.Add(ref totalProgressPercentage, -progressPercentage[index]);
-                            progressPercentage[index] = progress;
-                            Interlocked.Add(ref totalProgressPercentage, progress);
-
-                            taskDialog.SetProgressBarState(totalProgressPercentage / ConnectionCount, TaskDialogProgressState.Normal);
+                            Array.Copy(list[connectionIndex], 0, mergedFileBytes, destinationOffset, list[connectionIndex].Length);
+                            destinationOffset += list[connectionIndex].Length;
                         }
 
-                        list[index] = memoryStream.ToArray();
+                        File.WriteAllBytes(updateFile, mergedFileBytes);
 
-                        if (Interlocked.Increment(ref completedRequests) == ConnectionCount)
+                        // On macOS, ensure that we remove the quarantine bit to prevent Gatekeeper from blocking execution.
+                        if (OperatingSystem.IsMacOS())
                         {
-                            byte[] mergedFileBytes = new byte[_buildSize];
-                            for (int connectionIndex = 0, destinationOffset = 0; connectionIndex < ConnectionCount; connectionIndex++)
-                            {
-                                Array.Copy(list[connectionIndex], 0, mergedFileBytes, destinationOffset, list[connectionIndex].Length);
-                                destinationOffset += list[connectionIndex].Length;
-                            }
+                            using Process xattrProcess = Process.Start("xattr",
+                                ["-d", "com.apple.quarantine", updateFile]);
 
-                            File.WriteAllBytes(updateFile, mergedFileBytes);
+                            xattrProcess.WaitForExit();
+                        }
 
-                            // On macOS, ensure that we remove the quarantine bit to prevent Gatekeeper from blocking execution.
-                            if (OperatingSystem.IsMacOS())
-                            {
-                                using Process xattrProcess = Process.Start("xattr",
-                                    ["-d", "com.apple.quarantine", updateFile]);
+                        try
+                        {
+                            InstallUpdate(taskDialog, updateFile);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Warning?.Print(LogClass.Application, e.Message);
+                            Logger.Warning?.Print(LogClass.Application, "Multi-Threaded update failed, falling back to single-threaded updater.");
 
-                                xattrProcess.WaitForExit();
-                            }
-
-                            try
-                            {
-                                InstallUpdate(taskDialog, updateFile);
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.Warning?.Print(LogClass.Application, e.Message);
-                                Logger.Warning?.Print(LogClass.Application, "Multi-Threaded update failed, falling back to single-threaded updater.");
-                                DoUpdateWithSingleThread(taskDialog, downloadUrl, updateFile);
-                            }
+                            DoUpdateWithSingleThread(taskDialog, downloadUrl, updateFile);
                         }
                     }
-                    catch (Exception ex)
+                };
+
+                try
+                {
+                    client.DownloadDataAsync(new Uri(downloadUrl), i);
+                }
+                catch (WebException ex)
+                {
+                    Logger.Warning?.Print(LogClass.Application, ex.Message);
+                    Logger.Warning?.Print(LogClass.Application, "Multi-Threaded update failed, falling back to single-threaded updater.");
+
+                    foreach (WebClient webClient in webClients)
                     {
-                        Logger.Warning?.Print(LogClass.Application, ex.Message);
-                        Logger.Warning?.Print(LogClass.Application, "Multi-Threaded update failed, falling back to single-threaded updater.");
-                        DoUpdateWithSingleThread(taskDialog, downloadUrl, updateFile);
+                        webClient.CancelAsync();
                     }
-                }));
+
+                    DoUpdateWithSingleThread(taskDialog, downloadUrl, updateFile);
+
+                    return;
+                }
             }
-
-            await Task.WhenAll(downloadTasks);
         }
 
         private static void DoUpdateWithSingleThreadWorker(TaskDialog taskDialog, string downloadUrl, string updateFile)

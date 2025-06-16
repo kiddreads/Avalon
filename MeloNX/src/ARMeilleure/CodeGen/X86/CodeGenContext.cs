@@ -2,6 +2,7 @@ using ARMeilleure.CodeGen.RegisterAllocators;
 using ARMeilleure.IntermediateRepresentation;
 using Microsoft.IO;
 using Ryujinx.Common.Memory;
+using System.IO;
 using System.Numerics;
 
 namespace ARMeilleure.CodeGen.X86

@@ -16,7 +16,7 @@ namespace Ryujinx.Graphics.OpenGL
             _table = new FormatInfo[tableSize];
             _tableImage = new SizedInternalFormat[tableSize];
 
-            #pragma warning disable IDE0055 // Disable formatting
+#pragma warning disable IDE0055 // Disable formatting
             Add(Format.R8Unorm,             new FormatInfo(1, true,  false, All.R8,                PixelFormat.Red,            PixelType.UnsignedByte));
             Add(Format.R8Snorm,             new FormatInfo(1, true,  false, All.R8Snorm,           PixelFormat.Red,            PixelType.Byte));
             Add(Format.R8Uint,              new FormatInfo(1, false, false, All.R8ui,              PixelFormat.RedInteger,     PixelType.UnsignedByte));

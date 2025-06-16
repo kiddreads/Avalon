@@ -4,9 +4,10 @@ namespace Ryujinx.Graphics.Vic.Types
 {
     readonly struct OutputConfig
     {
-
+#pragma warning disable CS0649 // Field is never assigned to
         private readonly long _word0;
         private readonly long _word1;
+#pragma warning restore CS0649
 
         public int AlphaFillMode => (int)_word0.Extract(0, 3);
         public int AlphaFillSlot => (int)_word0.Extract(3, 3);
