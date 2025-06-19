@@ -1688,8 +1688,8 @@ namespace Ryujinx.Ava.UI.ViewModels
                 RendererHostControl.Focus();
             });
 
-        public static void UpdateGameMetadata(string titleId)
-            => ApplicationLibrary.LoadAndSaveMetaData(titleId, appMetadata => appMetadata.UpdatePostGame());
+        public static void UpdateGameMetadata(string titleId, TimeSpan playTime)
+            => ApplicationLibrary.LoadAndSaveMetaData(titleId, appMetadata => appMetadata.UpdatePostGame(playTime));
 
         public void RefreshFirmwareStatus()
         {

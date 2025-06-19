@@ -33,19 +33,11 @@ namespace Ryujinx.Ava.Systems.AppLibrary
         /// <summary>
         /// Updates <see cref="LastPlayed"/> and <see cref="TimePlayed"/>. Call this after a game ends.
         /// </summary>
-        public void UpdatePostGame()
+        /// <param name="playTime">The active gameplay time this past session.</param>
+        public void UpdatePostGame(TimeSpan playTime)
         {
-            DateTime? prevLastPlayed = LastPlayed;
             UpdatePreGame();
-
-            if (!prevLastPlayed.HasValue)
-            {
-                return;
-            }
-
-            TimeSpan diff = DateTime.UtcNow - prevLastPlayed.Value;
-            double newTotalSeconds = TimePlayed.Add(diff).TotalSeconds;
-            TimePlayed = TimeSpan.FromSeconds(Math.Round(newTotalSeconds, MidpointRounding.AwayFromZero));
+            TimePlayed += playTime;
         }
     }
 }

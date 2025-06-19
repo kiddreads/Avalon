@@ -75,6 +75,7 @@ namespace Ryujinx.Ava.Systems
 
         private readonly long _ticksPerFrame;
         private readonly Stopwatch _chrono;
+        private readonly Stopwatch _playTimer;
         private long _ticks;
 
         private readonly AccountManager _accountManager;
@@ -175,6 +176,7 @@ namespace Ryujinx.Ava.Systems
 
             _chrono = new Stopwatch();
             _ticksPerFrame = Stopwatch.Frequency / TargetFps;
+            _playTimer = new Stopwatch();
 
             if (ApplicationPath.StartsWith("@SystemContent"))
             {
@@ -565,6 +567,7 @@ namespace Ryujinx.Ava.Systems
         public void Stop()
         {
             _isActive = false;
+            _playTimer.Stop();
         }
 
         private void Exit()
@@ -616,7 +619,7 @@ namespace Ryujinx.Ava.Systems
         private void Dispose()
         {
             if (Device.Processes != null)
-                MainWindowViewModel.UpdateGameMetadata(Device.Processes.ActiveApplication.ProgramIdText);
+                MainWindowViewModel.UpdateGameMetadata(Device.Processes.ActiveApplication.ProgramIdText, _playTimer.Elapsed);
 
             ConfigurationState.Instance.System.IgnoreMissingServices.Event -= UpdateIgnoreMissingServicesState;
             ConfigurationState.Instance.Graphics.AspectRatio.Event -= UpdateAspectRatioState;
@@ -635,6 +638,7 @@ namespace Ryujinx.Ava.Systems
             _gpuCancellationTokenSource.Dispose();
 
             _chrono.Stop();
+            _playTimer.Stop();
         }
 
         public void DisposeGpu()
@@ -868,6 +872,7 @@ namespace Ryujinx.Ava.Systems
             ApplicationLibrary.LoadAndSaveMetaData(Device.Processes.ActiveApplication.ProgramIdText,
                 appMetadata => appMetadata.UpdatePreGame()
             );
+            _playTimer.Start();
 
             return true;
         }
@@ -877,6 +882,7 @@ namespace Ryujinx.Ava.Systems
             Device?.System.TogglePauseEmulation(false);
 
             _viewModel.IsPaused = false;
+            _playTimer.Start();
             _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device?.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI);
             Logger.Info?.Print(LogClass.Emulation, "Emulation was resumed");
         }
@@ -886,6 +892,7 @@ namespace Ryujinx.Ava.Systems
             Device?.System.TogglePauseEmulation(true);
 
             _viewModel.IsPaused = true;
+            _playTimer.Stop();
             _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device?.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI, LocaleManager.Instance[LocaleKeys.Paused]);
             Logger.Info?.Print(LogClass.Emulation, "Emulation was paused");
         }
