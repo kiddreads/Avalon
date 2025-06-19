@@ -5,13 +5,11 @@ using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using Ryujinx.Ava.Common.Locale;
-using Ryujinx.Ava.Common.Models.Github;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
 using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
-using Ryujinx.Common.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,16 +33,12 @@ namespace Ryujinx.Ava.Systems
         private static readonly string _updateDir = Path.Combine(Path.GetTempPath(), "Ryujinx", "update");
         private static readonly string _updatePublishDir = Path.Combine(_updateDir, "publish");
         private const int ConnectionCount = 4;
-
-        private static string _buildVer;
-        private static string _buildUrl;
+        
         private static long _buildSize;
         private static bool _updateSuccessful;
         private static bool _running;
 
         private static readonly string[] _windowsDependencyDirs = [];
-        
-        private static string _changelogUrlFormat = null;
         
         public static async Task BeginUpdateAsync(bool showVersionUpToDate = false)
         {
@@ -72,7 +66,7 @@ namespace Ryujinx.Ava.Systems
 
                     if (userResult is UserResult.Ok)
                     {
-                        OpenHelper.OpenUrl(_changelogUrlFormat.Format(currentVersion));
+                        OpenHelper.OpenUrl(_versionResponse.ReleaseUrlFormat.Format(currentVersion));
                     }
                 }
 
@@ -92,7 +86,7 @@ namespace Ryujinx.Ava.Systems
                 // GitLab instance is located in Ukraine. Connection times will vary across the world.
                 buildSizeClient.Timeout = TimeSpan.FromSeconds(10);
 
-                HttpResponseMessage message = await buildSizeClient.GetAsync(new Uri(_buildUrl), HttpCompletionOption.ResponseHeadersRead);
+                HttpResponseMessage message = await buildSizeClient.GetAsync(new Uri(_versionResponse.ArtifactUrl), HttpCompletionOption.ResponseHeadersRead);
 
                 _buildSize = message.Content.Headers.ContentRange.Length.Value;
             }
@@ -122,7 +116,7 @@ namespace Ryujinx.Ava.Systems
                 switch (shouldUpdate)
                 {
                     case UserResult.Yes:
-                        await UpdateRyujinx(_buildUrl);
+                        await UpdateRyujinx(_versionResponse.ArtifactUrl);
                         break;
                     // Secondary button maps to no, which in this case is the show changelog button.
                     case UserResult.No:
