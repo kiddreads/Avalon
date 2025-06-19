@@ -6,7 +6,6 @@ using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
 using Ryujinx.Systems.Update.Client;
 using Ryujinx.Systems.Update.Common;
-using Ryujinx.Systems.Updater.Common;
 using System;
 using System.Threading.Tasks;
 
