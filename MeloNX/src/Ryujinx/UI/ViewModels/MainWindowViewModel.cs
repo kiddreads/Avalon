@@ -310,10 +310,15 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         private void TotalTimePlayed_Recalculated(Optional<TimeSpan> ts)
         {
-            ShowTotalTimePlayed = ts.HasValue;
-
             if (ts.HasValue)
-                LocaleManager.Instance.SetDynamicValues(LocaleKeys.GameListLabelTotalTimePlayed, ValueFormatUtils.FormatTimeSpan(ts.Value));
+            {
+                var formattedPlayTime = ValueFormatUtils.FormatTimeSpan(ts.Value);
+                LocaleManager.Instance.SetDynamicValues(LocaleKeys.GameListLabelTotalTimePlayed, formattedPlayTime);
+                ShowTotalTimePlayed = formattedPlayTime != string.Empty;
+                return;
+            }
+            
+            ShowTotalTimePlayed = ts.HasValue;
         }
 
         public bool ShowTotalTimePlayed
@@ -334,7 +339,6 @@ namespace Ryujinx.Ava.UI.ViewModels
                 _listSelectedApplication = value;
 
                 if (_listSelectedApplication != null && ListAppContextMenu == null)
-
                     ListAppContextMenu = new ApplicationContextMenu();
                 else if (_listSelectedApplication == null && ListAppContextMenu != null)
                     ListAppContextMenu = null!;
