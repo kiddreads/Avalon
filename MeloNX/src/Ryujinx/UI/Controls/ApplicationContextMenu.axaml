@@ -41,32 +41,34 @@
         Command="{Binding OpenApplicationCompatibility}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuShowCompatEntry}"
-        Icon="{ext:Icon mdi-gamepad}"
+        Icon="{ext:Icon fa-solid fa-database}"
         ToolTip.Tip="{ext:Locale GameListContextMenuShowCompatEntryToolTip}"/>
     <MenuItem
         Command="{Binding OpenApplicationData}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuShowGameData}"
-        Icon="{ext:Icon mdi-chart-line}"
+        Icon="{ext:Icon fa-solid fa-chart-line}"
         ToolTip.Tip="{ext:Locale GameListContextMenuShowGameDataToolTip}"/>
     <Separator />
     <MenuItem
         Command="{Binding OpenUserSaveDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenUserSaveDirectory}"
-        Icon="{ext:Icon mdi-folder-account}"
+        Icon="{ext:Icon fa-solid fa-sd-card}"
         IsEnabled="{Binding OpenUserSaveDirectoryEnabled}"
         ToolTip.Tip="{ext:Locale GameListContextMenuOpenUserSaveDirectoryToolTip}" />
     <MenuItem
         Command="{Binding OpenDeviceSaveDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenDeviceSaveDirectory}"
+        Icon="{ext:Icon fa-solid fa-hard-drive}"
         IsEnabled="{Binding OpenDeviceSaveDirectoryEnabled}"
         ToolTip.Tip="{ext:Locale GameListContextMenuOpenDeviceSaveDirectoryToolTip}" />
     <MenuItem
         Command="{Binding OpenBcatSaveDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenBcatSaveDirectory}"
+        Icon="{ext:Icon fa-solid fa-box-archive}"
         IsEnabled="{Binding OpenBcatSaveDirectoryEnabled}"
         ToolTip.Tip="{ext:Locale GameListContextMenuOpenBcatSaveDirectoryToolTip}" />
     <Separator />
@@ -92,20 +94,20 @@
         Command="{Binding OpenModManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageMod}"
-        Icon="{ext:Icon mdi-view-module}"
+        Icon="{ext:Icon fa-solid fa-sliders}"
         ToolTip.Tip="{ext:Locale GameListContextMenuManageModToolTip}" />
     <Separator />
     <MenuItem
         Command="{Binding OpenModsDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenModsDirectory}"
-        Icon="{ext:Icon mdi-folder-file}"
+        Icon="{ext:Icon fa-solid fa-folder}"
         ToolTip.Tip="{ext:Locale GameListContextMenuOpenModsDirectoryToolTip}" />
     <MenuItem
         Command="{Binding OpenSdModsDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenSdModsDirectory}"
-        Icon="{ext:Icon mdi-folder-file}"
+        Icon="{ext:Icon fa-solid fa-folder}"
         ToolTip.Tip="{ext:Locale GameListContextMenuOpenSdModsDirectoryToolTip}" />
     <Separator />
 	<MenuItem
@@ -113,40 +115,41 @@
         CommandParameter="{Binding}"
 		Header="{ext:Locale GameListContextMenuTrimXCI}"
         IsEnabled="{Binding TrimXCIEnabled}"
+        Icon="{ext:Icon fa-solid fa-scissors}"
 		ToolTip.Tip="{ext:Locale GameListContextMenuTrimXCIToolTip}" />
-    <MenuItem Header="{ext:Locale GameListContextMenuCacheManagement}" Icon="{ext:Icon mdi-cached}">
+    <MenuItem Header="{ext:Locale GameListContextMenuCacheManagement}" Icon="{ext:Icon fa-solid fa-memory}">
         <MenuItem
             Command="{Binding PurgePtcCache}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementPurgePptc}"
-            Icon="{ext:Icon mdi-refresh}"
+            Icon="{ext:Icon fa-solid fa-arrow-rotate-right}"
             ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementPurgePptcToolTip}" />
         <MenuItem
             Command="{Binding NukePtcCache}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementNukePptc}"
-            Icon="{ext:Icon mdi-delete-alert}"
+            Icon="{ext:Icon fa-solid fa-trash-can}"
             ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementNukePptcToolTip}" />
         <MenuItem
             Command="{Binding PurgeShaderCache}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementPurgeShaderCache}"
-            Icon="{ext:Icon mdi-delete-alert}"
+            Icon="{ext:Icon fa-solid fa-trash-can}"
             ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementPurgeShaderCacheToolTip}" />
         <MenuItem
             Command="{Binding OpenPtcDirectory}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementOpenPptcDirectory}"
-            Icon="{ext:Icon mdi-folder-arrow-up-down}"
+            Icon="{ext:Icon fa-solid fa-folder}"
             ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementOpenPptcDirectoryToolTip}" />
         <MenuItem
             Command="{Binding OpenShaderCacheDirectory}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementOpenShaderCacheDirectory}"
-            Icon="{ext:Icon mdi-folder-arrow-up-down}"
+            Icon="{ext:Icon fa-solid fa-folder}"
             ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementOpenShaderCacheDirectoryToolTip}" />
     </MenuItem>
-    <MenuItem Header="{ext:Locale GameListContextMenuExtractData}">
+    <MenuItem Header="{ext:Locale GameListContextMenuExtractData}" Icon="{ext:Icon fa-solid fa-file-export}">
         <MenuItem
             Command="{Binding ExtractApplicationExeFs}"
             CommandParameter="{Binding}"
