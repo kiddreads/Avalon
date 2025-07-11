@@ -59,6 +59,9 @@ struct Settings
     
     static func registerDefaults()
     {
+        let iOS26 = OperatingSystemVersion(majorVersion: 26, minorVersion: 0, patchVersion: 0)
+        let opensGamesInNewWindow = ProcessInfo.processInfo.isOperatingSystemAtLeast(iOS26)
+        
         var defaults = [#keyPath(UserDefaults.translucentControllerSkinOpacity): 0.7,
                         #keyPath(UserDefaults.gameShortcutsMode): GameShortcutsMode.recent.rawValue,
                         #keyPath(UserDefaults.isButtonHapticFeedbackEnabled): true,
@@ -70,7 +73,7 @@ struct Settings
                         #keyPath(UserDefaults.pauseWhileInactive): true,
                         #keyPath(UserDefaults.supportsExternalDisplays): true,
                         #keyPath(UserDefaults.isQuickGesturesEnabled): true,
-                        #keyPath(UserDefaults.opensGamesInNewWindow): true,
+                        #keyPath(UserDefaults.opensGamesInNewWindow): opensGamesInNewWindow,
                         Settings.preferredCoreSettingsKey(for: .ds): MelonDS.core.identifier] as [String : Any]
         
         #if BETA
