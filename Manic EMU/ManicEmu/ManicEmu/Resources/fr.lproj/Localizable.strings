@@ -1,0 +1,569 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Services cloud";
+"ImportAddLanServiceTitle" = "Services réseau local";
+"ImportAddDiscoverServiceTitle" = "Services de découverte";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Yun";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Ajouter un service";
+"ImportServiceDelete" = "Supprimer le service";
+"ImportAliyunNotGetDriveId" = "Échec de l'ajout du service Aliyun, impossible d'obtenir le répertoire";
+"ImportDownloadError" = "Erreur de téléchargement\n%@";
+"ImportDownloadContinue" = "Téléchargement en cours...\n%@";
+"LandServiceEditServerName" = "Nom du serveur";
+"LandServiceEditServerNamePlaceholder" = "Mon serveur SMB";
+"LandServiceEditHost" = "Adresse du serveur";
+"LandServiceEditUserName" = "Nom d'utilisateur";
+"LandServiceEditPassword" = "Mot de passe";
+"LandServiceEditRequiredPlaceholder" = "Requis";
+"LandServiceEditOptionalPlaceholder" = "Optionnel";
+"LandServiceEditConnect" = "Connexion";
+"AddLandServiceSuccess" = "Ajout de %@ réussi";
+"AddLandServiceFailed" = "Échec de l'ajout de %@\nVérifiez la connexion réseau, l'état du service ou les informations saisies";
+"AddLandServiceTimeout" = "Délai de connexion au service expiré";
+"FilesImporterErrorFileExist" = "\"%@\" existe déjà, import inutile";
+"FilesImporterErrorBadCopy" = "Échec de l'import de \"%@\", erreur lors de la copie du fichier";
+"FilesImporterErrorBadExtension" = "Échec de l'import de \"%@\", extension de fichier non reconnue";
+"FilesImporterErrorNoPermission" = "Aucune autorisation pour accéder à %@";
+"FilesImporterErrorUnableToHash" = "Échec de l'import de \"%@\", impossible de calculer le hash";
+"FilesImporterErrorWriteDatabase" = "Échec de l'import de \"%@\", impossible d'écrire dans la base de données";
+"GameSaveMatchTitle" = "Associer une sauvegarde à un jeu";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" ne correspond à aucun jeu, veuillez l'associer manuellement";
+"GameSaveAlreadyExistTitle" = "Sauvegarde existante";
+"FilesImporterErrorSaveAlreadyExist" = "Échec de l'import de \"%@\", forcer l'écrasement de la sauvegarde existante ?";
+"GameSaveMathToMuchTitle" = "Correspondances multiples";
+"FilesImporterErrorSaveMathToMuch" = "Échec de l'import de \"%@\", la sauvegarde correspond à plusieurs jeux, veuillez l'associer manuellement";
+"FilesImporterErrorSkinBadFile" = "Échec de l'import de %@, fichier skin corrompu";
+"PasteImporterErrorNoMatchContent" = "Aucun contenu importable dans le presse-papiers";
+"FilesDownloadErrorFileExist" = "%@ déjà téléchargé, inutile de le retélécharger";
+"FilesImporterErrorEmptyContent" = "Aucune ressource à importer";
+"LanServiceInitFailed" = "Échec de la création du service %@";
+"SMBLoginFailed" = "Échec de connexion Samba %@";
+"SMBListFilesFailed" = "Échec de récupération des fichiers %@";
+"SMBListFilesTypeError" = "Ce fichier n'est pas un dossier";
+"DropErrorLoadFailed" = "Échec du chargement du fichier";
+"DropErrorNotSupportFile" = "Type de fichier non supporté";
+"ImportErrorTitle" = "Erreur d'import";
+"ImportGameSuccessTitle" = "Jeu importé avec succès";
+"ImportGameSuccessDetail" = "%@\na été ajouté à votre bibliothèque, consulter maintenant ?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\na été ajouté à votre bibliothèque, jouer maintenant ?";
+"ImportSkinSuccessTitle" = "Skin importé avec succès";
+"ImportSkinSuccessDetail" = "\"%@\"\nimporté avec succès, consulter maintenant ?";
+"ImportGameSaveSuccessTitle" = "Sauvegarde importée avec succès";
+"ImportGameSaveSuccessDetail" = "\"%@\"\na été ajouté au jeu correspondant";
+"ImportGameSaveSuccessForOne" = "\"%@\"\na été ajouté au jeu, jouer maintenant ?";
+"ImportGameSaveFailedNoGameError" = "Échec de l'import de \"%@\" car vous n'avez encore aucun jeu !";
+"DownloadCompletion" = "Téléchargement terminé";
+"QQChannelName" = "Chaîne QQ";
+"NotSupportPasswordZip" = "Impossible de décompresser \"%@\", les archives chiffrées ne sont pas encore supportées";
+"UnzipFailed" = "Échec de la décompression de \"%@\"";
+"NoSupportInZip" = "\"%@\" ne contient aucun format supporté";
+"IPCopy" = "Adresse copiée";
+"ImportServiceListFilesTitle" = "Fichiers";
+"ImportServiceListFilesDetail" = "Importer des jeux, skins ou sauvegardes depuis des fichiers ou iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Transférer des fichiers via un navigateur sur le même réseau local";
+"ImportServiceListWiFiOnDetail" = "%@\nUtiliser un navigateur pour transférer des fichiers";
+"ImportServiceListPasteTitle" = "Lire le presse-papiers";
+"ImportServiceListPasteDetail" = "Prend en charge les fichiers copiés depuis macOS ou l'application Fichiers";
+"ImportHowTo" = "Comment importer";
+"ImportTopHintTitle" = "Une histoire pleine de rêves et d'aventures commence ici !";
+"ImportDragAndDropTips" = "Glissez-déposez des fichiers sur n'importe quelle interface de Manic EMU pour les transférer";
+"ImportChannelTips" = "Pour toute question, rejoignez %@ pour obtenir de l'aide";
+"ToastConnectCloudDriveSuccess" = "Connexion à %@ réussie";
+"AlertImportFilesSuccess" = "Ressources importées avec succès";
+"ErrorConnectCloudDrive" = "Impossible de se connecter au service cloud";
+"ErrorUnknown" = "Erreur inconnue";
+"ReasonConncetCloudDriveFail" = "Vérifiez votre connexion réseau et l'autorisation du service cloud, ou essayez de supprimer et réajouter ce service";
+
+//Common
+"TabbarTitleGames" = "Jeux";
+"TabbarTitleImport" = "Importer";
+"TabbarTitleSettings" = "Paramètres";
+"SelectAll" = "Tout sélectionner";
+"DeSelectAll" = "Tout désélectionner";
+"CloudDriveBrowserDownload" = "Télécharger";
+"CancelTitle" = "Annuler";
+"CheckTitle" = "Vérifier";
+"StartGameTitle" = "Jouer maintenant";
+"ConfirmTitle" = "Confirmer";
+"SaveTitle" = "Enregistrer";
+"NameTitle" = "Nom";
+"TimeAgoMinuteFormat" = "il y a %d minutes";
+"TimeAgoHourFormat" = "il y a %d heures";
+"TimeAgoDayFormat" = "il y a %d jours";
+"TimeAgoWeekFormat" = "il y a %d semaines";
+"TimeAgoMonthFormat" = "il y a %d mois";
+"TimeAgoYearFormat" = "il y a %d ans";
+"TimeDurationHourAndMinuteFormat" = "%d heures %d minutes";
+"TimeDurationHourFormat" = "%d heures";
+"TimeDurationMinuteFormat" = "%d minutes";
+"FatalErrorTitle" = "Erreur fatale";
+"FatalErrorDesc" = "Échec du chargement des ressources système, Manic EMU pourrait présenter des dysfonctionnements majeurs";
+"LodingFailedTitle" = "Échec du chargement";
+"AirPlayDesc" = "Commencez l'aventure maintenant !";
+"ToastSuccess" = "Enregistrement réussi";
+"ToastFailed" = "Échec de l'enregistrement";
+
+//Games
+"GamesSearchPlaceHolder" = "Titre du jeu";
+"GamesRename" = "Renommer";
+"GamesModifyCover" = "Modifier la couverture";
+"GamesSpecifySkin" = "Définir un skin";
+"GamesCheatCode" = "Codes de triche";
+"GamesShareRom" = "Partager le ROM";
+"GamesCheckSave" = "Voir les sauvegardes instantanées";
+"GamesImportSave" = "Importer une sauvegarde";
+"GamesShareSave" = "Exporter une sauvegarde";
+"GamesDelete" = "Supprimer le jeu";
+"GamesRandom" = "Je ne sais pas quoi jouer, choisir au hasard";
+"LoadGameErrorRomNotExist" = "Erreur de chargement, le ROM n'existe pas";
+"GamesListEmptyGuideLeft" = "Cliquez sur le";
+"GamesListEmptyGuideRight" = "ci-dessous pour importer un je";
+"GamesListEmptyWelcomeLeft" = "Bienvenue dans l'univers de";
+"GamesListEmptyWelcomeRight" = "";
+"GamesListEmptyWarnning" = "Assurez-vous d'obtenir les fichiers ROM de jeux par des moyens légaux";
+"DeleteGameAlertDetail" = "Les données du jeu ROM, des sauvegardes et des codes de triche seront supprimées, cette action est irréversible !";
+"DeleteSkinAlertDetail" = "Le skin supprimé ne pourra pas être récupéré !";
+"DeleteGameGameStateAlertTitle" = "Supprimer la sauvegarde instantanée";
+"DeleteGameGameStateAlertDetail" = "La sauvegarde instantanée supprimée ne pourra pas être récupérée !";
+"confirmDelte" = "Confirmer la suppression";
+
+//Controllers
+"ControllersTouchName" = "Contrôleur tactile";
+"ControllersHeaderTitle" = "Contrôleurs";
+"ControllersPlayerIndex" = "Joueur %d";
+"ControllersPlayerUnset" = "Non défini";
+"ControllersHowToConnect" = "Comment se connecter";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "Joué il y a %@ · total %@";
+"ReadyGameInfoNeverPlayed" = "Jamais joué, commencez l'aventure maintenant";
+"ReadyEditCoverTakePhoto" = "Prendre une photo";
+"ReadyEditCoverAlbum" = "Album photo";
+"ReadyEditCoverFile" = "Fichier";
+"ReadyEditCoverSearch" = "Rechercher";
+"ReadySegmentManualSave" = "Sauvegarde instantanée manuelle";
+"ReadySegmentAutoSave" = "Sauvegarde instantanée automatique";
+"ReadyEditTitleFailed" = "Échec du renommage, le nom du jeu ne peut pas être vide";
+"ReadyEditTitleSuccess" = "Renommage réussi";
+"ReadyGameSaveStatesEmpty" = "Aucune sauvegarde";
+"GameSaveGuideBecomTitle" = "Devenez";
+"GameSaveGuideMemberTitle" = "membre";
+"GameSaveGuideDesc" = "Débloquez des sauvegardes instantanées illimitées et jusqu'à 50 sauvegardes automatiques";
+"GameSaveUnCompatibleTitle" = "Problème de compatibilité des sauvegardes";
+"GameSaveUnCompatibleDetail" = "Cette sauvegarde a été générée par %@, l'environnement actuel est %@. Les sauvegardes dépendent du type d'appareil et de la version du système, un chargement dans un environnement incompatible peut causer des problèmes !";
+"GameSaveStateForceLoad" = "Charger quand même";
+"GameSaveContinue" = "Continuer";
+"GameSaveTitle" = "Sauvegarde %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU prend parfaitement en charge les skins au format .deltaskin";
+"SkinNavigationSubTitleSpecifiedGame" = "Skin spécifique pour %@";
+"SkinSegmentPortraitTitle" = "Portrait";
+"SkinSegmentLandscapeTitle" = "Paysage";
+"SkinAddTitle" = "Ajouter un skin";
+"HowToFetch" = "Comment obtenir";
+"SkinDelete" = "Supprimer le skin";
+"DefaultSkinCannotEdit" = "Le skin par défaut ne peut pas être modifié";
+
+//History
+"HistoryHeaderTitle" = "Historique de jeu";
+"HistoryFavouriteTitle" = "Jeu préféré";
+"HistoryEmptyTitle" = "Aucun historique de jeu";
+"HistoryEmptyImportGame" = "Importer un jeu";
+"HistoryEmptyStartGame" = "Jouer maintenant";
+
+//Settings
+"LeftHandTitle" = "Mode gaucher";
+"LeftHandDetail" = "Inversion miroir gauche-droite du joystick, DPad et boutons";
+"QuickGameTitle" = "Démarrage rapide";
+"QuickGameDetail" = "Cliquer sur un jeu affiche directement l'écran de jeu";
+"AirPlayTitle" = "Mode plein écran AirPlay";
+"AirPlayDetail" = "L'écran de jeu sera diffusé en plein écran";
+"iCloudTitle" = "Synchronisation iCloud";
+"iCloudDetail" = "Synchronise jeux, skins, sauvegardes et paramètres sur les appareils avec le même Apple ID";
+"AppIconTitle" = "Icône de l'application";
+"WidgetTitle" = "Widgets";
+"QATitle" = "FAQ";
+"FeedbackTitle" = "Retour d'expérience";
+"ShareAppTitle" = "Partager «Manic EMU» avec des amis";
+"JoinQQTitle" = "Rejoindre la chaîne QQ";
+"JoinTelegramTitle" = "Rejoindre Telegram";
+"ClearCacheTitle" = "Vider le cache";
+"LanguageTitle" = "Langue";
+"UserAgreementTitle" = "Conditions d'utilisation";
+"PrivacyPolicyTitle" = "Politique de confidentialité";
+"GeneralSettingTitle" = "Paramètres généraux";
+"AdvanceSettingTitle" = "Paramètres avancés";
+"SupportSettingTitle" = "Support";
+"OthersSettingTitle" = "Autres";
+"RatingTitleLeft" = "Noter";
+"RatingTitleRight" = "";
+"RatingDetail" = "Si vous trouvez notre produit utile, merci de nous laisser une note 5 étoiles, votre avis compte vraiment pour nous : )";
+"iCloudDisableTitle" = "iCloud temporairement indisponible";
+"iCloudDisableDetail" = "Le service de synchronisation iCloud a été activé, mais ne fonctionnera vraiment qu'après votre connexion et autorisation iCloud. Allez dans «Réglages» > «Apple ID» > «iCloud» sur iPhone, assurez-vous qu'iCloud Drive est activé et que Manic EMU y a accès";
+"iCloudSyncConfilictTitle" = "Conflit de synchronisation iCloud";
+"iCloudSyncConfilictDetail" = "Fichier cloud:\n%@\n\nFichier local:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "Conserver iCloud";
+"iCloudSyncConfilictSaveLocal" = "Conserver local";
+"SettingsNonMemberDesc" = "Vous serez le héros de cette histoire";
+"ThanksSupportDesc" = "Merci pour votre soutien";
+"ThanksCommingDesc" = "Merci d'être venu jouer sur";
+"PlayGameDesc" = "";
+"NoEmailSetting" = "Vous n'avez pas configuré d'e-mail";
+"IDCopy" = "Votre ID a été copié";
+"SendEmailSuccess" = "E-mail envoyé avec succès";
+"SendEmailFailed" = "Échec de l'envoi de l'e-mail %@";
+"iCloudTipsTitle" = "Activer la synchronisation iCloud";
+"iCloudTipsDetail" = "Activez la synchronisation iCloud pour synchroniser tout le contenu de Manic EMU sur les appareils utilisant le même Apple ID. Une fois activée, toutes vos données seront uploadées sur iCloud, ce qui occupera de l'espace de stockage. Si l'espace est insuffisant, la synchronisation échouera ! Vos données seront stockées dans le cloud - si elles ne sont pas encore téléchargées, le jeu peut ne pas fonctionner correctement !";
+"iCloudConfirm" = "Activer";
+
+//Play
+"LoadingTitle" = "Téléchargement";
+"LoadRomSuccess" = "%@ téléchargé(e), prêt à jouer !";
+"GameSettingSaveState" = "Sauvegarder";
+"GameSettingQuickLoadState" = "Chargement rapide";
+"GameSettingVolume" = "Volume";
+"GameSettingFastForwardResume" = "Vitesse normale";
+"GameSettingFastForward" = "Avance rapide %@";
+"GameSettingStateList" = "Liste des save states";
+"GameSettingSkins" = "Skins";
+"GameSettingFilter" = "Filtres";
+"GameSettingScreenShot" = "Capture d'écran";
+"GameSettingHapticOff" = "Retour haptique désactivé";
+"GameSettingHapticSoft" = "Haptique doux";
+"GameSettingHapticLight" = "Haptique léger";
+"GameSettingHapticMedium" = "Haptique moyen";
+"GameSettingHapticHeavy" = "Haptique fort";
+"GameSettingHapticRigid" = "Haptique rigide";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "Joystick";
+"GameSettingAirplay" = "AirPlay";
+"GameSettingControllerSetting" = "Contrôleurs";
+"GameSettingOrientationAuto" = "Rotation automatique";
+"GameSettingOrientationPortrait" = "Forcer portrait";
+"GameSettingOrientationLandscape" = "Forcer paysage";
+"GameSettingFunctionSort" = "Tri des fonctions";
+"GameSettingReload" = "Redémarrer";
+"GameSettingQuit" = "Quitter";
+"GameSaveStateSuccess" = "Save state réussi";
+"GameSaveStateLoadFailed" = "Échec du chargement - save state corrompu ou incompatible";
+"GameSaveStateLoadSuccess" = "Save state chargé avec succès";
+"GameSaveStateQuickLoadFailed" = "Aucun save state manuel trouvé. Pour charger un save state automatique, utilisez « Liste des save states »";
+"GameSaveListTitle" = "Save states";
+"GameCheatActivateFailed" = "%@\nÉchec d'activation - cheat code invalide";
+"GameCheatActivateSuccess" = "%@\nActivé avec succès";
+"AirPlayingTitle" = "Affichage du jeu sur l'écran AirPlay";
+"VolumeOff" = "Volume : OFF";
+"VolumeOn" = "Volume : ON";
+"FunctionSortDesc1" = "Ces fonctions serviront de raccourcis pour le skin officiel par défaut";
+"FunctionSortDesc2" = "Maintenez enfoncé pour réorganiser";
+"ManualGameSaveCountLimit" = "Limite de save states atteinte ! Passez premium pour les sauvegardes illimitées ou supprimez des save states existants";
+"FastForwardSpeedLimit" = "Vitesse max x2 ! Passez premium pour débloquer le x5";
+"ResetSpeed" = "Vitesse normale";
+"GoToUpgrade" = "Améliorer";
+"SaveStateTooFrequent" = "Sauvegardes trop fréquentes";
+"LoadStateTooFrequent" = "Chargements trop fréquents";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Nom du cheat code";
+"AutoDetectCheatTypeName" = "Détection automatique";
+"AutoDetectFormat" = "Le format sera détecté automatiquement";
+"CheatCodeFormatError" = "Format de cheat code incorrect";
+"CheatCodeEmptyTitle" = "Aucun cheat code";
+"CheatCodeEmptyGuideLeft" = "Appuyez sur le";
+"CheatCodeEmptyGuideRight" = "en haut à gauche pour ajouter un cheat code";
+"EnableCheatCodeAlertTitle" = "Activer les cheat codes";
+"EnableCheatCodeAlertDetail" = "Les cheat codes dépendent de la version du jeu et doivent correspondre exactement pour fonctionner. Leur utilisation modifie les données du jeu et peut provoquer des erreurs ou instabilités - à utiliser avec discernement.";
+
+//Filtres
+"FilterSectionHeaderTitle" = "Filtres vidéo";
+"FilterOriginTitle" = "Original";
+
+//Achats intégrés
+"PurchaseAdcancedFeaturesTitle" = "Fonctionnalités premium";
+"AdcancedFeaturesDetail" = " 
+« 🎮 Expérience ultime - Débloquez tout »
+🔥 Save states illimités
+🚀 Vitesse x5 - Contrôlez le rythme du jeu
+💎 Bibliothèque de cheat codes illimitée
+✨ Filtres visuels exclusifs pour une immersion totale
+";
+"PurchaseImportFeaturesTitle" = "Importation via cloud";
+"ImportFeaturesDetail" = " 
+☁️ ​​« Synchronisation multiplateforme »
+✅ Google Drive, Dropbox, OneDrive
+✅ Baidu Cloud, Alibaba Cloud
+⚡ Prise en charge WebDAV/SMB
+";
+"PurchaseControllerFeaturesTitle" = "Contrôleurs externes";
+"ControllerFeaturesDetail" = " 
+🕹️ ​​« Compatibilité totale »
+🎮 Prise en charge native Joy-Con/DUALSHOCK/Xbox
+⌨️ Connexion Bluetooth clavier/manette
+✨ Multiples contrôleurs simultanés
+🎲 Partage de contrôle entre joueurs
+";
+"PurchaseAirPlayFeaturesTitle" = "AirPlay illimité";
+"AirPlayFeaturesDetail" = " 
+📺 ​​« Jeu sur grand écran »
+🔓 AirPlay haute qualité
+🛋️ Switch mobile → TV en un clic
+🎮 Expérience immersive avec manette
+";
+"PurchaseiCloudFeaturesTitle" = "Synchronisation iCloud";
+"iCloudFeaturesDetail" = " 
+☁️ ​​« Univers de jeu synchronisé »
+🎮 Jeux/sauvegardes/paramètres synchronisés
+🔒 Stockage chiffré - 0 interruption
+🔄 Reprenez votre partie sur n'importe quel appareil
+👉 Jouez partout, tout le temps !
+";
+"AdvanceFeatureDescLabel1" = "Vitesse x5";
+"AdvanceFeatureDescLabel2" = "Save states illimités";
+"AdvanceFeatureDescLabel3" = "Cheat codes illimités";
+"AdvanceFeatureDescLabel4" = "Filtres personnalisables";
+"AdvanceFeatureDescLabel5" = "Save states automatiques";
+"RestorePurchaseButton" = "Restaurer les achats";
+"AnnualDescription" = "Abonnement annuel";
+"MonthlyDescription" = "Abonnement mensuel";
+"ForeverDescription" = "Accès permanent · Paiement unique";
+"SubscriptionPromotional" = "%d jours d'essai gratuit";
+"PurchasePricePerYear" = "/an";
+"PurchasePricePerMonth" = "/mois";
+"PromptLabelForYear" = "50%% de réduction";
+"PromptLabelForMonth" = "Prix découverte";
+"PromptLabelForForever" = "Le plus avantageux";
+"GetProductsFailedTitle" = "Échec - réessayez ultérieurement";
+"TermOfServiceTitle" = "CGU";
+"AnnualMemberTitle" = "Abonnement annuel premium";
+"MonthlyMemberTitle" = "Abonnement mensuel";
+"ForeverMemberTitle" = "Membre permanent";
+"PurchaseVerifiedFailed" = "Échec de vérification - redémarrez Manic EMU";
+"PurchaseCancel" = "Paiement annulé";
+"PurchasePending" = "Paiement en attente";
+"PurchaseUnknown" = "Statut inconnu";
+"PurchaseErrorDesc" = "Problème de connexion - réessayez";
+"PurchaseFailedTitle" = "Échec du paiement";
+"RestoreSuccessDesc" = "Achats restaurés !";
+"RestoreEndDesc" = "Aucun achat trouvé";
+"TrialDesc" = "Essai gratuit - annulation à tout moment";
+"SubscriptionPurchaseButtonTitle" = "Essai gratuit de %d jours";
+"YearSubscriptionDisableDesc" = "Abonnement annuel actif";
+"MonthSubscriptionDisableDesc" = "Abonnement mensuel actif";
+"ForeverSubscriptionDisableDesc" = "Membre permanent";
+"ChangeSubscription" = "Changer d'offre";
+"UpgradePurchase" = "Améliorer";
+"ForeverPlanDesc" = "Accès permanent à toutes les fonctionnalités futures";
+"BuyNowTitle" = "S'abonner";
+"SettingsFreeTrialDesc" = "Essai gratuit de %d jours";
+"Hi" = "Salut,";
+
+//Permissions
+"PrePermissionPhotoTitle" = "Autoriser Manic EMU à accéder à vos photos ?";
+"PrePermissionPhotoMessage" = "Nécessaire pour enregistrer les captures d'écran et choisir des images comme couvertures de jeu";
+"PrePermissionPhotoCancel" = "Plus tard";
+"PrePermissionPhotoConfirm" = "Autoriser";
+"DeniedPermissionPhotoTitle" = "Accès refusé !";
+"DeniedPermissionPhotoMessage" = "L'accès à la bibliothèque photo est nécessaire pour enregistrer les captures d'écran";
+"DeniedPermissionPhotoCancel" = "Non";
+"DeniedPermissionPhotoConfirm" = "Paramètres";
+"PrePermissionCameraTitle" = "Autoriser Manic EMU à utiliser l'appareil photo ?";
+"PrePermissionCameraMessage" = "Nécessaire pour prendre des photos comme couvertures de jeu";
+"PrePermissionCameraCancel" = "Plus tard";
+"PrePermissionCameraConfirm" = "Autoriser";
+"DeniedPermissionCameraTitle" = "Accès refusé !";
+"DeniedPermissionCameraMessage" = "L'accès à l'appareil photo est nécessaire pour personnaliser les couvertures de jeu";
+"DeniedPermissionCameraCancel" = "Non";
+"DeniedPermissionCameraConfirm" = "Paramètres";
+"DeniedPermissionMicTitle" = "Accès au microphone refusé";
+"DeniedPermissionMicMessage" = "Nécessaire pour certaines fonctionnalités des jeux DS";
+"DeniedPermissionMicCancel" = "Non";
+"DeniedPermissionMicConfirm" = "Paramètres";
+
+//Partage
+"ShareAppSubtitle" = "Partagez l'aventure avec vos amis !";
+"ShareRomFilesFailed" = "Échec du partage - ROM introuvable";
+"ShareSaveFilesFailed" = "Échec du partage - aucune sauvegarde";
+"ShareFilesCopyFailed" = "Échec du partage - erreur de copie";
+"ShareFilesCompressFailed" = "Échec du partage - erreur de compression";
+
+"TurnOnAirPlayAsk" = "AirPlay est connecté. Passer en mode plein écran maintenant ?";
+
+"ThreeDSModePerformance" = "Mode Performance";
+"ThreeDSModeCompatibility" = "Mode Compatibilité";
+"ThreeDSModeQuality" = "Priorité Graphisme";
+"ThreeDSNotSupportImportSave" = "Les jeux 3DS ne prennent pas en charge l'import de sauvegardes actuellement";
+"ThreeDSNotSupportShareSave" = "Les jeux 3DS ne prennent pas en charge le partage de sauvegardes actuellement";
+"ThreeDSBetaAlertTitle" = "Version Expérimentale 3DS";
+"ThreeDSBetaAlertDetail" = "Pour vous permettre de découvrir les jeux 3DS plus tôt, Manic EMU a lancé cette fonctionnalité en version expérimentale. Certaines optimisations sont encore nécessaires.
+
+Fonctionnalités temporairement indisponibles :
+❌ Mode Plein Écran AirPlay
+❌ Sauvegarde Automatique
+❌ Accélération
+
+En cas d'instabilité, consultez notre FAQ ou rejoignez notre canal d'assistance. Nous optimisons continuellement l'émulateur. Votre compréhension nous aide à créer une expérience de jeu parfaite. Nous nous efforçons d'améliorer votre environnement de jeu.";
+"ThreeDSNoSupportDeviceTitle" = "Performances insuffisantes";
+"ThreeDSNoSupportDeviceDetail" = "Cet appareil ne prend peut-être pas en charge l'émulation 3DS. Continuer pourrait provoquer des dysfonctionnements imprévisibles";
+
+"GameImportBadFile" = "Échec d'import : \"%@\" est corrompu ou une erreur inconnue est survenue. Veuillez essayer un autre fichier ROM";
+"Game3DSDecryptFailed" = "Échec d'import : Échec du déchiffrement de \"%@\". Veuillez essayer un autre fichier ROM";
+"Game3DSGameNotExist" = "Échec de l'importation de la mise à jour, \"%@\" : Le jeu n'est pas installé !";
+
+"Game3DSInputTitle" = "Saisissez le contenu";
+"ControllerMappingGuideTitle" = "Appuyez sur le bouton à l'écran pour mapper les touches";
+"ControllerMappingGuideBegin" = "Mapper 「%@」
+Appuyez sur le bouton du contrôleur...";
+"ControllerMappingReset" = "Réinitialiser";
+"ControllerMappingNoFouond" = "Configuration non reconnue";
+"FlexSkinSettingError" = "Interface non prête, réessayez plus tard";
+"SkinPreviewTitle" = "Aperçu";
+"FullScreenWhenConnectControllerTitle" = "Plein écran automatique";
+"FullScreenWhenConnectControllerDetail" = "Activer le plein écran lors de la connexion d'un contrôleur";
+"JoinDiscordTitle" = "Rejoindre Discord (Non officiel)";
+"JoinDiscordAlertMessage" = "Merci à %@ pour ce canal. Continuer ?";
+"FlexSkinGuideTitle" = "Glissez ou pincez pour ajuster l'écran";
+"DownloadFailed" = "Échec du téléchargement";
+"RemoveDownloadTask" = "Annuler le téléchargement de \"%@\" ?";
+"GameSettingResolution" = "Résolution %@";
+"GameSettingSwapScreen" = "Changer d'écran";
+"NotSupportGameSetting" = "Option non prise en charge sur %@";
+
+"ThemeSettingTitle" = "Thème";
+"ThemeSettingDetail" = "Icônes d'apps, couleurs, paramètres des jaquettes, ordre des consoles";
+"ThemeDesktopIconTitle" = "Icônes d'apps";
+"ThemeDesktopIconDetail" = "Plus d'icônes bientôt...";
+"ThemeThemeColorTitle" = "Couleurs du thème";
+"ThemeCoverStyleTitle" = "Style des jaquettes et coins";
+"ThemeCoverStyleName" = "Style %d";
+"ThemePlatformOrderTitle" = "Ordre des consoles";
+"ThemePlatformOrderDetail" = "Maintenez et glissez pour ajuster l'ordre d'affichage";
+"ThemeColorLimitToast" = "Nombre maximal de couleurs atteint";
+"ThemeColorSystemNotAllowEdit" = "Les couleurs par défaut ne sont pas modifiables";
+"EditTitle" = "Modifier";
+"RemoveTitle" = "Supprimer";
+"On" = "Activé";
+"Off" = "Désactivé";
+"AmiiboNotSearching" = "Amiibo indisponible si NFC inactif";
+"ConsoleHomeTitle" = "Menu principal";
+"AmiiboTitle" = "Charger Amiibo";
+"ThreeDSHomeMenuNotRunning" = "Le menu principal ne fonctionne pas";
+"ThreeDSImportSaveFailed" = "Échec d'importation de %@ : Fichier non reconnu";
+"ThreeDSUpdateInstallSuccess" = "Mise à jour installée";
+"OnlineCoverFetchFailed" = "Échec de récupération d'image";
+"JITMenuDesc" = "Activer JIT dans des environnements non supportés peut crasher l'app";
+"ShaderModeTitle" = "Shaders avancés";
+"ShaderModeDesc" = "Améliore la précision des textures (peut impacter les performances)";
+"NoDownloadTask" = "Aucun téléchargement en cours";
+"NoGameCoverResult" = "Aucune jaquette trouvée";
+"NoContentResult" = "Aucun contenu disponible";
+"OpenFilePermissionsLimit" = "Aucun droit d'ouverture pour %@";
+"SevenZipDecompressError" = "Fichier 7z corrompu ou chiffré";
+"ForceSquareRatioTitle" = "Forcer le ratio carré";
+"ForceSquareRatioDetail" = "Les jaquettes utiliseront un ratio carré (activé) ou original (désactivé)";
+
+"AutoSaveStateTitle" = "Sauvegarde automatique";
+"GamesThemeTitle" = "Bibliothèque de jeux";
+"GamesPerRowTitle" = "Jeux par ligne (iPhone)";
+"GamesHideScrollIndicator" = "Masquer les indicateurs de défilement";
+"ConsoleLanguageDesc" = "Certains jeux nécessitent une configuration manuelle de la région et de la langue";
+"JitNoSupportDesc" = "La compilation JIT n'est pas disponible dans cet environnement";
+"RenderRightEyeTitle" = "Rendu œil droit";
+"RenderRightEyeDesc" = "Désactiver le rendu de l'œil droit améliore les performances pour certains jeux, mais peut causer des scintillements";
+"DisableTitle" = "Désactiver";
+"EnableTitle" = "Activer";
+"NoSaveStateToast" = "Aucun %@ disponible";
+"DeleteSelectedSaveStateAlert" = "Supprimer le « %@ » sélectionné ?\nAction irréversible !";
+"DeleteAllSaveStateAlert" = "Aucune sélection. Supprimer tous les « %@ » ?\nAction irréversible !";
+"AICoverSearchDesc" = "Recherche non-anglaise détectée. Passez Premium pour activer la recherche multilingue par IA de Manic EMU";
+"MaxTextSizeAllowDesc" = "Cette option accepte jusqu'à %@ caractères";
+
+"PlatformSelectionTitle" = "Sélection de Plateforme";
+"PlatformSelectionDetail" = "Choisir la plateforme par défaut pour %@";
+"PlatformChange" = "Attribuer Plateforme";
+"BIOSDesc" = "BIOS requis pour certaines plateformes";
+"BIOSImported" = "Importé";
+"BIOSAlert" = "Certaines plateformes nécessitent des fichiers BIOS. Les droits BIOS appartiennent aux fabricants. Respectez les lois locales lors de l'importation.\n\nRejoignez notre communauté pour assistance.";
+"UnknownPlatform" = "Plateforme Inconnue";
+"UnknownPlatformGameSelectWarn" = "Jeux sans plateforme attribuée non sélectionnables";
+"BIOSImportSuccess" = "%@ importé avec succès !";
+"BIOSImportFailed" = "Fichier incorrect !";
+
+"HideGameTitleDesc" = "Masquer le titre du jeu";
+"HideGroupTitleDesc" = "Masquer le titre du groupe";
+"GroupTitleStyelDesc" = "Style du titre de groupe";
+"GroupTitleStyelAbbr" = "Abrév.";
+"GroupTitleStyelFull" = "Complet";
+"GroupTitleStyelBrand" = "Marque";
+"CopyLaunchLinkTitle" = "Copier le lien de lancement";
+"AskIfNeedToSaveCover" = "Le lien de lancement est copié dans le presse-papiers. Souhaitez-vous enregistrer la jaquette dans votre album photo ?";
+"SaturnBiosAlertTitle" = "BIOS manquant";
+"SaturnBiosAlertDetail" = "L'émulation Sega Saturn via HLE ne nécessite pas de BIOS, mais son utilisation réduit les erreurs graphiques";
+"BiosAddTitle" = "Ajouter un BIOS";
+"StartGameWithoutBiosTitle" = "Démarrer sans BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Mode Avancé";
+"ThreeDSAdvanceSettingTitle" = "Paramètres Avancés";
+"ThreeDSBasicSettingMode" = "Mode Basique";
+"ShareConfigButtonTitle" = "Partager la Configuration";
+"ImportConfigButtonTitle" = "Importer la Configuration";
+"ShareFileFailedMissing" = "Échec du partage : fichier introuvable";
+"ReadConfigFileFailed" = "Impossible de lire le fichier de configuration";
+"SwitchEmulationCore" = "Changer de Noyau";
+"SwitchEmulationCoreDetail" = "Changer le noyau d'émulation pour %@\nLe changement de noyau rendra les sauvegardes du noyau précédent illisibles. Pour y accéder, revenez au noyau d'origine";
+"BeetleSaturnNoSupportCheat" = "Le noyau Beetle Saturn ne prend pas en charge les codes de triche. Si nécessaire, utilisez le noyau Yabause";
+"CurrentTitle" = "actuel";
+"NewSkinDesc" = "Manic EMU prend en charge les skins aux formats .manicskin et .deltaskin. Remarque : le skin importé doit correspondre à la plateforme actuelle, sinon il n'apparaîtra pas dans la liste.\nDe plus, nous fournissons un accès à des communautés de skins tierces. Celles-ci ne sont pas affiliées à Manic EMU. En téléchargeant des skins, respectez strictement les conditions d'utilisation de chaque site";
+"VisitSite" = "Visiter %@";
+"OpenFile" = "Ouvrir le Fichier";
+"WebViewDownloadBegin" = "Téléchargement démarré";
+"RespectSilentMode" = "Respecter le Mode Silencieux";
+"RespectSilentModeDesc" = "Activé, Manic EMU ne jouera l'audio que hors du mode silencieux";
+"SaturnISONoSwitchCore" = "Les jeux Sega Saturn au format .iso ne supportent pas le changement de noyau";
+"EnableFullScreenTitle" = "Activer le Plein Écran";
+"DisableFullScreenTitle" = "Désactiver le Plein Écran";
+"SimulateBlowingTitle" = "Simuler le Souffle";
+"PaletteTitle" = "Palette";
+"SkinRestDesc" = "Réinitialiser le skin restaurera également les skins attribuées par le jeu à leurs versions par défaut";
+"SkinResetForAll" = "Réinitialiser tous les skins";
+"SkinResetForPlatform" = "Réinitialiser le skin %@";
+"SkinDebug" = "Zone de Test des Skins";
+
+"ImportMissingFile" = "Échec d'importation de %@ : Fichier %@ manquant";
+"MultiDiscBuilder" = "Assistant multidisc";
+"MultiDiscBuilderDesc" = "Crée des fichiers .m3u échangeables pour jeux multidisc (.cue/.bin ou .chd). Ignorez si vous avez déjà un .m3u - importez-le directement via l'importation de jeu";
+"M3uFileShare" = "Partager fichier .m3u";
+"M3uFileImport" = "Ajouter à la bibliothèque";
+"MultiDiscAddFile" = "Ajouter fichier %@";
+"MultiDiscImportErrorConflict" = "Erreur : Impossible de mixer .cue et .chd";
+"MultiDiscImportErrorMissing" = "Erreur : Aucun fichier .cue/.chd trouvé";
+"GenerateM3uFailed" = "Échec de génération du .m3u";
+"MultiDiscCloseAlert" = ".m3u généré. Fermez cette page après l'importation";
+"MultiDiscContinueClose" = "Fermer";
+"SwapDisk" = "Changer de disque";
+"NotSupportSwapDisk" = "Jeu non multidisc";
+"TransferPakDesc" = "Transfer Pak synchronise GB/GBC avec N64. Pour activer : importez ROM (.gb/.gbc) et sauvegarde (.sav)";
+"TransferPakFromLibrary" = "Importer depuis bibliothèque";
+"TransferPakFromLibraryDesc" = "Seuls les jeux avec sauvegardes sont affichés.\nLes jeux GB/GBC doivent correspondre au ROM N64, sinon échec";
+"TransferPakNoGames" = "Aucun jeu compatible";
+"TransferPakFromFiles" = "Importer depuis fichiers";
+"TransferPakOn" = "Activé";
+"TransferPakOff" = "Désactivé";
+"TransferPakImportError" = "Erreur : Importez ROM et sauvegarde (2 fichiers requis)";
+"ShowControlsTitle" = "Afficher commandes";
+"HideControlsTitle" = "Masquer commandes";
+
+"DesignedFor" = "Conçu pour %@";

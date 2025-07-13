@@ -1,0 +1,66 @@
+inhibit_all_warnings!
+
+target 'ManicEmu' do
+  platform :ios, '15.0'
+  use_modular_headers!
+  
+  pod 'ManicSupport', :path => '../ManicSupport'
+  pod 'ManicEmuCore', :path => '../Cores/DeltaCore'
+  pod 'GBADeltaCore', :path => '../Cores/GBADeltaCore'
+  pod 'GBCDeltaCore', :path => '../Cores/GBCDeltaCore'
+  pod 'MelonDSDeltaCore', :path => '../Cores/MelonDSDeltaCore'
+  
+  pod 'DNSPageView', :path => '../DNSPageView'
+  pod 'CollectionViewPagingLayout', :path => '../CollectionViewPagingLayout'
+  pod 'CloudServiceKit', :path => '../CloudServiceKit'
+  pod 'HXPhotoPicker/Lite', :path => '../HXPhotoPicker'
+  pod 'Closures', :path => '../Closures/Xcode/Closures'
+  pod 'TKSwitcherCollection', :path => '../TKSwitcherCollection'
+  pod "GCDWebServer/WebUploader", :path => '../GCDWebServer'
+  pod 'ProHUD', :path => '../ProHUD'
+  pod 'BlankSlate', :path => '../BlankSlate'
+  pod 'IceCream', :path => '../IceCream'
+  pod 'iCloudSync', :path => '../iCloudSync'
+  pod 'JXBanner', :path => '../JXBanner'
+  pod 'SwipeCellKit', :path => '../SwipeCellKit'
+  pod 'SSZipArchive', :path => '../ZipArchive'
+  pod 'ZIPFoundation', :path => '../ZIPFoundation'
+  pod 'MarqueeLabel', :path => '../MarqueeLabel'
+  
+  pod 'RealmSwift', '= 10.54.2'
+  pod 'UMCommon', '~> 7.5.2'
+#  pod 'UMAPM', '~> 2.0.3'
+  pod 'Fireworks', :git => 'https://github.com/tomkowz/fireworks.git', :branch => 'master'
+  pod 'SnapKit', '~> 5.0'
+  pod 'SwifterSwift', '~> 7.0'
+  pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug', 'DevRelease', 'DebugSimulator']
+  pod 'FLEX', :configurations => ['Debug', 'DevRelease', 'DebugSimulator']
+  pod 'ShowTouches', :configurations => ['Debug', 'DevRelease', 'DebugSimulator']
+  pod 'KeychainAccess', '~> 4.2'
+  pod 'Permission/Photos', '~> 3.1.2'
+  pod 'Permission/Camera', '~> 3.1.2'
+  pod 'Permission/Microphone', '~> 3.1.2'
+  pod 'NVActivityIndicatorView', '~> 5.2'
+  pod 'SideMenu', '~> 6.5'
+  pod 'VisualEffectView', '~> 5.0'
+  pod 'FluentDarkModeKit', '~> 1.0.4'
+  pod "Device", '~> 3.7'
+  pod 'SFSafeSymbols', '~> 5.0'
+  pod "Haptica", '~> 3.0'
+  pod 'IQKeyboardManagerSwift', '~> 8.0'
+  pod 'Tiercel', '~> 3.0'
+  pod 'BetterSegmentedControl', '~> 2.0'
+  pod 'Schedule', '~> 2.0'
+  pod "Fuse", '~> 1.4.0'
+  pod 'Kingfisher', '~> 8.0'
+end
+
+post_install do |installer|
+    installer.generated_projects.each do |project|
+          project.targets.each do |target|
+              target.build_configurations.each do |config|
+                  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+               end
+          end
+   end
+end

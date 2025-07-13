@@ -1,0 +1,571 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+
+//Import
+"ImportAddCloudServiceTitle" = "클라우드 서비스";
+"ImportAddLanServiceTitle" = "로컬 네트워크 서비스";
+"ImportAddDiscoverServiceTitle" = "서비스 발견";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "BaiduYun";
+"AliYun" = "AliYun";
+"AddImportServiceHeaderTitle" = "서비스 추가";
+"ImportServiceDelete" = "서비스 제거";
+"ImportAliyunNotGetDriveId" = "Aliyun 서비스 추가 실패, 디렉토리 정보를 가져올 수 없음";
+"ImportDownloadError" = "다운로드 오류\n%@";
+"ImportDownloadContinue" = "다운로드 계속...\n%@";
+"LandServiceEditServerName" = "서버 제목";
+"LandServiceEditServerNamePlaceholder" = "나의 SMB 서버";
+"LandServiceEditHost" = "서버 주소";
+"LandServiceEditUserName" = "사용자 이름";
+"LandServiceEditPassword" = "비밀번호";
+"LandServiceEditRequiredPlaceholder" = "필수 입력";
+"LandServiceEditOptionalPlaceholder" = "선택 입력";
+"LandServiceEditConnect" = "연결";
+"AddLandServiceSuccess" = "%@ 추가 성공";
+"AddLandServiceFailed" = "%@ 추가 실패\n네트워크 연결, 서버 상태 또는 입력 정보를 확인해 주세요";
+"AddLandServiceTimeout" = "서비스 연결 시간 초과";
+"FilesImporterErrorFileExist" = "\"%@\"이(가) 이미 존재하여 가져올 필요가 없습니다";
+"FilesImporterErrorBadCopy" = "\"%@\" 가져오기 실패, 파일 복사 중 오류 발생";
+"FilesImporterErrorBadExtension" = "\"%@\" 가져오기 실패, 인식할 수 없는 파일 확장자";
+"FilesImporterErrorNoPermission" = "%@에 접근할 권한이 없습니다";
+"FilesImporterErrorUnableToHash" = "\"%@\" 가져오기 실패, 해시 계산 불가";
+"FilesImporterErrorWriteDatabase" = "\"%@\" 가져오기 실패, 데이터베이스 기록 실패";
+"GameSaveMatchTitle" = "세이브 파일과 게임 매칭";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\"과(와) 매칭되는 게임을 찾을 수 없습니다. 수동으로 매칭해 주세요";
+"GameSaveAlreadyExistTitle" = "세이브 파일 이미 존재";
+"FilesImporterErrorSaveAlreadyExist" = "\"%@\" 가져오기 실패, 기존 세이브 파일을 강제로 덮어쓰시겠습니까?";
+"GameSaveMathToMuchTitle" = "다중 매칭";
+"FilesImporterErrorSaveMathToMuch" = "\"%@\" 가져오기 실패, 여러 게임과 매칭되었습니다. 수동으로 선택해 주세요";
+"FilesImporterErrorSkinBadFile" = "%@ 가져오기 실패, 손상된 스킨 파일";
+"PasteImporterErrorNoMatchContent" = "클립보드에서 가져올 수 있는 내용이 없습니다";
+"FilesDownloadErrorFileExist" = "%@이(가) 이미 다운로드되어 있습니다";
+"FilesImporterErrorEmptyContent" = "가져올 리소스가 없습니다";
+"LanServiceInitFailed" = "%@ 서비스 생성 실패";
+"SMBLoginFailed" = "Samba 로그인 실패%@";
+"SMBListFilesFailed" = "파일 목록 가져오기 실패%@";
+"SMBListFilesTypeError" = "이 파일은 폴더가 아닙니다";
+"DropErrorLoadFailed" = "파일 로드 실패";
+"DropErrorNotSupportFile" = "지원하지 않는 파일 형식";
+"ImportErrorTitle" = "가져오기 오류";
+"ImportGameSuccessTitle" = "게임 가져오기 성공";
+"ImportGameSuccessDetail" = "%@\n게임 라이브러리에 추가되었습니다. 지금 확인하시겠습니까?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\n게임 라이브러리에 추가되었습니다. 지금 플레이하시겠습니까?";
+"ImportSkinSuccessTitle" = "스킨 가져오기 성공";
+"ImportSkinSuccessDetail" = "\"%@\"\n가져오기 성공, 지금 확인하시겠습니까?";
+"ImportGameSaveSuccessTitle" = "게임 세이브 가져오기 성공";
+"ImportGameSaveSuccessDetail" = "\"%@\"\n해당 게임에 성공적으로 추가되었습니다";
+"ImportGameSaveSuccessForOne" = "\"%@\"\n게임에 추가되었습니다. 지금 플레이하시겠습니까?";
+"ImportGameSaveFailedNoGameError" = "\"%@\" 가져오기 실패, 아직 게임이 없습니다!";
+"DownloadCompletion" = "다운로드 완료";
+"QQChannelName" = "QQ 채널";
+"NotSupportPasswordZip" = "\"%@\" 압축 해제 불가, 암호화된 ZIP 파일은 아직 지원하지 않습니다";
+"UnzipFailed" = "\"%@\" 압축 해제 실패";
+"NoSupportInZip" = "\"%@\" 내부에 지원되는 형식이 없습니다";
+"IPCopy" = "주소가 복사되었습니다";
+"ImportServiceListFilesTitle" = "파일";
+"ImportServiceListFilesDetail" = "파일 또는 iCloud에서 게임, 스킨, 세이브 파일 가져오기";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "동일한 LAN 내 브라우저를 통해 파일 전송";
+"ImportServiceListWiFiOnDetail" = "%@\n브라우저로 파일 전송";
+"ImportServiceListPasteTitle" = "클립보드 읽기";
+"ImportServiceListPasteDetail" = "macOS 및 파일 앱에서 복사한 파일 지원";
+"ImportHowTo" = "가져오기 방법";
+"ImportTopHintTitle" = "꿈과 모험이 가득한 이야기가 여기서 시작됩니다!";
+"ImportDragAndDropTips" = "파일을 Manic EMU의 아무 화면에 드래그하여 전송하세요";
+"ImportChannelTips" = "궁금한 점이 있다면 %@에 참여하여 도움을 받으세요";
+"ToastConnectCloudDriveSuccess" = "%@ 연결 성공";
+"AlertImportFilesSuccess" = "리소스 가져오기 성공";
+"ErrorConnectCloudDrive" = "클라우드 서비스에 연결할 수 없습니다";
+"ErrorUnknown" = "알 수 없는 오류";
+"ReasonConncetCloudDriveFail" = "네트워크 연결과 클라우드 서비스 권한 상태를 확인하거나, 해당 서비스를 제거 후 다시 추가해 보세요";
+
+//Common
+"TabbarTitleGames" = "게임";
+"TabbarTitleImport" = "가져오기";
+"TabbarTitleSettings" = "설정";
+"SelectAll" = "전체 선택";
+"DeSelectAll" = "전체 해제";
+"CloudDriveBrowserDownload" = "다운로드";
+"CancelTitle" = "취소";
+"CheckTitle" = "확인";
+"StartGameTitle" = "즉시 플레이";
+"ConfirmTitle" = "확인";
+"SaveTitle" = "저장";
+"NameTitle" = "이름";
+"TimeAgoMinuteFormat" = "%d분 전";
+"TimeAgoHourFormat" = "%d시간 전";
+"TimeAgoDayFormat" = "%d일 전";
+"TimeAgoWeekFormat" = "%d주 전";
+"TimeAgoMonthFormat" = "%d개월 전";
+"TimeAgoYearFormat" = "%d년 전";
+"TimeDurationHourAndMinuteFormat" = "%d시간 %d분";
+"TimeDurationHourFormat" = "%d시간";
+"TimeDurationMinuteFormat" = "%d분";
+"FatalErrorTitle" = "치명적 오류";
+"FatalErrorDesc" = "시스템 리소스 로드 실패, Manic EMU 실행 중 중대한 결함이 발생할 수 있습니다";
+"LodingFailedTitle" = "로드 실패";
+"AirPlayDesc" = "지금 바로 모험을 시작하세요!";
+"ToastSuccess" = "저장 성공";
+"ToastFailed" = "저장 실패";
+
+//Games
+"GamesSearchPlaceHolder" = "게임 제목 검색";
+"GamesRename" = "이름 변경";
+"GamesModifyCover" = "커버 수정";
+"GamesSpecifySkin" = "스킨 설정";
+"GamesCheatCode" = "치트 코드";
+"GamesShareRom" = "ROM 공유";
+"GamesCheckSave" = "수동 세이브 확인";
+"GamesImportSave" = "게임 세이브 가져오기";
+"GamesShareSave" = "게임 세이브 내보내기";
+"GamesDelete" = "게임 제거";
+"GamesRandom" = "무작위 게임 추천";
+"LoadGameErrorRomNotExist" = "게임 로드 오류, ROM이 존재하지 않습니다";
+"GamesListEmptyGuideLeft" = "아래의";
+"GamesListEmptyGuideRight" = "눌러 게임을 가져오세요";
+"GamesListEmptyWelcomeLeft" = "";
+"GamesListEmptyWelcomeRight" = "의 세계에 오신 것을 환영합니다";
+"GamesListEmptyWarnning" = "게임 ROM 파일은 합법적인 경로로 획득하시기 바랍니다";
+"DeleteGameAlertDetail" = "게임 ROM, 세이브 및 치트 코드 등 모든 데이터가 영구 삭제되며 복구할 수 없습니다!";
+"DeleteSkinAlertDetail" = "스킨 삭제 후 복구할 수 없습니다!";
+"DeleteGameGameStateAlertTitle" = "수동 세이브 삭제";
+"DeleteGameGameStateAlertDetail" = "수동 세이브 삭제 후 복구할 수 없습니다!";
+"confirmDelte" = "삭제 확인";
+
+//Controllers
+"ControllersTouchName" = "터치 컨트롤러";
+"ControllersHeaderTitle" = "컨트롤러";
+"ControllersPlayerIndex" = "플레이어 %d";
+"ControllersPlayerUnset" = "미지정";
+"ControllersHowToConnect" = "연결 방법";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "%@ 플레이 · 총 %@";
+"ReadyGameInfoNeverPlayed" = "아직 플레이하지 않음, 지금 모험을 시작하세요";
+"ReadyEditCoverTakePhoto" = "촬영";
+"ReadyEditCoverAlbum" = "앨범";
+"ReadyEditCoverFile" = "파일";
+"ReadyEditCoverSearch" = "검색";
+"ReadySegmentManualSave" = "수동 세이브";
+"ReadySegmentAutoSave" = "자동 세이브";
+"ReadyEditTitleFailed" = "이름 변경 실패, 게임 이름은 비워둘 수 없습니다";
+"ReadyEditTitleSuccess" = "이름 변경 성공";
+"ReadyGameSaveStatesEmpty" = "세이브 파일 없음";
+"GameSaveGuideBecomTitle" = "멤버십";
+"GameSaveGuideMemberTitle" = "가입";
+"GameSaveGuideDesc" = "무제한 수동 세이브와 최대 50개의 자동 세이브를 지원하는 프리미엄 멤버십을 지금 해제하세요";
+"GameSaveUnCompatibleTitle" = "세이브 호환성 문제";
+"GameSaveUnCompatibleDetail" = "이 세이브는 %@에서 생성되었으며 현재 기기 환경은 %@입니다. 세이브는 기기 유형과 시스템 버전에 따라 호환성이 달라질 수 있으며, 호환되지 않는 환경에서 강제 로드할 경우 문제가 발생할 수 있습니다!";
+"GameSaveStateForceLoad" = "계속 로드";
+"GameSaveContinue" = "계속";
+"GameSaveTitle" = "세이브 %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU는 .deltaskin 형식 스킨을 완벽하게 지원합니다";
+"SkinNavigationSubTitleSpecifiedGame" = "%@ 전용 스킨 설정";
+"SkinSegmentPortraitTitle" = "세로 모드";
+"SkinSegmentLandscapeTitle" = "가로 모드";
+"SkinAddTitle" = "새 스킨 추가";
+"HowToFetch" = "얻는 방법";
+"SkinDelete" = "스킨 삭제";
+"DefaultSkinCannotEdit" = "기본 스킨은 편집할 수 없습니다";
+
+//History
+"HistoryHeaderTitle" = "플레이 기록";
+"HistoryFavouriteTitle" = "가장 많이 플레이한 게임";
+"HistoryEmptyTitle" = "플레이 기록 없음";
+"HistoryEmptyImportGame" = "게임 가져오기";
+"HistoryEmptyStartGame" = "즉시 플레이";
+
+//Settings
+"LeftHandTitle" = "왼손 모드";
+"LeftHandDetail" = "조이스틱, DPad, 버튼을 좌우 반전";
+"QuickGameTitle" = "빠른 게임 시작";
+"QuickGameDetail" = "게임 클릭 시 준비 화면을 건너뜁니다";
+"AirPlayTitle" = "AirPlay 전체 화면 모드";
+"AirPlayDetail" = "활성화 시 게임 화면이 전체 화면으로 출력됩니다";
+"iCloudTitle" = "iCloud 동기화";
+"iCloudDetail" = "동일한 Apple ID 기기간 게임, 스킨, 세이브, 설정 등 동기화";
+"AppIconTitle" = "앱 아이콘";
+"WidgetTitle" = "홈 화면 위젯";
+"QATitle" = "자주 묻는 질문";
+"FeedbackTitle" = "피드백";
+"ShareAppTitle" = "「Manic EMU」를 친구에게 공유하기";
+"JoinQQTitle" = "QQ 채널 가입";
+"JoinTelegramTitle" = "Telegram 가입";
+"ClearCacheTitle" = "캐시 지우기";
+"LanguageTitle" = "언어";
+"UserAgreementTitle" = "이용약관";
+"PrivacyPolicyTitle" = "개인정보 처리방침";
+"GeneralSettingTitle" = "일반 설정";
+"AdvanceSettingTitle" = "고급 설정";
+"SupportSettingTitle" = "지원 문의";
+"OthersSettingTitle" = "기타";
+"RatingTitleLeft" = "";
+"RatingTitleRight" = "평가하기";
+"RatingDetail" = "저희 제품이 가치 있다고 생각하신다면 5성 리뷰를 남겨주세요, 여러분의 리뷰는 정말 중요합니다 : )";
+"iCloudDisableTitle" = "iCloud 사용 불가";
+"iCloudDisableDetail" = "iCloud 동기화 서비스를 활성화하려고 시도했습니다. iCloud 로그인 및 권한 부여가 완료된 후에만 실제 동기화가 시작됩니다. iPhone의 '설정' > 'Apple ID' > 'iCloud'에서 iCloud Drive가 켜져 있고 Manic EMU에 대한 접근이 허용되었는지 확인하세요";
+"iCloudSyncConfilictTitle" = "iCloud 동기화 파일 충돌";
+"iCloudSyncConfilictDetail" = "클라우드 파일:\n%@\n\n로컬 파일:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "iCloud 파일 유지";
+"iCloudSyncConfilictSaveLocal" = "로컬 파일 유지";
+"SettingsNonMemberDesc" = "여러분이 이 이야기의 주인공이 될 것입니다";
+"ThanksSupportDesc" = "지원해 주셔서 감사합니다";
+"ThanksCommingDesc" = "";
+"PlayGameDesc" = "에서 게임을 즐겨주셔서 감사합니다";
+"NoEmailSetting" = "이메일 설정이 완료되지 않았습니다";
+"IDCopy" = "ID가 복사되었습니다";
+"SendEmailSuccess" = "이메일 전송 성공";
+"SendEmailFailed" = "이메일 전송 실패%@";
+"iCloudTipsTitle" = "iCloud 동기화 활성화";
+"iCloudTipsDetail" = "iCloud 동기화를 사용하면 동일한 Apple ID로 로그인한 모든 기기에서 Manic EMU 데이터를 동기화할 수 있습니다. 동기화 활성화 후 모든 데이터는 iCloud에 업로드되며, iCloud 저장 공간을 사용하게 됩니다. 저장 공간이 부족할 경우 동기화가 실패할 수 있습니다! 데이터가 클라우드에 저장된 후 다운로드 완료 전까지는 정상적인 게임 진행이 불가능할 수 있습니다!";
+"iCloudConfirm" = "계속 활성화";
+
+//Play
+"LoadingTitle" = "다운로드 중";
+"LoadRomSuccess" = "%@ 다운로드 완료. 지금 바로 게임을 시작하세요!";
+"GameSettingSaveState" = "수동 세이브";
+"GameSettingQuickLoadState" = "빠른 불러오기";
+"GameSettingVolume" = "볼륨";
+"GameSettingFastForwardResume" = "일반 속도";
+"GameSettingFastForward" = "빨리감기%@";
+"GameSettingStateList" = "세이브 목록";
+"GameSettingSkins" = "스킨 설정";
+"GameSettingFilter" = "필터";
+"GameSettingScreenShot" = "게임 스크린샷";
+"GameSettingHapticOff" = "진동 끄기";
+"GameSettingHapticSoft" = "약한 진동";
+"GameSettingHapticLight" = "가벼운 진동";
+"GameSettingHapticMedium" = "중간 진동";
+"GameSettingHapticHeavy" = "강한 진동";
+"GameSettingHapticRigid" = "뻣뻣한 진동";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "조이스틱";
+"GameSettingAirplay" = "화면 미러링";
+"GameSettingControllerSetting" = "컨트롤러 설정";
+"GameSettingOrientationAuto" = "자동 회전";
+"GameSettingOrientationPortrait" = "세로 모드 고정";
+"GameSettingOrientationLandscape" = "가로 모드 고정";
+"GameSettingFunctionSort" = "기능 정렬";
+"GameSettingReload" = "재시작";
+"GameSettingQuit" = "종료";
+"GameSaveStateSuccess" = "수동 세이브 성공";
+"GameSaveStateLoadFailed" = "세이브 불러오기 실패. 파일이 손상되었거나 호환되지 않습니다";
+"GameSaveStateLoadSuccess" = "세이브 불러오기 성공";
+"GameSaveStateQuickLoadFailed" = "수동 세이브가 없습니다. 자동 세이브를 불러오려면 '세이브 목록'을 사용하세요";
+"GameSaveListTitle" = "세이브 목록";
+"GameCheatActivateFailed" = "%@\n치트 코드 활성화 실패. 유효하지 않은 코드입니다";
+"GameCheatActivateSuccess" = "%@\n치트 코드 활성화 성공";
+"AirPlayingTitle" = "게임 화면이 미러링 디스플레이로 전송되었습니다";
+"VolumeOff" = "볼륨 끄기";
+"VolumeOn" = "볼륨 켜기";
+"FunctionSortDesc1" = "위 기능들은 공식 기본 스킨의 빠른 기능으로 사용됩니다";
+"FunctionSortDesc2" = "길게 눌러 순서를 조정할 수 있습니다";
+"ManualGameSaveCountLimit" = "세이브 슬롯이 가득 찼습니다! 멤버십 업그레이드를 통해 무제한 세이브 슬롯을 해제하거나, 세이브 목록에서 불필요한 세이브를 삭제하세요";
+"FastForwardSpeedLimit" = "현재 최대 속도는 2배입니다! 멤버십 업그레이드를 통해 최대 5배속을 해제하세요";
+"ResetSpeed" = "일반 속도로 복귀";
+"GoToUpgrade" = "업그레이드 하기";
+"SaveStateTooFrequent" = "세이브가 너무 빈번합니다";
+"LoadStateTooFrequent" = "불러오기가 너무 빈번합니다";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "이름을 입력하세요";
+"AutoDetectCheatTypeName" = "자동 감지";
+"AutoDetectFormat" = "코드 입력 시 형식 자동 감지";
+"CheatCodeFormatError" = "치트 코드 형식이 올바르지 않습니다";
+"CheatCodeEmptyTitle" = "치트 코드 없음";
+"CheatCodeEmptyGuideLeft" = "왼쪽 상단";
+"CheatCodeEmptyGuideRight" = "을 눌러 치트 코드 추가";
+"EnableCheatCodeAlertTitle" = "치트 코드 활성화";
+"EnableCheatCodeAlertDetail" = "치트 코드는 게임 버전과 정확히 일치해야만 정상 작동합니다! 또한 치트 코드 사용은 게임 데이터를 수정하는 행위로, 게임 오류나 불안정성을 초래할 수 있으니 신중히 사용하시기 바랍니다.";
+
+//필터
+"FilterSectionHeaderTitle" = "비디오 필터";
+"FilterOriginTitle" = "원본";
+
+//인앱 구매
+"PurchaseAdcancedFeaturesTitle" = "고급 기능 잠금 해제";
+"AdcancedFeaturesDetail" = "
+「🎮 궁극의 경험, 한 번의 클릭으로 해제」
+🔥 무제한 세이브: 3개 제한 해제, 마음껏 저장
+🚀 5배속 게임플레이: 게임 속도 당신이 결정
+💎 치트 코드 자유: 무제한 치트 코드로 완벽한 클리어
+✨ 비주얼 혁명: 독점 필터 컬렉션으로 몰입감 UP
+";
+"PurchaseImportFeaturesTitle" = "클라우드 서비스 가져오기 활성화";
+"ImportFeaturesDetail" = " 
+☁️ ​​「크로스 플랫폼 클라우드 연동 · 원스텝 가져오기」​
+✅ Google Drive, Dropbox, OneDrive
+✅ Baidu Cloud, Alibaba Cloud
+⚡ WebDAV/SMB 프로토콜 지원으로 인터넷 전체를 제어!
+";
+"PurchaseControllerFeaturesTitle" = "외부 컨트롤러 전체 기능 잠금 해제";
+"ControllerFeaturesDetail" = " 
+🕹️ ​​「모든 외장 기기 지원 · 플레이어 자유」​
+🎮 Joy-Con/DUALSHOCK/Xbox 기본 지원
+⌨️ 블루투스 컨트롤러/키보드 즉시 연결, Mac에서도 플레이 가능
+✨ 멀티 컨트롤러 동시 연결
+🎲 컨트롤 혁명: '1인 전용'에서 '모두 참여'로
+🔥 모든 플레이어 컨트롤 지원, 팀플레이/대전 모드 자유 전환
+";
+"PurchaseAirPlayFeaturesTitle" = "AirPlay 활성화로 대화면 게임 즐기기";
+"AirPlayFeaturesDetail" = " 
+📺 ​​「크로스 스크린 제어 · 거실이 전장이 된다」​
+🔓 AirPlay 무손실 미러링 해제
+🛋️ 휴대폰→TV 원활 전환, 누워서 플레이/파티 플레이 모두 가능
+🎮 대화면 + 컨트롤러 = 최고의 몰입감
+";
+"PurchaseiCloudFeaturesTitle" = "iCloud 동기화로 언제 어디서나 게임";
+"iCloudFeaturesDetail" = " 
+☁️ ​​「iCloud 전체 동기화 · 당신의 게임 세계」​
+🎮 게임/세이브/설정 모든 기기에서 동기화
+🔒 암호화 저장 · 클라우드 백업 · 기기 변경 시 ​0% 중단
+🔄 태블릿 대화면에서 플레이 중, 휴대폰으로 전환: 진행률 유지
+👉 iCloud 활성화로 어디서나 게임, 당신의 게임은 절대 멈추지 않습니다!
+";
+"AdvanceFeatureDescLabel1" = "최대 5배속";
+"AdvanceFeatureDescLabel2" = "무제한 수동 세이브";
+"AdvanceFeatureDescLabel3" = "무제한 치트 코드";
+"AdvanceFeatureDescLabel4" = "필터 자유 전환";
+"AdvanceFeatureDescLabel5" = "자동 세이브";
+"RestorePurchaseButton" = "구매 복원";
+"AnnualDescription" = "연간 멤버십";
+"MonthlyDescription" = "월간 멤버십";
+"ForeverDescription" = "영구 멤버십 · 일회성 결제";
+"SubscriptionPromotional" = "첫 %d일 무료";
+"PurchasePricePerYear" = "/년";
+"PurchasePricePerMonth" = "/월";
+"PromptLabelForYear" = "50%% 할인";
+"PromptLabelForMonth" = "체험 가격";
+"PromptLabelForForever" = "가장 경제적";
+"GetProductsFailedTitle" = "상품 정보를 가져오지 못했습니다. 잠시 후 다시 시도해 주세요";
+"TermOfServiceTitle" = "이용 약관";
+"AnnualMemberTitle" = "연간 프리미엄";
+"MonthlyMemberTitle" = "월간 멤버";
+"ForeverMemberTitle" = "영구 멤버";
+"PurchaseVerifiedFailed" = "결제 확인에 실패했습니다. 네트워크 연결 확인 후 Manic EMU를 재시작하여 다시 확인해 주세요";
+"PurchaseCancel" = "결제가 취소되었습니다. 고급 기능 해제 기회를 놓치셨네요";
+"PurchasePending" = "결제가 보류 중입니다. 결제 완료 시 멤버십이 활성화됩니다";
+"PurchaseUnknown" = "알 수 없는 결제 상태";
+"PurchaseErrorDesc" = "일시적으로 결제를 진행할 수 없습니다. 네트워크 연결 확인 후 다시 시도해 주세요";
+"PurchaseFailedTitle" = "결제 실패";
+"RestoreSuccessDesc" = "구매 복원 성공!";
+"RestoreEndDesc" = "구매 복원이 완료되었으나 사용 가능한 구매 항목을 찾지 못했습니다!";
+"TrialDesc" = "체험 기간 중에는 요금이 부과되지 않으며 언제든지 취소 가능합니다";
+"SubscriptionPurchaseButtonTitle" = "%d일 무료 체험 시작";
+"YearSubscriptionDisableDesc" = "이미 연간 멤버십에 가입하셨습니다";
+"MonthSubscriptionDisableDesc" = "이미 월간 멤버십에 가입하셨습니다";
+"ForeverSubscriptionDisableDesc" = "이미 영구 멤버십을 보유 중입니다";
+"ChangeSubscription" = "요금제 변경";
+"UpgradePurchase" = "업그레이드 계속";
+"ForeverPlanDesc" = "향후 모든 고급 기능 영구 이용";
+"BuyNowTitle" = "지금 구독";
+"SettingsFreeTrialDesc" = "%d일 무료 체험";
+"Hi" = "안녕，";
+
+//권한
+"PrePermissionPhotoTitle" = "Manic EMU이(가) 사진 라이브러리에 접근하도록 허용하시겠습니까?";
+"PrePermissionPhotoMessage" = "접근 권한 허용 시 게임 스크린샷을 앨범에 저장하고 앨범 이미지를 게임 커버로 선택할 수 있습니다";
+"PrePermissionPhotoCancel" = "나중에";
+"PrePermissionPhotoConfirm" = "허용";
+"DeniedPermissionPhotoTitle" = "Manic EMU이(가) 사진 라이브러리에 접근할 수 없습니다!";
+"DeniedPermissionPhotoMessage" = "게임 스크린샷 저장을 위해 Manic EMU에 사진 라이브러리 접근 권한이 필요합니다";
+"DeniedPermissionPhotoCancel" = "아니오";
+"DeniedPermissionPhotoConfirm" = "설정으로 이동";
+"PrePermissionCameraTitle" = "Manic EMU이(가) 카메라에 접근하도록 허용하시겠습니까?";
+"PrePermissionCameraMessage" = "접근 권한 허용 시 카메라로 촬영한 사진을 게임 커버로 사용할 수 있습니다";
+"PrePermissionCameraCancel" = "나중에";
+"PrePermissionCameraConfirm" = "허용";
+"DeniedPermissionCameraTitle" = "Manic EMU이(가) 카메라에 접근할 수 없습니다!";
+"DeniedPermissionCameraMessage" = "게임 커버 촬영을 위해 Manic EMU에 카메라 접근 권한이 필요합니다!";
+"DeniedPermissionCameraCancel" = "아니오";
+"DeniedPermissionCameraConfirm" = "설정으로 이동";
+"DeniedPermissionMicTitle" = "Manic EMU이(가) 마이크를 사용할 수 없습니다";
+"DeniedPermissionMicMessage" = "일부 DS 게임 기능 제한을 방지하려면 Manic EMU에 마이크 접근 권한이 필요합니다!";
+"DeniedPermissionMicCancel" = "아니오";
+"DeniedPermissionMicConfirm" = "설정으로 이동";
+
+//공유
+"ShareAppSubtitle" = "친구들을 초대해 함께 모험을 떠나세요!";
+"ShareRomFilesFailed" = "ROM 공유 실패. 파일을 가져올 수 없습니다";
+"ShareSaveFilesFailed" = "게임 세이브 공유 실패. 사용 가능한 세이브가 없습니다";
+"ShareFilesCopyFailed" = "파일 공유 실패. 복사 중 오류 발생";
+"ShareFilesCompressFailed" = "파일 공유 실패. 압축 중 오류 발생";
+
+"TurnOnAirPlayAsk" = "AirPlay가 연결되었습니다. 전체 화면 모드로 전환하시겠습니까?";
+
+"ThreeDSModePerformance" = "성능 모드";
+"ThreeDSModeCompatibility" = "호환 모드";
+"ThreeDSModeQuality" = "화질 우선";
+"ThreeDSNotSupportImportSave" = "3DS 게임은 현재 세이브 파일 가져오기를 지원하지 않습니다";
+"ThreeDSNotSupportShareSave" = "3DS 게임은 현재 세이브 파일 공유를 지원하지 않습니다";
+"ThreeDSBetaAlertTitle" = "3DS 실험적 버전";
+"ThreeDSBetaAlertDetail" = "3DS 게임을 더 빨리 체험해 보실 수 있도록 Manic EMU에서 실험적 버전을 출시했습니다. 일부 기능은 최적화가 필요합니다.
+
+일시적으로 사용할 수 없는 기능:
+❌ AirPlay 전체 화면 모드
+❌ 자동 세이브
+❌ 배속 기능
+
+불안정한 현상이 발생하면 FAQ를 참조하시거나 채널에 문의해 주세요. 에뮬레이터 최적화를 지속하고 있습니다. 여러분의 이해와 지원이 더 나은 게임 환경을 만듭니다. 항상 노력하겠습니다.";
+"ThreeDSNoSupportDeviceTitle" = "기기 성능 부족";
+"ThreeDSNoSupportDeviceDetail" = "현재 기기로는 3DS 에뮬레이션을 실행할 수 없습니다. 계속하면 예측 불가능한 오류가 발생할 수 있습니다";
+
+"GameImportBadFile" = "가져오기 실패: \"%@\" 파일이 손상되었거나 알 수 없는 오류입니다. 다른 ROM 파일을 시도해 주세요";
+"Game3DSDecryptFailed" = "가져오기 실패: \"%@\" 복호화 실패. 다른 ROM 파일을 시도해 주세요";
+"Game3DSGameNotExist" = "업데이트 가져오기 실패, \"%@\": 게임 본체가 설치되지 않았습니다!";
+
+"Game3DSInputTitle" = "내용을 입력하세요";
+"ControllerMappingGuideTitle" = "화면 버튼을 눌러 키 매핑 시작";
+"ControllerMappingGuideBegin" = "「%@」 매핑 시작
+컨트롤러 버튼을 눌러주세요...";
+"ControllerMappingReset" = "초기화";
+"ControllerMappingNoFouond" = "인식할 수 없는 키 설정";
+"FlexSkinSettingError" = "인터페이스 준비 중, 잠시 후 다시 시도해주세요";
+"SkinPreviewTitle" = "미리보기";
+"FullScreenWhenConnectControllerTitle" = "자동 전체 화면";
+"FullScreenWhenConnectControllerDetail" = "컨트롤러 연결 시 자동 전체 화면 실행";
+"JoinDiscordTitle" = "Discord 참가 (비공식)";
+"JoinDiscordAlertMessage" = "%@ 님이 만든 채널에 참가하시겠습니까?";
+"FlexSkinGuideTitle" = "드래그 또는 핀치로 화면 조절";
+"DownloadFailed" = "다운로드 실패";
+"RemoveDownloadTask" = "「%@」 다운로드 중단 및 삭제할까요?";
+"GameSettingResolution" = "해상도 %@";
+"GameSettingSwapScreen" = "화면 전환";
+"NotSupportGameSetting" = "%@ 플랫폼에서 지원하지 않는 옵션";
+
+"ThemeSettingTitle" = "테마";
+"ThemeSettingDetail" = "앱 아이콘, 테마 색상, 박스아트 설정, 콘솔 순서";
+"ThemeDesktopIconTitle" = "앱 아이콘";
+"ThemeDesktopIconDetail" = "추가 아이콘 곧 출시...";
+"ThemeThemeColorTitle" = "테마 색상";
+"ThemeCoverStyleTitle" = "박스아트 스타일 및 모서리";
+"ThemeCoverStyleName" = "스타일 %d";
+"ThemePlatformOrderTitle" = "콘솔 순서";
+"ThemePlatformOrderDetail" = "길게 눌러 드래그하면 게임 목록의 콘솔 표시 순서 조정";
+"ThemeColorLimitToast" = "테마 색상 최대 개수 도달";
+"ThemeColorSystemNotAllowEdit" = "기본 테마 색상은 수정 불가";
+"EditTitle" = "편집";
+"RemoveTitle" = "삭제";
+"On" = "켬";
+"Off" = "끔";
+"AmiiboNotSearching" = "NFC 비활성 시 Amiibo 로드 불가";
+"ConsoleHomeTitle" = "홈 메뉴";
+"AmiiboTitle" = "Amiibo 로드";
+"ThreeDSHomeMenuNotRunning" = "홈 메뉴가 실행 중이지 않음";
+"ThreeDSImportSaveFailed" = "%@ 가져오기 실패: 인식 불가 저장 파일";
+"ThreeDSUpdateInstallSuccess" = "업데이트 설치 성공";
+"OnlineCoverFetchFailed" = "이미지 가져오기 실패";
+"JITMenuDesc" = "지원되지 않는 환경에서 JIT 활성화 시 앱 충돌 가능성";
+"ShaderModeTitle" = "고급 셰이더";
+"ShaderModeDesc" = "일부 게임의 텍스처 정확도 향상 (성능 영향 가능)";
+"NoDownloadTask" = "진행 중인 다운로드 없음";
+"NoGameCoverResult" = "박스아트 없음";
+"NoContentResult" = "콘텐츠 없음";
+"OpenFilePermissionsLimit" = "%@ 열기 권한 없음";
+"SevenZipDecompressError" = "7z 파일 손상 또는 암호화됨";
+"ForceSquareRatioTitle" = "정사각형 비율 강제";
+"ForceSquareRatioDetail" = "활성화 시 정사각형 비율, 비활성화 시 원본 비율 사용";
+
+"AutoSaveStateTitle" = "자동 저장 상태";
+"GamesThemeTitle" = "게임 라이브러리";
+"GamesPerRowTitle" = "한 줄에 표시할 게임 수 (iPhone)";
+"GamesHideScrollIndicator" = "스크롤 표시기 숨기기";
+"ConsoleLanguageDesc" = "일부 게임은 지역 및 언어 설정을 수동으로 구성해야 할 수 있음";
+"JitNoSupportDesc" = "현재 환경에서는 JIT 컴파일을 사용할 수 없음";
+"RenderRightEyeTitle" = "오른쪽 눈 렌더링";
+"RenderRightEyeDesc" = "오른쪽 눈 렌더링 비활성화 시 일부 게임 성능이 향상되지만 화면 깜빡임 문제가 발생할 수 있음";
+"DisableTitle" = "비활성화";
+"EnableTitle" = "활성화";
+"NoSaveStateToast" = "%@ 없음";
+"DeleteSelectedSaveStateAlert" = "선택한 '%@'을(를) 삭제할까요?\n삭제 후 복구 불가능!";
+"DeleteAllSaveStateAlert" = "선택된 항목 없음. 모든 '%@'을(를) 삭제할까요?\n삭제 후 복구 불가능!";
+"AICoverSearchDesc" = "비영어 검색 감지. 프리미엄 업그레이드 시 Manic EMU의 AI 기술로 다국어 검색 지원";
+"MaxTextSizeAllowDesc" = "최대 %@자까지 지원";
+
+"PlatformSelectionTitle" = "실행 플랫폼 선택";
+"PlatformSelectionDetail" = "%@의 기본 플랫폼 선택";
+"PlatformChange" = "플랫폼 지정";
+"BIOSDesc" = "일부 플랫폼은 BIOS 필요";
+"BIOSImported" = "가져옴";
+"BIOSAlert" = "일부 플랫폼 작동에는 BIOS 파일이 필요합니다. BIOS 저작권은 하드웨어 제조사에 있습니다. 합법적인 BIOS 파일만 가져오세요.\n\n문제 발생 시 커뮤니티에서 도움을 받으세요.";
+"UnknownPlatform" = "알 수 없는 플랫폼";
+"UnknownPlatformGameSelectWarn" = "플랫폼 미지정 게임은 선택 불가";
+"BIOSImportSuccess" = "%@ 가져오기 성공!";
+"BIOSImportFailed" = "잘못된 파일입니다!";
+
+"HideGameTitleDesc" = "게임 제목 숨기기";
+"HideGroupTitleDesc" = "그룹 제목 숨기기";
+"GroupTitleStyelDesc" = "그룹 제목 스타일";
+"GroupTitleStyelAbbr" = "약칭";
+"GroupTitleStyelFull" = "전체";
+"GroupTitleStyelBrand" = "브랜드";
+"CopyLaunchLinkTitle" = "실행 링크 복사";
+"AskIfNeedToSaveCover" = "실행 링크가 클립보드에 복사되었습니다. 박스아트를 사진 앨범에 저장하시겠습니까?";
+"SaturnBiosAlertTitle" = "BIOS 없음";
+"SaturnBiosAlertDetail" = "세가 새턴은 BIOS 없이 HLE 에뮬레이션 가능하지만, BIOS 사용 시 그래픽 오류 감소";
+"BiosAddTitle" = "BIOS 추가";
+"StartGameWithoutBiosTitle" = "BIOS 없이 시작";
+
+"ThreeDSAdvanceSettingMode" = "고급 모드";
+"ThreeDSAdvanceSettingTitle" = "고급 설정";
+"ThreeDSBasicSettingMode" = "기본 모드";
+"ShareConfigButtonTitle" = "설정 공유";
+"ImportConfigButtonTitle" = "설정 가져오기";
+"ShareFileFailedMissing" = "공유 실패: 파일이 존재하지 않음";
+"ReadConfigFileFailed" = "설정 파일을 읽을 수 없음";
+"SwitchEmulationCore" = "코어 전환";
+"SwitchEmulationCoreDetail" = "%@ 에뮬레이션 코어 전환\n코어 전환 시 이전 코어에서 생성된 세이브 파일을 읽을 수 없게 됩니다. 접근하려면 원래 코어로 전환하세요";
+"BeetleSaturnNoSupportCheat" = "Beetle Saturn 코어는 치트 코드 설정을 지원하지 않습니다. 필요한 경우 Yabause 코어로 전환하세요";
+"CurrentTitle" = "현재";
+"NewSkinDesc" = "Manic EMU는 .manicskin 및 .deltaskin 형식의 스킨을 지원합니다. 참고: 가져온 스킨은 현재 플랫폼과 호환되어야 하며, 그렇지 않으면 스킨 목록에 표시되지 않습니다.\n또한 타사 스킨 커뮤니티 접근을 제공합니다. 이들은 Manic EMU와 공식적으로 연관되지 않았습니다. 스킨 다운로드 시 각 사이트의 서비스 약관을 준수하세요";
+"VisitSite" = "%@ 방문";
+"OpenFile" = "파일 열기";
+"WebViewDownloadBegin" = "다운로드 시작됨";
+"RespectSilentMode" = "무음 모드 준수";
+"RespectSilentModeDesc" = "활성화 시, Manic EMU는 무음 모드가 아닐 때만 오디오를 재생합니다";
+"SaturnISONoSwitchCore" = "세가 새턴 .iso 형식 게임은 코어 전환을 지원하지 않습니다";
+"EnableFullScreenTitle" = "전체 화면 활성화";
+"DisableFullScreenTitle" = "전체 화면 비활성화";
+"SimulateBlowingTitle" = "불기 시뮬레이션";
+"PaletteTitle" = "팔레트";
+"SkinRestDesc" = "스킨 초기화 시 게임 할당 스킨도 기본 스킨으로 복원됩니다";
+"SkinResetForAll" = "모든 플랫폼 스킨 초기화";
+"SkinResetForPlatform" = "%@ 스킨 초기화";
+"SkinDebug" = "스킨 테스트장";
+
+"ImportMissingFile" = "%@ 가져오기 실패: %@ 파일 없음";
+"MultiDiscBuilder" = "멀티디스크 도우미";
+"MultiDiscBuilderDesc" = "멀티디스크 게임(.cue/.bin 또는 .chd)용 디스크 교체 가능 .m3u 파일 생성. 이미 .m3u 파일이 있다면 건너뛰고 게임 가져오기로 직접 추가하세요";
+"M3uFileShare" = ".m3u 파일 공유";
+"M3uFileImport" = "라이브러리에 추가";
+"MultiDiscAddFile" = "%@ 파일 추가";
+"MultiDiscImportErrorConflict" = "오류: .cue와 .chd 파일 혼합 불가";
+"MultiDiscImportErrorMissing" = "오류: .cue 또는 .chd 파일 없음";
+"GenerateM3uFailed" = ".m3u 파일 생성 실패";
+"MultiDiscCloseAlert" = ".m3u 파일 생성됨. 라이브러리로 가져온 후 이 페이지 닫기";
+"MultiDiscContinueClose" = "닫기";
+"SwapDisk" = "디스크 교체";
+"NotSupportSwapDisk" = "멀티디스크 게임 아님";
+"TransferPakDesc" = "Transfer Pak은 GB/GBC 데이터를 N64에 동기화합니다. 활성화하려면 ROM(.gb/.gbc)과 저장 파일(.sav)을 모두 가져오세요";
+"TransferPakFromLibrary" = "라이브러리에서 가져오기";
+"TransferPakFromLibraryDesc" = "저장 파일이 있는 게임만 표시됨\n선택한 GB/GBC 게임은 N64 ROM과 일치해야 함, 불일치 시 실패";
+"TransferPakNoGames" = "호환 게임 없음";
+"TransferPakFromFiles" = "파일에서 가져오기";
+"TransferPakOn" = "활성화됨";
+"TransferPakOff" = "비활성화됨";
+"TransferPakImportError" = "오류: ROM과 저장 파일 모두 가져오세요 (2개 파일 필요)";
+"ShowControlsTitle" = "컨트롤 표시";
+"HideControlsTitle" = "컨트롤 숨기기";
+
+"DesignedFor" = "%@ 전용 디자인";

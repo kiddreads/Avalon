@@ -1,0 +1,52 @@
+default_platform(:ios)
+
+config = {
+  clean: true,
+  skip_build: true,
+  code_coverage: true
+}
+
+def xcodebuild(scheme:, simulator:)
+  Dir.chdir("../Package") do
+    sh [
+      %(set -o pipefail &&),
+      %(xcodebuild -resolvePackageDependencies &&),
+      %(xcodebuild -project Package.xcodeproj -scheme #{scheme} -sdk #{simulator} clean build),
+      %(| bundle exec xcpretty -c)
+    ].join " "
+  end
+end
+
+platform :ios do
+  desc "Run iOS unit tests"
+  lane :unit_tests do
+    run_tests(config.merge(scheme: "QuickTableViewController-iOS"))
+  end
+
+  desc "Run iOS UI tests"
+  lane :ui_tests do
+    run_tests(config.merge(scheme: "Example-iOS"))
+  end
+
+  desc "Test Swift Package on iOS"
+  lane :swift_package do
+    xcodebuild(scheme: "App-iOS", simulator: "iphonesimulator")
+  end
+end
+
+platform :tvos do
+  desc "Run tvOS unit tests"
+  lane :unit_tests do
+    run_tests(config.merge(scheme: "QuickTableViewController-tvOS"))
+  end
+
+  desc "Run tvOS UI tests"
+  lane :ui_tests do
+    run_tests(config.merge(scheme: "Example-tvOS"))
+  end
+
+  desc "Test Swift Package on tvOS"
+  lane :swift_package do
+    xcodebuild(scheme: "App-tvOS", simulator: "appletvsimulator")
+  end
+end

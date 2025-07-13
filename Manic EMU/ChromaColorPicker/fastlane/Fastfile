@@ -1,0 +1,60 @@
+ENV['PODSPEC'] = "ChromaColorPicker.podspec"
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Runs unit tests, publishing a new pod version if tests succeed."
+  lane :test_and_publish do
+    test
+    publish_pod
+  end
+
+  desc "Publish podspec, incrementing the patch version."
+  lane :publish_pod do
+    publish_podspec
+  end
+
+  desc "Runs unit tests."
+  lane :test do
+    run_tests(scheme: "ChromaColorPickerTests")
+  end
+end
+
+
+def publish_podspec
+  podspec = ENV['PODSPEC']
+  version = version_bump_podspec(path: podspec, bump_type: "patch")
+  commit(podspec, 'Updated Podspec version.')
+  push_to_git_remote(local_branch: git_branch)
+  tag_build(version)
+  pod_push(path: podspec)
+end
+
+def tag_build(tag)
+  tag_exists_in_remote = `git ls-remote origin refs/tags/"#{tag}"`.length > 0
+  sh "git fetch --tags --prune origin"
+
+  if tag_exists_in_remote
+    sh "git push --delete origin #{tag}"
+  end
+
+  add_git_tag(
+      tag: tag,
+      force: true,
+      prefix: 'dev' # TEMP: This is temporary only intended for use in the `develop` branch.
+  )
+  push_git_tags
+end
+
+def commit(path, message)
+  # Ensure we are on the correct branch before committing.
+  sh "git checkout #{git_branch}"
+  ensure_git_branch(branch: git_branch)
+
+  message = "Fastfile: #{message}"
+  git_commit(
+      path: path,
+      message: message
+  )
+end

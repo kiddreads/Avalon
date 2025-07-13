@@ -1,0 +1,561 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Molntjänster";
+"ImportAddLanServiceTitle" = "Lokala nätverkstjänster";
+"ImportAddDiscoverServiceTitle" = "Upptäck tjänster";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Yun";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Lägg till tjänst";
+"ImportServiceDelete" = "Ta bort tjänst";
+"ImportAliyunNotGetDriveId" = "Misslyckades att lägga till Aliyun, kunde inte hämta katalog";
+"ImportDownloadError" = "Nedladdningsfel\n%@";
+"ImportDownloadContinue" = "Fortsätt ladda ner...\n%@";
+"LandServiceEditServerName" = "Servernamn";
+"LandServiceEditServerNamePlaceholder" = "Min SMB-server";
+"LandServiceEditHost" = "Serveradress";
+"LandServiceEditUserName" = "Användarnamn";
+"LandServiceEditPassword" = "Lösenord";
+"LandServiceEditRequiredPlaceholder" = "Obligatoriskt";
+"LandServiceEditOptionalPlaceholder" = "Valfritt";
+"LandServiceEditConnect" = "Anslut";
+"AddLandServiceSuccess" = "%@ lades till";
+"AddLandServiceFailed" = "Kunde inte lägga till %@\nKontrollera nätverk, serverstatus eller inmatad information";
+"AddLandServiceTimeout" = "Anslutningstimeout";
+"FilesImporterErrorFileExist" = "\"%@\" finns redan, importeras ej";
+"FilesImporterErrorBadCopy" = "Misslyckades importera \"%@\", filkopieringsfel";
+"FilesImporterErrorBadExtension" = "Misslyckades importera \"%@\", ogiltig filändelse";
+"FilesImporterErrorNoPermission" = "Saknar åtkomst till %@";
+"FilesImporterErrorUnableToHash" = "Misslyckades importera \"%@\", kan ej beräkna hash";
+"FilesImporterErrorWriteDatabase" = "Misslyckades importera \"%@\", databasfel";
+"GameSaveMatchTitle" = "Matcha sparning till spel";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" matchar inget spel, matcha manuellt";
+"GameSaveAlreadyExistTitle" = "Sparning finns redan";
+"FilesImporterErrorSaveAlreadyExist" = "Misslyckades importera \"%@\", vill du skriva över?";
+"GameSaveMathToMuchTitle" = "Flera matchningar";
+"FilesImporterErrorSaveMathToMuch" = "Misslyckades importera \"%@\", flera spel matchar. Matcha manuellt";
+"FilesImporterErrorSkinBadFile" = "Misslyckades importera %@, skadad skin-fil";
+"PasteImporterErrorNoMatchContent" = "Inget importerbart innehåll i urklipp";
+"FilesDownloadErrorFileExist" = "%@ finns redan, laddas ej ned igen";
+"FilesImporterErrorEmptyContent" = "Inget innehåll att importera";
+"LanServiceInitFailed" = "Kunde inte skapa %@-tjänst";
+"SMBLoginFailed" = "Samba-inloggning misslyckades%@";
+"SMBListFilesFailed" = "Kunde ej hämta filer%@";
+"SMBListFilesTypeError" = "Filen är inte en mapp";
+"DropErrorLoadFailed" = "Kunde ej ladda fil";
+"DropErrorNotSupportFile" = "Filtypen stöds ej";
+"ImportErrorTitle" = "Importfel";
+"ImportGameSuccessTitle" = "Spel importerat";
+"ImportGameSuccessDetail" = "%@\nhar importerats. Vill du visa nu?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\nhar importerats. Vill du spela nu?";
+"ImportSkinSuccessTitle" = "Skin importerat";
+"ImportSkinSuccessDetail" = "\"%@\"\nhar importerats. Visa nu?";
+"ImportGameSaveSuccessTitle" = "Sparning importerad";
+"ImportGameSaveSuccessDetail" = "\"%@\"\nhar importerats till spelet";
+"ImportGameSaveSuccessForOne" = "\"%@\"\nhar importerats. Spela nu?";
+"ImportGameSaveFailedNoGameError" = "Misslyckades importera \"%@\", inget spel finns";
+"DownloadCompletion" = "Nedladdning klar";
+"QQChannelName" = "QQ-kanal";
+"NotSupportPasswordZip" = "Kan ej packa upp \"%@\", lösenordsskyddade zip stöds ej";
+"UnzipFailed" = "\"%@\" kunde ej packas upp";
+"NoSupportInZip" = "Inget stödt format i \"%@\"";
+"IPCopy" = "Adress kopierad";
+"ImportServiceListFilesTitle" = "Filer";
+"ImportServiceListFilesDetail" = "Importera spel, skins eller sparningar från filer/iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Överför filer via webbläsare i samma nätverk";
+"ImportServiceListWiFiOnDetail" = "%@\nAnvänd webbläsare för filöverföring";
+"ImportServiceListPasteTitle" = "Läs urklipp";
+"ImportServiceListPasteDetail" = "Stöd för filer från macOS eller Filer-appen";
+"ImportHowTo" = "Hur man importerar";
+"ImportTopHintTitle" = "Ett äventyr fullt av drömmar börjar här!";
+"ImportDragAndDropTips" = "Dra filer till valfri Manic EMU-yta för överföring";
+"ImportChannelTips" = "Besök %@ om du har frågor";
+"ToastConnectCloudDriveSuccess" = "Ansluten till %@";
+"AlertImportFilesSuccess" = "Import lyckades";
+"ErrorConnectCloudDrive" = "Kan ej ansluta till molntjänst";
+"ErrorUnknown" = "Okänt fel";
+"ReasonConncetCloudDriveFail" = "Kontrollera nätverk eller molntjänstbehörighet. Försök lägga till tjänsten igen";
+
+//Common
+"TabbarTitleGames" = "Spel";
+"TabbarTitleImport" = "Importera";
+"TabbarTitleSettings" = "Inställningar";
+"SelectAll" = "Markera allt";
+"DeSelectAll" = "Avmarkera allt";
+"CloudDriveBrowserDownload" = "Ladda ner";
+"CancelTitle" = "Avbryt";
+"CheckTitle" = "Visa";
+"StartGameTitle" = "Spela nu";
+"ConfirmTitle" = "Bekräfta";
+"SaveTitle" = "Spara";
+"NameTitle" = "Namn";
+"TimeAgoMinuteFormat" = "%d minuter sedan";
+"TimeAgoHourFormat" = "%d timmar sedan";
+"TimeAgoDayFormat" = "%d dagar sedan";
+"TimeAgoWeekFormat" = "%d veckor sedan";
+"TimeAgoMonthFormat" = "%d månader sedan";
+"TimeAgoYearFormat" = "%d år sedan";
+"TimeDurationHourAndMinuteFormat" = "%d tim %d min";
+"TimeDurationHourFormat" = "%d tim";
+"TimeDurationMinuteFormat" = "%d min";
+"FatalErrorTitle" = "Kritiskt fel";
+"FatalErrorDesc" = "Systemresurser laddades ej. Manic EMU kan fungera felaktigt";
+"LodingFailedTitle" = "Laddning misslyckades";
+"AirPlayDesc" = "Börja ditt äventyr nu!";
+"ToastSuccess" = "Sparat";
+"ToastFailed" = "Sparning misslyckades";
+
+//Games
+"GamesSearchPlaceHolder" = "Sök spel";
+"GamesRename" = "Byt namn";
+"GamesModifyCover" = "Ändra omslag";
+"GamesSpecifySkin" = "Ange skin";
+"GamesCheatCode" = "Fuskkoder";
+"GamesShareRom" = "Dela ROM";
+"GamesCheckSave" = "Visa snabbsparning";
+"GamesImportSave" = "Importera sparning";
+"GamesShareSave" = "Exportera sparning";
+"GamesDelete" = "Ta bort";
+"GamesRandom" = "Slumpa spel";
+"LoadGameErrorRomNotExist" = "ROM finns ej";
+"GamesListEmptyGuideLeft" = "Tryck på";
+"GamesListEmptyGuideRight" = "för att importera";
+"GamesListEmptyWelcomeLeft" = "Välkommen till ";
+"GamesListEmptyWelcomeRight" = ":s värld";
+"GamesListEmptyWarnning" = "Se till att ROM-filer kommer från lagliga källor";
+"DeleteGameAlertDetail" = "ROM, sparningar och fuskkoder raderas permanent!";
+"DeleteSkinAlertDetail" = "Skin tas bort permanent!";
+"DeleteGameGameStateAlertTitle" = "Ta bort snabbsparning";
+"DeleteGameGameStateAlertDetail" = "Snabbsparning raderas permanent!";
+"confirmDelte" = "Bekräfta borttagning";
+
+//Controllers
+"ControllersTouchName" = "Skärmkontroller";
+"ControllersHeaderTitle" = "Kontroller";
+"ControllersPlayerIndex" = "Spelare %d";
+"ControllersPlayerUnset" = "Ej tilldelad";
+"ControllersHowToConnect" = "Anslutningsguide";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "%@ spelad · Totalt %@";
+"ReadyGameInfoNeverPlayed" = "Ej spelat än, börja nu";
+"ReadyEditCoverTakePhoto" = "Ta foto";
+"ReadyEditCoverAlbum" = "Album";
+"ReadyEditCoverFile" = "Fil";
+"ReadyEditCoverSearch" = "Sök";
+"ReadySegmentManualSave" = "Manuella snabbsparningar";
+"ReadySegmentAutoSave" = "Automatiska snabbsparningar";
+"ReadyEditTitleFailed" = "Namnbyte misslyckades, namn får ej vara tomt";
+"ReadyEditTitleSuccess" = "Namnbyte lyckades";
+"ReadyGameSaveStatesEmpty" = "Inga sparningar";
+"GameSaveGuideBecomTitle" = "Bli";
+"GameSaveGuideMemberTitle" = "medlem";
+"GameSaveGuideDesc" = "Lås upp obegränsade snabbsparningar och 50 automatiska sparplatser";
+"GameSaveUnCompatibleTitle" = "Sparningskompatibilitet";
+"GameSaveUnCompatibleDetail" = "Denna sparning skapades på %@. Nuvarande enhet: %@. Inkompatibilitet kan orsaka fel!";
+"GameSaveStateForceLoad" = "Fortsätt ladda";
+"GameSaveContinue" = "Fortsätt";
+"GameSaveTitle" = "Sparning %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU stödjer .deltaskin-format";
+"SkinNavigationSubTitleSpecifiedGame" = "Anpassat skin för %@";
+"SkinSegmentPortraitTitle" = "Stående";
+"SkinSegmentLandscapeTitle" = "Liggande";
+"SkinAddTitle" = "Nytt skin";
+"HowToFetch" = "Hur man får";
+"SkinDelete" = "Ta bort skin";
+"DefaultSkinCannotEdit" = "Standardskin kan ej redigeras";
+
+//History
+"HistoryHeaderTitle" = "Spelhistorik";
+"HistoryFavouriteTitle" = "Favoriter";
+"HistoryEmptyTitle" = "Ingen historik";
+"HistoryEmptyImportGame" = "Importera spel";
+"HistoryEmptyStartGame" = "Starta spel";
+
+//Settings
+"LeftHandTitle" = "Vänsterhänt läge";
+"LeftHandDetail" = "Spegelvänd kontroller";
+"QuickGameTitle" = "Snabbstart";
+"QuickGameDetail" = "Hoppa över infosidan";
+"AirPlayTitle" = "AirPlay-fullskärm";
+"AirPlayDetail" = "Spel visas i fullskärm vid skärmdelning";
+"iCloudTitle" = "iCloud-synk";
+"iCloudDetail" = "Synka spel, skins och inställningar mellan enheter";
+"AppIconTitle" = "Appikon";
+"WidgetTitle" = "Widgetar";
+"QATitle" = "Vanliga frågor";
+"FeedbackTitle" = "Feedback";
+"ShareAppTitle" = "Dela Manic EMU";
+"JoinQQTitle" = "Gå med i QQ-kanal";
+"JoinTelegramTitle" = "Gå med i Telegram";
+"ClearCacheTitle" = "Rensa cache";
+"LanguageTitle" = "Språk";
+"UserAgreementTitle" = "Användarvillkor";
+"PrivacyPolicyTitle" = "Integritetspolicy";
+"GeneralSettingTitle" = "Allmänt";
+"AdvanceSettingTitle" = "Avancerat";
+"SupportSettingTitle" = "Support";
+"OthersSettingTitle" = "Övrigt";
+"RatingTitleLeft" = "Betygsätt";
+"RatingTitleRight" = "";
+"RatingDetail" = "Ge oss 5 stjärnor om du gillar appen!";
+"iCloudDisableTitle" = "iCloud ej tillgänglig";
+"iCloudDisableDetail" = "Aktivera iCloud i Inställningar > Apple ID > iCloud";
+"iCloudSyncConfilictTitle" = "Synkkonflikt";
+"iCloudSyncConfilictDetail" = "Moln: %@\nLokal: %@";
+"iCloudSyncConfilictSaveiCloud" = "Behåll moln";
+"iCloudSyncConfilictSaveLocal" = "Behåll lokal";
+"SettingsNonMemberDesc" = "Du är huvudkaraktären";
+"ThanksSupportDesc" = "Tack för ditt stöd";
+"ThanksCommingDesc" = "Tack för att du spelar";
+"PlayGameDesc" = "";
+"NoEmailSetting" = "Ingen e-post angiven";
+"IDCopy" = "ID kopierat";
+"SendEmailSuccess" = "E-post skickad";
+"SendEmailFailed" = "E-post misslyckades%@";
+"iCloudTipsTitle" = "Aktivera iCloud-synk";
+"iCloudTipsDetail" = "Synka data mellan enheter. Kräver iCloud-utrymme.";
+"iCloudConfirm" = "Fortsätt";
+
+//Play
+"LoadingTitle" = "Laddar";
+"LoadRomSuccess" = "%@ klar, spela nu!";
+"GameSettingSaveState" = "Spara";
+"GameSettingQuickLoadState" = "Snabb-ladda";
+"GameSettingVolume" = "Volym";
+"GameSettingFastForwardResume" = "Normal hastighet";
+"GameSettingFastForward" = "Snabbspola %@";
+"GameSettingStateList" = "Sparningslista";
+"GameSettingSkins" = "Skins";
+"GameSettingFilter" = "Filter";
+"GameSettingScreenShot" = "Skärmdump";
+"GameSettingHapticOff" = "Vibration av";
+"GameSettingHapticSoft" = "Svag vibration";
+"GameSettingHapticLight" = "Lätt vibration";
+"GameSettingHapticMedium" = "Mellan vibration";
+"GameSettingHapticHeavy" = "Stark vibration";
+"GameSettingHapticRigid" = "Hård vibration";
+"GameSettingControllerTypeDPad" = "D-pad";
+"GameSettingControllerTypeStick" = "Styrspak";
+"GameSettingAirplay" = "Skärmdelning";
+"GameSettingControllerSetting" = "Kontroller";
+"GameSettingOrientationAuto" = "Auto-rotation";
+"GameSettingOrientationPortrait" = "Tvinga stående";
+"GameSettingOrientationLandscape" = "Tvinga liggande";
+"GameSettingFunctionSort" = "Sortera funktioner";
+"GameSettingReload" = "Starta om";
+"GameSettingQuit" = "Avsluta";
+"GameSaveStateSuccess" = "Sparning lyckades";
+"GameSaveStateLoadFailed" = "Sparning trasig/inkompatibel";
+"GameSaveStateLoadSuccess" = "Sparning laddad";
+"GameSaveStateQuickLoadFailed" = "Ingen manuell sparning finns";
+"GameSaveListTitle" = "Snabbsparningar";
+"GameCheatActivateFailed" = "%@\nAktivering misslyckades";
+"GameCheatActivateSuccess" = "%@\nAktiverad";
+"AirPlayingTitle" = "Skärmdelning aktiv";
+"VolumeOff" = "Volym av";
+"VolumeOn" = "Volym på";
+"FunctionSortDesc1" = "Standardfunktioner för skins";
+"FunctionSortDesc2" = "Dra för att ändra ordning";
+"ManualGameSaveCountLimit" = "Max antal sparningar nått. Uppgradera för mer";
+"FastForwardSpeedLimit" = "Max hastighet x2. Uppgradera till x5";
+"ResetSpeed" = "Återställ hastighet";
+"GoToUpgrade" = "Uppgradera";
+"SaveStateTooFrequent" = "För snabb sparning";
+"LoadStateTooFrequent" = "För snabb inläsning";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Namnge fuskkod";
+"AutoDetectCheatTypeName" = "Auto-identifiera";
+"AutoDetectFormat" = "Koden identifieras automatiskt";
+"CheatCodeFormatError" = "Ogiltigt format";
+"CheatCodeEmptyTitle" = "Inga fuskkoder";
+"CheatCodeEmptyGuideLeft" = "Tryck på";
+"CheatCodeEmptyGuideRight" = "uppe till vänster";
+"EnableCheatCodeAlertTitle" = "Aktivera fuskkod";
+"EnableCheatCodeAlertDetail" = "Fuskkoder kan orsaka instabilitet. Använd med försiktighet.";
+
+//滤镜
+"FilterSectionHeaderTitle" = "Grafikfilter";
+"FilterOriginTitle" = "Original";
+
+//内购
+"PurchaseAdcancedFeaturesTitle" = "Premiumfunktioner";
+"AdcancedFeaturesDetail" = " 
+「🎮 Ultimate Experience」
+🔥 Obegränsade sparningar
+🚀 5x snabbspolning
+💎 Fuskkodsfrihet
+✨ Exklusiva filter
+";
+"PurchaseImportFeaturesTitle" = "Molnimport";
+"ImportFeaturesDetail" = " 
+☁️ Anslut till Google Drive, Dropbox, OneDrive
+✅ WebDAV/SMB-stöd
+";
+"PurchaseControllerFeaturesTitle" = "Extern kontroll";
+"ControllerFeaturesDetail" = " 
+🕹️ Stöd för Joy-Con/DUALSHOCK/Xbox
+⌨️ Bluetooth-kontroller
+✨ Multiplayer-stöd
+";
+"PurchaseAirPlayFeaturesTitle" = "AirPlay-låsning";
+"AirPlayFeaturesDetail" = " 
+📺 Sömlös TV-uppspelning
+🎮 Storskärmsupplevelse
+";
+"PurchaseiCloudFeaturesTitle" = "iCloud-synk";
+"iCloudFeaturesDetail" = " 
+☁️ Synka spel på alla enheter
+🔒 Säker molnlagring
+";
+"AdvanceFeatureDescLabel1" = "Upp till 5x hastighet";
+"AdvanceFeatureDescLabel2" = "Obegränsade sparningar";
+"AdvanceFeatureDescLabel3" = "Obegränsade fuskkoder";
+"AdvanceFeatureDescLabel4" = "Anpassade filter";
+"AdvanceFeatureDescLabel5" = "Automatiska sparningar";
+"RestorePurchaseButton" = "Återställ köp";
+"AnnualDescription" = "Årsprenumeration";
+"MonthlyDescription" = "Månadsprenumeration";
+"ForeverDescription" = "Livstid · Engångsköp";
+"SubscriptionPromotional" = "%d dagar gratis";
+"PurchasePricePerYear" = "/år";
+"PurchasePricePerMonth" = "/månad";
+"PromptLabelForYear" = "50%% rabatt";
+"PromptLabelForMonth" = "Provperiod";
+"PromptLabelForForever" = "Bästa värde";
+"GetProductsFailedTitle" = "Kunde ej hämta produkter";
+"TermOfServiceTitle" = "Villkor";
+"AnnualMemberTitle" = "Superårmedlem";
+"MonthlyMemberTitle" = "Månadsmedlem";
+"ForeverMemberTitle" = "Livstidsmedlem";
+"PurchaseVerifiedFailed" = "Betalningsverifiering misslyckades. Starta om appen";
+"PurchaseCancel" = "Betalning avbruten";
+"PurchasePending" = "Betalning väntar";
+"PurchaseUnknown" = "Okänd status";
+"PurchaseErrorDesc" = "Nätverksfel. Försök igen";
+"PurchaseFailedTitle" = "Betalning misslyckades";
+"RestoreSuccessDesc" = "Återställning lyckades!";
+"RestoreEndDesc" = "Inga köp hittades";
+"TrialDesc" = "Gratis under provperioden";
+"SubscriptionPurchaseButtonTitle" = "Starta %d dagar gratis";
+"YearSubscriptionDisableDesc" = "Redan prenumerant";
+"MonthSubscriptionDisableDesc" = "Redan prenumerant";
+"ForeverSubscriptionDisableDesc" = "Livstidsmedlem";
+"ChangeSubscription" = "Byt prenumeration";
+"UpgradePurchase" = "Uppgradera";
+"ForeverPlanDesc" = "Framtida funktioner inkluderade";
+"BuyNowTitle" = "Prenumerera nu";
+"SettingsFreeTrialDesc" = "%d dagar gratis";
+"Hi" = "Hej,";
+
+//Permission
+"PrePermissionPhotoTitle" = "Tillåt åtkomst till foto?";
+"PrePermissionPhotoMessage" = "Behövs för sparning av skärmdumpar och omslag";
+"PrePermissionPhotoCancel" = "Nej";
+"PrePermissionPhotoConfirm" = "Tillåt";
+"DeniedPermissionPhotoTitle" = "Åtkomst nekad";
+"DeniedPermissionPhotoMessage" = "Aktivera i Inställningar";
+"DeniedPermissionPhotoCancel" = "Avbryt";
+"DeniedPermissionPhotoConfirm" = "Inställningar";
+"PrePermissionCameraTitle" = "Tillåt kameraåtkomst?";
+"PrePermissionCameraMessage" = "Behövs för foto på spelomslag";
+"PrePermissionCameraCancel" = "Nej";
+"PrePermissionCameraConfirm" = "Tillåt";
+"DeniedPermissionCameraTitle" = "Kameraåtkomst nekad";
+"DeniedPermissionCameraMessage" = "Aktivera i Inställningar";
+"DeniedPermissionCameraCancel" = "Avbryt";
+"DeniedPermissionCameraConfirm" = "Inställningar";
+"DeniedPermissionMicTitle" = "Mikrofon nekad";
+"DeniedPermissionMicMessage" = "Aktivera för full DS-funktionalitet";
+"DeniedPermissionMicCancel" = "Avbryt";
+"DeniedPermissionMicConfirm" = "Inställningar";
+
+//Share
+"ShareAppSubtitle" = "Bjud in vänner till äventyret!";
+"ShareRomFilesFailed" = "ROM-delning misslyckades";
+"ShareSaveFilesFailed" = "Ingen sparning att dela";
+"ShareFilesCopyFailed" = "Kopieringsfel";
+"ShareFilesCompressFailed" = "Komprimeringsfel";
+
+"TurnOnAirPlayAsk" = "AirPlay är anslutet. Vill du aktivera helskärmsläge nu?";
+
+"ThreeDSModePerformance" = "Prestandaläge";
+"ThreeDSModeCompatibility" = "Kompatibilitetsläge";
+"ThreeDSModeQuality" = "Grafikprioritet";
+"ThreeDSNotSupportImportSave" = "3DS-spel stöder för närvarande inte import av sparfil";
+"ThreeDSNotSupportShareSave" = "3DS-spel stöder för närvarande inte delning av sparfil";
+"ThreeDSBetaAlertTitle" = "Experimentell 3DS-version";
+"ThreeDSBetaAlertDetail" = "För att låta dig uppleva 3DS-spel tidigare har Manic EMU släppt 3DS-funktionen i experimentellt skick. Vissa optimeringar behövs fortfarande.
+
+Tillfälligt saknade funktioner:
+❌ AirPlay Fullskärmsläge
+❌ Automatisk sparning
+❌ Hastighetsökning
+
+Vid instabilitet, se vår FAQ eller gå med i vår supportkanal. Vi optimerar ständigt emulatorn. Ditt stöd hjälper oss skapa en bättre upplevelse. Vi jobbar för dig!";
+"ThreeDSNoSupportDeviceTitle" = "Enhetens prestanda otillräcklig";
+"ThreeDSNoSupportDeviceDetail" = "Denna enhet kan inte hantera 3DS-emulering. Fortsättning kan orsaka oförutsägbara fel";
+
+"GameImportBadFile" = "Import misslyckades: \"%@\" är skadat eller ett okänt fel uppstod. Försök med en annan ROM-fil";
+"Game3DSDecryptFailed" = "Import misslyckades: Dekryptering av \"%@\" misslyckades. Försök med en annan ROM-fil";
+"Game3DSGameNotExist" = "Misslyckades att importera uppdatering, \"%@\": Spelet är inte installerat!";
+
+"Game3DSInputTitle" = "Ange innehåll";
+"ControllerMappingGuideTitle" = "Tryck på skärmknappen för att mappa tangenter";
+"ControllerMappingGuideBegin" = "Börja mappa 「%@」
+Tryck på kontrollknappen...";
+"ControllerMappingReset" = "Återställ";
+"ControllerMappingNoFouond" = "Okänd tangentkonfiguration";
+"FlexSkinSettingError" = "Gränssnitt ej redo, försök senare";
+"SkinPreviewTitle" = "Förhandsvisning";
+"FullScreenWhenConnectControllerTitle" = "Auto-helskärm";
+"FullScreenWhenConnectControllerDetail" = "Aktivera helskärm vid kontrollanslutning";
+"JoinDiscordTitle" = "Gå med i Discord (Inofficiellt)";
+"JoinDiscordAlertMessage" = "Tack till spelare %@ för denna kanal. Fortsätta?";
+"FlexSkinGuideTitle" = "Dra eller zooma för att justera";
+"DownloadFailed" = "Nedladdning misslyckades";
+"RemoveDownloadTask" = "Avbryt nedladdning av \"%@\"?";
+"GameSettingResolution" = "Upplösning %@";
+"GameSettingSwapScreen" = "Byt skärm";
+"NotSupportGameSetting" = "Alternativ ej tillgängligt på %@";
+
+"ThemeSettingTitle" = "Tema";
+"ThemeSettingDetail" = "App-ikoner, temafärger, boxkonfiguration, konsolordning";
+"ThemeDesktopIconTitle" = "App-ikoner";
+"ThemeDesktopIconDetail" = "Fler ikoner kommer snart...";
+"ThemeThemeColorTitle" = "Temafärger";
+"ThemeCoverStyleTitle" = "Boxstil & hörn";
+"ThemeCoverStyleName" = "Stil %d";
+"ThemePlatformOrderTitle" = "Konsolordning";
+"ThemePlatformOrderDetail" = "Håll ned och dra för att ändra ordning";
+"ThemeColorLimitToast" = "Max antal temafärger uppnått";
+"ThemeColorSystemNotAllowEdit" = "Standardfärger kan inte redigeras";
+"EditTitle" = "Redigera";
+"RemoveTitle" = "Ta bort";
+"On" = "På";
+"Off" = "Av";
+"AmiiboNotSearching" = "Amiibo ej tillgängligt vid inaktiv NFC";
+"ConsoleHomeTitle" = "Huvudmeny";
+"AmiiboTitle" = "Ladda Amiibo";
+"ThreeDSHomeMenuNotRunning" = "Huvudmeny körs inte";
+"ThreeDSImportSaveFailed" = "Misslyckades importera %@: Okänt sparningsfil";
+"ThreeDSUpdateInstallSuccess" = "Uppdatering installerad";
+"OnlineCoverFetchFailed" = "Kunde inte hämta bild";
+"JITMenuDesc" = "Aktivering av JIT i ej stödda miljöer kan krascha appen";
+"ShaderModeTitle" = "Avancerade shaders";
+"ShaderModeDesc" = "Förbättrar texturnoggrannhet (kan påverka prestanda)";
+"NoDownloadTask" = "Inga aktiva nedladdningar";
+"NoGameCoverResult" = "Inga boxomslag hittades";
+"NoContentResult" = "Inget innehåll tillgängligt";
+"OpenFilePermissionsLimit" = "Saknar behörighet att öppna %@";
+"SevenZipDecompressError" = "7z-filen är skadad eller krypterad";
+"ForceSquareRatioTitle" = "Tvinga kvadratiskt format";
+"ForceSquareRatioDetail" = "Boxar använder kvadratiskt format (på) eller original (av)";
+
+"AutoSaveStateTitle" = "Auto-spara tillstånd";
+"GamesThemeTitle" = "Spelbibliotek";
+"GamesPerRowTitle" = "Spel per rad (iPhone)";
+"GamesHideScrollIndicator" = "Dölj scrollindikatorer";
+"ConsoleLanguageDesc" = "Region- och språkinställningar kan kräva manuell konfiguration för vissa spel";
+"JitNoSupportDesc" = "JIT-kompilering är inte tillgänglig i nuvarande miljö";
+"RenderRightEyeTitle" = "Höger ögon-rendering";
+"RenderRightEyeDesc" = "Inaktivering förbättrar prestanda i vissa spel men kan orsaka skärmflimmer";
+"DisableTitle" = "Inaktivera";
+"EnableTitle" = "Aktivera";
+"NoSaveStateToast" = "Ingen %@ tillgänglig";
+"DeleteSelectedSaveStateAlert" = "Radera vald «%@»?\nÅterställning ej möjlig!";
+"DeleteAllSaveStateAlert" = "Inget valt. Radera alla «%@»?\nÅterställning ej möjlig!";
+"AICoverSearchDesc" = "Icke-engelsk sökning upptäckt. Uppgradera till Premium för flerspråkig AI-sökning";
+"MaxTextSizeAllowDesc" = "Stöder upp till %@ tecken";
+
+"PlatformSelectionTitle" = "Plattformsval";
+"PlatformSelectionDetail" = "Välj standardplattform för %@";
+"PlatformChange" = "Tilldela Plattform";
+"BIOSDesc" = "Vissa plattformar kräver BIOS";
+"BIOSImported" = "Importerad";
+"BIOSAlert" = "Vissa plattformar kräver BIOS-filer. BIOS-upphovsrätt tillhör tillverkare. Följ lokal lagstiftning vid import.\n\nGå med i vår community för hjälp.";
+"UnknownPlatform" = "Okänd Plattform";
+"UnknownPlatformGameSelectWarn" = "Spel utan tilldelad plattform kan inte väljas";
+"BIOSImportSuccess" = "%@ importerades framgångsrikt!";
+"BIOSImportFailed" = "Felaktig fil!";
+
+"HideGameTitleDesc" = "Dölj speltitel";
+"HideGroupTitleDesc" = "Dölj grupptitel";
+"GroupTitleStyelDesc" = "Grupptitelsstil";
+"GroupTitleStyelAbbr" = "Förk.";
+"GroupTitleStyelFull" = "Fullständig";
+"GroupTitleStyelBrand" = "Varumärke";
+"CopyLaunchLinkTitle" = "Kopiera startlänk";
+"AskIfNeedToSaveCover" = "Startlänken kopierad. Spar omslaget i fotoalbumet?";
+"SaturnBiosAlertTitle" = "BIOS saknas";
+"SaturnBiosAlertDetail" = "Sega Saturn kan emuleras med HLE utan BIOS, men BIOS-fil minskar grafiska fel";
+"BiosAddTitle" = "Lägg till BIOS";
+"StartGameWithoutBiosTitle" = "Starta utan BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Avancerat Läge";
+"ThreeDSAdvanceSettingTitle" = "Avancerade Inställningar";
+"ThreeDSBasicSettingMode" = "Grundläge";
+"ShareConfigButtonTitle" = "Dela Konfiguration";
+"ImportConfigButtonTitle" = "Importera Konfiguration";
+"ShareFileFailedMissing" = "Delning misslyckades: fil saknas";
+"ReadConfigFileFailed" = "Kunde inte läsa konfigurationsfil";
+"SwitchEmulationCore" = "Byt Kärna";
+"SwitchEmulationCoreDetail" = "Byt emuleringskärna för %@\nKärnbyte gör sparade filer från föregående kärna oläsbara. Återgå till originalkärnan för åtkomst";
+"BeetleSaturnNoSupportCheat" = "Beetle Saturn-kärnan stöder inte fuskoder för närvarande. Byt till Yabause-kärnan om nödvändigt";
+"CurrentTitle" = "nuvarande";
+"NewSkinDesc" = "Manic EMU stöder skinn i .manicskin och .deltaskin-format. OBS: Importerat skinn måste matcha nuvarande plattform, annars visas det inte i listan.\nVi ger också tillgång till tredjeparts skinn-communities. Dessa är inte officiellt knutna till Manic EMU. Följ varje webbplats servicevillkor vid nedladdning";
+"VisitSite" = "Besök %@";
+"OpenFile" = "Öppna Fil";
+"WebViewDownloadBegin" = "Nedladdning påbörjad";
+"RespectSilentMode" = "Respektera Tyst Läge";
+"RespectSilentModeDesc" = "När aktiverat spelar Manic EMU bara ljud utanför tyst läge";
+"SaturnISONoSwitchCore" = "Sega Saturn .iso-spel stöder inte kärnbyte";
+"EnableFullScreenTitle" = "Aktivera Helskärm";
+"DisableFullScreenTitle" = "Inaktivera Helskärm";
+"SimulateBlowingTitle" = "Simulera Blåsning";
+"PaletteTitle" = "Palett";
+"SkinRestDesc" = "Återställning av skinn återställer också spel-tilldelade skinn till standardversioner";
+"SkinResetForAll" = "Återställ Alla Plattformsskinn";
+"SkinResetForPlatform" = "Återställ %@ Skinn";
+"SkinDebug" = "Skinn Testområde";
+
+"ImportMissingFile" = "Misslyckades importera %@: Filen %@ saknas";
+"MultiDiscBuilder" = "Multidiskhjälpare";
+"MultiDiscBuilderDesc" = "Skapar bytbara .m3u-filer för multidisk-spel (.cue/.bin eller .chd). Hoppa över om du redan har .m3u - importera direkt via Spelimport";
+"M3uFileShare" = "Dela .m3u-fil";
+"M3uFileImport" = "Lägg till i bibliotek";
+"MultiDiscAddFile" = "Lägg till %@-fil";
+"MultiDiscImportErrorConflict" = "Fel: Kan inte blanda .cue och .chd";
+"MultiDiscImportErrorMissing" = "Fel: Hittade inga .cue/.chd-filer";
+"GenerateM3uFailed" = "Misslyckades skapa .m3u";
+"MultiDiscCloseAlert" = ".m3u skapad. Stäng sidan efter import";
+"MultiDiscContinueClose" = "Stäng";
+"SwapDisk" = "Byt skiva";
+"NotSupportSwapDisk" = "Inte ett multidisk-spel";
+"TransferPakDesc" = "Transfer Pak synkroniserar GB/GBC-data med N64. För aktivering: importera både ROM (.gb/.gbc) och sparfiler (.sav)";
+"TransferPakFromLibrary" = "Importera från bibliotek";
+"TransferPakFromLibraryDesc" = "Endast spel med sparfiler visas.\nValda GB/GBC-spel måste matcha N64-ROM";
+"TransferPakNoGames" = "Inga kompatibla spel";
+"TransferPakFromFiles" = "Importera från filer";
+"TransferPakOn" = "Aktiverad";
+"TransferPakOff" = "Inaktiverad";
+"TransferPakImportError" = "Fel: Importera både ROM och sparning (2 filer krävs)";
+"ShowControlsTitle" = "Visa kontroller";
+"HideControlsTitle" = "Dölj kontroller";
+
+"DesignedFor" = "Designad för %@";

@@ -1,0 +1,563 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Cloudové služby";
+"ImportAddLanServiceTitle" = "Lokální síťové služby";
+"ImportAddDiscoverServiceTitle" = "Vyhledávací služby";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Cloud";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Přidat službu";
+"ImportServiceDelete" = "Odebrat službu";
+"ImportAliyunNotGetDriveId" = "Přidání služby Aliyun selhalo – nelze získat ID složky";
+"ImportDownloadError" = "Chyba stahování\n%@";
+"ImportDownloadContinue" = "Pokračovat ve stahování...\n%@";
+"LandServiceEditServerName" = "Název serveru";
+"LandServiceEditServerNamePlaceholder" = "Můj SMB server";
+"LandServiceEditHost" = "Adresa serveru";
+"LandServiceEditUserName" = "Uživatelské jméno";
+"LandServiceEditPassword" = "Heslo";
+"LandServiceEditRequiredPlaceholder" = "Povinné";
+"LandServiceEditOptionalPlaceholder" = "Volitelné";
+"LandServiceEditConnect" = "Připojit";
+"AddLandServiceSuccess" = "Úspěšně přidáno: %@";
+"AddLandServiceFailed" = "Přidání %@ selhalo\nZkontrolujte připojení, stav služby nebo zadané údaje";
+"AddLandServiceTimeout" = "Vypršel časový limit připojení";
+"FilesImporterErrorFileExist" = "\"%@\" již existuje – import není nutný";
+"FilesImporterErrorBadCopy" = "Import \"%@\" selhal – chyba při kopírování souboru";
+"FilesImporterErrorBadExtension" = "Import \"%@\" selhal – nepodporovaná přípona souboru";
+"FilesImporterErrorNoPermission" = "Chybí oprávnění pro přístup k %@";
+"FilesImporterErrorUnableToHash" = "Import \"%@\" selhal – nelze vypočítat hash";
+"FilesImporterErrorWriteDatabase" = "Import \"%@\" selhal – chyba zápisu do databáze";
+"GameSaveMatchTitle" = "Přiřazení uložení ke hře";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" nelze automaticky přiřadit – prosím přiřaďte ručně";
+"GameSaveAlreadyExistTitle" = "Uložení již existuje";
+"FilesImporterErrorSaveAlreadyExist" = "Import \"%@\" selhal – přepsat existující uložení?";
+"GameSaveMathToMuchTitle" = "Více shod";
+"FilesImporterErrorSaveMathToMuch" = "Import \"%@\" selhal – nalezeno více možných her, přiřaďte ručně";
+"FilesImporterErrorSkinBadFile" = "Import %@ selhal – poškozený soubor skinu";
+"PasteImporterErrorNoMatchContent" = "V schránce není obsah vhodný pro import";
+"FilesDownloadErrorFileExist" = "%@ již staženo – opakované stahování není nutné";
+"FilesImporterErrorEmptyContent" = "Žádný obsah k importu";
+"LanServiceInitFailed" = "Vytvoření služby %@ selhalo";
+"SMBLoginFailed" = "Chyba přihlášení k Samba: %@";
+"SMBListFilesFailed" = "Chyba načítání souborů: %@";
+"SMBListFilesTypeError" = "Tento soubor není složka";
+"DropErrorLoadFailed" = "Chyba načítání souboru";
+"DropErrorNotSupportFile" = "Nepodporovaný typ souboru";
+"ImportErrorTitle" = "Chyba importu";
+"ImportGameSuccessTitle" = "Hra úspěšně importována";
+"ImportGameSuccessDetail" = "%@\nByla přidána do knihovny. Zobrazit nyní?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\nByla přidána do knihovny. Spustit hru?";
+"ImportSkinSuccessTitle" = "Skin úspěšně importován";
+"ImportSkinSuccessDetail" = "\"%@\"\nImportován úspěšně. Zobrazit nyní?";
+"ImportGameSaveSuccessTitle" = "Uložení hry importováno";
+"ImportGameSaveSuccessDetail" = "\"%@\"\nBylo přiřazeno k odpovídající hře";
+"ImportGameSaveSuccessForOne" = "\"%@\"\nBylo importováno. Spustit hru?";
+"ImportGameSaveFailedNoGameError" = "Import \"%@\" selhal – nejprve přidejte hru!";
+"DownloadCompletion" = "Stahování dokončeno";
+"QQChannelName" = "QQ kanál";
+"NotSupportPasswordZip" = "\"%@\" nelze rozbalit – šifrované archivy nejsou podporovány";
+"UnzipFailed" = "\"%@\" – chyba rozbalení";
+"NoSupportInZip" = "\"%@\" neobsahuje podporované formáty";
+"IPCopy" = "Adresa zkopírována";
+"ImportServiceListFilesTitle" = "Soubory";
+"ImportServiceListFilesDetail" = "Import her, skinů nebo uložení ze souborů nebo iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Přenos souborů přes prohlížeč v lokální síti";
+"ImportServiceListWiFiOnDetail" = "%@\nPro přenos použijte prohlížeč";
+"ImportServiceListPasteTitle" = "Načíst ze schránky";
+"ImportServiceListPasteDetail" = "Podporuje soubory zkopírované z macOS nebo aplikace Soubory";
+"ImportHowTo" = "Jak importovat";
+"ImportTopHintTitle" = "Příběh plný snů a dobrodružství začíná právě zde!";
+"ImportDragAndDropTips" = "Přetáhněte soubory kamkoli do Manic EMU pro přenos";
+"ImportChannelTips" = "Máte dotazy? Připojte se k %@ pro pomoc";
+"ToastConnectCloudDriveSuccess" = "Úspěšné připojení k %@";
+"AlertImportFilesSuccess" = "Úspěšný import zdrojů";
+"ErrorConnectCloudDrive" = "Nelze připojit cloudovou službu";
+"ErrorUnknown" = "Neznámá chyba";
+"ReasonConncetCloudDriveFail" = "Zkontrolujte připojení a autorizaci služby, nebo službu odeberte a přidejte znovu";
+
+//Common
+"TabbarTitleGames" = "Hry";
+"TabbarTitleImport" = "Import";
+"TabbarTitleSettings" = "Nastavení";
+"SelectAll" = "Vybrat vše";
+"DeSelectAll" = "Zrušit výběr";
+"CloudDriveBrowserDownload" = "Stáhnout";
+"CancelTitle" = "Zrušit";
+"CheckTitle" = "Zobrazit";
+"StartGameTitle" = "Hrát";
+"ConfirmTitle" = "Potvrdit";
+"SaveTitle" = "Uložit";
+"NameTitle" = "Název";
+"TimeAgoMinuteFormat" = "Před %d minutami";
+"TimeAgoHourFormat" = "Před %d hodinami";
+"TimeAgoDayFormat" = "Před %d dny";
+"TimeAgoWeekFormat" = "Před %d týdny";
+"TimeAgoMonthFormat" = "Před %d měsíci";
+"TimeAgoYearFormat" = "Před %d lety";
+"TimeDurationHourAndMinuteFormat" = "%d hodin %d minut";
+"TimeDurationHourFormat" = "%d hodin";
+"TimeDurationMinuteFormat" = "%d minut";
+"FatalErrorTitle" = "Závažná chyba";
+"FatalErrorDesc" = "Chyba načítání systémových zdrojů – Manic EMU může mít omezenou funkčnost";
+"LodingFailedTitle" = "Chyba načítání";
+"AirPlayDesc" = "Začněte své dobrodružství hned teď!";
+"ToastSuccess" = "Úspěšně uloženo";
+"ToastFailed" = "Uložení selhalo";
+
+//Games
+"GamesSearchPlaceHolder" = "Název hry";
+"GamesRename" = "Přejmenovat";
+"GamesModifyCover" = "Upravit obal";
+"GamesSpecifySkin" = "Nastavit skin";
+"GamesCheatCode" = "Cheat code";
+"GamesShareRom" = "Sdílet ROM";
+"GamesCheckSave" = "Zobrazit uložení";
+"GamesImportSave" = "Importovat uložení";
+"GamesShareSave" = "Exportovat uložení";
+"GamesDelete" = "Odebrat hru";
+"GamesRandom" = "Nevíte co hrát? Zkuste náhodný výběr";
+"LoadGameErrorRomNotExist" = "Chyba načítání – ROM neexistuje";
+"GamesListEmptyGuideLeft" = "Klikněte na";
+"GamesListEmptyGuideRight" = "níže pro import her";
+"GamesListEmptyWelcomeLeft" = "Vítejte ve světě";
+"GamesListEmptyWelcomeRight" = "";
+"GamesListEmptyWarnning" = "Ujistěte se, že ROM soubory máte legálně!";
+"DeleteGameAlertDetail" = "ROM, uložení a cheat codes budou nenávratně smazány!";
+"DeleteSkinAlertDetail" = "Skin bude nenávratně odstraněn!";
+"DeleteGameGameStateAlertTitle" = "Odstranit uložení stavu";
+"DeleteGameGameStateAlertDetail" = "Uložení stavu bude nenávratně smazáno!";
+"confirmDelte" = "Potvrdit odstranění";
+
+//Controllers
+"ControllersTouchName" = "Dotykový ovladač";
+"ControllersHeaderTitle" = "Ovladače";
+"ControllersPlayerIndex" = "Hráč %d";
+"ControllersPlayerUnset" = "Nepřiřazeno";
+"ControllersHowToConnect" = "Jak připojit";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "Před %@ · celkem %@";
+"ReadyGameInfoNeverPlayed" = "Ještě nehráno – začněte hned!";
+"ReadyEditCoverTakePhoto" = "Vyfotit";
+"ReadyEditCoverAlbum" = "Album";
+"ReadyEditCoverFile" = "Soubor";
+"ReadyEditCoverSearch" = "Hledat";
+"ReadySegmentManualSave" = "Manuální uložení stavu";
+"ReadySegmentAutoSave" = "Automatické uložení stavu";
+"ReadyEditTitleFailed" = "Přejmenování selhalo – název nesmí být prázdný";
+"ReadyEditTitleSuccess" = "Úspěšně přejmenováno";
+"ReadyGameSaveStatesEmpty" = "Žádná uložení";
+"GameSaveGuideBecomTitle" = "Stát se";
+"GameSaveGuideMemberTitle" = "členem";
+"GameSaveGuideDesc" = "Odemkněte neomezená manuální uložení a až 50 automatických uložení";
+"GameSaveUnCompatibleTitle" = "Problém kompatibility uložení";
+"GameSaveUnCompatibleDetail" = "Toto uložení vytvořil %@. Vaše zařízení (%@) může způsobit nestabilitu při načítání!";
+"GameSaveStateForceLoad" = "Přesto načíst";
+"GameSaveContinue" = "Pokračovat";
+"GameSaveTitle" = "Uložení %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU plně podporuje skiny ve formátu .deltaskin";
+"SkinNavigationSubTitleSpecifiedGame" = "Skin pouze pro %@";
+"SkinSegmentPortraitTitle" = "Na výšku";
+"SkinSegmentLandscapeTitle" = "Na šířku";
+"SkinAddTitle" = "Přidat skin";
+"HowToFetch" = "Jak získat";
+"SkinDelete" = "Odebrat skin";
+"DefaultSkinCannotEdit" = "Výchozí skin nelze upravovat";
+
+//History
+"HistoryHeaderTitle" = "Historie hraní";
+"HistoryFavouriteTitle" = "Nejhranější";
+"HistoryEmptyTitle" = "Žádná historie";
+"HistoryEmptyImportGame" = "Importovat hru";
+"HistoryEmptyStartGame" = "Začít hrát";
+
+//Settings
+"LeftHandTitle" = "Levá ruka";
+"LeftHandDetail" = "Zrcadlové převrácení ovládacích prvků";
+"QuickGameTitle" = "Rychlý start";
+"QuickGameDetail" = "Přeskočit úvodní obrazovku hry";
+"AirPlayTitle" = "Režim AirPlay";
+"AirPlayDetail" = "Zobrazení hry na plnou obrazovku přes AirPlay";
+"iCloudTitle" = "iCloud synchronizace";
+"iCloudDetail" = "Synchronizace her, skinů a nastavení mezi zařízeními se stejným Apple ID";
+"AppIconTitle" = "Ikona aplikace";
+"WidgetTitle" = "Widgety";
+"QATitle" = "Časté dotazy";
+"FeedbackTitle" = "Zpětná vazba";
+"ShareAppTitle" = "Sdílet Manic EMU";
+"JoinQQTitle" = "Připojit se na QQ";
+"JoinTelegramTitle" = "Připojit se na Telegram";
+"ClearCacheTitle" = "Vymazat cache";
+"LanguageTitle" = "Jazyk";
+"UserAgreementTitle" = "Uživatelská smlouva";
+"PrivacyPolicyTitle" = "Zásady ochrany soukromí";
+"GeneralSettingTitle" = "Obecná nastavení";
+"AdvanceSettingTitle" = "Pokročilá nastavení";
+"SupportSettingTitle" = "Podpora";
+"OthersSettingTitle" = "Další";
+"RatingTitleLeft" = "Ohodnotit";
+"RatingTitleRight" = "";
+"RatingDetail" = "Pokud se vám aplikace líbí, podpořte nás 5hvězdičkovým hodnocením";
+"iCloudDisableTitle" = "iCloud není dostupný";
+"iCloudDisableDetail" = "Přihlaste se do iCloud a povolte přístup pro Manic EMU v Nastavení > Apple ID > iCloud";
+"iCloudSyncConfilictTitle" = "Konflikt synchronizace";
+"iCloudSyncConfilictDetail" = "Cloudová verze:\n%@\n\nLokální verze:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "Ponechat cloud";
+"iCloudSyncConfilictSaveLocal" = "Ponechat lokální";
+"SettingsNonMemberDesc" = "Staňte se hlavním hrdinou příběhu";
+"ThanksSupportDesc" = "Děkujeme za podporu";
+"ThanksCommingDesc" = "Děkujeme, že hrajete v";
+"PlayGameDesc" = "";
+"NoEmailSetting" = "E-mail není nastaven";
+"IDCopy" = "ID zkopírováno";
+"SendEmailSuccess" = "E-mail odeslán";
+"SendEmailFailed" = "Chyba odeslání: %@";
+"iCloudTipsTitle" = "Zapnout iCloud synchronizaci";
+"iCloudTipsDetail" = "Data budou nahrána do iCloud a spotřebují váš úložný prostor. Při nedostatku místa synchronizace selže!";
+"iCloudConfirm" = "Pokračovat";
+
+//Play
+"LoadingTitle" = "Načítání";
+"LoadRomSuccess" = "%@ připraveno – začněte hrát!";
+"GameSettingSaveState" = "Uložit stav";
+"GameSettingQuickLoadState" = "Rychlé načtení";
+"GameSettingVolume" = "Hlasitost";
+"GameSettingFastForwardResume" = "Normální rychlost";
+"GameSettingFastForward" = "Rychloposuv %@";
+"GameSettingStateList" = "Seznam uložení";
+"GameSettingSkins" = "Nastavit skin";
+"GameSettingFilter" = "Filtr";
+"GameSettingScreenShot" = "Screenshot";
+"GameSettingHapticOff" = "Vypnout vibrace";
+"GameSettingHapticSoft" = "Slabé vibrace";
+"GameSettingHapticLight" = "Lehké vibrace";
+"GameSettingHapticMedium" = "Střední vibrace";
+"GameSettingHapticHeavy" = "Silné vibrace";
+"GameSettingHapticRigid" = "Tuhé vibrace";
+"GameSettingControllerTypeDPad" = "D-Pad";
+"GameSettingControllerTypeStick" = "Joystick";
+"GameSettingAirplay" = "AirPlay";
+"GameSettingControllerSetting" = "Nastavení ovladače";
+"GameSettingOrientationAuto" = "Auto rotace";
+"GameSettingOrientationPortrait" = "Na výšku";
+"GameSettingOrientationLandscape" = "Na šířku";
+"GameSettingFunctionSort" = "Řazení funkcí";
+"GameSettingReload" = "Restartovat";
+"GameSettingQuit" = "Ukončit";
+"GameSaveStateSuccess" = "Stav úspěšně uložen";
+"GameSaveStateLoadFailed" = "Chyba načtení – uložení je poškozené";
+"GameSaveStateLoadSuccess" = "Stav úspěšně načten";
+"GameSaveStateQuickLoadFailed" = "Žádné manuální uložení – použijte seznam uložení";
+"GameSaveListTitle" = "Uložení stavu";
+"GameCheatActivateFailed" = "%@\nAktivace selhala – neplatný cheat code";
+"GameCheatActivateSuccess" = "%@\nAktivováno úspěšně";
+"AirPlayingTitle" = "Obraz je přenášen přes AirPlay";
+"VolumeOff" = "Zvuk vypnut";
+"VolumeOn" = "Zvuk zapnut";
+"FunctionSortDesc1" = "Tyto funkce jsou výchozí pro oficiální skiny";
+"FunctionSortDesc2" = "Podržte pro změnu pořadí";
+"ManualGameSaveCountLimit" = "Překročen limit uložení – odemkněte prémiový účet";
+"FastForwardSpeedLimit" = "Maximální rychlost x2 – odemkněte prémiový účet pro x5";
+"ResetSpeed" = "Normální rychlost";
+"GoToUpgrade" = "Přejít na upgrade";
+"SaveStateTooFrequent" = "Příliš časté ukládání";
+"LoadStateTooFrequent" = "Příliš časté načítání";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Zadejte název";
+"AutoDetectCheatTypeName" = "Automatická detekce";
+"AutoDetectFormat" = "Cheat code bude automaticky detekován";
+"CheatCodeFormatError" = "Neplatný formát cheat code";
+"CheatCodeEmptyTitle" = "Žádné cheat codes";
+"CheatCodeEmptyGuideLeft" = "Klikněte na";
+"CheatCodeEmptyGuideRight" = "pro přidání cheat code";
+"EnableCheatCodeAlertTitle" = "Aktivace cheat code";
+"EnableCheatCodeAlertDetail" = "Cheat codes závisí na verzi hry. Mohou způsobit nestabilitu!";
+
+//Filter
+"FilterSectionHeaderTitle" = "Videofiltry";
+"FilterOriginTitle" = "Originál";
+
+//In-App Purchases
+"PurchaseAdcancedFeaturesTitle" = "Odemknout prémiové funkce";
+"AdcancedFeaturesDetail" = " 
+「🎮 Ultimate zážitek」
+🔥 Neomezená uložení
+🚀 Rychlost až x5
+💎 Neomezené cheat codes
+✨ Exkluzivní filtry
+";
+"PurchaseImportFeaturesTitle" = "Cloudové služby";
+"ImportFeaturesDetail" = " 
+☁️ Podpora Google Drive, Dropbox, OneDrive
+✅ Baidu Cloud, Aliyun
+⚡ WebDAV/SMB integrace
+";
+"PurchaseControllerFeaturesTitle" = "Podpora externích ovladačů";
+"ControllerFeaturesDetail" = " 
+🕹️ Joy-Con/DUALSHOCK/Xbox/klávesnice
+✨ Více ovladačů současně
+🎲 Režimy pro více hráčů
+";
+"PurchaseAirPlayFeaturesTitle" = "AirPlay pro TV";
+"AirPlayFeaturesDetail" = " 
+📺 Bezdrátový přenos na TV
+🔓 Plná podpora AirPlay
+🎮 Ovládání přes gamepad
+";
+"PurchaseiCloudFeaturesTitle" = "iCloud synchronizace";
+"iCloudFeaturesDetail" = " 
+☁️ Synchronizace her a uložení
+🔒 Šifrované zálohy
+🔄 Pokračování na jiném zařízení
+";
+"AdvanceFeatureDescLabel1" = "Rychlost až x5";
+"AdvanceFeatureDescLabel2" = "Neomezená uložení";
+"AdvanceFeatureDescLabel3" = "Neomezené cheat codes";
+"AdvanceFeatureDescLabel4" = "Vlastní filtry";
+"AdvanceFeatureDescLabel5" = "Automatické ukládání";
+"RestorePurchaseButton" = "Obnovit nákupy";
+"AnnualDescription" = "Roční členství";
+"MonthlyDescription" = "Měsíční členství";
+"ForeverDescription" = "Doživotní členství";
+"SubscriptionPromotional" = "Prvních %d dní zdarma";
+"PurchasePricePerYear" = "/rok";
+"PurchasePricePerMonth" = "/měsíc";
+"PromptLabelForYear" = "50%% sleva";
+"PromptLabelForMonth" = "Zkušební";
+"PromptLabelForForever" = "Nejvýhodnější";
+"GetProductsFailedTitle" = "Chyba načítání produktů";
+"TermOfServiceTitle" = "Podmínky služby";
+"AnnualMemberTitle" = "Super roční člen";
+"MonthlyMemberTitle" = "Měsíční člen";
+"ForeverMemberTitle" = "Doživotní člen";
+"PurchaseVerifiedFailed" = "Chyba ověření – restartujte aplikaci";
+"PurchaseCancel" = "Platba zrušena";
+"PurchasePending" = "Platba čeká na dokončení";
+"PurchaseUnknown" = "Neznámý stav";
+"PurchaseErrorDesc" = "Zkontrolujte připojení a opakujte";
+"PurchaseFailedTitle" = "Chyba platby";
+"RestoreSuccessDesc" = "Obnovení úspěšné!";
+"RestoreEndDesc" = "Žádné nákupy k obnovení";
+"TrialDesc" = "Zkušební období zdarma – lze kdykoli zrušit";
+"SubscriptionPurchaseButtonTitle" = "Vyzkoušet %d dní zdarma";
+"YearSubscriptionDisableDesc" = "Již máte roční členství";
+"MonthSubscriptionDisableDesc" = "Již máte měsíční členství";
+"ForeverSubscriptionDisableDesc" = "Již máte doživotní členství";
+"ChangeSubscription" = "Změnit plán";
+"UpgradePurchase" = "Pokračovat v upgradu";
+"ForeverPlanDesc" = "Všechny budoucí funkce zdarma";
+"BuyNowTitle" = "Odebírat";
+"SettingsFreeTrialDesc" = "%d dní zdarma";
+"Hi" = "Ahoj,";
+
+//Permission
+"PrePermissionPhotoTitle" = "Povolit Manic EMU přístup k albu?";
+"PrePermissionPhotoMessage" = "Pro ukládání screenshotů a výběr obalů";
+"PrePermissionPhotoCancel" = "Teď ne";
+"PrePermissionPhotoConfirm" = "Povolit";
+"DeniedPermissionPhotoTitle" = "Přístup k albu zamítnut!";
+"DeniedPermissionPhotoMessage" = "Pro ukládání screenshotů povolte přístup";
+"DeniedPermissionPhotoCancel" = "Zamítnout";
+"DeniedPermissionPhotoConfirm" = "Povolit v Nastavení";
+"PrePermissionCameraTitle" = "Povolit Manic EMU přístup k fotoaparátu?";
+"PrePermissionCameraMessage" = "Pro pořizování herních obalů";
+"PrePermissionCameraCancel" = "Teď ne";
+"PrePermissionCameraConfirm" = "Povolit";
+"DeniedPermissionCameraTitle" = "Přístup k fotoaparátu zamítnut!";
+"DeniedPermissionCameraMessage" = "Povolte přístup pro pořizování obalů";
+"DeniedPermissionCameraCancel" = "Zamítnout";
+"DeniedPermissionCameraConfirm" = "Povolit v Nastavení";
+"DeniedPermissionMicTitle" = "Přístup k mikrofonu zamítnut";
+"DeniedPermissionMicMessage" = "Pro plnou funkčnost některých DS her";
+"DeniedPermissionMicCancel" = "Zamítnout";
+"DeniedPermissionMicConfirm" = "Povolit v Nastavení";
+
+//Share
+"ShareAppSubtitle" = "Pozvěte přátele k dobrodružství!";
+"ShareRomFilesFailed" = "Chyba sdílení ROM";
+"ShareSaveFilesFailed" = "Žádné uložení k sdílení";
+"ShareFilesCopyFailed" = "Chyba kopírování souboru";
+"ShareFilesCompressFailed" = "Chyba komprese souboru";
+
+"TurnOnAirPlayAsk" = "AirPlay je připojen. Přepnout do režimu celé obrazovky?";
+
+"ThreeDSModePerformance" = "Výkonnostní režim";
+"ThreeDSModeCompatibility" = "Kompatibilní režim";
+"ThreeDSModeQuality" = "Priorita Grafiky";
+"ThreeDSNotSupportImportSave" = "3DS hry momentálně nepodporují import uložení";
+"ThreeDSNotSupportShareSave" = "3DS hry momentálně nepodporují sdílení uložení";
+"ThreeDSBetaAlertTitle" = "Experimentální verze 3DS";
+"ThreeDSBetaAlertDetail" = "Abychom vám umožnili dříve vyzkoušet hry 3DS, vydal Manic EMU tuto funkci v experimentální fázi. Některá vylepšení jsou stále potřeba.
+
+Dočasně nedostupné funkce:
+❌ Režim celé obrazovky AirPlay
+❌ Automatické ukládání
+❌ Zrychlení
+
+Při nestabilitě se podívejte na FAQ nebo připojte se k podpoře. Neustále vylepšujeme emulátor. Vaše podpora nám pomáhá vytvářet lepší zážitek. Pracujeme pro vás!";
+"ThreeDSNoSupportDeviceTitle" = "Nedostatečný výkon zařízení";
+"ThreeDSNoSupportDeviceDetail" = "Toto zařízení nemusí zvládnout emulaci 3DS. Pokračování může způsobit nepředvídatelné chyby";
+
+"GameImportBadFile" = "Import selhal: \"%@\" je poškozen nebo došlo k neznámé chybě. Zkuste jiný ROM soubor";
+"Game3DSDecryptFailed" = "Import selhal: Dešifrování \"%@\" selhalo. Zkuste jiný ROM soubor";
+"Game3DSGameNotExist" = "Selhalo importování aktualizace, \"%@\": Hra není nainstalována!";
+
+"Game3DSInputTitle" = "Zadejte obsah";
+"ControllerMappingGuideTitle" = "Klepnutím na tlačítko spusťte mapování";
+"ControllerMappingGuideBegin" = "Začít mapování 「%@」
+Stiskněte tlačítko ovladače...";
+"ControllerMappingReset" = "Obnovit";
+"ControllerMappingNoFouond" = "Nerozpoznané nastavení";
+"FlexSkinSettingError" = "Rozhraní není připraveno, zkuste to později";
+"SkinPreviewTitle" = "Náhled";
+"FullScreenWhenConnectControllerTitle" = "Automaticky celá obrazovka";
+"FullScreenWhenConnectControllerDetail" = "Přepnout na celou obrazovku při připojení ovladače";
+"JoinDiscordTitle" = "Připojit se k Discordu (Neoficiální)";
+"JoinDiscordAlertMessage" = "Děkujeme hráči %@ za vytvoření kanálu. Pokračovat?";
+"FlexSkinGuideTitle" = "Tažením nebo štípnutím upravte obrazovku";
+"DownloadFailed" = "Stažení selhalo";
+"RemoveDownloadTask" = "Zrušit stahování \"%@\"?";
+"GameSettingResolution" = "Rozlišení %@";
+"GameSettingSwapScreen" = "Přepnout obrazovku";
+"NotSupportGameSetting" = "Tato možnost není na %@ podporována";
+
+"ThemeSettingTitle" = "Téma";
+"ThemeSettingDetail" = "Ikony aplikací, barvy témat, nastavení obalů, pořadí konzolí";
+"ThemeDesktopIconTitle" = "Ikony aplikací";
+"ThemeDesktopIconDetail" = "Více ikon již brzy...";
+"ThemeThemeColorTitle" = "Barvy témat";
+"ThemeCoverStyleTitle" = "Styl obalů a rohy";
+"ThemeCoverStyleName" = "Styl %d";
+"ThemePlatformOrderTitle" = "Pořadí konzolí";
+"ThemePlatformOrderDetail" = "Podržte a táhněte pro úpravu pořadí";
+"ThemeColorLimitToast" = "Dosaženo maximálního počtu barev";
+"ThemeColorSystemNotAllowEdit" = "Výchozí barvy nelze upravovat";
+"EditTitle" = "Upravit";
+"RemoveTitle" = "Odebrat";
+"On" = "Zapnuto";
+"Off" = "Vypnuto";
+"AmiiboNotSearching" = "Amiibo nelze načíst při vypnutém NFC";
+"ConsoleHomeTitle" = "Hlavní nabídka";
+"AmiiboTitle" = "Načíst Amiibo";
+"ThreeDSHomeMenuNotRunning" = "Hlavní nabídka neběží";
+"ThreeDSImportSaveFailed" = "Chyba importu %@: Neznámý soubor uložení";
+"ThreeDSUpdateInstallSuccess" = "Aktualizace úspěšně nainstalována";
+"OnlineCoverFetchFailed" = "Chyba načítání obrázku";
+"JITMenuDesc" = "Aktivace JIT v nepodporovaném prostředí může způsobit pád aplikace";
+"ShaderModeTitle" = "Pokročilé shadery";
+"ShaderModeDesc" = "Zlepšuje přesnost textur (může ovlivnit výkon)";
+"NoDownloadTask" = "Žádné aktivní stahování";
+"NoGameCoverResult" = "Nenalezeny obaly";
+"NoContentResult" = "Žádný obsah";
+"OpenFilePermissionsLimit" = "Chybí oprávnění k otevření %@";
+"SevenZipDecompressError" = "Soubor 7z je poškozen nebo zašifrován";
+"ForceSquareRatioTitle" = "Vynutit čtvercový poměr";
+"ForceSquareRatioDetail" = "Obaly budou čtvercové (zapnuto) nebo původní (vypnuto)";
+
+"AutoSaveStateTitle" = "Automatické ukládání stavů";
+"GamesThemeTitle" = "Herní knihovna";
+"GamesPerRowTitle" = "Her na řádek (iPhone)";
+"GamesHideScrollIndicator" = "Skrýt ukazatele posuvníku";
+"ConsoleLanguageDesc" = "Nastavení oblasti a jazyka může vyžadovat manuální konfiguraci u některých her";
+"JitNoSupportDesc" = "JIT kompilace není v současném prostředí dostupná";
+"RenderRightEyeTitle" = "Vyrenderovat pravé oko";
+"RenderRightEyeDesc" = "Vypnutí zlepšuje výkon některých her, ale může způsobit blikání";
+"DisableTitle" = "Vypnout";
+"EnableTitle" = "Zapnout";
+"NoSaveStateToast" = "Žádný %@ k dispozici";
+"DeleteSelectedSaveStateAlert" = "Smazat vybraný «%@»?\nNelze obnovit!";
+"DeleteAllSaveStateAlert" = "Nevybran žádný prvek. Smazat všechny «%@»?\nNelze obnovit!";
+"AICoverSearchDesc" = "Detekováno neanglické hledání. Upgradujte na Premium pro vícejazyčné AI vyhledávání";
+"MaxTextSizeAllowDesc" = "Podporuje až %@ znaků";
+
+"PlatformSelectionTitle" = "Výběr Platformy";
+"PlatformSelectionDetail" = "Zvolte výchozí platformu pro %@";
+"PlatformChange" = "Přiřadit Platformu";
+"BIOSDesc" = "Některé platformy vyžadují BIOS";
+"BIOSImported" = "Importováno";
+"BIOSAlert" = "Některé platformy vyžadují soubory BIOS. Autorská práva BIOS patří výrobcům. Při importu dodržujte místní zákony.\n\nPřipojte se k naší komunitě pro pomoc.";
+"UnknownPlatform" = "Neznámá Platforma";
+"UnknownPlatformGameSelectWarn" = "Hry bez platformy nelze vybrat";
+"BIOSImportSuccess" = "%@ úspěšně importován!";
+"BIOSImportFailed" = "Nesprávný soubor!";
+
+"HideGameTitleDesc" = "Skrýt název hry";
+"HideGroupTitleDesc" = "Skrýt název skupiny";
+"GroupTitleStyelDesc" = "Styl názvu skupiny";
+"GroupTitleStyelAbbr" = "Zkr.";
+"GroupTitleStyelFull" = "Plný";
+"GroupTitleStyelBrand" = "Značka";
+"CopyLaunchLinkTitle" = "Kopírovat spouštěcí odkaz";
+"AskIfNeedToSaveCover" = "Spouštěcí odkaz zkopírován. Uložit obal do fotoalba?";
+"SaturnBiosAlertTitle" = "Chybí BIOS";
+"SaturnBiosAlertDetail" = "Sega Saturn lze emulovat přes HLE bez BIOS, ale BIOS soubor snižuje grafické chyby";
+"BiosAddTitle" = "Přidat BIOS";
+"StartGameWithoutBiosTitle" = "Spustit bez BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Pokročilý Režim";
+"ThreeDSAdvanceSettingTitle" = "Pokročilá Nastavení";
+"ThreeDSBasicSettingMode" = "Základní Režim";
+"ShareConfigButtonTitle" = "Sdílet Konfiguraci";
+"ImportConfigButtonTitle" = "Importovat Konfiguraci";
+"ShareFileFailedMissing" = "Sdílení selhalo: soubor neexistuje";
+"ReadConfigFileFailed" = "Nelze přečíst konfigurační soubor";
+"SwitchEmulationCore" = "Přepnout Jádro";
+"SwitchEmulationCoreDetail" = "Přepnout emulační jádro pro %@\nPřepnutí jádra znepřístupní uložené pozice z předchozího jádra. Pro přístup se vraťte k původnímu jádru";
+"BeetleSaturnNoSupportCheat" = "Jádro Beetle Saturn aktuálně nepodporuje cheaty. V případě potřeby přepněte na jádro Yabause";
+"CurrentTitle" = "aktuální";
+"NewSkinDesc" = "Manic EMU podporuje skiny ve formátech .manicskin a .deltaskin. Poznámka: Importovaný skin musí odpovídat aktuální platformě, jinak se v seznamu nezobrazí.\nPoskytujeme také přístup ke komunitám třetích stran pro skiny. Ty nejsou oficiálně spojeny s Manic EMU. Při stahování dodržujte podmínky služeb jednotlivých webů";
+"VisitSite" = "Navštívit %@";
+"OpenFile" = "Otevřít Soubor";
+"WebViewDownloadBegin" = "Stahování zahájeno";
+"RespectSilentMode" = "Respektovat Tichý Režim";
+"RespectSilentModeDesc" = "Při aktivaci bude Manic EMU přehrávat audio pouze mimo tichý režim";
+"SaturnISONoSwitchCore" = "Hry Sega Saturn ve formátu .iso nepodporují přepínání jader";
+"EnableFullScreenTitle" = "Povolit Celou Obrazovku";
+"DisableFullScreenTitle" = "Zakázat Celou Obrazovku";
+"SimulateBlowingTitle" = "Simulovat Foukání";
+"PaletteTitle" = "Paleta";
+"SkinRestDesc" = "Resetování skinu také obnoví skiny přiřazené hrami na výchozí verze";
+"SkinResetForAll" = "Resetovat všechny skiny platforem";
+"SkinResetForPlatform" = "Resetovat skin %@";
+"SkinDebug" = "Testovací Oblast Skinů";
+
+"ImportMissingFile" = "Chyba při importu %@: Soubor %@ nebyl nalezen";
+"MultiDiscBuilder" = "Pomocník pro více disků";
+"MultiDiscBuilderDesc" = "Vytváří vyměnitelné .m3u soubory pro hry na více discích (.cue/.bin nebo .chd). Přeskočte, pokud již .m3u máte – importujte přímo přes Import her";
+"M3uFileShare" = "Sdílet .m3u soubor";
+"M3uFileImport" = "Přidat do knihovny";
+"MultiDiscAddFile" = "Přidat soubor %@";
+"MultiDiscImportErrorConflict" = "Chyba: Nelze kombinovat .cue a .chd soubory";
+"MultiDiscImportErrorMissing" = "Chyba: Nenalezeny .cue/.chd soubory";
+"GenerateM3uFailed" = "Chyba při vytváření .m3u";
+"MultiDiscCloseAlert" = ".m3u vytvořen. Po importu zavřete";
+"MultiDiscContinueClose" = "Zavřít";
+"SwapDisk" = "Vyměnit disk";
+"NotSupportSwapDisk" = "Hra nepodporuje více disků";
+"TransferPakDesc" = "Transfer Pak synchronizuje data GB/GBC s N64. Pro aktivaci importujte ROM (.gb/.gbc) i uloženou hru (.sav)";
+"TransferPakFromLibrary" = "Import z knihovny";
+"TransferPakFromLibraryDesc" = "Zobrazeny pouze hry s uloženými pozicemi.\nVybrané hry GB/GBC musí odpovídat ROM N64";
+"TransferPakNoGames" = "Žádné kompatibilní hry";
+"TransferPakFromFiles" = "Import ze souborů";
+"TransferPakOn" = "Zapnuto";
+"TransferPakOff" = "Vypnuto";
+"TransferPakImportError" = "Chyba: Importujte oba soubory (ROM a uložení, 2 vyžadovány)";
+"ShowControlsTitle" = "Zobrazit ovládání";
+"HideControlsTitle" = "Skrýt ovládání";
+
+"DesignedFor" = "Navrženo pro %@";

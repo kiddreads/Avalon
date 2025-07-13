@@ -1,0 +1,198 @@
+//
+//  GameCoverView.swift
+//  ManicEmu
+//
+//  Created by Daiuno on 2025/5/4.
+//  Copyright © 2025 Manic EMU. All rights reserved.
+//
+
+import ManicEmuCore
+import Kingfisher
+
+class GameCoverView: UIView {
+    var imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = Constants.Color.BackgroundPrimary
+        return view
+    }()
+    
+    private var platformView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .center
+        view.backgroundColor = .white
+        view.isHidden = true
+        return view
+    }()
+    
+    private var barShadowView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.isHidden = true
+        view.addShadow(ofColor: Constants.Color.Background, radius: 10, offset: CGSize(width: 5, height: 0))
+        return view
+    }()
+    
+    private var style: CoverStyle = .style1
+    private var autoCornerRadius: Bool = false
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = Constants.Color.BackgroundPrimary
+        addSubview(imageView)
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        addSubview(barShadowView)
+        
+        addSubview(platformView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if style == .style3 {
+            imageView.roundCorners([.topLeft, .topRight], radius: layerCornerRadius - 6)
+        } else {
+            imageView.roundCorners([], radius: 0)
+        }
+        if autoCornerRadius {
+            layerCornerRadius = Constants.Size.GameCoverCornerRatio * style.maxCornerRadius(frameHeight: height)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setData(game: Game, coverSize: CGSize, style: CoverStyle) {
+        if height > 0 {
+            autoCornerRadius = false
+            layerCornerRadius = Constants.Size.GameCoverCornerRatio * style.maxCornerRadius(frameHeight: height)
+        } else {
+            autoCornerRadius = true
+        }
+        imageView.setGameCover(game: game, size: coverSize)
+        updateStyle(style, gameType: game.gameType)
+    }
+    
+    func setData(gameType: GameType, image: UIImage?, style: CoverStyle, cornerRadius: CGFloat, scalePlatform: Bool = true) {
+        autoCornerRadius = false
+        layerCornerRadius = cornerRadius
+        imageView.image = image
+        imageView.contentMode = .center
+        updateStyle(style, gameType: gameType, scalePlatform: scalePlatform)
+    }
+    
+    func updateStyle(_ style: CoverStyle, gameType: GameType, scalePlatform: Bool = true) {
+        self.style = style
+        platformView.image = Self.getPlatformImage(gameType: gameType, style: style, scalePlatform: scalePlatform)
+        switch style {
+        case .style1:
+            imageView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            platformView.isHidden = true
+            barShadowView.isHidden = true
+            backgroundColor = Constants.Color.BackgroundPrimary
+        case .style2:
+            imageView.snp.remakeConstraints { make in
+                make.top.trailing.bottom.equalToSuperview()
+                make.leading.equalTo(platformView.snp.trailing)
+            }
+            platformView.snp.remakeConstraints { make in
+                make.leading.top.bottom.equalToSuperview()
+                make.width.equalToSuperview().multipliedBy(0.1298)
+            }
+            barShadowView.snp.remakeConstraints { make in
+                make.edges.equalTo(platformView)
+            }
+            platformView.isHidden = false
+            barShadowView.isHidden = false
+            backgroundColor = Constants.Color.BackgroundPrimary
+        case .style3:
+            imageView.snp.remakeConstraints { make in
+                make.leading.top.trailing.equalToSuperview().inset(6)
+                make.bottom.equalTo(platformView.snp.top)
+            }
+            platformView.snp.remakeConstraints { make in
+                make.leading.bottom.trailing.equalToSuperview()
+                make.height.equalToSuperview().multipliedBy(0.2077)
+            }
+            platformView.isHidden = false
+            barShadowView.isHidden = true
+            backgroundColor = .white
+        }
+    }
+    
+    func updateCornerRadius(_ radius: CGFloat) {
+        layerCornerRadius = radius
+        if style == .style3 {
+            imageView.roundCorners([.topLeft, .topRight], radius: layerCornerRadius - 6)
+        } else {
+            imageView.roundCorners([], radius: 0)
+        }
+    }
+    
+    private static var platformImageCaches = [String: UIImage?]()
+    static func getPlatformImage(gameType: GameType, style: CoverStyle, scalePlatform: Bool = true) -> UIImage? {
+        guard style != .style1 else { return nil }
+        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && scalePlatform ? "_\(Constants.Size.GamesPerRow)" : "")
+        if let image = GameCoverView.platformImageCaches[key] {
+            return image
+        } else {
+            var image: UIImage? = nil
+            if gameType == ._3ds {
+                image = style == .style2 ? R.image.sds_cover_v() : R.image.sds_cover_h()
+            } else if gameType == .ds {
+                image = style == .style2 ? R.image.ds_cover_v() : R.image.ds_cover_h()
+            } else if gameType == .gba {
+                image = style == .style2 ? R.image.gba_cover_v() : R.image.gba_cover_h()
+            } else if gameType == .gbc {
+                image = style == .style2 ? R.image.gbc_cover_v() : R.image.gbc_cover_h()
+            } else if gameType == .gb {
+                image = style == .style2 ? R.image.gb_cover_v() : R.image.gb_cover_h()
+            } else if gameType == .nes {
+                image = style == .style2 ? R.image.nes_cover_v() : R.image.nes_cover_h()
+            } else if gameType == .snes {
+                image = style == .style2 ? R.image.snes_cover_v() : R.image.snes_cover_h()
+            } else if gameType == .psp {
+                image = style == .style2 ? R.image.psp_cover_v() : R.image.psp_cover_h()
+            } else if gameType == .md {
+                if Locale.prefersUS {
+                    image = style == .style2 ? R.image.md_cover_v_us() : R.image.md_cover_h_us()
+                } else {
+                    image = style == .style2 ? R.image.md_cover_v() : R.image.md_cover_h()
+                }
+            } else if gameType == .mcd {
+                if Locale.prefersUS {
+                    image = style == .style2 ? R.image.mcd_cover_v_us() : R.image.mcd_cover_h_us()
+                } else {
+                    image = style == .style2 ? R.image.mcd_cover_v() : R.image.mcd_cover_h()
+                }
+            } else if gameType == ._32x {
+                if Locale.prefersUS {
+                    image = style == .style2 ? R.image.s2x_cover_v_us() : R.image.s2x_cover_h_us()
+                } else {
+                    image = style == .style2 ? R.image.s2x_cover_v() : R.image.s2x_cover_h()
+                }
+            } else if gameType == .ss {
+                image = style == .style2 ? R.image.ss_cover_v() : R.image.ss_cover_h()
+            } else if gameType == .sg1000 {
+                image = style == .style2 ? R.image.sg1000_cover_v() : R.image.sg1000_cover_h()
+            } else if gameType == .gg {
+                image = style == .style2 ? R.image.gg_cover_v() : R.image.gg_cover_h()
+            } else if gameType == .ms {
+                image = style == .style2 ? R.image.ms_cover_v() : R.image.ms_cover_h()
+            } else if gameType == .n64 {
+                image = style == .style2 ? R.image.n64_cover_v() : R.image.n64_cover_h()
+            }
+            if UIDevice.isPhone, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
+                image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))
+            }
+            GameCoverView.platformImageCaches[key] = image
+            return image
+        }
+    }
+    
+}

@@ -1,0 +1,46 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  run-tests:
+    name: Run tests
+    runs-on: macOS-latest
+    if: contains(github.event.head_commit.message, '[ci skip]') == false
+    env:
+      BUNDLE_PATH: vendor/bundle
+      DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.1'
+      - run: |
+          ls -l /Applications | grep -i Xcode
+
+      # Cache
+      - name: Cache ${{ env.BUNDLE_PATH }}
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.BUNDLE_PATH }}
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+
+      # Dependencies
+      - name: Bundle install
+        run: |
+          gem install bundler -v `tail -1 Gemfile.lock`
+          bundle config path ${{ env.BUNDLE_PATH }}
+          bundle install --jobs 4 --retry 3
+
+      # Tests
+      - run: |
+          bundle exec fastlane ios unit_tests
+      - run: |
+          bundle exec fastlane tvos unit_tests
+      - name: Report coverage
+        run: |
+          bash <(curl -s https://codecov.io/bash) -cF ios -J "QuickTableViewController"
+      - run: |
+          bundle exec fastlane ios ui_tests
+      - run: |
+          bundle exec fastlane tvos ui_tests

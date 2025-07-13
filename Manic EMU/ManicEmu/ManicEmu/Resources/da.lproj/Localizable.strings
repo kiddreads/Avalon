@@ -1,0 +1,565 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Skytjenester";
+"ImportAddLanServiceTitle" = "Lokalt netværk";
+"ImportAddDiscoverServiceTitle" = "Opdagelsestjenester";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Yun";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Tilføj tjeneste";
+"ImportServiceDelete" = "Fjern tjeneste";
+"ImportAliyunNotGetDriveId" = "Kunne ikke tilføje Aliyun-tjeneste: Fejl ved hentning af mappe-ID";
+"ImportDownloadError" = "Downloadfejl\n%@";
+"ImportDownloadContinue" = "Fortsæt download...\n%@";
+"LandServiceEditServerName" = "Servernavn";
+"LandServiceEditServerNamePlaceholder" = "Min SMB-server";
+"LandServiceEditHost" = "Serveradresse";
+"LandServiceEditUserName" = "Brugernavn";
+"LandServiceEditPassword" = "Adgangskode";
+"LandServiceEditRequiredPlaceholder" = "Påkrævet";
+"LandServiceEditOptionalPlaceholder" = "Valgfrit";
+"LandServiceEditConnect" = "Forbind";
+"AddLandServiceSuccess" = "%@ tilføjet succesfuldt";
+"AddLandServiceFailed" = "Kunne ikke tilføje %@\nTjek netværk, serverstatus eller indtastede oplysninger";
+"AddLandServiceTimeout" = "Forbindelsestimeout";
+"FilesImporterErrorFileExist" = "\"%@\" eksisterer allerede – importering unødvendig";
+"FilesImporterErrorBadCopy" = "Kunne ikke importere \"%@\": Fejl under filkopiering";
+"FilesImporterErrorBadExtension" = "Kunne ikke importere \"%@\": Filtype genkendes ikke";
+"FilesImporterErrorNoPermission" = "Ingen adgang til %@";
+"FilesImporterErrorUnableToHash" = "Kunne ikke importere \"%@\": Fejl ved hash-beregning";
+"FilesImporterErrorWriteDatabase" = "Kunne ikke importere \"%@\": Fejl ved databaseskrivning";
+"GameSaveMatchTitle" = "Match gemt spil til spil";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" kunne ikke matches – manuel matchning kræves";
+"GameSaveAlreadyExistTitle" = "Gemme tilstand eksisterer";
+"FilesImporterErrorSaveAlreadyExist" = "Kunne ikke importere \"%@\". Overskriv eksisterende gemme tilstand?";
+"GameSaveMathToMuchTitle" = "Flere matches";
+"FilesImporterErrorSaveMathToMuch" = "Kunne ikke importere \"%@\": Flere spil matchet – manuel matchning kræves";
+"FilesImporterErrorSkinBadFile" = "Kunne ikke importere %@: Skinfilen er beskadiget";
+"PasteImporterErrorNoMatchContent" = "Ingen importvenligt indhold i udklipsholder";
+"FilesDownloadErrorFileExist" = "%@ er allerede downloadet";
+"FilesImporterErrorEmptyContent" = "Intet indhold at importere";
+"LanServiceInitFailed" = "Kunne ikke oprette %@-tjeneste";
+"SMBLoginFailed" = "Samba-login mislykkedes%@";
+"SMBListFilesFailed" = "Kunne ikke hente filer%@";
+"SMBListFilesTypeError" = "Filen er ikke en mappe";
+"DropErrorLoadFailed" = "Kunne ikke indlæse fil";
+"DropErrorNotSupportFile" = "Filtypen understøttes ikke";
+"ImportErrorTitle" = "Importfejl";
+"ImportGameSuccessTitle" = "Spil importeret";
+"ImportGameSuccessDetail" = "%@\nEr importeret til spilbibliotek. Vis nu?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\nEr importeret. Start spil nu?";
+"ImportSkinSuccessTitle" = "Skin importeret";
+"ImportSkinSuccessDetail" = "\"%@\"\nImporteret succesfuldt. Vis nu?";
+"ImportGameSaveSuccessTitle" = "Gemme tilstand importeret";
+"ImportGameSaveSuccessDetail" = "\"%@\"\nEr importeret til matchet spil";
+"ImportGameSaveSuccessForOne" = "\"%@\"\nEr importeret. Start spil nu?";
+"ImportGameSaveFailedNoGameError" = "Kunne ikke importere \"%@\": Du har endnu ingen spil!";
+"DownloadCompletion" = "Download fuldført";
+"QQChannelName" = "QQ-kanal";
+"NotSupportPasswordZip" = "Kan ikke udpakke \"%@\": Krypterede ZIP-filer understøttes ikke";
+"UnzipFailed" = "Kunne ikke udpakke \"%@\"";
+"NoSupportInZip" = "\"%@\" indeholder ikke understøttede formater";
+"IPCopy" = "Adresse kopieret";
+"ImportServiceListFilesTitle" = "Filer";
+"ImportServiceListFilesDetail" = "Importer spil, skins eller gemte tilstande fra filer/iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Overfør filer via browser på samme netværk";
+"ImportServiceListWiFiOnDetail" = "%@\nBrug browser til filoverførsel";
+"ImportServiceListPasteTitle" = "Læs udklipsholder";
+"ImportServiceListPasteDetail" = "Understøtter filoverførsel fra macOS og Filer-app";
+"ImportHowTo" = "Sådan importerer du";
+"ImportTopHintTitle" = "Et eventyr fuld af drømme og udfordringer begynder her!";
+"ImportDragAndDropTips" = "Træk filer til enhver Manic EMU-skærm for overførsel";
+"ImportChannelTips" = "Besøg %@ for support";
+"ToastConnectCloudDriveSuccess" = "Forbundet til %@";
+"AlertImportFilesSuccess" = "Ressourcer importeret";
+"ErrorConnectCloudDrive" = "Kan ikke forbinde til skytjeneste";
+"ErrorUnknown" = "Ukendt fejl";
+"ReasonConncetCloudDriveFail" = "Tjek netværk eller skyadgang, eller fjern og tilføj tjenesten igen";
+
+//Common
+"TabbarTitleGames" = "Spil";
+"TabbarTitleImport" = "Importer";
+"TabbarTitleSettings" = "Indstillinger";
+"SelectAll" = "Vælg alle";
+"DeSelectAll" = "Fravælg alle";
+"CloudDriveBrowserDownload" = "Download";
+"CancelTitle" = "Annuller";
+"CheckTitle" = "Vis";
+"StartGameTitle" = "Start spil";
+"ConfirmTitle" = "Bekræft";
+"SaveTitle" = "Gem";
+"NameTitle" = "Navn";
+"TimeAgoMinuteFormat" = "%d minut siden";
+"TimeAgoHourFormat" = "%d time siden";
+"TimeAgoDayFormat" = "%d dag siden";
+"TimeAgoWeekFormat" = "%d uge siden";
+"TimeAgoMonthFormat" = "%d måned siden";
+"TimeAgoYearFormat" = "%d år siden";
+"TimeDurationHourAndMinuteFormat" = "%d timer %d minutter";
+"TimeDurationHourFormat" = "%d timer";
+"TimeDurationMinuteFormat" = "%d minutter";
+"FatalErrorTitle" = "Kritisk fejl";
+"FatalErrorDesc" = "Systemressourcer kunne ikke indlæses – Manic EMU kan være ustabil";
+"LodingFailedTitle" = "Indlæsningsfejl";
+"AirPlayDesc" = "Begynd dit eventyr nu!";
+"ToastSuccess" = "Gemt succesfuldt";
+"ToastFailed" = "Kunne ikke gemme";
+
+//Games
+"GamesSearchPlaceHolder" = "Søg efter spil";
+"GamesRename" = "Omdøb";
+"GamesModifyCover" = "Rediger cover";
+"GamesSpecifySkin" = "Vælg skin";
+"GamesCheatCode" = "Cheat code";
+"GamesShareRom" = "Del ROM";
+"GamesCheckSave" = "Vis øjeblikkelig gemt tilstand";
+"GamesImportSave" = "Importer gemt tilstand";
+"GamesShareSave" = "Eksporter gemt tilstand";
+"GamesDelete" = "Fjern spil";
+"GamesRandom" = "Jeg ved ikke hvad jeg skal spille – tilfældigt valg";
+"LoadGameErrorRomNotExist" = "Spil kunne ikke indlæses: ROM findes ikke";
+"GamesListEmptyGuideLeft" = "Klik på";
+"GamesListEmptyGuideRight" = "nedenfor for at importere spil";
+"GamesListEmptyWelcomeLeft" = "Velkommen til";
+"GamesListEmptyWelcomeRight" = "s verden";
+"GamesListEmptyWarnning" = "Sikr dig at ROM-filer er erhvervet lovligt";
+"DeleteGameAlertDetail" = "ROM-filer, gemte tilstande og cheat codes vil blive slettet – handlingen kan ikke fortrydes!";
+"DeleteSkinAlertDetail" = "Slettede skins kan ikke gendannes!";
+"DeleteGameGameStateAlertTitle" = "Slet øjeblikkelig gemt tilstand";
+"DeleteGameGameStateAlertDetail" = "Slettede øjeblikkelige gemte tilstande kan ikke gendannes!";
+"confirmDelte" = "Bekræft sletning";
+
+//Controllers
+"ControllersTouchName" = "Touch-controller";
+"ControllersHeaderTitle" = "Controllere";
+"ControllersPlayerIndex" = "Spiller %d";
+"ControllersPlayerUnset" = "Ikke tildelt";
+"ControllersHowToConnect" = "Sådan forbinder du";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "%@ spillede · Total %@";
+"ReadyGameInfoNeverPlayed" = "Ikke spillet endnu – begynd dit eventyr";
+"ReadyEditCoverTakePhoto" = "Tag foto";
+"ReadyEditCoverAlbum" = "Fotoalbum";
+"ReadyEditCoverFile" = "Fil";
+"ReadyEditCoverSearch" = "Søg";
+"ReadySegmentManualSave" = "Manuel gemt tilstand";
+"ReadySegmentAutoSave" = "Automatisk gemt tilstand";
+"ReadyEditTitleFailed" = "Omdøbning mislykkedes: Spilnavn må ikke være tomt";
+"ReadyEditTitleSuccess" = "Omdøbt succesfuldt";
+"ReadyGameSaveStatesEmpty" = "Ingen gemte tilstande";
+"GameSaveGuideBecomTitle" = "Bliv";
+"GameSaveGuideMemberTitle" = "medlem";
+"GameSaveGuideDesc" = "Lås op for ubegrænsede manuelle gemte tilstande og op til 50 automatiske";
+"GameSaveUnCompatibleTitle" = "Kompatibilitetsproblem";
+"GameSaveUnCompatibleDetail" = "Denne gemte tilstand blev oprettet på %@. Nuværende enhed: %@. Uoverensstemmelser kan forårsage fejl!";
+"GameSaveStateForceLoad" = "Fortsæt indlæsning";
+"GameSaveContinue" = "Fortsæt";
+"GameSaveTitle" = "Gem tilstand %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU understøtter .deltaskin-formater";
+"SkinNavigationSubTitleSpecifiedGame" = "Tilpasset skin for %@";
+"SkinSegmentPortraitTitle" = "Portræt";
+"SkinSegmentLandscapeTitle" = "Landskab";
+"SkinAddTitle" = "Tilføj skin";
+"HowToFetch" = "Hvordan man får";
+"SkinDelete" = "Fjern skin";
+"DefaultSkinCannotEdit" = "Standardskin kan ikke redigeres";
+
+//History
+"HistoryHeaderTitle" = "Spilhistorie";
+"HistoryFavouriteTitle" = "Mest spillede";
+"HistoryEmptyTitle" = "Ingen spilhistorie";
+"HistoryEmptyImportGame" = "Importer spil";
+"HistoryEmptyStartGame" = "Start spil";
+
+//Settings
+"LeftHandTitle" = "Venstrehåndstilstand";
+"LeftHandDetail" = "Spejlvendt kontrolpanel til venstrehånd";
+"QuickGameTitle" = "Hurtig start";
+"QuickGameDetail" = "Spring forberedelsessiden over";
+"AirPlayTitle" = "AirPlay-fuldskærm";
+"AirPlayDetail" = "Spil vises i fuld skærm ved AirPlay";
+"iCloudTitle" = "iCloud-synkronisering";
+"iCloudDetail" = "Synkroniser spil, skins og indstillinger på tværs af enheder";
+"AppIconTitle" = "App-ikon";
+"WidgetTitle" = "Hjemmeskærmswidget";
+"QATitle" = "Ofte stillede spørgsmål";
+"FeedbackTitle" = "Tilbagemelding";
+"ShareAppTitle" = "Del «Manic EMU»";
+"JoinQQTitle" = "Tilslut QQ-kanal";
+"JoinTelegramTitle" = "Tilslut Telegram";
+"ClearCacheTitle" = "Ryd cache";
+"LanguageTitle" = "Sprog";
+"UserAgreementTitle" = "Brugervilkår";
+"PrivacyPolicyTitle" = "Privatlivspolitik";
+"GeneralSettingTitle" = "Generelt";
+"AdvanceSettingTitle" = "Avancerede";
+"SupportSettingTitle" = "Support";
+"OthersSettingTitle" = "Andet";
+"RatingTitleLeft" = "Bedøm";
+"RatingTitleRight" = "";
+"RatingDetail" = "Hvis du synes vores app er værdifuld, vær venlig at give en 5-stjernet anmeldelse";
+"iCloudDisableTitle" = "iCloud ikke tilgængelig";
+"iCloudDisableDetail" = "Aktivér iCloud under «Indstillinger» > «Apple ID» > «iCloud»";
+"iCloudSyncConfilictTitle" = "iCloud-konflikt";
+"iCloudSyncConfilictDetail" = "Cloudfil:\n%@\n\nLokal fil:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "Bevar iCloud";
+"iCloudSyncConfilictSaveLocal" = "Bevar lokal";
+"SettingsNonMemberDesc" = "Du er hovedpersonen i dette eventyr";
+"ThanksSupportDesc" = "Tak for din støtte";
+"ThanksCommingDesc" = "Tak fordi du bruger";
+"PlayGameDesc" = "";
+"NoEmailSetting" = "Ingen e-mail konfigureret";
+"IDCopy" = "ID kopieret";
+"SendEmailSuccess" = "E-mail sendt";
+"SendEmailFailed" = "Kunne ikke sende e-mail%@";
+"iCloudTipsTitle" = "Aktivér iCloud-synkronisering";
+"iCloudTipsDetail" = "Data synkroniseres på tværs af enheder – kræver iCloud-plads";
+"iCloudConfirm" = "Fortsæt";
+
+//Play
+"LoadingTitle" = "Downloader";
+"LoadRomSuccess" = "%@ downloadet – klar til spil!";
+"GameSettingSaveState" = "Gem tilstand";
+"GameSettingQuickLoadState" = "Hurtigindlæsning";
+"GameSettingVolume" = "Lydstyrke";
+"GameSettingFastForwardResume" = "Normal hastighed";
+"GameSettingFastForward" = "Hurtig frem %@";
+"GameSettingStateList" = "Gemte tilstande";
+"GameSettingSkins" = "Skift skin";
+"GameSettingFilter" = "Filter";
+"GameSettingScreenShot" = "Tag skærmbillede";
+"GameSettingHapticOff" = "Vibration slået fra";
+"GameSettingHapticSoft" = "Svag vibration";
+"GameSettingHapticLight" = "Let vibration";
+"GameSettingHapticMedium" = "Middel vibration";
+"GameSettingHapticHeavy" = "Kraftig vibration";
+"GameSettingHapticRigid" = "Stiv vibration";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "Joystick";
+"GameSettingAirplay" = "AirPlay";
+"GameSettingControllerSetting" = "Controller-indstillinger";
+"GameSettingOrientationAuto" = "Auto-rotation";
+"GameSettingOrientationPortrait" = "Tving portræt";
+"GameSettingOrientationLandscape" = "Tving landskab";
+"GameSettingFunctionSort" = "Sorter funktioner";
+"GameSettingReload" = "Genstart";
+"GameSettingQuit" = "Afslut";
+"GameSaveStateSuccess" = "Gemt tilstand succesfuld";
+"GameSaveStateLoadFailed" = "Kunne ikke indlæse – beskadiget eller inkompatibel";
+"GameSaveStateLoadSuccess" = "Gemt tilstand indlæst";
+"GameSaveStateQuickLoadFailed" = "Ingen manuelle gemte tilstande – brug listen";
+"GameSaveListTitle" = "Øjeblikkelige gemte tilstande";
+"GameCheatActivateFailed" = "%@\nAktivering mislykkedes – ugyldig kode";
+"GameCheatActivateSuccess" = "%@\nAktiveret";
+"AirPlayingTitle" = "Spil vises via AirPlay";
+"VolumeOff" = "Lyd slået fra";
+"VolumeOn" = "Lyd slået til";
+"FunctionSortDesc1" = "Standardfunktioner til officielle skins";
+"FunctionSortDesc2" = "Træk for at ændre rækkefølge";
+"ManualGameSaveCountLimit" = "Maks antal nået – opgrader for ubegrænset";
+"FastForwardSpeedLimit" = "Maks hastighed x2 – opgrader til x5";
+"ResetSpeed" = "Nulstil hastighed";
+"GoToUpgrade" = "Opgrader";
+"SaveStateTooFrequent" = "Gemmer for hyppigt";
+"LoadStateTooFrequent" = "Indlæser for hyppigt";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Indtast navn";
+"AutoDetectCheatTypeName" = "Auto-detekter";
+"AutoDetectFormat" = "Automatisk format-genkendelse";
+"CheatCodeFormatError" = "Ugyldigt cheat code-format";
+"CheatCodeEmptyTitle" = "Ingen cheat codes";
+"CheatCodeEmptyGuideLeft" = "Klik på";
+"CheatCodeEmptyGuideRight" = "for at tilføje cheat codes";
+"EnableCheatCodeAlertTitle" = "Aktiver cheat codes";
+"EnableCheatCodeAlertDetail" = "Cheat codes kan forårsage ustabilitet – brug med omhu";
+
+//Filter
+"FilterSectionHeaderTitle" = "Videofiltre";
+"FilterOriginTitle" = "Original";
+
+//In-App Purchases
+"PurchaseAdcancedFeaturesTitle" = "Lås avancerede funktioner op";
+"AdcancedFeaturesDetail" = "
+«🎮 Ultimate Oplevelse»
+🔥 Ubegrænsede gemte tilstande
+🚀 5x hastighedsboost
+💎 Uendelige cheat codes
+✨ Eksklusive filtre
+";
+"PurchaseImportFeaturesTitle" = "Aktivér skytjenester";
+"ImportFeaturesDetail" = " 
+☁️ ​«Skyintegration»
+✅ Google Drive, Dropbox, OneDrive
+✅ Baidu Yun, Aliyun
+⚡ WebDAV/SMB-understøttelse
+";
+"PurchaseControllerFeaturesTitle" = "Fuld controller-understøttelse";
+"ControllerFeaturesDetail" = " 
+🕹️ ​«Multi-enheds kontrol»
+🎮 Joy-Con/DUALSHOCK/Xbox
+⌨️ Bluetooth-enheder
+✨ Flere controllere samtidig
+";
+"PurchaseAirPlayFeaturesTitle" = "AirPlay til stor skærm";
+"AirPlayFeaturesDetail" = " 
+📺 ​«Sømløs skærmoverførsel»
+🔓 Ubegrænset AirPlay
+🎮 Stor skærm + controller
+";
+"PurchaseiCloudFeaturesTitle" = "iCloud-synkronisering";
+"iCloudFeaturesDetail" = " 
+☁️ ​«Tværenhedssynkronisering»
+🎮 Synkroniser alt
+🔒 Krypteret backup
+";
+"AdvanceFeatureDescLabel1" = "Op til 5x hastighed";
+"AdvanceFeatureDescLabel2" = "Ubgrænsede gemte tilstande";
+"AdvanceFeatureDescLabel3" = "Uendelige cheat codes";
+"AdvanceFeatureDescLabel4" = "Filtreringsmuligheder";
+"AdvanceFeatureDescLabel5" = "Automatisk gemt tilstand";
+"RestorePurchaseButton" = "Gendan køb";
+"AnnualDescription" = "Årligt medlemskab";
+"MonthlyDescription" = "Månedligt medlemskab";
+"ForeverDescription" = "Permanent – engangsbetaling";
+"SubscriptionPromotional" = "%d dage gratis";
+"PurchasePricePerYear" = "/år";
+"PurchasePricePerMonth" = "/måned";
+"PromptLabelForYear" = "50%% rabat";
+"PromptLabelForMonth" = "Prøvepris";
+"PromptLabelForForever" = "Mest værdi";
+"GetProductsFailedTitle" = "Kunne ikke hente produkter";
+"TermOfServiceTitle" = "Servicevilkår";
+"AnnualMemberTitle" = "Årligt premium";
+"MonthlyMemberTitle" = "Månedlig";
+"ForeverMemberTitle" = "Permanent";
+"PurchaseVerifiedFailed" = "Betaling ikke verificeret – genstart appen";
+"PurchaseCancel" = "Betaling annulleret";
+"PurchasePending" = "Afventer betaling";
+"PurchaseUnknown" = "Ukendt status";
+"PurchaseErrorDesc" = "Netværksfejl – prøv igen";
+"PurchaseFailedTitle" = "Betaling mislykkedes";
+"RestoreSuccessDesc" = "Gendannelsesucces!";
+"RestoreEndDesc" = "Ingen køb fundet";
+"TrialDesc" = "Gratis prøveperiode – annuller når som helst";
+"SubscriptionPurchaseButtonTitle" = "Start %d dages prøveperiode";
+"YearSubscriptionDisableDesc" = "Du har allerede årligt abonnement";
+"MonthSubscriptionDisableDesc" = "Du har allerede månedligt abonnement";
+"ForeverSubscriptionDisableDesc" = "Du er permanent medlem";
+"ChangeSubscription" = "Skift abonnement";
+"UpgradePurchase" = "Opgrader";
+"ForeverPlanDesc" = "Få alle fremtidige funktioner";
+"BuyNowTitle" = "Abonner nu";
+"SettingsFreeTrialDesc" = "%d dage gratis";
+"Hi" = "Hej,";
+
+//Permission
+"PrePermissionPhotoTitle" = "Tillad adgang til fotoalbum?";
+"PrePermissionPhotoMessage" = "Gem skærmbilleder og vælg coverbilleder";
+"PrePermissionPhotoCancel" = "Senere";
+"PrePermissionPhotoConfirm" = "Tillad";
+"DeniedPermissionPhotoTitle" = "Ingen adgang til fotoalbum!";
+"DeniedPermissionPhotoMessage" = "Nødvendigt for at gemme skærmbilleder";
+"DeniedPermissionPhotoCancel" = "Afvis";
+"DeniedPermissionPhotoConfirm" = "Åbn indstillinger";
+"PrePermissionCameraTitle" = "Tillad adgang til kamera?";
+"PrePermissionCameraMessage" = "Tag coverbilleder med kamera";
+"PrePermissionCameraCancel" = "Senere";
+"PrePermissionCameraConfirm" = "Tillad";
+"DeniedPermissionCameraTitle" = "Ingen kameraadgang!";
+"DeniedPermissionCameraMessage" = "Nødvendigt for at tage coverfotos";
+"DeniedPermissionCameraCancel" = "Afvis";
+"DeniedPermissionCameraConfirm" = "Åbn indstillinger";
+"DeniedPermissionMicTitle" = "Ingen mikrofonadgang!";
+"DeniedPermissionMicMessage" = "Nødvendigt for DS-spilfunktioner";
+"DeniedPermissionMicCancel" = "Afvis";
+"DeniedPermissionMicConfirm" = "Åbn indstillinger";
+
+//Share
+"ShareAppSubtitle" = "Inviter venner til eventyret!";
+"ShareRomFilesFailed" = "Kunne ikke dele ROM – fil mangler";
+"ShareSaveFilesFailed" = "Kunne ikke dele gemt tilstand";
+"ShareFilesCopyFailed" = "Fejl under filkopiering";
+"ShareFilesCompressFailed" = "Fejl under filkomprimering";
+
+"TurnOnAirPlayAsk" = "AirPlay er tilsluttet. Skal der skiftes til fuld skærm nu?";
+
+"ThreeDSModePerformance" = "Ydelsestilstand";
+"ThreeDSModeCompatibility" = "Kompatibilitetstilstand";
+"ThreeDSModeQuality" = "Grafikprioritet";
+"ThreeDSNotSupportImportSave" = "3DS-spil understøtter ikke import af gemte filer i øjeblikket";
+"ThreeDSNotSupportShareSave" = "3DS-spil understøtter ikke deling af gemte filer i øjeblikket";
+"ThreeDSBetaAlertTitle" = "Eksperimentel 3DS-version";
+"ThreeDSBetaAlertDetail" = "For at du tidligere kan opleve 3DS-spil har Manic EMU udgivet 3DS-funktionen i en eksperimentel tilstand. Visse optimeringer mangler endnu.
+
+Midlertidigt utilgængelige funktioner:
+❌ AirPlay Fuldskærmstilstand
+❌ Automatisk gemning
+❌ Hastighedsforøgelse
+
+Ved ustabilitet, se vores FAQ eller deltag i supportkanalen. Vi optimerer løbende emulatoren. Din støtte hjælper os med at skabe en bedre oplevelse. Vi arbejder for dig!";
+"ThreeDSNoSupportDeviceTitle" = "Utilstrækkelig enhedsydelse";
+"ThreeDSNoSupportDeviceDetail" = "Denne enhed understøtter muligvis ikke 3DS-emulering. Hvis du fortsætter, kan det medføre uforudsigelige fejl";
+
+"GameImportBadFile" = "Import fejlede: \"%@\" er beskadiget eller en ukendt fejl opstod. Prøv en anden ROM-fil";
+"Game3DSDecryptFailed" = "Import fejlede: Dekryptering af \"%@\" mislykkedes. Prøv en anden ROM-fil";
+"Game3DSGameNotExist" = "Kunne ikke importere opdatering, \"%@\": Spillet er ikke installeret!";
+
+"Game3DSInputTitle" = "Indtast indhold";
+"ControllerMappingGuideTitle" = "Tryk på skærmknappen for at kortlægge tastatur";
+"ControllerMappingGuideBegin" = "Begynd kortlægning af 「%@」
+Tryk på controller-knappen...";
+"ControllerMappingReset" = "Nulstil";
+"ControllerMappingNoFouond" = "Ukendt tastaturindstilling";
+"FlexSkinSettingError" = "Interface ikke klar, prøv senere";
+"SkinPreviewTitle" = "Forhåndsvisning";
+"FullScreenWhenConnectControllerTitle" = "Auto-fuldskærm";
+"FullScreenWhenConnectControllerDetail" = "Aktiver fuldskærm ved controller-tilslutning";
+"JoinDiscordTitle" = "Tilmeld Discord (Uofficielt)";
+"JoinDiscordAlertMessage" = "Tak til spiller %@ for kanalen. Fortsætte?";
+"FlexSkinGuideTitle" = "Træk eller zoom for at justere";
+"DownloadFailed" = "Download fejlede";
+"RemoveDownloadTask" = "Annuller download af \"%@\"?";
+"GameSettingResolution" = "Opløsning %@";
+"GameSettingSwapScreen" = "Skift skærm";
+"NotSupportGameSetting" = "Funktion ikke tilgængelig på %@";
+
+"ThemeSettingTitle" = "Tema";
+"ThemeSettingDetail" = "App-ikoner, temafarver, indstillinger for covers, konsolrækkefølge";
+"ThemeDesktopIconTitle" = "App-ikoner";
+"ThemeDesktopIconDetail" = "Flere ikoner kommer snart...";
+"ThemeThemeColorTitle" = "Temafarver";
+"ThemeCoverStyleTitle" = "Coverstil & hjørner";
+"ThemeCoverStyleName" = "Stil %d";
+"ThemePlatformOrderTitle" = "Konsolrækkefølge";
+"ThemePlatformOrderDetail" = "Tryk og træk for at ændre rækkefølgen";
+"ThemeColorLimitToast" = "Maksimalt antal temafarver nået";
+"ThemeColorSystemNotAllowEdit" = "Standardfarver kan ikke redigeres";
+"EditTitle" = "Rediger";
+"RemoveTitle" = "Fjern";
+"On" = "Til";
+"Off" = "Fra";
+"AmiiboNotSearching" = "Amiibo ikke tilgængelig når NFC er inaktiv";
+"ConsoleHomeTitle" = "Hovedmenu";
+"AmiiboTitle" = "Indlæs Amiibo";
+"ThreeDSHomeMenuNotRunning" = "Hovedmenu kører ikke";
+"ThreeDSImportSaveFailed" = "Fejl ved import af %@: Ukendt gemmefil";
+"ThreeDSUpdateInstallSuccess" = "Opdatering installeret";
+"OnlineCoverFetchFailed" = "Kunne ikke hente billede";
+"JITMenuDesc" = "Aktivering af JIT i ikke-understøttede miljøer kan medføre nedbrud";
+"ShaderModeTitle" = "Avancerede shaders";
+"ShaderModeDesc" = "Forbedrer teksturnøjagtighed (kan påvirke ydeevne)";
+"NoDownloadTask" = "Ingen aktive downloads";
+"NoGameCoverResult" = "Ingen covers fundet";
+"NoContentResult" = "Intet indhold";
+"OpenFilePermissionsLimit" = "Ingen tilladelse til at åbne %@";
+"SevenZipDecompressError" = "7z-fil er beskadiget eller krypteret";
+"ForceSquareRatioTitle" = "Tving kvadratisk format";
+"ForceSquareRatioDetail" = "Covers bruger kvadratisk (til) eller originalt format (fra)";
+
+"AutoSaveStateTitle" = "Automatisk Gem Tilstande";
+"GamesThemeTitle" = "Spilbibliotek";
+"GamesPerRowTitle" = "Spil pr. række (iPhone)";
+"GamesHideScrollIndicator" = "Skjul rullemarkører";
+"ConsoleLanguageDesc" = "Region- og sprogindstillinger kræver muligvis manuel konfiguration til visse spil";
+"JitNoSupportDesc" = "JIT-kompilering er ikke tilgængelig i nuværende miljø";
+"RenderRightEyeTitle" = "Højre øje-rendering";
+"RenderRightEyeDesc" = "Deaktivering forbedrer ydeevne i nogle spil, men kan forårsage skærmflimmer";
+"DisableTitle" = "Deaktivér";
+"EnableTitle" = "Aktivér";
+"NoSaveStateToast" = "Ingen %@ tilgængelig";
+"DeleteSelectedSaveStateAlert" = "Slet valgt «%@»?\nKan ikke gendannes!";
+"DeleteAllSaveStateAlert" = "Intet valgt. Slet alle «%@»?\nKan ikke gendannes!";
+"AICoverSearchDesc" = "Ikke-engelsk søgning opdaget. Opgrader til Premium for flersproget AI-søgning";
+"MaxTextSizeAllowDesc" = "Understøtter op til %@ tegn";
+
+"PlatformSelectionTitle" = "Platformvalg";
+"PlatformSelectionDetail" = "Vælg standardplatform til %@";
+"PlatformChange" = "Tildel Platform";
+"BIOSDesc" = "Nogle platforme kræver BIOS";
+"BIOSImported" = "Importeret";
+"BIOSAlert" = "Nogle platforme kræver BIOS-filer. BIOS-ophavsret tilhører producenter. Overhold lokal lovgivning ved import.\n\nFå hjælp i vores community.";
+"UnknownPlatform" = "Ukendt Platform";
+"UnknownPlatformGameSelectWarn" = "Spil uden platform kan ikke vælges";
+"BIOSImportSuccess" = "%@ importeret succesfuldt!";
+"BIOSImportFailed" = "Forkert fil!";
+
+"HideGameTitleDesc" = "Skjul spiltitel";
+"HideGroupTitleDesc" = "Skjul gruppetitel";
+"GroupTitleStyelDesc" = "Gruppetitelstil";
+"GroupTitleStyelAbbr" = "Fork.";
+"GroupTitleStyelFull" = "Fuld";
+"GroupTitleStyelBrand" = "Brand";
+"CopyLaunchLinkTitle" = "Kopiér startlink";
+"AskIfNeedToSaveCover" = "Startlink kopieret. Gem cover i fotoalbum?";
+"SaturnBiosAlertTitle" = "BIOS mangler";
+"SaturnBiosAlertDetail" = "Sega Saturn kan emuleres med HLE uden BIOS, men BIOS-fil reducerer grafiske fejl";
+"BiosAddTitle" = "Tilføj BIOS";
+"StartGameWithoutBiosTitle" = "Start uden BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Avanceret Tilstand";
+"ThreeDSAdvanceSettingTitle" = "Avancerede Indstillinger";
+"ThreeDSBasicSettingMode" = "Basis Tilstand";
+"ShareConfigButtonTitle" = "Del Konfiguration";
+"ImportConfigButtonTitle" = "Importer Konfiguration";
+"ShareFileFailedMissing" = "Deling mislykkedes: fil findes ikke";
+"ReadConfigFileFailed" = "Kan ikke læse konfigurationsfil";
+"SwitchEmulationCore" = "Skift Kerne";
+"SwitchEmulationCoreDetail" = "Skift emulationskerne for %@\nKerneskift gør gemte spil fra forrige kerne ulæselige. Vend tilbage til original kernen for adgang";
+"BeetleSaturnNoSupportCheat" = "Beetle Saturn-kernen understøtter ikke snydekoder i øjeblikket. Skift til Yabause-kernen om nødvendigt";
+"CurrentTitle" = "nuværende";
+"NewSkinDesc" = "Manic EMU understøtter skins i .manicskin og .deltaskin-formater. Bemærk: Importeret skin skal matche nuværende platform, ellers vises det ikke i listen.\nVi giver også adgang til tredjeparts skin-fællesskaber. Disse er ikke officielt tilknyttet Manic EMU. Overhold hjemmesiders servicevilkår ved download";
+"VisitSite" = "Besøg %@";
+"OpenFile" = "Åbn Fil";
+"WebViewDownloadBegin" = "Download påbegyndt";
+"RespectSilentMode" = "Respekter Lydløs Tilstand";
+"RespectSilentModeDesc" = "Når aktiveret, afspiller Manic EMU kun lyd uden for lydløs tilstand";
+"SaturnISONoSwitchCore" = "Sega Saturn .iso-spil understøtter ikke kerneskift";
+"EnableFullScreenTitle" = "Aktivér Fuld Skærm";
+"DisableFullScreenTitle" = "Deaktivér Fuld Skærm";
+"SimulateBlowingTitle" = "Simuler Pust";
+"PaletteTitle" = "Palette";
+"SkinRestDesc" = "Nulstilling af skin vil også gendanne spiltildelte skins til standardversioner";
+"SkinResetForAll" = "Nulstil Alle Platformskins";
+"SkinResetForPlatform" = "Nulstil %@ Skin";
+"SkinDebug" = "Skin Testområde";
+
+"ImportMissingFile" = "Kunne ikke importere %@: Mangler fil %@";
+"MultiDiscBuilder" = "Multidisk-værktøj";
+"MultiDiscBuilderDesc" = "Opretter skiftbare .m3u-filer til multidisk-spil (.cue/.bin eller .chd). Spring over hvis du allerede har .m3u - importer direkte via Spilimport";
+"M3uFileShare" = "Del .m3u-fil";
+"M3uFileImport" = "Tilføj til bibliotek";
+"MultiDiscAddFile" = "Tilføj %@-fil";
+"MultiDiscImportErrorConflict" = "Fejl: Bland ikke .cue og .chd";
+"MultiDiscImportErrorMissing" = "Fejl: Ingen .cue/.chd-filer";
+"GenerateM3uFailed" = "Kunne ikke generere .m3u";
+"MultiDiscCloseAlert" = ".m3u oprettet. Luk efter import";
+"MultiDiscContinueClose" = "Luk";
+"SwapDisk" = "Skift disk";
+"NotSupportSwapDisk" = "Ikke et multidisk-spil";
+"TransferPakDesc" = "Transfer Pak synkroniserer GB/GBC-data med N64. For aktivering: importer både ROM (.gb/.gbc) og gemmefil (.sav)";
+"TransferPakFromLibrary" = "Importer fra bibliotek";
+"TransferPakFromLibraryDesc" = "Kun spil med gemmefiler vises.\nValgte GB/GBC-spil skal matche N64-ROM";
+"TransferPakNoGames" = "Ingen kompatible spil";
+"TransferPakFromFiles" = "Importer fra filer";
+"TransferPakOn" = "Aktiveret";
+"TransferPakOff" = "Deaktiveret";
+"TransferPakImportError" = "Fejl: Importer både ROM og gemmefil (2 filer)";
+"ShowControlsTitle" = "Vis kontroller";
+"HideControlsTitle" = "Skjul kontroller";
+
+"DesignedFor" = "Designet til %@";

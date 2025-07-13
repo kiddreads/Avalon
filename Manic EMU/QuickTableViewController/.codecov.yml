@@ -1,0 +1,13 @@
+coverage:
+  status:
+    patch: off
+    project:
+      default:
+        target: 90%
+comment:
+  layout: "files"
+ignore:
+  - "Carthage/**/*"
+  - "Example*/**/*"
+  - "Tests/**/*"
+  - "Pods/**/*"

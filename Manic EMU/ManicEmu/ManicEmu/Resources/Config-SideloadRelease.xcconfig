@@ -1,0 +1,13 @@
+//
+//  Config-SideloadRelease.xcconfig
+//  ManicEmu
+//
+//  Created by Daiuno on 2025/5/10.
+//  Copyright © 2025 Manic EMU. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Pods/Target Support Files/Pods-ManicEmu/Pods-ManicEmu.sideloadrelease.xcconfig"
+#include "ManicEmu/Resources/Config-Base.xcconfig"

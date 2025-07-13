@@ -1,0 +1,8 @@
+use_frameworks!
+
+target 'JXBanner_Example' do
+  pod 'JXBanner', :path => '../'
+#  pod 'JXBanner'
+  pod 'SnapKit'
+
+end

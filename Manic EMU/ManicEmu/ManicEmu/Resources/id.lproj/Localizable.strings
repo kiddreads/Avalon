@@ -1,0 +1,560 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Layanan Cloud";
+"ImportAddLanServiceTitle" = "Layanan Jaringan Lokal";
+"ImportAddDiscoverServiceTitle" = "Layanan Penemuan";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Cloud";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Tambahkan Layanan";
+"ImportServiceDelete" = "Hapus Layanan";
+"ImportAliyunNotGetDriveId" = "Gagal menambahkan Aliyun, direktori tidak ditemukan";
+"ImportDownloadError" = "Kesalahan unduh\n%@";
+"ImportDownloadContinue" = "Lanjutkan unduhan...\n%@";
+"LandServiceEditServerName" = "Judul Server";
+"LandServiceEditServerNamePlaceholder" = "Server SMB Saya";
+"LandServiceEditHost" = "Alamat Server";
+"LandServiceEditUserName" = "Nama Pengguna";
+"LandServiceEditPassword" = "Kata Sandi";
+"LandServiceEditRequiredPlaceholder" = "Wajib diisi";
+"LandServiceEditOptionalPlaceholder" = "Opsional";
+"LandServiceEditConnect" = "Hubungkan";
+"AddLandServiceSuccess" = "Berhasil menambahkan %@";
+"AddLandServiceFailed" = "Gagal menambahkan %@\nPeriksa koneksi jaringan, status layanan, atau informasi yang dimasukkan";
+"AddLandServiceTimeout" = "Koneksi ke layanan melebihi batas waktu";
+"FilesImporterErrorFileExist" = "\"%@\" sudah ada, tidak perlu diimpor";
+"FilesImporterErrorBadCopy" = "Gagal mengimpor \"%@\", kesalahan saat menyalin file";
+"FilesImporterErrorBadExtension" = "Gagal mengimpor \"%@\", ekstensi file tidak dikenali";
+"FilesImporterErrorNoPermission" = "Tidak memiliki izin untuk mengakses %@";
+"FilesImporterErrorUnableToHash" = "Gagal mengimpor \"%@\", tidak dapat menghitung hash";
+"FilesImporterErrorWriteDatabase" = "Gagal mengimpor \"%@\", kesalahan menulis ke basis data";
+"GameSaveMatchTitle" = "Cocokkan Simpanan dengan Permainan";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" tidak cocok dengan permainan, harap sesuaikan manual";
+"GameSaveAlreadyExistTitle" = "Simpanan Sudah Ada";
+"FilesImporterErrorSaveAlreadyExist" = "Gagal mengimpor \"%@\", apakah ingin menimpa simpanan yang ada?";
+"GameSaveMathToMuchTitle" = "Banyak Kecocokan";
+"FilesImporterErrorSaveMathToMuch" = "Gagal mengimpor \"%@\", simpanan cocok dengan banyak permainan, harap sesuaikan manual";
+"FilesImporterErrorSkinBadFile" = "Gagal mengimpor %@, file skin rusak";
+"PasteImporterErrorNoMatchContent" = "Tidak ada konten yang dapat diimpor dari clipboard";
+"FilesDownloadErrorFileExist" = "%@ sudah diunduh, tidak perlu mengunduh ulang";
+"FilesImporterErrorEmptyContent" = "Tidak ada sumber daya yang dapat diimpor";
+"LanServiceInitFailed" = "Gagal membuat layanan %@";
+"SMBLoginFailed" = "Gagal masuk Samba %@";
+"SMBListFilesFailed" = "Gagal mengambil file %@";
+"SMBListFilesTypeError" = "File ini bukan folder";
+"DropErrorLoadFailed" = "Gagal memuat file";
+"DropErrorNotSupportFile" = "Jenis file tidak didukung";
+"ImportErrorTitle" = "Kesalahan Impor";
+"ImportGameSuccessTitle" = "Impor Permainan Berhasil";
+"ImportGameSuccessDetail" = "%@\nberhasil diimpor ke perpustakaan, lihat sekarang?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\nberhasil diimpor, mulai bermain sekarang?";
+"ImportSkinSuccessTitle" = "Impor Skin Berhasil";
+"ImportSkinSuccessDetail" = "\"%@\"\nberhasil diimpor, lihat sekarang?";
+"ImportGameSaveSuccessTitle" = "Impor Simpanan Berhasil";
+"ImportGameSaveSuccessDetail" = "\"%@\"\ntelah diimpor ke permainan yang sesuai";
+"ImportGameSaveSuccessForOne" = "\"%@\"\ntelah diimpor, mulai bermain sekarang?";
+"ImportGameSaveFailedNoGameError" = "Gagal mengimpor \"%@\", Anda belum memiliki permainan!";
+"DownloadCompletion" = "Unduhan Selesai";
+"QQChannelName" = "Saluran QQ";
+"NotSupportPasswordZip" = "Gagal mengekstrak \"%@\", file ZIP berpassword tidak didukung";
+"UnzipFailed" = "Gagal mengekstrak \"%@\"";
+"NoSupportInZip" = "Tidak ada format yang didukung dalam \"%@\"";
+"IPCopy" = "Alamat telah disalin";
+"ImportServiceListFilesTitle" = "File";
+"ImportServiceListFilesDetail" = "Impor permainan, skin, atau simpanan dari file atau iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Transfer file melalui browser dalam jaringan yang sama";
+"ImportServiceListWiFiOnDetail" = "%@\nGunakan browser untuk transfer file";
+"ImportServiceListPasteTitle" = "Baca Clipboard";
+"ImportServiceListPasteDetail" = "Dukung impor dari macOS atau aplikasi File";
+"ImportHowTo" = "Cara Mengimpor";
+"ImportTopHintTitle" = "Sebuah petualangan penuh mimpi akan dimulai di sini!";
+"ImportDragAndDropTips" = "Seret dan lepas file ke antarmuka Manic EMU untuk transfer";
+"ImportChannelTips" = "Bergabunglah dengan %@ untuk bantuan jika ada pertanyaan";
+"ToastConnectCloudDriveSuccess" = "Berhasil terhubung ke %@";
+"AlertImportFilesSuccess" = "Berhasil mengimpor sumber daya";
+"ErrorConnectCloudDrive" = "Tidak dapat terhubung ke layanan cloud";
+"ErrorUnknown" = "Kesalahan tidak diketahui";
+"ReasonConncetCloudDriveFail" = "Periksa koneksi jaringan dan otorisasi layanan cloud, atau coba hapus dan tambahkan ulang layanan";
+
+//Common
+"TabbarTitleGames" = "Permainan";
+"TabbarTitleImport" = "Impor";
+"TabbarTitleSettings" = "Pengaturan";
+"SelectAll" = "Pilih Semua";
+"DeSelectAll" = "Batalkan Pilihan";
+"CloudDriveBrowserDownload" = "Unduh";
+"CancelTitle" = "Batal";
+"CheckTitle" = "Lihat";
+"StartGameTitle" = "Mulai Bermain";
+"ConfirmTitle" = "Konfirmasi";
+"SaveTitle" = "Simpan";
+"NameTitle" = "Nama";
+"TimeAgoMinuteFormat" = "%d menit yang lalu";
+"TimeAgoHourFormat" = "%d jam yang lalu";
+"TimeAgoDayFormat" = "%d hari yang lalu";
+"TimeAgoWeekFormat" = "%d minggu yang lalu";
+"TimeAgoMonthFormat" = "%d bulan yang lalu";
+"TimeAgoYearFormat" = "%d tahun yang lalu";
+"TimeDurationHourAndMinuteFormat" = "%d jam %d menit";
+"TimeDurationHourFormat" = "%d jam";
+"TimeDurationMinuteFormat" = "%d menit";
+"FatalErrorTitle" = "Kesalahan Fatal";
+"FatalErrorDesc" = "Gagal memuat sumber daya sistem, Manic EMU mungkin mengalami gangguan serius";
+"LodingFailedTitle" = "Gagal Memuat";
+"AirPlayDesc" = "Mulai petualangan Anda sekarang!";
+"ToastSuccess" = "Berhasil Disimpan";
+"ToastFailed" = "Gagal Menyimpan";
+
+//Games
+"GamesSearchPlaceHolder" = "Judul Permainan";
+"GamesRename" = "Ubah Nama";
+"GamesModifyCover" = "Ubah Sampul";
+"GamesSpecifySkin" = "Atur Skin";
+"GamesCheatCode" = "Cheat Code";
+"GamesShareRom" = "Bagikan ROM";
+"GamesCheckSave" = "Lihat Simpanan Instan";
+"GamesImportSave" = "Impor Simpanan";
+"GamesShareSave" = "Ekspor Simpanan";
+"GamesDelete" = "Hapus Permainan";
+"GamesRandom" = "Tidak tahu mau main apa? Acak!";
+"LoadGameErrorRomNotExist" = "Gagal memuat permainan, ROM tidak ditemukan";
+"GamesListEmptyGuideLeft" = "Segera klik";
+"GamesListEmptyGuideRight" = "di bawah untuk mengimpor permainan";
+"GamesListEmptyWelcomeLeft" = "Selamat datang di dunia";
+"GamesListEmptyWelcomeRight" = "";
+"GamesListEmptyWarnning" = "Pastikan ROM diperoleh melalui saluran legal";
+"DeleteGameAlertDetail" = "ROM, simpanan, dan data cheat akan dihapus permanen!";
+"DeleteSkinAlertDetail" = "Skin yang dihapus tidak dapat dipulihkan!";
+"DeleteGameGameStateAlertTitle" = "Hapus Simpanan Instan";
+"DeleteGameGameStateAlertDetail" = "Simpanan instan akan dihapus permanen!";
+"confirmDelte" = "Konfirmasi Hapus";
+
+//Controllers
+"ControllersTouchName" = "Kontroler Layar";
+"ControllersHeaderTitle" = "Kontroler";
+"ControllersPlayerIndex" = "Pemain %d";
+"ControllersPlayerUnset" = "Belum ditetapkan";
+"ControllersHowToConnect" = "Cara Menghubungkan";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "Bermain %@ · Total %@";
+"ReadyGameInfoNeverPlayed" = "Belum dimainkan, mulai petualangan sekarang!";
+"ReadyEditCoverTakePhoto" = "Ambil Foto";
+"ReadyEditCoverAlbum" = "Album";
+"ReadyEditCoverFile" = "File";
+"ReadyEditCoverSearch" = "Cari";
+"ReadySegmentManualSave" = "Simpanan Instan Manual";
+"ReadySegmentAutoSave" = "Simpanan Instan Otomatis";
+"ReadyEditTitleFailed" = "Gagal mengubah nama, nama permainan tidak boleh kosong";
+"ReadyEditTitleSuccess" = "Nama berhasil diubah";
+"ReadyGameSaveStatesEmpty" = "Belum ada simpanan";
+"GameSaveGuideBecomTitle" = "Menjadi";
+"GameSaveGuideMemberTitle" = "Member";
+"GameSaveGuideDesc" = "Buka kunci simpanan instan tak terbatas dan dukungan hingga 50 simpanan otomatis";
+"GameSaveUnCompatibleTitle" = "Masalah Kompatibilitas Simpanan";
+"GameSaveUnCompatibleDetail" = "Simpanan ini dibuat oleh %@, lingkungan perangkat saat ini %@. Kompatibilitas bergantung pada jenis perangkat dan versi OS!";
+"GameSaveStateForceLoad" = "Lanjutkan Memuat";
+"GameSaveContinue" = "Lanjutkan";
+"GameSaveTitle" = "Simpanan %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU kompatibel dengan skin format .deltaskin";
+"SkinNavigationSubTitleSpecifiedGame" = "Khusus untuk %@";
+"SkinSegmentPortraitTitle" = "Portrait";
+"SkinSegmentLandscapeTitle" = "Landscape";
+"SkinAddTitle" = "Tambah Skin";
+"HowToFetch" = "Cara Mendapatkan";
+"SkinDelete" = "Hapus Skin";
+"DefaultSkinCannotEdit" = "Skin default tidak dapat diedit";
+
+//History
+"HistoryHeaderTitle" = "Riwayat Bermain";
+"HistoryFavouriteTitle" = "Favorit";
+"HistoryEmptyTitle" = "Belum ada riwayat";
+"HistoryEmptyImportGame" = "Impor Permainan";
+"HistoryEmptyStartGame" = "Mulai Bermain";
+
+//Settings
+"LeftHandTitle" = "Mode Tangan Kiri";
+"LeftHandDetail" = "Cerminkan posisi kontrol ke kiri";
+"QuickGameTitle" = "Mulai Cepat";
+"QuickGameDetail" = "Langsung mulai tanpa halaman persiapan";
+"AirPlayTitle" = "Mode Layar Penuh AirPlay";
+"AirPlayDetail" = "Tampilkan permainan di layar penuh saat diaktifkan";
+"iCloudTitle" = "Sinkronisasi iCloud";
+"iCloudDetail" = "Sinkronkan data ke perangkat dengan Apple ID yang sama";
+"AppIconTitle" = "Ikon Aplikasi";
+"WidgetTitle" = "Widget";
+"QATitle" = "FAQ";
+"FeedbackTitle" = "Umpan Balik";
+"ShareAppTitle" = "Bagikan Manic EMU";
+"JoinQQTitle" = "Gabung Saluran QQ";
+"JoinTelegramTitle" = "Gabung Telegram";
+"ClearCacheTitle" = "Hapus Cache";
+"LanguageTitle" = "Bahasa";
+"UserAgreementTitle" = "Perjanjian Pengguna";
+"PrivacyPolicyTitle" = "Kebijakan Privasi";
+"GeneralSettingTitle" = "Pengaturan Umum";
+"AdvanceSettingTitle" = "Pengaturan Lanjutan";
+"SupportSettingTitle" = "Dukungan";
+"OthersSettingTitle" = "Lainnya";
+"RatingTitleLeft" = "Beri Nilai untuk ";
+"RatingTitleRight" = "";
+"RatingDetail" = "Jika Anda menyukai aplikasi ini, tolong beri ulasan bintang 5";
+"iCloudDisableTitle" = "iCloud Tidak Tersedia";
+"iCloudDisableDetail" = "Aktifkan iCloud di Pengaturan > Apple ID > iCloud";
+"iCloudSyncConfilictTitle" = "Konflik Sinkronisasi iCloud";
+"iCloudSyncConfilictDetail" = "File Cloud:\n%@\n\nFile Lokal:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "Simpan iCloud";
+"iCloudSyncConfilictSaveLocal" = "Simpan Lokal";
+"SettingsNonMemberDesc" = "Anda akan menjadi protagonis dalam cerita ini";
+"ThanksSupportDesc" = "Terima kasih atas dukungannya";
+"ThanksCommingDesc" = "Terima kasih telah bermain di";
+"PlayGameDesc" = "";
+"NoEmailSetting" = "Email belum diatur";
+"IDCopy" = "ID telah disalin";
+"SendEmailSuccess" = "Email terkirim";
+"SendEmailFailed" = "Gagal mengirim email %@";
+"iCloudTipsTitle" = "Aktifkan Sinkronisasi iCloud";
+"iCloudTipsDetail" = "Data akan disinkronkan ke semua perangkat dengan Apple ID yang sama";
+"iCloudConfirm" = "Lanjutkan";
+
+//Play
+"LoadingTitle" = "Sedang Mengunduh";
+"LoadRomSuccess" = "%@ selesai diunduh, mulai bermain!";
+"GameSettingSaveState" = "Simpanan";
+"GameSettingQuickLoadState" = "Muat Cepat";
+"GameSettingVolume" = "Suara";
+"GameSettingFastForwardResume" = "Kecepatan Normal";
+"GameSettingFastForward" = "Maju Cepat %@";
+"GameSettingStateList" = "Daftar Simpanan";
+"GameSettingSkins" = "Atur Skin";
+"GameSettingFilter" = "Filter";
+"GameSettingScreenShot" = "Tangkapan Layar";
+"GameSettingHapticOff" = "Getar Mati";
+"GameSettingHapticSoft" = "Getar Lemah";
+"GameSettingHapticLight" = "Getar Ringan";
+"GameSettingHapticMedium" = "Getar Sedang";
+"GameSettingHapticHeavy" = "Getar Kuat";
+"GameSettingHapticRigid" = "Getar Kaku";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "Stik";
+"GameSettingAirplay" = "AirPlay";
+"GameSettingControllerSetting" = "Pengaturan Kontroler";
+"GameSettingOrientationAuto" = "Rotasi Otomatis";
+"GameSettingOrientationPortrait" = "Portrait Paksa";
+"GameSettingOrientationLandscape" = "Landscape Paksa";
+"GameSettingFunctionSort" = "Urutkan Fungsi";
+"GameSettingReload" = "Mulai Ulang";
+"GameSettingQuit" = "Keluar";
+"GameSaveStateSuccess" = "Simpanan instan berhasil";
+"GameSaveStateLoadFailed" = "Gagal memuat, simpanan rusak atau tidak kompatibel";
+"GameSaveStateLoadSuccess" = "Simpanan instan berhasil dimuat";
+"GameSaveStateQuickLoadFailed" = "Tidak ada simpanan manual, gunakan \"Daftar Simpanan\"";
+"GameSaveListTitle" = "Simpanan Instan";
+"GameCheatActivateFailed" = "%@\nGagal diaktifkan, kode tidak valid";
+"GameCheatActivateSuccess" = "%@\nBerhasil diaktifkan";
+"AirPlayingTitle" = "Tampilan dikirim ke AirPlay";
+"VolumeOff" = "Suara Mati";
+"VolumeOn" = "Suara Nyala";
+"FunctionSortDesc1" = "Fungsi default untuk skin resmi";
+"FunctionSortDesc2" = "Tahan dan geser untuk mengurutkan";
+"ManualGameSaveCountLimit" = "Batas simpanan tercapai! Upgrade ke member untuk akses tak terbatas";
+"FastForwardSpeedLimit" = "Kecepatan maksimum x2! Upgrade untuk x5";
+"ResetSpeed" = "Reset Kecepatan";
+"GoToUpgrade" = "Upgrade Sekarang";
+"SaveStateTooFrequent" = "Terlalu sering menyimpan";
+"LoadStateTooFrequent" = "Terlalu sering memuat";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Masukkan nama";
+"AutoDetectCheatTypeName" = "Deteksi Otomatis";
+"AutoDetectFormat" = "Kode akan terdeteksi otomatis";
+"CheatCodeFormatError" = "Format kode tidak valid";
+"CheatCodeEmptyTitle" = "Belum ada cheat code";
+"CheatCodeEmptyGuideLeft" = "Klik";
+"CheatCodeEmptyGuideRight" = "di kiri atas untuk menambahkan cheat code";
+"EnableCheatCodeAlertTitle" = "Aktifkan Cheat Code";
+"EnableCheatCodeAlertDetail" = "Cheat code mungkin menyebabkan ketidakstabilan permainan";
+
+//Filter
+"FilterSectionHeaderTitle" = "Filter Video";
+"FilterOriginTitle" = "Asli";
+
+//In-App Purchase
+"PurchaseAdcancedFeaturesTitle" = "Buka Fitur Premium";
+"AdcancedFeaturesDetail" = "
+「🎮 Pengalaman Ultimate」
+🔥 Simpanan Instan Tak Terbatas
+🚀 Kecepatan 5x
+💎 Koleksi Cheat Code Eksklusif
+✨ Filter Visual Premium
+";
+"PurchaseImportFeaturesTitle" = "Aktifkan Impor Cloud";
+"ImportFeaturesDetail" = "
+☁️ Akses ke Google Drive, Dropbox, OneDrive
+⚡ Dukungan WebDAV/SMB
+";
+"PurchaseControllerFeaturesTitle" = "Buka Kontroler Eksternal";
+"ControllerFeaturesDetail" = "
+🕹️ Dukungan Joy-Con/DUALSHOCK/Xbox
+🎮 Sambungkan via Bluetooth
+✨ Multiplayer
+";
+"PurchaseAirPlayFeaturesTitle" = "Buka AirPlay";
+"AirPlayFeaturesDetail" = "
+📺 Layar Penuh tanpa Batas
+🛋️ Mainkan di TV dengan AirPlay
+";
+"PurchaseiCloudFeaturesTitle" = "Sinkronisasi iCloud";
+"iCloudFeaturesDetail" = "
+☁️ Simpanan & Pengaturan Tersinkronisasi
+🔄 Lanjutkan di Perangkat Lain
+";
+"AdvanceFeatureDescLabel1" = "Kecepatan 5x";
+"AdvanceFeatureDescLabel2" = "Simpanan Instan Tak Terbatas";
+"AdvanceFeatureDescLabel3" = "Cheat Code Tak Terbatas";
+"AdvanceFeatureDescLabel4" = "Filter Kustom";
+"AdvanceFeatureDescLabel5" = "Simpanan Otomatis";
+"RestorePurchaseButton" = "Pulihkan Pembelian";
+"AnnualDescription" = "Member Tahunan";
+"MonthlyDescription" = "Member Bulanan";
+"ForeverDescription" = "Member Permanen";
+"SubscriptionPromotional" = "Gratis %d hari pertama";
+"PurchasePricePerYear" = "/tahun";
+"PurchasePricePerMonth" = "/bulan";
+"PromptLabelForYear" = "Diskon 50%%";
+"PromptLabelForMonth" = "Harga Percobaan";
+"PromptLabelForForever" = "Paling Hemat";
+"GetProductsFailedTitle" = "Gagal memuat produk";
+"TermOfServiceTitle" = "Syarat Layanan";
+"AnnualMemberTitle" = "Member Super Tahunan";
+"MonthlyMemberTitle" = "Member Bulanan";
+"ForeverMemberTitle" = "Member Permanen";
+"PurchaseVerifiedFailed" = "Verifikasi gagal, restart aplikasi";
+"PurchaseCancel" = "Pembayaran dibatalkan";
+"PurchasePending" = "Pembayaran tertunda";
+"PurchaseUnknown" = "Status tidak diketahui";
+"PurchaseErrorDesc" = "Periksa koneksi internet";
+"PurchaseFailedTitle" = "Gagal Membayar";
+"RestoreSuccessDesc" = "Pemulihan berhasil!";
+"RestoreEndDesc" = "Tidak ada pembelian yang ditemukan";
+"TrialDesc" = "Gratis selama masa percobaan";
+"SubscriptionPurchaseButtonTitle" = "Mulai %d hari gratis";
+"YearSubscriptionDisableDesc" = "Anda sudah berlangganan tahunan";
+"MonthSubscriptionDisableDesc" = "Anda sudah berlangganan bulanan";
+"ForeverSubscriptionDisableDesc" = "Anda member permanen";
+"ChangeSubscription" = "Ubah Paket";
+"UpgradePurchase" = "Upgrade";
+"ForeverPlanDesc" = "Akses seumur hidup";
+"BuyNowTitle" = "Berlangganan Sekarang";
+"SettingsFreeTrialDesc" = "%d hari percobaan gratis";
+"Hi" = "Hai,";
+
+//Permission
+"PrePermissionPhotoTitle" = "Izinkan Manic EMU mengakses album?";
+"PrePermissionPhotoMessage" = "Izinkan untuk menyimpan tangkapan layar dan memilih sampul";
+"PrePermissionPhotoCancel" = "Nanti";
+"PrePermissionPhotoConfirm" = "Izinkan";
+"DeniedPermissionPhotoTitle" = "Akses Album Ditolak!";
+"DeniedPermissionPhotoMessage" = "Aktifkan izin untuk menyimpan tangkapan layar";
+"DeniedPermissionPhotoCancel" = "Tidak";
+"DeniedPermissionPhotoConfirm" = "Buka Pengaturan";
+"PrePermissionCameraTitle" = "Izinkan akses kamera?";
+"PrePermissionCameraMessage" = "Untuk memotong sampul permainan";
+"PrePermissionCameraCancel" = "Nanti";
+"PrePermissionCameraConfirm" = "Izinkan";
+"DeniedPermissionCameraTitle" = "Akses Kamera Ditolak!";
+"DeniedPermissionCameraMessage" = "Aktifkan izin untuk memotong sampul";
+"DeniedPermissionCameraCancel" = "Tidak";
+"DeniedPermissionCameraConfirm" = "Buka Pengaturan";
+"DeniedPermissionMicTitle" = "Akses Mikrofon Ditolak";
+"DeniedPermissionMicMessage" = "Diperlukan untuk fungsi game DS tertentu";
+"DeniedPermissionMicCancel" = "Tidak";
+"DeniedPermissionMicConfirm" = "Buka Pengaturan";
+
+//Share
+"ShareAppSubtitle" = "Ajak temanmu berpetualang!";
+"ShareRomFilesFailed" = "Gagal membagikan ROM";
+"ShareSaveFilesFailed" = "Tidak ada simpanan untuk dibagikan";
+"ShareFilesCopyFailed" = "Gagal menyalin file";
+"ShareFilesCompressFailed" = "Gagal mengompresi file";
+
+"TurnOnAirPlayAsk" = "AirPlay telah tersambung. Aktifkan mode layar penuh sekarang?";
+
+"ThreeDSModePerformance" = "Mode Performa";
+"ThreeDSModeCompatibility" = "Mode Kompatibilitas";
+"ThreeDSModeQuality" = "Prioritas Grafis";
+"ThreeDSNotSupportImportSave" = "Game 3DS saat ini tidak mendukung impor save";
+"ThreeDSNotSupportShareSave" = "Game 3DS saat ini tidak mendukung berbagi save";
+"ThreeDSBetaAlertTitle" = "Versi Eksperimental 3DS";
+"ThreeDSBetaAlertDetail" = "Agar Anda bisa mencoba game 3DS lebih awal, Manic EMU merilis fitur 3DS dalam status eksperimental. Beberapa optimasi masih diperlukan.
+
+Fitur yang belum tersedia sementara:
+❌ Mode Layar Penuh AirPlay
+❌ Simpan Otomatis
+❌ Percepatan
+
+Jika terjadi ketidakstabilan, lihat FAQ atau bergabunglah dengan saluran bantuan. Kami terus mengoptimalkan emulator. Dukungan Anda membantu menciptakan pengalaman bermain yang lebih baik. Kami bekerja untuk Anda!";
+"ThreeDSNoSupportDeviceTitle" = "Performa Perangkat Tidak Memadai";
+"ThreeDSNoSupportDeviceDetail" = "Perangkat ini mungkin tidak mendukung emulasi 3DS. Melanjutkan dapat menyebabkan kesalahan tak terduga";
+
+"GameImportBadFile" = "Gagal mengimpor: \"%@\" rusak atau terjadi kesalahan tidak dikenal. Coba file ROM lain";
+"Game3DSDecryptFailed" = "Gagal mengimpor: Gagal mendekripsi \"%@\". Coba file ROM lain";
+"Game3DSGameNotExist" = "Gagal mengimpor pembaruan, \"%@\": Game belum diinstal!";
+
+"Game3DSInputTitle" = "Masukkan konten";
+"ControllerMappingGuideTitle" = "Ketuk tombol di layar untuk memetakan tombol";
+"ControllerMappingGuideBegin" = "Mulai memetakan 「%@」
+Tekan tombol kontroler...";
+"ControllerMappingReset" = "Reset";
+"ControllerMappingNoFouond" = "Pengaturan tombol tidak dikenali";
+"FlexSkinSettingError" = "Antarmuka belum siap, coba lagi nanti";
+"SkinPreviewTitle" = "Pratinjau";
+"FullScreenWhenConnectControllerTitle" = "Layar penuh otomatis";
+"FullScreenWhenConnectControllerDetail" = "Aktifkan layar penuh saat kontroler terhubung";
+"JoinDiscordTitle" = "Bergabung dengan Discord (Tidak Resmi)";
+"JoinDiscordAlertMessage" = "Terima kasih kepada pemain %@ yang membuat saluran ini. Lanjutkan?";
+"FlexSkinGuideTitle" = "Geser atau cubit untuk menyesuaikan layar";
+"DownloadFailed" = "Gagal mengunduh";
+"RemoveDownloadTask" = "Hentikan pengunduhan dan hapus \"%@\"?";
+"GameSettingResolution" = "Resolusi %@";
+"GameSettingSwapScreen" = "Ganti layar";
+"NotSupportGameSetting" = "Opsi tidak tersedia di %@";
+
+"ThemeSettingTitle" = "Tema";
+"ThemeSettingDetail" = "Ikon aplikasi, warna tema, pengaturan sampul, urutan konsol";
+"ThemeDesktopIconTitle" = "Ikon Aplikasi";
+"ThemeDesktopIconDetail" = "Ikon tambahan segera hadir...";
+"ThemeThemeColorTitle" = "Warna Tema";
+"ThemeCoverStyleTitle" = "Gaya Sampul & Sudut";
+"ThemeCoverStyleName" = "Gaya %d";
+"ThemePlatformOrderTitle" = "Urutan Konsol";
+"ThemePlatformOrderDetail" = "Tahan dan seret untuk mengubah urutan tampilan";
+"ThemeColorLimitToast" = "Batas maksimal warna tema tercapai";
+"ThemeColorSystemNotAllowEdit" = "Warna default tidak dapat diedit";
+"EditTitle" = "Edit";
+"RemoveTitle" = "Hapus";
+"On" = "Aktif";
+"Off" = "Nonaktif";
+"AmiiboNotSearching" = "Amiibo tidak dapat dimuat saat NFC nonaktif";
+"ConsoleHomeTitle" = "Menu Utama";
+"AmiiboTitle" = "Muat Amiibo";
+"ThreeDSHomeMenuNotRunning" = "Menu utama tidak berjalan";
+"ThreeDSImportSaveFailed" = "Gagal mengimpor %@: File simpan tidak dikenal";
+"ThreeDSUpdateInstallSuccess" = "Pembaruan berhasil dipasang";
+"OnlineCoverFetchFailed" = "Gagal mengambil gambar";
+"JITMenuDesc" = "Mengaktifkan JIT di lingkungan tidak didukung dapat menyebabkan crash";
+"ShaderModeTitle" = "Shader Lanjutan";
+"ShaderModeDesc" = "Meningkatkan akurasi tekstur (dapat memengaruhi performa)";
+"NoDownloadTask" = "Tidak ada unduhan aktif";
+"NoGameCoverResult" = "Tidak ditemukan sampul";
+"NoContentResult" = "Tidak ada konten";
+"OpenFilePermissionsLimit" = "Tidak ada izin untuk membuka %@";
+"SevenZipDecompressError" = "File 7z rusak atau terenkripsi";
+"ForceSquareRatioTitle" = "Paksa Rasio Persegi";
+"ForceSquareRatioDetail" = "Sampul menggunakan rasio persegi (aktif) atau asli (nonaktif)";
+
+"AutoSaveStateTitle" = "Simpan Status Otomatis";
+"GamesThemeTitle" = "Pustaka Game";
+"GamesPerRowTitle" = "Game per Baris (iPhone)";
+"GamesHideScrollIndicator" = "Sembunyikan Indikator Scroll";
+"ConsoleLanguageDesc" = "Pengaturan Wilayah & Bahasa mungkin perlu dikonfigurasi manual untuk game tertentu";
+"JitNoSupportDesc" = "Kompilasi JIT tidak tersedia di lingkungan saat ini";
+"RenderRightEyeTitle" = "Render Mata Kanan";
+"RenderRightEyeDesc" = "Menonaktifkan dapat meningkatkan performa beberapa game, tetapi mungkin menyebabkan layar berkedip";
+"DisableTitle" = "Nonaktifkan";
+"EnableTitle" = "Aktifkan";
+"NoSaveStateToast" = "%@ tidak tersedia";
+"DeleteSelectedSaveStateAlert" = "Hapus «%@» terpilih?\nTidak dapat dikembalikan!";
+"DeleteAllSaveStateAlert" = "Tidak ada pilihan. Hapus semua «%@»?\nTidak dapat dikembalikan!";
+"AICoverSearchDesc" = "Deteksi pencarian non-Inggris. Tingkatkan ke Premium untuk pencarian multibahasa AI Manic EMU";
+"MaxTextSizeAllowDesc" = "Mendukung hingga %@ karakter";
+
+"PlatformSelectionTitle" = "Pemilihan Platform";
+"PlatformSelectionDetail" = "Pilih platform default untuk %@";
+"PlatformChange" = "Tetapkan Platform";
+"BIOSDesc" = "Beberapa platform memerlukan BIOS";
+"BIOSImported" = "Diimpor";
+"BIOSAlert" = "Beberapa platform memerlukan file BIOS. Hak cipta BIOS milik produsen. Patuhi hukum lokal saat mengimpor.\n\nBergabunglah dengan komunitas kami untuk bantuan.";
+"UnknownPlatform" = "Platform Tidak Dikenal";
+"UnknownPlatformGameSelectWarn" = "Game tanpa platform tidak dapat dipilih";
+"BIOSImportSuccess" = "%@ berhasil diimpor!";
+"BIOSImportFailed" = "File tidak benar!";
+
+"HideGameTitleDesc" = "Sembunyikan judul game";
+"HideGroupTitleDesc" = "Sembunyikan judul grup";
+"GroupTitleStyelDesc" = "Gaya Judul Grup";
+"GroupTitleStyelAbbr" = "Singktn.";
+"GroupTitleStyelFull" = "Lengkap";
+"GroupTitleStyelBrand" = "Merek";
+"CopyLaunchLinkTitle" = "Salin Tautan Peluncuran";
+"AskIfNeedToSaveCover" = "Tautan peluncuran disalin ke clipboard. Simpan sampul ke album foto?";
+"SaturnBiosAlertTitle" = "BIOS Hilang";
+"SaturnBiosAlertDetail" = "Sega Saturn dapat diemulasikan dengan HLE tanpa BIOS, tetapi file BIOS mengurangi kesalahan grafis";
+"BiosAddTitle" = "Tambah BIOS";
+"StartGameWithoutBiosTitle" = "Mulai tanpa BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Mode Lanjutan";
+"ThreeDSAdvanceSettingTitle" = "Pengaturan Lanjutan";
+"ThreeDSBasicSettingMode" = "Mode Dasar";
+"ShareConfigButtonTitle" = "Bagikan Konfigurasi";
+"ImportConfigButtonTitle" = "Impor Konfigurasi";
+"ShareFileFailedMissing" = "Berbagi gagal: file tidak ada";
+"ReadConfigFileFailed" = "Tidak dapat membaca file konfigurasi";
+"SwitchEmulationCore" = "Ganti Inti";
+"SwitchEmulationCoreDetail" = "Ganti inti emulasi untuk %@\nPenggantian inti akan membuat simpanan dari inti sebelumnya tidak terbaca. Kembali ke inti asli untuk mengakses";
+"BeetleSaturnNoSupportCheat" = "Inti Beetle Saturn saat ini tidak mendukung kode curang. Jika perlu, beralihlah ke inti Yabause";
+"CurrentTitle" = "saat ini";
+"NewSkinDesc" = "Manic EMU mendukung skin dalam format .manicskin dan .deltaskin. Catatan: Skin yang diimpor harus cocok dengan platform saat ini, jika tidak tidak akan muncul di daftar.\nKami juga menyediakan akses ke komunitas skin pihak ketiga. Ini tidak berafiliasi resmi dengan Manic EMU. Saat mengunduh, patuhi ketentuan layanan masing-masing situs";
+"VisitSite" = "Kunjungi %@";
+"OpenFile" = "Buka File";
+"WebViewDownloadBegin" = "Unduhan dimulai";
+"RespectSilentMode" = "Hormati Mode Senyap";
+"RespectSilentModeDesc" = "Saat diaktifkan, Manic EMU hanya akan memutar audio di luar mode senyap";
+"SaturnISONoSwitchCore" = "Game Sega Saturn format .iso tidak mendukung penggantian inti";
+"EnableFullScreenTitle" = "Aktifkan Layar Penuh";
+"DisableFullScreenTitle" = "Nonaktifkan Layar Penuh";
+"SimulateBlowingTitle" = "Simulasikan Tiupan";
+"PaletteTitle" = "Palet";
+"SkinRestDesc" = "Mengatur ulang skin juga akan mengembalikan skin yang ditetapkan game ke versi default";
+"SkinResetForAll" = "Atur Ulang Semua Skin Platform";
+"SkinResetForPlatform" = "Atur Ulang Skin %@";
+"SkinDebug" = "Area Uji Skin";
+
+"ImportMissingFile" = "Gagal impor %@: File %@ tidak ditemukan";
+"MultiDiscBuilder" = "Pemutar MultiDisc";
+"MultiDiscBuilderDesc" = "Membuat file .m3u tukar-disk untuk game multidisc (.cue/.bin atau .chd). Lewati jika sudah punya .m3u - impor langsung via Impor Game";
+"M3uFileShare" = "Bagikan File .m3u";
+"M3uFileImport" = "Tambahkan ke Library";
+"MultiDiscAddFile" = "Tambahkan File %@";
+"MultiDiscImportErrorConflict" = "Error: Tidak bisa campur file .cue dan .chd";
+"MultiDiscImportErrorMissing" = "Error: File .cue/.chd tidak ditemukan";
+"GenerateM3uFailed" = "Gagal membuat file .m3u";
+"MultiDiscCloseAlert" = "File .m3u telah dibuat. Tutup halaman ini setelah diimpor";
+"MultiDiscContinueClose" = "Tutup";
+"SwapDisk" = "Ganti Disk";
+"NotSupportSwapDisk" = "Bukan game multidisc";
+"TransferPakDesc" = "Transfer Pak menyinkronkan data GB/GBC ke N64. Untuk mengaktifkan: impor file ROM (.gb/.gbc) dan save (.sav)";
+"TransferPakFromLibrary" = "Impor dari Library";
+"TransferPakFromLibraryDesc" = "Hanya game dengan file save yang ditampilkan.\nGame GB/GBC yang dipilih harus cocok dengan ROM N64";
+"TransferPakNoGames" = "Tidak ada game kompatibel";
+"TransferPakFromFiles" = "Impor dari File";
+"TransferPakOn" = "Aktif";
+"TransferPakOff" = "Nonaktif";
+"TransferPakImportError" = "Error: Impor kedua file (ROM dan save, 2 file dibutuhkan)";
+"ShowControlsTitle" = "Tampilkan Kontrol";
+"HideControlsTitle" = "Sembunyikan Kontrol";
+
+"DesignedFor" = "Dirancang untuk %@";

@@ -1,0 +1,567 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Serveis al núvol";
+"ImportAddLanServiceTitle" = "Serveis de xarxa local";
+"ImportAddDiscoverServiceTitle" = "Serveis de descobriment";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Yun";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Afegir servei";
+"ImportServiceDelete" = "Eliminar servei";
+"ImportAliyunNotGetDriveId" = "Error en afegir el servei d'Aliyun: no s'ha pogut obtenir el directori";
+"ImportDownloadError" = "Error en la descàrrega\n%@";
+"ImportDownloadContinue" = "Continuant la descàrrega...\n%@";
+"LandServiceEditServerName" = "Nom del servidor";
+"LandServiceEditServerNamePlaceholder" = "El meu servidor SMB";
+"LandServiceEditHost" = "Adreça del servidor";
+"LandServiceEditUserName" = "Usuari";
+"LandServiceEditPassword" = "Contrasenya";
+"LandServiceEditRequiredPlaceholder" = "Obligatori";
+"LandServiceEditOptionalPlaceholder" = "Opcional";
+"LandServiceEditConnect" = "Connectar";
+"AddLandServiceSuccess" = "S'ha afegit %@ correctament";
+"AddLandServiceFailed" = "Error en afegir %@\nComprova la connexió a Internet, l'estat del servei o les dades introduïdes";
+"AddLandServiceTimeout" = "Temps d'espera esgotat en connectar al servei";
+"FilesImporterErrorFileExist" = "\"%@\" ja existeix, no cal importar-lo";
+"FilesImporterErrorBadCopy" = "Error en importar \"%@\": s'ha produït un error en copiar el fitxer";
+"FilesImporterErrorBadExtension" = "Error en importar \"%@\": extensió de fitxer no reconeguda";
+"FilesImporterErrorNoPermission" = "No tens permisos per accedir a %@";
+"FilesImporterErrorUnableToHash" = "Error en importar \"%@\": no s'ha pogut calcular el hash";
+"FilesImporterErrorWriteDatabase" = "Error en importar \"%@\": no s'ha pogut escriure a la base de dades";
+"GameSaveMatchTitle" = "Associar partida guardada a un joc";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" no s'ha pogut associar a cap joc, fes-ho manualment";
+"GameSaveAlreadyExistTitle" = "La partida guardada ja existeix";
+"FilesImporterErrorSaveAlreadyExist" = "Error en importar \"%@\": vols sobreescriure la partida guardada existent?";
+"GameSaveMathToMuchTitle" = "Múltiples coincidències";
+"FilesImporterErrorSaveMathToMuch" = "Error en importar \"%@\": la partida guardada coincideix amb diversos jocs, fes-ho manualment";
+"FilesImporterErrorSkinBadFile" = "Error en importar %@: el fitxer de skin està danyat";
+"PasteImporterErrorNoMatchContent" = "No hi ha contingut vàlid al porta-retalls per importar";
+"FilesDownloadErrorFileExist" = "%@ ja està descarregat, no cal tornar-ho a descarregar";
+"FilesImporterErrorEmptyContent" = "No hi ha recursos per importar";
+"LanServiceInitFailed" = "Error en crear el servei %@";
+"SMBLoginFailed" = "Error en l'inici de sessió Samba %@";
+"SMBListFilesFailed" = "Error en obtenir els fitxers %@";
+"SMBListFilesTypeError" = "Aquest fitxer no és una carpeta";
+"DropErrorLoadFailed" = "Error en carregar el fitxer";
+"DropErrorNotSupportFile" = "Tipus de fitxer no compatible";
+"ImportErrorTitle" = "Error en importar";
+"ImportGameSuccessTitle" = "Joc importat correctament";
+"ImportGameSuccessDetail" = "%@\ns'ha afegit a la biblioteca de jocs, vols veure'l ara?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\ns'ha afegit a la biblioteca de jocs, vols jugar-hi ara?";
+"ImportSkinSuccessTitle" = "Skin importada correctament";
+"ImportSkinSuccessDetail" = "\"%@\"\ns'ha importat correctament, vols veure-la ara?";
+"ImportGameSaveSuccessTitle" = "Partida guardada importada correctament";
+"ImportGameSaveSuccessDetail" = "\"%@\"\ns'ha importat al joc corresponent";
+"ImportGameSaveSuccessForOne" = "\"%@\"\ns'ha importat al joc, vols jugar-hi ara?";
+"ImportGameSaveFailedNoGameError" = "Error en importar \"%@\": encara no tens cap joc!";
+"DownloadCompletion" = "Descàrrega completada";
+"QQChannelName" = "Canal QQ";
+"NotSupportPasswordZip" = "No es pot descomprimir \"%@\": no es permeten fitxers ZIP amb contrasenya";
+"UnzipFailed" = "Error en descomprimir \"%@\"";
+"NoSupportInZip" = "\"%@\" no conté cap format compatible";
+"IPCopy" = "S'ha copiat l'adreça";
+"ImportServiceListFilesTitle" = "Fitxers";
+"ImportServiceListFilesDetail" = "Importa jocs, skins o partides guardades des de fitxers o iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Transfereix fitxers mitjançant un navegador a la mateixa xarxa local";
+"ImportServiceListWiFiOnDetail" = "%@\nUtilitza un navegador per transferir fitxers";
+"ImportServiceListPasteTitle" = "Llegeix el porta-retalls";
+"ImportServiceListPasteDetail" = "Permet importar fitxers copiats des de macOS o l'aplicació Fitxers";
+"ImportHowTo" = "Com importar";
+"ImportTopHintTitle" = "Una història plena de somnis i aventures començarà aquí!";
+"ImportDragAndDropTips" = "Arrossega fitxers a qualsevol pantalla de Manic EMU per transferir-los";
+"ImportChannelTips" = "Si tens dubtes, uneix-te a %@ per obtenir ajuda";
+"ToastConnectCloudDriveSuccess" = "S'ha connectat a %@ correctament";
+"AlertImportFilesSuccess" = "Recursos importats correctament";
+"ErrorConnectCloudDrive" = "No es pot connectar al servei al núvol";
+"ErrorUnknown" = "Error desconegut";
+"ReasonConncetCloudDriveFail" = "Comprova la connexió a Internet i l'estat d'autorització del servei al núvol, o prova a eliminar i tornar a afegir el servei";
+
+//Common
+"TabbarTitleGames" = "Jocs";
+"TabbarTitleImport" = "Importar";
+"TabbarTitleSettings" = "Configuració";
+"SelectAll" = "Seleccionar-ho tot";
+"DeSelectAll" = "Deseleccionar-ho tot";
+"CloudDriveBrowserDownload" = "Descarregar";
+"CancelTitle" = "Cancel·lar";
+"CheckTitle" = "Veure";
+"StartGameTitle" = "Jugar ara";
+"ConfirmTitle" = "Confirmar";
+"SaveTitle" = "Guardar";
+"NameTitle" = "Nom";
+"TimeAgoMinuteFormat" = "Fa %d minut(s)";
+"TimeAgoHourFormat" = "Fa %d hora(s)";
+"TimeAgoDayFormat" = "Fa %d dia(s)";
+"TimeAgoWeekFormat" = "Fa %d setmana(s)";
+"TimeAgoMonthFormat" = "Fa %d mes(os)";
+"TimeAgoYearFormat" = "Fa %d any(s)";
+"TimeDurationHourAndMinuteFormat" = "%d hora(s) i %d minut(s)";
+"TimeDurationHourFormat" = "%d hora(s)";
+"TimeDurationMinuteFormat" = "%d minut(s)";
+"FatalErrorTitle" = "Error fatal";
+"FatalErrorDesc" = "Error en carregar els recursos del sistema, Manic EMU podria tenir problemes greus de funcionament";
+"LodingFailedTitle" = "Error en carregar";
+"AirPlayDesc" = "Comença l'aventura ara mateix!";
+"ToastSuccess" = "S'ha guardat correctament";
+"ToastFailed" = "Error en guardar";
+
+//Games
+"GamesSearchPlaceHolder" = "Títol del joc";
+"GamesRename" = "Canvia el nom";
+"GamesModifyCover" = "Canvia la portada";
+"GamesSpecifySkin" = "Configura la skin";
+"GamesCheatCode" = "Cheat codes";
+"GamesShareRom" = "Compartir ROM";
+"GamesCheckSave" = "Veure partides guardades";
+"GamesImportSave" = "Importar partida guardada";
+"GamesShareSave" = "Exportar partida guardada";
+"GamesDelete" = "Eliminar joc";
+"GamesRandom" = "No saps què jugar? Deixa'ns triar per tu";
+"LoadGameErrorRomNotExist" = "Error en carregar el joc: la ROM no existeix";
+"GamesListEmptyGuideLeft" = "Prem el";
+"GamesListEmptyGuideRight" = "a sota per importar jocs";
+"GamesListEmptyWelcomeLeft" = "Benvingut/da al món de";
+"GamesListEmptyWelcomeRight" = "";
+"GamesListEmptyWarnning" = "Assegura't que obtinguis les ROMs dels jocs mitjançant canals legals";
+"DeleteGameAlertDetail" = "La ROM del joc, les partides guardades i les dades dels cheat codes s'eliminaran permanentment. Aquesta acció no es pot desfer!";
+"DeleteSkinAlertDetail" = "La skin s'eliminarà permanentment!";
+"DeleteGameGameStateAlertTitle" = "Eliminar partida guardada";
+"DeleteGameGameStateAlertDetail" = "La partida guardada s'eliminarà permanentment!";
+"confirmDelte" = "Confirmar eliminació";
+
+//Controllers
+"ControllersTouchName" = "Controlador tàctil";
+"ControllersHeaderTitle" = "Controladors";
+"ControllersPlayerIndex" = "Jugador %d";
+"ControllersPlayerUnset" = "No assignat";
+"ControllersHowToConnect" = "Com connectar";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "Jugat %@ · Total %@";
+"ReadyGameInfoNeverPlayed" = "Encara no has jugat, comença l'aventura ara";
+"ReadyEditCoverTakePhoto" = "Fer foto";
+"ReadyEditCoverAlbum" = "Àlbum";
+"ReadyEditCoverFile" = "Fitxer";
+"ReadyEditCoverSearch" = "Cercar";
+"ReadySegmentManualSave" = "Partides guardades manuals";
+"ReadySegmentAutoSave" = "Partides guardades automàtiques";
+"ReadyEditTitleFailed" = "Error en canviar el nom: el nom del joc no pot estar buit";
+"ReadyEditTitleSuccess" = "S'ha canviat el nom correctament";
+"ReadyGameSaveStatesEmpty" = "Encara no hi ha partides guardades";
+"GameSaveGuideBecomTitle" = "Fes-te";
+"GameSaveGuideMemberTitle" = "membre";
+"GameSaveGuideDesc" = "Desbloqueja partides guardades manuals il·limitades i fins a 50 partides guardades automàtiques";
+"GameSaveUnCompatibleTitle" = "Problema de compatibilitat amb les partides guardades";
+"GameSaveUnCompatibleDetail" = "Aquesta partida guardada va ser creada per %@ i l'entorn actual del dispositiu és %@. Les partides guardades depenen del tipus de dispositiu i la versió del sistema. Forçar la càrrega en un entorn incompatible podria causar problemes!";
+"GameSaveStateForceLoad" = "Continuar carregant";
+"GameSaveContinue" = "Continuar";
+"GameSaveTitle" = "Partida guardada %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU és compatible amb skins en format .deltaskin";
+"SkinNavigationSubTitleSpecifiedGame" = "Configura una skin només per a %@";
+"SkinSegmentPortraitTitle" = "Vertical";
+"SkinSegmentLandscapeTitle" = "Horitzontal";
+"SkinAddTitle" = "Afegir skin";
+"HowToFetch" = "Com obtenir";
+"SkinDelete" = "Eliminar skin";
+"DefaultSkinCannotEdit" = "No es pot editar la skin per defecte";
+
+//History
+"HistoryHeaderTitle" = "Historial de joc";
+"HistoryFavouriteTitle" = "Els meus preferits";
+"HistoryEmptyTitle" = "Encara no hi ha historial de joc";
+"HistoryEmptyImportGame" = "Importar joc";
+"HistoryEmptyStartGame" = "Començar a jugar";
+
+//Settings
+"LeftHandTitle" = "Mode per esquerrans";
+"LeftHandDetail" = "Inverteix els controls (joystick, DPad, botons)";
+"QuickGameTitle" = "Inici ràpid del joc";
+"QuickGameDetail" = "En prémer un joc, no es mostrarà la pantalla de preparació";
+"AirPlayTitle" = "Mode de pantalla completa AirPlay";
+"AirPlayDetail" = "Activa-ho per projectar la pantalla del joc en mode de pantalla completa";
+"iCloudTitle" = "Sincronització amb iCloud";
+"iCloudDetail" = "Sincronitza jocs, skins, partides guardades i configuració entre dispositius amb el mateix Apple ID";
+"AppIconTitle" = "Icona de l'aplicació";
+"WidgetTitle" = "Ginys d'escriptori";
+"QATitle" = "Preguntes freqüents";
+"FeedbackTitle" = "Comentaris";
+"ShareAppTitle" = "Comparteix «Manic EMU» amb amics";
+"JoinQQTitle" = "Uneix-te al canal QQ";
+"JoinTelegramTitle" = "Uneix-te a Telegram";
+"ClearCacheTitle" = "Esborrar memòria cau";
+"LanguageTitle" = "Idioma";
+"UserAgreementTitle" = "Acord d'usuari";
+"PrivacyPolicyTitle" = "Política de privadesa";
+"GeneralSettingTitle" = "Configuració general";
+"AdvanceSettingTitle" = "Configuració avançada";
+"SupportSettingTitle" = "Suport";
+"OthersSettingTitle" = "Altres";
+"RatingTitleLeft" = "Valora";
+"RatingTitleRight" = "";
+"RatingDetail" = "Si creus que el nostre producte té valor, si us plau, dóna'ns 5 estrelles. La teva opinió és molt important per a nosaltres :)";
+"iCloudDisableTitle" = "iCloud no disponible temporalment";
+"iCloudDisableDetail" = "S'ha intentat activar la sincronització amb iCloud. Només es farà efectiva quan hagis iniciat sessió i autoritzat iCloud. Ves a «Configuració» > «Apple ID» > «iCloud» i assegura't que iCloud Drive està activat i que Manic EMU té permís per accedir-hi";
+"iCloudSyncConfilictTitle" = "Conflicte de sincronització amb iCloud";
+"iCloudSyncConfilictDetail" = "Fitxer al núvol:\n%@\n\nFitxer local:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "Conservar el de iCloud";
+"iCloudSyncConfilictSaveLocal" = "Conservar el local";
+"SettingsNonMemberDesc" = "Tu seràs el protagonista d'aquesta història";
+"ThanksSupportDesc" = "Gràcies pel teu suport";
+"ThanksCommingDesc" = "Gràcies per venir a jugar a";
+"PlayGameDesc" = "";
+"NoEmailSetting" = "Encara no has configurat el correu electrònic";
+"IDCopy" = "S'ha copiat el teu ID";
+"SendEmailSuccess" = "S'ha enviat el correu electrònic correctament";
+"SendEmailFailed" = "Error en enviar el correu electrònic %@";
+"iCloudTipsTitle" = "Activar la sincronització amb iCloud";
+"iCloudTipsDetail" = "Activa la sincronització amb iCloud per compartir tot el contingut de Manic EMU entre dispositius amb el mateix Apple ID. En activar-la, totes les teves dades es pujaran a iCloud, cosa que ocuparà espai d'emmagatzematge. Si no n'hi ha prou, la sincronització podria fallar. Un cop sincronitzades, les teves dades s'emmagatzemaran al núvol i, si no s'han descarregat, podria no ser possible jugar correctament!";
+"iCloudConfirm" = "Continuar amb l'activació";
+
+//Play
+"LoadingTitle" = "Descarregant";
+"LoadRomSuccess" = "%@ descarregat, pots començar a jugar!";
+"GameSettingSaveState" = "Partida guardada";
+"GameSettingQuickLoadState" = "Càrrega ràpida";
+"GameSettingVolume" = "So";
+"GameSettingFastForwardResume" = "Velocitat normal";
+"GameSettingFastForward" = "Avanç ràpid %@";
+"GameSettingStateList" = "Llista de partides guardades";
+"GameSettingSkins" = "Configurar skin";
+"GameSettingFilter" = "Filtre";
+"GameSettingScreenShot" = "Captura de pantalla";
+"GameSettingHapticOff" = "Vibració desactivada";
+"GameSettingHapticSoft" = "Vibració suau";
+"GameSettingHapticLight" = "Vibració lleugera";
+"GameSettingHapticMedium" = "Vibració mitjana";
+"GameSettingHapticHeavy" = "Vibració forta";
+"GameSettingHapticRigid" = "Vibració rígida";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "Joystick";
+"GameSettingAirplay" = "Projectar";
+"GameSettingControllerSetting" = "Controlador";
+"GameSettingOrientationAuto" = "Rotació automàtica";
+"GameSettingOrientationPortrait" = "Forçar vertical";
+"GameSettingOrientationLandscape" = "Forçar horitzontal";
+"GameSettingFunctionSort" = "Ordenar funcions";
+"GameSettingReload" = "Reiniciar";
+"GameSettingQuit" = "Sortir";
+"GameSaveStateSuccess" = "Partida guardada correctament";
+"GameSaveStateLoadFailed" = "Error en carregar la partida guardada: està danyada o és incompatible";
+"GameSaveStateLoadSuccess" = "Partida guardada carregada correctament";
+"GameSaveStateQuickLoadFailed" = "Encara no hi ha partides guardades manuals. Si vols carregar una automàtica, utilitza la «Llista de partides guardades»";
+"GameSaveListTitle" = "Partides guardades";
+"GameCheatActivateFailed" = "%@\nError en activar: el cheat code no és vàlid";
+"GameCheatActivateSuccess" = "%@\nS'ha activat correctament";
+"AirPlayingTitle" = "La pantalla del joc s'ha projectat";
+"VolumeOff" = "So desactivat";
+"VolumeOn" = "So activat";
+"FunctionSortDesc1" = "Aquestes funcions seran les accions ràpides per defecte a les skins oficials";
+"FunctionSortDesc2" = "Manté premut per arrossegar i canviar l'ordre";
+"ManualGameSaveCountLimit" = "Has superat el límit de partides guardades manuals! Fes-te membre per desbloquejar partides guardades il·limitades o elimina'n algunes de la llista";
+"FastForwardSpeedLimit" = "La teva velocitat màxima d'avanç ràpid és x2! Fes-te membre per desbloquejar fins a x5 de velocitat";
+"ResetSpeed" = "Restaurar velocitat normal";
+"GoToUpgrade" = "Actualitzar";
+"SaveStateTooFrequent" = "Estàs guardant massa sovint";
+"LoadStateTooFrequent" = "Estàs carregant massa sovint";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Introdueix un nom";
+"AutoDetectCheatTypeName" = "Detectar automàticament";
+"AutoDetectFormat" = "Introdueix el codi per detectar el format automàticament";
+"CheatCodeFormatError" = "El format del cheat code no és correcte";
+"CheatCodeEmptyTitle" = "Encara no hi ha cheat codes";
+"CheatCodeEmptyGuideLeft" = "Prem el";
+"CheatCodeEmptyGuideRight" = "a la cantonada superior esquerra per afegir cheat codes";
+"EnableCheatCodeAlertTitle" = "Activar cheat codes";
+"EnableCheatCodeAlertDetail" = "Els cheat codes depenen de la versió del joc i només funcionaran si coincideixen. L'ús de cheat codes modifica les dades del joc i podria causar errors o inestabilitat. Utilitza'ls amb cura.";
+
+//Filtres
+"FilterSectionHeaderTitle" = "Filtres de vídeo";
+"FilterOriginTitle" = "Original";
+
+//Compres dins de l'aplicació
+"PurchaseAdcancedFeaturesTitle" = "Desbloqueja funcions avançades";
+"AdcancedFeaturesDetail" = "
+«🎮 Experiència definitiva, desbloqueig instantani»
+🔥 Partides guardades il·limitades: supera el límit de 3
+🚀 Velocitat x5: controla el ritme del joc
+💎 Cheat codes il·limitats: completa els jocs fàcilment
+✨ Revolució visual: biblioteca exclusiva de filtres
+";
+"PurchaseImportFeaturesTitle" = "Activa la importació des del núvol";
+"ImportFeaturesDetail" = " 
+☁️ ​​«Connexió multiplataforma en un sol pas»​
+✅ Google Drive, Dropbox, OneDrive
+✅ Baidu Yun, Aliyun
+⚡  Accés sense problemes a WebDAV/SMB
+";
+"PurchaseControllerFeaturesTitle" = "Desbloqueja controladors externs complets";
+"ControllerFeaturesDetail" = " 
+🕹️ ​​«Suport complet per a perifèrics»​
+🎮 Compatibilitat nativa amb Joy-Con/DUALSHOCK/Xbox/
+⌨️  Connexió ràpida amb comandaments o teclats Bluetooth
+✨  Múltiples comandaments simultànis
+🎲  Revolució en el control
+";
+"PurchaseAirPlayFeaturesTitle" = "Desbloqueja AirPlay per jugar a pantalla gran";
+"AirPlayFeaturesDetail" = " 
+📺 ​​«Joc multiplataforma a la televisió»​
+🔓  Desbloqueja AirPlay sense pèrdua de qualitat
+🛋️  Transició perfecta entre mòbil i TV
+🎮  Experiència immersiva a pantalla gran
+";
+"PurchaseiCloudFeaturesTitle" = "Activa la sincronització amb iCloud";
+"iCloudFeaturesDetail" = " 
+☁️ ​​«Sincronització multiplataforma amb iCloud»​
+🎮  Jocs/partides guardades/configuració sincronitzats
+🔒  Emmagatzematge encriptat al núvol
+🔄  Continua on ho vas deixar en qualsevol dispositiu
+👉  Activa iCloud i gaudeix dels teus jocs a qualsevol lloc!
+";
+"AdvanceFeatureDescLabel1" = "Velocitat màxima x5";
+"AdvanceFeatureDescLabel2" = "Partides guardades il·limitades";
+"AdvanceFeatureDescLabel3" = "Cheat codes il·limitats";
+"AdvanceFeatureDescLabel4" = "Canvi lliure de filtres";
+"AdvanceFeatureDescLabel5" = "Partides guardades automàtiques";
+"RestorePurchaseButton" = "Restaurar compra";
+"AnnualDescription" = "Membresia anual";
+"MonthlyDescription" = "Membresia mensual";
+"ForeverDescription" = "Membresia permanent · Pagament únic";
+"SubscriptionPromotional" = "%d dies gratuïts";
+"PurchasePricePerYear" = "/any";
+"PurchasePricePerMonth" = "/mes";
+"PromptLabelForYear" = "50%% de descompte";
+"PromptLabelForMonth" = "Preu d'introducció";
+"PromptLabelForForever" = "La millor opció";
+"GetProductsFailedTitle" = "Error en obtenir els productes, torna-ho a provar més tard";
+"TermOfServiceTitle" = "Termes del servei";
+"AnnualMemberTitle" = "Super membre anual";
+"MonthlyMemberTitle" = "Aventurer mensual";
+"ForeverMemberTitle" = "Membre permanent";
+"PurchaseVerifiedFailed" = "No s'ha pogut verificar el rebut de pagament. Assegura't que tens connexió a Internet i reinicia Manic EMU per tornar-ho a intentar";
+"PurchaseCancel" = "S'ha cancel·lat el teu pagament. Has perdut l'oportunitat de desbloquejar funcions avançades";
+"PurchasePending" = "El teu pagament està pendent. Un cop completat, s'activarà la teva membresia";
+"PurchaseUnknown" = "Estat de pagament desconegut";
+"PurchaseErrorDesc" = "No es pot completar el pagament. Assegura't que tens connexió a Internet i torna-ho a provar";
+"PurchaseFailedTitle" = "Error en el pagament";
+"RestoreSuccessDesc" = "S'han restaurat les compres correctament!";
+"RestoreEndDesc" = "S'ha completat la restauració: no s'han trobat compres vàlides";
+"TrialDesc" = "No es cobrarà res durant el període de prova. Pots cancel·lar en qualsevol moment";
+"SubscriptionPurchaseButtonTitle" = "Comença la prova de %d dies";
+"YearSubscriptionDisableDesc" = "Ja ets membre anual";
+"MonthSubscriptionDisableDesc" = "Ja ets membre mensual";
+"ForeverSubscriptionDisableDesc" = "Ja ets membre permanent";
+"ChangeSubscription" = "Canviar subscripció";
+"UpgradePurchase" = "Continuar actualització";
+"ForeverPlanDesc" = "Gaudeix de totes les funcions avançades per sempre";
+"BuyNowTitle" = "Subscriure't ara";
+"SettingsFreeTrialDesc" = "%d dies de prova gratuïta";
+"Hi" = "Hola,";
+
+//Permission
+"PrePermissionPhotoTitle" = "Permets que Manic EMU accedeixi al teu àlbum?";
+"PrePermissionPhotoMessage" = "Permet l'accés per guardar captures de pantalla del joc a l'àlbum i seleccionar imatges com a portades dels jocs";
+"PrePermissionPhotoCancel" = "Ara no";
+"PrePermissionPhotoConfirm" = "Permetre";
+"DeniedPermissionPhotoTitle" = "Manic EMU no pot accedir al teu àlbum!";
+"DeniedPermissionPhotoMessage" = "Per poder guardar captures de pantalla, cal que autoritzis l'accés a l'àlbum per a Manic EMU";
+"DeniedPermissionPhotoCancel" = "No";
+"DeniedPermissionPhotoConfirm" = "Autoritzar";
+"PrePermissionCameraTitle" = "Permets que Manic EMU accedeixi a la teva càmera?";
+"PrePermissionCameraMessage" = "Permet l'accés per fer fotos com a portades dels jocs";
+"PrePermissionCameraCancel" = "Ara no";
+"PrePermissionCameraConfirm" = "Permetre";
+"DeniedPermissionCameraTitle" = "Manic EMU no pot accedir a la teva càmera!";
+"DeniedPermissionCameraMessage" = "Cal que autoritzis l'accés a la càmera per a Manic EMU per poder fer fotos com a portades dels jocs!";
+"DeniedPermissionCameraCancel" = "No";
+"DeniedPermissionCameraConfirm" = "Autoritzar";
+"DeniedPermissionMicTitle" = "Manic EMU no pot utilitzar el teu micròfon";
+"DeniedPermissionMicMessage" = "Cal que autoritzes l'accés al micròfon per a Manic EMU, o algunes funcions dels jocs DS podrien no funcionar correctament!";
+"DeniedPermissionMicCancel" = "No";
+"DeniedPermissionMicConfirm" = "Autoritzar";
+
+//Share
+"ShareAppSubtitle" = "Convida els teus amics a unir-se a l'aventura!";
+"ShareRomFilesFailed" = "Error en compartir la ROM: no s'ha pogut obtenir el fitxer";
+"ShareSaveFilesFailed" = "Error en compartir la partida guardada: encara no n'hi ha cap";
+"ShareFilesCopyFailed" = "Error en compartir el fitxer: s'ha produït un error en copiar-lo";
+"ShareFilesCompressFailed" = "Error en compartir el fitxer: s'ha produït un error en comprimir-lo";
+
+"TurnOnAirPlayAsk" = "AirPlay està connectat. Vols activar el mode de pantalla completa ara?";
+
+"ThreeDSModePerformance" = "Mode Rendiment";
+"ThreeDSModeCompatibility" = "Mode Compatibilitat";
+"ThreeDSModeQuality" = "Prioritat Gràfica";
+"ThreeDSNotSupportImportSave" = "Els jocs 3DS encara no admeten importar partides";
+"ThreeDSNotSupportShareSave" = "Els jocs 3DS encara no admeten compartir partides";
+"ThreeDSBetaAlertTitle" = "Versió Beta 3DS";
+"ThreeDSBetaAlertDetail" = "Perquè pugueu gaudir abans dels jocs 3DS, Manic EMU ha llançat suport per a 3DS, però encara es troba en fase experimental. Algunes funcions requereixen més optimització.
+Les funcions següents són temporalment indisponibles:
+❌ Mode de pantalla completa amb AirPlay
+❌ Desat automàtic
+❌ Funció d'acceleració
+Si experimenteu inestabilitat amb 3DS, consulteu les «PMF» o uniu-vos al nostre canal per a assistència. Continuem millorant el rendiment de l'emulador, i la vostra comprensió i suport ens ajudaran a crear una experiència de joc més perfecta. Treballem sense descans per un entorn de joc millor.";
+"ThreeDSNoSupportDeviceTitle" = "Rendiment del dispositiu insuficient";
+"ThreeDSNoSupportDeviceDetail" = "El rendiment d'aquest dispositiu pot no suportar l'emulació 3DS. Continuar pot causar errors impredictibles";
+
+"GameImportBadFile" = "Error en la importació: \"%@\" està danyat o hi ha hagut un error desconegut. Proveu un altre fitxer ROM";
+"Game3DSDecryptFailed" = "Error en la importació: Ha fallat la desencriptació de \"%@\". Proveu un altre fitxer ROM";
+"Game3DSGameNotExist" = "Error en importar l'actualització, \"%@\": El joc no està instal·lat!";
+
+"Game3DSInputTitle" = "Introdueix el contingut";
+"ControllerMappingGuideTitle" = "Prem el botó per iniciar el mapa de tecles";
+"ControllerMappingGuideBegin" = "Inicia el mapa de 「%@」
+Prem el botó del control...";
+"ControllerMappingReset" = "Reinicia";
+"ControllerMappingNoFouond" = "Configuració no reconeguda";
+"FlexSkinSettingError" = "La interfície no està llesta, torna-ho a provar";
+"SkinPreviewTitle" = "Previsualització";
+"FullScreenWhenConnectControllerTitle" = "Pantalla completa automàtica";
+"FullScreenWhenConnectControllerDetail" = "Activa pantalla completa en connectar control";
+"JoinDiscordTitle" = "Uneix-te a Discord (No oficial)";
+"JoinDiscordAlertMessage" = "Gràcies al jugador %@ per crear el canal. Vols continuar?";
+"FlexSkinGuideTitle" = "Arrossega o fes zoom per ajustar";
+"DownloadFailed" = "Descarrega fallida";
+"RemoveDownloadTask" = "Cancel·lar descàrrega de \"%@\"?";
+"GameSettingResolution" = "Resolució %@";
+"GameSettingSwapScreen" = "Canvia pantalla";
+"NotSupportGameSetting" = "Opció no disponible a %@";
+
+"ThemeSettingTitle" = "Tema";
+"ThemeSettingDetail" = "Icones d'aplicació, Colors del tema, Configuració de Boxart, Ordre de consoles";
+"ThemeDesktopIconTitle" = "Icones d'aplicació";
+"ThemeDesktopIconDetail" = "Més icones properament...";
+"ThemeThemeColorTitle" = "Colors del tema";
+"ThemeCoverStyleTitle" = "Estil Boxart & Cantonades";
+"ThemeCoverStyleName" = "Estil %d";
+"ThemePlatformOrderTitle" = "Ordre de consoles";
+"ThemePlatformOrderDetail" = "Premi i arrossegueu per ajustar l'ordre de visualització de les consoles a la llista de jocs";
+"ThemeColorLimitToast" = "S'ha assolit el nombre màxim de colors del tema";
+"ThemeColorSystemNotAllowEdit" = "Els colors predeterminats del tema no es poden editar";
+"EditTitle" = "Edita";
+"RemoveTitle" = "Elimina";
+"On" = "Activat";
+"Off" = "Desactivat";
+"AmiiboNotSearching" = "La càrrega d'Amiibo no està disponible mentre la cerca NFC està inactiva";
+"ConsoleHomeTitle" = "Menú principal";
+"AmiiboTitle" = "Carrega Amiibo";
+"ThreeDSHomeMenuNotRunning" = "El menú principal no s'està executant";
+"ThreeDSImportSaveFailed" = "Error en importar %@: Fitxer de guardat no reconegut";
+"ThreeDSUpdateInstallSuccess" = "Actualització instal·lada correctament";
+"OnlineCoverFetchFailed" = "Error en obtenir la imatge";
+"JITMenuDesc" = "Activar JIT en entorns no compatibles pot causar errors a l'aplicació";
+"ShaderModeTitle" = "Shaders avançats";
+"ShaderModeDesc" = "Millora la precisió de textures en alguns jocs, però pot afectar el rendiment";
+"NoDownloadTask" = "No hi ha descàrregues actives";
+"NoGameCoverResult" = "No s'ha trobat Boxart";
+"NoContentResult" = "No hi ha contingut disponible";
+"OpenFilePermissionsLimit" = "Sense permisos per obrir %@";
+"SevenZipDecompressError" = "El fitxer 7z està corrupte o encriptat";
+"ForceSquareRatioTitle" = "Força la relació quadrada";
+"ForceSquareRatioDetail" = "El Boxart utilitzarà una relació quadrada quan estigui activat o la relació original quan estigui desactivat";
+
+"AutoSaveStateTitle" = "Desar estat automàticament";
+"GamesThemeTitle" = "Biblioteca de jocs";
+"GamesPerRowTitle" = "Jocs per fila (iPhone)";
+"GamesHideScrollIndicator" = "Amaga indicadors de desplaçament";
+"ConsoleLanguageDesc" = "La configuració de regió i idioma pot requerir ajustos manuals per a certs jocs";
+"JitNoSupportDesc" = "La compilació JIT no està disponible en l'entorn actual";
+"RenderRightEyeTitle" = "Renderitzar ull dret";
+"RenderRightEyeDesc" = "Desactivar-ho millora el rendiment en alguns jocs, però pot causar parpelleig";
+"DisableTitle" = "Desactivar";
+"EnableTitle" = "Activar";
+"NoSaveStateToast" = "Cap %@ disponible";
+"DeleteSelectedSaveStateAlert" = "Eliminar el «%@» seleccionat?\nNo es pot recuperar!";
+"DeleteAllSaveStateAlert" = "Cap selecció. Eliminar tots els «%@»?\nNo es poden recuperar!";
+"AICoverSearchDesc" = "S'ha detectat cerca no anglesa. Actualitzeu a Premium per a cerca multilingüe amb IA";
+"MaxTextSizeAllowDesc" = "Admet fins a %@ caràcters";
+
+"PlatformSelectionTitle" = "Selecció de Plataforma";
+"PlatformSelectionDetail" = "Seleccioneu plataforma per defecte per a %@";
+"PlatformChange" = "Assignar Plataforma";
+"BIOSDesc" = "Algunes plataformes requereixen BIOS";
+"BIOSImported" = "Importat";
+"BIOSAlert" = "Algunes plataformes requereixen fitxers BIOS. Els drets de BIOS pertanyen als fabricants. Compliu amb les lleis locals en importar.\n\nUniu-vos a la nostra comunitat per a assistència.";
+"UnknownPlatform" = "Plataforma Desconeguda";
+"UnknownPlatformGameSelectWarn" = "Jocs sense plataforma no es poden seleccionar";
+"BIOSImportSuccess" = "%@ importat correctament!";
+"BIOSImportFailed" = "Fitxer incorrecte!";
+
+"HideGameTitleDesc" = "Amaga el títol del joc";
+"HideGroupTitleDesc" = "Amaga el títol del grup";
+"GroupTitleStyelDesc" = "Estil del títol del grup";
+"GroupTitleStyelAbbr" = "Abrev.";
+"GroupTitleStyelFull" = "Complet";
+"GroupTitleStyelBrand" = "Marca";
+"CopyLaunchLinkTitle" = "Copia l'enllaç d'inici";
+"AskIfNeedToSaveCover" = "S'ha copiat l'enllaç d'inici. Vols desar la portada a l'àlbum?";
+"SaturnBiosAlertTitle" = "Falta el BIOS";
+"SaturnBiosAlertDetail" = "Sega Saturn es pot emular amb HLE sense BIOS, però el fitxer BIOS redueix errors gràfics";
+"BiosAddTitle" = "Afegeix BIOS";
+"StartGameWithoutBiosTitle" = "Inicia sense BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Mode Avançat";
+"ThreeDSAdvanceSettingTitle" = "Configuració Avançada";
+"ThreeDSBasicSettingMode" = "Mode Bàsic";
+"ShareConfigButtonTitle" = "Compartir Configuració";
+"ImportConfigButtonTitle" = "Importar Configuració";
+"ShareFileFailedMissing" = "Error en compartir: fitxer no existent";
+"ReadConfigFileFailed" = "No es pot llegir el fitxer de configuració";
+"SwitchEmulationCore" = "Canviar Nucli";
+"SwitchEmulationCoreDetail" = "Canvia el nucli d'emulació per a %@\nEl canvi de nucli farà que les partides desades del nucli anterior siguin illegibles. Per accedir, torna al nucli original";
+"BeetleSaturnNoSupportCheat" = "El nucli Beetle Saturn no admet codis de trampa actualment. Si cal, canvia al nucli Yabause";
+"CurrentTitle" = "actual";
+"NewSkinDesc" = "Manic EMU admet pells en formats .manicskin i .deltaskin. Nota: La pell importada ha de coincidir amb la plataforma actual, sinó no apareixerà a la llista.\nTambé oferim accés a comunitats de pells de tercers. Aquestes no estan afiliades oficialment amb Manic EMU. En descarregar, respecteu els termes de servei de cada lloc web";
+"VisitSite" = "Visita %@";
+"OpenFile" = "Obrir Fitxer";
+"WebViewDownloadBegin" = "S'ha iniciat la descàrrega";
+"RespectSilentMode" = "Respecta Mode Silenci";
+"RespectSilentModeDesc" = "Quan està activat, Manic EMU només reprodueix àudio fora del mode silenci";
+"SaturnISONoSwitchCore" = "Els jocs Sega Saturn en format .iso no admeten canvi de nucli";
+"EnableFullScreenTitle" = "Activar Pantalla Completa";
+"DisableFullScreenTitle" = "Desactivar Pantalla Completa";
+"SimulateBlowingTitle" = "Simular Buforada";
+"PaletteTitle" = "Paleta";
+"SkinRestDesc" = "Restablir la pell també restaurarà les pells assignades per jocs a les versions per defecte";
+"SkinResetForAll" = "Restablir Totes les Pells";
+"SkinResetForPlatform" = "Restablir Pell %@";
+"SkinDebug" = "Zona de Proves de Pells";
+
+"ImportMissingFile" = "Error important %@: Falta fitxer %@";
+"MultiDiscBuilder" = "Ajudant multidisc";
+"MultiDiscBuilderDesc" = "Crea fitxers .m3u intercanviables per jocs multidisc (.cue/.bin o .chd). Omet si ja tens .m3u - importa'l directament via Importar Joc";
+"M3uFileShare" = "Compartir fitxer .m3u";
+"M3uFileImport" = "Afegir a biblioteca";
+"MultiDiscAddFile" = "Afegir fitxer %@";
+"MultiDiscImportErrorConflict" = "Error: No es poden barrejar .cue i .chd";
+"MultiDiscImportErrorMissing" = "Error: No s'han trobat fitxers .cue/.chd";
+"GenerateM3uFailed" = "Error generant .m3u";
+"MultiDiscCloseAlert" = "Fitxer .m3u generat. Tanca després d'importar";
+"MultiDiscContinueClose" = "Tancar";
+"SwapDisk" = "Canviar disc";
+"NotSupportSwapDisk" = "No és un joc multidisc";
+"TransferPakDesc" = "Transfer Pak sincronitza dades GB/GBC amb N64. Per activar: importa ROM (.gb/.gbc) i fitxer de desat (.sav)";
+"TransferPakFromLibrary" = "Importar des de biblioteca";
+"TransferPakFromLibraryDesc" = "Només jocs amb desats.\nEls jocs GB/GBC seleccionats han de coincidir amb el ROM N64";
+"TransferPakNoGames" = "Cap joc compatible";
+"TransferPakFromFiles" = "Importar des de fitxers";
+"TransferPakOn" = "Activat";
+"TransferPakOff" = "Desactivat";
+"TransferPakImportError" = "Error: Importa tant ROM com desat (2 fitxers)";
+"ShowControlsTitle" = "Mostrar controls";
+"HideControlsTitle" = "Amagar controls";
+
+"DesignedFor" = "Dissenyat per a %@";

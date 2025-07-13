@@ -1,0 +1,383 @@
+PODS:
+  - BetterSegmentedControl (2.0.1)
+  - BlankSlate (0.7.1)
+  - Closures (1.0.1)
+  - CloudServiceKit (1.0.4):
+    - OAuthSwift
+  - CollectionViewPagingLayout (1.1.0)
+  - Device (3.7.0)
+  - DNSPageView (2.2.0):
+    - CollectionViewPagingLayout
+    - SnapKit
+  - Fireworks (1.0.0)
+  - FLEX (5.22.10)
+  - FluentDarkModeKit (1.0.4)
+  - Fuse (1.4.0)
+  - GBADeltaCore (0.1):
+    - ManicEmuCore
+  - GBCDeltaCore (0.1):
+    - ManicEmuCore
+  - GCDWebServer/Core (3.5.4)
+  - GCDWebServer/WebUploader (3.5.4):
+    - GCDWebServer/Core
+  - Haptica (3.0.3)
+  - HXPhotoPicker/Camera/Lite (4.2.5):
+    - HXPhotoPicker/Core
+  - HXPhotoPicker/Core (4.2.5):
+    - HXPhotoPicker/Resources
+  - HXPhotoPicker/Editor/Lite (4.2.5):
+    - HXPhotoPicker/EditorView/Lite
+  - HXPhotoPicker/EditorView/Lite (4.2.5):
+    - HXPhotoPicker/Core
+  - HXPhotoPicker/Lite (4.2.5):
+    - HXPhotoPicker/Camera/Lite
+    - HXPhotoPicker/Editor/Lite
+    - HXPhotoPicker/Picker/Lite
+  - HXPhotoPicker/Picker/Lite (4.2.5):
+    - HXPhotoPicker/Core
+  - HXPhotoPicker/Resources (4.2.5)
+  - IceCream (2.1.0):
+    - RealmSwift (~> 10.42)
+  - iCloudSync (8.0.21)
+  - IQKeyboardCore (1.0.5)
+  - IQKeyboardManagerSwift (8.0.0):
+    - IQKeyboardManagerSwift/Appearance (= 8.0.0)
+    - IQKeyboardManagerSwift/Core (= 8.0.0)
+    - IQKeyboardManagerSwift/IQKeyboardReturnManager (= 8.0.0)
+    - IQKeyboardManagerSwift/IQKeyboardToolbarManager (= 8.0.0)
+    - IQKeyboardManagerSwift/IQTextView (= 8.0.0)
+    - IQKeyboardManagerSwift/Resign (= 8.0.0)
+  - IQKeyboardManagerSwift/Appearance (8.0.0):
+    - IQKeyboardManagerSwift/Core
+  - IQKeyboardManagerSwift/Core (8.0.0):
+    - IQKeyboardNotification
+    - IQTextInputViewNotification
+  - IQKeyboardManagerSwift/IQKeyboardReturnManager (8.0.0):
+    - IQKeyboardReturnManager
+  - IQKeyboardManagerSwift/IQKeyboardToolbarManager (8.0.0):
+    - IQKeyboardManagerSwift/Core
+    - IQKeyboardToolbarManager
+  - IQKeyboardManagerSwift/IQTextView (8.0.0):
+    - IQTextView
+  - IQKeyboardManagerSwift/Resign (8.0.0):
+    - IQKeyboardManagerSwift/Core
+  - IQKeyboardNotification (1.0.3)
+  - IQKeyboardReturnManager (1.0.4):
+    - IQKeyboardCore (= 1.0.5)
+  - IQKeyboardToolbar (1.1.1):
+    - IQKeyboardCore
+    - IQKeyboardToolbar/Core (= 1.1.1)
+  - IQKeyboardToolbar/Core (1.1.1):
+    - IQKeyboardCore
+    - IQKeyboardToolbar/Placeholderable
+  - IQKeyboardToolbar/Placeholderable (1.1.1):
+    - IQKeyboardCore
+  - IQKeyboardToolbarManager (1.1.2):
+    - IQKeyboardToolbar
+    - IQTextInputViewNotification
+  - IQTextInputViewNotification (1.0.8):
+    - IQKeyboardCore
+  - IQTextView (1.0.5):
+    - IQKeyboardToolbar/Placeholderable
+  - JXBanner (0.3.6):
+    - JXBanner/Banner (= 0.3.6)
+    - JXBanner/PageControl (= 0.3.6)
+  - JXBanner/Banner (0.3.6):
+    - JXBanner/Banner/API (= 0.3.6)
+    - JXBanner/Banner/Banner (= 0.3.6)
+    - JXBanner/Banner/Cell (= 0.3.6)
+    - JXBanner/Banner/Common (= 0.3.6)
+    - JXBanner/Banner/Transform (= 0.3.6)
+  - JXBanner/Banner/API (0.3.6):
+    - JXBanner/Banner/Cell
+    - JXBanner/PageControl
+  - JXBanner/Banner/Banner (0.3.6):
+    - JXBanner/Banner/API
+    - JXBanner/Banner/Common
+    - JXBanner/Banner/Transform
+  - JXBanner/Banner/Cell (0.3.6)
+  - JXBanner/Banner/Common (0.3.6)
+  - JXBanner/Banner/Transform (0.3.6):
+    - JXBanner/Banner/API
+  - JXBanner/PageControl (0.3.6):
+    - JXPageControl
+  - JXPageControl (0.1.5):
+    - JXPageControl/Common (= 0.1.5)
+    - JXPageControl/Jump (= 0.1.5)
+    - JXPageControl/Transform (= 0.1.5)
+  - JXPageControl/Common (0.1.5)
+  - JXPageControl/Jump (0.1.5):
+    - JXPageControl/Common
+  - JXPageControl/Transform (0.1.5):
+    - JXPageControl/Common
+  - KeychainAccess (4.2.2)
+  - Kingfisher (8.3.1)
+  - LookinServer/Core (1.2.8)
+  - LookinServer/Swift (1.2.8):
+    - LookinServer/Core
+  - ManicEmuCore (0.1):
+    - ZIPFoundation
+  - ManicSupport (1.0.2)
+  - MarqueeLabel (4.5.0)
+  - MelonDSDeltaCore (0.1):
+    - ManicEmuCore
+  - NVActivityIndicatorView (5.2.0):
+    - NVActivityIndicatorView/Base (= 5.2.0)
+  - NVActivityIndicatorView/Base (5.2.0)
+  - OAuthSwift (2.2.0)
+  - Permission/Camera (3.1.2):
+    - Permission/Core
+  - Permission/Core (3.1.2)
+  - Permission/Microphone (3.1.2):
+    - Permission/Core
+  - Permission/Photos (3.1.2):
+    - Permission/Core
+  - ProHUD (4.0.3):
+    - SnapKit
+  - Realm (10.54.2):
+    - Realm/Headers (= 10.54.2)
+  - Realm/Headers (10.54.2)
+  - RealmSwift (10.54.2):
+    - Realm (= 10.54.2)
+  - Schedule (2.1.0)
+  - SFSafeSymbols (5.3.0)
+  - ShowTouches (1.0.0)
+  - SideMenu (6.5.0)
+  - SnapKit (5.7.1)
+  - SSZipArchive (2.6.1)
+  - SwifterSwift (7.0.0):
+    - SwifterSwift/AppKit (= 7.0.0)
+    - SwifterSwift/CoreAnimation (= 7.0.0)
+    - SwifterSwift/CoreGraphics (= 7.0.0)
+    - SwifterSwift/CoreLocation (= 7.0.0)
+    - SwifterSwift/CryptoKit (= 7.0.0)
+    - SwifterSwift/Dispatch (= 7.0.0)
+    - SwifterSwift/Foundation (= 7.0.0)
+    - SwifterSwift/HealthKit (= 7.0.0)
+    - SwifterSwift/MapKit (= 7.0.0)
+    - SwifterSwift/SceneKit (= 7.0.0)
+    - SwifterSwift/SpriteKit (= 7.0.0)
+    - SwifterSwift/StoreKit (= 7.0.0)
+    - SwifterSwift/SwiftStdlib (= 7.0.0)
+    - SwifterSwift/UIKit (= 7.0.0)
+    - SwifterSwift/WebKit (= 7.0.0)
+  - SwifterSwift/AppKit (7.0.0)
+  - SwifterSwift/CoreAnimation (7.0.0)
+  - SwifterSwift/CoreGraphics (7.0.0)
+  - SwifterSwift/CoreLocation (7.0.0)
+  - SwifterSwift/CryptoKit (7.0.0)
+  - SwifterSwift/Dispatch (7.0.0)
+  - SwifterSwift/Foundation (7.0.0)
+  - SwifterSwift/HealthKit (7.0.0)
+  - SwifterSwift/MapKit (7.0.0)
+  - SwifterSwift/SceneKit (7.0.0)
+  - SwifterSwift/SpriteKit (7.0.0)
+  - SwifterSwift/StoreKit (7.0.0)
+  - SwifterSwift/SwiftStdlib (7.0.0)
+  - SwifterSwift/UIKit (7.0.0)
+  - SwifterSwift/WebKit (7.0.0)
+  - SwipeCellKit (2.7.1)
+  - Tiercel (3.2.5)
+  - TKSwitcherCollection (1.4.3)
+  - UMCommon (7.5.2):
+    - UMDevice
+  - UMDevice (3.4.0)
+  - VisualEffectView (5.0.0)
+  - ZIPFoundation (0.9.19)
+
+DEPENDENCIES:
+  - BetterSegmentedControl (~> 2.0)
+  - BlankSlate (from `../BlankSlate`)
+  - Closures (from `../Closures/Xcode/Closures`)
+  - CloudServiceKit (from `../CloudServiceKit`)
+  - CollectionViewPagingLayout (from `../CollectionViewPagingLayout`)
+  - Device (~> 3.7)
+  - DNSPageView (from `../DNSPageView`)
+  - Fireworks (from `https://github.com/tomkowz/fireworks.git`, branch `master`)
+  - FLEX
+  - FluentDarkModeKit (~> 1.0.4)
+  - Fuse (~> 1.4.0)
+  - GBADeltaCore (from `../Cores/GBADeltaCore`)
+  - GBCDeltaCore (from `../Cores/GBCDeltaCore`)
+  - GCDWebServer/WebUploader (from `../GCDWebServer`)
+  - Haptica (~> 3.0)
+  - HXPhotoPicker/Lite (from `../HXPhotoPicker`)
+  - IceCream (from `../IceCream`)
+  - iCloudSync (from `../iCloudSync`)
+  - IQKeyboardManagerSwift (~> 8.0)
+  - JXBanner (from `../JXBanner`)
+  - KeychainAccess (~> 4.2)
+  - Kingfisher (~> 8.0)
+  - LookinServer/Swift
+  - ManicEmuCore (from `../Cores/DeltaCore`)
+  - ManicSupport (from `../ManicSupport`)
+  - MarqueeLabel (from `../MarqueeLabel`)
+  - MelonDSDeltaCore (from `../Cores/MelonDSDeltaCore`)
+  - NVActivityIndicatorView (~> 5.2)
+  - Permission/Camera (~> 3.1.2)
+  - Permission/Microphone (~> 3.1.2)
+  - Permission/Photos (~> 3.1.2)
+  - ProHUD (from `../ProHUD`)
+  - RealmSwift (= 10.54.2)
+  - Schedule (~> 2.0)
+  - SFSafeSymbols (~> 5.0)
+  - ShowTouches
+  - SideMenu (~> 6.5)
+  - SnapKit (~> 5.0)
+  - SSZipArchive (from `../ZipArchive`)
+  - SwifterSwift (~> 7.0)
+  - SwipeCellKit (from `../SwipeCellKit`)
+  - Tiercel (~> 3.0)
+  - TKSwitcherCollection (from `../TKSwitcherCollection`)
+  - UMCommon (~> 7.5.2)
+  - VisualEffectView (~> 5.0)
+  - ZIPFoundation (from `../ZIPFoundation`)
+
+SPEC REPOS:
+  trunk:
+    - BetterSegmentedControl
+    - Device
+    - FLEX
+    - FluentDarkModeKit
+    - Fuse
+    - Haptica
+    - IQKeyboardCore
+    - IQKeyboardManagerSwift
+    - IQKeyboardNotification
+    - IQKeyboardReturnManager
+    - IQKeyboardToolbar
+    - IQKeyboardToolbarManager
+    - IQTextInputViewNotification
+    - IQTextView
+    - JXPageControl
+    - KeychainAccess
+    - Kingfisher
+    - LookinServer
+    - NVActivityIndicatorView
+    - OAuthSwift
+    - Permission
+    - Realm
+    - RealmSwift
+    - Schedule
+    - SFSafeSymbols
+    - ShowTouches
+    - SideMenu
+    - SnapKit
+    - SwifterSwift
+    - Tiercel
+    - UMCommon
+    - UMDevice
+    - VisualEffectView
+
+EXTERNAL SOURCES:
+  BlankSlate:
+    :path: "../BlankSlate"
+  Closures:
+    :path: "../Closures/Xcode/Closures"
+  CloudServiceKit:
+    :path: "../CloudServiceKit"
+  CollectionViewPagingLayout:
+    :path: "../CollectionViewPagingLayout"
+  DNSPageView:
+    :path: "../DNSPageView"
+  Fireworks:
+    :branch: master
+    :git: https://github.com/tomkowz/fireworks.git
+  GBADeltaCore:
+    :path: "../Cores/GBADeltaCore"
+  GBCDeltaCore:
+    :path: "../Cores/GBCDeltaCore"
+  GCDWebServer:
+    :path: "../GCDWebServer"
+  HXPhotoPicker:
+    :path: "../HXPhotoPicker"
+  IceCream:
+    :path: "../IceCream"
+  iCloudSync:
+    :path: "../iCloudSync"
+  JXBanner:
+    :path: "../JXBanner"
+  ManicEmuCore:
+    :path: "../Cores/DeltaCore"
+  ManicSupport:
+    :path: "../ManicSupport"
+  MarqueeLabel:
+    :path: "../MarqueeLabel"
+  MelonDSDeltaCore:
+    :path: "../Cores/MelonDSDeltaCore"
+  ProHUD:
+    :path: "../ProHUD"
+  SSZipArchive:
+    :path: "../ZipArchive"
+  SwipeCellKit:
+    :path: "../SwipeCellKit"
+  TKSwitcherCollection:
+    :path: "../TKSwitcherCollection"
+  ZIPFoundation:
+    :path: "../ZIPFoundation"
+
+CHECKOUT OPTIONS:
+  Fireworks:
+    :commit: c54a983649510ddaf1ff315000626eb43486410b
+    :git: https://github.com/tomkowz/fireworks.git
+
+SPEC CHECKSUMS:
+  BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
+  BlankSlate: c20583b0b13dcc8c061fd60d4e51e1825671c9ee
+  Closures: f517d860081aa7a4e9773a1d89ccbf7b44ac6adf
+  CloudServiceKit: 4a0e2c0d9135e3f479f9848cea023ac27c61066c
+  CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
+  Device: acf18785fd7359aca095040e9c4745caf33b9cf1
+  DNSPageView: d3ce7bd62b9e7bde1614d1ae07a525cc056887df
+  Fireworks: 62a6f2b8b693a2a8420702cbaee36c0fb0f06d6c
+  FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
+  FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
+  Fuse: 48eaf66d0c407c7f8b0ddb168888dc4637e87f14
+  GBADeltaCore: 7b00d92a6acd276fe9a5348733aafe90011bf0ba
+  GBCDeltaCore: 9bd060ba84e628d178e9e972397e9f94343ff95a
+  GCDWebServer: dbf897b7c0602d936e1f368f0f0451597575a397
+  Haptica: 23497230b2d7476621f7860263ae0667279a0a89
+  HXPhotoPicker: c200bc265eab96411f22a7f2ff32447734c7dc2a
+  IceCream: fa012f4b8e5bc321f2dfde126c85f88a5da88dbb
+  iCloudSync: 68ea8986be30ac6297cc037312348c3e60c89e86
+  IQKeyboardCore: 28c8bf3bcd8ba5aa1570b318cbc4da94b861711e
+  IQKeyboardManagerSwift: 0c6fbbaa2e60739e48d7cf59f25661471a7a3a65
+  IQKeyboardNotification: d7382c4466c5a5adef92c7452ebf861b36050088
+  IQKeyboardReturnManager: 972be48528ce9e7508ab3ab15ac7efac803f17f5
+  IQKeyboardToolbar: d4bdccfb78324aec2f3920659c77bb89acd33312
+  IQKeyboardToolbarManager: 6f4072ac620c2572d4af8c09f42a801f3e4909f7
+  IQTextInputViewNotification: f5e954d8881fd9808b744e49e024cc0d4bcfe572
+  IQTextView: ae13b4922f22e6f027f62c557d9f4f236b19d5c7
+  JXBanner: b53efc5b4d2dbe074bdc5fe2efaea68b8805eaca
+  JXPageControl: e9487b39e2e58fc17790833214f3b8e935bef98b
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  Kingfisher: 3204d23de16b5ea53541c44ca5a8efb55741dec3
+  LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
+  ManicEmuCore: 34894a1ba8092736be51d06ce9bec33d8c7df58d
+  ManicSupport: 8ae21bae33d19eb2e34c82543edfb35481781453
+  MarqueeLabel: 4b46d196abd253448e830cbd976f9eacc3af0849
+  MelonDSDeltaCore: 5eec77a14c0b1aad6c827117ac04fe3cff5cb9bf
+  NVActivityIndicatorView: fe52a6a68664c2df8991d7d9e3d86d8d19453c53
+  OAuthSwift: 75efbb5bd9a4b2b71a37bd7e986bf3f55ddd54c6
+  Permission: 4821359fb4d4367fb59aa16df38fbba5722ac842
+  ProHUD: e14866f94b20efca8507402861f616e831e659e5
+  Realm: 16852517a207e98cc6acba9336b56c30d06d84ad
+  RealmSwift: bca777b3904ee58a9b16036e1840012f03348060
+  Schedule: 00e6d7bbdbdb000fd1f51a7d10e9f88a8c451fda
+  SFSafeSymbols: c0244d55ef543c7b2c01f3af2d3d2dd9e26dd00c
+  ShowTouches: d92e379beb451d6d63242abd38640182fb597a4e
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SSZipArchive: 83768be78cdddec97f2aac25d57cc0cd33cf7b72
+  SwifterSwift: e9caf990fc72e835432280755d1f4c43f2a483d5
+  SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
+  Tiercel: c0a73f876a72800333b15f4e7e48791f4ad21e90
+  TKSwitcherCollection: 6805f52958a8b661cd583a538345618a26ff9263
+  UMCommon: 72513a01ebca2dead52f2112b4d7c6196dbbe412
+  UMDevice: dcdf7ec167387837559d149fbc7d793d984faf82
+  VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
+  ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
+
+PODFILE CHECKSUM: 03035eb896d7b1bcacbfb58f4465c5fd4b55b361
+
+COCOAPODS: 1.16.2

@@ -1,0 +1,567 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+//Import
+"ImportAddCloudServiceTitle" = "Bulut Hizmetleri";
+"ImportAddLanServiceTitle" = "Yerel Ağ Hizmeti";
+"ImportAddDiscoverServiceTitle" = "Keşif Hizmeti";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "Baidu Bulut";
+"AliYun" = "Aliyun";
+"AddImportServiceHeaderTitle" = "Hizmet Ekle";
+"ImportServiceDelete" = "Hizmeti Kaldır";
+"ImportAliyunNotGetDriveId" = "Aliyun hizmeti eklenemedi, dizin alınamadı";
+"ImportDownloadError" = "İndirme hatası\n%@";
+"ImportDownloadContinue" = "İndirmeye devam ediliyor...\n%@";
+"LandServiceEditServerName" = "Sunucu Başlığı";
+"LandServiceEditServerNamePlaceholder" = "Benim SMB Sunucum";
+"LandServiceEditHost" = "Sunucu Adresi";
+"LandServiceEditUserName" = "Kullanıcı Adı";
+"LandServiceEditPassword" = "Şifre";
+"LandServiceEditRequiredPlaceholder" = "Zorunlu";
+"LandServiceEditOptionalPlaceholder" = "Opsiyonel";
+"LandServiceEditConnect" = "Bağlan";
+"AddLandServiceSuccess" = "%@ başarıyla eklendi";
+"AddLandServiceFailed" = "%@ eklenemedi\nLütfen ağ bağlantısını, hizmet durumunu veya bilgilerin doğruluğunu kontrol edin";
+"AddLandServiceTimeout" = "Hizmet bağlantısı zaman aşımına uğradı";
+"FilesImporterErrorFileExist" = "\"%@\" zaten mevcut, içe aktarmaya gerek yok";
+"FilesImporterErrorBadCopy" = "\"%@\" içe aktarılamadı, dosya kopyalama hatası";
+"FilesImporterErrorBadExtension" = "\"%@\" içe aktarılamadı, dosya uzantısı tanınmıyor";
+"FilesImporterErrorNoPermission" = "%@ erişim izni yok";
+"FilesImporterErrorUnableToHash" = "\"%@\" içe aktarılamadı, hash hesaplanamadı";
+"FilesImporterErrorWriteDatabase" = "\"%@\" içe aktarılamadı, veritabanına yazılamadı";
+"GameSaveMatchTitle" = "Kayıt Dosyasını Oyunla Eşleştir";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" oyunla eşleşmedi, lütfen manuel eşleştirin";
+"GameSaveAlreadyExistTitle" = "Kayıt Zaten Mevcut";
+"FilesImporterErrorSaveAlreadyExist" = "\"%@\" içe aktarılamadı, mevcut kaydın üzerine yazılsın mı?";
+"GameSaveMathToMuchTitle" = "Çoklu Eşleşme";
+"FilesImporterErrorSaveMathToMuch" = "\"%@\" içe aktarılamadı, birden fazla oyunla eşleşti, lütfen manuel eşleştirin";
+"FilesImporterErrorSkinBadFile" = "%@ içe aktarılamadı, skin dosyası bozuk";
+"PasteImporterErrorNoMatchContent" = "Panoda içe aktarılabilir içerik yok";
+"FilesDownloadErrorFileExist" = "%@ zaten indirildi, tekrar indirmeye gerek yok";
+"FilesImporterErrorEmptyContent" = "İçe aktarılacak kaynak yok";
+"LanServiceInitFailed" = "%@ hizmeti oluşturulamadı";
+"SMBLoginFailed" = "Samba girişi başarısız %@";
+"SMBListFilesFailed" = "Dosyalar alınamadı %@";
+"SMBListFilesTypeError" = "Bu dosya bir klasör değil";
+"DropErrorLoadFailed" = "Dosya yüklenemedi";
+"DropErrorNotSupportFile" = "Desteklenmeyen dosya türü";
+"ImportErrorTitle" = "İçe Aktarma Hatası";
+"ImportGameSuccessTitle" = "Oyun Başarıyla İçe Aktarıldı";
+"ImportGameSuccessDetail" = "%@\noyun kütüphanesine eklendi, hemen görüntülemek ister misiniz?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\noyun kütüphanesine eklendi, hemen oynamak ister misiniz?";
+"ImportSkinSuccessTitle" = "Skin Başarıyla İçe Aktarıldı";
+"ImportSkinSuccessDetail" = "\"%@\"\niçe aktarıldı, hemen görüntülemek ister misiniz?";
+"ImportGameSaveSuccessTitle" = "Oyun Kaydı İçe Aktarıldı";
+"ImportGameSaveSuccessDetail" = "\"%@\"\nilgili oyuna eklendi";
+"ImportGameSaveSuccessForOne" = "\"%@\"\noyuna eklendi, hemen oynamak ister misiniz?";
+"ImportGameSaveFailedNoGameError" = "\"%@\" içe aktarılamadı, henüz hiç oyununuz yok!";
+"DownloadCompletion" = "İndirme Tamamlandı";
+"QQChannelName" = "QQ Kanalı";
+"NotSupportPasswordZip" = "\"%@\" açılamıyor, şifreli ZIP desteklenmiyor";
+"UnzipFailed" = "\"%@\" açılamadı";
+"NoSupportInZip" = "\"%@\" içinde desteklenen format yok";
+"IPCopy" = "Adres panoya kopyalandı";
+"ImportServiceListFilesTitle" = "Dosyalar";
+"ImportServiceListFilesDetail" = "Dosya veya iCloud'dan oyun, skin, kayıt içe aktar";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Aynı yerel ağdaki bir tarayıcı üzerinden dosya aktar";
+"ImportServiceListWiFiOnDetail" = "%@\nTarayıcı ile dosya aktar";
+"ImportServiceListPasteTitle" = "Panoyu Oku";
+"ImportServiceListPasteDetail" = "macOS ve Dosya uygulamasından kopyalanan dosyaları destekler";
+"ImportHowTo" = "Nasıl İçe Aktarılır?";
+"ImportTopHintTitle" = "Hayaller ve maceralarla dolu bir hikaye burada başlayacak!";
+"ImportDragAndDropTips" = "Dosyaları Manic EMU arayüzüne sürükleyerek aktarabilirsiniz";
+"ImportChannelTips" = "Sorularınız için %@ katılın";
+"ToastConnectCloudDriveSuccess" = "%@ bağlantısı başarılı";
+"AlertImportFilesSuccess" = "Kaynaklar başarıyla içe aktarıldı";
+"ErrorConnectCloudDrive" = "Bulut hizmetine bağlanılamadı";
+"ErrorUnknown" = "Bilinmeyen hata";
+"ReasonConncetCloudDriveFail" = "Lütfen ağ bağlantınızı ve bulut hizmeti yetkilerini kontrol edin veya hizmeti kaldırıp yeniden eklemeyi deneyin";
+
+//Common
+"TabbarTitleGames" = "Oyunlar";
+"TabbarTitleImport" = "İçe Aktar";
+"TabbarTitleSettings" = "Ayarlar";
+"SelectAll" = "Tümünü Seç";
+"DeSelectAll" = "Tümünü Kaldır";
+"CloudDriveBrowserDownload" = "İndir";
+"CancelTitle" = "İptal";
+"CheckTitle" = "Görüntüle";
+"StartGameTitle" = "Hemen Oyna";
+"ConfirmTitle" = "Onayla";
+"SaveTitle" = "Kaydet";
+"NameTitle" = "İsim";
+"TimeAgoMinuteFormat" = "%d dakika önce";
+"TimeAgoHourFormat" = "%d saat önce";
+"TimeAgoDayFormat" = "%d gün önce";
+"TimeAgoWeekFormat" = "%d hafta önce";
+"TimeAgoMonthFormat" = "%d ay önce";
+"TimeAgoYearFormat" = "%d yıl önce";
+"TimeDurationHourAndMinuteFormat" = "%d saat %d dakika";
+"TimeDurationHourFormat" = "%d saat";
+"TimeDurationMinuteFormat" = "%d dakika";
+"FatalErrorTitle" = "Kritik Hata";
+"FatalErrorDesc" = "Sistem kaynakları yüklenemedi, Manic EMU'da ciddi sorunlar oluşabilir";
+"LodingFailedTitle" = "Yükleme Başarısız";
+"AirPlayDesc" = "Hemen maceraya başla!";
+"ToastSuccess" = "Başarıyla kaydedildi";
+"ToastFailed" = "Kaydetme başarısız";
+
+//Games
+"GamesSearchPlaceHolder" = "Oyun adı";
+"GamesRename" = "Yeniden Adlandır";
+"GamesModifyCover" = "Kapağı Değiştir";
+"GamesSpecifySkin" = "Skin Ayarla";
+"GamesCheatCode" = "Cheat Kodu";
+"GamesShareRom" = "ROM'u Paylaş";
+"GamesCheckSave" = "Anlık Kayıtları Görüntüle";
+"GamesImportSave" = "Oyun Kaydını İçe Aktar";
+"GamesShareSave" = "Oyun Kaydını Dışa Aktar";
+"GamesDelete" = "Oyunu Kaldır";
+"GamesRandom" = "Ne oynayacağımı bilmiyorum, rastgele seç";
+"LoadGameErrorRomNotExist" = "Oyun yüklenemedi, ROM mevcut değil";
+"GamesListEmptyGuideLeft" = "Hemen aşağıdaki";
+"GamesListEmptyGuideRight" = "ile oyun içe aktar";
+"GamesListEmptyWelcomeLeft" = "";
+"GamesListEmptyWelcomeRight" = "dünyasına hoş geldin";
+"GamesListEmptyWarnning" = "Lütfen oyun ROM dosyalarını yasal kaynaklardan edindiğinizden emin olun";
+"DeleteGameAlertDetail" = "Oyun ROM'u, kayıtlar ve cheat kodları gibi tüm veriler kalıcı olarak silinecek!";
+"DeleteSkinAlertDetail" = "Skin kaldırıldıktan sonra geri alınamaz!";
+"DeleteGameGameStateAlertTitle" = "Anlık Kaydı Kaldır";
+"DeleteGameGameStateAlertDetail" = "Anlık kayıtlar kalıcı olarak silinecek!";
+"confirmDelte" = "Kaldırmayı Onayla";
+
+//Controllers
+"ControllersTouchName" = "Dokunmatik Kontrolcü";
+"ControllersHeaderTitle" = "Kontrolcüler";
+"ControllersPlayerIndex" = "Oyuncu %d";
+"ControllersPlayerUnset" = "Atanmamış";
+"ControllersHowToConnect" = "Nasıl Bağlanılır?";
+
+//GameInfo
+"ReadyGameInfoSubTitle" = "%@ oynandı · Toplam %@";
+"ReadyGameInfoNeverPlayed" = "Henüz oynanmadı, hemen maceraya başla";
+"ReadyEditCoverTakePhoto" = "Fotoğraf Çek";
+"ReadyEditCoverAlbum" = "Albüm";
+"ReadyEditCoverFile" = "Dosya";
+"ReadyEditCoverSearch" = "Ara";
+"ReadySegmentManualSave" = "Manuel Anlık Kayıt";
+"ReadySegmentAutoSave" = "Otomatik Anlık Kayıt";
+"ReadyEditTitleFailed" = "Yeniden adlandırma başarısız, oyun adı boş olamaz";
+"ReadyEditTitleSuccess" = "Yeniden adlandırma başarılı";
+"ReadyGameSaveStatesEmpty" = "Henüz kayıt yok";
+"GameSaveGuideBecomTitle" = "Üye Ol";
+"GameSaveGuideMemberTitle" = "Üyelik";
+"GameSaveGuideDesc" = "Sınırsız manuel anlık kayıt ve 50 otomatik kayıt için hemen üyeliği aç";
+"GameSaveUnCompatibleTitle" = "Anlık Kayıt Uyumsuzluğu";
+"GameSaveUnCompatibleDetail" = "Bu anlık kayıt %@ tarafından oluşturuldu. Mevcut cihaz ortamı %@. Uyumsuz cihazlarda yüklenirse sorun çıkabilir!";
+"GameSaveStateForceLoad" = "Yüklemeye Devam Et";
+"GameSaveContinue" = "Devam Et";
+"GameSaveTitle" = "Kayıt %d";
+
+//Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU .deltaskin formatını destekler";
+"SkinNavigationSubTitleSpecifiedGame" = "Sadece %@ için skin ayarla";
+"SkinSegmentPortraitTitle" = "Dikey";
+"SkinSegmentLandscapeTitle" = "Yatay";
+"SkinAddTitle" = "Skin Ekle";
+"HowToFetch" = "Nasıl Edinilir";
+"SkinDelete" = "Skin'i Kaldır";
+"DefaultSkinCannotEdit" = "Varsayılan skin düzenlenemez";
+
+//History
+"HistoryHeaderTitle" = "Oyun Geçmişi";
+"HistoryFavouriteTitle" = "En Çok Oynanan";
+"HistoryEmptyTitle" = "Henüz oyun geçmişi yok";
+"HistoryEmptyImportGame" = "Oyun İçe Aktar";
+"HistoryEmptyStartGame" = "Hemen Oyna";
+
+//Settings
+"LeftHandTitle" = "Solak Modu";
+"LeftHandDetail" = "Joystick, D-Pad ve tuşlar yatay olarak ters çevrilir";
+"QuickGameTitle" = "Hızlı Başlat";
+"QuickGameDetail" = "Oyunlara tıklandığında hazırlık sayfası gösterilmez";
+"AirPlayTitle" = "AirPlay Tam Ekran Modu";
+"AirPlayDetail" = "Açıldığında oyun ekranı tam ekran yansıtılır";
+"iCloudTitle" = "iCloud Senkronizasyonu";
+"iCloudDetail" = "Aynı Apple ID'li cihazlarda oyunlar, skinler, kayıtlar ve ayarlar senkronize edilir";
+"AppIconTitle" = "Uygulama Simgesi";
+"WidgetTitle" = "Ana Ekran Widget'ı";
+"QATitle" = "SSS";
+"FeedbackTitle" = "Geri Bildirim";
+"ShareAppTitle" = "Manic EMU'yu Arkadaşlarınla Paylaş";
+"JoinQQTitle" = "QQ Kanalına Katıl";
+"JoinTelegramTitle" = "Telegram'a Katıl";
+"ClearCacheTitle" = "Önbelleği Temizle";
+"LanguageTitle" = "Dil";
+"UserAgreementTitle" = "Kullanıcı Sözleşmesi";
+"PrivacyPolicyTitle" = "Gizlilik Politikası";
+"GeneralSettingTitle" = "Genel Ayarlar";
+"AdvanceSettingTitle" = "Gelişmiş Ayarlar";
+"SupportSettingTitle" = "Destek";
+"OthersSettingTitle" = "Diğer";
+"RatingTitleLeft" = "";
+"RatingTitleRight" = "'yu Değerlendir";
+"RatingDetail" = "Ürünümüzü beğendiyseniz, bize 5 yıldız vererek destek olun";
+"iCloudDisableTitle" = "iCloud Kullanılamıyor";
+"iCloudDisableDetail" = "iPhone 'Ayarlar' > 'Apple ID' > 'iCloud' bölümünden iCloud Drive'ın açık olduğunu ve Manic EMU erişimine izin verdiğinizi kontrol edin";
+"iCloudSyncConfilictTitle" = "iCloud Çakışması";
+"iCloudSyncConfilictDetail" = "Bulut dosyası:\n%@\n\nYerel dosya:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "iCloud'u Koru";
+"iCloudSyncConfilictSaveLocal" = "Yereli Koru";
+"SettingsNonMemberDesc" = "Bu hikayenin kahramanı siz olacaksınız";
+"ThanksSupportDesc" = "Desteğiniz için teşekkürler";
+"ThanksCommingDesc" = "";
+"PlayGameDesc" = "'ya oyun oynamak için katıldığın için teşekkürler";
+"NoEmailSetting" = "E-posta ayarlanmamış";
+"IDCopy" = "ID'niz panoya kopyalandı";
+"SendEmailSuccess" = "E-posta gönderildi";
+"SendEmailFailed" = "E-posta gönderilemedi %@";
+"iCloudTipsTitle" = "iCloud Senkronizasyonu Etkinleştir";
+"iCloudTipsDetail" = "iCloud senkronizasyonu ile aynı Apple ID'ye sahip tüm cihazlarınızda verileriniz senkronize edilir. iCloud depolama alanı yetersizse senkronizasyon başarısız olabilir!";
+"iCloudConfirm" = "Etkinleştir";
+
+//Play
+"LoadingTitle" = "İndiriliyor";
+"LoadRomSuccess" = "%@ indirildi, hemen oynamaya başla!";
+"GameSettingSaveState" = "Kaydet";
+"GameSettingQuickLoadState" = "Hızlı Yükle";
+"GameSettingVolume" = "Ses";
+"GameSettingFastForwardResume" = "Normal Hız";
+"GameSettingFastForward" = "Hızlı İleri %@";
+"GameSettingStateList" = "Kayıt Listesi";
+"GameSettingSkins" = "Skin Ayarla";
+"GameSettingFilter" = "Filtre";
+"GameSettingScreenShot" = "Ekran Görüntüsü";
+"GameSettingHapticOff" = "Titreşim Kapalı";
+"GameSettingHapticSoft" = "Hafif Titreşim";
+"GameSettingHapticLight" = "Hafif";
+"GameSettingHapticMedium" = "Orta";
+"GameSettingHapticHeavy" = "Güçlü";
+"GameSettingHapticRigid" = "Sert";
+"GameSettingControllerTypeDPad" = "D-Pad";
+"GameSettingControllerTypeStick" = "Joystick";
+"GameSettingAirplay" = "Yansıt";
+"GameSettingControllerSetting" = "Kontrolcü Ayarları";
+"GameSettingOrientationAuto" = "Otomatik Döndür";
+"GameSettingOrientationPortrait" = "Dikey Kilitle";
+"GameSettingOrientationLandscape" = "Yatay Kilitle";
+"GameSettingFunctionSort" = "Fonksiyon Sıralaması";
+"GameSettingReload" = "Yeniden Başlat";
+"GameSettingQuit" = "Çıkış";
+"GameSaveStateSuccess" = "Anlık kayıt başarılı";
+"GameSaveStateLoadFailed" = "Anlık kayıt yüklenemedi, bozuk veya uyumsuz";
+"GameSaveStateLoadSuccess" = "Anlık kayıt yüklendi";
+"GameSaveStateQuickLoadFailed" = "Manuel kayıt bulunamadı, otomatik kayıtlar için 'Kayıt Listesi'ni kullanın";
+"GameSaveListTitle" = "Anlık Kayıtlar";
+"GameCheatActivateFailed" = "%@\netkinleştirilemedi, cheat kodu geçersiz";
+"GameCheatActivateSuccess" = "%@\nbaşarıyla etkinleştirildi";
+"AirPlayingTitle" = "Oyun ekranı yansıtılıyor";
+"VolumeOff" = "Ses Kapalı";
+"VolumeOn" = "Ses Açık";
+"FunctionSortDesc1" = "Bu fonksiyonlar varsayılan skin için kısayol olarak kullanılır";
+"FunctionSortDesc2" = "Sıralamak için uzun basıp sürükleyin";
+"ManualGameSaveCountLimit" = "Anlık kayıt limitiniz doldu! Üye olarak sınırsız kayıt açın veya listeden silin";
+"FastForwardSpeedLimit" = "Maksimum hız x2! Üye olarak x5 hızını açın";
+"ResetSpeed" = "Normal Hıza Dön";
+"GoToUpgrade" = "Yükselt";
+"SaveStateTooFrequent" = "Çok sık kayıt yapıyorsunuz";
+"LoadStateTooFrequent" = "Çok sık yükleme yapıyorsunuz";
+
+//CheatCode
+"CheatCodeNamePlaceHolder" = "Lütfen isim girin";
+"AutoDetectCheatTypeName" = "Otomatik Algıla";
+"AutoDetectFormat" = "Format otomatik algılanacak";
+"CheatCodeFormatError" = "Cheat kodu formatı geçersiz";
+"CheatCodeEmptyTitle" = "Cheat kodu yok";
+"CheatCodeEmptyGuideLeft" = "Sol üstteki";
+"CheatCodeEmptyGuideRight" = "ile cheat kodu ekle";
+"EnableCheatCodeAlertTitle" = "Cheat Kodlarını Etkinleştir";
+"EnableCheatCodeAlertDetail" = "Cheat kodları oyun sürümüne bağlıdır ve yanlış kullanım hatalara yol açabilir!";
+
+//滤镜
+"FilterSectionHeaderTitle" = "Video Filtreleri";
+"FilterOriginTitle" = "Orijinal";
+
+//内购
+"PurchaseAdcancedFeaturesTitle" = "Premium Özellikleri Aç";
+"AdcancedFeaturesDetail" = "
+「🎮 Ultimate Deneyim」
+🔥 Sınırsız Kayıt: 3 limitini aş
+🚀 5x Hız: Oyun temponu kontrol et
+💎 Sınırsız Cheat: Mükemmel tamamlama
+✨ Özel Filtreler: Görsel şölen
+";
+"PurchaseImportFeaturesTitle" = "Bulut Entegrasyonu";
+"ImportFeaturesDetail" = " 
+☁️ Tüm bulut servisleriyle entegre:
+✅ Google Drive, Dropbox, OneDrive
+✅ Baidu Bulut, Aliyun
+⚡ WebDAV/SMB desteği
+";
+"PurchaseControllerFeaturesTitle" = "Harici Kontrolcü Desteği";
+"ControllerFeaturesDetail" = " 
+🕹️ Tüm kontrolcüler desteklenir:
+🎮 Joy-Con/DUALSHOCK/Xbox
+⌨️ Bluetooth klavye/joystick
+✨ Çoklu kontrolcü desteği
+";
+"PurchaseAirPlayFeaturesTitle" = "AirPlay ile Büyük Ekran";
+"AirPlayFeaturesDetail" = " 
+📺 TV'ye kusursuz yansıtma:
+🔓 AirPlay kilidini aç
+🛋️ Telefondan TV'ye kesintisiz geçiş
+🎮 Büyük ekran + kontrolcü keyfi
+";
+"PurchaseiCloudFeaturesTitle" = "iCloud Senkronizasyonu";
+"iCloudFeaturesDetail" = " 
+☁️ Tüm cihazlarda senkronize:
+🎮 Oyunlar/Kayıtlar/Ayarlar
+🔒 Şifreli depolama
+🔄 Cihazlar arası devam ettir
+";
+"AdvanceFeatureDescLabel1" = "5x hıza kadar";
+"AdvanceFeatureDescLabel2" = "Sınırsız anlık kayıt";
+"AdvanceFeatureDescLabel3" = "Sınırsız cheat kodu";
+"AdvanceFeatureDescLabel4" = "Özel filtreler";
+"AdvanceFeatureDescLabel5" = "Otomatik kayıt";
+"RestorePurchaseButton" = "Satın Alımı Geri Yükle";
+"AnnualDescription" = "Yıllık Üyelik";
+"MonthlyDescription" = "Aylık Üyelik";
+"ForeverDescription" = "Süresiz Üyelik · Tek Ödeme";
+"SubscriptionPromotional" = "İlk %d gün ücretsiz";
+"PurchasePricePerYear" = "/yıl";
+"PurchasePricePerMonth" = "/ay";
+"PromptLabelForYear" = "%%50 indirim";
+"PromptLabelForMonth" = "Deneme Fırsatı";
+"PromptLabelForForever" = "En ekonomik";
+"GetProductsFailedTitle" = "Ürünler alınamadı, lütfen tekrar deneyin";
+"TermOfServiceTitle" = "Hizmet Şartları";
+"AnnualMemberTitle" = "Süper Yıllık Üye";
+"MonthlyMemberTitle" = "Aylık Maceracı";
+"ForeverMemberTitle" = "Süresiz Üye";
+"PurchaseVerifiedFailed" = "Doğrulama başarısız, lütfen internet bağlantınızı kontrol edin";
+"PurchaseCancel" = "Ödeme iptal edildi";
+"PurchasePending" = "Ödeme bekleniyor";
+"PurchaseUnknown" = "Bilinmeyen durum";
+"PurchaseErrorDesc" = "Ödeme yapılamadı, internet bağlantınızı kontrol edin";
+"PurchaseFailedTitle" = "Ödeme Başarısız";
+"RestoreSuccessDesc" = "Satın alım geri yüklendi!";
+"RestoreEndDesc" = "Geri yükleme tamamlandı, aktif üyelik bulunamadı";
+"TrialDesc" = "Ücretsiz deneme süresince ücret alınmaz";
+"SubscriptionPurchaseButtonTitle" = "%d günlük denemeye başla";
+"YearSubscriptionDisableDesc" = "Zaten yıllık üyesiniz";
+"MonthSubscriptionDisableDesc" = "Zaten aylık üyesiniz";
+"ForeverSubscriptionDisableDesc" = "Zaten süresiz üyesiniz";
+"ChangeSubscription" = "Paketi Değiştir";
+"UpgradePurchase" = "Yükseltmeye Devam Et";
+"ForeverPlanDesc" = "Tüm premium özelliklere kalıcı erişim";
+"BuyNowTitle" = "Hemen Satın Al";
+"SettingsFreeTrialDesc" = "%d gün ücretsiz deneme";
+"Hi" = "Merhaba";
+
+//Permission
+"PrePermissionPhotoTitle" = "Manic EMU'nun fotoğraflarınıza erişmesine izin verilsin mi?";
+"PrePermissionPhotoMessage" = "Oyun ekran görüntülerini kaydetmek ve albümden kapak seçmek için izin gereklidir";
+"PrePermissionPhotoCancel" = "Şimdi Değil";
+"PrePermissionPhotoConfirm" = "İzin Ver";
+"DeniedPermissionPhotoTitle" = "Fotoğraf Erişimi Reddedildi!";
+"DeniedPermissionPhotoMessage" = "Ekran görüntülerini kaydetmek için fotoğraf izni gereklidir";
+"DeniedPermissionPhotoCancel" = "Hayır";
+"DeniedPermissionPhotoConfirm" = "Ayarlara Git";
+"PrePermissionCameraTitle" = "Manic EMU'nun kameranıza erişmesine izin verilsin mi?";
+"PrePermissionCameraMessage" = "Oyun kapağı çekmek için kamera izni gereklidir";
+"PrePermissionCameraCancel" = "Şimdi Değil";
+"PrePermissionCameraConfirm" = "İzin Ver";
+"DeniedPermissionCameraTitle" = "Kamera Erişimi Reddedildi!";
+"DeniedPermissionCameraMessage" = "Oyun kapağı çekmek için kamera izni gereklidir";
+"DeniedPermissionCameraCancel" = "Hayır";
+"DeniedPermissionCameraConfirm" = "Ayarlara Git";
+"DeniedPermissionMicTitle" = "Mikrofon Erişimi Reddedildi!";
+"DeniedPermissionMicMessage" = "Bazı DS oyunları için mikrofon izni gereklidir";
+"DeniedPermissionMicCancel" = "Hayır";
+"DeniedPermissionMicConfirm" = "Ayarlara Git";
+
+//Share
+"ShareAppSubtitle" = "Arkadaşlarını maceraya davet et!";
+"ShareRomFilesFailed" = "ROM paylaşılamadı, dosya bulunamadı";
+"ShareSaveFilesFailed" = "Kayıt paylaşılamadı, kayıt yok";
+"ShareFilesCopyFailed" = "Dosya kopyalanamadı";
+"ShareFilesCompressFailed" = "Dosya sıkıştırılamadı";
+
+"TurnOnAirPlayAsk" = "AirPlay bağlandı. Tam ekran moduna geçilsin mi?";
+
+"ThreeDSModePerformance" = "Performans Modu";
+"ThreeDSModeCompatibility" = "Uyumluluk Modu";
+"ThreeDSModeQuality" = "Görüntü Kalitesi Önceliği";
+"ThreeDSNotSupportImportSave" = "3DS oyunları şu anda kayıt dosyası içe aktarmayı desteklemiyor";
+"ThreeDSNotSupportShareSave" = "3DS oyunları şu anda kayıt dosyası paylaşmayı desteklemiyor";
+"ThreeDSBetaAlertTitle" = "3DS Deneysel Sürüm";
+"ThreeDSBetaAlertDetail" = "3DS oyunlarını daha erken deneyimlemeniz için Manic EMU, deneysel 3DS özelliğini yayınladı. Bazı iyileştirmeler gerekiyor.
+
+Geçici olarak eksik özellikler:
+❌ AirPlay Tam Ekran Modu
+❌ Otomatik Kaydetme
+❌ Hızlandırma
+
+Sorun yaşarsanız SSS'mize bakın veya destek kanalımıza katılın. Emülatörü sürekli optimize ediyoruz. Desteğiniz mükemmel bir deneyim yaratmamıza yardımcı olur. Sizin için çalışıyoruz!";
+"ThreeDSNoSupportDeviceTitle" = "Cihaz Performansı Yetersiz";
+"ThreeDSNoSupportDeviceDetail" = "Bu cihaz 3DS emülasyonunu desteklemiyor olabilir. Devam etmek öngörülemeyen hatalara neden olabilir";
+
+"GameImportBadFile" = "İçe aktarma başarısız: \"%@\" bozuk veya bilinmeyen bir hata oluştu. Lütfen başka bir ROM dosyası deneyin";
+"Game3DSDecryptFailed" = "İçe aktarma başarısız: \"%@\" şifre çözme başarısız. Lütfen başka bir ROM dosyası deneyin";
+"Game3DSGameNotExist" = "Güncelleme içe aktarılamadı, \"%@\": Oyun kurulu değil!";
+
+"Game3DSInputTitle" = "İçeriği girin";
+"ControllerMappingGuideTitle" = "Tuş haritası için ekrandaki düğmeye dokun";
+"ControllerMappingGuideBegin" = "「%@」 haritalaması başlatılıyor
+Kontrolcü düğmesine basın...";
+"ControllerMappingReset" = "Sıfırla";
+"ControllerMappingNoFouond" = "Tanımlanamayan tuş ayarı";
+"FlexSkinSettingError" = "Arayüz hazır değil, lütfen bekleyin";
+"SkinPreviewTitle" = "Önizleme";
+"FullScreenWhenConnectControllerTitle" = "Otomatik tam ekran";
+"FullScreenWhenConnectControllerDetail" = "Kontrolcü bağlandığında tam ekran yap";
+"JoinDiscordTitle" = "Discord'a Katıl (Resmi değil)";
+"JoinDiscordAlertMessage" = "%@ tarafından oluşturulan kanala katılmak ister misiniz?";
+"FlexSkinGuideTitle" = "Ekranı ayarlamak için sürükle veya yakınlaştır";
+"DownloadFailed" = "İndirme başarısız";
+"RemoveDownloadTask" = "\"%@\" indirmesi iptal edilsin mi?";
+"GameSettingResolution" = "Çözünürlük %@";
+"GameSettingSwapScreen" = "Ekranı değiştir";
+"NotSupportGameSetting" = "%@ platformunda desteklenmiyor";
+
+"ThemeSettingTitle" = "Tema";
+"ThemeSettingDetail" = "Uygulama simgeleri, tema renkleri, kutu ayarları, konsol sıralaması";
+"ThemeDesktopIconTitle" = "Uygulama simgeleri";
+"ThemeDesktopIconDetail" = "Yeni simgeler yakında gelecek...";
+"ThemeThemeColorTitle" = "Tema renkleri";
+"ThemeCoverStyleTitle" = "Kutu stili ve köşeler";
+"ThemeCoverStyleName" = "Stil %d";
+"ThemePlatformOrderTitle" = "Konsol sıralaması";
+"ThemePlatformOrderDetail" = "Sıralamayı düzenlemek için uzun basıp sürükleyin";
+"ThemeColorLimitToast" = "Maksimum tema rengi sayısına ulaşıldı";
+"ThemeColorSystemNotAllowEdit" = "Varsayılan renkler düzenlenemez";
+"EditTitle" = "Düzenle";
+"RemoveTitle" = "Kaldır";
+"On" = "Açık";
+"Off" = "Kapalı";
+"AmiiboNotSearching" = "NFC etkin değilken Amiibo yüklenemez";
+"ConsoleHomeTitle" = "Ana menü";
+"AmiiboTitle" = "Amiibo Yükle";
+"ThreeDSHomeMenuNotRunning" = "Ana menü çalışmıyor";
+"ThreeDSImportSaveFailed" = "%@ içe aktarılamadı: Tanınmayan kayıt dosyası";
+"ThreeDSUpdateInstallSuccess" = "Güncelleme başarıyla yüklendi";
+"OnlineCoverFetchFailed" = "Görsel alınamadı";
+"JITMenuDesc" = "Desteklenmeyen ortamlarda JIT etkinleştirme uygulama çökmelerine neden olabilir";
+"ShaderModeTitle" = "Gelişmiş gölgelendiriciler";
+"ShaderModeDesc" = "Doku hassasiyetini artırır (performansı etkileyebilir)";
+"NoDownloadTask" = "Aktif indirme yok";
+"NoGameCoverResult" = "Kutu bulunamadı";
+"NoContentResult" = "İçerik yok";
+"OpenFilePermissionsLimit" = "%@ açma izni yok";
+"SevenZipDecompressError" = "7z dosyası bozuk veya şifreli";
+"ForceSquareRatioTitle" = "Kare en-boy oranı zorla";
+"ForceSquareRatioDetail" = "Kutular kare oran (açık) veya orijinal oran (kapalı) kullanır";
+
+"AutoSaveStateTitle" = "Otomatik Durum Kaydetme";
+"GamesThemeTitle" = "Oyun Kütüphanesi";
+"GamesPerRowTitle" = "Satır Başına Oyun Sayısı (iPhone)";
+"GamesHideScrollIndicator" = "Kaydırma Göstergelerini Gizle";
+"ConsoleLanguageDesc" = "Bazı oyunlar için bölge ve dil ayarlarının elle yapılandırılması gerekebilir";
+"JitNoSupportDesc" = "Mevcut ortamda JIT derleme kullanılamıyor";
+"RenderRightEyeTitle" = "Sağ Göz Renderi";
+"RenderRightEyeDesc" = "Devre dışı bırakmak bazı oyunlarda performansı artırır ancak ekran titremesine neden olabilir";
+"DisableTitle" = "Devre Dışı";
+"EnableTitle" = "Etkinleştir";
+"NoSaveStateToast" = "%@ Yok";
+"DeleteSelectedSaveStateAlert" = "Seçilen «%@» silinsin mi?\nGeri alınamaz!";
+"DeleteAllSaveStateAlert" = "Seçili öğe yok. Tüm «%@» silinsin mi?\nGeri alınamaz!";
+"AICoverSearchDesc" = "İngilizce olmayan arama algılandı. Manic EMU'nun çok dilli AI araması için Premium'a yükseltin";
+"MaxTextSizeAllowDesc" = "En fazla %@ karakter desteklenir";
+
+"PlatformSelectionTitle" = "Platform Seçimi";
+"PlatformSelectionDetail" = "%@ için varsayılan platform seçin";
+"PlatformChange" = "Platform Ata";
+"BIOSDesc" = "Bazı platformlar BIOS gerektirir";
+"BIOSImported" = "İçe Aktarıldı";
+"BIOSAlert" = "Bazı platformlar BIOS dosyaları gerektirir. BIOS telif hakları üreticilere aittir. İçe aktarırken yerel yasalara uyun.\n\nYardım için topluluğumuza katılın.";
+"UnknownPlatform" = "Bilinmeyen Platform";
+"UnknownPlatformGameSelectWarn" = "Platform atanmamış oyunlar seçilemez";
+"BIOSImportSuccess" = "%@ başarıyla içe aktarıldı!";
+"BIOSImportFailed" = "Hatalı dosya!";
+
+"HideGameTitleDesc" = "Oyun başlığını gizle";
+"HideGroupTitleDesc" = "Grup başlığını gizle";
+"GroupTitleStyelDesc" = "Grup Başlığı Stili";
+"GroupTitleStyelAbbr" = "Kısaltma";
+"GroupTitleStyelFull" = "Tam";
+"GroupTitleStyelBrand" = "Marka";
+"CopyLaunchLinkTitle" = "Başlatma Bağlantısını Kopyala";
+"AskIfNeedToSaveCover" = "Başlatma bağlantısı panoya kopyalandı. Kutu resmini fotoğraf albümünüze kaydetmek ister misiniz?";
+"SaturnBiosAlertTitle" = "BIOS Eksik";
+"SaturnBiosAlertDetail" = "Sega Saturn HLE ile BIOS olmadan çalıştırılabilir, ancak BIOS dosyası grafik hatalarını azaltır";
+"BiosAddTitle" = "BIOS Ekle";
+"StartGameWithoutBiosTitle" = "BIOS Olmadan Başlat";
+
+"ThreeDSAdvanceSettingMode" = "Gelişmiş Mod";
+"ThreeDSAdvanceSettingTitle" = "Gelişmiş Ayarlar";
+"ThreeDSBasicSettingMode" = "Temel Mod";
+"ShareConfigButtonTitle" = "Yapılandırmayı Paylaş";
+"ImportConfigButtonTitle" = "Yapılandırmayı İçe Aktar";
+"ShareFileFailedMissing" = "Paylaşım başarısız: dosya bulunamadı";
+"ReadConfigFileFailed" = "Yapılandırma dosyası okunamadı";
+"SwitchEmulationCore" = "Çekirdek Değiştir";
+"SwitchEmulationCoreDetail" = "%@ için emülasyon çekirdeği değiştir\nÇekirdek değişimi önceki çekirdeğin kayıtlarını okunamaz hale getirir. Erişmek için orijinal çekirdeğe dönün";
+"BeetleSaturnNoSupportCheat" = "Beetle Saturn çekirdeği şu anda hile kodu desteklemiyor. Gerekirse Yabause çekirdeğine geçin";
+"CurrentTitle" = "mevcut";
+"NewSkinDesc" = "Manic EMU, .manicskin ve .deltaskin formatlarında skinleri destekler. Not: İçe aktarılan skin mevcut platformla uyumlu olmalıdır, aksi takdirde listede görünmez.\nAyrıca üçüncü taraf skin topluluklarına erişim sağlıyoruz. Bunlar Manic EMU ile resmi olarak bağlantılı değildir. Skin indirirken her sitenin hizmet şartlarına uyun";
+"VisitSite" = "%@ ziyaret et";
+"OpenFile" = "Dosya Aç";
+"WebViewDownloadBegin" = "İndirme başladı";
+"RespectSilentMode" = "Sessiz Moda Uy";
+"RespectSilentModeDesc" = "Etkinleştirildiğinde, Manic EMU yalnızca sessiz mod dışında ses çalar";
+"SaturnISONoSwitchCore" = "Sega Saturn .iso formatındaki oyunlar çekirdek değiştirmeyi desteklemez";
+"EnableFullScreenTitle" = "Tam Ekran Etkinleştir";
+"DisableFullScreenTitle" = "Tam Ekran Devre Dışı Bırak";
+"SimulateBlowingTitle" = "Üfleme Simülasyonu";
+"PaletteTitle" = "Palet";
+"SkinRestDesc" = "Skin sıfırlama, oyun atanmış skinleri de varsayılan sürümlerine geri yükler";
+"SkinResetForAll" = "Tüm platform skinlerini sıfırla";
+"SkinResetForPlatform" = "%@ skinini sıfırla";
+"SkinDebug" = "Skin Test Alanı";
+
+"ImportMissingFile" = "%@ içe aktarma başarısız: %@ dosyası eksik";
+"MultiDiscBuilder" = "Çoklu Disk Yardımcısı";
+"MultiDiscBuilderDesc" = "Çok diskli oyunlar (.cue/.bin veya .chd) için disk değiştirilebilir .m3u dosyaları oluşturur. Zaten .m3u dosyanız varsa atlayın - doğrudan Oyun İçe Aktarma ile içe aktarın";
+"M3uFileShare" = ".m3u Dosyasını Paylaş";
+"M3uFileImport" = "Kütüphaneye Ekle";
+"MultiDiscAddFile" = "%@ Dosyası Ekle";
+"MultiDiscImportErrorConflict" = "Hata: .cue ve .chd dosyaları karıştırılamaz";
+"MultiDiscImportErrorMissing" = "Hata: .cue veya .chd dosyası bulunamadı";
+"GenerateM3uFailed" = ".m3u dosyası oluşturulamadı";
+"MultiDiscCloseAlert" = ".m3u dosyası oluşturuldu. Kütüphaneye aktardıktan sonra bu sayfayı kapatın";
+"MultiDiscContinueClose" = "Kapatmaya Devam Et";
+"SwapDisk" = "Disk Değiştir";
+"NotSupportSwapDisk" = "Çok diskli oyun değil";
+"TransferPakDesc" = "Transfer Pak, GB/GBC verilerini N64 ile senkronize eder. Etkinleştirmek için ROM (.gb/.gbc) ve kayıt dosyasını (.sav) içe aktarın";
+"TransferPakFromLibrary" = "Kütüphaneden İçe Aktar";
+"TransferPakFromLibraryDesc" = "Sadece kayıt dosyası olan oyunlar gösterilir.\nSeçilen GB/GBC oyunları N64 ROM ile eşleşmeli, aksi takdirde başarısız olabilir";
+"TransferPakNoGames" = "Uyumlu oyun yok";
+"TransferPakFromFiles" = "Dosyalardan İçe Aktar";
+"TransferPakOn" = "Aktif";
+"TransferPakOff" = "Pasif";
+"TransferPakImportError" = "Hata: Hem ROM hem kayıt dosyasını içe aktarın (2 dosya gerekli)";
+"ShowControlsTitle" = "Kontrolleri Göster";
+"HideControlsTitle" = "Kontrolleri Gizle";
+
+"DesignedFor" = "%@ için Tasarlanmıştır";

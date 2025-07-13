@@ -1,0 +1,572 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+
+//導入
+"ImportAddCloudServiceTitle" = "雲端服務";
+"ImportAddLanServiceTitle" = "區域網路服務";
+"ImportAddDiscoverServiceTitle" = "探索服務";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "百度雲";
+"AliYun" = "阿里雲";
+"AddImportServiceHeaderTitle" = "新增服務";
+"ImportServiceDelete" = "移除服務";
+"ImportAliyunNotGetDriveId" = "新增阿里雲服務失敗，獲取目錄失敗";
+"ImportDownloadError" = "下載錯誤\n%@";
+"ImportDownloadContinue" = "繼續下載...\n%@";
+"LandServiceEditServerName" = "伺服器標題";
+"LandServiceEditServerNamePlaceholder" = "我的SMB伺服器";
+"LandServiceEditHost" = "伺服器地址";
+"LandServiceEditUserName" = "登入用戶";
+"LandServiceEditPassword" = "密碼";
+"LandServiceEditRequiredPlaceholder" = "必填";
+"LandServiceEditOptionalPlaceholder" = "選填";
+"LandServiceEditConnect" = "連接";
+"AddLandServiceSuccess" = "新增%@成功";
+"AddLandServiceFailed" = "新增%@失敗\n請檢查網路連接、服務狀態或填寫的資訊是否正確";
+"AddLandServiceTimeout" = "連接服務逾時";
+"FilesImporterErrorFileExist" = "\"%@\"已存在，無需導入";
+"FilesImporterErrorBadCopy" = "導入\"%@\"失敗，檔案複製過程中發生錯誤";
+"FilesImporterErrorBadExtension" = "導入\"%@\"失敗，無法識別該檔案副檔名";
+"FilesImporterErrorNoPermission" = "沒有權限存取%@";
+"FilesImporterErrorUnableToHash" = "導入\"%@\"失敗，無法計算哈希值";
+"FilesImporterErrorWriteDatabase" = "導入\"%@\"失敗，無法寫入資料庫";
+"GameSaveMatchTitle" = "為存檔匹配遊戲";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\"無法匹配遊戲，請手動匹配";
+"GameSaveAlreadyExistTitle" = "存檔已存在";
+"FilesImporterErrorSaveAlreadyExist" = "導入\"%@\"失敗，是否強制覆蓋原有存檔？";
+"GameSaveMathToMuchTitle" = "多重匹配";
+"FilesImporterErrorSaveMathToMuch" = "導入\"%@\"失敗，存檔匹配到多個遊戲，請手動匹配";
+"FilesImporterErrorSkinBadFile" = "導入%@失敗，皮膚檔案已損毀";
+"PasteImporterErrorNoMatchContent" = "剪貼簿中沒有符合導入的內容";
+"FilesDownloadErrorFileExist" = "%@已下載，無需重複下載";
+"FilesImporterErrorEmptyContent" = "沒有資源可以導入";
+"LanServiceInitFailed" = "建立%@服務失敗";
+"SMBLoginFailed" = "Samba登入失敗%@";
+"SMBListFilesFailed" = "獲取檔案失敗%@";
+"SMBListFilesTypeError" = "該檔案不是資料夾";
+"DropErrorLoadFailed" = "載入檔案失敗";
+"DropErrorNotSupportFile" = "不支援的檔案類型";
+"ImportErrorTitle" = "導入錯誤";
+"ImportGameSuccessTitle" = "導入遊戲成功";
+"ImportGameSuccessDetail" = "%@\n已經導入遊戲庫中，是否立即查看？";
+"ImportGameSuccessDetailForOne" = "\"%@\"\n已經導入遊戲庫中，是否立即遊玩？";
+"ImportSkinSuccessTitle" = "導入皮膚成功";
+"ImportSkinSuccessDetail" = "\"%@\"\n導入成功，是否立即查看？";
+"ImportGameSaveSuccessTitle" = "導入存檔成功";
+"ImportGameSaveSuccessDetail" = "\"%@\"\n已經導入對應遊戲中";
+"ImportGameSaveSuccessForOne" = "\"%@\"\n已經導入遊戲中，是否立即遊玩？";
+"ImportGameSaveFailedNoGameError" = "導入\"%@\"失敗，因為你還沒有遊戲！";
+"DownloadCompletion" = "下載完成";
+"QQChannelName" = "QQ頻道";
+"NotSupportPasswordZip" = "無法解壓\"%@\"，暫不支援加密壓縮檔";
+"UnzipFailed" = "\"%@\"解壓失敗";
+"NoSupportInZip" = "\"%@\"中未包含支援的格式";
+"IPCopy" = "已複製地址";
+"ImportServiceListFilesTitle" = "檔案";
+"ImportServiceListFilesDetail" = "從檔案或iCloud上導入遊戲、皮膚、存檔";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "透過同一區域網路的瀏覽器傳輸檔案";
+"ImportServiceListWiFiOnDetail" = "%@\n使用瀏覽器傳輸檔案";
+"ImportServiceListPasteTitle" = "讀取剪貼簿";
+"ImportServiceListPasteDetail" = "支援從macOS及檔案應用程式拷貝檔案";
+"ImportHowTo" = "如何導入";
+"ImportTopHintTitle" = "一個充滿夢想與冒險的故事將從這裡開始！";
+"ImportDragAndDropTips" = "將檔案拖到Manic EMU的任意界面實現傳輸";
+"ImportChannelTips" = "如有疑問，加入%@獲取幫助";
+"ToastConnectCloudDriveSuccess" = "連接%@成功";
+"AlertImportFilesSuccess" = "導入資源成功";
+"ErrorConnectCloudDrive" = "無法連接雲端服務";
+"ErrorUnknown" = "未知錯誤";
+"ReasonConncetCloudDriveFail" = "請檢查網路連接和雲端服務授權狀態，或嘗試移除此服務進行重新新增";
+
+//通用
+"TabbarTitleGames" = "遊戲";
+"TabbarTitleImport" = "導入";
+"TabbarTitleSettings" = "設定";
+"SelectAll" = "全選";
+"DeSelectAll" = "取消全選";
+"CloudDriveBrowserDownload" = "下載";
+"CancelTitle" = "取消";
+"CheckTitle" = "查看";
+"StartGameTitle" = "立即遊玩";
+"ConfirmTitle" = "確定";
+"SaveTitle" = "儲存";
+"NameTitle" = "名稱";
+"TimeAgoMinuteFormat" = "%d分鐘前";
+"TimeAgoHourFormat" = "%d小時前";
+"TimeAgoDayFormat" = "%d天前";
+"TimeAgoWeekFormat" = "%d週前";
+"TimeAgoMonthFormat" = "%d個月前";
+"TimeAgoYearFormat" = "%d年前";
+"TimeDurationHourAndMinuteFormat" = "%d小時%d分鐘";
+"TimeDurationHourFormat" = "%d小時";
+"TimeDurationMinuteFormat" = "%d分鐘";
+"FatalErrorTitle" = "致命錯誤";
+"FatalErrorDesc" = "系統資源載入失敗，Manic EMU運行中可能會有重大缺陷";
+"LodingFailedTitle" = "載入失敗";
+"AirPlayDesc" = "馬上開始冒險吧！";
+"ToastSuccess" = "儲存成功";
+"ToastFailed" = "儲存失敗";
+
+//遊戲
+"GamesSearchPlaceHolder" = "遊戲標題";
+"GamesRename" = "重新命名";
+"GamesModifyCover" = "修改封面";
+"GamesSpecifySkin" = "設定皮膚";
+"GamesCheatCode" = "金手指";
+"GamesShareRom" = "分享ROM";
+"GamesCheckSave" = "查看即時存檔";
+"GamesImportSave" = "導入遊戲存檔";
+"GamesShareSave" = "導出遊戲存檔";
+"GamesDelete" = "移除遊戲";
+"GamesRandom" = "不知道玩什麼，隨機一下";
+"LoadGameErrorRomNotExist" = "遊戲載入錯誤，ROM不存在";
+"GamesListEmptyGuideLeft" = "快去點擊下面";
+"GamesListEmptyGuideRight" = "導入遊戲吧";
+"GamesListEmptyWelcomeLeft" = "歡迎來到";
+"GamesListEmptyWelcomeRight" = "的世界";
+"GamesListEmptyWarnning" = "請確保通過合法渠道獲取遊戲ROM檔案";
+"DeleteGameAlertDetail" = "遊戲 ROM、存檔和金手指等數據將一併刪除，此操作不可逆！";
+"DeleteSkinAlertDetail" = "皮膚移除後將不可恢復！";
+"DeleteGameGameStateAlertTitle" = "移除即時存檔";
+"DeleteGameGameStateAlertDetail" = "即時存檔移除後將不可恢復！";
+"confirmDelte" = "確認移除";
+
+//控制器
+"ControllersTouchName" = "屏幕控制器";
+"ControllersHeaderTitle" = "控制器";
+"ControllersPlayerIndex" = "玩家%d";
+"ControllersPlayerUnset" = "未指定";
+"ControllersHowToConnect" = "如何連接";
+
+//遊戲資訊
+"ReadyGameInfoSubTitle" = "%@遊玩 · 總共%@";
+"ReadyGameInfoNeverPlayed" = "未進行遊戲，立即開始冒險";
+"ReadyEditCoverTakePhoto" = "拍攝";
+"ReadyEditCoverAlbum" = "相簿";
+"ReadyEditCoverFile" = "檔案";
+"ReadyEditCoverSearch" = "搜尋";
+"ReadySegmentManualSave" = "玩家即時存檔";
+"ReadySegmentAutoSave" = "自動即時存檔";
+"ReadyEditTitleFailed" = "重新命名失敗，遊戲名稱不能為空";
+"ReadyEditTitleSuccess" = "重新命名成功";
+"ReadyGameSaveStatesEmpty" = "暫無存檔";
+"GameSaveGuideBecomTitle" = "成為";
+"GameSaveGuideMemberTitle" = "會員";
+"GameSaveGuideDesc" = "立即解鎖無限玩家即時存檔，開啟最多支援50個自動即時存檔";
+"GameSaveUnCompatibleTitle" = "即時存檔兼容問題";
+"GameSaveUnCompatibleDetail" = "此即時存檔由%@生成，當前設備環境為%@。即時存檔與設備類型和系統版本有關，如果強制在不兼容的環境中載入可能會產生異常問題！";
+"GameSaveStateForceLoad" = "繼續載入";
+"GameSaveContinue" = "繼續";
+"GameSaveTitle" = "存檔%d";
+
+//皮膚
+"SkinNavigationSubTitleCommon" = "Manic EMU完美兼容.deltaskin格式皮膚";
+"SkinNavigationSubTitleSpecifiedGame" = "僅為%@設定皮膚";
+"SkinSegmentPortraitTitle" = "直屏";
+"SkinSegmentLandscapeTitle" = "橫屏";
+"SkinAddTitle" = "新增皮膚";
+"HowToFetch" = "如何獲取";
+"SkinDelete" = "移除皮膚";
+"DefaultSkinCannotEdit" = "預設皮膚不允許編輯";
+
+//歷史
+"HistoryHeaderTitle" = "遊玩歷史";
+"HistoryFavouriteTitle" = "最喜愛玩";
+"HistoryEmptyTitle" = "暫無遊玩歷史";
+"HistoryEmptyImportGame" = "導入遊戲";
+"HistoryEmptyStartGame" = "立即遊戲";
+
+//設定
+"LeftHandTitle" = "左手模式";
+"LeftHandDetail" = "搖桿、DPad、按鍵左右鏡像翻轉";
+"QuickGameTitle" = "快速開始遊戲";
+"QuickGameDetail" = "點擊遊戲不在展示準備頁面";
+"AirPlayTitle" = "AirPlay全螢幕模式";
+"AirPlayDetail" = "開啟後遊戲畫面將進行全螢幕投放";
+"iCloudTitle" = "iCloud同步";
+"iCloudDetail" = "相同Apple ID的設備同步遊戲、皮膚、存檔、設定等";
+"AppIconTitle" = "應用圖示";
+"WidgetTitle" = "桌面小工具";
+"QATitle" = "常見問題";
+"FeedbackTitle" = "意見回饋";
+"ShareAppTitle" = "分享「Manic EMU」給好友";
+"JoinQQTitle" = "加入QQ頻道";
+"JoinTelegramTitle" = "加入Telegram";
+"ClearCacheTitle" = "清除緩存";
+"LanguageTitle" = "語言";
+"UserAgreementTitle" = "用戶協議";
+"PrivacyPolicyTitle" = "隱私政策";
+"GeneralSettingTitle" = "通用設定";
+"AdvanceSettingTitle" = "進階設定";
+"SupportSettingTitle" = "聯繫支援";
+"OthersSettingTitle" = "其他";
+"RatingTitleLeft" = "評分";
+"RatingTitleRight" = "";
+"RatingDetail" = "如果您認為我們的產品對您有價值，請幫我們寫個五星好評，你的好評對我們真的非常重要 : )";
+"iCloudDisableTitle" = "iCloud暫不可用";
+"iCloudDisableDetail" = "已嘗試開啟iCloud同步服務，只有你完成iCloud登入及授權才會真正開始同步，前往 iPhone 的「設定」>「Apple ID」>「iCloud」，確保已開啟 iCloud 雲碟並允許 Manic EMU 存取";
+"iCloudSyncConfilictTitle" = "iCloud同步檔案衝突";
+"iCloudSyncConfilictDetail" = "雲端檔案:\n%@\n\n本地檔案:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "保留iCloud";
+"iCloudSyncConfilictSaveLocal" = "保留本地";
+"SettingsNonMemberDesc" = "你將成為這個故事的主角";
+"ThanksSupportDesc" = "感謝支持";
+"ThanksCommingDesc" = "謝謝你來";
+"PlayGameDesc" = "玩遊戲";
+"NoEmailSetting" = "你還沒有設定電郵";
+"IDCopy" = "已複製你的ID";
+"SendEmailSuccess" = "發送電郵成功";
+"SendEmailFailed" = "發送電郵失敗%@";
+"iCloudTipsTitle" = "開啟iCloud同步";
+"iCloudTipsDetail" = "啟用iCloud同步，可以在登入了相同Apple ID的客戶端上同步Manic EMU上的一切，開啟同步之後你的所有數據都會上傳到iCloud中，這將會佔用你的iCloud儲存空間，若空間不足，則會導致同步失敗！同步後你的數據會儲存在雲端，若數據尚未下載可能你將無法正常遊戲！";
+"iCloudConfirm" = "繼續開啟";
+
+//遊玩
+"LoadingTitle" = "下載中";
+"LoadRomSuccess" = "%@下載完成，快開始遊戲吧";
+"GameSettingSaveState" = "存檔";
+"GameSettingQuickLoadState" = "快速讀檔";
+"GameSettingVolume" = "聲音";
+"GameSettingFastForwardResume" = "正常速度";
+"GameSettingFastForward" = "快進%@";
+"GameSettingStateList" = "存檔列表";
+"GameSettingSkins" = "設定皮膚";
+"GameSettingFilter" = "濾鏡";
+"GameSettingScreenShot" = "遊戲截圖";
+"GameSettingHapticOff" = "震感關閉";
+"GameSettingHapticSoft" = "震感 弱";
+"GameSettingHapticLight" = "震感 輕";
+"GameSettingHapticMedium" = "震感 中";
+"GameSettingHapticHeavy" = "震感 重";
+"GameSettingHapticRigid" = "震感 剛性";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "搖桿";
+"GameSettingAirplay" = "投放";
+"GameSettingControllerSetting" = "控制器";
+"GameSettingOrientationAuto" = "自動旋轉";
+"GameSettingOrientationPortrait" = "強制直屏";
+"GameSettingOrientationLandscape" = "強制橫屏";
+"GameSettingFunctionSort" = "功能排序";
+"GameSettingReload" = "重啟";
+"GameSettingQuit" = "退出";
+"GameSaveStateSuccess" = "即時存檔成功";
+"GameSaveStateLoadFailed" = "即時存檔載入失敗，該存檔已損毀或不兼容";
+"GameSaveStateLoadSuccess" = "即時存檔載入成功";
+"GameSaveStateQuickLoadFailed" = "暫無手動存檔，如果想載入自動存檔，請使用「存檔列表」";
+"GameSaveListTitle" = "即時存檔";
+"GameCheatActivateFailed" = "%@\n激活失敗 作弊碼無效";
+"GameCheatActivateSuccess" = "%@\n激活成功";
+"AirPlayingTitle" = "遊戲畫面已輸出到投放畫面中";
+"VolumeOff" = "音量 關";
+"VolumeOn" = "音量 開";
+"FunctionSortDesc1" = "以上功能將作為官方預設皮膚的快捷功能";
+"FunctionSortDesc2" = "長按可以拖動調整順序";
+"ManualGameSaveCountLimit" = "你的即時存檔數量已超限！請升級成為會員解鎖無限即時存檔數量，或著去存檔列表刪減存檔數量";
+"FastForwardSpeedLimit" = "你的最高加速是x2！請升級成為會員解鎖最高x5倍速";
+"ResetSpeed" = "恢復常速";
+"GoToUpgrade" = "前往升級";
+"SaveStateTooFrequent" = "存檔過於頻繁";
+"LoadStateTooFrequent" = "載入過於頻繁";
+
+//金手指
+"CheatCodeNamePlaceHolder" = "請輸入名稱";
+"AutoDetectCheatTypeName" = "自動檢測";
+"AutoDetectFormat" = "輸入代碼自動檢測格式";
+"CheatCodeFormatError" = "作弊碼格式不正確";
+"CheatCodeEmptyTitle" = "暫無金手指";
+"CheatCodeEmptyGuideLeft" = "點擊左上角";
+"CheatCodeEmptyGuideRight" = "新增金手指";
+"EnableCheatCodeAlertTitle" = "開啟金手指";
+"EnableCheatCodeAlertDetail" = "金手指編碼與遊戲版本有關，必須對應正確才能生效！並且金手指的使用是對遊戲運行數據的一種修改，可能會伴隨著運行錯誤或不穩定的情況，需要你自行斟酌使用。";
+
+//濾鏡
+"FilterSectionHeaderTitle" = "影片濾鏡";
+"FilterOriginTitle" = "原始";
+
+//內購
+"PurchaseAdcancedFeaturesTitle" = "解鎖進階功能";
+"AdcancedFeaturesDetail" = "
+「🎮 終極體驗 一鍵解鎖」
+🔥 無限存檔：突破3個限制，隨心保存
+🚀 五倍速狂飆：遊戲節奏由你掌控
+💎 金手指自由：無限作弊碼庫，完美通關不是夢
+✨ 視覺革命：獨家濾鏡庫，視覺更沉浸
+";
+"PurchaseImportFeaturesTitle" = "開啟雲端服務導入";
+"ImportFeaturesDetail" = " 
+☁️ ​​「全平台雲聯 · 一步導入」​
+✅ Google Drive、Dropbox、OneDrive
+✅ 百度雲、阿里雲
+⚡ 無縫接入 ​WebDAV/SMB 協議，擁有整個互聯網！
+";
+"PurchaseControllerFeaturesTitle" = "解鎖全功能外置控制器";
+"ControllerFeaturesDetail" = " 
+🕹️ ​​「全外設制霸 · 玩家自由」​
+🎮 原生支援 Joy-Con/DUALSHOCK/Xbox/
+⌨️ 秒接藍牙手柄/鍵盤，mac上也能暢遊
+✨ 多手柄同時接入
+🎲 操控革命：從「單人獨享」到「全員參戰」
+🔥 支援控制任意玩家，組隊/對戰 隨心切換
+";
+"PurchaseAirPlayFeaturesTitle" = "解鎖AirPlay暢享大螢幕遊戲";
+"AirPlayFeaturesDetail" = " 
+📺 ​​「跨螢幕制霸 · 客廳即戰場」​
+🔓 解鎖 ​AirPlay 無損投放
+🛋️ 手機→電視無縫切換，躺玩/聚會全場景適配
+🎮 大螢幕視野+手柄操控=沉浸感暴擊
+";
+"PurchaseiCloudFeaturesTitle" = "開啟iCloud同步隨時遊戲";
+"iCloudFeaturesDetail" = " 
+☁️ ​​「iCloud 全端同步 · 你的遊戲宇宙」​
+🎮 遊戲/存檔/設定 多端無損同步
+🔒 加密儲存 · 雲端備份 · 換機/升級 ​0斷檔
+🔄 平板大螢幕戰一半，切手機繼續：​進度永不掉線
+👉 ​激活iCloud 走到哪玩到哪，你的遊戲永不暫停！
+";
+"AdvanceFeatureDescLabel1" = "最高5倍速快進";
+"AdvanceFeatureDescLabel2" = "無限即時存檔";
+"AdvanceFeatureDescLabel3" = "無限金手指";
+"AdvanceFeatureDescLabel4" = "濾鏡自由切換";
+"AdvanceFeatureDescLabel5" = "自動即時存檔";
+"RestorePurchaseButton" = "恢復購買";
+"AnnualDescription" = "年度會員";
+"MonthlyDescription" = "月度會員";
+"ForeverDescription" = "永久會員 · 一次性付費";
+"SubscriptionPromotional" = "前%d天免費";
+"PurchasePricePerYear" = "/年";
+"PurchasePricePerMonth" = "/月";
+"PromptLabelForYear" = "50%%優惠";
+"PromptLabelForMonth" = "嚐鮮價";
+"PromptLabelForForever" = "最划算";
+"GetProductsFailedTitle" = "獲取商品失敗，請稍後再試";
+"TermOfServiceTitle" = "服務條款";
+"AnnualMemberTitle" = "超級年會員";
+"MonthlyMemberTitle" = "月度冒險家";
+"ForeverMemberTitle" = "永久會員";
+"PurchaseVerifiedFailed" = "支付憑證無法通過校驗，請保證網路暢通，重新啟動Manic EMU以重新校驗";
+"PurchaseCancel" = "很遺憾你的支付被取消了，錯失了解鎖進階特性的機會";
+"PurchasePending" = "你的支付暫時被掛起，完成後續支付後，將為你開通會員";
+"PurchaseUnknown" = "支付狀態未知";
+"PurchaseErrorDesc" = "暫時無法進行支付，請保證網路暢通後再次嘗試";
+"PurchaseFailedTitle" = "支付失敗";
+"RestoreSuccessDesc" = "內購恢復成功!";
+"RestoreEndDesc" = "內購恢復結束，沒有找到可用內購！";
+"TrialDesc" = "試用期間不收取任何費用，隨時取消";
+"SubscriptionPurchaseButtonTitle" = "開始%d天免費試用";
+"YearSubscriptionDisableDesc" = "你已訂閱年度會員";
+"MonthSubscriptionDisableDesc" = "你已訂閱月度會員";
+"ForeverSubscriptionDisableDesc" = "你已經是永久會員";
+"ChangeSubscription" = "更換套餐";
+"UpgradePurchase" = "繼續升級";
+"ForeverPlanDesc" = "永久享受未來所有進階功能";
+"BuyNowTitle" = "立即訂閱";
+"SettingsFreeTrialDesc" = "%d天免費試用";
+"Hi" = "嗨，";
+
+//權限
+"PrePermissionPhotoTitle" = "是否允許 Manic EMU 存取你的相簿？";
+"PrePermissionPhotoMessage" = "允許存取權限可以將遊戲截圖儲存到相簿以及選擇相簿圖片作為遊戲封面";
+"PrePermissionPhotoCancel" = "暫不";
+"PrePermissionPhotoConfirm" = "允許";
+"DeniedPermissionPhotoTitle" = "Manic EMU 無法存取你的相簿!";
+"DeniedPermissionPhotoMessage" = "為了順利儲存遊戲截圖，需要你相簿權限授權給 Manic EMU";
+"DeniedPermissionPhotoCancel" = "否";
+"DeniedPermissionPhotoConfirm" = "去授權";
+"PrePermissionCameraTitle" = "是否允許 Manic EMU 存取你的相機？";
+"PrePermissionCameraMessage" = "允許存取權限可以使用相機拍攝圖片作為遊戲封面";
+"PrePermissionCameraCancel" = "暫不";
+"PrePermissionCameraConfirm" = "允許";
+"DeniedPermissionCameraTitle" = "Manic EMU 無法存取你的相機!";
+"DeniedPermissionCameraMessage" = "需要你相簿權限授權給 Manic EMU 才能進行遊戲封面拍攝!";
+"DeniedPermissionCameraCancel" = "否";
+"DeniedPermissionCameraConfirm" = "去授權";
+"DeniedPermissionMicTitle" = "Manic EMU 無法使用你的麥克風";
+"DeniedPermissionMicMessage" = "需要你將麥克風權限授權給 Manic EMU，否則部分DS遊戲可能功能受限!";
+"DeniedPermissionMicCancel" = "否";
+"DeniedPermissionMicConfirm" = "去授權";
+
+//分享
+"ShareAppSubtitle" = "快叫上你的小夥伴一起冒險吧!";
+"ShareRomFilesFailed" = "分享ROM失敗，無法獲取檔案";
+"ShareSaveFilesFailed" = "分享遊戲存檔失敗，暫無存檔";
+"ShareFilesCopyFailed" = "分享檔案失敗，複製檔案時出錯";
+"ShareFilesCompressFailed" = "分享檔案失敗，壓縮檔案時出錯";
+
+"TurnOnAirPlayAsk" = "已連接AirPlay，是否立即轉換至全螢幕模式？";
+
+"ThreeDSModePerformance" = "效能模式";
+"ThreeDSModeCompatibility" = "兼容模式";
+"ThreeDSModeQuality" = "畫質優先";
+"ThreeDSNotSupportImportSave" = "3DS 遊戲暫不支援匯入存檔";
+"ThreeDSNotSupportShareSave" = "3DS 遊戲暫不支援分享存檔";
+"ThreeDSBetaAlertTitle" = "3DS 實驗性版本";
+"ThreeDSBetaAlertDetail" = "為咗令你可以更早體驗3DS遊戲，Manic EMU已推出3DS功能，但目前仍處於實驗階段，部分效能有待進一步優化。
+
+以下功能暫時缺失：
+❌ AirPlay全螢幕模式
+❌ 自動即時存檔
+❌ 加速功能
+
+如3DS出現不穩定情況，請參閱「常見問題」或加入我哋嘅頻道尋求協助。我哋會持續優化模擬器效能，你嘅理解同支持將幫助我哋打造更完美嘅遊戲體驗。我哋一直努力為你創造更好嘅遊戲環境。";
+"ThreeDSNoSupportDeviceTitle" = "裝置效能不足";
+"ThreeDSNoSupportDeviceDetail" = "當前裝置可能無法支援3DS模擬，繼續執行或會導致不可預測嘅異常";
+
+"GameImportBadFile" = "導入失敗：\"%@\"檔案損毀或出現未知錯誤，請嘗試其他ROM檔案";
+"Game3DSDecryptFailed" = "導入失敗：\"%@\"解密失敗，請嘗試其他ROM檔案";
+"Game3DSGameNotExist" = "匯入更新失敗，\"%@\"：遊戲主體尚未安裝！";
+
+"Game3DSInputTitle" = "請輸入內容";
+"ControllerMappingGuideTitle" = "點擊畫面按鈕開始按鍵映射";
+"ControllerMappingGuideBegin" = "開始映射「%@」
+按下控制器按鍵完成映射...";
+"ControllerMappingReset" = "重設";
+"ControllerMappingNoFouond" = "無法識別此按鍵設定";
+"FlexSkinSettingError" = "介面尚未準備好，請稍後再試";
+"SkinPreviewTitle" = "預覽";
+"FullScreenWhenConnectControllerTitle" = "自動全螢幕";
+"FullScreenWhenConnectControllerDetail" = "連接控制器時自動進入全螢幕模式";
+"JoinDiscordTitle" = "加入Discord（非官方）";
+"JoinDiscordAlertMessage" = "感謝玩家 %@ 創建此Discord頻道，是否繼續加入？";
+"FlexSkinGuideTitle" = "拖曳或雙指縮放調整畫面";
+"DownloadFailed" = "下載失敗";
+"RemoveDownloadTask" = "是否停止下載並移除「%@」？";
+"GameSettingResolution" = "解析度 %@";
+"GameSettingSwapScreen" = "切換畫面";
+"NotSupportGameSetting" = "%@ 平台不支援此選項";
+
+"ThemeSettingTitle" = "主題設定";
+"ThemeSettingDetail" = "應用程式圖示、主題顏色、遊戲封面設定、主機排序";
+"ThemeDesktopIconTitle" = "應用程式圖示";
+"ThemeDesktopIconDetail" = "更多圖示即將推出...";
+"ThemeThemeColorTitle" = "主題顏色";
+"ThemeCoverStyleTitle" = "封面風格與圓角";
+"ThemeCoverStyleName" = "風格 %d";
+"ThemePlatformOrderTitle" = "主機排序";
+"ThemePlatformOrderDetail" = "長按並拖動以調整遊戲列表中的主機顯示順序";
+"ThemeColorLimitToast" = "已達主題顏色數量上限";
+"ThemeColorSystemNotAllowEdit" = "預設主題顏色不可編輯";
+"EditTitle" = "編輯";
+"RemoveTitle" = "移除";
+"On" = "開啟";
+"Off" = "關閉";
+"AmiiboNotSearching" = "NFC 搜尋未啟用時無法載入 Amiibo";
+"ConsoleHomeTitle" = "主選單";
+"AmiiboTitle" = "載入 Amiibo";
+"ThreeDSHomeMenuNotRunning" = "主選單未運行";
+"ThreeDSImportSaveFailed" = "匯入 %@ 失敗：無法識別的存檔";
+"ThreeDSUpdateInstallSuccess" = "更新已成功安裝";
+"OnlineCoverFetchFailed" = "圖片下載失敗";
+"JITMenuDesc" = "在不支援的環境啟用 JIT 可能導致程式崩潰";
+"ShaderModeTitle" = "進階光影";
+"ShaderModeDesc" = "提升部分遊戲紋理精度（可能影響效能）";
+"NoDownloadTask" = "沒有進行中的下載";
+"NoGameCoverResult" = "找不到遊戲封面";
+"NoContentResult" = "沒有內容";
+"OpenFilePermissionsLimit" = "無權限開啟 %@";
+"SevenZipDecompressError" = "7z 檔案損毀或已加密";
+"ForceSquareRatioTitle" = "強制正方形比例";
+"ForceSquareRatioDetail" = "啟用時封面採用正方形比例，停用時保留原始比例";
+
+"AutoSaveStateTitle" = "自動即時存檔";
+"GamesThemeTitle" = "遊戲庫";
+"GamesPerRowTitle" = "每行遊戲數目（iPhone）";
+"GamesHideScrollIndicator" = "隱藏滾動指示器";
+"ConsoleLanguageDesc" = "部分遊戲可能需要手動設定地區與語言";
+"JitNoSupportDesc" = "目前環境不支援JIT編譯功能";
+
+"RenderRightEyeTitle" = "右眼渲染";
+"RenderRightEyeDesc" = "停用右眼渲染可提升部分遊戲運行效率，但可能導致畫面閃爍等問題";
+"DisableTitle" = "停用";
+"EnableTitle" = "啟用";
+"NoSaveStateToast" = "暫無%@";
+"DeleteSelectedSaveStateAlert" = "是否刪除選中嘅「%@」？\n刪除後無法恢復！";
+"DeleteAllSaveStateAlert" = "未選中任何項目，是否刪除所有「%@」？\n刪除後無法恢復！";
+"AICoverSearchDesc" = "偵測到非英文搜尋，升級高級會員後Manic EMU將使用最新AI技術實現多語言搜尋";
+"MaxTextSizeAllowDesc" = "此選項最多支援%@個字符";
+
+"PlatformSelectionTitle" = "執行平台選擇";
+"PlatformSelectionDetail" = "請為%@選擇預設執行平台";
+"PlatformChange" = "指定執行平台";
+"BIOSDesc" = "部分平台需要BIOS才能運作";
+"BIOSImported" = "已匯入";
+"BIOSAlert" = "部分平台需BIOS檔案才能正常運作，BIOS版權屬硬件生產商所有。匯入時請遵守當地法例。\n\n匯入問題請加入社群獲取協助。";
+"UnknownPlatform" = "未知平台";
+"UnknownPlatformGameSelectWarn" = "未分配平台嘅遊戲無法選取";
+"BIOSImportSuccess" = "%@匯入成功!";
+"BIOSImportFailed" = "檔案匯入錯誤!";
+
+"HideGameTitleDesc" = "隱藏遊戲標題";
+"HideGroupTitleDesc" = "隱藏組別標題";
+"GroupTitleStyelDesc" = "組別標題樣式";
+"GroupTitleStyelAbbr" = "縮寫";
+"GroupTitleStyelFull" = "全稱";
+"GroupTitleStyelBrand" = "品牌";
+"CopyLaunchLinkTitle" = "複製啟動連結";
+"AskIfNeedToSaveCover" = "啟動連結已複製到剪貼簿。是否將盒面圖片儲存到相簿？";
+"SaturnBiosAlertTitle" = "BIOS檔案缺失";
+"SaturnBiosAlertDetail" = "世嘉土星可用HLE模擬無需BIOS檔案，但使用BIOS可減少圖形錯誤";
+"BiosAddTitle" = "加入BIOS";
+"StartGameWithoutBiosTitle" = "無BIOS啟動";
+
+"ThreeDSAdvanceSettingMode" = "進階模式";
+"ThreeDSAdvanceSettingTitle" = "進階設定";
+"ThreeDSBasicSettingMode" = "基本模式";
+"ShareConfigButtonTitle" = "分享設定";
+"ImportConfigButtonTitle" = "導入設定";
+"ShareFileFailedMissing" = "分享失敗：檔案不存在";
+"ReadConfigFileFailed" = "無法讀取設定檔案";
+"SwitchEmulationCore" = "切換核心";
+"SwitchEmulationCoreDetail" = "切換 %@ 的模擬核心\n切換核心會令之前核心產生的存檔無法讀取。要存取存檔，請切換回原有核心";
+"BeetleSaturnNoSupportCheat" = "Beetle Saturn 核心暫不支援金手指設定。如需使用金手指，請切換至 Yabause 核心";
+"CurrentTitle" = "目前";
+"NewSkinDesc" = "Manic EMU 支援 .manicskin 同 .deltaskin 格式嘅皮膚。請注意：導入皮膚嘅規格需同目前平台匹配，否則唔會顯示喺皮膚列表。\n另外，我哋提供第三方皮膚社群入口。呢啲社群唔係 Manic EMU 官方營運，下載皮膚時請嚴格遵守各網站服務條款";
+"VisitSite" = "訪問 %@";
+"OpenFile" = "開啟檔案";
+"WebViewDownloadBegin" = "下載已開始";
+"RespectSilentMode" = "遵循靜音模式";
+"RespectSilentModeDesc" = "啟用後，Manic EMU 只會喺非靜音模式播放音訊";
+"SaturnISONoSwitchCore" = "Sega Saturn .iso 格式遊戲唔支援切換核心";
+"EnableFullScreenTitle" = "啟用全螢幕";
+"DisableFullScreenTitle" = "停用全螢幕";
+"SimulateBlowingTitle" = "模擬吹氣";
+"PaletteTitle" = "調色板";
+"SkinRestDesc" = "重置皮膚後，遊戲分配嘅皮膚亦會恢復為預設皮膚";
+"SkinResetForAll" = "重置所有平台皮膚";
+"SkinResetForPlatform" = "重置 %@ 皮膚";
+"SkinDebug" = "皮膚測試區";
+
+"ImportMissingFile" = "導入%@失敗：缺少文件%@";
+"MultiDiscBuilder" = "多光碟助手";
+"MultiDiscBuilderDesc" = "此工具為多光碟遊戲(.cue/.bin或.chd)建立可換碟的.m3u檔案。若已有.m3u檔案，請跳過此步驟並直接透過遊戲導入功能添加";
+"M3uFileShare" = "分享.m3u檔案";
+"M3uFileImport" = "加入遊戲庫";
+"MultiDiscAddFile" = "加入%@檔案";
+"MultiDiscImportErrorConflict" = "錯誤：不可混合.cue與.chd檔案";
+"MultiDiscImportErrorMissing" = "錯誤：找不到.cue或.chd檔案";
+"GenerateM3uFailed" = "生成.m3u檔案失敗";
+"MultiDiscCloseAlert" = ".m3u檔案已生成。導入遊戲庫後可關閉此頁面";
+"MultiDiscContinueClose" = "繼續關閉";
+"SwapDisk" = "更換光碟";
+"NotSupportSwapDisk" = "非多光碟遊戲";
+"TransferPakDesc" = "Transfer Pak可同步GB/GBC資料至N64。需同時導入ROM檔(.gb/.gbc)及存檔(.sav)方可啟用";
+"TransferPakFromLibrary" = "從遊戲庫導入";
+"TransferPakFromLibraryDesc" = "僅顯示具存檔的遊戲。\n選擇的GB/GBC遊戲必須與N64 ROM相符，否則可能失敗";
+"TransferPakNoGames" = "無相容遊戲";
+"TransferPakFromFiles" = "從檔案導入";
+"TransferPakOn" = "已啟用";
+"TransferPakOff" = "已停用";
+"TransferPakImportError" = "錯誤：需同時導入ROM及存檔（共需2個檔案）";
+"ShowControlsTitle" = "顯示控制項";
+"HideControlsTitle" = "隱藏控制項";
+
+"DesignedFor" = "為 %@ 設計";

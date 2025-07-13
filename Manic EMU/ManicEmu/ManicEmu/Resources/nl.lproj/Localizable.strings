@@ -1,0 +1,568 @@
+/*
+  Localizable.strings
+  ManicEmu
+
+  Created by Aoshuang Lee on 2024/12/25.
+  Copyright © 2024 Manic EMU. All rights reserved.
+*/
+
+
+// Import
+"ImportAddCloudServiceTitle" = "Clouddiensten";
+"ImportAddLanServiceTitle" = "Lokaal netwerk";
+"ImportAddDiscoverServiceTitle" = "Ontdekservice";
+"GoogleDrive" = "Google Drive";
+"Dropbox" = "Dropbox";
+"OneDrive" = "OneDrive";
+"BaiduYun" = "BaiduYun";
+"AliYun" = "AliYun";
+"AddImportServiceHeaderTitle" = "Service toevoegen";
+"ImportServiceDelete" = "Service verwijderen";
+"ImportAliyunNotGetDriveId" = "AliYun-service toevoegen mislukt: map-ID niet gevonden";
+"ImportDownloadError" = "Downloadfout\n%@";
+"ImportDownloadContinue" = "Download wordt voortgezet...\n%@";
+"LandServiceEditServerName" = "Servernaam";
+"LandServiceEditServerNamePlaceholder" = "Mijn SMB-server";
+"LandServiceEditHost" = "Serveradres";
+"LandServiceEditUserName" = "Gebruikersnaam";
+"LandServiceEditPassword" = "Wachtwoord";
+"LandServiceEditRequiredPlaceholder" = "Verplicht";
+"LandServiceEditOptionalPlaceholder" = "Optioneel";
+"LandServiceEditConnect" = "Verbinden";
+"AddLandServiceSuccess" = "%@ succesvol toegevoegd";
+"AddLandServiceFailed" = "%@ toevoegen mislukt\nControleer je netwerk, serverstatus of ingevoerde gegevens";
+"AddLandServiceTimeout" = "Verbinding met service verlopen";
+"FilesImporterErrorFileExist" = "\"%@\" bestaat al en wordt niet geïmporteerd";
+"FilesImporterErrorBadCopy" = "Importeren van \"%@\" mislukt: fout tijdens kopiëren";
+"FilesImporterErrorBadExtension" = "Importeren van \"%@\" mislukt: bestandstype niet herkend";
+"FilesImporterErrorNoPermission" = "Geen toegang tot %@";
+"FilesImporterErrorUnableToHash" = "Importeren van \"%@\" mislukt: hash berekenen niet mogelijk";
+"FilesImporterErrorWriteDatabase" = "Importeren van \"%@\" mislukt: database schrijven mislukt";
+"GameSaveMatchTitle" = "Opslag aan game koppelen";
+"FilesImporterErrorSaveNoMatchGames" = "\"%@\" kan niet automatisch gekoppeld worden. Koppel handmatig";
+"GameSaveAlreadyExistTitle" = "Opslag bestaat al";
+"FilesImporterErrorSaveAlreadyExist" = "Importeren van \"%@\" mislukt: overschrijven?";
+"GameSaveMathToMuchTitle" = "Meerdere matches";
+"FilesImporterErrorSaveMathToMuch" = "Importeren van \"%@\" mislukt: meerdere games gevonden. Koppel handmatig";
+"FilesImporterErrorSkinBadFile" = "Importeren van %@ mislukt: skinbestand is beschadigd";
+"PasteImporterErrorNoMatchContent" = "Geen importeerbare inhoud in klembord";
+"FilesDownloadErrorFileExist" = "%@ is al gedownload";
+"FilesImporterErrorEmptyContent" = "Geen bronnen om te importeren";
+"LanServiceInitFailed" = "%@-service initialiseren mislukt";
+"SMBLoginFailed" = "SMB-aanmelding mislukt%@";
+"SMBListFilesFailed" = "Bestanden ophalen mislukt%@";
+"SMBListFilesTypeError" = "Dit is geen map";
+"DropErrorLoadFailed" = "Bestand laden mislukt";
+"DropErrorNotSupportFile" = "Bestandstype niet ondersteund";
+"ImportErrorTitle" = "Importfout";
+"ImportGameSuccessTitle" = "Game geïmporteerd";
+"ImportGameSuccessDetail" = "%@\nis toegevoegd aan je bibliotheek. Nu bekijken?";
+"ImportGameSuccessDetailForOne" = "\"%@\"\nis toegevoegd. Direct spelen?";
+"ImportSkinSuccessTitle" = "Skin geïmporteerd";
+"ImportSkinSuccessDetail" = "\"%@\"\nis toegevoegd. Nu bekijken?";
+"ImportGameSaveSuccessTitle" = "Opslag geïmporteerd";
+"ImportGameSaveSuccessDetail" = "\"%@\"\nis aan de game gekoppeld";
+"ImportGameSaveSuccessForOne" = "\"%@\"\nis geïmporteerd. Direct spelen?";
+"ImportGameSaveFailedNoGameError" = "\"%@\" importeren mislukt: je hebt nog geen games!";
+"DownloadCompletion" = "Download voltooid";
+"QQChannelName" = "QQ-kanaal";
+"NotSupportPasswordZip" = "\"%@\" kan niet uitgepakt worden: versleutelde ZIP wordt niet ondersteund";
+"UnzipFailed" = "\"%@\" uitpakken mislukt";
+"NoSupportInZip" = "\"%@\" bevat geen ondersteunde bestanden";
+"IPCopy" = "Adres gekopieerd";
+"ImportServiceListFilesTitle" = "Bestanden";
+"ImportServiceListFilesDetail" = "Importeer games, skins of opslag via bestanden of iCloud";
+"ImportServiceListWiFiTitle" = "WiFi";
+"ImportServiceListWiFiOffDetail" = "Bestanden overdragen via browser in hetzelfde netwerk";
+"ImportServiceListWiFiOnDetail" = "%@\nGebruik browser om bestanden over te dragen";
+"ImportServiceListPasteTitle" = "Klembord lezen";
+"ImportServiceListPasteDetail" = "Ondersteunt bestanden van macOS en Bestanden-app";
+"ImportHowTo" = "Hoe importeer ik?";
+"ImportTopHintTitle" = "Een verhaal vol dromen en avonturen begint hier!";
+"ImportDragAndDropTips" = "Sleep bestanden naar elk Manic EMU-scherm om ze over te dragen";
+"ImportChannelTips" = "Vragen? Sluit je aan bij %@ voor hulp";
+"ToastConnectCloudDriveSuccess" = "Verbonden met %@";
+"AlertImportFilesSuccess" = "Bronnen geïmporteerd";
+"ErrorConnectCloudDrive" = "Kan geen verbinding maken met cloudservice";
+"ErrorUnknown" = "Onbekende fout";
+"ReasonConncetCloudDriveFail" = "Controleer je netwerk of autorisatie. Verwijder en voeg de service opnieuw toe";
+
+// Common
+"TabbarTitleGames" = "Games";
+"TabbarTitleImport" = "Importeren";
+"TabbarTitleSettings" = "Instellingen";
+"SelectAll" = "Alles selecteren";
+"DeSelectAll" = "Selectie opheffen";
+"CloudDriveBrowserDownload" = "Downloaden";
+"CancelTitle" = "Annuleren";
+"CheckTitle" = "Bekijken";
+"StartGameTitle" = "Nu spelen";
+"ConfirmTitle" = "Bevestigen";
+"SaveTitle" = "Opslaan";
+"NameTitle" = "Naam";
+"TimeAgoMinuteFormat" = "%d minuten geleden";
+"TimeAgoHourFormat" = "%d uur geleden";
+"TimeAgoDayFormat" = "%d dagen geleden";
+"TimeAgoWeekFormat" = "%d weken geleden";
+"TimeAgoMonthFormat" = "%d maanden geleden";
+"TimeAgoYearFormat" = "%d jaar geleden";
+"TimeDurationHourAndMinuteFormat" = "%d uur %d min";
+"TimeDurationHourFormat" = "%d uur";
+"TimeDurationMinuteFormat" = "%d min";
+"FatalErrorTitle" = "Kritieke fout";
+"FatalErrorDesc" = "Systeembronnen laden mislukt. Manic EMU kan instabiel worden";
+"LodingFailedTitle" = "Laden mislukt";
+"AirPlayDesc" = "Start nu je avontuur!";
+"ToastSuccess" = "Opgeslagen";
+"ToastFailed" = "Opslaan mislukt";
+
+// Games
+"GamesSearchPlaceHolder" = "Zoek gamenaam";
+"GamesRename" = "Hernoemen";
+"GamesModifyCover" = "Cover aanpassen";
+"GamesSpecifySkin" = "Skin instellen";
+"GamesCheatCode" = "Cheatcode";
+"GamesShareRom" = "ROM delen";
+"GamesCheckSave" = "Handmatige opslagstatus bekijken";
+"GamesImportSave" = "Gameopslag importeren";
+"GamesShareSave" = "Gameopslag exporteren";
+"GamesDelete" = "Game verwijderen";
+"GamesRandom" = "Ik weet niet wat ik moet spelen, verras me";
+"LoadGameErrorRomNotExist" = "Game laden mislukt: ROM bestaat niet";
+"GamesListEmptyGuideLeft" = "Klik op de";
+"GamesListEmptyGuideRight" = "hieronder om games te importeren";
+"GamesListEmptyWelcomeLeft" = "Welkom in de wereld van";
+"GamesListEmptyWelcomeRight" = "";
+"GamesListEmptyWarnning" = "Zorg ervoor dat je ROMs legaal verkregen zijn";
+"DeleteGameAlertDetail" = "ROM, opslag en cheatcodes worden permanent verwijderd!";
+"DeleteSkinAlertDetail" = "Skin wordt permanent verwijderd!";
+"DeleteGameGameStateAlertTitle" = "Handmatige opslagstatus verwijderen";
+"DeleteGameGameStateAlertDetail" = "Handmatige opslagstatus wordt permanent verwijderd!";
+"confirmDelte" = "Bevestig verwijderen";
+
+// Controllers
+"ControllersTouchName" = "Touchcontroller";
+"ControllersHeaderTitle" = "Controllers";
+"ControllersPlayerIndex" = "Speler %d";
+"ControllersPlayerUnset" = "Niet toegewezen";
+"ControllersHowToConnect" = "Hoe verbind ik een controller?";
+
+// GameInfo
+"ReadyGameInfoSubTitle" = "%@ gespeeld · Totaal %@";
+"ReadyGameInfoNeverPlayed" = "Nog niet gespeeld. Start je avontuur!";
+"ReadyEditCoverTakePhoto" = "Foto maken";
+"ReadyEditCoverAlbum" = "Fotobibliotheek";
+"ReadyEditCoverFile" = "Bestand";
+"ReadyEditCoverSearch" = "Zoeken";
+"ReadySegmentManualSave" = "Handmatige opslagstatus";
+"ReadySegmentAutoSave" = "Automatische opslagstatus";
+"ReadyEditTitleFailed" = "Hernoemen mislukt: naam mag niet leeg zijn";
+"ReadyEditTitleSuccess" = "Hernoemd";
+"ReadyGameSaveStatesEmpty" = "Geen opslagstatus";
+"GameSaveGuideBecomTitle" = "Word";
+"GameSaveGuideMemberTitle" = "lid";
+"GameSaveGuideDesc" = "Ontgrendel onbeperkte handmatige opslag en tot 50 automatische opslagpunten";
+"GameSaveUnCompatibleTitle" = "Compatibiliteitsprobleem";
+"GameSaveUnCompatibleDetail" = "Deze opslagstatus is gemaakt met %@. Huidige omgeving: %@. Onverenigbaarheid kan problemen veroorzaken!";
+"GameSaveStateForceLoad" = "Toch laden";
+"GameSaveContinue" = "Doorgaan";
+"GameSaveTitle" = "Opslag %d";
+
+// Skin
+"SkinNavigationSubTitleCommon" = "Manic EMU ondersteunt .deltaskin-bestanden";
+"SkinNavigationSubTitleSpecifiedGame" = "Skin instellen voor %@";
+"SkinSegmentPortraitTitle" = "Portret";
+"SkinSegmentLandscapeTitle" = "Landschap";
+"SkinAddTitle" = "Skin toevoegen";
+"HowToFetch" = "Hoe te verkrijgen";
+"SkinDelete" = "Skin verwijderen";
+"DefaultSkinCannotEdit" = "Standaardskin kan niet bewerkt worden";
+
+// History
+"HistoryHeaderTitle" = "Speelgeschiedenis";
+"HistoryFavouriteTitle" = "Favoriet";
+"HistoryEmptyTitle" = "Geen geschiedenis";
+"HistoryEmptyImportGame" = "Game importeren";
+"HistoryEmptyStartGame" = "Nu spelen";
+
+// Settings
+"LeftHandTitle" = "Linkshandige modus";
+"LeftHandDetail" = "Spiegel joystick, DPad en knoppen";
+"QuickGameTitle" = "Snel starten";
+"QuickGameDetail" = "Sla het voorbereidingsscherm over";
+"AirPlayTitle" = "AirPlay volledig scherm";
+"AirPlayDetail" = "Spelbeeld wordt volledig gespiegeld";
+"iCloudTitle" = "iCloud-sync";
+"iCloudDetail" = "Sync games, skins, opslag en instellingen tussen apparaten";
+"AppIconTitle" = "App-pictogram";
+"WidgetTitle" = "Widgets";
+"QATitle" = "FAQ";
+"FeedbackTitle" = "Feedback";
+"ShareAppTitle" = "Deel Manic EMU";
+"JoinQQTitle" = "Word lid van QQ-kanaal";
+"JoinTelegramTitle" = "Word lid van Telegram";
+"ClearCacheTitle" = "Cache wissen";
+"LanguageTitle" = "Taal";
+"UserAgreementTitle" = "Gebruikersovereenkomst";
+"PrivacyPolicyTitle" = "Privacybeleid";
+"GeneralSettingTitle" = "Algemene instellingen";
+"AdvanceSettingTitle" = "Geavanceerd";
+"SupportSettingTitle" = "Ondersteuning";
+"OthersSettingTitle" = "Overig";
+"RatingTitleLeft" = "Beoordeel";
+"RatingTitleRight" = "";
+"RatingDetail" = "Geef ons een 5-sterrenbeoordeling als je ons waardeert";
+"iCloudDisableTitle" = "iCloud niet beschikbaar";
+"iCloudDisableDetail" = "Ga naar 'Instellingen > Apple ID > iCloud' en zorg dat iCloud Schakelbaar is voor Manic EMU";
+"iCloudSyncConfilictTitle" = "iCloud-conflict";
+"iCloudSyncConfilictDetail" = "Cloudbestand:\n%@\n\nLokaal bestand:\n%@";
+"iCloudSyncConfilictSaveiCloud" = "Cloud behouden";
+"iCloudSyncConfilictSaveLocal" = "Lokaal behouden";
+"SettingsNonMemberDesc" = "Jij bent de hoofdpersoon";
+"ThanksSupportDesc" = "Bedankt voor je steun";
+"ThanksCommingDesc" = "Bedankt dat je";
+"PlayGameDesc" = "speelt";
+"NoEmailSetting" = "E-mailadres niet ingesteld";
+"IDCopy" = "ID gekopieerd";
+"SendEmailSuccess" = "E-mail verzonden";
+"SendEmailFailed" = "E-mail mislukt: %@";
+"iCloudTipsTitle" = "iCloud-sync inschakelen";
+"iCloudTipsDetail" = "Sync vereist iCloud-opslagruimte. Bij onvoldoende ruimte kan sync mislukken";
+"iCloudConfirm" = "Doorgaan";
+
+// Play
+"LoadingTitle" = "Downloaden";
+"LoadRomSuccess" = "%@ gedownload. Start het spel!";
+"GameSettingSaveState" = "Opslaan";
+"GameSettingQuickLoadState" = "Snel laden";
+"GameSettingVolume" = "Volume";
+"GameSettingFastForwardResume" = "Normale snelheid";
+"GameSettingFastForward" = "Versnellen %@";
+"GameSettingStateList" = "Opslaglijst";
+"GameSettingSkins" = "Skins instellen";
+"GameSettingFilter" = "Filter";
+"GameSettingScreenShot" = "Screenshot";
+"GameSettingHapticOff" = "Trilling uit";
+"GameSettingHapticSoft" = "Zwak";
+"GameSettingHapticLight" = "Licht";
+"GameSettingHapticMedium" = "Gemiddeld";
+"GameSettingHapticHeavy" = "Zwaar";
+"GameSettingHapticRigid" = "Hard";
+"GameSettingControllerTypeDPad" = "DPad";
+"GameSettingControllerTypeStick" = "Joystick";
+"GameSettingAirplay" = "AirPlay";
+"GameSettingControllerSetting" = "Controller";
+"GameSettingOrientationAuto" = "Automatisch draaien";
+"GameSettingOrientationPortrait" = "Portret vergrendelen";
+"GameSettingOrientationLandscape" = "Landschap vergrendelen";
+"GameSettingFunctionSort" = "Functies ordenen";
+"GameSettingReload" = "Herstarten";
+"GameSettingQuit" = "Afsluiten";
+"GameSaveStateSuccess" = "Opslagstatus opgeslagen";
+"GameSaveStateLoadFailed" = "Laden mislukt: opslagstatus is beschadigd";
+"GameSaveStateLoadSuccess" = "Opslagstatus geladen";
+"GameSaveStateQuickLoadFailed" = "Geen handmatige opslag. Gebruik 'Opslaglijst' voor automatische opslag";
+"GameSaveListTitle" = "Opslagstatus";
+"GameCheatActivateFailed" = "%@\nCheatcode is ongeldig";
+"GameCheatActivateSuccess" = "%@\nGeactiveerd";
+"AirPlayingTitle" = "Beeld wordt gespiegeld via AirPlay";
+"VolumeOff" = "Volume uit";
+"VolumeOn" = "Volume aan";
+"FunctionSortDesc1" = "Standaard functies voor officiële skins";
+"FunctionSortDesc2" = "Sleep om volgorde aan te passen";
+"ManualGameSaveCountLimit" = "Maximaal aantal handmatige opslagpunten bereikt. Word lid voor onbeperkt opslaan";
+"FastForwardSpeedLimit" = "Maximale snelheid x2. Word lid voor x5 versnelling";
+"ResetSpeed" = "Normale snelheid";
+"GoToUpgrade" = "Upgraden";
+"SaveStateTooFrequent" = "Te vaak opgeslagen";
+"LoadStateTooFrequent" = "Te vaak geladen";
+
+// CheatCode
+"CheatCodeNamePlaceHolder" = "Voer naam in";
+"AutoDetectCheatTypeName" = "Automatisch detecteren";
+"AutoDetectFormat" = "Code wordt automatisch herkend";
+"CheatCodeFormatError" = "Ongeldige cheatcode";
+"CheatCodeEmptyTitle" = "Geen cheatcodes";
+"CheatCodeEmptyGuideLeft" = "Klik op";
+"CheatCodeEmptyGuideRight" = "linksboven om een cheatcode toe te voegen";
+"EnableCheatCodeAlertTitle" = "Cheatcode activeren";
+"EnableCheatCodeAlertDetail" = "Cheatcodes zijn gameversie-afhankelijk en kunnen instabiliteit veroorzaken. Gebruik op eigen risico.";
+
+// 滤镜
+"FilterSectionHeaderTitle" = "Videofilters";
+"FilterOriginTitle" = "Origineel";
+
+// 内购
+"PurchaseAdcancedFeaturesTitle" = "Ontgrendel geavanceerde functies";
+"AdcancedFeaturesDetail" = "
+「🎮 Ultieme ervaring · Direct ontgrendeld」
+🔥 Onbeperkte opslag: Verwijder de limiet van 3
+🚀 5x versnelling: Bepaal zelf het tempo
+💎 Cheatcode-vrijheid: Eindeloze mogelijkheden
+✨ Visuele revolutie: Exclusieve filters
+";
+"PurchaseImportFeaturesTitle" = "Cloudimport inschakelen";
+"ImportFeaturesDetail" = "
+☁️ 「Cloudconnectie · Direct importeren」
+✅ Google Drive, Dropbox, OneDrive
+✅ BaiduYun, AliYun
+⚡ Ondersteuning voor WebDAV/SMB
+";
+"PurchaseControllerFeaturesTitle" = "Ontgrendel externe controllers";
+"ControllerFeaturesDetail" = "
+🕹️ 「Complete controllerondersteuning」
+🎮 Joy-Con, DUALSHOCK, Xbox, en meer
+⌨️ Bluetooth-controllers/toetsenborden
+✨ Multiplayer-ondersteuning
+🎲 Controle revolutie: Van solo naar teamplay
+";
+"PurchaseAirPlayFeaturesTitle" = "Ontgrendel AirPlay";
+"AirPlayFeaturesDetail" = "
+📺 「Groot scherm · Zonder beperkingen」
+🔓 AirPlay zonder compressie
+🛋️ Schakel naadloos tussen apparaten
+🎮 Beeld + controller = ultieme ervaring
+";
+"PurchaseiCloudFeaturesTitle" = "iCloud-sync inschakelen";
+"iCloudFeaturesDetail" = "
+☁️ 「Sync tussen apparaten · Altijd beschikbaar」
+🎮 Games, opslag, instellingen syncen
+🔒 Beveiligde cloudback-ups
+🔄 Speel verder op elk apparaat
+";
+"AdvanceFeatureDescLabel1" = "Tot 5x versnellen";
+"AdvanceFeatureDescLabel2" = "Onbeperkte opslag";
+"AdvanceFeatureDescLabel3" = "Onbeperkte cheatcodes";
+"AdvanceFeatureDescLabel4" = "Filters vrij schakelen";
+"AdvanceFeatureDescLabel5" = "Automatisch opslaan";
+"RestorePurchaseButton" = "Aankoop herstellen";
+"AnnualDescription" = "Jaarlijks lidmaatschap";
+"MonthlyDescription" = "Maandelijks lidmaatschap";
+"ForeverDescription" = "Lifetime · Eenmalige betaling";
+"SubscriptionPromotional" = "%d dagen gratis";
+"PurchasePricePerYear" = "/jaar";
+"PurchasePricePerMonth" = "/maand";
+"PromptLabelForYear" = "50%% korting";
+"PromptLabelForMonth" = "Proefprijs";
+"PromptLabelForForever" = "Meest voordelig";
+"GetProductsFailedTitle" = "Producten ophalen mislukt";
+"TermOfServiceTitle" = "Servicevoorwaarden";
+"AnnualMemberTitle" = "Super Jaarlid";
+"MonthlyMemberTitle" = "Maandelijkse avonturier";
+"ForeverMemberTitle" = "Lifetime lid";
+"PurchaseVerifiedFailed" = "Betaling verificatie mislukt. Herstart de app";
+"PurchaseCancel" = "Betaling geannuleerd";
+"PurchasePending" = "Betaling in behandeling";
+"PurchaseUnknown" = "Onbekende status";
+"PurchaseErrorDesc" = "Betaling mislukt. Controleer je netwerk";
+"PurchaseFailedTitle" = "Betaling mislukt";
+"RestoreSuccessDesc" = "Aankoop hersteld!";
+"RestoreEndDesc" = "Geen aankoop gevonden";
+"TrialDesc" = "Gratis proefperiode. Altijd annuleerbaar";
+"SubscriptionPurchaseButtonTitle" = "Start %d dagen gratis";
+"YearSubscriptionDisableDesc" = "Je bent jaarlid";
+"MonthSubscriptionDisableDesc" = "Je bent maandlid";
+"ForeverSubscriptionDisableDesc" = "Je hebt een lifetime lidmaatschap";
+"ChangeSubscription" = "Abonnement wijzigen";
+"UpgradePurchase" = "Upgraden";
+"ForeverPlanDesc" = "Geniet van alle toekomstige functies";
+"BuyNowTitle" = "Nu kopen";
+"SettingsFreeTrialDesc" = "%d dagen gratis uitproberen";
+"Hi" = "Hoi, ";
+
+// Permission
+"PrePermissionPhotoTitle" = "Manic EMU toegang tot je fotobibliotheek geven?";
+"PrePermissionPhotoMessage" = "Toegang is nodig om screenshots op te slaan en covers te selecteren";
+"PrePermissionPhotoCancel" = "Nee";
+"PrePermissionPhotoConfirm" = "Toestaan";
+"DeniedPermissionPhotoTitle" = "Geen toegang tot fotobibliotheek!";
+"DeniedPermissionPhotoMessage" = "Manic EMU heeft toegang nodig om screenshots op te slaan";
+"DeniedPermissionPhotoCancel" = "Nee";
+"DeniedPermissionPhotoConfirm" = "Instellingen";
+"PrePermissionCameraTitle" = "Manic EMU toegang tot je camera geven?";
+"PrePermissionCameraMessage" = "Toegang is nodig om gamecovers te maken";
+"PrePermissionCameraCancel" = "Nee";
+"PrePermissionCameraConfirm" = "Toestaan";
+"DeniedPermissionCameraTitle" = "Geen cameratoegang!";
+"DeniedPermissionCameraMessage" = "Manic EMU heeft toegang nodig voor gamecovers";
+"DeniedPermissionCameraCancel" = "Nee";
+"DeniedPermissionCameraConfirm" = "Instellingen";
+"DeniedPermissionMicTitle" = "Geen microfoontoegang!";
+"DeniedPermissionMicMessage" = "Manic EMU heeft microfoon nodig voor DS-games";
+"DeniedPermissionMicCancel" = "Nee";
+"DeniedPermissionMicConfirm" = "Instellingen";
+
+// Share
+"ShareAppSubtitle" = "Nodig je vrienden uit voor een avontuur!";
+"ShareRomFilesFailed" = "ROM delen mislukt";
+"ShareSaveFilesFailed" = "Opslag delen mislukt";
+"ShareFilesCopyFailed" = "Delen mislukt: kopiëren fout";
+"ShareFilesCompressFailed" = "Delen mislukt: comprimeren fout";
+
+"TurnOnAirPlayAsk" = "AirPlay is verbonden. Nu naar volledig scherm overschakelen?";
+
+"ThreeDSModePerformance" = "Prestatiemodus";
+"ThreeDSModeCompatibility" = "Compatibiliteitsmodus";
+"ThreeDSModeQuality" = "Grafische Prioriteit";
+"ThreeDSNotSupportImportSave" = "3DS-games ondersteunen momenteel het importeren van saves niet";
+"ThreeDSNotSupportShareSave" = "3DS-games ondersteunen momenteel het delen van saves niet";
+"ThreeDSBetaAlertTitle" = "Experimentele 3DS-versie";
+"ThreeDSBetaAlertDetail" = "Om je eerder 3DS-games te laten ervaren, heeft Manic EMU een experimentele 3DS-functie uitgebracht. Sommige optimalisaties zijn nog nodig.
+
+Tijdelijk niet beschikbaar:
+❌ AirPlay Volledig Scherm
+❌ Automatisch Opslaan
+❌ Versnellingsfunctie
+
+Bij problemen raadpleeg onze FAQ of join ons supportkanaal. We optimaliseren continu. Jouw steun helpt ons een perfecte ervaring te creëren. We werken hard voor jou!";
+"ThreeDSNoSupportDeviceTitle" = "Onvoldoende apparaatprestaties";
+"ThreeDSNoSupportDeviceDetail" = "Dit apparaat ondersteunt mogelijk geen 3DS-emulatie. Doorgaan kan onvoorspelbare fouten veroorzaken";
+
+"GameImportBadFile" = "Importeren mislukt: \"%@\" is beschadigd of er is een onbekende fout. Probeer een ander ROM-bestand";
+"Game3DSDecryptFailed" = "Importeren mislukt: Ontsleuteling van \"%@\" mislukt. Probeer een ander ROM-bestand";
+"Game3DSGameNotExist" = "Importeren update mislukt, \"%@\": Hoofdspel is niet geïnstalleerd!";
+
+"Game3DSInputTitle" = "Voer inhoud in";
+"ControllerMappingGuideTitle" = "Druk op het scherm om toetsen in te stellen";
+"ControllerMappingGuideBegin" = "Stel 「%@」 in
+Druk op de controllerknop...";
+"ControllerMappingReset" = "Resetten";
+"ControllerMappingNoFouond" = "Instelling niet herkend";
+"FlexSkinSettingError" = "Interface niet klaar, probeer later";
+"SkinPreviewTitle" = "Voorbeeld";
+"FullScreenWhenConnectControllerTitle" = "Automatisch volledig scherm";
+"FullScreenWhenConnectControllerDetail" = "Volledig scherm bij controllerverbinding";
+"JoinDiscordTitle" = "Word lid van Discord (Niet officieel)";
+"JoinDiscordAlertMessage" = "Bedankt aan speler %@ voor dit kanaal. Doorgaan?";
+"FlexSkinGuideTitle" = "Sleep of knijp om aan te passen";
+"DownloadFailed" = "Download mislukt";
+"RemoveDownloadTask" = "Download van \"%@\" annuleren?";
+"GameSettingResolution" = "Resolutie %@";
+"GameSettingSwapScreen" = "Scherm wisselen";
+"NotSupportGameSetting" = "Optie niet beschikbaar op %@";
+
+"ThemeSettingTitle" = "Thema";
+"ThemeSettingDetail" = "App-pictogrammen, themakleuren, coverinstellingen, consolevolgorde";
+"ThemeDesktopIconTitle" = "App-pictogrammen";
+"ThemeDesktopIconDetail" = "Meer pictogrammen binnenkort...";
+"ThemeThemeColorTitle" = "Themakleuren";
+"ThemeCoverStyleTitle" = "Coverstijl & hoeken";
+"ThemeCoverStyleName" = "Stijl %d";
+"ThemePlatformOrderTitle" = "Consolevolgorde";
+"ThemePlatformOrderDetail" = "Houd ingedrukt en sleep om de volgorde aan te passen";
+"ThemeColorLimitToast" = "Maximum aantal themakleuren bereikt";
+"ThemeColorSystemNotAllowEdit" = "Standaardkleuren kunnen niet worden bewerkt";
+"EditTitle" = "Bewerken";
+"RemoveTitle" = "Verwijderen";
+"On" = "Aan";
+"Off" = "Uit";
+"AmiiboNotSearching" = "Amiibo laden niet mogelijk bij inactieve NFC";
+"ConsoleHomeTitle" = "Hoofdmenu";
+"AmiiboTitle" = "Amiibo laden";
+"ThreeDSHomeMenuNotRunning" = "Hoofdmenu wordt niet uitgevoerd";
+"ThreeDSImportSaveFailed" = "Import %@ mislukt: Onbekend opslagbestand";
+"ThreeDSUpdateInstallSuccess" = "Update succesvol geïnstalleerd";
+"OnlineCoverFetchFailed" = "Afbeelding ophalen mislukt";
+"JITMenuDesc" = "JIT inschakelen in niet-ondersteunde omgevingen kan crashes veroorzaken";
+"ShaderModeTitle" = "Geavanceerde shaders";
+"ShaderModeDesc" = "Verbetert textuurnauwkeurigheid (kan prestaties beïnvloeden)";
+"NoDownloadTask" = "Geen actieve downloads";
+"NoGameCoverResult" = "Geen covers gevonden";
+"NoContentResult" = "Geen inhoud beschikbaar";
+"OpenFilePermissionsLimit" = "Geen rechten om %@ te openen";
+"SevenZipDecompressError" = "7z-bestand beschadigd of versleuteld";
+"ForceSquareRatioTitle" = "Vierkante verhouding forceren";
+"ForceSquareRatioDetail" = "Covers gebruiken vierkante verhouding (ingeschakeld) of origineel (uitgeschakeld)";
+
+"AutoSaveStateTitle" = "Automatisch statussen opslaan";
+"GamesThemeTitle" = "Spelbibliotheek";
+"GamesPerRowTitle" = "Spellen per rij (iPhone)";
+"GamesHideScrollIndicator" = "Scrollindicatoren verbergen";
+"ConsoleLanguageDesc" = "Regio- en taalinstellingen vereisen mogelijk handmatige configuratie voor bepaalde spellen";
+"JitNoSupportDesc" = "JIT-compilatie is niet beschikbaar in de huidige omgeving";
+"RenderRightEyeTitle" = "Rechteroog weergeven";
+"RenderRightEyeDesc" = "Uitschakelen verbetert prestaties bij sommige spellen, maar kan flikkeringen veroorzaken";
+"DisableTitle" = "Uitschakelen";
+"EnableTitle" = "Inschakelen";
+"NoSaveStateToast" = "Geen %@ beschikbaar";
+"DeleteSelectedSaveStateAlert" = "Geselecteerde «%@» verwijderen?\nVerwijderen is permanent!";
+"DeleteAllSaveStateAlert" = "Geen selectie. Alle «%@» verwijderen?\nVerwijderen is permanent!";
+"AICoverSearchDesc" = "Niet-Engelse zoekopdracht gedetecteerd. Upgrade naar Premium voor meertalig zoeken met AI";
+"MaxTextSizeAllowDesc" = "Ondersteunt maximaal %@ tekens";
+
+"PlatformSelectionTitle" = "Platformselectie";
+"PlatformSelectionDetail" = "Stel standaardplatform in voor %@";
+"PlatformChange" = "Platform Toewijzen";
+"BIOSDesc" = "Sommige platforms vereisen BIOS";
+"BIOSImported" = "Geïmporteerd";
+"BIOSAlert" = "Sommige platforms vereisen BIOS-bestanden. BIOS-auteursrechten zijn eigendom van fabrikanten. Houd u aan lokale wetten bij importeren.\n\nWord lid van onze community voor hulp.";
+"UnknownPlatform" = "Onbekend Platform";
+"UnknownPlatformGameSelectWarn" = "Niet-toegewezen spellen kunnen niet worden geselecteerd";
+"BIOSImportSuccess" = "%@ succesvol geïmporteerd!";
+"BIOSImportFailed" = "Incorrect bestand!";
+
+"HideGameTitleDesc" = "Speltitel verbergen";
+"HideGroupTitleDesc" = "Groepstitel verbergen";
+"GroupTitleStyelDesc" = "Groepstitelstijl";
+"GroupTitleStyelAbbr" = "Afk.";
+"GroupTitleStyelFull" = "Volledig";
+"GroupTitleStyelBrand" = "Merk";
+"CopyLaunchLinkTitle" = "Startlink kopiëren";
+"AskIfNeedToSaveCover" = "Startlink gekopieerd. Wilt u de hoes opslaan in uw fotoalbum?";
+"SaturnBiosAlertTitle" = "BIOS ontbreekt";
+"SaturnBiosAlertDetail" = "Sega Saturn emulatie via HLE werkt zonder BIOS, maar BIOS-bestand vermindert grafische fouten";
+"BiosAddTitle" = "BIOS toevoegen";
+"StartGameWithoutBiosTitle" = "Starten zonder BIOS";
+
+"ThreeDSAdvanceSettingMode" = "Geavanceerde Modus";
+"ThreeDSAdvanceSettingTitle" = "Geavanceerde Instellingen";
+"ThreeDSBasicSettingMode" = "Basis Modus";
+"ShareConfigButtonTitle" = "Configuratie Delen";
+"ImportConfigButtonTitle" = "Configuratie Importeren";
+"ShareFileFailedMissing" = "Delen mislukt: bestand bestaat niet";
+"ReadConfigFileFailed" = "Kan configuratiebestand niet lezen";
+"SwitchEmulationCore" = "Kern Wisselen";
+"SwitchEmulationCoreDetail" = "Verander emulatiekern voor %@\nKernwisseling maakt opslagen van de vorige kern onleesbaar. Ga terug naar de oorspronkelijke kern om ze te benaderen";
+"BeetleSaturnNoSupportCheat" = "De Beetle Saturn-kern ondersteunt momenteel geen cheatcodes. Schakel over naar de Yabause-kern indien nodig";
+"CurrentTitle" = "huidige";
+"NewSkinDesc" = "Manic EMU ondersteunt skins in .manicskin- en .deltaskin-formaten. Let op: geïmporteerde skins moeten overeenkomen met het huidige platform, anders verschijnen ze niet in de lijst.\nWe bieden ook toegang tot skin-communities van derden. Deze zijn niet officieel verbonden met Manic EMU. Volg bij het downloaden strikt de servicevoorwaarden van elke website";
+"VisitSite" = "Bezoek %@";
+"OpenFile" = "Bestand Openen";
+"WebViewDownloadBegin" = "Download gestart";
+"RespectSilentMode" = "Stille Modus Eren";
+"RespectSilentModeDesc" = "Indien ingeschakeld, speelt Manic EMU alleen audio af buiten de stille modus";
+"SaturnISONoSwitchCore" = "Sega Saturn .iso-spellen ondersteunen geen kernwisseling";
+"EnableFullScreenTitle" = "Volledig Scherm Inschakelen";
+"DisableFullScreenTitle" = "Volledig Scherm Uitschakelen";
+"SimulateBlowingTitle" = "Blaas Simulatie";
+"PaletteTitle" = "Palet";
+"SkinRestDesc" = "Reset van de skin herstelt ook door spellen toegewezen skins naar standaardversies";
+"SkinResetForAll" = "Alle platformskins resetten";
+"SkinResetForPlatform" = "%@-skin resetten";
+"SkinDebug" = "Skin Testgebied";
+
+"ImportMissingFile" = "Import %@ mislukt: Bestand %@ ontbreekt";
+"MultiDiscBuilder" = "MultiDisc-hulpmiddel";
+"MultiDiscBuilderDesc" = "Maakt verwisselbare .m3u-bestanden voor multidisc-spellen (.cue/.bin of .chd). Overslaan als u al een .m3u heeft - importeer direct via Spel importeren";
+"M3uFileShare" = ".m3u-bestand delen";
+"M3uFileImport" = "Toevoegen aan bibliotheek";
+"MultiDiscAddFile" = "%@-bestand toevoegen";
+"MultiDiscImportErrorConflict" = "Fout: .cue en .chd niet mengen";
+"MultiDiscImportErrorMissing" = "Fout: Geen .cue/.chd-bestanden gevonden";
+"GenerateM3uFailed" = ".m3u aanmaken mislukt";
+"MultiDiscCloseAlert" = ".m3u aangemaakt. Sluit na importeren";
+"MultiDiscContinueClose" = "Doorgaan met sluiten";
+"SwapDisk" = "Schijf wisselen";
+"NotSupportSwapDisk" = "Geen multidisc-spel";
+"TransferPakDesc" = "Transfer Pak synchroniseert GB/GBC met N64. Activeer door ROM (.gb/.gbc) en opslagbestand (.sav) te importeren";
+"TransferPakFromLibrary" = "Importeren uit bibliotheek";
+"TransferPakFromLibraryDesc" = "Alleen spellen met opslagbestanden.\nGB/GBC-spellen moeten overeenkomen met N64 ROM";
+"TransferPakNoGames" = "Geen compatibele spellen";
+"TransferPakFromFiles" = "Importeren uit bestanden";
+"TransferPakOn" = "Ingeschakeld";
+"TransferPakOff" = "Uitgeschakeld";
+"TransferPakImportError" = "Fout: Importeer ROM en opslagbestand (2 bestanden vereist)";
+"ShowControlsTitle" = "Bediening tonen";
+"HideControlsTitle" = "Bediening verbergen";
+
+"DesignedFor" = "Ontworpen voor %@";

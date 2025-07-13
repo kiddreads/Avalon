@@ -1,0 +1,78 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode specific
+build/
+.build/
+DerivedData/
+*.xcworkspace/
+*.xccheckout
+*.xcscmblueprint
+xcuserdata/
+*.xcodeproj/project.xcworkspace/
+
+# Swift Package Manager
+.swiftpm
+Package.resolved
+
+# Cocoapods (if used)
+Pods/
+*.xcconfig
+podfile.lock
+
+# Carthage (if used)
+Carthage/
+Carthage/Checkouts/
+Carthage/Build/
+
+# Fastlane (if used)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Archives
+*.xcarchive
+*.ipa
+*.dSYM
+*.bcsymbolmap
+*.dylib
+*.tbd
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Logs and temporary files
+*.log
+*.swp
+*.swo
+*.tmp
+*.lock
+*~ 
+
+# Environment and config files
+.env
+*.key
+*.crt
+*.pem
+*.p12
+*.mobileprovision
+
+# SwiftLint & SwiftFormat
+.swiftlint.yml
+.swiftformat
+
+# Vim / Emacs / VSCode editor files
+*~ 
+*.swp
+*.swo
+*.idea/
+.vscode/
+*.code-workspace
+
+# Ignore Xcode's user-specific settings
+xcuserdata/
+

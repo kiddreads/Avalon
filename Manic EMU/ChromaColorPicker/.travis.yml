@@ -1,0 +1,19 @@
+language: objective-c
+osx_image: xcode11.3
+before_install: 
+  - gem install bundler --version '2.0.1'
+install:
+  - bundle install
+jobs:
+  include:
+    - stage: test
+      script:
+        - fastlane test
+    - stage: pod-lint
+      script:
+        - pod lib lint
+stages:
+  - test
+  - pod-lint
+  - name: test-lint
+    if: type = pull_request

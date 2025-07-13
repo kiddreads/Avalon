@@ -1,0 +1,25 @@
+name: Package
+packages:
+  QuickTableViewController:
+    path: ../
+options:
+  deploymentTarget:
+    iOS: "11.0"
+    tvOS: "11.0"
+targetTemplates:
+  AppTemplate:
+    type: application
+    sources: Package
+    settings:
+      base:
+        INFOPLIST_FILE: Package/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: "io.github.bcylin.QuickTableViewController.Package"
+    dependencies:
+      - package: QuickTableViewController
+targets:
+  App-iOS:
+    platform: iOS
+    templates: [AppTemplate]
+  App-tvOS:
+    platform: tvOS
+    templates: [AppTemplate]
