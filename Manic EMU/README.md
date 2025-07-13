@@ -1,5 +1,5 @@
-# Manic-EMU
-[![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+# Manic-EMU [![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
 Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful features while keeping a clean, sleek UI and delivering buttery-smooth gameplay.
 
 [<img src="resources/img/appstore-badge.png" height="50">](https://itunes.apple.com/us/app/id6743335790)
@@ -62,13 +62,14 @@ Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful featur
 - Big screen + controller = Ultimate immersion
 
 ## Development Notes
-**Build Environment**: Requires Xcode 16+, iOS SDK 15+, and Swift 5.9+
-**Build Step**
-	1. Install VulkanSDK  
-	2. Install C++ Boost  
-	3. Open Manic-EMU/ManicEmu/ManicEmu.xcworkspace  
-	4. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities  
-	5. Press CMD+R to run Manic EMU
+ **Build Environment**: Requires Xcode 16+, iOS SDK 15+, and Swift 5.9+
+
+ **Build Step**
+1. Install VulkanSDK  
+2. Install C++ Boost  
+3. Open Manic-EMU/ManicEmu/ManicEmu.xcworkspace  
+4. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities  
+5. Press CMD+R to run Manic EMU
 
 
 ## Acknowledgements
