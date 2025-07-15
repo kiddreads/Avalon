@@ -66,10 +66,12 @@ Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful featur
 
  **Build Step**
 1. Install VulkanSDK  
-2. Install C++ Boost  
-3. Open Manic-EMU/ManicEmu/ManicEmu.xcworkspace  
-4. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities  
-5. Press CMD+R to run Manic EMU
+2. Install C++ Boost
+3. cd Manic-EMU/ManicEmu
+4. pod install
+5. Open Manic-EMU/ManicEmu/ManicEmu.xcworkspace
+6. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities
+7. Wait for SPM to finish loading. Press CMD+R to run Manic EMU
 
 
 ## Acknowledgements
