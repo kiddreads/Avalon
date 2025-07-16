@@ -1,1 +1,1 @@
-../../../GTMSessionFetcher/Source/GTMGatherInputStream.h
+../../../GTMSessionFetcher/Sources/Full/Public/GTMSessionFetcher/GTMGatherInputStream.h

@@ -1,1 +1,1 @@
-../../../AppAuth/Source/AppAuthCore/OIDFieldMapping.h
+../../../AppAuth/Sources/AppAuthCore/OIDFieldMapping.h

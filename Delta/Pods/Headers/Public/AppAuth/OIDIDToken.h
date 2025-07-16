@@ -1,1 +1,1 @@
-../../../AppAuth/Source/AppAuthCore/OIDIDToken.h
+../../../AppAuth/Sources/AppAuthCore/OIDIDToken.h

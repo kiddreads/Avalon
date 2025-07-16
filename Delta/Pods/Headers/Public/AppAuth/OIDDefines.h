@@ -1,1 +1,1 @@
-../../../AppAuth/Source/AppAuthCore/OIDDefines.h
+../../../AppAuth/Sources/AppAuthCore/OIDDefines.h

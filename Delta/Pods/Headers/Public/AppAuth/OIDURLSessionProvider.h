@@ -1,1 +1,1 @@
-../../../AppAuth/Source/AppAuthCore/OIDURLSessionProvider.h
+../../../AppAuth/Sources/AppAuthCore/OIDURLSessionProvider.h

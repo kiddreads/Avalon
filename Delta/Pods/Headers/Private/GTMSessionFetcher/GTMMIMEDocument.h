@@ -1,1 +1,1 @@
-../../../GTMSessionFetcher/Source/GTMMIMEDocument.h
+../../../GTMSessionFetcher/Sources/Full/Public/GTMSessionFetcher/GTMMIMEDocument.h
