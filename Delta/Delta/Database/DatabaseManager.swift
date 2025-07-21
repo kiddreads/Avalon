@@ -561,9 +561,15 @@ extension DatabaseManager
             for url in urls
             {
                 var archiveContainsValidGameFile = false
+                let archive: Archive
                 
-                guard let archive = Archive(url: url, accessMode: .read) else {
-                    errors.insert(.invalid(url))
+                do
+                {
+                    archive = try Archive(url: url, accessMode: .read)
+                }
+                catch
+                {
+                    errors.insert(.unknown(url, error as NSError))
                     continue
                 }
                 
