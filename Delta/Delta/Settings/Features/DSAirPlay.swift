@@ -11,7 +11,7 @@ import SwiftUI
 import DeltaFeatures
 import DeltaCore
 
-extension TouchControllerSkin.LayoutAxis: OptionValue {}
+extension TouchControllerSkin.LayoutAxis: @retroactive OptionValue {}
 
 struct DSAirPlayOptions
 {

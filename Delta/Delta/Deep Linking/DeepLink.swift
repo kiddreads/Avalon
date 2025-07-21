@@ -97,7 +97,7 @@ enum DeepLink
             let type = ActionType(rawValue: shortcut.type)
             return type
             
-        case .handoff(let userActivity):
+        case .handoff(_):
             return .launchGame
         }
     }

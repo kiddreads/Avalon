@@ -517,7 +517,7 @@ extension PauseViewController {
         let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             DispatchQueue.main.async {
                 loadingAlert.dismiss(animated: true) {
-                    if let error = error {
+                    if error != nil {
                         
                         let errorAlert = UIAlertController(
                             title: "Feedback Error",
@@ -625,7 +625,7 @@ extension PauseViewController {
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     self.showError("Sorry, but Lu can't help you with this game right now. Don't worry—we're already working on getting it fixed as soon as possible. Thank you so much for giving Lu a try! Issue : Received an invalid response. Please try again.")
-                    luLog(.error,"check-rom error: invalid response \(response)")
+                    luLog(.error,"check-rom error: invalid response \(response?.description ?? "nil")")
                     completion(false)
                     return
                 }

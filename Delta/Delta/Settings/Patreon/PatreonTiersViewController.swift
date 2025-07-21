@@ -412,7 +412,7 @@ struct PatreonTiersView: View
                         
                     Spacer()
                     
-                    Text("$\(subscription.price)/month")
+                    Text("$\(subscription.price.description)/month")
                         
                 }
                 .bold()
