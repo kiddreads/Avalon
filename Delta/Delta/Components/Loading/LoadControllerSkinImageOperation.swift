@@ -47,7 +47,7 @@ class ControllerSkinImageCacheKey: NSObject
     }
 }
 
-class LoadControllerSkinImageOperation: RSTLoadOperation<UIImage, ControllerSkinImageCacheKey>
+class LoadControllerSkinImageOperation: RSTLoadOperation<UIImage, ControllerSkinImageCacheKey>, @unchecked Sendable
 {
     let controllerSkin: ControllerSkin
     let traits: DeltaCore.ControllerSkin.Traits

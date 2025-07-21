@@ -44,7 +44,7 @@ extension DatabaseManager
     }
 }
 
-final class DatabaseManager: RSTPersistentContainer
+final class DatabaseManager: RSTPersistentContainer, @unchecked Sendable
 {
     static let shared = DatabaseManager()
     

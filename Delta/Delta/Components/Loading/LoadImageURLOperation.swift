@@ -23,7 +23,7 @@ extension LoadImageURLOperation
     }
 }
 
-class LoadImageURLOperation: RSTLoadOperation<UIImage, NSURL>
+class LoadImageURLOperation: RSTLoadOperation<UIImage, NSURL>, @unchecked Sendable
 {
     let url: URL
     
