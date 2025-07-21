@@ -1132,7 +1132,7 @@ private extension GameCollectionViewController
             
             self._exportedSaveFileURL = temporaryURL
             
-            let documentPicker = UIDocumentPickerViewController(urls: [temporaryURL], in: .exportToService)
+            let documentPicker = UIDocumentPickerViewController(forExporting: [temporaryURL], asCopy: false)
             documentPicker.delegate = self
             self.present(documentPicker, animated: true, completion: nil)
         }

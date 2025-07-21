@@ -287,25 +287,24 @@ extension CheatsViewController
         self.tableView.reloadRows(at: [indexPath], with: .none)
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         let cheat = self.dataSource.item(at: indexPath)
         
-        let deleteAction = UITableViewRowAction(style: .destructive, title: NSLocalizedString("Delete", comment: "")) { (action, indexPath) in
+        let deleteAction = UIContextualAction(style: .destructive, title: RSTSystemLocalizedString("Delete")) { action, view, completion in
             self.deleteCheat(cheat)
+            completion(true)
         }
         
-        let editAction = UITableViewRowAction(style: .normal, title: NSLocalizedString("Edit", comment: "")) { (action, indexPath) in
+        let editAction = UIContextualAction(style: .normal, title: RSTSystemLocalizedString("Edit")) { action, view, completion in
             let editCheatViewController = self.makeEditCheatViewController(cheat: cheat)
             editCheatViewController.presentWithPresentingViewController(self)
+            completion(true)
         }
         
-        return [deleteAction, editAction]
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
-    {
-        // This method intentionally left blank because someone decided it was a Good Idea™ to require this method be implemented to use UITableViewRowActions
+        let configuration = UISwipeActionsConfiguration(actions: [editAction, deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
     }
 }
 

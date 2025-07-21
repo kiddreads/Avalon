@@ -227,22 +227,19 @@ private extension MelonDSCoreSettingsViewController
     {
         self.importingBIOS = bios
         
-        var supportedTypes = [kUTTypeItem as String, kUTTypeContent as String, "com.apple.macbinary-archive" /* System UTI for .bin */]
+        var supportedTypes: [UTType] = [.item, .content, UTType("com.apple.macbinary-archive")! /* System UTI for .bin */]
         
-        // Explicitly support files with .bin and .rom extensions.
-        if let binTypes = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension, "bin" as CFString, nil)?.takeRetainedValue()
+        if let binType = UTType(filenameExtension: "bin")
         {
-            let types = (binTypes as NSArray).map { $0 as! String }
-            supportedTypes.append(contentsOf: types)
-        }
-            
-        if let romTypes = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension, "rom" as CFString, nil)?.takeRetainedValue()
-        {
-            let types = (romTypes as NSArray).map { $0 as! String }
-            supportedTypes.append(contentsOf: types)
+            supportedTypes.append(binType)
         }
         
-        let documentPicker = UIDocumentPickerViewController(documentTypes: supportedTypes, in: .import)
+        if let romType = UTType(filenameExtension: "rom")
+        {
+            supportedTypes.append(romType)
+        }
+        
+        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes, asCopy: true)
         documentPicker.delegate = self
         
         if #available(iOS 13.0, *)

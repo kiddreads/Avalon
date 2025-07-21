@@ -65,29 +65,25 @@ private extension CheatTextView
         }
         
         let attributedFormat = NSMutableAttributedString()
-        var prefixString: NSString? = nil
+        var prefixString: String? = nil
         
         let scanner = Scanner(string: format)
         scanner.charactersToBeSkipped = nil
         
         while (!scanner.isAtEnd)
         {
-            var string: NSString? = nil
-            scanner.scanCharacters(from: CharacterSet.alphanumerics, into: &string)
+            guard let scannedString = scanner.scanCharacters(from: CharacterSet.alphanumerics), !scannedString.isEmpty else { break }
             
-            guard let scannedString = string, scannedString.length > 0 else { break }
+            let attributedString = NSMutableAttributedString(string: scannedString)
             
-            let attributedString = NSMutableAttributedString(string: scannedString as String)
-            
-            if let prefixString = prefixString, prefixString.length > 0
+            if let prefixString, !prefixString.isEmpty
             {
                 attributedString.addAttribute(.cheatPrefix, value: prefixString, range: NSRange(location: 0, length: 1))
             }
             
             attributedFormat.append(attributedString)
             
-            prefixString = nil
-            scanner.scanUpToCharacters(from: CharacterSet.alphanumerics, into: &prefixString)
+            prefixString = scanner.scanUpToCharacters(from: CharacterSet.alphanumerics)
         }
         
         self.attributedFormat = attributedFormat

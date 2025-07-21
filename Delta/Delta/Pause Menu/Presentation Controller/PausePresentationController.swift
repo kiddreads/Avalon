@@ -31,14 +31,14 @@ class PausePresentationController: UIPresentationController
     
     override var frameOfPresentedViewInContainerView: CGRect
     {
-        guard let containerView = self.containerView else { return super.frameOfPresentedViewInContainerView }
+        guard let containerView = self.containerView, let statusBarManager = containerView.window?.windowScene?.statusBarManager else { return super.frameOfPresentedViewInContainerView }
         
         var frame: CGRect
         let contentHeight = self.presentedViewController.preferredContentSize.height
         
         if contentHeight == 0
         {
-            let statusBarHeight = UIApplication.shared.statusBarFrame.height
+            let statusBarHeight = statusBarManager.statusBarFrame.height
             frame = CGRect(x: 0, y: statusBarHeight, width: containerView.bounds.width, height: containerView.bounds.height - statusBarHeight)
         }
         else
@@ -152,7 +152,7 @@ class PausePresentationController: UIPresentationController
         self.contentView.removeFromSuperview()
         
         // Temporarily match the bounds of self.containerView (accounting for the status bar)
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight = self.containerView?.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         self.contentView.frame = CGRect(x: 0, y: statusBarHeight, width: self.containerView!.bounds.width, height: self.containerView!.bounds.height - statusBarHeight)
         
         // Layout content view
