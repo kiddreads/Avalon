@@ -1082,8 +1082,7 @@ private extension SaveStatesViewController
     }
 }
 
-//MARK: - 3D Touch -
-extension SaveStatesViewController: UIViewControllerPreviewingDelegate
+private extension SaveStatesViewController
 {
     private func prepareEmulatorCoreSaveState()
     {
@@ -1098,30 +1097,6 @@ extension SaveStatesViewController: UIViewControllerPreviewingDelegate
         {
             emulatorCore.stop()
         }
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController?
-    {
-        guard
-            let indexPath = self.collectionView?.indexPathForItem(at: location),
-            let layoutAttributes = self.collectionViewLayout.layoutAttributesForItem(at: indexPath)
-        else { return nil }
-        
-        guard self.emulatorCore == nil || (self.emulatorCore != nil && self.emulatorCoreSaveState != nil) else { return nil }
-        
-        previewingContext.sourceRect = layoutAttributes.frame
-        
-        let saveState = self.dataSource.item(at: indexPath)
-        
-        let previewGameViewController = self.makePreviewGameViewController(for: saveState)
-        _previewTransitionViewController = previewGameViewController
-        
-        return previewGameViewController
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController)
-    {
-        self.commitPreviewTransition()
     }
     
     func makePreviewGameViewController(for saveState: SaveState) -> PreviewGameViewController

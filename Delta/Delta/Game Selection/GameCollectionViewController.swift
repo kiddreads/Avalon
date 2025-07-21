@@ -1177,37 +1177,8 @@ private extension GameCollectionViewController
     }
 }
 
-//MARK: - UIViewControllerPreviewingDelegate -
-/// UIViewControllerPreviewingDelegate
-extension GameCollectionViewController: UIViewControllerPreviewingDelegate
+private extension GameCollectionViewController
 {
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController?
-    {
-        guard self.gameCollection?.identifier != GameType.unknown.rawValue else { return nil }
-        
-        guard
-            let collectionView = self.collectionView,
-            let indexPath = collectionView.indexPathForItem(at: location),
-            let layoutAttributes = collectionView.layoutAttributesForItem(at: indexPath)
-        else { return nil }
-        
-        previewingContext.sourceRect = layoutAttributes.frame
-        
-        let cell = collectionView.cellForItem(at: indexPath)
-        self._popoverSourceView = cell
-        
-        let game = self.dataSource.item(at: indexPath)
-        
-        let gameViewController = self.makePreviewGameViewController(for: game)
-        _previewTransitionViewController = gameViewController
-        return gameViewController
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController)
-    {
-        self.commitPreviewTransition()
-    }
-    
     func makePreviewGameViewController(for game: Game) -> PreviewGameViewController
     {
         let gameViewController = PreviewGameViewController()

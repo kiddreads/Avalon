@@ -56,43 +56,6 @@ class EditCheatViewController: UITableViewController
     @IBOutlet private var nameTextField: UITextField!
     @IBOutlet private var typeSegmentedControl: UISegmentedControl!
     @IBOutlet private var codeTextView: CheatTextView!
-    
-    override var previewActionItems: [UIPreviewActionItem]
-    {
-        guard let cheat = self.cheat else { return [] }
-        
-        let copyCodeAction = UIPreviewAction(title: NSLocalizedString("Copy Code", comment: ""), style: .default) { (action, viewController) in
-            UIPasteboard.general.string = cheat.code
-        }
-        
-        let presentingViewController = self.presentingViewController!
-        
-        let editCheatAction = UIPreviewAction(title: NSLocalizedString("Edit", comment: ""), style: .default) { (action, viewController) in
-            // Delaying until next run loop prevents self from being dismissed immediately
-            DispatchQueue.main.async {
-                let editCheatViewController = viewController as! EditCheatViewController
-                editCheatViewController.isPreviewing = false
-                editCheatViewController.presentWithPresentingViewController(presentingViewController)
-            }
-        }
-        
-        let deleteAction = UIPreviewAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { [unowned self] (action, viewController) in
-            self.delegate?.editCheatViewController(self, deactivateCheat: cheat)
-            
-            DatabaseManager.shared.performBackgroundTask { (context) in
-                let temporaryCheat = context.object(with: cheat.objectID)
-                context.delete(temporaryCheat)
-                context.saveWithErrorLogging()
-            }
-        }
-        
-        let cancelDeleteAction = UIPreviewAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (action, viewController) in
-        }
-        
-        let deleteActionGroup = UIPreviewActionGroup(title: NSLocalizedString("Delete", comment: ""), style: .destructive, actions: [deleteAction, cancelDeleteAction])
-        
-        return [copyCodeAction, editCheatAction, deleteActionGroup]
-    }
 }
 
 extension EditCheatViewController

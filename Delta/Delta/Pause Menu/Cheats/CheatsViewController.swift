@@ -64,8 +64,6 @@ extension CheatsViewController
         
         self.tableView.separatorEffect = vibrancyEffect
         
-        self.registerForPreviewing(with: self, sourceView: self.tableView)
-        
         if #available(iOS 14, *)
         {
             self.updateAddCheatMenu()
@@ -305,31 +303,6 @@ extension CheatsViewController
         let configuration = UISwipeActionsConfiguration(actions: [editAction, deleteAction])
         configuration.performsFirstActionWithFullSwipe = true
         return configuration
-    }
-}
-
-//MARK: - <UIViewControllerPreviewingDelegate> -
-extension CheatsViewController: UIViewControllerPreviewingDelegate
-{
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController?
-    {
-        guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
-        
-        let frame = self.tableView.rectForRow(at: indexPath)
-        previewingContext.sourceRect = frame
-        
-        let cheat = self.dataSource.item(at: indexPath)
-        
-        let editCheatViewController = self.makeEditCheatViewController(cheat: cheat)
-        editCheatViewController.isPreviewing = true
-        return editCheatViewController
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController)
-    {
-        let editCheatViewController = viewControllerToCommit as! EditCheatViewController
-        editCheatViewController.isPreviewing = false
-        editCheatViewController.presentWithPresentingViewController(self)
     }
 }
 

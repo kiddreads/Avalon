@@ -25,16 +25,6 @@ extension Action
             case .destructive: return .destructive
             }
         }
-        
-        var previewActionStyle: UIPreviewAction.Style? {
-            switch self
-            {
-            case .default: return .default
-            case .destructive: return .destructive
-            case .selected: return .selected
-            case .cancel: return nil
-            }
-        }
     }
 }
 
@@ -84,18 +74,6 @@ extension UIAlertAction
     }
 }
 
-extension UIPreviewAction
-{
-    convenience init?(_ action: Action)
-    {
-        guard let previewActionStyle = action.style.previewActionStyle else { return nil }
-        
-        self.init(title: action.title, style: previewActionStyle) { (previewAction, viewController) in
-            action.action?(action)
-        }
-    }
-}
-
 extension UIAlertController
 {
     convenience init(actions: [Action])
@@ -126,11 +104,6 @@ extension RangeReplaceableCollection where Iterator.Element == Action
 {
     var alertActions: [UIAlertAction] {
         let actions = self.map { UIAlertAction($0) }
-        return actions
-    }
-    
-    var previewActions: [UIPreviewAction] {
-        let actions = self.compactMap { UIPreviewAction($0) }
         return actions
     }
     
