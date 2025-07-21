@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 @propertyWrapper
-public class Option<Value: OptionValue, DetailView: View>: _AnyOption
+public class Option<Value: OptionValue & SendableMetatype, DetailView: View & SendableMetatype>: _AnyOption
 {
     // Nil name == hidden option.
     public let name: LocalizedStringKey?

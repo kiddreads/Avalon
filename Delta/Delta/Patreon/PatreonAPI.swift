@@ -369,7 +369,7 @@ private extension PatreonAPI
         }
     }
     
-    func send<ResponseType: Decodable>(_ request: URLRequest, authorizationType: AuthorizationType, completion: @escaping (Result<ResponseType, Swift.Error>) -> Void)
+    func send<ResponseType: Decodable & SendableMetatype>(_ request: URLRequest, authorizationType: AuthorizationType, completion: @escaping (Result<ResponseType, Swift.Error>) -> Void)
     {
         var request = request
         
