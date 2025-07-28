@@ -2092,7 +2092,7 @@
         "sv_SE": "Total speltid: {0}",
         "th_TH": "",
         "tr_TR": "Toplam Oyun Süresi: {0}",
-        "uk_UA": "",
+        "uk_UA": "Всього зіграно: {0}",
         "zh_CN": "总游戏时间: {0}",
         "zh_TW": "總遊戲時間: {0}"
       }
@@ -7217,7 +7217,7 @@
         "sv_SE": "Konfiguration hittad:\n\nNamn:\t{0}\nGUID:\t{1}\n\n Väntar på anslutning till kontroller...",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Знайдено конфігурацій:\n\nНазва:\t{0}\nGUID:\t{1}\n\n Очікується з’єднання з контролером...",
         "zh_CN": "发现配置:\n\n名称:\t{0}\nGUID:\t{1}\n\n 正在等待控制器连接...",
         "zh_TW": "找到控制器的配置:\n\n名稱:\t{0}\nGUID:\t{1}\n\n 正在等待控制器連線..."
       }
@@ -13142,7 +13142,7 @@
         "sv_SE": "Det gick inte att konvertera Ryujinx-versionen som mottogs från uppdateringsservern.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Не вдалося конвертувати версію Ryujinx, отриману з сервера оновлень.",
         "zh_CN": "无法转换从更新服务器接收的 Ryujinx 版本。",
         "zh_TW": "無法轉換從更新伺服器接收的 Ryujinx 版本。"
       }
@@ -16567,7 +16567,7 @@
         "sv_SE": "Om det här alternativet är aktiverat i anpassade inställningar kommer den globala inmatningskonfigurationen att användas.\n\nI de globala inställningarna: du kan aktivera eller inaktivera det efter behov; den här inställningen kommer att ärvas av alla nya anpassade konfigurationer som skapas.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Якщо цей параметр увімкнено в користувацьких налаштуваннях, буде використовуватись глобальна конфігурація вводу.\n\nВ глобальних налаштуваннях: за потреби цю опцію можна вмикати або вимикати; це налаштування автоматично застосується до всіх нових конфігурацій, які ви створите.",
         "zh_CN": "如果在自定义设置中启用了此选项,则将使用全局输入配置。\n\n在全局设置中: 您可以根据需要启用或禁用它;之后创建的任何自定义配置都将继承此设置。",
         "zh_TW": "如果在自訂設定啟用了此選項，則將使用全域輸入配置。\n\n在全域設定中：你可以根據需要啟用或停用它；之後建立的任何自訂配置都將繼承此設定。"
       }
@@ -18917,7 +18917,7 @@
         "sv_SE": "Ryujinx kunde inte hitta några installerade firmwares",
         "th_TH": "Ryujinx ไม่พบ เฟิร์มแวร์ที่ติดตั้งไว้ในเครื่องของคุณ",
         "tr_TR": "Ryujinx yüklü herhangi firmware bulamadı",
-        "uk_UA": "Ryujinx не вдалося знайти встановлену прошивку",
+        "uk_UA": "Ryujinx не вдалося знайти жодної встановленої прошивки",
         "zh_CN": "Ryujinx 模拟器未安装 Switch 系统固件",
         "zh_TW": "Ryujinx 無法找到已安裝的任何韌體"
       }
@@ -18942,7 +18942,7 @@
         "sv_SE": "Ryujinx kunde inte tolka angiven firmware. Detta sker oftast med utdaterade nycklar.",
         "th_TH": "Ryujinx ไม่สามารถวิเคราะห์เฟิร์มแวร์ที่ให้มาได้ ซึ่งมักมีสาเหตุมาจากคีย์ที่เก่าจนเกินไป",
         "tr_TR": "Ryujinx temin edilen firmware'i çözümleyemedi. Bu durum genellikle güncel olmayan keys'den kaynaklanır.",
-        "uk_UA": "Ryujinx не вдалося проаналізувати прошивку.  Зазвичай це спричинено застарілими ключами.",
+        "uk_UA": "Ryujinx не вдалося проаналізувати прошивку. Зазвичай це спричинено застарілими ключами.",
         "zh_CN": "Ryujinx 模拟器无法解密当前固件，一般是由于使用了旧版的密钥导致的。",
         "zh_TW": "Ryujinx 無法解析所提供的韌體。這通常是由於金鑰過時造成的。"
       }
@@ -19017,7 +19017,7 @@
         "sv_SE": "Ett odefinierat fel inträffade! Detta ska inte hända. Kontakta en utvecklare!",
         "th_TH": "เกิดข้อผิดพลาดที่ไม่สามารถระบุได้! สิ่งนี้ไม่ควรเกิดขึ้น โปรดติดต่อผู้พัฒนา!",
         "tr_TR": "Tanımlanmayan bir hata oluştu! Bu durum ile karşılaşılmamalıydı, lütfen bir geliştirici ile iletişime geçin!",
-        "uk_UA": "Виникла невизначена помилка! Це не повинно було статися. Будь ласка, зверніться до розробника!",
+        "uk_UA": "Виникла невизначена помилка! Це не повинно було статися. Будь ласка, зверніться до розробників!",
         "zh_CN": "出现未定义错误！此类错误不应出现，请联系开发者！",
         "zh_TW": "發生未定義錯誤! 這種情況不應該發生，請聯絡開發人員!"
       }
@@ -19692,7 +19692,7 @@
         "sv_SE": "Din aktuella konfiguration är ogiltig. Öppna inställningarna och konfigurera om din inmatning.",
         "th_TH": "การกำหนดค่าปัจจุบันของคุณไม่ถูกต้อง กรุณาเปิดการตั้งค่าและกำหนดค่าอินพุตของคุณใหม่",
         "tr_TR": "Halihazırdaki konfigürasyonunuz geçersiz. Ayarları açın ve girişlerinizi yeniden konfigüre edin.",
-        "uk_UA": "Поточна конфігурація невірна. Відкрийте налаштування та переналаштуйте Ваші дані.",
+        "uk_UA": "Поточна конфігурація невірна. Перейдіть до параметрів та переналаштуйте керування.",
         "zh_CN": "您当前的输入配置无效。打开设置并重新设置您的输入选项。",
         "zh_TW": "您目前的配置無效。開啟設定並重新配置輸入。"
       }
@@ -19717,7 +19717,7 @@
         "sv_SE": "Dockat läge angivet. Handhållna kontroller bör inaktiveras.",
         "th_TH": "ตั้งค่าด็อกโหมด ควรปิดใช้งานการควบคุมแบบแฮนด์เฮลด์",
         "tr_TR": "Docked mod ayarlandı. Portatif denetim devre dışı bırakılmalı.",
-        "uk_UA": "Встановлений режим в док-станції. Вимкніть портативні контролери.",
+        "uk_UA": "Встановлений режим в док-станції. Вимкніть портативний режим.",
         "zh_CN": "已经设置为主机模式，应禁用掌机手柄操控。",
         "zh_TW": "已設定底座模式。手提控制應該停用。"
       }
@@ -23442,7 +23442,7 @@
         "sv_SE": "Visa ändringslogg",
         "th_TH": "ด",
         "tr_TR": "",
-        "uk_UA": "",
+        "uk_UA": "Показати список змін",
         "zh_CN": "查看更新日志",
         "zh_TW": "檢視更新日誌"
       }
@@ -24817,7 +24817,7 @@
         "sv_SE": "Startar och går in i spelet men lider av ett eller flera av följande: kraschar, deadlocks, GPU-buggar, distraherande dåligt ljud eller är helt enkelt för långsamt. Spelet kan fortfarande spelas hela vägen igenom, men inte så som spelet är avsett att spelas.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Запускається, але в грі на вас чекатимуть одна або декілька наступних проблем: збої, зависання, графічні баги, спотворений звук або ж гра загалом працюватиме надто повільно. Можливо, її все ще можна пройти, але досвід буде не найкращим.",
+        "uk_UA": "Запускається, але в грі на вас чекатимуть одна або декілька наступних проблем: збої, зависання, графічні баги, спотворений звук або ж гра загалом працюватиме надто повільно. Можливо, гру все ще можна буде пройти, але досвід буде не найкращим.",
         "zh_CN": "可以成功启动并进入游戏但可能会遇到以下一种或多种问题: 崩溃、卡死、GPU bug、令人无法接受的音频,或者只是太慢。仍然可以继续进行游戏,但是可能无法达到预期。",
         "zh_TW": "能啟動並進入遊戲，但可能會遇到下列狀況：崩潰、卡死、GPU bug、令人無法接受的聲音、或遊戲過慢。遊戲或可繼續進行，但是可能無法達到預期效果。"
       }
@@ -24842,7 +24842,7 @@
         "sv_SE": "Startar upp och går förbi titelskärmen men tar sig inte in i huvudspelet.",
         "th_TH": "",
         "tr_TR": "",
-        "uk_UA": "Запускається та проходить початковий екран, але пограти не вийде.",
+        "uk_UA": "Запускається та проходить початковий екран, проте зіграти у вас не вийде.",
         "zh_CN": "可以启动并通过标题画面但是无法进入到主要的游戏流程。",
         "zh_TW": "能啟動並通過標題畫面，但是無法進入主要的遊戲畫面。"
       }
