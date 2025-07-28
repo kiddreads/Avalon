@@ -33,7 +33,7 @@ namespace Ryujinx.BuildValidationTasks
             LocalesJson json;
 
             if (isGitRunner && data.Contains("\r\n"))
-                throw new FormatException("locales.json is using CRLF line endings! It should be using LF line endings, build locally to fix...");
+                throw new FormatException("locales.json is using CRLF line endings! It should be using LF line endings, rebuild locally to fix...");
 
             try
             {
@@ -86,7 +86,7 @@ namespace Ryujinx.BuildValidationTasks
             }
 
             if (isGitRunner && encounteredIssue)
-                throw new JsonException("1 or more locales are invalid!");
+                throw new JsonException("1 or more locales are invalid! Rebuild locally to fix...");
 
             string jsonString = JsonSerializer.Serialize(json, _jsonOptions);
 
@@ -102,6 +102,7 @@ namespace Ryujinx.BuildValidationTasks
 
         struct LocalesJson
         {
+            public Dictionary<string, string> Info { get; set; }
             public List<string> Languages { get; set; }
             public List<LocalesEntry> Locales { get; set; }
         }
