@@ -40,7 +40,6 @@
                             Width="250" />
                         <ComboBox
                             SelectedIndex="{Binding Region}"
-                            ToolTip.Tip="{ext:Locale RegionTooltip}"
                             HorizontalContentAlignment="Left"
                             Width="350">
                             <ComboBoxItem>
@@ -72,11 +71,9 @@
                         <TextBlock
                             VerticalAlignment="Center"
                             Text="{ext:Locale SettingsTabSystemSystemLanguage}"
-                            ToolTip.Tip="{ext:Locale LanguageTooltip}"
                             Width="250" />
                         <ComboBox
                             SelectedIndex="{Binding Language}"
-                            ToolTip.Tip="{ext:Locale LanguageTooltip}"
                             HorizontalContentAlignment="Left"
                             Width="350">
                             <ComboBoxItem>
@@ -141,7 +138,6 @@
                         <TextBlock
                             VerticalAlignment="Center"
                             Text="{ext:Locale SettingsTabSystemSystemTimeZone}"
-                            ToolTip.Tip="{ext:Locale TimezoneTooltip}"
                             Width="250" />
                         <AutoCompleteBox
                             Name="TimeZoneBox"
@@ -152,7 +148,6 @@
                             SelectionChanged="TimeZoneBox_OnSelectionChanged"
                             Text="{Binding Path=TimeZone, Mode=OneWay}"
                             TextChanged="TimeZoneBox_OnTextChanged"
-                            ToolTip.Tip="{ext:Locale TimezoneTooltip}" 
                             ValueMemberBinding="{Binding Mode=OneWay, Converter={x:Static helpers:TimeZoneConverter.Instance}}" />
                     </StackPanel>
                     <StackPanel
@@ -163,13 +158,11 @@
                         <TextBlock
                             VerticalAlignment="Center"
                             Text="{ext:Locale SettingsTabSystemSystemTime}"
-                            ToolTip.Tip="{ext:Locale TimeTooltip}"
                             Width="250"/>
                         <DatePicker
                             VerticalAlignment="Center"
                             IsEnabled="{Binding !MatchSystemTime}"
                             SelectedDate="{Binding CurrentDate}"
-                            ToolTip.Tip="{ext:Locale TimeTooltip}"
                             Width="350" />
                         <TextBlock  Classes="globalConfigMarker" IsVisible="{Binding IsGameTitleNotNull}"/>
                     </StackPanel>
@@ -183,8 +176,7 @@
                             ClockIdentifier="24HourClock"
                             IsEnabled="{Binding !MatchSystemTime}"
                             SelectedTime="{Binding CurrentTime}"
-                            Width="350"
-                            ToolTip.Tip="{ext:Locale TimeTooltip}" />
+                            Width="350" />
                         <TextBlock  Classes="globalConfigMarker" IsVisible="{Binding IsGameTitleNotNull}"/>
                     </StackPanel>
                     <StackPanel

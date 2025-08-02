@@ -63,18 +63,15 @@
                 <MenuItem
                     Command="{Binding OpenRyujinxFolder}"
                     Header="{ext:Locale MenuBarFileOpenEmuFolder}"
-                    Icon="{ext:Icon fa-solid fa-folder-closed}"
-                    ToolTip.Tip="{ext:Locale OpenRyujinxFolderTooltip}" />
+                    Icon="{ext:Icon fa-solid fa-folder-closed}" />
                 <MenuItem
                     Command="{Binding OpenScreenshotsFolder}"
                     Header="{ext:Locale MenuBarFileOpenScreenshotsFolder}"
-                    Icon="{ext:Icon fa-solid fa-desktop}"
-                    ToolTip.Tip="{ext:Locale OpenScreenshotFolderTooltip}"/>
+                    Icon="{ext:Icon fa-solid fa-desktop}" />
                 <MenuItem
                     Command="{Binding OpenLogsFolder}"
                     Header="{ext:Locale MenuBarFileOpenLogsFolder}"
-                    Icon="{ext:Icon fa-solid fa-file-lines}"
-                    ToolTip.Tip="{ext:Locale OpenRyujinxLogsTooltip}" />
+                    Icon="{ext:Icon fa-solid fa-file-lines}" />
                 <Separator />
                 <MenuItem
                     Name="CloseRyujinxMenuItem"
@@ -149,7 +146,6 @@
                     Padding="0"
                     Header="{ext:Locale MenuBarOptionsSettings}"
                     Icon="{ext:Icon fa-solid fa-gear}"
-                    ToolTip.Tip="{ext:Locale OpenSettingsTooltip}"
                     Classes="withCheckbox">
                 </MenuItem>
                 <MenuItem
@@ -158,7 +154,6 @@
                     Header="{ext:Locale MenuBarOptionsManageUserProfiles}"
                     Icon="{ext:Icon fa-solid fa-user}"
                     IsEnabled="{Binding EnableNonGameRunningControls}"
-                    ToolTip.Tip="{ext:Locale OpenProfileManagerTooltip}"
                     Classes="withCheckbox">
                 </MenuItem>
             </MenuItem>

@@ -16418,106 +16418,6 @@
       }
     },
     {
-      "ID": "RegionTooltip",
-      "Translations": {
-        "ar_SA": "تغيير منطقة النظام",
-        "de_DE": "Ändert die Systemregion",
-        "el_GR": "Αλλαγή Περιοχής Συστήματος",
-        "en_US": "Change System Region",
-        "es_ES": "Cambia la región del sistema",
-        "fr_FR": "Changer la région du système",
-        "he_IL": "שנה אזור מערכת",
-        "it_IT": "Cambia regione di sistema",
-        "ja_JP": "システムの地域を変更します",
-        "ko_KR": "시스템 지역 변경",
-        "no_NO": "Endre systemregion",
-        "pl_PL": "Zmień Region Systemu",
-        "pt_BR": "Mudar a Região do Sistema",
-        "ru_RU": "Сменяет регион системы",
-        "sv_SE": "Ändra systemets region",
-        "th_TH": "เปลี่ยนภูมิภาคของระบบ",
-        "tr_TR": "Sistem Bölgesini Değiştir",
-        "uk_UA": "Змінити регіон системи",
-        "zh_CN": "更改系统区域",
-        "zh_TW": "變更系統區域"
-      }
-    },
-    {
-      "ID": "LanguageTooltip",
-      "Translations": {
-        "ar_SA": "تغيير لغة النظام",
-        "de_DE": "Ändert die Systemsprache",
-        "el_GR": "Αλλαγή Γλώσσας Συστήματος",
-        "en_US": "Change System Language",
-        "es_ES": "Cambia el idioma del sistema",
-        "fr_FR": "Changer la langue du système",
-        "he_IL": "שנה שפת מערכת",
-        "it_IT": "Cambia lingua di sistema",
-        "ja_JP": "システムの言語を変更します",
-        "ko_KR": "시스템 언어 변경",
-        "no_NO": "Endre systemspråk",
-        "pl_PL": "Zmień język systemu",
-        "pt_BR": "Mudar o Idioma do Sistema",
-        "ru_RU": "Меняет язык системы",
-        "sv_SE": "Ändra systemets språk",
-        "th_TH": "เปลี่ยนภาษาของระบบ",
-        "tr_TR": "Sistem Dilini Değiştir",
-        "uk_UA": "Змінити мову системи",
-        "zh_CN": "更改系统语言",
-        "zh_TW": "變更系統語言"
-      }
-    },
-    {
-      "ID": "TimezoneTooltip",
-      "Translations": {
-        "ar_SA": "تغيير النطاق الزمني للنظام",
-        "de_DE": "Ändert die Systemzeitzone",
-        "el_GR": "Αλλαγή Ζώνης Ώρας Συστήματος",
-        "en_US": "Change System TimeZone",
-        "es_ES": "Cambia la zona horaria del sistema",
-        "fr_FR": "Changer le fuseau horaire du système",
-        "he_IL": "שנה את אזור הזמן של המערכת",
-        "it_IT": "Cambia fuso orario di sistema",
-        "ja_JP": "システムのタイムゾーンを変更します",
-        "ko_KR": "시스템 시간대 변경",
-        "no_NO": "Endre systemtidssone",
-        "pl_PL": "Zmień Strefę Czasową Systemu",
-        "pt_BR": "Mudar o Fuso-Horário do Sistema",
-        "ru_RU": "Меняет часовой пояс системы",
-        "sv_SE": "Ändra systemets tidszon",
-        "th_TH": "เปลี่ยนโซนเวลาของระบบ",
-        "tr_TR": "Sistem Saat Dilimini Değiştir",
-        "uk_UA": "Змінити часовий пояс системи",
-        "zh_CN": "更改系统时区",
-        "zh_TW": "變更系統時區"
-      }
-    },
-    {
-      "ID": "TimeTooltip",
-      "Translations": {
-        "ar_SA": "تغيير وقت النظام",
-        "de_DE": "Ändert die Systemzeit",
-        "el_GR": "Αλλαγή Ώρας Συστήματος",
-        "en_US": "Change System Time",
-        "es_ES": "Cambia la hora del sistema",
-        "fr_FR": "Changer l'heure du système",
-        "he_IL": "שנה זמן מערכת",
-        "it_IT": "Cambia data e ora di sistema",
-        "ja_JP": "システムの時刻を変更します",
-        "ko_KR": "시스템 시간 변경",
-        "no_NO": "Endre systemtid",
-        "pl_PL": "Zmień czas systemowy",
-        "pt_BR": "Mudar a Data e Hora do Sistema",
-        "ru_RU": "Меняет системное время системы",
-        "sv_SE": "Ändra systemtid",
-        "th_TH": "เปลี่ยนเวลาของระบบ",
-        "tr_TR": "Sistem Saatini Değiştir",
-        "uk_UA": "Змінити системний час",
-        "zh_CN": "更改系统时间",
-        "zh_TW": "變更系統時鐘"
-      }
-    },
-    {
       "ID": "MatchTimeTooltip",
       "Translations": {
         "ar_SA": "",
@@ -17068,31 +16968,6 @@
       }
     },
     {
-      "ID": "ShaderDumpPathTooltip",
-      "Translations": {
-        "ar_SA": "مسار تفريغ المظللات",
-        "de_DE": "Grafik-Shader-Dump-Pfad",
-        "el_GR": "Τοποθεσία Εναπόθεσης Προσωρινής Μνήμης Shaders",
-        "en_US": "Graphics Shaders Dump Path",
-        "es_ES": "Directorio en el cual se volcarán los sombreadores de los gráficos",
-        "fr_FR": "Chemin de sauvegarde des shaders graphiques",
-        "he_IL": "נתיב השלכת הצללות גראפיות",
-        "it_IT": "Percorso di dump degli shader",
-        "ja_JP": "グラフィックス シェーダー ダンプのパスです",
-        "ko_KR": "그래픽 셰이더 덤프 경로",
-        "no_NO": "Grafikk Shader Dump bane",
-        "pl_PL": "Ścieżka Zrzutu Shaderów Grafiki",
-        "pt_BR": "Diretório de Despejo de Shaders",
-        "ru_RU": "Путь с дампами графических шейдеров",
-        "sv_SE": "Sökväg för Graphics Shaders Dump",
-        "th_TH": "ที่เก็บ ดัมพ์ไฟล์เชเดอร์",
-        "tr_TR": "Grafik Shader Döküm Yolu",
-        "uk_UA": "Шлях до дампу графічних шейдерів",
-        "zh_CN": "转储图形着色器的路径",
-        "zh_TW": "圖形著色器傾印路徑"
-      }
-    },
-    {
       "ID": "FileLogTooltip",
       "Translations": {
         "ar_SA": "حفظ تسجيل وحدة التحكم إلى ملف سجل على القرص. لا يؤثر على الأداء.",
@@ -17518,81 +17393,6 @@
       }
     },
     {
-      "ID": "OpenRyujinxFolderTooltip",
-      "Translations": {
-        "ar_SA": "فتح مجلد نظام ملفات ريوجينكس",
-        "de_DE": "Öffnet den Ordner, der das Ryujinx Dateisystem enthält",
-        "el_GR": "Ανοίξτε το φάκελο συστήματος αρχείων Ryujinx",
-        "en_US": "Open Ryujinx filesystem folder",
-        "es_ES": "Abre la carpeta de sistema de Ryujinx",
-        "fr_FR": "Ouvrir le dossier du système de fichiers Ryujinx",
-        "he_IL": "פתח את תיקיית מערכת הקבצים ריוג'ינקס",
-        "it_IT": "Apri la cartella del filesystem di Ryujinx",
-        "ja_JP": "Ryujinx ファイルシステムフォルダを開きます",
-        "ko_KR": "Ryujinx 파일 시스템 폴더 열기",
-        "no_NO": "Åpne Ryujinx filsystem-mappen",
-        "pl_PL": "Otwórz folder systemu plików Ryujinx",
-        "pt_BR": "Abre a pasta do sistema de arquivos Ryujinx",
-        "ru_RU": "Открывает папку с файлами Ryujinx",
-        "sv_SE": "Öppna Ryujinx-filsystemsmappen",
-        "th_TH": "เปิดโฟลเดอร์ระบบไฟล์ Ryujinx",
-        "tr_TR": "Ryujinx dosya sistem klasörünü açar",
-        "uk_UA": "Відкриває теку з файлами Ryujinx",
-        "zh_CN": "打开 Ryujinx 模拟器系统目录",
-        "zh_TW": "開啟 Ryujinx 檔案系統資料夾"
-      }
-    },
-    {
-      "ID": "OpenScreenshotFolderTooltip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Open Ryujinx screenshots folder",
-        "es_ES": "",
-        "fr_FR": "Ouvrir le dossier des captures d’écran Ryujinx",
-        "he_IL": "",
-        "it_IT": "",
-        "ja_JP": "",
-        "ko_KR": "Ryujinx 스크린샷 폴더 열기",
-        "no_NO": "Åpne Ryujinx skjermbildemappen",
-        "pl_PL": "",
-        "pt_BR": "Abre a pasta de capturas de tela do Ryujinx",
-        "ru_RU": "Открывает папку скриншотов Ryujinx",
-        "sv_SE": "Öppna Ryujinx skärmbildsmapp",
-        "th_TH": "",
-        "tr_TR": "",
-        "uk_UA": "Відкрити теку куди зберігаються скріншоти Ryujinx",
-        "zh_CN": "打开 Ryujinx 截图文件夹",
-        "zh_TW": "開啟 Ryujinx 螢幕擷取畫面資料夾"
-      }
-    },
-    {
-      "ID": "OpenRyujinxLogsTooltip",
-      "Translations": {
-        "ar_SA": "يفتح المجلد الذي تتم كتابة السجلات إليه",
-        "de_DE": "Öffnet den Ordner, in welchem die Logs gespeichert werden",
-        "el_GR": "Ανοίξτε το φάκελο στον οποίο διατηρούνται τα αρχεία καταγραφής",
-        "en_US": "Opens the folder where logs are written to",
-        "es_ES": "Abre la carpeta en la que se guardan los registros",
-        "fr_FR": "Ouvre le dossier où les journaux sont enregistrés",
-        "he_IL": "פותח את התיקיה שאליה נכתבים רישומים",
-        "it_IT": "Apre la cartella dove vengono salvati i log",
-        "ja_JP": "ログが格納されるフォルダを開きます",
-        "ko_KR": "로그가 기록되는 폴더 열기",
-        "no_NO": "Åpner mappen hvor logger er lagret",
-        "pl_PL": "Otwiera folder, w którym zapisywane są logi",
-        "pt_BR": "Abre a pasta onde os logs são gravados",
-        "ru_RU": "Открывает папку, в которую записываются логи",
-        "sv_SE": "Öppnar mappen där loggarna har skrivits till",
-        "th_TH": "เปิดโฟลเดอร์ ที่เก็บไฟล์ประวัติ",
-        "tr_TR": "Log dosyalarının bulunduğu klasörü açar",
-        "uk_UA": "Відкриває теку, куди зберігаються журнали (logs)",
-        "zh_CN": "打开日志存放的目录",
-        "zh_TW": "開啟日誌被寫入的資料夾"
-      }
-    },
-    {
       "ID": "ExitTooltip",
       "Translations": {
         "ar_SA": "الخروج من ريوجينكس",
@@ -17615,56 +17415,6 @@
         "uk_UA": "Закриває Ryujinx",
         "zh_CN": "退出 Ryujinx 模拟器",
         "zh_TW": "結束 Ryujinx"
-      }
-    },
-    {
-      "ID": "OpenSettingsTooltip",
-      "Translations": {
-        "ar_SA": "فتح نافذة الإعدادات",
-        "de_DE": "Öffnet das Einstellungsfenster",
-        "el_GR": "Ανοίξτε το παράθυρο Ρυθμίσεων",
-        "en_US": "Open settings window",
-        "es_ES": "Abre la ventana de configuración",
-        "fr_FR": "Ouvrir la fenêtre des paramètres",
-        "he_IL": "פתח את חלון ההגדרות",
-        "it_IT": "Apri la finestra delle impostazioni",
-        "ja_JP": "設定ウインドウを開きます",
-        "ko_KR": "설정 창 열기",
-        "no_NO": "Åpne innstillinger-vinduet",
-        "pl_PL": "Otwórz okno ustawień",
-        "pt_BR": "Abrir janela de configurações",
-        "ru_RU": "Открывает окно параметров",
-        "sv_SE": "Öppna inställningar",
-        "th_TH": "เปิดหน้าต่างการตั้งค่า",
-        "tr_TR": "Seçenekler penceresini açar",
-        "uk_UA": "Відкриває вікно налаштувань",
-        "zh_CN": "打开设置窗口",
-        "zh_TW": "開啟設定視窗"
-      }
-    },
-    {
-      "ID": "OpenProfileManagerTooltip",
-      "Translations": {
-        "ar_SA": "فتح نافذة إدارة الملفات الشخصية للمستخدمين",
-        "de_DE": "Öffnet das Profilverwaltungsfenster",
-        "el_GR": "Ανοίξτε το παράθυρο Διαχείρισης Προφίλ Χρήστη",
-        "en_US": "Open User Profiles Manager window",
-        "es_ES": "Abre la ventana para gestionar los perfiles de usuario",
-        "fr_FR": "Ouvrir la fenêtre du gestionnaire de profils d'utilisateurs",
-        "he_IL": "פתח את חלון מנהל פרופילי המשתמש",
-        "it_IT": "Apri la finestra di gestione dei profili utente",
-        "ja_JP": "ユーザプロファイル管理ウインドウを開きます",
-        "ko_KR": "사용자 프로필 관리자 창 열기",
-        "no_NO": "Åpne vindu for brukerprofiler",
-        "pl_PL": "Otwórz okno Menedżera Profili Użytkownika",
-        "pt_BR": "Abrir Janela de Gerenciamento de Perfis",
-        "ru_RU": "Открыть менеджер учётных записей",
-        "sv_SE": "Öppna hanterare för användarprofiler",
-        "th_TH": "เปิดหน้าต่างตัวจัดการโปรไฟล์ผู้ใช้",
-        "tr_TR": "Kullanıcı profil yöneticisi penceresini açar",
-        "uk_UA": "Відкриває вікно диспетчера профілів користувачів",
-        "zh_CN": "打开用户账户管理窗口",
-        "zh_TW": "開啟使用者設定檔管理員視窗"
       }
     },
     {

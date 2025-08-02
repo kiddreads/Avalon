@@ -285,12 +285,10 @@
                     Spacing="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center"
-                                   ToolTip.Tip="{ext:Locale ShaderDumpPathTooltip}"
                                    Text="{ext:Locale SettingsTabGraphicsShaderDumpPath}"
                                    Width="250" />
                         <TextBox Text="{Binding ShaderDumpPath}"
-                                 Width="350"
-                                 ToolTip.Tip="{ext:Locale ShaderDumpPathTooltip}" />
+                                 Width="350" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
