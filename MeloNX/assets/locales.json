@@ -2143,31 +2143,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuOpenUserSaveDirectoryToolTip",
-      "Translations": {
-        "ar_SA": "يفتح المجلد الذي يحتوي على حفظ المستخدم للتطبيق",
-        "de_DE": "Öffnet das Verzeichnis, welches den Benutzer-Spielstand beinhaltet",
-        "el_GR": "Ανοίγει την τοποθεσία που περιέχει την Αποθήκευση Χρήστη της εφαρμογής",
-        "en_US": "Opens the directory which contains Application's User Save",
-        "es_ES": "Abre la carpeta que contiene la partida guardada del usuario para esta aplicación",
-        "fr_FR": "Ouvre le dossier contenant la sauvegarde utilisateur de l’application",
-        "he_IL": "פותח את תקיית השמור של המשתמש ביישום הנוכחי",
-        "it_IT": "Apre la cartella che contiene i dati di salvataggio dell'utente",
-        "ja_JP": "アプリケーションのユーザセーブデータを格納するディレクトリを開きます",
-        "ko_KR": "앱의 사용자 저장이 포함된 디렉터리 열기",
-        "no_NO": "Åpner mappen som inneholder programmets bruker lagring",
-        "pl_PL": "Otwiera katalog, który zawiera zapis użytkownika dla tej aplikacji",
-        "pt_BR": "Abre o diretório que contém jogos salvos para o usuário atual",
-        "ru_RU": "Открывает папку с пользовательскими сохранениями",
-        "sv_SE": "Öppnar katalogen som innehåller applikationens användarsparade spel",
-        "th_TH": "เปิดไดเร็กทอรี่ซึ่งมีการบันทึกข้อมูลของผู้ใช้แอปพลิเคชัน",
-        "tr_TR": "Uygulamanın Kullanıcı Kaydı'nın bulunduğu dizini açar",
-        "uk_UA": "Відкриває теку, яка містить збереження користувача",
-        "zh_CN": "打开储存游戏用户存档的目录",
-        "zh_TW": "開啟此應用程式的使用者存檔資料夾"
-      }
-    },
-    {
       "ID": "GameListContextMenuOpenDeviceSaveDirectory",
       "Translations": {
         "ar_SA": "فتح مجلد حفظ الجهاز",
@@ -2190,31 +2165,6 @@
         "uk_UA": "Відкрити теку пристроїв користувача",
         "zh_CN": "打开系统数据目录",
         "zh_TW": "開啟裝置存檔資料夾"
-      }
-    },
-    {
-      "ID": "GameListContextMenuOpenDeviceSaveDirectoryToolTip",
-      "Translations": {
-        "ar_SA": "يفتح المجلد الذي يحتوي على حفظ الجهاز للتطبيق",
-        "de_DE": "Öffnet das Verzeichnis, welches den Geräte-Spielstände beinhaltet",
-        "el_GR": "Ανοίγει την τοποθεσία που περιέχει την Αποθήκευση Συσκευής της εφαρμογής",
-        "en_US": "Opens the directory which contains Application's Device Save",
-        "es_ES": "Abre la carpeta que contiene la partida guardada del sistema para esta aplicación",
-        "fr_FR": "Ouvre le dossier contenant la sauvegarde locale de l’application",
-        "he_IL": "פותח את הספרייה המכילה את שמור המכשיר של היישום",
-        "it_IT": "Apre la cartella che contiene i dati di salvataggio del dispositivo",
-        "ja_JP": "アプリケーションのデバイスセーブデータを格納するディレクトリを開きます",
-        "ko_KR": "앱의 장치 저장이 포함된 디렉터리 열기",
-        "no_NO": "Åpner mappen som inneholder programmets lagringsenhet",
-        "pl_PL": "Otwiera katalog, który zawiera zapis urządzenia dla tej aplikacji",
-        "pt_BR": "Abre o diretório que contém saves do dispositivo para o usuário atual",
-        "ru_RU": "Открывает папку, содержащую сохраненные устройства",
-        "sv_SE": "Öppnar katalogen som innehåller applikationens sparade spel på enheten",
-        "th_TH": "เปิดไดเรกทอรี่ซึ่งมีบันทึกข้อมูลของอุปกรณ์ในแอปพลิเคชัน",
-        "tr_TR": "Uygulamanın Kullanıcı Cihaz Kaydı'nın bulunduğu dizini açar",
-        "uk_UA": "Відкриває теку, яка містить збережені пристрої",
-        "zh_CN": "打开储存游戏系统数据的目录",
-        "zh_TW": "開啟此應用程式的裝置存檔資料夾"
       }
     },
     {
@@ -2243,31 +2193,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuOpenBcatSaveDirectoryToolTip",
-      "Translations": {
-        "ar_SA": "‫يفتح المجلد الذي يحتوي على حفظ الـBCAT للتطبيق",
-        "de_DE": "Öffnet das Verzeichnis, welches den BCAT-Cache des Spiels beinhaltet",
-        "el_GR": "Ανοίγει την τοποθεσία που περιέχει την Αποθήκευση BCAT της εφαρμογής",
-        "en_US": "Opens the directory which contains Application's BCAT Save",
-        "es_ES": "Abrir la carpeta que contiene el guardado BCAT de esta aplicación",
-        "fr_FR": "Ouvre le dossier contenant la sauvegarde BCAT de l’application",
-        "he_IL": "פותח את תקיית שמור ה-BCAT של היישום",
-        "it_IT": "Apre la cartella che contiene il salvataggio BCAT dell'applicazione",
-        "ja_JP": "アプリケーションの BCAT セーブデータを格納するディレクトリを開きます",
-        "ko_KR": "앱의 BCAT 저장이 포함된 디렉터리 열기",
-        "no_NO": "Åpner mappen som inneholder programmets BCAT-lagring",
-        "pl_PL": "Otwiera katalog, który zawiera zapis BCAT dla tej aplikacji",
-        "pt_BR": "Abre o diretório que contém saves BCAT para o usuário atual",
-        "ru_RU": "Открывает папку, содержащую сохраненные BCAT",
-        "sv_SE": "Öppnar katalogen som innehåller applikationens BCAT-sparningar",
-        "th_TH": "เปิดไดเรกทอรี่ซึ่งมีการบันทึกข้อมูลของ BCAT ในแอปพลิเคชัน",
-        "tr_TR": "Uygulamanın Kullanıcı BCAT Kaydı'nın bulunduğu dizini açar",
-        "uk_UA": "Відкриває теку, яка містить BCAT-збереження програми",
-        "zh_CN": "打开储存游戏 BCAT 数据的目录",
-        "zh_TW": "開啟此應用程式的 BCAT 存檔資料夾"
-      }
-    },
-    {
       "ID": "GameListContextMenuManageTitleUpdates",
       "Translations": {
         "ar_SA": "إدارة تحديثات اللُعبة",
@@ -2293,31 +2218,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuManageTitleUpdatesToolTip",
-      "Translations": {
-        "ar_SA": "يفتح نافذة إدارة تحديث اللُعبة",
-        "de_DE": "Öffnet den Spiel-Update-Manager",
-        "el_GR": "Ανοίγει το παράθυρο διαχείρισης Ενημερώσεων Παιχνιδιού",
-        "en_US": "Opens the Title Update management window",
-        "es_ES": "Abrir la ventana de gestión de actualizaciones de esta aplicación",
-        "fr_FR": "Ouvre la fenêtre de gestion des mises à jour du titre",
-        "he_IL": "פותח את חלון מנהל עדכוני המשחקים",
-        "it_IT": "Apre la finestra di gestione aggiornamenti del gioco",
-        "ja_JP": "タイトルのアップデート管理ウインドウを開きます",
-        "ko_KR": "타이틀 업데이트 관리 창 열기",
-        "no_NO": "Åpner vinduet Tittel - Oppdateringskontroll",
-        "pl_PL": "Otwiera okno zarządzania aktualizacjami danej aplikacji",
-        "pt_BR": "Abre a janela de gerenciamento de atualizações",
-        "ru_RU": "Открывает окно управления обновлениями приложения",
-        "sv_SE": "Öppnar spelets hanteringsfönster för uppdateringar",
-        "th_TH": "เปิดหน้าต่างการจัดการเวอร์ชั่นการอัพเดต",
-        "tr_TR": "Oyun Güncelleme Yönetim Penceresini Açar",
-        "uk_UA": "Відкриває меню керування оновленнями до гри (застосунку)",
-        "zh_CN": "打开游戏更新管理窗口",
-        "zh_TW": "開啟遊戲更新管理視窗"
-      }
-    },
-    {
       "ID": "GameListContextMenuManageDlc",
       "Translations": {
         "ar_SA": "إدارة المحتوي الإضافي",
@@ -2340,31 +2240,6 @@
         "uk_UA": "Керування DLC",
         "zh_CN": "管理 DLC",
         "zh_TW": "管理 DLC"
-      }
-    },
-    {
-      "ID": "GameListContextMenuManageDlcToolTip",
-      "Translations": {
-        "ar_SA": "يفتح نافذة إدارة المحتوي الإضافي",
-        "de_DE": "Öffnet den DLC-Manager",
-        "el_GR": "Ανοίγει το παράθυρο διαχείρισης DLC",
-        "en_US": "Opens the DLC management window",
-        "es_ES": "Abrir la ventana de gestión del DLC",
-        "fr_FR": "Ouvre la fenêtre de gestion des DLC",
-        "he_IL": "פותח את חלון מנהל הרחבות המשחקים",
-        "it_IT": "Apre la finestra di gestione dei DLC",
-        "ja_JP": "DLC管理ウインドウを開きます",
-        "ko_KR": "DLC 관리 창 열기",
-        "no_NO": "Åpner DLC håndteringsvinduet",
-        "pl_PL": "Otwiera okno zarządzania dodatkową zawartością",
-        "pt_BR": "Abre a janela de gerenciamento de DLCs",
-        "ru_RU": "Открывает окно управления DLC",
-        "sv_SE": "Öppnar DLC-hanteringsfönstret",
-        "th_TH": "เปิดหน้าต่างจัดการ DLC",
-        "tr_TR": "DLC yönetim penceresini açar",
-        "uk_UA": "Відкриває меню керування DLC",
-        "zh_CN": "打开 DLC 管理窗口",
-        "zh_TW": "開啟 DLC 管理視窗"
       }
     },
     {
@@ -2568,31 +2443,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuCacheManagementOpenPptcDirectoryToolTip",
-      "Translations": {
-        "ar_SA": "‫‫يفتح المجلد الذي يحتوي على ذاكرة التخزين المؤقت للترجمة المستمرة (PPTC) للتطبيق",
-        "de_DE": "Öffnet das Verzeichnis, das den PPTC-Cache der Anwendung beinhaltet",
-        "el_GR": "Ανοίγει την τοποθεσία που περιέχει τη προσωρινή μνήμη PPTC της εφαρμογής",
-        "en_US": "Opens the directory which contains Application's PPTC cache",
-        "es_ES": "Abrir la carpeta que contiene la caché de PPTC de esta aplicación",
-        "fr_FR": "Ouvre le dossier contenant le cache PPTC de l’application",
-        "he_IL": "פותח את התקייה של מטמון ה-PPTC של האפליקציה",
-        "it_IT": "Apre la cartella che contiene la cache PPTC dell'applicazione",
-        "ja_JP": "アプリケーションの PPTC キャッシュを格納するディレクトリを開きます",
-        "ko_KR": "앱의 PPTC 캐시가 포함된 디렉터리 열기",
-        "no_NO": "Åpner mappen som inneholder programmets PPTC cache",
-        "pl_PL": "Otwiera katalog, który zawiera pamięć podręczną PPTC aplikacji",
-        "pt_BR": "Abre o diretório contendo os arquivos do cache PPTC",
-        "ru_RU": "Открывает папку, содержащую PPTC кэш приложений и игр",
-        "sv_SE": "Öppnar katalogen som innehåller applikationens PPTC-cache",
-        "th_TH": "เปิดไดเร็กทอรี่ของ แคช PPTC ในแอปพลิเคชัน",
-        "tr_TR": "Uygulamanın PPTC Önbelleğinin bulunduğu dizini açar",
-        "uk_UA": "Відкриває теку, яка містить PPTC кеш застосунку (гри)",
-        "zh_CN": "打开储存游戏 PPTC 缓存文件的目录",
-        "zh_TW": "開啟此應用程式的 PPTC 快取資料夾"
-      }
-    },
-    {
       "ID": "GameListContextMenuCacheManagementOpenShaderCacheDirectory",
       "Translations": {
         "ar_SA": "فتح مجلد الذاكرة المؤقتة لمرشحات الفيديو ",
@@ -2615,31 +2465,6 @@
         "uk_UA": "Відкрити теку з кешем шейдерів",
         "zh_CN": "打开着色器缓存目录",
         "zh_TW": "開啟著色器快取資料夾"
-      }
-    },
-    {
-      "ID": "GameListContextMenuCacheManagementOpenShaderCacheDirectoryToolTip",
-      "Translations": {
-        "ar_SA": "يفتح المجلد الذي يحتوي على ذاكرة المظللات المؤقتة للتطبيق",
-        "de_DE": "Öffnet das Verzeichnis, das den Shader Cache der Anwendung beinhaltet",
-        "el_GR": "Ανοίγει την τοποθεσία που περιέχει την προσωρινή μνήμη Shader της εφαρμογής",
-        "en_US": "Opens the directory which contains Application's shader cache",
-        "es_ES": "Abrir la carpeta que contiene la caché de sombreadores de esta aplicación",
-        "fr_FR": "Ouvre le dossier contenant le cache des shaders de l’application",
-        "he_IL": "פותח את תקיית מטמון ההצללות של היישום",
-        "it_IT": "Apre la cartella che contiene la cache degli shader dell'applicazione",
-        "ja_JP": "アプリケーションのシェーダーキャッシュを格納するディレクトリを開きます",
-        "ko_KR": "앱의 셰이더 캐시가 포함된 디렉터리 열기",
-        "no_NO": "Åpner mappen som inneholder Programmets shader cache",
-        "pl_PL": "Otwiera katalog, który zawiera pamięć podręczną cieni aplikacji",
-        "pt_BR": "Abre o diretório contendo os arquivos do cache de Shaders",
-        "ru_RU": "Открывает папку, содержащую кэш шейдеров приложений и игр",
-        "sv_SE": "Öppnar katalogen som innehåller applikationens shader cache",
-        "th_TH": "เปิดไดเรกทอรี่ของ แคช แสงเงา ในแอปพลิเคชัน",
-        "tr_TR": "Uygulamanın shader önbelleğinin bulunduğu dizini açar",
-        "uk_UA": "Відкриває теку, яка містить кеш шейдерів застосунку (гри)",
-        "zh_CN": "打开储存游戏着色器缓存文件的目录",
-        "zh_TW": "開啟此應用程式的著色器快取資料夾"
       }
     },
     {
@@ -3118,31 +2943,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuShowGameDataToolTip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Show stats & details about the currently selected game.",
-        "es_ES": "",
-        "fr_FR": "Afficher les statistiques et les détails sur le jeu actuellement sélectionné.",
-        "he_IL": "",
-        "it_IT": "",
-        "ja_JP": "",
-        "ko_KR": "그리드 보기 레이아웃에서 누락된 현재 선택된 게임에 대한 다양한 정보를 표시합니다.",
-        "no_NO": "Vis statistikk og detaljer om det valgte spillet.",
-        "pl_PL": "",
-        "pt_BR": "Exibe estatísticas e detalhes sobre o jogo selecionado.",
-        "ru_RU": "Показывать статистику и подробную информацию о выбранной игре.",
-        "sv_SE": "Visa statistik och detaljer om det aktuella spelet.",
-        "th_TH": "",
-        "tr_TR": "",
-        "uk_UA": "Показати статистику та деталі обраної гри.",
-        "zh_CN": "显示当前选定游戏的状态与详细信息。",
-        "zh_TW": "顯示目前已選擇遊戲的狀態及詳細資訊。"
-      }
-    },
-    {
       "ID": "GameListContextMenuOpenModsDirectory",
       "Translations": {
         "ar_SA": "‫فتح مجلد التعديلات (Mods)",
@@ -3165,31 +2965,6 @@
         "uk_UA": "Відкрити теку з модами",
         "zh_CN": "打开 MOD 目录",
         "zh_TW": "開啟模組資料夾"
-      }
-    },
-    {
-      "ID": "GameListContextMenuOpenModsDirectoryToolTip",
-      "Translations": {
-        "ar_SA": "يفتح المجلد الذي يحتوي على تعديلات‫(mods) التطبيق",
-        "de_DE": "Öffnet das Verzeichnis, welches Mods für die Spiele beinhaltet",
-        "el_GR": "",
-        "en_US": "Opens the directory which contains Application's Mods",
-        "es_ES": "Abre el directorio que contiene los Mods de la Aplicación.",
-        "fr_FR": "Ouvre le dossier contenant les mods de l’application",
-        "he_IL": "פותח את התיקייה שמכילה מודים של האפליקציה",
-        "it_IT": "Apre la cartella che contiene le mod dell'applicazione",
-        "ja_JP": "アプリケーションの Mod データを格納するディレクトリを開きます",
-        "ko_KR": "앱의 모드가 포함된 디렉터리 열기",
-        "no_NO": "Åpner mappen som inneholder programmets modifikasjoner",
-        "pl_PL": "Otwiera katalog zawierający mody dla danej aplikacji",
-        "pt_BR": "Abre a pasta que contém os mods da aplicação",
-        "ru_RU": "Открывает папку, содержащую моды для приложений и игр",
-        "sv_SE": "Öppnar katalogen som innehåller applikationens Mods",
-        "th_TH": "เปิดไดเร็กทอรี่ Mods ของแอปพลิเคชัน",
-        "tr_TR": "",
-        "uk_UA": "Відкриває теку, яка містить модифікації застосунків (ігор)",
-        "zh_CN": "打开存放游戏 MOD 的目录",
-        "zh_TW": "開啟此應用程式模組的資料夾"
       }
     },
     {
@@ -12390,31 +12165,6 @@
         "uk_UA": "Додати в обрані",
         "zh_CN": "收藏",
         "zh_TW": "加入/移除為我的最愛"
-      }
-    },
-    {
-      "ID": "GameListContextMenuToggleFavoriteToolTip",
-      "Translations": {
-        "ar_SA": "تبديل الحالة المفضلة للعبة",
-        "de_DE": "Aktiviert den Favoriten-Status des Spiels",
-        "el_GR": "Εναλλαγή της Κατάστασης Αγαπημένο του Παιχνιδιού",
-        "en_US": "Toggle Favorite status of Game",
-        "es_ES": "Marca o desmarca el juego como favorito",
-        "fr_FR": "Basculer le statut favori du jeu",
-        "he_IL": "למתג סטטוס העדפה של משחק",
-        "it_IT": "Segna il gioco come preferito",
-        "ja_JP": "ゲームをお気に入りに含めるかどうかを切り替えます",
-        "ko_KR": "게임의 즐겨찾기 상태 전환",
-        "no_NO": "Vis/Skjul favorittstatus for spillet",
-        "pl_PL": "Przełącz status Ulubionej Gry",
-        "pt_BR": "Marca ou desmarca o jogo como favorito",
-        "ru_RU": "Добавляет игру в избранное и помечает звёздочкой",
-        "sv_SE": "Växla favoritstatus för spelet",
-        "th_TH": "สลับสถานะเกมที่ชื่นชอบ",
-        "tr_TR": "Oyunu Favorilere Ekle/Çıkar",
-        "uk_UA": "Додати або вилучити гру з обраних",
-        "zh_CN": "切换游戏的收藏状态",
-        "zh_TW": "切換遊戲的我的最愛狀態"
       }
     },
     {

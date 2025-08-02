@@ -14,8 +14,7 @@
         Command="{Binding ToggleFavorite}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuToggleFavorite}"
-        Icon="{ext:Icon fa-solid fa-star}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuToggleFavoriteToolTip}" />
+        Icon="{ext:Icon fa-solid fa-star}" />
     <MenuItem
         Command="{Binding CreateApplicationShortcut}"
         CommandParameter="{Binding}"
@@ -47,43 +46,37 @@
         Command="{Binding OpenApplicationData}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuShowGameData}"
-        Icon="{ext:Icon fa-solid fa-chart-line}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuShowGameDataToolTip}"/>
+        Icon="{ext:Icon fa-solid fa-chart-line}" />
     <Separator />
     <MenuItem
         Command="{Binding OpenUserSaveDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenUserSaveDirectory}"
         Icon="{ext:Icon fa-solid fa-sd-card}"
-        IsEnabled="{Binding OpenUserSaveDirectoryEnabled}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuOpenUserSaveDirectoryToolTip}" />
+        IsEnabled="{Binding OpenUserSaveDirectoryEnabled}" />
     <MenuItem
         Command="{Binding OpenDeviceSaveDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenDeviceSaveDirectory}"
         Icon="{ext:Icon fa-solid fa-hard-drive}"
-        IsEnabled="{Binding OpenDeviceSaveDirectoryEnabled}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuOpenDeviceSaveDirectoryToolTip}" />
+        IsEnabled="{Binding OpenDeviceSaveDirectoryEnabled}" />
     <MenuItem
         Command="{Binding OpenBcatSaveDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenBcatSaveDirectory}"
         Icon="{ext:Icon fa-solid fa-box-archive}"
-        IsEnabled="{Binding OpenBcatSaveDirectoryEnabled}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuOpenBcatSaveDirectoryToolTip}" />
+        IsEnabled="{Binding OpenBcatSaveDirectoryEnabled}" />
     <Separator />
     <MenuItem
         Command="{Binding OpenTitleUpdateManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageTitleUpdates}"
-        Icon="{ext:Icon fa-solid fa-code-compare}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuManageTitleUpdatesToolTip}" />
+        Icon="{ext:Icon fa-solid fa-code-compare}" />
     <MenuItem
         Command="{Binding OpenDownloadableContentManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageDlc}"
-        Icon="{ext:Icon fa-solid fa-download}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuManageDlcToolTip}" />
+        Icon="{ext:Icon fa-solid fa-download}" />
     <MenuItem
         Command="{Binding OpenCheatManager}"
         CommandParameter="{Binding}"
@@ -101,8 +94,7 @@
         Command="{Binding OpenModsDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenModsDirectory}"
-        Icon="{ext:Icon fa-solid fa-folder}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuOpenModsDirectoryToolTip}" />
+        Icon="{ext:Icon fa-solid fa-folder}" />
     <MenuItem
         Command="{Binding OpenSdModsDirectory}"
         CommandParameter="{Binding}"
@@ -140,14 +132,12 @@
             Command="{Binding OpenPtcDirectory}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementOpenPptcDirectory}"
-            Icon="{ext:Icon fa-solid fa-folder}"
-            ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementOpenPptcDirectoryToolTip}" />
+            Icon="{ext:Icon fa-solid fa-folder}" />
         <MenuItem
             Command="{Binding OpenShaderCacheDirectory}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementOpenShaderCacheDirectory}"
-            Icon="{ext:Icon fa-solid fa-folder}"
-            ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementOpenShaderCacheDirectoryToolTip}" />
+            Icon="{ext:Icon fa-solid fa-folder}" />
     </MenuItem>
     <MenuItem Header="{ext:Locale GameListContextMenuExtractData}" Icon="{ext:Icon fa-solid fa-file-export}">
         <MenuItem
