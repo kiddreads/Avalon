@@ -188,6 +188,8 @@
 01003DD00BFEE000,"Airheart - Tales of broken Wings",,playable,2021-02-26 15:20:27
 01007F100DE52000,"Akane",nvdec,playable,2022-07-21 00:12:18
 01009A800F0C8000,"Akash: Path of the Five",gpu;nvdec,ingame,2020-12-14 22:33:12
+01009E8012976000,"AKIBA'S TRIP: Hellbound & Debriefed",,playable,2025-07-30 23:22:47
+0100D74019A0E000,"AKIBA'S TRIP: Undead & Undressed Director's Cut",,playable,2025-07-31 13:58:42
 010053100B0EA000,"Akihabara - Feel the Rhythm Remixed",,playable,2021-02-22 14:39:35
 0100D4C00EE0C000,"Akuarium",slow,playable,2020-12-12 23:43:36
 010026E00FEBE000,"Akuto: Showdown",,playable,2020-08-04 19:43:27
@@ -1095,6 +1097,7 @@
 0100F9600E746000,"ESP Ra.De. Psi",audio;slow,ingame,2024-03-07 15:05:08
 010073000FE18000,"Esports powerful pro yakyuu 2020",gpu;crash;Needs More Attention,ingame,2024-04-29 05:34:14
 01004F9012FD8000,"Estranged: The Departure",nvdec;UE4,playable,2022-10-24 10:37:58
+010018f01e0a0000,"Eternights",,playable,2025-07-30 12:10:24
 0100CB900B498000,"Eternum Ex",,playable,2021-01-13 20:28:32
 010092501EB2C000,"Europa (Demo)",gpu;crash;UE4,ingame,2024-04-23 10:47:12
 01007BE0160D6000,"EVE ghost enemies",gpu,ingame,2023-01-14 03:13:30
@@ -1240,6 +1243,8 @@
 010003F00BD48000,"Friday the 13th: Killer Puzzle",,playable,2021-01-28 01:33:38
 010092A00C4B6000,"Friday the 13th: The Game Ultimate Slasher Edition",nvdec;online-broken;UE4,playable,2022-09-06 17:33:27
 0100F200178F4000,"FRONT MISSION 1st: Remake",,playable,2023-06-09 07:44:24
+0100c4e018a24000,"FRONT MISSION 2: Remake",,playable,2025-07-30 12:11:23
+01007E6019872000,"FRONT MISSION 3: Remake",,playable,2025-07-30 12:12:02
 0100861012474000,"Frontline Zed",,playable,2020-10-03 12:55:59
 0100B5300B49A000,"Frost",,playable,2022-07-27 12:00:36
 010038A007AA4000,"FruitFall Crush",,playable,2020-10-20 11:33:33
@@ -1518,6 +1523,7 @@
 010095C016C14000,"Iridium",,playable,2022-08-05 23:19:53
 0100AD300B786000,"Iris School of Wizardry -Vinculum Hearts-",,playable,2022-12-05 13:11:15
 0100945012168000,"Iris.Fall",nvdec,playable,2022-10-18 13:40:22
+010059801B736000,"IronFall: Invasion",,playable,2025-07-30 11:42:30 
 01005270118D6000,"Iron Wings",slow,ingame,2022-08-07 08:32:57
 01004DB003E6A000,"IRONCAST",,playable,2021-01-13 13:54:29
 0100E5700CD56000,"Irony Curtain: From Matryoshka with Love",,playable,2021-06-04 20:12:37
@@ -2306,6 +2312,7 @@
 010077B00BDD8000,"Professional Farmer: Nintendo Switch™ Edition",slow,playable,2020-12-16 13:38:19
 010018300C83A000,"Professor Lupo and his Horrible Pets",,playable,2020-06-12 00:08:45
 0100D1F0132F6000,"Professor Lupo: Ocean",,playable,2021-04-14 16:33:33
+0100c3a017834000,"Prodeus",,playable,2025-07-30 12:07:52
 0100BBD00976C000,"Project Highrise: Architect's Edition",,playable,2022-08-10 17:19:12
 0100ACE00DAB6000,"Project Nimbus: Complete Edition",nvdec;UE4;vulkan-backend-bug,playable,2022-08-10 17:35:43
 01002980140F6000,"Project TRIANGLE STRATEGY™ Debut Demo",UE4;demo,playable,2022-10-24 21:40:27
@@ -2768,7 +2775,7 @@
 0100E6B0115FC000,"Star99",online,menus,2021-11-26 14:18:51
 01002100137BA000,"Stardash",,playable,2021-01-21 16:31:19
 0100E65002BB8000,"Stardew Valley",online-broken;ldn-untested,playable,2024-02-14 03:11:19
-01002CC003FE6000,"Starlink: Battle for Atlas™ Digital Edition",services-horizon;crash;Needs Update,nothing,2024-05-05 17:25:11
+01002CC003FE6000,"Starlink: Battle for Atlas™ Digital Edition",,playable,2025-07-30 12:09:37
 010098E010FDA000,"Starlit Adventures Golden Stars",,playable,2020-11-21 12:14:43
 01001BB00AC26000,"STARSHIP AVENGER Operation: Take Back Earth",,playable,2021-01-12 15:52:55
 010000700A572000,"State of Anarchy: Master of Mayhem",nvdec,playable,2021-01-12 19:00:05
@@ -2976,6 +2983,7 @@
 0100C2E0129A6000,"The Executioner",nvdec,playable,2021-01-23 00:31:28
 01006050114D4000,"The Experiment: Escape Room",gpu,ingame,2022-09-30 13:20:35
 0100B5900DFB2000,"The Eyes of Ara",,playable,2022-09-16 14:44:06
+0100BA5013E52000,"The Falconeer: Warrior Edition",,playable,2025-07-30 12:04:50
 01002DD00AF9E000,"The Fall",gpu,ingame,2020-05-31 23:31:16
 01003E5002320000,"The Fall Part 2: Unbound",,playable,2021-11-06 02:18:08
 0100CDC00789E000,"The Final Station",nvdec,playable,2022-08-22 15:54:39
@@ -3198,6 +3206,7 @@
 010000400F582000,"TT Isle of Man Ride on the Edge 2",gpu;nvdec;online-broken,ingame,2022-09-30 22:13:05
 0100752011628000,"TTV2",,playable,2020-11-27 13:21:36
 0100AFE00452E000,"Tumblestone",,playable,2021-01-07 17:49:20
+0100D1A01D7BA000,"Turbo Overkill",,playable,2025-07-30 12:08:57
 010085500D5F6000,"Turok",gpu,ingame,2021-06-04 13:16:24
 0100CDC00D8D6000,"Turok 2: Seeds of Evil",gpu;vulkan,ingame,2022-09-12 17:50:05
 010004B0130C8000,"Turrican Flashback",audout,playable,2021-08-30 10:07:56
@@ -3221,6 +3230,8 @@
 0100592005164000,"UNBOX: Newbie's Adventure",UE4,playable,2022-08-29 13:12:56
 01002D900C5E4000,"Uncanny Valley",nvdec,playable,2021-06-04 13:28:45
 010076F011F54000,"Undead & Beyond",nvdec,playable,2022-10-04 09:11:18
+01009B700D0B8000,"Undead Horde",,playable,2025-07-30 12:05:05
+0100FC301A878000,"Undead Horde 2: Necropolis",,playable,2025-07-30 12:06:07
 01008F3013E4E000,"Under Leaves",,playable,2021-05-22 18:13:58
 010080B00AD66000,"Undertale",,playable,2022-08-31 17:31:46
 01008F80049C6000,"Unepic",,playable,2024-01-15 17:03:00
