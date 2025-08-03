@@ -32,26 +32,22 @@
                     Command="{Binding OpenFile}"
                     Header="{ext:Locale MenuBarFileOpenFromFile}"
                     Icon="{ext:Icon fa-solid fa-file}"
-                    IsEnabled="{Binding EnableNonGameRunningControls}"
-                    ToolTip.Tip="{ext:Locale LoadApplicationFileTooltip}" />
+                    IsEnabled="{Binding EnableNonGameRunningControls}" />
                 <MenuItem
                     Command="{Binding OpenFolder}"
                     Header="{ext:Locale MenuBarFileOpenUnpacked}"
                     Icon="{ext:Icon fa-solid fa-folder-open}"
-                    IsEnabled="{Binding EnableNonGameRunningControls}"
-                    ToolTip.Tip="{ext:Locale LoadApplicationFolderTooltip}" />
+                    IsEnabled="{Binding EnableNonGameRunningControls}" />
                 <MenuItem
                     Command="{Binding LoadDlcFromFolder}"
                     Header="{ext:Locale MenuBarFileLoadDlcFromFolder}"
                     Icon="{ext:Icon fa-solid fa-download}"
-                    IsEnabled="{Binding EnableNonGameRunningControls}"
-                    ToolTip.Tip="{ext:Locale LoadDlcFromFolderTooltip}" />
+                    IsEnabled="{Binding EnableNonGameRunningControls}" />
                 <MenuItem
                     Command="{Binding LoadTitleUpdatesFromFolder}"
                     Header="{ext:Locale MenuBarFileLoadTitleUpdatesFromFolder}"
                     Icon="{ext:Icon fa-solid fa-code-compare}"
-                    IsEnabled="{Binding EnableNonGameRunningControls}"
-                    ToolTip.Tip="{ext:Locale LoadTitleUpdatesFromFolderTooltip}" />
+                    IsEnabled="{Binding EnableNonGameRunningControls}" />
                 <MenuItem Header="{ext:Locale MenuBarFileOpenApplet}" IsEnabled="{Binding IsAppletMenuActive}" Icon="{ext:Icon fa-solid fa-microchip}">
                     <MenuItem
                         Name="MiiAppletMenuItem"
@@ -76,8 +72,7 @@
                 <MenuItem
                     Name="CloseRyujinxMenuItem"
                     Header="{ext:Locale MenuBarFileExit}"
-                    Icon="{ext:Icon fa-solid fa-power-off}"
-                    ToolTip.Tip="{ext:Locale ExitTooltip}" />
+                    Icon="{ext:Icon fa-solid fa-power-off}" />
             </MenuItem>
             <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarOptions}">
                 <MenuItem
@@ -181,8 +176,7 @@
                     Header="{ext:Locale MenuBarOptionsStopEmulation}"
                     Icon="{ext:Icon fa-solid fa-stop}"
                     InputGesture="Escape"
-                    IsEnabled="{Binding IsGameRunning}"
-                    ToolTip.Tip="{ext:Locale StopEmulationTooltip}" />
+                    IsEnabled="{Binding IsGameRunning}" />
                 <MenuItem Command="{Binding SimulateWakeUpMessage}" Header="{ext:Locale MenuBarOptionsSimulateWakeUpMessage}" Icon="{ext:Icon fa-solid fa-sun}" />
                 <Separator />
                 <MenuItem

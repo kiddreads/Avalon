@@ -2343,31 +2343,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuCacheManagementNukePptcToolTip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Deletes all PPTC cache files for the Application",
-        "es_ES": "",
-        "fr_FR": "Supprime tous les fichiers de cache PPTC de l’application",
-        "he_IL": "",
-        "it_IT": "",
-        "ja_JP": "",
-        "ko_KR": "앱의 모든 PPTC 캐시 파일 삭제",
-        "no_NO": "Sletter alle PPTC-cache-filer for applikasjonen",
-        "pl_PL": "",
-        "pt_BR": "Apaga os arquivos de cache PPTC do aplicativo",
-        "ru_RU": "Удаляет все файлы кэша PPTC для приложения",
-        "sv_SE": "Tar bort alla PPTC-cachefiler för applikationen",
-        "th_TH": "",
-        "tr_TR": "",
-        "uk_UA": "Видаляє всі файли кешу PPTC для застосунку",
-        "zh_CN": "删除应用程序的所有 PPTC 缓存",
-        "zh_TW": "清除應用程式的 PPTC"
-      }
-    },
-    {
       "ID": "GameListContextMenuCacheManagementPurgeShaderCache",
       "Translations": {
         "ar_SA": "تنظيف ذاكرة مرشحات الفيديو المؤقتة",
@@ -2390,31 +2365,6 @@
         "uk_UA": "Очистити кеш шейдерів",
         "zh_CN": "清除着色器缓存文件",
         "zh_TW": "清除著色器快取"
-      }
-    },
-    {
-      "ID": "GameListContextMenuCacheManagementPurgeShaderCacheToolTip",
-      "Translations": {
-        "ar_SA": "يحذف ذاكرة مرشحات الفيديو المؤقتة الخاصة بالتطبيق",
-        "de_DE": "Löscht den Shader-Cache der Anwendung",
-        "el_GR": "Διαγράφει την προσωρινή μνήμη Shader της εφαρμογής",
-        "en_US": "Deletes Application's shader cache",
-        "es_ES": "Eliminar la caché de sombreadores de esta aplicación",
-        "fr_FR": "Supprime le cache des shaders de l’application",
-        "he_IL": "מוחק את מטמון ההצללות של היישום",
-        "it_IT": "Elimina la cache degli shader dell'applicazione",
-        "ja_JP": "アプリケーションのシェーダーキャッシュを破棄します",
-        "ko_KR": "앱의 셰이더 캐시 삭제",
-        "no_NO": "Sletter applikasjonens shader cache",
-        "pl_PL": "Usuwa pamięć podręczną cieni danej aplikacji",
-        "pt_BR": "Deleta o cache de Shader do jogo armazenado em disco",
-        "ru_RU": "Удаляет кеш шейдеров приложения",
-        "sv_SE": "Tar bort applikationens shader cache",
-        "th_TH": "ลบแคช แสงเงา ของแอปพลิเคชัน",
-        "tr_TR": "Uygulamanın shader önbelleğini temizler",
-        "uk_UA": "Видаляє кеш шейдерів застосунку (гри)",
-        "zh_CN": "删除游戏的着色器缓存文件，下次启动游戏时重新生成着色器缓存文件",
-        "zh_TW": "清除應用程式的著色器快取檔案"
       }
     },
     {
@@ -2818,56 +2768,6 @@
       }
     },
     {
-      "ID": "CreateCustomConfigurationToolTip",
-      "Translations": {
-        "ar_SA": "ينشئ تكوينًا مستقلًا للعبة الحالية",
-        "de_DE": "Erstellt eine unabhängige Konfiguration für das aktuelle Spiel",
-        "el_GR": "Δημιουργεί μια ανεξάρτητη διαμόρφωση για το τρέχον παιχνίδι",
-        "en_US": "Creates an independent configuration for the selected game",
-        "es_ES": "Crea una configuración independiente para el juego actual",
-        "fr_FR": "Crée une configuration indépendante pour le jeu sélectionné",
-        "he_IL": "יוצר תצורה עצמאית למשחק הנוכחי",
-        "it_IT": "Crea una configurazione indipendente per il gioco attuale",
-        "ja_JP": "現在のゲーム用の独立した設定を作成します",
-        "ko_KR": "현재 게임에 대한 독립적인 설정을 생성합니다",
-        "no_NO": "Oppretter en uavhengig konfigurasjon for det gjeldende spillet",
-        "pl_PL": "Tworzy niezależną konfigurację dla bieżącej gry",
-        "pt_BR": "Cria uma configuração independente para o jogo atual",
-        "ru_RU": "Создает независимую конфигурацию для текущей игры",
-        "sv_SE": "Skapar en oberoende konfiguration för det aktuella spelet",
-        "th_TH": "สร้างการกำหนดค่าที่เป็นอิสระสำหรับเกมปัจจุบัน",
-        "tr_TR": "Mevcut oyun için bağımsız bir yapılandırma oluşturur",
-        "uk_UA": "Створюйте незалежну конфігурацію для поточної гри",
-        "zh_CN": "为当前游戏创建独立的配置",
-        "zh_TW": "為已選擇的遊戲建立遊戲獨立自訂 (game-specific) 的設定檔"
-      }
-    },
-    {
-      "ID": "EditCustomConfigurationToolTip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Edit your existing independent configuration for the selected game",
-        "es_ES": "",
-        "fr_FR": "Modifier votre configuration indépendante existante pour le jeu sélectionné",
-        "he_IL": "",
-        "it_IT": "",
-        "ja_JP": "",
-        "ko_KR": "선택한 게임에 대한 기존 독립 구성 편집",
-        "no_NO": "Rediger din eksisterende uavhengige konfigurasjon for det valgte spillet",
-        "pl_PL": "",
-        "pt_BR": "Editar sua configuração independente existente para o jogo selecionado",
-        "ru_RU": "Отредактировать существующие независимые параметры для выбранной игры.",
-        "sv_SE": "Redigera din befintliga oberoende konfiguration för det valda spelet",
-        "th_TH": "",
-        "tr_TR": "",
-        "uk_UA": "Відредагувати наявну індивідуальну конфігурацію для цієї гри.",
-        "zh_CN": "编辑选定游戏的现存独立配置",
-        "zh_TW": "為已選擇的遊戲編輯遊戲獨立自訂 (game-specific) 的設定檔"
-      }
-    },
-    {
       "ID": "GameListContextMenuShowCompatEntry",
       "Translations": {
         "ar_SA": "",
@@ -2915,6 +2815,56 @@
         "uk_UA": "Показати цю гру в Списку Сумісності. Список сумісності також можна зайти в меню Довідки.",
         "zh_CN": "在兼容性列表中显示选定的游戏,您通常可以通过帮助菜单访问。",
         "zh_TW": "在相容性列表中顯示已選擇的遊戲。你也可以透過「說明」選單開啟。"
+      }
+    },
+    {
+      "ID": "CreateCustomConfigurationToolTip",
+      "Translations": {
+        "ar_SA": "ينشئ تكوينًا مستقلًا للعبة الحالية",
+        "de_DE": "Erstellt eine unabhängige Konfiguration für das aktuelle Spiel",
+        "el_GR": "Δημιουργεί μια ανεξάρτητη διαμόρφωση για το τρέχον παιχνίδι",
+        "en_US": "Creates an independent configuration for the selected game",
+        "es_ES": "Crea una configuración independiente para el juego actual",
+        "fr_FR": "Crée une configuration indépendante pour le jeu sélectionné",
+        "he_IL": "יוצר תצורה עצמאית למשחק הנוכחי",
+        "it_IT": "Crea una configurazione indipendente per il gioco attuale",
+        "ja_JP": "現在のゲーム用の独立した設定を作成します",
+        "ko_KR": "현재 게임에 대한 독립적인 설정을 생성합니다",
+        "no_NO": "Oppretter en uavhengig konfigurasjon for det gjeldende spillet",
+        "pl_PL": "Tworzy niezależną konfigurację dla bieżącej gry",
+        "pt_BR": "Cria uma configuração independente para o jogo atual",
+        "ru_RU": "Создает независимую конфигурацию для текущей игры",
+        "sv_SE": "Skapar en oberoende konfiguration för det aktuella spelet",
+        "th_TH": "สร้างการกำหนดค่าที่เป็นอิสระสำหรับเกมปัจจุบัน",
+        "tr_TR": "Mevcut oyun için bağımsız bir yapılandırma oluşturur",
+        "uk_UA": "Створюйте незалежну конфігурацію для поточної гри",
+        "zh_CN": "为当前游戏创建独立的配置",
+        "zh_TW": "為已選擇的遊戲建立遊戲獨立自訂 (game-specific) 的設定檔"
+      }
+    },
+    {
+      "ID": "EditCustomConfigurationToolTip",
+      "Translations": {
+        "ar_SA": "",
+        "de_DE": "",
+        "el_GR": "",
+        "en_US": "Edit your existing independent configuration for the selected game",
+        "es_ES": "",
+        "fr_FR": "Modifier votre configuration indépendante existante pour le jeu sélectionné",
+        "he_IL": "",
+        "it_IT": "",
+        "ja_JP": "",
+        "ko_KR": "선택한 게임에 대한 기존 독립 구성 편집",
+        "no_NO": "Rediger din eksisterende uavhengige konfigurasjon for det valgte spillet",
+        "pl_PL": "",
+        "pt_BR": "Editar sua configuração independente existente para o jogo selecionado",
+        "ru_RU": "Отредактировать существующие независимые параметры для выбранной игры.",
+        "sv_SE": "Redigera din befintliga oberoende konfiguration för det valda spelet",
+        "th_TH": "",
+        "tr_TR": "",
+        "uk_UA": "Відредагувати наявну індивідуальну конфігурацію для цієї гри.",
+        "zh_CN": "编辑选定游戏的现存独立配置",
+        "zh_TW": "為已選擇的遊戲編輯遊戲獨立自訂 (game-specific) 的設定檔"
       }
     },
     {
@@ -17290,156 +17240,6 @@
         "uk_UA": "Виводить повідомлення журналу налагодження в консолі.\n\nВикористовуйте лише за спеціальною вказівкою розробника, оскільки увімкнення цього параметру ускладнить читання журналів (logs) і погіршить роботу емулятора.",
         "zh_CN": "在控制台中显示调试日志。\n\n仅在特别需要时使用此功能，因为它会导致日志信息难以阅读，并降低模拟器性能。",
         "zh_TW": "在控制台中輸出偵錯日誌訊息。\n\n只有在人員特別指示的情況下才能使用，因為這會導致日誌難以閱讀，並降低模擬器效能。"
-      }
-    },
-    {
-      "ID": "LoadApplicationFileTooltip",
-      "Translations": {
-        "ar_SA": "افتح مستكشف الملفات لاختيار ملف متوافق مع سويتش لتحميله",
-        "de_DE": "Öffnet die Dateiauswahl um Datei zu laden, welche mit der Switch kompatibel ist",
-        "el_GR": "Ανοίξτε έναν επιλογέα αρχείων για να επιλέξετε ένα αρχείο συμβατό με το Switch για φόρτωση",
-        "en_US": "Open a file explorer to choose a Switch compatible file to load",
-        "es_ES": "Abre el explorador de archivos para elegir un archivo compatible con Switch para cargar",
-        "fr_FR": "Ouvre un explorateur de fichiers pour choisir un fichier compatible Switch à charger.",
-        "he_IL": "פתח סייר קבצים כדי לבחור קובץ תואם סוויץ' לטעינה",
-        "it_IT": "Apri un selettore file per scegliere un file compatibile con Switch da caricare",
-        "ja_JP": "ロードする Switch 互換のファイルを選択するためファイルエクスプローラを開きます",
-        "ko_KR": "파일 탐색기를 열어 불러올 Switch 호환 파일을 선택",
-        "no_NO": "Åpne filutforsker for å velge en Switch kompatibel fil å laste",
-        "pl_PL": "Otwórz eksplorator plików, aby wybrać plik kompatybilny z Switch do wczytania",
-        "pt_BR": "Abre um explorador de arquivos para escolher um arquivo compatível com o Switch para carregar",
-        "ru_RU": "Открывает файловый менеджер для выбора файла, совместимого с Nintendo Switch.",
-        "sv_SE": "Öppna en filutforskare för att välja en Switch-kompatibel fil att läsa in",
-        "th_TH": "เปิดตัวสำรวจไฟล์เพื่อเลือกไฟล์ที่เข้ากันได้กับ Switch ที่จะโหลด",
-        "tr_TR": "Switch ile uyumlu bir dosya yüklemek için dosya tarayıcısını açar",
-        "uk_UA": "Відкриває Файловий провідник, щоб обрати для завантаження сумісний зі Switch файл",
-        "zh_CN": "选择 Switch 游戏文件并加载",
-        "zh_TW": "開啟檔案總管，選擇與 Switch 相容的檔案來載入"
-      }
-    },
-    {
-      "ID": "LoadApplicationFolderTooltip",
-      "Translations": {
-        "ar_SA": "افتح مستكشف الملفات لاختيار تطبيق متوافق مع سويتش للتحميل",
-        "de_DE": "Öffnet die Dateiauswahl um ein Spiel zu laden, welches mit der Switch kompatibel ist",
-        "el_GR": "Ανοίξτε έναν επιλογέα αρχείων για να επιλέξετε μία μη συσκευασμένη εφαρμογή, συμβατή με το Switch για φόρτωση",
-        "en_US": "Open a file explorer to choose a Switch compatible, unpacked application to load",
-        "es_ES": "Abre el explorador de archivos para elegir un archivo desempaquetado y compatible con Switch para cargar",
-        "fr_FR": "Ouvre un explorateur de fichiers pour choisir une application dépaquetée compatible Switch à charger.",
-        "he_IL": "פתח סייר קבצים כדי לבחור יישום תואם סוויץ', לא ארוז לטעינה.",
-        "it_IT": "Apri un selettore file per scegliere un'applicazione estratta compatibile con Switch da caricare",
-        "ja_JP": "ロードする Switch 互換の展開済みアプリケーションを選択するためファイルエクスプローラを開きます",
-        "ko_KR": "Switch와 호환되는 압축 해제된 앱을 선택하여 불러오려면 파일 탐색기를 엽니다.",
-        "no_NO": "Åpne en filutforsker for å velge en Switch kompatibel, upakket applikasjon for å laste",
-        "pl_PL": "Otwórz eksplorator plików, aby wybrać zgodną z Switch, rozpakowaną aplikację do załadowania",
-        "pt_BR": "Abre um explorador de arquivos para escolher um aplicativo descompactado compatível com o Switch para carregar",
-        "ru_RU": "Открывает файловый менеджер для выбора распакованного приложения, совместимого с Nintendo Switch.",
-        "sv_SE": "Öppna en filutforskare för att välja en Switch-kompatibel, uppackad applikation att läsa in",
-        "th_TH": "เปิดตัวสำรวจไฟล์เพื่อเลือกไฟล์ที่เข้ากันได้กับ Switch ที่จะโหลด",
-        "tr_TR": "Switch ile uyumlu ayrıştırılmamış bir uygulama yüklemek için dosya tarayıcısını açar",
-        "uk_UA": "Відкриває Файловий провідник, щоб обрати сумісну зі Switch розпаковану програму для завантаження",
-        "zh_CN": "选择解包后的 Switch 游戏目录并加载",
-        "zh_TW": "開啟檔案總管，選擇與 Switch 相容且未封裝的應用程式來載入"
-      }
-    },
-    {
-      "ID": "LoadDlcFromFolderTooltip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Open a file explorer to choose one or more folders to bulk load DLC from",
-        "es_ES": "Abrir un explorador de archivos para seleccionar una o más carpetas para cargar DLC de forma masiva",
-        "fr_FR": "Ouvre un explorateur de fichiers pour choisir un ou plusieurs dossiers afin de charger en masse des DLC",
-        "he_IL": "",
-        "it_IT": "Apri un selettore file per scegliere una o più cartelle dalle quali caricare DLC in blocco",
-        "ja_JP": "",
-        "ko_KR": "파일 탐색기를 열어 DLC를 일괄 불러오기할 폴더를 하나 이상 선택",
-        "no_NO": "Åpne en filutforsker for å velge en eller flere mapper å laste inn DLC fra",
-        "pl_PL": "",
-        "pt_BR": "Abre um explorador de arquivos para escolher uma ou mais pastas para carregar DLC em massa",
-        "ru_RU": "Открывает проводник, для выбора одной или нескольких папок для массовой загрузки DLC",
-        "sv_SE": "Öppna en filutforskare för att välja en eller flera mappar att läsa in alla DLC från",
-        "th_TH": "เปิดตัวสำรวจไฟล์เพื่อเลือกหนึ่งโฟลเดอร์ขึ้นไปเพื่อโหลด DLC จำนวนมาก",
-        "tr_TR": "",
-        "uk_UA": "Відкриває Файловий провідник для обрання однієї або декількох тек для масового завантаження DLC",
-        "zh_CN": "打开文件资源管理器以选择一个或多个文件夹来批量加载 DLC。",
-        "zh_TW": "開啟檔案總管，選擇一個或多個資料夾來大量載入 DLC"
-      }
-    },
-    {
-      "ID": "LoadTitleUpdatesFromFolderTooltip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Open a file explorer to choose one or more folders to bulk load title updates from",
-        "es_ES": "Abrir un explorador de archivos para seleccionar una o más carpetas para cargar actualizaciones de título de forma masiva",
-        "fr_FR": "Ouvre un explorateur de fichiers pour choisir un ou plusieurs dossiers afin de charger en masse des mises à jour de titre.",
-        "he_IL": "",
-        "it_IT": "Apri un selettore file per scegliere una o più cartelle dalle quali caricare aggiornamenti in blocco",
-        "ja_JP": "",
-        "ko_KR": "파일 탐색기를 열어 하나 이상의 폴더를 선택하여 대량으로 타이틀 업데이트 불러오기",
-        "no_NO": "Åpne en filutforsker for å velge en eller flere mapper som du vil laste inn titteloppdateringer fra",
-        "pl_PL": "",
-        "pt_BR": "Abre um explorador de arquivos para escolher uma ou mais pastas para carregar em massa as atualizações de títulos",
-        "ru_RU": "Открывает проводник, чтобы выбрать одну или несколько папок для массовой загрузки обновлений приложений",
-        "sv_SE": "Öppna en filutforskare för att välja en eller flera mappar att läsa in alla titeluppdateringar från",
-        "th_TH": "เปิดตัวสำรวจไฟล์เพื่อเลือกหนึ่งโฟลเดอร์ขึ้นไปเพื่อโหลดไฟล์อัปเดตจำนวนมาก",
-        "tr_TR": "",
-        "uk_UA": "Відкриває Файловий Провідник для обрання однієї або декількох тек для масового завантаження оновлень",
-        "zh_CN": "打开文件资源管理器以选择一个或多个文件夹来批量加载游戏更新。",
-        "zh_TW": "開啟檔案總管，選擇一個或多個資料夾來大量載入遊戲更新"
-      }
-    },
-    {
-      "ID": "ExitTooltip",
-      "Translations": {
-        "ar_SA": "الخروج من ريوجينكس",
-        "de_DE": "Beendet Ryujinx",
-        "el_GR": "Έξοδος από το Ryujinx",
-        "en_US": "Exit Ryujinx",
-        "es_ES": "Cierra Ryujinx",
-        "fr_FR": "Quitter Ryujinx",
-        "he_IL": "צא מריוג'ינקס",
-        "it_IT": "Esci da Ryujinx",
-        "ja_JP": "Ryujinx を終了します",
-        "ko_KR": "Ryujinx 종료",
-        "no_NO": "Avslutt Ryujinx",
-        "pl_PL": "Wyjdź z Ryujinx",
-        "pt_BR": "Sair do Ryujinx",
-        "ru_RU": "Выйти из Ryujinx",
-        "sv_SE": "Avsluta Ryujinx",
-        "th_TH": "ออกจากโปรแกรม Ryujinx",
-        "tr_TR": "Ryujinx'ten çıkış yapmayı sağlar",
-        "uk_UA": "Закриває Ryujinx",
-        "zh_CN": "退出 Ryujinx 模拟器",
-        "zh_TW": "結束 Ryujinx"
-      }
-    },
-    {
-      "ID": "StopEmulationTooltip",
-      "Translations": {
-        "ar_SA": "إيقاف محاكاة اللعبة الحالية والعودة إلى اختيار اللعبة",
-        "de_DE": "Beendet die Emulation des derzeitigen Spiels und kehrt zu der Spielauswahl zurück",
-        "el_GR": "Σταματήστε την εξομοίωση του τρέχοντος παιχνιδιού και επιστρέψτε στην επιλογή παιχνιδιού",
-        "en_US": "Stop emulation of the current game and return to game selection",
-        "es_ES": "Detiene la emulación del juego actual y regresa a la selección de juegos",
-        "fr_FR": "Arrêter l'émulation du jeu en cours et revenir à la sélection des jeux",
-        "he_IL": "הפסק את הדמייה של המשחק הנוכחי וחזור למסך בחירת המשחק",
-        "it_IT": "Ferma l'emulazione del gioco attuale e torna alla selezione dei giochi",
-        "ja_JP": "ゲームのエミュレーションを中止してゲーム選択画面に戻ります",
-        "ko_KR": "현재 게임의 에뮬레이션을 중지하고 게임 선택으로 돌아가기",
-        "no_NO": "Stopp emuleringen av dette spillet og gå tilbake til spill valg",
-        "pl_PL": "Zatrzymaj emulację bieżącej gry i wróć do wyboru gier",
-        "pt_BR": "Parar emulação do jogo atual e voltar a seleção de jogos",
-        "ru_RU": "Остановка эмуляции текущей игры с последующим возвратом к списку игр",
-        "sv_SE": "Stoppa emulering av aktuellt spel och återgå till spelväljaren",
-        "th_TH": "หยุดการจำลองของเกมที่เปิดอยู่ในปัจจุบันและกลับไปยังการเลือกเกม",
-        "tr_TR": "Oynanmakta olan oyunun emülasyonunu durdurup oyun seçimine geri döndürür",
-        "uk_UA": "Зупиняє емуляцію поточної гри та повертається до вибору гри",
-        "zh_CN": "停止运行当前游戏，并回到主界面",
-        "zh_TW": "停止模擬目前遊戲，返回遊戲選擇介面"
       }
     },
     {
