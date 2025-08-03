@@ -246,14 +246,12 @@
                 <MenuItem
                     Name="AboutWindowMenuItem"
                     Header="{ext:Locale MenuBarHelpAbout}"
-                    Icon="{ext:Icon fa-solid fa-circle-info}"
-                    ToolTip.Tip="{ext:Locale OpenAboutTooltip}" />
+                    Icon="{ext:Icon fa-solid fa-circle-info}" />
                 <MenuItem
                     Name="UpdateMenuItem"
                     IsEnabled="{Binding CanUpdate}"
                     Header="{ext:Locale MenuBarHelpCheckForUpdates}"
-                    Icon="{ext:Icon fa-solid fa-rotate}"
-                    ToolTip.Tip="{ext:Locale CheckUpdatesTooltip}" />
+                    Icon="{ext:Icon fa-solid fa-rotate}" />
                 <MenuItem
                     Name="CompatibilityListMenuItem"
                     Header="{ext:Locale CompatibilityListOpen}"

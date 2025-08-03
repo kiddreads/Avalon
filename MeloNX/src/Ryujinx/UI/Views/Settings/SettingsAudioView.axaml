@@ -33,6 +33,7 @@
                                Width="250" />
                     <ComboBox SelectedIndex="{Binding AudioBackend}"
                               Width="350"
+                              ToolTip.Tip="{ext:Locale AudioBackendTooltip}"
                               HorizontalContentAlignment="Left">
                         <ComboBoxItem>
                             <TextBlock Text="{ext:Locale SettingsTabSystemAudioBackendDummy}" />
@@ -51,10 +52,8 @@
                 <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center"
                                Text="{ext:Locale SettingsTabSystemAudioVolume}"
-                               ToolTip.Tip="{ext:Locale AudioVolumeTooltip}"
                                Width="250" />
                     <ui:NumberBox Value="{Binding Volume}"
-                            ToolTip.Tip="{ext:Locale AudioVolumeTooltip}"
                             Width="350"
                             SmallChange="1"
                             LargeChange="10"
@@ -66,7 +65,6 @@
                 <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
                     <controls:SliderScroll Value="{Binding Volume}"
                             Margin="250,0,0,0"
-                            ToolTip.Tip="{ext:Locale AudioVolumeTooltip}"
                             Minimum="0"
                             Maximum="100"
                             SmallChange="1"

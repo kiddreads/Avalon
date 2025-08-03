@@ -281,6 +281,7 @@
                     <TextBlock
                         VerticalAlignment="Center"
                         Text="{ext:Locale SettingsTabSystemDramSize}"
+                        ToolTip.Tip="{ext:Locale DRamTooltip}"
                         Width="250" />
                     <ComboBox
                         SelectedIndex="{Binding DramSize}"

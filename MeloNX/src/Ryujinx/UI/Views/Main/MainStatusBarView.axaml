@@ -236,7 +236,6 @@
                                 Minimum="0"
                                 SmallChange="0.01"
                                 TickFrequency="0.05"
-                                ToolTip.Tip="{ext:Locale AudioVolumeTooltip}"
                                 Value="{Binding Volume}" />
                         </Grid>
                     </Flyout>

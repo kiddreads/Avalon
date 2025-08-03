@@ -49,8 +49,7 @@
         <TextBlock
             Margin="10,0"
             VerticalAlignment="Center"
-            Text="{ext:Locale IconSize}"
-            ToolTip.Tip="{ext:Locale IconSizeTooltip}" />
+            Text="{ext:Locale IconSize}" />
         <controls:SliderScroll
             Width="150"
             Height="35"
@@ -61,7 +60,6 @@
             Maximum="4"
             Minimum="1"
             TickFrequency="1"
-            ToolTip.Tip="{ext:Locale IconSizeTooltip}"
             Value="{Binding GridSizeScale}" />
         <CheckBox
             Margin="0"

@@ -81,14 +81,12 @@
         Command="{Binding OpenCheatManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageCheat}"
-        Icon="{ext:Icon fa-solid fa-code}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuManageCheatToolTip}" />
+        Icon="{ext:Icon fa-solid fa-code}" />
     <MenuItem
         Command="{Binding OpenModManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageMod}"
-        Icon="{ext:Icon fa-solid fa-sliders}"
-        ToolTip.Tip="{ext:Locale GameListContextMenuManageModToolTip}" />
+        Icon="{ext:Icon fa-solid fa-sliders}" />
     <Separator />
     <MenuItem
         Command="{Binding OpenModsDirectory}"

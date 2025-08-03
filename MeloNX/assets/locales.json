@@ -17443,56 +17443,6 @@
       }
     },
     {
-      "ID": "CheckUpdatesTooltip",
-      "Translations": {
-        "ar_SA": "التحقق من وجود تحديثات لريوجينكس",
-        "de_DE": "Sucht nach Updates für Ryujinx",
-        "el_GR": "Ελέγξτε για ενημερώσεις του Ryujinx",
-        "en_US": "Check for updates to Ryujinx",
-        "es_ES": "Busca actualizaciones para Ryujinx",
-        "fr_FR": "Vérifier les mises à jour de Ryujinx",
-        "he_IL": "בדוק אם קיימים עדכונים לריוג'ינקס",
-        "it_IT": "Controlla la presenza di aggiornamenti di Ryujinx",
-        "ja_JP": "Ryujinx のアップデートを確認します",
-        "ko_KR": "Ryujinx 업데이트 확인",
-        "no_NO": "Se etter oppdateringer til Ryujinx",
-        "pl_PL": "Sprawdź aktualizacje Ryujinx",
-        "pt_BR": "Verificar por atualizações para o Ryujinx",
-        "ru_RU": "Проверяет наличие обновлений Ryujinx",
-        "sv_SE": "Leta efter uppdateringar för Ryujinx",
-        "th_TH": "ตรวจสอบอัปเดตของ Ryujinx",
-        "tr_TR": "Ryujinx güncellemelerini denetlemeyi sağlar",
-        "uk_UA": "Перевіряє наявність оновлень для Ryujinx",
-        "zh_CN": "检查 Ryujinx 新版本",
-        "zh_TW": "檢查 Ryujinx 的更新"
-      }
-    },
-    {
-      "ID": "OpenAboutTooltip",
-      "Translations": {
-        "ar_SA": "فتح حول النافذة",
-        "de_DE": "Öffnet das 'Über Ryujinx'-Fenster",
-        "el_GR": "Ανοίξτε το Παράθυρο Σχετικά",
-        "en_US": "Open About Window",
-        "es_ES": "Abre la ventana \"Acerca de\"",
-        "fr_FR": "Ouvrir la fenêtre À Propos",
-        "he_IL": "פתח את חלון אודות היישום",
-        "it_IT": "Apri la finestra delle informazioni",
-        "ja_JP": "Ryujinx についてのウインドウを開きます",
-        "ko_KR": "정보 창 열기",
-        "no_NO": "Åpne Om Vindu",
-        "pl_PL": "Otwórz Okno Informacje",
-        "pt_BR": "Abrir Janela Sobre",
-        "ru_RU": "Открывает окно «О программе»",
-        "sv_SE": "Öppna Om-fönstret",
-        "th_TH": "เปิดหน้าต่าง เกี่ยวกับ",
-        "tr_TR": "Hakkında penceresini açar",
-        "uk_UA": "Відкриває вікно «Про застосунок»",
-        "zh_CN": "打开关于窗口",
-        "zh_TW": "開啟關於視窗"
-      }
-    },
-    {
       "ID": "GridSize",
       "Translations": {
         "ar_SA": "حجم الشبكة",
@@ -17515,31 +17465,6 @@
         "uk_UA": "Розмір сітки",
         "zh_CN": "网格尺寸",
         "zh_TW": "網格尺寸"
-      }
-    },
-    {
-      "ID": "GridSizeTooltip",
-      "Translations": {
-        "ar_SA": "تغيير حجم عناصر الشبكة",
-        "de_DE": "Ändert die Größe der Rasterelemente",
-        "el_GR": "Αλλαγή μεγέθους στοιχείων πλέγματος",
-        "en_US": "Change the size of grid items",
-        "es_ES": "Cambia el tamaño de los objetos en la cuadrícula",
-        "fr_FR": "Modifier la taille des éléments de la grille",
-        "he_IL": "שנה את גודל המוצרים על הרשת.",
-        "it_IT": "Cambia la dimensione dei riquadri della griglia",
-        "ja_JP": "グリッドサイズを変更します",
-        "ko_KR": "그리드 항목의 크기 변경",
-        "no_NO": "Endre størrelsen på rutenettet elementer",
-        "pl_PL": "Zmień rozmiar elementów siatki",
-        "pt_BR": "Mudar tamanho dos items da grade",
-        "ru_RU": "Меняет размер сетки элементов",
-        "sv_SE": "Ändra objektstorleken för rutnätet",
-        "th_TH": "เปลี่ยนขนาด ของตาราง",
-        "tr_TR": "Grid ögelerinin boyutunu değiştirmeyi sağlar",
-        "uk_UA": "Змінити розмір елементів сітки",
-        "zh_CN": "调整网格项目的大小",
-        "zh_TW": "調整網格的大小"
       }
     },
     {
@@ -17618,31 +17543,6 @@
       }
     },
     {
-      "ID": "AudioVolumeTooltip",
-      "Translations": {
-        "ar_SA": "تغيير مستوى الصوت",
-        "de_DE": "Ändert die Lautstärke",
-        "el_GR": "Αλλαγή Έντασης Ήχου",
-        "en_US": "Change Audio Volume",
-        "es_ES": "Ajusta el nivel de volumen",
-        "fr_FR": "Modifier le volume audio",
-        "he_IL": "שנה עוצמת קול",
-        "it_IT": "Cambia volume audio",
-        "ja_JP": "音量を変更します",
-        "ko_KR": "음량 변경",
-        "no_NO": "Endre lydenivå",
-        "pl_PL": "Zmień Głośność Dźwięku",
-        "pt_BR": "Mudar Volume do Áudio",
-        "ru_RU": "Изменяет громкость звука",
-        "sv_SE": "Ändra ljudvolym",
-        "th_TH": "ปรับระดับเสียง",
-        "tr_TR": "Ses seviyesini değiştirir",
-        "uk_UA": "Регулювання гучності",
-        "zh_CN": "调节音量",
-        "zh_TW": "調節音量"
-      }
-    },
-    {
       "ID": "SettingsTabSystemEnableInternetAccess",
       "Translations": {
         "ar_SA": "الوصول إلى إنترنت كضيف/وضع LAN",
@@ -17693,31 +17593,6 @@
       }
     },
     {
-      "ID": "GameListContextMenuManageCheatToolTip",
-      "Translations": {
-        "ar_SA": "إدارة الغش",
-        "de_DE": "Öffnet den Cheat-Manager",
-        "el_GR": "Διαχείριση Κόλπων",
-        "en_US": "Manage Cheats",
-        "es_ES": "Activa o desactiva los cheats",
-        "fr_FR": "Gérer les cheats",
-        "he_IL": "נהל צ'יטים",
-        "it_IT": "Gestisci trucchi",
-        "ja_JP": "チートを管理します",
-        "ko_KR": "치트 관리",
-        "no_NO": "Administrer juksemoduser",
-        "pl_PL": "Zarządzaj Kodami",
-        "pt_BR": "Gerenciar Trapaças",
-        "ru_RU": "Открывает окно управления читами",
-        "sv_SE": "Hantera fusk",
-        "th_TH": "ฟังก์ชั่นจัดการสูตรโกง",
-        "tr_TR": "Hileleri yönetmeyi sağlar",
-        "uk_UA": "Відкриває меню керування чит-кодами (cheats)",
-        "zh_CN": "管理当前游戏的金手指",
-        "zh_TW": "管理密技"
-      }
-    },
-    {
       "ID": "GameListContextMenuManageCheat",
       "Translations": {
         "ar_SA": "إدارة الغش",
@@ -17740,31 +17615,6 @@
         "uk_UA": "Керування читами",
         "zh_CN": "管理金手指",
         "zh_TW": "管理密技"
-      }
-    },
-    {
-      "ID": "GameListContextMenuManageModToolTip",
-      "Translations": {
-        "ar_SA": "إدارة التعديلات",
-        "de_DE": "Mods verwalten",
-        "el_GR": "",
-        "en_US": "Manage Mods",
-        "es_ES": "Gestionar Mods",
-        "fr_FR": "Gérer les mods",
-        "he_IL": "נהל מודים",
-        "it_IT": "Gestisci mod",
-        "ja_JP": "Modを管理します",
-        "ko_KR": "모드 관리",
-        "no_NO": "Administrer modifikasjoner",
-        "pl_PL": "Zarządzaj modyfikacjami",
-        "pt_BR": "Gerenciar Mods",
-        "ru_RU": "Открывает окно управления модами",
-        "sv_SE": "Hantera moddar",
-        "th_TH": "ฟังก์ชั่นจัดการม็อด",
-        "tr_TR": "Modları Yönet",
-        "uk_UA": "Відкриває меню керування модифікаціями (mods)",
-        "zh_CN": "管理当前游戏的 MOD",
-        "zh_TW": "管理模組"
       }
     },
     {
@@ -18165,31 +18015,6 @@
         "uk_UA": "Розмір обкладинки",
         "zh_CN": "图标尺寸",
         "zh_TW": "圖示大小"
-      }
-    },
-    {
-      "ID": "IconSizeTooltip",
-      "Translations": {
-        "ar_SA": "تغيير حجم أيقونات اللعبة",
-        "de_DE": "Ändert die Größe der Spiel-Cover",
-        "el_GR": "Αλλάξτε μέγεθος εικονιδίων των παιχνιδιών",
-        "en_US": "Change the size of game icons",
-        "es_ES": "Cambia el tamaño de los iconos de juegos",
-        "fr_FR": "Changer la taille des icônes de jeu",
-        "he_IL": "שנה את גודל הסמלים של משחקים",
-        "it_IT": "Cambia le dimensioni delle icone dei giochi",
-        "ja_JP": "ゲームアイコンのサイズを変更します",
-        "ko_KR": "게임 아이콘 크기 변경",
-        "no_NO": "Endre størrelsen på spillikonene",
-        "pl_PL": "Zmień rozmiar ikon gry",
-        "pt_BR": "Muda o tamanho do ícone do jogo",
-        "ru_RU": "Меняет размер обложек",
-        "sv_SE": "Ändra storleken för spelikonerna",
-        "th_TH": "เปลี่ยนขนาดของไอคอนเกม",
-        "tr_TR": "Oyun ikonlarının boyutunu değiştirmeyi sağlar",
-        "uk_UA": "Змінити розмір обкладинок (значків) ігор",
-        "zh_CN": "更改游戏图标的显示尺寸",
-        "zh_TW": "變更遊戲圖示的大小"
       }
     },
     {
