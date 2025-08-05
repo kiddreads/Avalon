@@ -218,6 +218,10 @@ namespace Ryujinx.Ava.Systems
             ConfigurationState.Instance.Multiplayer.LdnServer.Event += UpdateLdnServerState;
             ConfigurationState.Instance.Multiplayer.DisableP2p.Event += UpdateDisableP2pState;
 
+            ConfigurationState.Instance.Debug.EnableGdbStub.Event += UpdateEnableGdbStubState;
+            ConfigurationState.Instance.Debug.GdbStubPort.Event += UpdateGdbStubPortState;
+            ConfigurationState.Instance.Debug.DebuggerSuspendOnStart.Event += UpdateDebuggerSuspendOnStartState;
+
             _gpuCancellationTokenSource = new CancellationTokenSource();
             _gpuDoneEvent = new ManualResetEvent(false);
         }
@@ -562,6 +566,21 @@ namespace Ryujinx.Ava.Systems
         private void UpdateDisableP2pState(object sender, ReactiveEventArgs<bool> e)
         {
             Device.Configuration.MultiplayerDisableP2p = e.NewValue;
+        }
+
+        private void UpdateEnableGdbStubState(object sender, ReactiveEventArgs<bool> e)
+        {
+            Device.Configuration.EnableGdbStub = e.NewValue;
+        }
+
+        private void UpdateGdbStubPortState(object sender, ReactiveEventArgs<ushort> e)
+        {
+            Device.Configuration.GdbStubPort = e.NewValue;
+        }
+
+        private void UpdateDebuggerSuspendOnStartState(object sender, ReactiveEventArgs<bool> e)
+        {
+            Device.Configuration.DebuggerSuspendOnStart = e.NewValue;
         }
 
         public void Stop()

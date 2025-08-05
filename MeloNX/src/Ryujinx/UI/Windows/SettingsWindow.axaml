@@ -46,6 +46,7 @@
             <settings:SettingsAudioView Name="AudioPage" />
             <settings:SettingsNetworkView Name="NetworkPage" />
             <settings:SettingsLoggingView Name="LoggingPage" />
+            <settings:SettingsDebugView Name="DebugPage" />
             <settings:SettingsHacksView Name="HacksPage" />
         </Grid>
         <ui:NavigationView
@@ -100,6 +101,10 @@
                     Content="{ext:Locale SettingsTabLogging}"
                     Tag="LoggingPage"
                     IconSource="Document" />
+                <ui:NavigationViewItem
+                    Content="{ext:Locale SettingsTabDebug}"
+                    Tag="DebugPage"
+                    IconSource="Star" />
                 <ui:NavigationViewItem
                     IsVisible="{Binding ShowDirtyHacks}"
                     Content="Dirty Hacks"

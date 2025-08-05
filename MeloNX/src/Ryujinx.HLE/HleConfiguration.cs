@@ -195,6 +195,21 @@ namespace Ryujinx.HLE
         public Action RefreshInputConfig { internal get; set; }
 
         /// <summary>
+        /// Enables gdbstub to allow for debugging of the guest .
+        /// </summary>
+        public bool EnableGdbStub { internal get; set; }
+
+        /// <summary>
+        /// A TCP port to use to expose a gdbstub for a debugger to connect to.
+        /// </summary>
+        public ushort GdbStubPort { internal get; set; }
+
+        /// <summary>
+        /// Suspend execution when starting an application
+        /// </summary>
+        public bool DebuggerSuspendOnStart { internal get; set; }
+
+        /// <summary>
         ///     The desired hacky workarounds.
         /// </summary>
         /// <remarks>This cannot be changed after <see cref="Switch"/> instantiation.</remarks>
@@ -222,6 +237,9 @@ namespace Ryujinx.HLE
                                 bool multiplayerDisableP2p,
                                 string multiplayerLdnPassphrase,
                                 string multiplayerLdnServer,
+                                bool enableGdbStub,
+                                ushort gdbStubPort,
+                                bool debuggerSuspendOnStart,
                                 int customVSyncInterval,
                                 EnabledDirtyHack[] dirtyHacks = null)
         {
@@ -248,6 +266,9 @@ namespace Ryujinx.HLE
             MultiplayerDisableP2p = multiplayerDisableP2p;
             MultiplayerLdnPassphrase = multiplayerLdnPassphrase;
             MultiplayerLdnServer = multiplayerLdnServer;
+            EnableGdbStub = enableGdbStub;
+            GdbStubPort = gdbStubPort;
+            DebuggerSuspendOnStart = debuggerSuspendOnStart;
             Hacks = dirtyHacks ?? [];
         }
 

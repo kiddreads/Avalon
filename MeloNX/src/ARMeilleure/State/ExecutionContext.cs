@@ -1,4 +1,5 @@
 using ARMeilleure.Memory;
+using System.Threading;
 
 namespace ARMeilleure.State
 {
@@ -10,7 +11,7 @@ namespace ARMeilleure.State
 
         internal nint NativeContextPtr => _nativeContext.BasePtr;
 
-        private bool _interrupted;
+        internal bool Interrupted { get; private set; }
 
         private readonly ICounter _counter;
 
@@ -65,6 +66,8 @@ namespace ARMeilleure.State
 
         public bool IsAarch32 { get; set; }
 
+        public ulong ThreadUid { get; set; }
+
         internal ExecutionMode ExecutionMode
         {
             get
@@ -90,14 +93,19 @@ namespace ARMeilleure.State
 
         private readonly ExceptionCallbackNoArgs _interruptCallback;
         private readonly ExceptionCallback _breakCallback;
+        private readonly ExceptionCallbackNoArgs _stepCallback;
         private readonly ExceptionCallback _supervisorCallback;
         private readonly ExceptionCallback _undefinedCallback;
+
+        internal int ShouldStep;
+        public ulong DebugPc { get; set; }
 
         public ExecutionContext(
             IJitMemoryAllocator allocator,
             ICounter counter,
             ExceptionCallbackNoArgs interruptCallback = null,
             ExceptionCallback breakCallback = null,
+            ExceptionCallbackNoArgs stepCallback = null,
             ExceptionCallback supervisorCallback = null,
             ExceptionCallback undefinedCallback = null)
         {
@@ -105,6 +113,7 @@ namespace ARMeilleure.State
             _counter = counter;
             _interruptCallback = interruptCallback;
             _breakCallback = breakCallback;
+            _stepCallback = stepCallback;
             _supervisorCallback = supervisorCallback;
             _undefinedCallback = undefinedCallback;
 
@@ -127,9 +136,9 @@ namespace ARMeilleure.State
 
         internal void CheckInterrupt()
         {
-            if (_interrupted)
+            if (Interrupted)
             {
-                _interrupted = false;
+                Interrupted = false;
 
                 _interruptCallback?.Invoke(this);
             }
@@ -139,16 +148,37 @@ namespace ARMeilleure.State
 
         public void RequestInterrupt()
         {
-            _interrupted = true;
+            Interrupted = true;
+        }
+
+        public void StepHandler()
+        {
+            _stepCallback?.Invoke(this);
+        }
+
+        public void RequestDebugStep()
+        {
+            Interlocked.Exchange(ref ShouldStep, 1);
+            RequestInterrupt();
         }
 
         internal void OnBreak(ulong address, int imm)
         {
+            if (Optimizations.EnableDebugging)
+            {
+                DebugPc = Pc;
+            }
+
             _breakCallback?.Invoke(this, address, imm);
         }
 
         internal void OnSupervisorCall(ulong address, int imm)
         {
+            if (Optimizations.EnableDebugging)
+            {
+                DebugPc = Pc;
+            }
+
             _supervisorCallback?.Invoke(this, address, imm);
         }
 

@@ -98,6 +98,9 @@ namespace Ryujinx.Ava.UI.Windows
                     case "LoggingPage":
                         NavPanel.Content = LoggingPage;
                         break;
+                    case "DebugPage":
+                        NavPanel.Content = DebugPage;
+                        break;
                     case nameof(HacksPage):
                         HacksPage.DataContext = ViewModel;
                         NavPanel.Content = HacksPage;

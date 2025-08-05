@@ -147,6 +147,9 @@ namespace Ryujinx.Ava.Systems.Configuration
                 MultiplayerDisableP2p = Multiplayer.DisableP2p,
                 MultiplayerLdnPassphrase = Multiplayer.LdnPassphrase,
                 LdnServer = Multiplayer.LdnServer,
+                EnableGdbStub = Debug.EnableGdbStub,
+                GdbStubPort = Debug.GdbStubPort,
+                DebuggerSuspendOnStart = Debug.DebuggerSuspendOnStart,
                 ShowDirtyHacks = Hacks.ShowDirtyHacks,
                 DirtyHacks = Hacks.EnabledHacks.Select(it => it.Pack()).ToArray(),
             };
@@ -324,6 +327,9 @@ namespace Ryujinx.Ava.Systems.Configuration
                     },
                 }
             ];
+            Debug.EnableGdbStub.Value = false;
+            Debug.GdbStubPort.Value = 55555;
+            Debug.DebuggerSuspendOnStart.Value = false;
         }
 
         private static GraphicsBackend DefaultGraphicsBackend()

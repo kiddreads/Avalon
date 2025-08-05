@@ -14,6 +14,7 @@ using Ryujinx.HLE.Loaders.Processes;
 using Ryujinx.HLE.UI;
 using Ryujinx.Memory;
 using System;
+using System.Threading;
 
 namespace Ryujinx.HLE
 {
@@ -41,6 +42,7 @@ namespace Ryujinx.HLE
         public Hid Hid { get; }
         public TamperMachine TamperMachine { get; }
         public IHostUIHandler UIHandler { get; }
+        public Debugger.Debugger Debugger { get; }
 
         public int CpuCoresCount = 4; // Switch has a quad-core Tegra X1 SoC
 
@@ -72,6 +74,7 @@ namespace Ryujinx.HLE
             AudioDeviceDriver = new CompatLayerHardwareDeviceDriver(Configuration.AudioDeviceDriver);
             Memory            = new MemoryBlock(Configuration.MemoryConfiguration.ToDramSize(), memoryAllocationFlags);
             Gpu               = new GpuContext(Configuration.GpuRenderer, DirtyHacks);
+            Debugger          = Configuration.EnableGdbStub ? new Debugger.Debugger(this, Configuration.GdbStubPort) : null;
             System            = new HOS.Horizon(this);
             Statistics        = new PerformanceStatistics(this);
             Hid               = new Hid(this, System.HidStorage);
@@ -173,6 +176,7 @@ namespace Ryujinx.HLE
                 AudioDeviceDriver.Dispose();
                 FileSystem.Dispose();
                 Memory.Dispose();
+                Debugger?.Dispose();
 
                 TitleIDs.CurrentApplication.Value = null;
                 Shared = null;

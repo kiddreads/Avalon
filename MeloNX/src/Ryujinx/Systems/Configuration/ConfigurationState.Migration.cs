@@ -156,6 +156,10 @@ namespace Ryujinx.Ava.Systems.Configuration
             Multiplayer.LdnPassphrase.Value = cff.MultiplayerLdnPassphrase;
             Multiplayer.LdnServer.Value = cff.LdnServer;
 
+            Debug.EnableGdbStub.Value = shouldLoadFromFile ? cff.EnableGdbStub : Debug.EnableGdbStub.Value; // Get from global config only
+            Debug.GdbStubPort.Value = shouldLoadFromFile ? cff.GdbStubPort : Debug.GdbStubPort.Value; // Get from global config only
+            Debug.DebuggerSuspendOnStart.Value = shouldLoadFromFile ? cff.DebuggerSuspendOnStart : Debug.DebuggerSuspendOnStart.Value; // Get from global config only
+
             {
                 Hacks.ShowDirtyHacks.Value = shouldLoadFromFile ? cff.ShowDirtyHacks : Hacks.ShowDirtyHacks.Value; // Get from global config only
 

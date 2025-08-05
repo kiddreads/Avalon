@@ -2,6 +2,7 @@ using ARMeilleure.State;
 using Ryujinx.Memory;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Threading;
 
 namespace Ryujinx.Cpu.AppleHv
 {
@@ -12,6 +13,8 @@ namespace Ryujinx.Cpu.AppleHv
         private delegate HvResult SetSimdFpReg(ulong vcpu, HvSimdFPReg reg, in V128 value, nint funcPtr);
         private static readonly SetSimdFpReg _setSimdFpReg;
         private static readonly nint _setSimdFpRegNativePtr;
+
+        public ulong ThreadUid { get; set; }
 
         static HvExecutionContextVcpu()
         {
@@ -135,6 +138,7 @@ namespace Ryujinx.Cpu.AppleHv
         }
 
         private readonly ulong _vcpu;
+        private int _interruptRequested;
 
         public HvExecutionContextVcpu(ulong vcpu)
         {
@@ -180,8 +184,16 @@ namespace Ryujinx.Cpu.AppleHv
 
         public void RequestInterrupt()
         {
-            ulong vcpu = _vcpu;
-            HvApi.hv_vcpus_exit(ref vcpu, 1);
+            if (Interlocked.Exchange(ref _interruptRequested, 1) == 0)
+            {
+                ulong vcpu = _vcpu;
+                HvApi.hv_vcpus_exit(ref vcpu, 1);
+            }
+        }
+
+        public bool GetAndClearInterruptRequested()
+        {
+            return Interlocked.Exchange(ref _interruptRequested, 0) != 0;
         }
     }
 }

@@ -4,6 +4,7 @@ using Ryujinx.HLE.HOS.Kernel.Memory;
 using Ryujinx.HLE.HOS.Kernel.Threading;
 using Ryujinx.HLE.Loaders.Elf;
 using Ryujinx.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
         private readonly KProcess _owner;
 
-        private class Image
+        public class Image
         {
             public ulong BaseAddress { get; }
             public ulong Size { get; }
@@ -53,6 +54,15 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             StringBuilder trace = new();
 
             trace.AppendLine($"Process: {_owner.Name}, PID: {_owner.Pid}");
+
+            string ThreadName = thread.GetThreadName();
+
+            if (!String.IsNullOrEmpty(ThreadName))
+            {
+                trace.AppendLine($"Thread ID: {thread.ThreadUid} ({ThreadName})");
+            } else {
+                trace.AppendLine($"Thread ID: {thread.ThreadUid}");
+            }
 
             void AppendTrace(ulong address)
             {
@@ -283,7 +293,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             return null;
         }
 
-        private string GetGuessedNsoNameFromIndex(int index)
+        public string GetGuessedNsoNameFromIndex(int index)
         {
             if ((uint)index > 11)
             {
@@ -313,6 +323,16 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             lock (_images)
             {
                 return _images.Count;
+            }
+        }
+
+        public List<Image> GetLoadedImages()
+        {
+            EnsureLoaded();
+            
+            lock (_images)
+            {
+                return [.. _images];
             }
         }
 
