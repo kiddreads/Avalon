@@ -157,7 +157,7 @@ namespace Ryujinx.Memory.Range
         {
             int index = BinarySearch(item.Address);
 
-            if (index >= 0 && Items[index].Value.Equals(item))
+            if (index >= 0)
             {
                 _quickAccess.Remove(item.Address);
                 
