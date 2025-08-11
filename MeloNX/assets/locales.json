@@ -21343,56 +21343,6 @@
       }
     },
     {
-      "ID": "SettingsTabGraphicsBackendAuto",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Auto",
-        "es_ES": "",
-        "fr_FR": "",
-        "he_IL": "",
-        "it_IT": "Automatico",
-        "ja_JP": "",
-        "ko_KR": "자동",
-        "no_NO": "",
-        "pl_PL": "",
-        "pt_BR": "Automático",
-        "ru_RU": "Авто",
-        "sv_SE": "Automatiskt",
-        "th_TH": "อัตโนมัติ",
-        "tr_TR": "",
-        "uk_UA": "Автоматично",
-        "zh_CN": "自动",
-        "zh_TW": "自動"
-      }
-    },
-    {
-      "ID": "SettingsTabGraphicsBackendAutoTooltip",
-      "Translations": {
-        "ar_SA": "",
-        "de_DE": "",
-        "el_GR": "",
-        "en_US": "Uses Vulkan.\nOn an ARM Mac, and when playing a game that runs well under it, uses the Metal backend.",
-        "es_ES": "",
-        "fr_FR": "Utilise Vulkan.\nSur un Mac ARM, et lorsqu’un jeu fonctionne bien avec, utilise le moteur Metal.",
-        "he_IL": "",
-        "it_IT": "Utilizza Vulkan.\nSu un Mac con processore ARM, utilizza il backend Metal nei giochi che funzionano bene con quest'ultimo.",
-        "ja_JP": "",
-        "ko_KR": "Vulkan을 사용합니다.\nARM 맥에서 해당 플랫폼에서 잘 실행되는 게임을 플레이하는 경우 Metal 후단부를 사용합니다.",
-        "no_NO": "Bruker Vulkan \nPå en ARM Mac, og når du spiller et spill som kjører bra under den, bruker du Metal-backend.",
-        "pl_PL": "",
-        "pt_BR": "Usa Vulkan.\nEm um Mac ARM, e ao jogar um jogo que roda bem nele, usa o renderizador Metal.",
-        "ru_RU": "Использует Vulkan.\nНа Mac с ARM процессорами используется Metal, если игра с ним совместима и хорошо работает.",
-        "sv_SE": "Använder Vulkan.\nPå en ARM Mac och vid spel som körs bra på den så används Metal-bakänden.",
-        "th_TH": "ใช้ Vulkan\nบน Mac (ARM) จะใช้ Metal หากเกมทำงานได้ดีกว่า",
-        "tr_TR": "",
-        "uk_UA": "Використовує Vulkan.\nНа Mac з процесором ARM використовується графічний API Metal, якщо гра під нього оптимізована.",
-        "zh_CN": "使用 Vulkan。\n在 ARM Mac 上，当玩在其下运行良好的游戏时，使用 Metal 后端。",
-        "zh_TW": "使用Vulkan。\n在 ARM Mac 上，如果遊戲執行性能良好時，則將使用 Metal 後端。"
-      }
-    },
-    {
       "ID": "SettingsEnableTextureRecompression",
       "Translations": {
         "ar_SA": "تمكين إعادة ضغط التكستر",
