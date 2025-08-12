@@ -117,8 +117,9 @@
                     <ToggleButton Name="TurboMode">
                         <TextBlock Text="{Binding KeyboardHotkey.TurboMode, Converter={x:Static helpers:KeyValueConverter.Instance}}" />
                     </ToggleButton>
-                    <TextBlock Text="{ext:Locale SettingsTabHotkeysOnlyWhilePressed}" Margin="10,0" />
-                    <CheckBox IsChecked="{Binding KeyboardHotkey.TurboModeWhileHeld}" />
+                    <CheckBox IsChecked="{Binding KeyboardHotkey.TurboModeWhileHeld}" Margin="10,0,0,0">
+                        <TextBlock Text="{ext:Locale SettingsTabHotkeysOnlyWhilePressed}" />
+                    </CheckBox>
                 </StackPanel>
             </StackPanel>
         </Border>

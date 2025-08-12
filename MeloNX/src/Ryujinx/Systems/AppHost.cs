@@ -482,7 +482,10 @@ namespace Ryujinx.Ava.Systems
 
             Dispatcher.UIThread.InvokeAsync(() =>
             {
-                _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI);
+                if (ConfigurationState.Instance.ShowOldUI)
+                {
+                    _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI);
+                }
             });
 
             _viewModel.SetUiProgressHandlers(Device);
@@ -902,7 +905,10 @@ namespace Ryujinx.Ava.Systems
 
             _viewModel.IsPaused = false;
             _playTimer.Start();
-            _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device?.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI);
+            if (ConfigurationState.Instance.ShowOldUI)
+            {
+                _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device?.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI);
+            }
             Logger.Info?.Print(LogClass.Emulation, "Emulation was resumed");
         }
 
@@ -912,7 +918,10 @@ namespace Ryujinx.Ava.Systems
 
             _viewModel.IsPaused = true;
             _playTimer.Stop();
-            _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device?.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI, LocaleManager.Instance[LocaleKeys.Paused]);
+            if (ConfigurationState.Instance.ShowOldUI)
+            {
+                _viewModel.Title = TitleHelper.ActiveApplicationTitle(Device?.Processes.ActiveApplication, Program.Version, !ConfigurationState.Instance.ShowOldUI, LocaleManager.Instance[LocaleKeys.Paused]);
+            }
             Logger.Info?.Print(LogClass.Emulation, "Emulation was paused");
         }
 

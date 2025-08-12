@@ -88,14 +88,15 @@
                     </DropDownButton.Flyout>
                 </DropDownButton>
             </StackPanel>
-            <CheckBox Grid.Column="3" Margin="7, 0, 0, 0" IsChecked="{Binding OnlyShowOwnedGames}" />
-            <TextBlock Grid.Column="4" Padding="0, 0, 138, 0" Margin="-10, 0, 18, 0" Text="{ext:Locale CompatibilityListOnlyShowOwnedGames}" />
+            <CheckBox Grid.Column="3" Margin="20, 0, 50, 0" IsChecked="{Binding OnlyShowOwnedGames}">
+                <TextBlock Text="{ext:Locale CompatibilityListOnlyShowOwnedGames}" />
+            </CheckBox>
         </Grid>
 
         <!-- UI NormalControls -->
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Name="NormalControls">
-            <TextBox Name="SearchBoxNormal" Grid.Column="0" Margin="15, 0, 0, 5" HorizontalAlignment="Stretch" Watermark="{ext:Locale CompatibilityListSearchBoxWatermarkWithCount}" TextChanged="TextBox_OnTextChanged" />
-            <StackPanel Grid.Column="1" Orientation="Horizontal"  Margin="10, 0, 5, 5">
+            <TextBox Name="SearchBoxNormal" Grid.Column="0" Margin="15, 5, 0, 5" HorizontalAlignment="Stretch" Watermark="{ext:Locale CompatibilityListSearchBoxWatermarkWithCount}" TextChanged="TextBox_OnTextChanged" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal"  Margin="10, 5, 5, 5">
                 <TextBlock
                     Margin="10,0"
                     HorizontalAlignment="Right"
@@ -157,8 +158,9 @@
                     </DropDownButton.Flyout>
                 </DropDownButton>
             </StackPanel>
-            <CheckBox Grid.Column="2" Margin="7, 0, 0, 0" IsChecked="{Binding OnlyShowOwnedGames}" />
-            <TextBlock Grid.Column="3" Padding="0, 0, 1, 0" Margin="-10, 0, 18, 0" Text="{ext:Locale CompatibilityListOnlyShowOwnedGames}" />
+            <CheckBox Grid.Column="2" Margin="20, 0, 50, 0" IsChecked="{Binding OnlyShowOwnedGames}">
+                <TextBlock Text="{ext:Locale CompatibilityListOnlyShowOwnedGames}" />
+            </CheckBox>
         </Grid>
 
         <!-- Description Field Above ScrollViewer -->
@@ -206,15 +208,11 @@
                     Height="35"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Content="Info"
+                    Content="{ext:Locale CompatibilityListStats}"
                     DockPanel.Dock="Right">
                     <DropDownButton.Flyout>
                         <Flyout Placement="Bottom">
                             <StackPanel>
-                                <TextBlock
-                                    HorizontalAlignment="Left"
-                                    Padding="0,5"
-                                    Text="Compatibility verified:" />
                                 <TextBlock
                                     HorizontalAlignment="Left"
                                     Foreground="{Binding IsStringPlayable, Converter={x:Static helpers:PlayabilityStatusConverter.Shared}}"

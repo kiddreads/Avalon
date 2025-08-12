@@ -47,13 +47,13 @@
                 Glyph="{helpers:GlyphValueConverter Grid}" />
         </Button>
         <TextBlock
-            Margin="10,0"
+            Margin="10,0,5,0"
             VerticalAlignment="Center"
             Text="{ext:Locale IconSize}" />
         <controls:SliderScroll
             Width="150"
             Height="35"
-            Margin="5,-10,5,0"
+            Margin="5,-12,10,0"
             VerticalAlignment="Center"
             IsSnapToTickEnabled="True"
             SmallChange="1"
@@ -62,11 +62,11 @@
             TickFrequency="1"
             Value="{Binding GridSizeScale}" />
         <CheckBox
-            Margin="0"
+            Margin="0,-2,0,0"
             VerticalAlignment="Center"
             IsChecked="{Binding ShowNames, Mode=TwoWay}"
             IsVisible="{Binding IsGrid}">
-            <TextBlock Margin="5,3,0,0" Text="{ext:Locale CommonShowNames}" />
+            <TextBlock Text="{ext:Locale CommonShowNames}" />
         </CheckBox>
         <TextBox
             Name="SearchBox"

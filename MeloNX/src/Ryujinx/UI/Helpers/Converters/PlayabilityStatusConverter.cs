@@ -15,11 +15,11 @@ namespace Ryujinx.Ava.UI.Helpers
         public object Convert(object value, Type _, object __, CultureInfo ___)
             => value.Cast<LocaleKeys>() switch
             {
-                LocaleKeys.CompatibilityListNothing or
-                    LocaleKeys.CompatibilityListBoots or
-                    LocaleKeys.CompatibilityListMenus => Brushes.Red,
-                LocaleKeys.CompatibilityListIngame => Brushes.DarkOrange,
-                _ => Brushes.ForestGreen
+                LocaleKeys.CompatibilityListNothing => Brushes.DarkGray,
+                LocaleKeys.CompatibilityListBoots => Brushes.Red,
+                LocaleKeys.CompatibilityListMenus => Brushes.Tomato,
+                LocaleKeys.CompatibilityListIngame => Brushes.Orange,
+                _ => Brushes.LimeGreen
             };
 
         public object ConvertBack(object value, Type _, object __, CultureInfo ___)

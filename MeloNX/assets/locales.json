@@ -23693,28 +23693,28 @@
       }
     },
     {
-      "ID": "CompatibilityListInfo",
+      "ID": "CompatibilityListStats",
       "Translations": {
         "ar_SA": "",
         "de_DE": "",
-        "el_GR": "Πληροφορίες",
-        "en_US": "Info",
-        "es_ES": "Información",
-        "fr_FR": "",
-        "he_IL": "מידע",
+        "el_GR": "",
+        "en_US": "Stats",
+        "es_ES": null,
+        "fr_FR": null,
+        "he_IL": "",
         "it_IT": "",
-        "ja_JP": "情報",
-        "ko_KR": "정보",
+        "ja_JP": "",
+        "ko_KR": "",
         "no_NO": "",
-        "pl_PL": "Informacja",
+        "pl_PL": "",
         "pt_BR": "",
-        "ru_RU": "Инфо",
+        "ru_RU": "Данные",
         "sv_SE": "",
-        "th_TH": "รายละเอียด",
-        "tr_TR": "Bilgi",
-        "uk_UA": "Інфо",
-        "zh_CN": "信息",
-        "zh_TW": "資訊"
+        "th_TH": "",
+        "tr_TR": "",
+        "uk_UA": "",
+        "zh_CN": "",
+        "zh_TW": ""
       }
     },
     {
