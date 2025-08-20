@@ -13,12 +13,13 @@ namespace Ryujinx.Ava.Input
 {
     internal class AvaloniaMouseDriver : IGamepadDriver
     {
+        private const int ScrollTimerIntervalMilliseconds = 50;
+
         private Control _widget;
         private bool _isDisposed;
         private Size _size;
         private readonly TopLevel _window;
         private DispatcherTimer _scrollStopTimer;
-        private const int _dispatchTimerMS = 100;
 
         public bool[] PressedButtons { get; }
         public Vector2 CurrentPosition { get; private set; }
@@ -44,7 +45,7 @@ namespace Ryujinx.Ava.Input
 
             _scrollStopTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(_dispatchTimerMS)
+                Interval = TimeSpan.FromMilliseconds(ScrollTimerIntervalMilliseconds)
             };
 
             PressedButtons = new bool[(int)MouseButton.Count];
