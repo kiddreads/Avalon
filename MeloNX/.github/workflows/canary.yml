@@ -102,11 +102,9 @@ jobs:
           chmod +x Ryujinx.sh Ryujinx
           tar -czvf ../release_output/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz ../publish
           popd
-          
+
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-${{ steps.version_info.outputs.build_version }}-${{ matrix.platform.zip_os_name }}.tar.gz"
         shell: bash
-
-        # If anyone wants to look into why appimagetool randomly errors with exit code 8, that would be cool
 
       - name: Build AppImage (Linux)
         if: matrix.platform.os == 'ubuntu-latest'
