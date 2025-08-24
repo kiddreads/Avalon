@@ -91,7 +91,7 @@ namespace Ryujinx.Ava.UI.ViewModels
                 bool inSd = path == ModLoader.GetSdModsBasePath();
                 ModLoader.ModCache modCache = new();
 
-                ModLoader.QueryContentsDir(modCache, new DirectoryInfo(Path.Combine(path, "contents")), applicationId, _installedDlcIds);
+                ModLoader.QueryContentsDir(modCache, new DirectoryInfo(Path.Combine(path, "contents")), applicationId, installedDlcIds);
 
                 foreach (ModLoader.Mod<DirectoryInfo> mod in modCache.RomfsDirs)
                 {
