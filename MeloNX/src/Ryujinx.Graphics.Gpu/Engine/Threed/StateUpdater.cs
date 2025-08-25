@@ -423,9 +423,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         /// </summary>
         private void UpdateTfBufferState()
         {
+            Span<TfBufferState> tfBufferStateSpan = _state.State.TfBufferState.AsSpan();
+            
             for (int index = 0; index < Constants.TotalTransformFeedbackBuffers; index++)
             {
-                TfBufferState tfb = _state.State.TfBufferState[index];
+                TfBufferState tfb = tfBufferStateSpan[index];
 
                 if (!tfb.Enable)
                 {
@@ -466,10 +468,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             MemoryManager memoryManager = _channel.MemoryManager;
             RtControl rtControl = _state.State.RtControl;
 
-            bool useControl = updateFlags.HasFlag(RenderTargetUpdateFlags.UseControl);
-            bool layered = updateFlags.HasFlag(RenderTargetUpdateFlags.Layered);
-            bool singleColor = updateFlags.HasFlag(RenderTargetUpdateFlags.SingleColor);
-            bool discard = updateFlags.HasFlag(RenderTargetUpdateFlags.DiscardClip);
+            bool useControl = (updateFlags & RenderTargetUpdateFlags.UseControl) == RenderTargetUpdateFlags.UseControl;
+            bool layered = (updateFlags & RenderTargetUpdateFlags.Layered) == RenderTargetUpdateFlags.Layered;
+            bool singleColor = (updateFlags & RenderTargetUpdateFlags.SingleColor) == RenderTargetUpdateFlags.SingleColor;
+            bool discard = (updateFlags & RenderTargetUpdateFlags.DiscardClip) == RenderTargetUpdateFlags.DiscardClip;
 
             int count = useControl ? rtControl.UnpackCount() : Constants.TotalRenderTargets;
 
@@ -487,11 +489,13 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             bool changedScale = false;
             uint rtNoAlphaMask = 0;
 
+            Span<RtColorState> rtColorStateSpan = _state.State.RtColorState.AsSpan();
+
             for (int index = 0; index < Constants.TotalRenderTargets; index++)
             {
                 int rtIndex = useControl ? rtControl.UnpackPermutationIndex(index) : index;
 
-                RtColorState colorState = _state.State.RtColorState[rtIndex];
+                RtColorState colorState = rtColorStateSpan[rtIndex];
 
                 if (index >= count || !IsRtEnabled(colorState) || (singleColor && index != singleUse))
                 {
@@ -539,7 +543,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
             Image.Texture depthStencil = null;
 
-            if (dsEnable && updateFlags.HasFlag(RenderTargetUpdateFlags.UpdateDepthStencil))
+            if (dsEnable && (updateFlags & RenderTargetUpdateFlags.UpdateDepthStencil) == RenderTargetUpdateFlags.UpdateDepthStencil)
             {
                 RtDepthStencilState dsState = _state.State.RtDepthStencilState;
                 Size3D dsSize = _state.State.RtDepthStencilSize;
@@ -599,7 +603,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         /// </summary>
         public void UpdateRenderTargetSpecialization()
         {
-            _currentSpecState.SetFragmentOutputTypes(_state.State.RtControl, ref _state.State.RtColorState);
+            _currentSpecState.SetFragmentOutputTypes(_state.State.RtControl, _state.State.RtColorState.AsSpan());
         }
 
         /// <summary>
@@ -624,10 +628,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             const int MaxH = 0xffff;
 
             Span<Rectangle<int>> regions = stackalloc Rectangle<int>[Constants.TotalViewports];
-
+            Span<ScissorState> scissorStateSpan = _state.State.ScissorState.AsSpan();
+            
             for (int index = 0; index < Constants.TotalViewports; index++)
             {
-                ScissorState scissor = _state.State.ScissorState[index];
+                ScissorState scissor = scissorStateSpan[index];
 
                 bool enable = scissor.Enable && (scissor.X1 != MinX ||
                                                  scissor.Y1 != MinY ||
@@ -731,6 +736,8 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             UpdateDepthMode();
 
             Span<Viewport> viewports = stackalloc Viewport[Constants.TotalViewports];
+            Span<ViewportTransform> viewportTransformSpan = _state.State.ViewportTransform.AsSpan();
+            Span<ViewportExtents> viewportExtentsSpan = _state.State.ViewportExtents.AsSpan();
 
             for (int index = 0; index < Constants.TotalViewports; index++)
             {
@@ -745,8 +752,8 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                     continue;
                 }
 
-                ref ViewportTransform transform = ref _state.State.ViewportTransform[index];
-                ref ViewportExtents extents = ref _state.State.ViewportExtents[index];
+                ref ViewportTransform transform = ref viewportTransformSpan[index];
+                ref ViewportExtents extents = ref viewportExtentsSpan[index];
 
                 float scaleX = MathF.Abs(transform.ScaleX);
                 float scaleY = transform.ScaleY;
@@ -968,10 +975,11 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             uint vbEnableMask = _vbEnableMask;
 
             Span<VertexAttribDescriptor> vertexAttribs = stackalloc VertexAttribDescriptor[Constants.TotalVertexAttribs];
-
+            Span<VertexAttribState> vertexAttribStateSpan = _state.State.VertexAttribState.AsSpan();
+            
             for (int index = 0; index < Constants.TotalVertexAttribs; index++)
             {
-                VertexAttribState vertexAttrib = _state.State.VertexAttribState[index];
+                VertexAttribState vertexAttrib = vertexAttribStateSpan[index];
 
                 int bufferIndex = vertexAttrib.UnpackBufferIndex();
 
@@ -1015,7 +1023,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
             _pipeline.SetVertexAttribs(vertexAttribs);
             _context.Renderer.Pipeline.SetVertexAttribs(vertexAttribs);
-            _currentSpecState.SetAttributeTypes(ref _state.State.VertexAttribState);
+            _currentSpecState.SetAttributeTypes(_state.State.VertexAttribState.AsSpan());
         }
 
         /// <summary>
@@ -1113,20 +1121,25 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             int drawFirstVertex = _drawState.DrawFirstVertex;
             int drawVertexCount = _drawState.DrawVertexCount;
             uint vbEnableMask = 0;
+            
+            Span<VertexBufferState> vertexBufferStateSpan = _state.State.VertexBufferState.AsSpan();
+            Span<BufferPipelineDescriptor> vertexBuffersSpan = _pipeline.VertexBuffers.AsSpan();
+            Span<GpuVa> vertexBufferEndAddressSpan = _state.State.VertexBufferEndAddress.AsSpan();
+            Span<Boolean32> vertexBufferInstancedSpan = _state.State.VertexBufferInstanced.AsSpan();
 
             for (int index = 0; index < Constants.TotalVertexBuffers; index++)
             {
-                VertexBufferState vertexBuffer = _state.State.VertexBufferState[index];
+                VertexBufferState vertexBuffer = vertexBufferStateSpan[index];
 
                 if (!vertexBuffer.UnpackEnable())
                 {
-                    _pipeline.VertexBuffers[index] = new BufferPipelineDescriptor(false, 0, 0);
+                    vertexBuffersSpan[index] = new BufferPipelineDescriptor(false, 0, 0);
                     _channel.BufferManager.SetVertexBuffer(index, 0, 0, 0, 0);
 
                     continue;
                 }
 
-                GpuVa endAddress = _state.State.VertexBufferEndAddress[index];
+                GpuVa endAddress = vertexBufferEndAddressSpan[index];
 
                 ulong address = vertexBuffer.Address.Pack();
 
@@ -1137,7 +1150,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
                 int stride = vertexBuffer.UnpackStride();
 
-                bool instanced = _state.State.VertexBufferInstanced[index];
+                bool instanced = vertexBufferInstancedSpan[index];
 
                 int divisor = instanced ? vertexBuffer.Divisor : 0;
 
@@ -1184,7 +1197,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                     size = Math.Min(vbSize, (ulong)((firstInstance + drawFirstVertex + drawVertexCount) * stride));
                 }
 
-                _pipeline.VertexBuffers[index] = new BufferPipelineDescriptor(_channel.MemoryManager.IsMapped(address), stride, divisor);
+                vertexBuffersSpan[index] = new BufferPipelineDescriptor(_channel.MemoryManager.IsMapped(address), stride, divisor);
                 _channel.BufferManager.SetVertexBuffer(index, address, size, stride, divisor);
             }
 
@@ -1237,10 +1250,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             bool rtColorMaskShared = _state.State.RtColorMaskShared;
 
             Span<uint> componentMasks = stackalloc uint[Constants.TotalRenderTargets];
+            Span<RtColorMask> rtColorMaskSpan = _state.State.RtColorMask.AsSpan();
+            Span<uint> colorWriteMaskSpan = _pipeline.ColorWriteMask.AsSpan();
 
             for (int index = 0; index < Constants.TotalRenderTargets; index++)
             {
-                RtColorMask colorMask = _state.State.RtColorMask[rtColorMaskShared ? 0 : index];
+                RtColorMask colorMask = rtColorMaskSpan[rtColorMaskShared ? 0 : index];
 
                 uint componentMask;
 
@@ -1250,7 +1265,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                 componentMask |= (colorMask.UnpackAlpha() ? 8u : 0u);
 
                 componentMasks[index] = componentMask;
-                _pipeline.ColorWriteMask[index] = componentMask;
+                colorWriteMaskSpan[index] = componentMask;
             }
 
             _context.Renderer.Pipeline.SetRenderTargetColorMasks(componentMasks);
@@ -1282,10 +1297,14 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
             if (blendIndependent)
             {
+                Span<Boolean32> blendEnableSpan = _state.State.BlendEnable.AsSpan();
+                Span<BlendState> blendStateSpan = _state.State.BlendState.AsSpan();
+                Span<BlendDescriptor> blendDescriptorsSpan = _pipeline.BlendDescriptors.AsSpan();
+                
                 for (int index = 0; index < Constants.TotalRenderTargets; index++)
                 {
-                    bool enable = _state.State.BlendEnable[index];
-                    BlendState blend = _state.State.BlendState[index];
+                    bool enable = blendEnableSpan[index];
+                    BlendState blend = blendStateSpan[index];
 
                     BlendDescriptor descriptor = new(
                         enable,
@@ -1306,7 +1325,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                         dualSourceBlendEnabled = true;
                     }
 
-                    _pipeline.BlendDescriptors[index] = descriptor;
+                    blendDescriptorsSpan[index] = descriptor;
                     _context.Renderer.Pipeline.SetBlendState(index, descriptor);
                 }
             }
@@ -1333,10 +1352,12 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                 {
                     dualSourceBlendEnabled = true;
                 }
+                
+                Span<BlendDescriptor> blendDescriptorsSpan = _pipeline.BlendDescriptors.AsSpan();
 
                 for (int index = 0; index < Constants.TotalRenderTargets; index++)
                 {
-                    _pipeline.BlendDescriptors[index] = descriptor;
+                    blendDescriptorsSpan[index] = descriptor;
                     _context.Renderer.Pipeline.SetBlendState(index, descriptor);
                 }
             }
@@ -1422,12 +1443,13 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
             ShaderAddresses addresses = new();
             Span<ulong> addressesSpan = addresses.AsSpan();
+            Span<ShaderState> shaderStateSpan = _state.State.ShaderState.AsSpan();
 
             ulong baseAddress = _state.State.ShaderBaseAddress.Pack();
 
             for (int index = 0; index < 6; index++)
             {
-                ShaderState shader = _state.State.ShaderState[index];
+                ShaderState shader = shaderStateSpan[index];
                 if (!shader.UnpackEnable() && index != 1)
                 {
                     continue;

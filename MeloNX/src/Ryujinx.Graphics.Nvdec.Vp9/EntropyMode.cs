@@ -304,31 +304,40 @@ namespace Ryujinx.Graphics.Nvdec.Vp9
         }
 
         internal static void TxCountsToBranchCounts32X32(ReadOnlySpan<uint> txCount32X32P,
-            ref Array3<Array2<uint>> ct32X32P)
+            ReadOnlySpan<Array2<uint>> ct32X32P)
         {
-            ct32X32P[0][0] = txCount32X32P[(int)TxSize.Tx4X4];
-            ct32X32P[0][1] = txCount32X32P[(int)TxSize.Tx8X8] + txCount32X32P[(int)TxSize.Tx16X16] +
+            Span<uint> ct32X32PSpan0 = ct32X32P[0].AsSpan();
+            Span<uint> ct32X32PSpan1 = ct32X32P[1].AsSpan();
+            Span<uint> ct32X32PSpan2 = ct32X32P[2].AsSpan();
+            
+            ct32X32PSpan0[0] = txCount32X32P[(int)TxSize.Tx4X4];
+            ct32X32PSpan0[1] = txCount32X32P[(int)TxSize.Tx8X8] + txCount32X32P[(int)TxSize.Tx16X16] +
                              txCount32X32P[(int)TxSize.Tx32X32];
-            ct32X32P[1][0] = txCount32X32P[(int)TxSize.Tx8X8];
-            ct32X32P[1][1] = txCount32X32P[(int)TxSize.Tx16X16] + txCount32X32P[(int)TxSize.Tx32X32];
-            ct32X32P[2][0] = txCount32X32P[(int)TxSize.Tx16X16];
-            ct32X32P[2][1] = txCount32X32P[(int)TxSize.Tx32X32];
+            ct32X32PSpan1[0] = txCount32X32P[(int)TxSize.Tx8X8];
+            ct32X32PSpan1[1] = txCount32X32P[(int)TxSize.Tx16X16] + txCount32X32P[(int)TxSize.Tx32X32];
+            ct32X32PSpan2[0] = txCount32X32P[(int)TxSize.Tx16X16];
+            ct32X32PSpan2[1] = txCount32X32P[(int)TxSize.Tx32X32];
         }
 
         internal static void TxCountsToBranchCounts16X16(ReadOnlySpan<uint> txCount16X16P,
-            ref Array2<Array2<uint>> ct16X16P)
+            ReadOnlySpan<Array2<uint>> ct16X16P)
         {
-            ct16X16P[0][0] = txCount16X16P[(int)TxSize.Tx4X4];
-            ct16X16P[0][1] = txCount16X16P[(int)TxSize.Tx8X8] + txCount16X16P[(int)TxSize.Tx16X16];
-            ct16X16P[1][0] = txCount16X16P[(int)TxSize.Tx8X8];
-            ct16X16P[1][1] = txCount16X16P[(int)TxSize.Tx16X16];
+            Span<uint> ct16X16PSpan0 = ct16X16P[0].AsSpan();
+            Span<uint> ct16X16PSpan1 = ct16X16P[1].AsSpan();
+            
+            ct16X16PSpan0[0] = txCount16X16P[(int)TxSize.Tx4X4];
+            ct16X16PSpan0[1] = txCount16X16P[(int)TxSize.Tx8X8] + txCount16X16P[(int)TxSize.Tx16X16];
+            ct16X16PSpan1[0] = txCount16X16P[(int)TxSize.Tx8X8];
+            ct16X16PSpan1[1] = txCount16X16P[(int)TxSize.Tx16X16];
         }
 
         internal static void TxCountsToBranchCounts8X8(ReadOnlySpan<uint> txCount8X8P,
-            ref Array1<Array2<uint>> ct8X8P)
+            ReadOnlySpan<Array2<uint>> ct8X8P)
         {
-            ct8X8P[0][0] = txCount8X8P[(int)TxSize.Tx4X4];
-            ct8X8P[0][1] = txCount8X8P[(int)TxSize.Tx8X8];
+            Span<uint> ct8X8PSpan = ct8X8P[0].AsSpan();
+            
+            ct8X8PSpan[0] = txCount8X8P[(int)TxSize.Tx4X4];
+            ct8X8PSpan[1] = txCount8X8P[(int)TxSize.Tx8X8];
         }
 
         public static unsafe void SetupPastIndependence(ref Vp9Common cm)

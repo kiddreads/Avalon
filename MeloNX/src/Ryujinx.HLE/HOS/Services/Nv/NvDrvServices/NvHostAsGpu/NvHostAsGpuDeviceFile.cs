@@ -335,9 +335,11 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostAsGpu
                 writeEntries = (uint)_pageSizes.Length;
             }
 
+            Span<VaRegion> regionsSpan = arguments.Regions.AsSpan();
+
             for (uint i = 0; i < writeEntries; i++)
             {
-                ref VaRegion region = ref arguments.Regions[(int)i];
+                ref VaRegion region = ref regionsSpan[(int)i];
 
                 VmRegion vmRegion = _vmRegions[i];
                 uint pageSize = _pageSizes[i];

@@ -89,9 +89,10 @@ namespace Ryujinx.Graphics.Nvdec.Vp9
             cm.Lf.RefDeltas = pictureInfo.RefDeltas;
             cm.Lf.ModeDeltas = pictureInfo.ModeDeltas;
 
-            cm.FrameRefs[0].Buf = (Surface)pictureInfo.LastReference;
-            cm.FrameRefs[1].Buf = (Surface)pictureInfo.GoldenReference;
-            cm.FrameRefs[2].Buf = (Surface)pictureInfo.AltReference;
+            Span<RefBuffer> frameRefsSpan = cm.FrameRefs.AsSpan();
+            frameRefsSpan[0].Buf = (Surface)pictureInfo.LastReference;
+            frameRefsSpan[1].Buf = (Surface)pictureInfo.GoldenReference;
+            frameRefsSpan[2].Buf = (Surface)pictureInfo.AltReference;
             cm.Mb.CurBuf = (Surface)output;
 
             cm.Mb.SetupBlockPlanes(1, 1);

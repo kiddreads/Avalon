@@ -125,9 +125,14 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
             _vacContext.VertexInfoBufferUpdater.SetVertexCounts(_count, _instanceCount, _firstVertex, _firstInstance);
             _vacContext.VertexInfoBufferUpdater.SetGeometryCounts(primitivesCount);
 
+            Span<VertexAttribState> vertexAttribStateSpan = _state.State.VertexAttribState.AsSpan();
+            Span<GpuVa> vertexBufferEndAddressSpan = _state.State.VertexBufferEndAddress.AsSpan();
+            Span<VertexBufferState> vertexBufferStateSpan = _state.State.VertexBufferState.AsSpan();
+            Span<Boolean32> vertexBufferInstancedSpan = _state.State.VertexBufferInstanced.AsSpan();
+
             for (int index = 0; index < Constants.TotalVertexAttribs; index++)
             {
-                VertexAttribState vertexAttrib = _state.State.VertexAttribState[index];
+                VertexAttribState vertexAttrib = vertexAttribStateSpan[index];
 
                 if (!FormatTable.TryGetSingleComponentAttribFormat(vertexAttrib.UnpackFormat(), out Format format, out int componentsCount))
                 {
@@ -153,9 +158,9 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
 
                 int bufferIndex = vertexAttrib.UnpackBufferIndex();
 
-                GpuVa endAddress = _state.State.VertexBufferEndAddress[bufferIndex];
-                VertexBufferState vertexBuffer = _state.State.VertexBufferState[bufferIndex];
-                bool instanced = _state.State.VertexBufferInstanced[bufferIndex];
+                GpuVa endAddress = vertexBufferEndAddressSpan[bufferIndex];
+                VertexBufferState vertexBuffer = vertexBufferStateSpan[bufferIndex];
+                bool instanced = vertexBufferInstancedSpan[bufferIndex];
 
                 ulong address = vertexBuffer.Address.Pack();
 

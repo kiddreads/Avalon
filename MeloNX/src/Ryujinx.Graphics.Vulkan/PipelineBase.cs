@@ -710,9 +710,11 @@ namespace Ryujinx.Graphics.Vulkan
 
         public void SetBlendState(AdvancedBlendDescriptor blend)
         {
+            Span<PipelineColorBlendAttachmentState> colorBlendAttachmentStateSpan = _newState.Internal.ColorBlendAttachmentState.AsSpan();
+            
             for (int index = 0; index < Constants.MaxRenderTargets; index++)
             {
-                ref PipelineColorBlendAttachmentState vkBlend = ref _newState.Internal.ColorBlendAttachmentState[index];
+                ref PipelineColorBlendAttachmentState vkBlend = ref colorBlendAttachmentStateSpan[index];
 
                 if (index == 0)
                 {
@@ -985,10 +987,12 @@ namespace Ryujinx.Graphics.Vulkan
         {
             int count = Math.Min(Constants.MaxRenderTargets, componentMask.Length);
             int writtenAttachments = 0;
+            
+            Span<PipelineColorBlendAttachmentState> colorBlendAttachmentStateSpan = _newState.Internal.ColorBlendAttachmentState.AsSpan();
 
             for (int i = 0; i < count; i++)
             {
-                ref PipelineColorBlendAttachmentState vkBlend = ref _newState.Internal.ColorBlendAttachmentState[i];
+                ref PipelineColorBlendAttachmentState vkBlend = ref colorBlendAttachmentStateSpan[i];
                 ColorComponentFlags newMask = (ColorComponentFlags)componentMask[i];
 
                 // When color write mask is 0, remove all blend state to help the pipeline cache.
@@ -1166,6 +1170,8 @@ namespace Ryujinx.Graphics.Vulkan
 
             int count = Math.Min(Constants.MaxVertexAttributes, vertexAttribs.Length);
             uint dirtyVbSizes = 0;
+            
+            Span<VertexInputAttributeDescription> vertexAttributeDescriptionsSpan = _newState.Internal.VertexAttributeDescriptions.AsSpan();
 
             for (int i = 0; i < count; i++)
             {
@@ -1179,7 +1185,7 @@ namespace Ryujinx.Graphics.Vulkan
                     dirtyVbSizes |= 1u << rawIndex;
                 }
 
-                _newState.Internal.VertexAttributeDescriptions[i] = new VertexInputAttributeDescription(
+                vertexAttributeDescriptionsSpan[i] = new VertexInputAttributeDescription(
                     (uint)i,
                     (uint)bufferIndex,
                     formatCapabilities.ConvertToVertexVkFormat(attribute.Format),
@@ -1214,7 +1220,9 @@ namespace Ryujinx.Graphics.Vulkan
             int validCount = 1;
 
             BufferHandle lastHandle = default;
-            Auto<DisposableBuffer> lastBuffer = default;
+            Auto<DisposableBuffer> lastBuffer = null;
+            
+            Span<VertexInputBindingDescription> vertexBindingDescriptionsSpan = _newState.Internal.VertexBindingDescriptions.AsSpan();
 
             for (int i = 0; i < count; i++)
             {
@@ -1236,7 +1244,7 @@ namespace Ryujinx.Graphics.Vulkan
                         int binding = i + 1;
                         int descriptorIndex = validCount++;
 
-                        _newState.Internal.VertexBindingDescriptions[descriptorIndex] = new VertexInputBindingDescription(
+                        vertexBindingDescriptionsSpan[descriptorIndex] = new VertexInputBindingDescription(
                             (uint)binding,
                             (uint)vertexBuffer.Stride,
                             inputRate);
@@ -1405,6 +1413,9 @@ namespace Ryujinx.Graphics.Vulkan
 
                 // Look for textures that are masked out.
 
+                Span<PipelineColorBlendAttachmentState> colorBlendAttachmentStateSpan =
+                    _newState.Internal.ColorBlendAttachmentState.AsSpan();
+
                 for (int i = 0; i < colors.Length; i++)
                 {
                     if (colors[i] == null)
@@ -1412,7 +1423,7 @@ namespace Ryujinx.Graphics.Vulkan
                         continue;
                     }
 
-                    ref PipelineColorBlendAttachmentState vkBlend = ref _newState.Internal.ColorBlendAttachmentState[i];
+                    ref PipelineColorBlendAttachmentState vkBlend = ref colorBlendAttachmentStateSpan[i];
 
                     for (int j = 0; j < i; j++)
                     {
@@ -1421,7 +1432,7 @@ namespace Ryujinx.Graphics.Vulkan
                         if (colors[i] == colors[j])
                         {
                             // Prefer the binding with no write mask.
-                            ref PipelineColorBlendAttachmentState vkBlend2 = ref _newState.Internal.ColorBlendAttachmentState[j];
+                            ref PipelineColorBlendAttachmentState vkBlend2 = ref colorBlendAttachmentStateSpan[j];
                             if (vkBlend.ColorWriteMask == 0)
                             {
                                 colors[i] = null;

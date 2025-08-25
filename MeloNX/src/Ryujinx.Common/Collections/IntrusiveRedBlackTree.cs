@@ -131,7 +131,6 @@ namespace Ryujinx.Common.Collections
                 if (parent.Predecessor != null)
                 {
                     newNode.Predecessor = parent.Predecessor;
-                    parent.Predecessor = newNode;
                     newNode.Predecessor.Successor = newNode;
                 }
                 

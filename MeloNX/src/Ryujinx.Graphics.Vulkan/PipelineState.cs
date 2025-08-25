@@ -520,6 +520,9 @@ namespace Ryujinx.Graphics.Vulkan
                 };
 
                 uint blendEnables = 0;
+                
+                Span<PipelineColorBlendAttachmentState> colorBlendAttachmentStateSpan =
+                    Internal.ColorBlendAttachmentState.AsSpan();
 
                 if (gd.IsMoltenVk && Internal.AttachmentIntegerFormatMask != 0)
                 {
@@ -530,12 +533,12 @@ namespace Ryujinx.Graphics.Vulkan
                     {
                         int i = BitOperations.TrailingZeroCount(attachmentIntegerFormatMask);
 
-                        if (Internal.ColorBlendAttachmentState[i].BlendEnable)
+                        if (colorBlendAttachmentStateSpan[i].BlendEnable)
                         {
                             blendEnables |= 1u << i;
                         }
 
-                        Internal.ColorBlendAttachmentState[i].BlendEnable = false;
+                        colorBlendAttachmentStateSpan[i].BlendEnable = false;
                         attachmentIntegerFormatMask &= ~(1u << i);
                     }
                 }
@@ -656,7 +659,7 @@ namespace Ryujinx.Graphics.Vulkan
                 {
                     int i = BitOperations.TrailingZeroCount(blendEnables);
 
-                    Internal.ColorBlendAttachmentState[i].BlendEnable = true;
+                    colorBlendAttachmentStateSpan[i].BlendEnable = true;
                     blendEnables &= ~(1u << i);
                 }
             }
@@ -675,14 +678,21 @@ namespace Ryujinx.Graphics.Vulkan
             // To work around this, we reduce the format to something that doesn't exceed the stride if possible.
             // The assumption is that the exceeding components are not actually accessed on the shader.
 
+            Span<VertexInputAttributeDescription> vertexAttributeDescriptionsSpan =
+                Internal.VertexAttributeDescriptions.AsSpan();
+            Span<VertexInputBindingDescription> vertexBindingDescriptionsSpan =
+                Internal.VertexBindingDescriptions.AsSpan();
+            Span<VertexInputAttributeDescription> vertexAttributeDescriptions2Span =
+                _vertexAttributeDescriptions2.AsSpan();
+
             for (int index = 0; index < VertexAttributeDescriptionsCount; index++)
             {
-                VertexInputAttributeDescription attribute = Internal.VertexAttributeDescriptions[index];
+                VertexInputAttributeDescription attribute = vertexAttributeDescriptionsSpan[index];
                 int vbIndex = GetVertexBufferIndex(attribute.Binding);
 
                 if (vbIndex >= 0)
                 {
-                    ref VertexInputBindingDescription vb = ref Internal.VertexBindingDescriptions[vbIndex];
+                    ref VertexInputBindingDescription vb = ref vertexBindingDescriptionsSpan[vbIndex];
 
                     Format format = attribute.Format;
 
@@ -707,15 +717,18 @@ namespace Ryujinx.Graphics.Vulkan
                     }
                 }
 
-                _vertexAttributeDescriptions2[index] = attribute;
+                vertexAttributeDescriptions2Span[index] = attribute;
             }
         }
 
         private int GetVertexBufferIndex(uint binding)
         {
+            Span<VertexInputBindingDescription> vertexBindingDescriptionsSpan =
+                Internal.VertexBindingDescriptions.AsSpan();
+            
             for (int index = 0; index < VertexBindingDescriptionsCount; index++)
             {
-                if (Internal.VertexBindingDescriptions[index].Binding == binding)
+                if (vertexBindingDescriptionsSpan[index].Binding == binding)
                 {
                     return index;
                 }

@@ -580,10 +580,13 @@ namespace Ryujinx.Graphics.Gpu.Shader
 
             if (ShaderCache.MayConvertVtgToCompute(ref channel.Capabilities) && !vertexAsCompute)
             {
-                for (int index = 0; index < graphicsState.AttributeTypes.Length; index++)
+                Span<AttributeType> attributeTypesSpan = graphicsState.AttributeTypes.AsSpan();
+                Span<AttributeType> gAttributeTypesSpan = GraphicsState.AttributeTypes.AsSpan();
+                
+                for (int index = 0; index < attributeTypesSpan.Length; index++)
                 {
-                    AttributeType lType = FilterAttributeType(channel, graphicsState.AttributeTypes[index]);
-                    AttributeType rType = FilterAttributeType(channel, GraphicsState.AttributeTypes[index]);
+                    AttributeType lType = FilterAttributeType(channel, attributeTypesSpan[index]);
+                    AttributeType rType = FilterAttributeType(channel, gAttributeTypesSpan[index]);
 
                     if (lType != rType)
                     {
@@ -729,6 +732,8 @@ namespace Ryujinx.Graphics.Gpu.Shader
         {
             int constantBufferUsePerStageMask = _constantBufferUsePerStage;
 
+            Span<uint> constantBufferUseSpan = ConstantBufferUse.AsSpan();
+            
             while (constantBufferUsePerStageMask != 0)
             {
                 int index = BitOperations.TrailingZeroCount(constantBufferUsePerStageMask);
@@ -737,7 +742,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
                     ? channel.BufferManager.GetComputeUniformBufferUseMask()
                     : channel.BufferManager.GetGraphicsUniformBufferUseMask(index);
 
-                if (ConstantBufferUse[index] != useMask)
+                if (constantBufferUseSpan[index] != useMask)
                 {
                     return false;
                 }
@@ -801,7 +806,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
         {
             if (specializationState != null)
             {
-                if (specializationState.Value.QueriedFlags.HasFlag(QueriedTextureStateFlags.CoordNormalized) &&
+                if ((specializationState.Value.QueriedFlags & QueriedTextureStateFlags.CoordNormalized) == QueriedTextureStateFlags.CoordNormalized &&
                     specializationState.Value.CoordNormalized != descriptor.UnpackTextureCoordNormalized())
                 {
                     return false;
@@ -877,10 +882,12 @@ namespace Ryujinx.Graphics.Gpu.Shader
 
             int constantBufferUsePerStageMask = specState._constantBufferUsePerStage;
 
+            Span<uint> constantBufferUseSpan = specState.ConstantBufferUse.AsSpan();
+            
             while (constantBufferUsePerStageMask != 0)
             {
                 int index = BitOperations.TrailingZeroCount(constantBufferUsePerStageMask);
-                dataReader.Read(ref specState.ConstantBufferUse[index]);
+                dataReader.Read(ref constantBufferUseSpan[index]);
                 constantBufferUsePerStageMask &= ~(1 << index);
             }
 
@@ -979,11 +986,13 @@ namespace Ryujinx.Graphics.Gpu.Shader
             dataWriter.Write(ref _constantBufferUsePerStage);
 
             int constantBufferUsePerStageMask = _constantBufferUsePerStage;
+            
+            Span<uint> constantBufferUseSpan = ConstantBufferUse.AsSpan();
 
             while (constantBufferUsePerStageMask != 0)
             {
                 int index = BitOperations.TrailingZeroCount(constantBufferUsePerStageMask);
-                dataWriter.Write(ref ConstantBufferUse[index]);
+                dataWriter.Write(ref constantBufferUseSpan[index]);
                 constantBufferUsePerStageMask &= ~(1 << index);
             }
 

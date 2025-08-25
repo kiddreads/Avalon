@@ -35,18 +35,21 @@ namespace Ryujinx.Graphics.Vic
                 config.OutputSurfaceConfig.OutSurfaceWidth + 1,
                 config.OutputSurfaceConfig.OutSurfaceHeight + 1);
 
-            for (int i = 0; i < config.SlotStruct.Length; i++)
+            Span<SlotStruct> slotStructSpan = config.SlotStruct.AsSpan();
+            Span<Array8<PlaneOffsets>> setSurfacexSlotxSpan = _state.State.SetSurfacexSlotx.AsSpan();
+
+            for (int i = 0; i < slotStructSpan.Length; i++)
             {
-                ref SlotStruct slot = ref config.SlotStruct[i];
+                ref SlotStruct slot = ref slotStructSpan[i];
 
                 if (!slot.SlotConfig.SlotEnable)
                 {
                     continue;
                 }
 
-                ref Array8<PlaneOffsets> offsets = ref _state.State.SetSurfacexSlotx[i];
+                Span<PlaneOffsets> offsets = setSurfacexSlotxSpan[i].AsSpan();
 
-                using Surface src = SurfaceReader.Read(_rm, ref slot.SlotConfig, ref slot.SlotSurfaceConfig, ref offsets);
+                using Surface src = SurfaceReader.Read(_rm, ref slot.SlotConfig, ref slot.SlotSurfaceConfig, offsets);
 
                 int x1 = config.OutputConfig.TargetRectLeft;
                 int y1 = config.OutputConfig.TargetRectTop;

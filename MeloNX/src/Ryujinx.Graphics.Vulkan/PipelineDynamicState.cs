@@ -121,32 +121,32 @@ namespace Ryujinx.Graphics.Vulkan
         {
             Vk api = gd.Api;
 
-            if (_dirty.HasFlag(DirtyFlags.Blend))
+            if ((_dirty & DirtyFlags.Blend) == DirtyFlags.Blend)
             {
                 RecordBlend(api, commandBuffer);
             }
 
-            if (_dirty.HasFlag(DirtyFlags.DepthBias))
+            if ((_dirty & DirtyFlags.DepthBias) == DirtyFlags.DepthBias)
             {
                 RecordDepthBias(api, commandBuffer);
             }
 
-            if (_dirty.HasFlag(DirtyFlags.Scissor))
+            if ((_dirty & DirtyFlags.Scissor) == DirtyFlags.Scissor)
             {
                 RecordScissor(api, commandBuffer);
             }
 
-            if (_dirty.HasFlag(DirtyFlags.Stencil))
+            if ((_dirty & DirtyFlags.Stencil) == DirtyFlags.Stencil)
             {
                 RecordStencilMasks(api, commandBuffer);
             }
 
-            if (_dirty.HasFlag(DirtyFlags.Viewport))
+            if ((_dirty & DirtyFlags.Viewport) == DirtyFlags.Viewport)
             {
                 RecordViewport(api, commandBuffer);
             }
 
-            if (_dirty.HasFlag(DirtyFlags.FeedbackLoop) && gd.Capabilities.SupportsDynamicAttachmentFeedbackLoop)
+            if ((_dirty & DirtyFlags.FeedbackLoop) == DirtyFlags.FeedbackLoop && gd.Capabilities.SupportsDynamicAttachmentFeedbackLoop)
             {
                 RecordFeedbackLoop(gd.DynamicFeedbackLoopApi, commandBuffer);
             }
