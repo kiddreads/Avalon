@@ -1576,7 +1576,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public bool InitializeUserConfig(ApplicationData application)
+        public static bool InitializeUserConfig(ApplicationData application)
         {
             // Code where conditions will be met before loading the user configuration (Global Config)
             string backendThreadingInit = Program.BackendThreadingArg ?? ConfigurationState.Instance.Graphics.BackendThreading.Value.ToString();
@@ -1613,11 +1613,8 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public async Task LoadApplication(ApplicationData application, bool startFullscreen = false, BlitStruct<ApplicationControlProperty>? customNacpData = null)
         {
-
             if (InitializeUserConfig(application))
-            {
                 return;
-            }
 
             if (AppHost != null)
             {
@@ -1665,13 +1662,9 @@ namespace Ryujinx.Ava.UI.ViewModels
 
             CanUpdate = false;
 
-            LoadHeading = application.Name;
+            application.Name ??= AppHost.Device.Processes.ActiveApplication.Name;
 
-            if (string.IsNullOrWhiteSpace(application.Name))
-            {
-                LoadHeading = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.LoadingHeading, AppHost.Device.Processes.ActiveApplication.Name);
-                application.Name = AppHost.Device.Processes.ActiveApplication.Name;
-            }
+            LoadHeading = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.LoadingHeading, application.Name);
 
             SwitchToRenderer(startFullscreen);
 
