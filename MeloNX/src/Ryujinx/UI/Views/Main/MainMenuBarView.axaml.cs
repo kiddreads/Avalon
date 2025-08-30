@@ -38,7 +38,7 @@ namespace Ryujinx.Ava.UI.Views.Main
             ChangeLanguageMenuItem.ItemsSource = GenerateLanguageMenuItems();
 
             MiiAppletMenuItem.Command = Commands.Create(OpenMiiApplet);
-            CloseRyujinxMenuItem.Command = Commands.Create(CloseWindow);
+            CloseRyujinxMenuItem.Command = Commands.Create(() => Window?.Close());
             OpenSettingsMenuItem.Command = Commands.Create(OpenSettings);
             PauseEmulationMenuItem.Command = Commands.Create(() => ViewModel.AppHost?.Pause());
             ResumeEmulationMenuItem.Command = Commands.Create(() => ViewModel.AppHost?.Resume());
@@ -235,8 +235,5 @@ namespace Ryujinx.Ava.UI.Views.Main
                 Window.Arrange(new Rect(Window.Position.X, Window.Position.Y, windowWidthScaled, windowHeightScaled));
             });
         }
-
-        public void CloseWindow() => Window.Close();
-
     }
 }
