@@ -81,16 +81,8 @@ namespace Ryujinx.Graphics.Device
             if (index < Size)
             {
                 uint alignedOffset = index * RegisterSize;
-
-                Func<int> readCallback = Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_readCallbacks), (nint)index);
-                if (readCallback != null)
-                {
-                    return readCallback();
-                }
-                else
-                {
-                    return GetRefUnchecked<int>(alignedOffset);
-                }
+                
+                return _readCallbacks[index]?.Invoke() ?? GetRefUnchecked<int>(alignedOffset);
             }
 
             return 0;
@@ -107,7 +99,7 @@ namespace Ryujinx.Graphics.Device
 
                 GetRefIntAlignedUncheck(index) = data;
 
-                Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_writeCallbacks), (nint)index)?.Invoke(data);
+                _writeCallbacks[index]?.Invoke(data);
             }
         }
 
@@ -124,7 +116,7 @@ namespace Ryujinx.Graphics.Device
                 changed = storage != data;
                 storage = data;
 
-                Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_writeCallbacks), (nint)index)?.Invoke(data);
+                _writeCallbacks[index]?.Invoke(data);
             }
             else
             {
