@@ -148,12 +148,27 @@
                                         Text="{Binding FileExtension}"
                                         TextAlignment="Start"
                                         TextWrapping="Wrap" />
-                                    <TextBlock
-                                        HorizontalAlignment="Stretch"
+                                    <Button
+                                        HorizontalContentAlignment="Left"
+                                        Click="LdnGames_OnClick"
+                                        VerticalAlignment="Center"
                                         IsVisible="{Binding HasLdnGames}"
-                                        Text="{Binding Converter={x:Static helpers:MultiplayerInfoConverter.Instance}}"
-                                        TextAlignment="Start"
-                                        TextWrapping="Wrap"/>
+                                        Background="{DynamicResource AppListBackgroundColor}"
+                                        Padding="0">
+                                        <TextBlock
+                                            HorizontalAlignment="Stretch"
+                                            Tag="{Binding IdString}"
+                                            Text="{Binding Converter={x:Static helpers:MultiplayerInfoConverter.Instance}}"
+                                            TextAlignment="Start"
+                                            TextWrapping="Wrap"/>
+                                        <Button.Styles>
+                                            <Style Selector="Button">
+                                                <Setter Property="MinWidth"
+                                                        Value="0" /> 
+                                                <!-- avoids very wide buttons from the overall project avalonia style -->
+                                            </Style>
+                                        </Button.Styles>
+                                    </Button>
                                     <TextBlock
                                         HorizontalAlignment="Stretch"
                                         IsVisible="{Binding HasIndependentConfiguration}"

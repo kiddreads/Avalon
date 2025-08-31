@@ -49,6 +49,7 @@ namespace Ryujinx.Ava.UI.Views.Main
             XciTrimmerMenuItem.Command = Commands.Create(XciTrimmerView.Show);
             AboutWindowMenuItem.Command = Commands.Create(AboutView.Show);
             CompatibilityListMenuItem.Command = Commands.Create(() => CompatibilityListWindow.Show());
+            LdnGameListMenuItem.Command = Commands.Create(() => LdnGamesListWindow.Show());
 
             UpdateMenuItem.Command = MainWindowViewModel.UpdateCommand;
 

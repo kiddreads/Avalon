@@ -4,7 +4,6 @@ using DynamicData.Binding;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.UI.Models;
 using Ryujinx.HLE.HOS.Services.Account.Acc;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Ryujinx.Ava.UI.ViewModels

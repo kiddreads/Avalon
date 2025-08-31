@@ -47,8 +47,12 @@ namespace Ryujinx.Ava.Common.Locale
 
         private void Load()
         {
-            string localeLanguageCode = !string.IsNullOrEmpty(ConfigurationState.Instance.UI.LanguageCode.Value) ?
-                ConfigurationState.Instance.UI.LanguageCode.Value : CultureInfo.CurrentCulture.Name.Replace('-', '_');
+            string localeLanguageCode = CultureInfo.CurrentCulture.Name.Replace('-', '_');
+            if (Program.PreviewerDetached && ConfigurationState.Instance.UI.LanguageCode.Value is { } lang)
+            {
+                if (!string.IsNullOrEmpty(lang))
+                    localeLanguageCode = lang;
+            }
 
             LoadLanguage(localeLanguageCode);
 
@@ -62,6 +66,15 @@ namespace Ryujinx.Ava.Common.Locale
         }
 
         public static string GetUnformatted(LocaleKeys key) => Instance.Get(key);
+
+        public static string GetFormatted(LocaleKeys key, params object[] values) 
+            => GetUnformatted(key).Format(values);
+
+        public static string FormatDynamicValue(LocaleKeys key, params object[] values)
+            => Instance.UpdateAndGetDynamicValue(key, values);
+
+        public static void Associate(LocaleKeys key, params object[] values)
+            => Instance.SetDynamicValues(key, values);
 
         public string Get(LocaleKeys key) =>
             _localeStrings.TryGetValue(key, out string value)
@@ -106,9 +119,6 @@ namespace Ryujinx.Ava.Common.Locale
                 "ar_SA" or "he_IL" => true,
                 _ => false
             };
-
-        public static string FormatDynamicValue(LocaleKeys key, params object[] values)
-            => Instance.UpdateAndGetDynamicValue(key, values);
 
         public void SetDynamicValues(LocaleKeys key, params object[] values)
         {
@@ -161,12 +171,14 @@ namespace Ryujinx.Ava.Common.Locale
             {
                 if (locale.Translations.Count < _localeData.Value.Languages.Count)
                 {
-                    throw new Exception($"Locale key {{{locale.ID}}} is missing languages! Has {locale.Translations.Count} translations, expected {_localeData.Value.Languages.Count}!");
+                    throw new Exception(
+                        $"Locale key {{{locale.ID}}} is missing languages! Has {locale.Translations.Count} translations, expected {_localeData.Value.Languages.Count}!");
                 }
 
                 if (locale.Translations.Count > _localeData.Value.Languages.Count)
                 {
-                    throw new Exception($"Locale key {{{locale.ID}}} has too many languages! Has {locale.Translations.Count} translations, expected {_localeData.Value.Languages.Count}!");
+                    throw new Exception(
+                        $"Locale key {{{locale.ID}}} has too many languages! Has {locale.Translations.Count} translations, expected {_localeData.Value.Languages.Count}!");
                 }
 
                 if (!Enum.TryParse<LocaleKeys>(locale.ID, out LocaleKeys localeKey))
@@ -178,7 +190,8 @@ namespace Ryujinx.Ava.Common.Locale
 
                 if (string.IsNullOrEmpty(str))
                 {
-                    throw new Exception($"Locale key '{locale.ID}' has no valid translations for desired language {languageCode}! {DefaultLanguageCode} is an empty string or null");
+                    throw new Exception(
+                        $"Locale key '{locale.ID}' has no valid translations for desired language {languageCode}! {DefaultLanguageCode} is an empty string or null");
                 }
 
                 localeStrings[localeKey] = str;

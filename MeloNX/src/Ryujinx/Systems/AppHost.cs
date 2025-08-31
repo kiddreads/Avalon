@@ -1169,10 +1169,8 @@ namespace Ryujinx.Ava.Systems
             string frameTime = Device.Statistics.GetGameFrameTime().ToString("00.00");
 
             return Device.TurboMode
-                ? LocaleManager.GetUnformatted(LocaleKeys.FpsTurboStatusBarText)
-                    .Format(frameRate, frameTime, Device.TickScalar)
-                : LocaleManager.GetUnformatted(LocaleKeys.FpsStatusBarText)
-                    .Format(frameRate, frameTime);
+                ? LocaleManager.GetFormatted(LocaleKeys.FpsTurboStatusBarText, frameRate, frameTime, Device.TickScalar)
+                : LocaleManager.GetFormatted(LocaleKeys.FpsStatusBarText, frameRate, frameTime);
         }
 
         public async Task ShowExitPrompt()

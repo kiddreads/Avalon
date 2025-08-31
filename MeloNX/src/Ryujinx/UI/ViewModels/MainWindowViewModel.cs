@@ -32,6 +32,7 @@ using Ryujinx.Ava.UI.Windows;
 using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
 using Ryujinx.Common.Configuration;
+using Ryujinx.Common.Configuration.Multiplayer;
 using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.UI;
@@ -57,7 +58,6 @@ using Key = Ryujinx.Input.Key;
 using MissingKeyException = LibHac.Common.Keys.MissingKeyException;
 using Path = System.IO.Path;
 using ShaderCacheLoadingState = Ryujinx.Graphics.Gpu.Shader.ShaderCacheState;
-using UserId = Ryujinx.HLE.HOS.Services.Account.Acc.UserId;
 
 namespace Ryujinx.Ava.UI.ViewModels
 {
@@ -111,6 +111,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         [ObservableProperty] private bool _isSubMenuOpen;
         [ObservableProperty] private ApplicationContextMenu _listAppContextMenu;
         [ObservableProperty] private ApplicationContextMenu _gridAppContextMenu;
+        [ObservableProperty] private bool _isRyuLdnEnabled;
         [ObservableProperty] private bool _updateAvailable;
 
         public static AsyncRelayCommand UpdateCommand { get; } = Commands.Create(async () =>
@@ -142,7 +143,25 @@ namespace Ryujinx.Ava.UI.ViewModels
         private ApplicationData _gridSelectedApplication;
 
         // Key is Title ID
-        public SafeDictionary<string, LdnGameData.Array> LdnData = [];
+        /// <summary>
+        ///     At any given time, this dictionary contains the filtered data from <see cref="_ldnModels"/>.
+        ///     Filtered in this case meaning installed games only.
+        /// </summary>
+        public SafeDictionary<string, LdnGameModel.Array> UsableLdnData = [];
+
+        private LdnGameModel[] _ldnModels;
+
+        public LdnGameModel[] LdnModels
+        {
+            get => _ldnModels;
+            set
+            {
+                _ldnModels = value;
+                LocaleManager.Associate(LocaleKeys.LdnGameListTitle, value.Length);
+                LocaleManager.Associate(LocaleKeys.LdnGameListSearchBoxWatermark, value.Length);
+                OnPropertyChanged();
+            }
+        }
 
         public MainWindow Window { get; init; }
 
@@ -165,10 +184,27 @@ namespace Ryujinx.Ava.UI.ViewModels
             {
                 LoadConfigurableHotKeys();
 
+                IsRyuLdnEnabled = ConfigurationState.Instance.Multiplayer.Mode.Value is MultiplayerMode.LdnRyu;
+                ConfigurationState.Instance.Multiplayer.Mode.Event += OnLdnModeChanged;
+
                 Volume = ConfigurationState.Instance.System.AudioVolume;
                 CustomVSyncInterval = ConfigurationState.Instance.Graphics.CustomVSyncInterval.Value;
             }
         }
+
+        ~MainWindowViewModel()
+        {
+            if (Program.PreviewerDetached)
+            {
+                ConfigurationState.Instance.Multiplayer.Mode.Event -= OnLdnModeChanged;
+            }
+        }
+
+        private void OnLdnModeChanged(object sender, ReactiveEventArgs<MultiplayerMode> e) =>
+            Dispatcher.UIThread.Post(() =>
+            {
+                IsRyuLdnEnabled = e.NewValue is MultiplayerMode.LdnRyu;
+            });
 
         public void Initialize(
             ContentManager contentManager,
@@ -313,11 +349,11 @@ namespace Ryujinx.Ava.UI.ViewModels
             if (ts.HasValue)
             {
                 var formattedPlayTime = ValueFormatUtils.FormatTimeSpan(ts.Value);
-                LocaleManager.Instance.SetDynamicValues(LocaleKeys.GameListLabelTotalTimePlayed, formattedPlayTime);
+                LocaleManager.Associate(LocaleKeys.GameListLabelTotalTimePlayed, formattedPlayTime);
                 ShowTotalTimePlayed = formattedPlayTime != string.Empty;
                 return;
             }
-            
+
             ShowTotalTimePlayed = ts.HasValue;
         }
 

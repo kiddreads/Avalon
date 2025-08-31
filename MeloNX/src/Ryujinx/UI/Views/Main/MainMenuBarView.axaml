@@ -7,6 +7,7 @@
     mc:Ignorable="d"
     xmlns:viewModels="clr-namespace:Ryujinx.Ava.UI.ViewModels"
     xmlns:controls="clr-namespace:Ryujinx.Ava.UI.Controls"
+    xmlns:common="clr-namespace:Ryujinx.Common;assembly=Ryujinx.Common"
     x:DataType="viewModels:MainWindowViewModel"
     x:Class="Ryujinx.Ava.UI.Views.Main.MainMenuBarView">
     <Design.DataContext>
@@ -250,25 +251,30 @@
                     Name="CompatibilityListMenuItem"
                     Header="{ext:Locale CompatibilityListOpen}"
                     Icon="{ext:Icon fa-solid fa-database}"/>
+                <MenuItem
+                    Name="LdnGameListMenuItem"
+                    Header="{ext:Locale LdnGameListOpen}"
+                    Icon="{ext:Icon fa-solid fa-people-group}"
+                    IsEnabled="{Binding IsRyuLdnEnabled}"/>
                 <Separator />
                 <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarHelpFaqAndGuides}" Icon="{ext:Icon fa-solid fa-question}" >
                     <MenuItem
                         Name="FaqMenuItem"
                         Header="{ext:Locale MenuBarHelpFaq}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="https://git.ryujinx.app/ryubing/ryujinx/-/wikis/FAQ-&amp;-Troubleshooting"
+                        CommandParameter="{x:Static common:SharedConstants.FaqWikiUrl}"
                         ToolTip.Tip="{ext:Locale MenuBarHelpFaqTooltip}" />
                     <MenuItem
                         Name="SetupGuideMenuItem"
                         Header="{ext:Locale MenuBarHelpSetup}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="https://git.ryujinx.app/ryubing/ryujinx/-/wikis/Setup-&amp;-Configuration-Guide"
+                        CommandParameter="{x:Static common:SharedConstants.SetupGuideWikiUrl}"
                         ToolTip.Tip="{ext:Locale MenuBarHelpSetupTooltip}" />
                     <MenuItem
                         Name="LdnGuideMenuItem"
                         Header="{ext:Locale MenuBarHelpMultiplayer}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="https://git.ryujinx.app/ryubing/ryujinx/-/wikis/Multiplayer-(LDN-Local-Wireless)-Guide"
+                        CommandParameter="{x:Static common:SharedConstants.MultiplayerWikiUrl}"
                         ToolTip.Tip="{ext:Locale MenuBarHelpMultiplayerTooltip}" />
                 </MenuItem>
             </MenuItem>

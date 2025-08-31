@@ -11,6 +11,7 @@ using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Utilities;
 using Ryujinx.HLE;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RyuLogger = Ryujinx.Common.Logging.Logger;
@@ -687,6 +688,16 @@ namespace Ryujinx.Ava.Systems.Configuration
                 return string.IsNullOrEmpty(ldnServer)
                     ? SharedConstants.DefaultLanPlayHost
                     : ldnServer;
+            }
+
+            public string GetLdnWebServer()
+            {
+                if (Environment.GetEnvironmentVariable("RYULDN_WEB_HOST") is not { } ldnWebServer)
+                    ldnWebServer = LdnServer;
+
+                return string.IsNullOrEmpty(ldnWebServer)
+                    ? SharedConstants.DefaultLanPlayWebHost
+                    : ldnWebServer;
             }
 
             public MultiplayerSection()

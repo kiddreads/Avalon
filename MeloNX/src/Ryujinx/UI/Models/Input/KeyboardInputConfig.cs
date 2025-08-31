@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Common.Configuration.Hid;
 using Ryujinx.Common.Configuration.Hid.Keyboard;
-using System.Xml.Linq;
 
 namespace Ryujinx.Ava.UI.Models.Input
 {

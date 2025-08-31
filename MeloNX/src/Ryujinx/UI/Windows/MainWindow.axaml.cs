@@ -8,7 +8,6 @@ using Avalonia.Threading;
 using DynamicData;
 using FluentAvalonia.UI.Controls;
 using Gommon;
-using LibHac.Ns;
 using Ryujinx.Ava.Common;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Input;
@@ -18,6 +17,7 @@ using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Ava.Systems.Configuration.UI;
 using Ryujinx.Ava.UI.Applet;
 using Ryujinx.Ava.UI.Helpers;
+using Ryujinx.Ava.UI.Models;
 using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
@@ -185,12 +185,11 @@ namespace Ryujinx.Ava.UI.Windows
         {
             Dispatcher.UIThread.Post(() =>
             {
-                ViewModel.LdnData.Clear();
+                ViewModel.LdnModels = e.LdnData;
+                ViewModel.UsableLdnData.Clear();
                 foreach (ApplicationData application in ViewModel.Applications.Where(it => it.HasControlHolder))
                 {
-                    ref ApplicationControlProperty controlHolder = ref application.ControlHolder.Value;
-
-                    ViewModel.LdnData[application.IdString] = e.LdnData.Where(ref controlHolder);
+                    ViewModel.UsableLdnData[application.IdString] = LdnGameModel.GetArrayForApp(e.LdnData, ref application.ControlHolder.Value);
 
                     UpdateApplicationWithLdnData(application);
                 }
@@ -201,7 +200,7 @@ namespace Ryujinx.Ava.UI.Windows
 
         private void UpdateApplicationWithLdnData(ApplicationData application)
         {
-            if (application.HasControlHolder && ViewModel.LdnData.TryGetValue(application.IdString, out LdnGameData.Array ldnGameDatas))
+            if (application.HasControlHolder && ViewModel.UsableLdnData.TryGetValue(application.IdString, out LdnGameModel.Array ldnGameDatas))
             {
                 application.PlayerCount = ldnGameDatas.PlayerCount;
                 application.GameCount = ldnGameDatas.GameCount;

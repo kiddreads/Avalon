@@ -14,6 +14,7 @@ using LibHac.Tools.FsSystem.NcaUtils;
 using Ryujinx.Ava.Common.Models;
 using Ryujinx.Ava.Systems.Configuration;
 using Ryujinx.Ava.Systems.Configuration.System;
+using Ryujinx.Ava.UI.Models;
 using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
 using Ryujinx.Common.Configuration;
@@ -29,7 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -85,7 +85,6 @@ namespace Ryujinx.Ava.Systems.AppLibrary
         private readonly SourceCache<(DownloadableContentModel Dlc, bool IsEnabled), DownloadableContentModel> _downloadableContents = new(it => it.Dlc);
 
         private static readonly ApplicationJsonSerializerContext _serializerContext = new(JsonHelper.GetDefaultSerializerOptions());
-        private static readonly LdnGameDataSerializerContext _ldnDataSerializerContext = new(JsonHelper.GetDefaultSerializerOptions());
 
         public ApplicationLibrary(VirtualFileSystem virtualFileSystem, IntegrityCheckLevel checkLevel)
         {
@@ -865,16 +864,7 @@ namespace Ryujinx.Ava.Systems.AppLibrary
             {
                 try
                 {
-                    string ldnWebHost = ConfigurationState.Instance.Multiplayer.LdnServer;
-                    if (string.IsNullOrEmpty(ldnWebHost))
-                    {
-                        ldnWebHost = SharedConstants.DefaultLanPlayWebHost;
-                    }
-
-                    using HttpClient httpClient = new();
-                    string ldnGameDataArrayString = await httpClient.GetStringAsync($"https://{ldnWebHost}/api/public_games");
-                    LdnGameData[] ldnGameDataArray = JsonHelper.Deserialize(ldnGameDataArrayString, _ldnDataSerializerContext.IEnumerableLdnGameData).ToArray();
-                    LdnGameDataReceived?.Invoke(new LdnGameDataReceivedEventArgs(ldnGameDataArray));
+                    LdnGameDataReceived?.Invoke(new LdnGameDataReceivedEventArgs(await LdnGameModel.GetAllAsync()));
                     return;
                 }
                 catch (Exception ex)

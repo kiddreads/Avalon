@@ -145,8 +145,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             {
 
             }
-
-            OnPropertyChanged();
+            
             OnPropertyChanged(nameof(CurrentEntries));
         }
 
