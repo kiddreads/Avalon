@@ -115,7 +115,7 @@
                 Margin="10, 0, 148, 0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Content="Filters"
+                Content="{ext:Locale LdnGameListFiltersHeading}"
                 DockPanel.Dock="Right">
                 <DropDownButton.Flyout>
                     <Flyout Placement="Bottom">
@@ -124,10 +124,10 @@
                                 <TextBlock Text="{ext:Locale CompatibilityListOnlyShowOwnedGames}" />
                             </CheckBox>
                             <CheckBox IsChecked="{Binding OnlyShowPublicGames}">
-                                <TextBlock Text="{ext:Locale LdnGameListOnlyShowPublicGames}" />
+                                <TextBlock Text="{ext:Locale LdnGameListFiltersOnlyShowPublicGames}" />
                             </CheckBox>
                             <CheckBox IsChecked="{Binding OnlyShowJoinableGames}">
-                                <TextBlock Text="{ext:Locale LdnGameListOnlyShowJoinableGames}" />
+                                <TextBlock Text="{ext:Locale LdnGameListFiltersOnlyShowJoinableGames}" />
                             </CheckBox>
                         </StackPanel>
                     </Flyout>
@@ -213,7 +213,7 @@
                 Margin="10, 5, 20, 5" 
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Content="Filters"
+                Content="{ext:Locale LdnGameListFiltersHeading}"
                 DockPanel.Dock="Right">
                 <DropDownButton.Flyout>
                     <Flyout Placement="Bottom">
@@ -222,10 +222,10 @@
                                 <TextBlock Text="{ext:Locale CompatibilityListOnlyShowOwnedGames}" />
                             </CheckBox>
                             <CheckBox IsChecked="{Binding OnlyShowPublicGames}">
-                                <TextBlock Text="{ext:Locale LdnGameListOnlyShowPublicGames}" />
+                                <TextBlock Text="{ext:Locale LdnGameListFiltersOnlyShowPublicGames}" />
                             </CheckBox>
                             <CheckBox IsChecked="{Binding OnlyShowJoinableGames}">
-                                <TextBlock Text="{ext:Locale LdnGameListOnlyShowJoinableGames}" />
+                                <TextBlock Text="{ext:Locale LdnGameListFiltersOnlyShowJoinableGames}" />
                             </CheckBox>
                         </StackPanel>
                     </Flyout>
