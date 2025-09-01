@@ -50,7 +50,7 @@ namespace Ryujinx.HLE.HOS.Tamper
                 Logger.Error?.Print(LogClass.TamperMachine, ex.ToString());
             }
 
-            Logger.Error?.Print(LogClass.TamperMachine, "There was a problem while compiling the Atmosphere cheat");
+            Logger.Error?.Print(LogClass.TamperMachine, $"There was a problem while compiling the Atmosphere cheat '{name}'");
 
             return null;
         }
@@ -126,7 +126,7 @@ namespace Ryujinx.HLE.HOS.Tamper
                         DebugLog.Emit(instruction, context);
                         break;
                     default:
-                        throw new TamperCompilationException($"Code type {codeType} not implemented in Atmosphere cheat");
+                        throw new TamperCompilationException($"Code type {codeType} not implemented in Atmosphere cheat compiler");
                 }
             }
 
