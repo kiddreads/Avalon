@@ -12,16 +12,19 @@ Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful featur
   <img src="images_manicemu_ver4_a07.jpg" width="13%">
 </p>
 
-
+</br>
 
 [<img src="appstore-badge.png" height="50">](https://itunes.apple.com/us/app/id6743335790)
+</br>
 Manic EMU is now available on the AppStore
 
-
+</br>
 
 [<img src="kofi-badge.png" height="50">](https://ko-fi.com/maftymanicemu)
+</br>
 Your support keeps this app going
 
+</br>
 
 ## Features
 
