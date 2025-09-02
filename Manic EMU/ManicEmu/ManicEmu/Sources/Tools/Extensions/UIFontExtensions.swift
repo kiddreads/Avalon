@@ -5,6 +5,7 @@
 //  Created by Aoshuang Lee on 2023/5/31.
 //  Copyright © 2023 Aoshuang Lee. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Foundation
 

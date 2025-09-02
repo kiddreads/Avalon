@@ -5,6 +5,7 @@
 //  Created by Riley Testut on 4/30/17.
 //  Copyright © 2017 Riley Testut. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ManicEmuCore
 import GBADeltaCore

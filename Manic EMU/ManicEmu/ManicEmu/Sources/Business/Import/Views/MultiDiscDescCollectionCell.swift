@@ -5,6 +5,7 @@
 //  Created by Daiuno on 2025/7/3.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 class MultiDiscDescCollectionCell: UICollectionViewCell {
     private let descLabel: UILabel = {

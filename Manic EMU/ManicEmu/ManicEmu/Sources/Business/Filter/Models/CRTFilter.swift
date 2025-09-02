@@ -7,6 +7,7 @@
 //  Created by Simon Gladman on 20/01/2016.
 //  Copyright © 2016 Simon Gladman. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import CoreImage
 import CoreImage.CIFilterBuiltins

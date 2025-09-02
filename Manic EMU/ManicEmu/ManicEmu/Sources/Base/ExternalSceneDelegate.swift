@@ -5,6 +5,7 @@
 //  Created by Daiuno on 2025/3/9.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import RealmSwift
 
 /// 连接屏幕镜像的时候使用这个场景

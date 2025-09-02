@@ -5,6 +5,7 @@
 //  Created by Daiuno on 2025/4/12.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 #include "Pods/Target Support Files/Pods-ManicEmu/Pods-ManicEmu.devrelease.xcconfig"
 #include "ManicEmu/Resources/Config-Base.xcconfig"

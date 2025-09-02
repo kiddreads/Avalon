@@ -5,6 +5,7 @@
 //  Created by Max on 2025/1/20.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 extension FileManager {
     static func safeMoveItem(at srcURL: URL, to dstURL: URL, shouldReplace: Bool = false) throws {

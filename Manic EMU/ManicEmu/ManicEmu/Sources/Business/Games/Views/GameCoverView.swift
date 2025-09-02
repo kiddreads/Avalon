@@ -5,6 +5,7 @@
 //  Created by Daiuno on 2025/5/4.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ManicEmuCore
 import Kingfisher

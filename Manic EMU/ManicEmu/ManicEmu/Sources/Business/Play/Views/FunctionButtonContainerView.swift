@@ -5,6 +5,7 @@
 //  Created by Daiuno on 2025/3/19.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 class FunctionButtonContainerView: UIView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

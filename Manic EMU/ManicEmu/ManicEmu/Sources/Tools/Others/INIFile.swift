@@ -5,6 +5,7 @@
 //  Created by Heaven Chou on 2020/2/28.
 //  Copyright © 2020 CBETA. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 /*
  INI 範例檔案

@@ -2,29 +2,57 @@
 
 Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful features while keeping a clean, sleek UI and delivering buttery-smooth gameplay.
 
+<p float="center">
+  <img src="images_manicemu_ver4_a01.jpg" width="13%">
+  <img src="images_manicemu_ver4_a02.jpg" width="13%">
+  <img src="images_manicemu_ver4_a03.jpg" width="13%">
+  <img src="images_manicemu_ver4_a04.jpg" width="13%">
+  <img src="images_manicemu_ver4_a05.jpg" width="13%">
+  <img src="images_manicemu_ver4_a06.jpg" width="13%">
+  <img src="images_manicemu_ver4_a07.jpg" width="13%">
+</p>
+
+
+
 [<img src="appstore-badge.png" height="50">](https://itunes.apple.com/us/app/id6743335790)
+Manic EMU is now available on the AppStore
+
+
+
+[<img src="kofi-badge.png" height="50">](https://ko-fi.com/maftymanicemu)
+Your support keeps this app going
+
 
 ## Features
 
 ### [Supported Platforms]
-- Nintendo 64（N64）
-- Sega Saturn（SS）
-- Sega Master System（MS）
-- Sega Game Gear（GG）
-- Sega SG-1000（SG）
-- Sega Genesis 32X/Super 32X（32X）
-- SEGA CD/Mega-CD（MCD）
-- Sega Genesis/MegaDrive（MD）
-- PlayStation Portable（PSP）
-- Nintendo 3DS (3DS)
-- Nintendo DS (NDS)
-- Game Boy Advance (GBA)
-- Game Boy Color (GBC)
-- Game Boy (GB)
-- Nintendo Entertainment System (NES)
-- Super Nintendo Entertainment System (SNES)
-- More platforms coming soon!
 
+#### Nintendo
+- Nintendo 3DS(3DS)
+- Nintendo 64(N64)
+- Nintendo DS(NDS)
+- Game Boy Advance(GBA)
+- Game Boy Color(GBC)
+- Game Boy(GB)
+- Nintendo Entertainment System(NES)
+- Super Nintendo Entertainment System(SNES)
+- Virtual Boy(VB)
+- Pokémon Mini(PM)
+
+#### SONY
+- PlayStation(PS1)
+- PlayStation Portable(PSP)
+
+#### SEGA
+- Sega Saturn(SS)
+- Sega Master System(MS)
+- Sega Game Gear(GG)
+- Sega SG-1000(SG)
+- Sega Genesis 32X/Super 32X(32X)
+- Sega CD/Mega-CD(MCD)
+- Sega Genesis/MegaDrive(MD)
+
+More platforms coming soon!
 
 ### [Key Features]
 - Unlimited Saves: Manual & 50 auto-save slots
@@ -74,7 +102,18 @@ Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful featur
 
 ## Acknowledgements
 This project is made possible by the contributions of many outstanding open-source projects:
-- Developers of the emulator cores
+- Open source emulator cores
 - Architectural design of DeltaCore
-- Toolchain support from the RetroArch community
+- Toolchain support from the Libretro community
 - Additional dependencies (see `SPM` and `Podfile` listings)
+
+## Links
+
+<p float="left">
+	<a src="https://manicemu.site"><img src="manicemu-badge.png" height="80"></a>
+	<a src="https://discord.gg/qsaTHzknAZ"><img src="discord-badge.png" height="80"></a>
+</p>
+
+
+
+

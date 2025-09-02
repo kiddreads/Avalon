@@ -5,6 +5,7 @@
 //  Created by Daiuno on 2025/4/8.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ManicEmuCore
 import AVFoundation
