@@ -14,7 +14,7 @@ import SwiftUI
 
 struct CheersView: View {
     
-    static func makeCheers() {
+    static func makePurchaseCheers() {
         if let window = ApplicationSceneDelegate.applicationWindow {
             let vc = UIHostingController(rootView: CheersView().edgesIgnoringSafeArea(.all))
             if let cheersView = vc.view {
@@ -54,6 +54,36 @@ struct CheersView: View {
                         }) { _ in
                             container?.removeFromSuperview()
                         }
+                    }
+                }
+            }
+        }
+    }
+    
+    static func makeNormalCheers() {
+        if let window = ApplicationSceneDelegate.applicationWindow {
+            let vc = UIHostingController(rootView: CheersView().edgesIgnoringSafeArea(.all))
+            if let cheersView = vc.view {
+                
+                let container = UIView()
+                container.backgroundColor = .clear
+                window.addSubview(container)
+                container.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+                
+                cheersView.isUserInteractionEnabled = false
+                cheersView.backgroundColor = .clear
+                container.addSubview(cheersView)
+                cheersView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+                
+                DispatchQueue.main.asyncAfter(delay: 4) {
+                    UIView.normalAnimate(animations: {
+                        container.backgroundColor = .clear
+                    }) { _ in
+                        container.removeFromSuperview()
                     }
                 }
             }

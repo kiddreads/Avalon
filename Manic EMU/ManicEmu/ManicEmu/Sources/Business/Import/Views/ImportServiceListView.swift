@@ -24,19 +24,28 @@ class ImportServiceListView: BaseView {
         return view
     }()
     
-    private var howToImportButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.importHowTo()) {
+    private lazy var moreContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: R.string.localizable.importHowTo(), image: UIImage(symbol: .bookClosed)) { [weak self] _ in
+            guard let self = self else { return }
+            //how to import
             topViewController()?.present(WebViewController(url: Constants.URLs.GameImportGuide), animated: true)
-        }
+        }))
+        actions.append(UIAction(title: R.string.localizable.multiDiscBuilder(), image: UIImage(symbol: .opticaldisc)) { [weak self] _ in
+            guard let self = self else { return }
+            //多碟助手
+            topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view
     }()
     
-    private var multiDiscButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.multiDiscBuilder()) {
-            topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
+    private lazy var moreButton: SymbolButton = {
+        let view = SymbolButton(symbol: .ellipsis)
+        view.enableRoundCorner = true
+        view.addTapGesture { [weak self] gesture in
+            self?.moreContextMenuButton.triggerTapGesture()
         }
-        view.label.textColor = Constants.Color.LabelPrimary
-        view.label.font = Constants.Font.caption(size: .l, weight: .semibold)
         return view
     }()
     
@@ -48,8 +57,8 @@ class ImportServiceListView: BaseView {
         return view
     }()
     
-    private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+    lazy var collectionView: UICollectionView = {
+        let view = NoControllCollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: ImportFileCollectionViewCell.self)
@@ -145,7 +154,11 @@ class ImportServiceListView: BaseView {
         addSubview(topBlurView)
         topBlurView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                make.height.equalTo(Constants.Size.ItemHeightMid)
+            } else {
+                make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
+            }
         }
         
         let navigationContainer = UIView()
@@ -162,25 +175,34 @@ class ImportServiceListView: BaseView {
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
         }
         
-        navigationContainer.addSubview(howToImportButton)
-        howToImportButton.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+        navigationContainer.addSubview(moreContextMenuButton)
+        navigationContainer.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
         }
-        
-        navigationContainer.addSubview(multiDiscButton)
-        multiDiscButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.trailing.equalTo(howToImportButton.snp.leading).offset(-Constants.Size.ContentSpaceMin)
+        moreContextMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(moreButton)
         }
         
         navigationContainer.addSubview(downloadManageButton)
         downloadManageButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.trailing.equalTo(multiDiscButton.snp.leading).offset(-Constants.Size.ContentSpaceMin)
+            make.trailing.equalTo(moreButton.snp.leading).offset(-Constants.Size.ContentSpaceMin)
+        }
+    }
+    
+    func updateViews() {
+        if UIDevice.isPhone {
+            topBlurView.snp.updateConstraints { make in
+                if UIDevice.isLandscape {
+                    make.height.equalTo(Constants.Size.ItemHeightMid)
+                } else {
+                    make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
+                }
+            }
         }
     }
     

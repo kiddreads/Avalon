@@ -13,30 +13,29 @@ extension Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.second, .minute, .hour, .day, .weekOfYear, .month, .year], from: self, to: now)
         
-        if let minutes = components.minute, minutes < 60 {
-            return R.string.localizable.timeAgoMinuteFormat(minutes <= 0 ? 1 : minutes)
-        }
-        
-        if let hours = components.hour, hours < 24 {
-            return R.string.localizable.timeAgoHourFormat(hours)
-        }
-        
-        if let days = components.day, days < 7 {
-            return R.string.localizable.timeAgoDayFormat(days)
-        }
-        
-        if let weeks = components.weekOfYear, weeks < 5 {
-            return R.string.localizable.timeAgoWeekFormat(weeks)
-        }
-        
-        if let months = components.month, months < 12 {
-            return R.string.localizable.timeAgoMonthFormat(months)
-        }
-        
         if let years = components.year, years > 0 {
             return R.string.localizable.timeAgoYearFormat(years)
         }
         
+        if let months = components.month, months > 0 {
+            return R.string.localizable.timeAgoMonthFormat(months)
+        }
+        
+        if let weeks = components.weekOfYear, weeks > 0 {
+            return R.string.localizable.timeAgoWeekFormat(weeks)
+        }
+        
+        if let days = components.day, days > 0 {
+            return R.string.localizable.timeAgoDayFormat(days)
+        }
+        
+        if let hours = components.hour, hours > 0 {
+            return R.string.localizable.timeAgoHourFormat(hours)
+        }
+        
+        if let minutes = components.minute, minutes > 0 {
+            return R.string.localizable.timeAgoMinuteFormat(minutes <= 0 ? 1 : minutes)
+        }
         return nil
     }
     

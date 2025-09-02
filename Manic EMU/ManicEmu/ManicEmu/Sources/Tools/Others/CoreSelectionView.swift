@@ -90,12 +90,15 @@ class CoreSelectionView: BaseView {
             let CoreSelectionView = CoreSelectionView(cores: gameType.supportCores, currentCoreIndex: currentCoreIndex)
             CoreSelectionView.didSelected = { [weak sheet] coreIndex in
                 sheet?.pop {
-                    Game.change { realm in
-                        game.defaultCore = coreIndex
-                    }
-                    NotificationCenter.default.post(name: Constants.NotificationName.PlatformSelectionChange, object: nil)
-                    if !game.hasCoverMatch {
-                        OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
+                    if game.defaultCore != coreIndex {
+                        let oldSaveUrl = game.gameSaveUrl
+                        Game.change { realm in
+                            game.defaultCore = coreIndex
+                        }
+                        let newSaveUrl = game.gameSaveUrl
+                        if game.gameType != .ss, FileManager.default.fileExists(atPath: oldSaveUrl.path) {
+                            try? FileManager.safeMoveItem(at: oldSaveUrl, to: newSaveUrl)
+                        }
                     }
                     completion?()
                 }

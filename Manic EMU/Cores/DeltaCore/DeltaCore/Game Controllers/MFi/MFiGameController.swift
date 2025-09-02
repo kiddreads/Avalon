@@ -119,6 +119,8 @@ public class MFiGameController: NSObject, GameController
         }
     }
     
+    public var deadZone: Float = 0.0
+    
     public let inputType: GameControllerInputType = .mfi
         
     public private(set) lazy var defaultInputMapping: GameControllerInputMappingBase? = {
@@ -162,7 +164,11 @@ public class MFiGameController: NSObject, GameController
             switch value
             {
             case ..<0:
-                self.activate(input1, value: Double(-value))
+                if abs(value) > deadZone {
+                    self.activate(input1, value: Double(-value))
+                } else {
+                    print("忽略输入:\(input1.stringValue) value: \(-value) deadZone:\(deadZone)")
+                }
                 self.deactivate(input2)
                 
             case 0:
@@ -171,7 +177,11 @@ public class MFiGameController: NSObject, GameController
                 
             default:
                 self.deactivate(input1)
-                self.activate(input2, value: Double(value))
+                if abs(value) > deadZone {
+                    self.activate(input2, value: Double(value))
+                } else {
+                    print("忽略输入:\(input2.stringValue) value: \(value) deadZone:\(deadZone)")
+                }
             }
         }
         

@@ -250,7 +250,7 @@ class ControllerMappingView: UIView {
         }
     }
     
-    init(gameType: GameType = ._3ds, controller: GameController) {
+    init(gameType: GameType = .ps1, controller: GameController) {
         self.gameType = gameType
         self.gameController = controller
         super.init(frame: .zero)
@@ -585,6 +585,19 @@ extension ControllerMappingView: ControllerReceiverProtocol {
             Log.debug("点击皮肤:\(input)")
             startMapping(input: input)
         } else if let selectedSkinInput, gameController.inputType != .controllerSkin, !isKeyMapping {
+            
+            let isThumbStick = (input.stringValue == "leftThumbstickLeft" ||
+                                input.stringValue == "leftThumbstickRight" ||
+                                input.stringValue == "leftThumbstickUp" ||
+                                input.stringValue == "leftThumbstickDown" ||
+                                input.stringValue == "rightThumbstickLeft" ||
+                                input.stringValue == "rightThumbstickRight" ||
+                                input.stringValue == "rightThumbstickUp" ||
+                                input.stringValue == "rightThumbstickDown")
+            if isThumbStick, value < 0.5 {
+                return
+            }
+            
             //记录修改过
             if !modifiedList.contains([gameType]) {
                 modifiedList.append(gameType)

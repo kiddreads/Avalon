@@ -24,6 +24,30 @@ extension UIDevice {
         }
     }
     
+    static func generateAchievementHaptic() {
+        let achievementPattern: [Note] = [
+            // 开场强烈震动
+            .haptic(.impact(.heavy)),
+            .wait(0.1),
+            .haptic(.impact(.rigid)),
+
+            // 节奏庆祝（三连击）
+            .wait(0.15),
+            .haptic(.impact(.medium)),
+            .wait(0.1),
+            .haptic(.impact(.medium)),
+            .wait(0.1),
+            .haptic(.impact(.medium)),
+
+            // 收尾轻快感
+            .wait(0.2),
+            .haptic(.impact(.light)),
+            .wait(0.05),
+            .haptic(.impact(.soft))
+        ]
+        Haptic.play(achievementPattern)
+    }
+    
     static var supportsHaptics: Bool {
         CHHapticEngine.capabilitiesForHardware().supportsHaptics
     }

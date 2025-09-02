@@ -214,7 +214,7 @@ extension FilesImporter {
                             
                             group.notify(queue: .main) {
                                 //导入游戏成功
-                                if let home = topViewController(appController: true) as? HomeViewController, home.currentSelection == .games {
+                                if let home = topViewController(appController: true) as? HomeViewController, home.homeTabBar.currentSelection == .games {
                                     UIView.makeToast(message: R.string.localizable.importGameSuccessTitle())
                                 } else {
                                     let detail: String
@@ -630,6 +630,10 @@ extension FilesImporter {
                                 return
                             }
                         }
+                    } else if realm.objects(Skin.self).where({ $0.identifier == controllerSkin.identifier }).count > 0 {
+                        //identifier冲突了
+                        completion?(nil, .skinIdentifierConflict(identifier: controllerSkin.identifier))
+                        return
                     } else {
                         //数据库skin不存在
                         let skin = Skin()
@@ -638,7 +642,7 @@ extension FilesImporter {
                         skin.name = controllerSkin.name
                         skin.fileName = url.lastPathComponent
                         skin.gameType = controllerSkin.gameType
-                        skin.skinType = SkinType(fileExtension: url.pathExtension)!
+                        skin.skinType = .import
                         skin.skinData = CreamAsset.create(objectID: skin.id, propName: "skinData", url: url)
                         do {
                             try realm.write {
@@ -901,22 +905,25 @@ extension FilesImporter {
                         if !fileName.isEmpty {
                             //查询这个文件是否存在
                             if let fileUrl = urls.first(where: { $0.lastPathComponent == fileName}) {
-                                //文件存在 则将这个文件排除，不再需要导入
-                                excludeUrls.append(fileUrl)
-                                m3uFiles.append(fileUrl)
-                            } else if fileName.pathExtension.lowercased() == "cue" {
-                                //cue文件则从cueItems中进行判断
-                                if let cue = cueItems.first(where: { $0.url.lastPathComponent == fileName }) {
-                                    //cue文件存在 则排除这个cue
-                                    excludeCues.append(cue)
-                                    m3uFiles.append(cue.url)
-                                    m3uFiles.append(contentsOf: cue.files)
+                                if fileUrl.pathExtension.lowercased() == "cue" {
+                                    //cue文件则从cueItems中进行判断
+                                    if let cue = cueItems.first(where: { $0.url.lastPathComponent == fileName }) {
+                                        //cue文件存在 则排除这个cue
+                                        excludeCues.append(cue)
+                                        excludeUrls.append(cue.url)
+                                        m3uFiles.append(cue.url)
+                                        m3uFiles.append(contentsOf: cue.files)
+                                    } else {
+                                        //m3u中的不包含这个cue文件 说明这个m3u不合法，文件有缺失 则不导入这个m3u文件，并且将m3u中的其他文件也一并排除
+                                        isBadM3u = true
+                                        missFileName = fileName
+                                    }
                                 } else {
-                                    //m3u中的不包含这个cue文件 说明这个m3u不合法，文件有缺失 则不导入这个m3u文件，并且将m3u中的其他文件也一并排除
-                                    isBadM3u = true
-                                    missFileName = fileName
+                                    //文件存在 则将这个文件排除，不再需要导入
+                                    excludeUrls.append(fileUrl)
+                                    m3uFiles.append(fileUrl)
                                 }
-                                
+
                             } else {
                                 //m3u中的文件不存在 说明这个m3u不合法，文件有缺失 则不导入这个m3u文件，并且将m3u中的其他文件也一并排除
                                 isBadM3u = true
@@ -987,7 +994,7 @@ extension FilesImporter {
                     var cueFiles = [URL]()
                     let fileNames = extractCueFilenames(from: content)
                     guard fileNames.count > 0 else {
-                        errors.append(.badCopy(fileName: url.lastPathComponent))
+                        errors.append(.badCue(fileName: url.lastPathComponent))
                         continue
                     }
                     for fileName in fileNames {
@@ -1020,7 +1027,7 @@ extension FilesImporter {
                     }
                 } else {
                     //无法读取cue文件
-                    errors.append(.badFile(fileName: url.lastPathComponent))
+                    errors.append(.badCue(fileName: url.lastPathComponent))
                 }
             } else {
                 results.append(url)

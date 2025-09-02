@@ -9,6 +9,7 @@
 
 import UIKit
 import ManicEmuCore
+import MelonDSDeltaCore
 import Schedule
 import Haptica
 import RealmSwift
@@ -19,12 +20,12 @@ import AVFoundation
 #if targetEnvironment(simulator)
 import MetalKit
 #endif
+import Kingfisher
 
 //MARK: 主类
 class PlayViewController: GameViewController {
     //游戏 业务层定义 注意和core里面定义的Game区分
     private let manicGame: Game
-    private let gameFileName: String
     //默认加载的即时存档
     private var loadSaveState: GameSaveState? = nil
     //MARK: 通知定义
@@ -39,6 +40,13 @@ class PlayViewController: GameViewController {
     private var windowDidBecomeKeyNotification: Any? = nil
     private var membershipNotification: Any? = nil
     private var controllerMappingNotification: Any? = nil
+    private var wfcConnectNotification: Any? = nil
+    private var wfcDisconnectNotification: Any? = nil
+    private var emulationDidQuitNotification: Any? = nil
+    private var motionShakeNotification: Any? = nil
+    private var achievementsNotification: Any? = nil
+    private var quitGamingNotification: Any? = nil
+    private var turnOffHardcoreNotification: Any? = nil
     
     //每分钟执行一次
     private lazy var repeatTimer: Schedule.Task = {
@@ -81,44 +89,72 @@ class PlayViewController: GameViewController {
     private var threeDSCore: ThreeDSEmulatorBridge? = nil
     //监听静音键变化
     private lazy var muteSwitchMonitor = DLTAMuteSwitchMonitor()
+    //kvo监听
+    private var kvoContext = 0
+    //排行榜控件
+    private var leaderboardView: LeaderboardView? = nil
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
-        if let gameControllerDidConnectNotification = gameControllerDidConnectNotification {
+        if let gameControllerDidConnectNotification {
             NotificationCenter.default.removeObserver(gameControllerDidConnectNotification)
         }
-        if let gameControllerDidDisConnectNotification = gameControllerDidDisConnectNotification {
+        if let gameControllerDidDisConnectNotification {
             NotificationCenter.default.removeObserver(gameControllerDidDisConnectNotification)
         }
-        if let keyboardDidConnectNotification = keyboardDidConnectNotification {
+        if let keyboardDidConnectNotification {
             NotificationCenter.default.removeObserver(keyboardDidConnectNotification)
         }
-        if let keyboardDidDisConnectNotification = keyboardDidDisConnectNotification {
+        if let keyboardDidDisConnectNotification {
             NotificationCenter.default.removeObserver(keyboardDidDisConnectNotification)
         }
-        if let sceneWillConnectNotification = sceneWillConnectNotification {
+        if let sceneWillConnectNotification {
             NotificationCenter.default.removeObserver(sceneWillConnectNotification)
         }
-        if let sceneDidDisconnectNotification = sceneDidDisconnectNotification {
+        if let sceneDidDisconnectNotification {
             NotificationCenter.default.removeObserver(sceneDidDisconnectNotification)
         }
-        if let scenewillDeactivateNotification = scenewillDeactivateNotification {
+        if let scenewillDeactivateNotification {
             NotificationCenter.default.removeObserver(scenewillDeactivateNotification)
         }
-        if let sceneDidActivateNotification = sceneDidActivateNotification {
+        if let sceneDidActivateNotification {
             NotificationCenter.default.removeObserver(sceneDidActivateNotification)
         }
-        if let windowDidBecomeKeyNotification = windowDidBecomeKeyNotification {
+        if let windowDidBecomeKeyNotification {
             NotificationCenter.default.removeObserver(windowDidBecomeKeyNotification)
         }
-        if let membershipNotification = membershipNotification {
+        if let membershipNotification {
             NotificationCenter.default.removeObserver(membershipNotification)
         }
-        if let controllerMappingNotification = controllerMappingNotification {
+        if let controllerMappingNotification {
             NotificationCenter.default.removeObserver(controllerMappingNotification)
+        }
+        if let wfcConnectNotification {
+            NotificationCenter.default.removeObserver(wfcConnectNotification)
+        }
+        if let wfcDisconnectNotification {
+            NotificationCenter.default.removeObserver(wfcDisconnectNotification)
+        }
+        if let emulationDidQuitNotification {
+            NotificationCenter.default.removeObserver(emulationDidQuitNotification)
+        }
+        if let motionShakeNotification {
+            NotificationCenter.default.removeObserver(motionShakeNotification)
+        }
+        if let achievementsNotification {
+            NotificationCenter.default.removeObserver(achievementsNotification)
+        }
+        if let quitGamingNotification {
+            NotificationCenter.default.removeObserver(quitGamingNotification)
+        }
+        if let turnOffHardcoreNotification {
+            NotificationCenter.default.removeObserver(turnOffHardcoreNotification)
         }
         if SyncManager.shared.hasDownloadTask {
             UIView.makeLoadingToast(message: R.string.localizable.loadingTitle())
+        }
+        if manicGame.gameType == .ds {
+            manicEmuCore?.removeObserver(self, forKeyPath: #keyPath(EmulatorCore.state), context: &kvoContext)
         }
     }
     
@@ -133,9 +169,13 @@ class PlayViewController: GameViewController {
     private var isFullScreen = false
     
     private var lastPSPCheatCode: String = ""
+    ///WFC是否处于连接
+    private var isWFCConnect = false
+    ///是否处于硬核模式
+    private var isHardcoreMode = false
     
     static func startGame(game: Game, saveState: GameSaveState? = nil) {
-        if game.isRomExtsts {
+        if game.isRomExtsts || game.isNDSHomeMenuGame {
             UIView.hideLoadingToast(forceHide: true)
             func showPlayView() {
                 if game.isBIOSMissing() {
@@ -171,6 +211,14 @@ class PlayViewController: GameViewController {
                         UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShow3DSNotSupportAlert)
                         launchGameByDismissOtherVC()
                     })
+                }  else if game.gameType == .ps1, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowPS1PlayAlert) {
+                    UIView.makeAlert(title: R.string.localizable.psxRunAlert(),
+                                     detail: R.string.localizable.sbiImportDesc(),
+                                     detailAlignment: .left,
+                                     cancelTitle: R.string.localizable.confirmTitle(), hideAction: {
+                        UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowPS1PlayAlert)
+                        launchGameByDismissOtherVC()
+                    });
                 } else {
                     launchGameByDismissOtherVC()
                 }
@@ -199,7 +247,11 @@ class PlayViewController: GameViewController {
                 }, hideAction: {
                     UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowSSPlayAlert)
                 });
-            }  else {
+            } else if game.gameType == .snes, game.defaultCore != 0 {
+                UIView.makeAlert(detail: R.string.localizable.snes9xAlert(), cancelTitle: R.string.localizable.gotIt(), hideAction: {
+                    showPlayView()
+                })
+            } else {
                 showPlayView()
             }
         } else {
@@ -224,7 +276,6 @@ class PlayViewController: GameViewController {
     //MARK: 生命周期
     private init(game: Game, saveState: GameSaveState? = nil) {
         manicGame = game
-        gameFileName = game.fileName
         super.init()
         Log.debug("\(String(describing: Self.self)) init")
         prefersVolumeEnable = manicGame.volume
@@ -243,6 +294,7 @@ class PlayViewController: GameViewController {
         gameControllerDidDisConnectNotification = NotificationCenter.default.addObserver(forName: .externalGameControllerDidDisconnect, object: nil, queue: .main) { [weak self] notification in
             //手柄断开连接
             if ExternalGameControllerUtils.shared.linkedControllers.count == 0 {
+                self?.manicGame.forceFullSkin = false
                 self?.updateSkin()
             }
         }
@@ -254,6 +306,7 @@ class PlayViewController: GameViewController {
         keyboardDidDisConnectNotification = NotificationCenter.default.addObserver(forName: .externalKeyboardDidDisconnect, object: nil, queue: .main) { [weak self] notification in
             //键盘断开连接
             if ExternalGameControllerUtils.shared.linkedControllers.count == 0 {
+                self?.manicGame.forceFullSkin = false
                 self?.updateSkin()
             }
         }
@@ -270,11 +323,7 @@ class PlayViewController: GameViewController {
         scenewillDeactivateNotification = NotificationCenter.default.addObserver(forName: UIScene.willDeactivateNotification, object: nil, queue: .main) { [weak self] notification in
             //进入后台
             guard let self = self else { return }
-            if self.manicGame.gameType == ._3ds {
-                self.threeDSCore?.pause()
-            } else if self.manicGame.gameType.isLibretroType {
-                LibretroCore.sharedInstance().pause()
-            }
+            self.pauseEmulation()
         }
         
         sceneDidActivateNotification = NotificationCenter.default.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] notification in
@@ -320,6 +369,100 @@ class PlayViewController: GameViewController {
         controllerMappingNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ControllerMapping, object: nil, queue: .main) { [weak self] notification in
             self?.updateExternalGameController()
         }
+        
+        //监听WFC连接
+        wfcConnectNotification = NotificationCenter.default.addObserver(forName: MelonDS.didConnectToWFCNotification, object: nil, queue: .main) { [weak self] notification in
+            guard let self else { return }
+//            //在线游戏 禁用加速 禁用金手指
+            UIView.makeToast(message: R.string.localizable.wfcConnectDesc())
+            self.isWFCConnect = true
+            self.manicEmuCore?.setRate(speed: .one)
+        }
+        
+        //监听WFC断开连接
+        wfcDisconnectNotification = NotificationCenter.default.addObserver(forName: MelonDS.didDisconnectFromWFCNotification, object: nil, queue: .main) { [weak self] notification in
+            guard let self else { return }
+            UIView.makeToast(message: R.string.localizable.wfcDisconnectDesc())
+            self.isWFCConnect = false
+            self.manicEmuCore?.setRate(speed: self.manicGame.speed)
+        }
+        
+        //核心请求退出
+        emulationDidQuitNotification = NotificationCenter.default.addObserver(forName: EmulatorCore.emulationDidQuitNotification, object: nil, queue: .main) { [weak self] notification in
+            self?.dismiss(animated: true)
+        }
+        
+        //设备晃动通知
+        motionShakeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MotionShake, object: nil, queue: .main) { [weak self] notification in
+            guard let self else { return }
+            if self.manicGame.gameType == .pm {
+                LibretroCore.sharedInstance().press(.L1, playerIndex: 0)
+                DispatchQueue.main.asyncAfter(delay: 0.1) {
+                    LibretroCore.sharedInstance().release(.L1, playerIndex: 0)
+                }
+            }
+        }
+        
+        //获取成就
+        achievementsNotification = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "RetroAchievementsNotification"), object: nil, queue: .main, using: { [weak self] notification in
+            guard let self else { return }
+            if let achievement = notification.object as? CheevosAchievement {
+                //获得成就
+                self.showRetroAchievements(badgeUrl: achievement.unlockedBadgeUrl,
+                                            title: R.string.localizable.achievementUnlocked(),
+                                            message: achievement.title) { [weak self] in
+                    guard let self else { return }
+                    topViewController(appController: true)?.present(RetroAchievementsDetailViewController(achievement: achievement), animated: true)
+                    self.pauseEmulation()
+                }
+                UIDevice.generateAchievementHaptic()
+                
+            } else if let summary = notification.object as? CheevosSummary {
+                //启动成就
+                self.showRetroAchievements(badgeUrl: summary.badgeUrl,
+                                           title: R.string.localizable.achievementsGo() + " (\(self.isHardcoreMode ? R.string.localizable.hardcore() : R.string.localizable.softcore()))",
+                                            message: R.string.localizable.achievementsSummary(summary.unlockedAchievementsNum, summary.coreAchievementsNum),
+                                            hideIcon: true);
+            } else if let _ = notification.object as? CheevosCompletion {
+                //解锁完成
+                self.showRetroAchievements(title: R.string.localizable.achievementsCompleted());
+                CheersView.makeNormalCheers()
+                UIDevice.generateAchievementHaptic()
+                
+            } else if let leaderboardTracker = notification.object as? CheevosLeaderboardTracker {
+                //排行榜追踪
+                if let leaderboardView = self.leaderboardView {
+                    if leaderboardTracker.show, let content = leaderboardTracker.display {
+                        leaderboardView.updateLeaderboard(id: leaderboardTracker._id, content: content)
+                    } else {
+                        leaderboardView.removeLeaderboard(id: leaderboardTracker._id)
+                    }
+                }
+            } else if let leaderboard = notification.object as? CheevosLeaderboard {
+                //排行榜提示
+                if let title = leaderboard.title, let description = leaderboard._description {
+                    self.showRetroAchievements(title: R.string.localizable.leaderboardStart() + title, message: description, hideIcon: true);
+                }
+
+            } else if let message = notification.object as? String {
+                UIView.makeToast(message: message)
+            }
+        })
+        
+        //退出游戏
+        quitGamingNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.QuitGaming, object: nil, queue: .main, using: { [weak self] notification in
+            guard let self else { return }
+            UIView.hideAllAlert()
+            self.handleMenuGameSetting(GameSetting(type: .quit), nil)
+        })
+        
+        //关闭硬核模式
+        turnOffHardcoreNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.TurnOffHardcore, object: nil, queue: .main, using: { [weak self] notification in
+            guard let self else { return }
+            self.isHardcoreMode = false
+            LibretroCore.sharedInstance().updateLibretroConfig("cheevos_hardcore_mode_enable", value: "false")
+            LibretroCore.sharedInstance().turnOffHardcode()
+        })
         
         //更新最新游戏时间
         updateLatestPlayDate()
@@ -396,6 +539,25 @@ class PlayViewController: GameViewController {
                 break
             }
         }
+        
+        //监听核心状态的变化
+        if manicGame.gameType == .ds {
+            manicEmuCore?.addObserver(self, forKeyPath: #keyPath(EmulatorCore.state), options: [.old], context: &kvoContext)
+        }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard context == &kvoContext else { return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context) }
+        guard let rawValue = change?[.oldKey] as? Int, let previousState = EmulatorCore.State(rawValue: rawValue) else { return }
+        if let manicEmuCore {
+            if previousState != .stopped, manicEmuCore.state == .stopped {
+                DispatchQueue.main.async {
+                    if self.manicGame.isNDSHomeMenuGame {
+                        self.handleMenuGameSetting(GameSetting(type: .quit), nil)
+                    }
+                }
+            }
+        }
     }
     
     @MainActor required init() {
@@ -423,7 +585,11 @@ class PlayViewController: GameViewController {
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
-            make.leading.trailing.equalTo(gameView)
+            if manicGame.gameType == .pm && !UIDevice.isLandscape {
+                make.leading.trailing.equalTo(gameView).inset(50)
+            } else {
+                make.leading.trailing.equalTo(gameView)
+            }
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         //设置外设控制器
@@ -448,13 +614,9 @@ class PlayViewController: GameViewController {
         updateSkin()
         //更新声音
         updateAudio()
-        if manicGame.gameType != ._3ds {
+        if manicGame.gameType != ._3ds && !manicGame.gameType.isLibretroType {
             //设置速度
-            if manicGame.gameType == .psp && manicGame.speed == .one {
-                //如果是PSP平台 并且设置的是1倍速，则启动的时候不设置倍速
-            } else {
-                manicEmuCore?.setRate(speed: manicGame.speed)
-            }
+            self.manicEmuCore?.setRate(speed: self.manicGame.speed)
         }
         functionButtonContainer.isHidden = false
     }
@@ -506,6 +668,11 @@ class PlayViewController: GameViewController {
         if manicGame.gameType.isLibretroType || manicGame.gameType == ._3ds {
             muteSwitchMonitor.stopMonitoring()
         }
+        
+        if let gameSortType = GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0),
+            (gameSortType == .latestPlayed || gameSortType == .playTime) {
+            NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
+        }
     }
     
     /// 进入默认显示的方向
@@ -543,6 +710,9 @@ class PlayViewController: GameViewController {
         }) { [weak self] _ in
             guard let self = self else { return }
             self.resumeEmulationAndHandleAudio()
+            if self.manicGame.gameType.isLibretroType {
+                self.manicEmuCore?.setRate(speed: self.manicGame.speed)
+            }
         }
     }
     
@@ -559,14 +729,8 @@ class PlayViewController: GameViewController {
                     self?.resumeEmulationAndHandleAudio()
                 }
             } else {
-                if manicGame.gameType == ._3ds {
-                    threeDSCore?.pause()
-                } else if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    pauseEmulation()
-                }
-                if manicGame.fileExtension.lowercased() == "m3u" {
+                pauseEmulation()
+                if manicGame.supportSwapDisc {
                     manicGame.totalDiskCount = LibretroCore.sharedInstance().getDiskCount()
                     manicGame.currentDiskIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
                 }
@@ -589,13 +753,7 @@ class PlayViewController: GameViewController {
                 return
             }
             
-            if manicGame.gameType == ._3ds {
-                threeDSCore?.pause()
-            } else if manicGame.gameType.isLibretroType {
-                LibretroCore.sharedInstance().pause()
-            } else {
-                pauseEmulation()
-            }
+            pauseEmulation()
             
             func updateFlex(images: [UIImage?]) {
                 if let controllerSkin = controllerView.controllerSkin, let traits = controllerView.controllerSkinTraits,
@@ -678,7 +836,9 @@ class PlayViewController: GameViewController {
         } else if input.stringValue == "resolution" {
             handleMenuGameSetting(GameSetting(type: .resolution, resolution: manicGame.resolution.next), nil)
         } else if input.stringValue == "quit" {
-            handleMenuGameSetting(GameSetting(type: .quit), nil)
+            UIView.makeAlert(detail: R.string.localizable.quitGameAlert(), confirmTitle: R.string.localizable.confirmTitle(), confirmAction: { [weak self] in
+                self?.handleMenuGameSetting(GameSetting(type: .quit), nil)
+            })
         } else if input.stringValue == "amiibo" {
             handleMenuGameSetting(GameSetting(type: .amiibo), nil)
         } else if input.stringValue == "homeMenu" {
@@ -696,6 +856,10 @@ class PlayViewController: GameViewController {
             let totalCount = LibretroCore.sharedInstance().getDiskCount()
             let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
             handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: nextIndex), nil)
+        } else if input.stringValue == "toggleAnalog" {
+            updateAnalogMode(toastAllow: true, toggle: true);
+        } else if input.stringValue == "retroAchievements" {
+            handleMenuGameSetting(GameSetting(type: .retro), nil)
         }
     }
     
@@ -703,6 +867,22 @@ class PlayViewController: GameViewController {
         super.gameController(gameController, didDeactivate: input)
         if input.stringValue == "fastForward" {
             manicEmuCore?.setRate(speed: manicGame.speed)
+        }
+    }
+    
+    @discardableResult
+    override func pauseEmulation() -> Bool {
+        guard !isWFCConnect else {
+            return false
+        }
+        if manicGame.gameType == ._3ds {
+            threeDSCore?.pause()
+            return true
+        } else if manicGame.gameType.isLibretroType {
+            LibretroCore.sharedInstance().pause()
+            return true
+        } else {
+            return super.pauseEmulation()
         }
     }
 }
@@ -806,6 +986,7 @@ extension PlayViewController {
                         }
                         self.manicGame.gameSaveStates.append(state)
                     }
+                    state.updateExtra(key: ExtraKey.saveStateCore.rawValue, value: self.manicGame.defaultCore)
                     if type == .manualSaveState {
                         self.lastSaveDate = Date.now
                     }
@@ -908,11 +1089,17 @@ extension PlayViewController {
             return
         }
         //如果传入即时存档就尝试去加载 如果没有传入则选最新的手动即时存档进行读取
-        if let state = state ?? manicGame.gameSaveStates.last(where: { $0.type == .manualSaveState }), let statePath = state.stateData?.filePath.path, LibretroCore.sharedInstance().loadState(statePath) {
-            resumeEmulationAndHandleAudio()
-            UIView.makeToast(message: R.string.localizable.gameSaveStateLoadSuccess())
-            lastLoadDate = Date.now
-            updateCheatCodes()
+        if let state = state ?? manicGame.gameSaveStates.last(where: { $0.type == .manualSaveState }),
+            let statePath = state.stateData?.filePath.path,
+            LibretroCore.sharedInstance().loadState(statePath) {
+            if (state.getExtraInt(key: ExtraKey.saveStateCore.rawValue) ?? 0) != manicGame.defaultCore {
+                UIView.makeToast(message: R.string.localizable.latestSaveStateUnCompatible())
+            } else {
+                resumeEmulationAndHandleAudio()
+                UIView.makeToast(message: R.string.localizable.gameSaveStateLoadSuccess())
+                lastLoadDate = Date.now
+                updateCheatCodes()
+            }
         } else {
             UIView.makeToast(message: R.string.localizable.gameSaveStateQuickLoadFailed())
         }
@@ -953,23 +1140,30 @@ extension PlayViewController {
     /// - Returns: 是否关闭菜单
     @discardableResult
     private func handleMenuGameSetting(_ item: GameSetting, _ menuSheet: SheetTarget?) -> Bool {
+        if let _ = topViewController() as? ControllerMappingViewController {
+            //如果当前正在映射按键 则不能进行功能响应
+            return false
+        }
+        
         guard item.enable(for: manicGame.gameType) else {
             UIView.makeToast(message: R.string.localizable.notSupportGameSetting(manicGame.gameType.localizedShortName))
             return false
         }
         switch item.type {
         case .saveState:
+            guard !isWFCConnect else {
+                UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
+                return true
+            }
+            guard !isHardcoreMode else {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                return true
+            }
             //快速存档
             if !PurchaseManager.isMember && manicGame.gameSaveStates.filter({ $0.type == .manualSaveState }).count >= Constants.Numbers.NonMemberManualSaveGameCount {
                 //超限了
                 if menuSheet == nil {
-                    if manicGame.gameType == ._3ds {
-                        threeDSCore?.pause()
-                    } else if manicGame.gameType.isLibretroType {
-                        LibretroCore.sharedInstance().pause()
-                    } else {
-                        pauseEmulation()
-                    }
+                    pauseEmulation()
                 }
                 UIView.makeAlert(identifier: Constants.Strings.PlayPurchaseAlertIdentifier,
                                  detail: R.string.localizable.manualGameSaveCountLimit(),
@@ -994,6 +1188,14 @@ extension PlayViewController {
                 saveState(type: .manualSaveState)
             }
         case .quickLoadState:
+            guard !isWFCConnect else {
+                UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
+                return true
+            }
+            guard !isHardcoreMode else {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                return true
+            }
             //快速读档
             if manicGame.gameType == ._3ds {
                 quickLoadStateFor3DS(item.loadState)
@@ -1015,16 +1217,20 @@ extension PlayViewController {
             }
             UIView.makeToast(message: item.volumeOn ? R.string.localizable.volumeOn(): R.string.localizable.volumeOff(), identifier: "gameVolume")
         case .fastForward:
+            guard !isWFCConnect else {
+                UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
+                return true
+            }
+            guard !isHardcoreMode else {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                return true
+            }
             guard manicGame.gameType != ._3ds else { return true }
             //快进
             if !PurchaseManager.isMember && item.fastForwardSpeed.rawValue > GameSetting.FastForwardSpeed.two.rawValue {
                 //超限了
                 if menuSheet == nil {
-                    if manicGame.gameType.isLibretroType {
-                        LibretroCore.sharedInstance().pause()
-                    } else {
-                        pauseEmulation()
-                    }
+                    pauseEmulation()
                 }
                 UIView.makeAlert(identifier: Constants.Strings.PlayPurchaseAlertIdentifier,
                                  detail: R.string.localizable.fastForwardSpeedLimit(),
@@ -1045,9 +1251,14 @@ extension PlayViewController {
                     }
                 }
             } else {
-                
                 if manicGame.speed.rawValue == 0 || manicGame.speed != item.fastForwardSpeed {
+                    if manicGame.gameType == .ps1, menuSheet == nil {
+                        pauseEmulation()
+                    }
                     manicEmuCore?.setRate(speed: item.fastForwardSpeed)
+                    if manicGame.gameType == .ps1, menuSheet == nil {
+                        resumeEmulationAndHandleAudio()
+                    }
                     Game.change { realm in
                         manicGame.speed = item.fastForwardSpeed
                     }
@@ -1056,14 +1267,16 @@ extension PlayViewController {
             }
             return false
         case .stateList:
+            guard !isWFCConnect else {
+                UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
+                return true
+            }
+            guard !isHardcoreMode else {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                return true
+            }
             if menuSheet == nil {
-                if manicGame.gameType == ._3ds {
-                    threeDSCore?.pause()
-                } else if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    self.pauseEmulation()
-                }
+                pauseEmulation()
             }
             GameInfoView.show(game: manicGame, gameViewRect: gameView.frame, selection: { [weak self, weak menuSheet] saveState in
                 guard let self = self else { return }
@@ -1098,15 +1311,19 @@ extension PlayViewController {
             })
             return false
         case .cheatCode:
+            guard !isWFCConnect else {
+                UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
+                return true
+            }
+            guard !isHardcoreMode else {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                return true
+            }
             if manicGame.gameType == .ss && manicGame.defaultCore == 0 {
                 UIView.makeToast(message: R.string.localizable.beetleSaturnNoSupportCheat())
             } else {
                 if menuSheet == nil {
-                    if manicGame.gameType.isLibretroType {
-                        LibretroCore.sharedInstance().pause()
-                    } else {
-                        pauseEmulation()
-                    }
+                    pauseEmulation()
                 }
                 CheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
                     if menuSheet == nil {
@@ -1117,13 +1334,7 @@ extension PlayViewController {
             return false
         case .skins:
             if menuSheet == nil {
-                if manicGame.gameType == ._3ds {
-                    threeDSCore?.pause()
-                } else if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    pauseEmulation()
-                }
+                pauseEmulation()
             }
             SkinSettingsView.show(game: manicGame, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
                 if menuSheet == nil {
@@ -1134,11 +1345,7 @@ extension PlayViewController {
         case .filter:
             guard manicGame.gameType != ._3ds else { return true }
             if menuSheet == nil {
-                if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    pauseEmulation()
-                }
+                pauseEmulation()
             }
             if manicGame.gameType.isLibretroType {
                 FilterSelectionView.show(game: self.manicGame, snapshot: nil, gameViewRect: self.gameView.frame, hideCompletion: { [weak self] in
@@ -1210,13 +1417,7 @@ extension PlayViewController {
             return false
         case .airplay:
             if menuSheet == nil {
-                if manicGame.gameType == ._3ds {
-                    threeDSCore?.pause()
-                } else if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    pauseEmulation()
-                }
+                pauseEmulation()
             }
             let vc = WebViewController(url: Constants.URLs.AirPlayUsageGuide, isShow: true)
             vc.didClose = { [weak self] in
@@ -1228,13 +1429,7 @@ extension PlayViewController {
             return false
         case .controllerSetting:
             if menuSheet == nil {
-                if manicGame.gameType == ._3ds {
-                    threeDSCore?.pause()
-                } else if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    pauseEmulation()
-                }
+                pauseEmulation()
             }
             ControllersSettingView.show(gameType: manicGame.gameType, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
                 if menuSheet == nil {
@@ -1257,13 +1452,7 @@ extension PlayViewController {
             return true
         case .functionSort:
             if menuSheet == nil {
-                if manicGame.gameType == ._3ds {
-                    threeDSCore?.pause()
-                } else if manicGame.gameType.isLibretroType {
-                    LibretroCore.sharedInstance().pause()
-                } else {
-                    pauseEmulation()
-                }
+                pauseEmulation()
             }
             GameSettingView.show(game: manicGame, gameViewRect: gameView.frame, isEditingMode: true, hideCompletion: { [weak self] in
                 if menuSheet == nil {
@@ -1298,7 +1487,7 @@ extension PlayViewController {
                 dismiss(animated: true)
             }
         case .resolution:
-            guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 else { return true }
+            guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 else { return true }
             Log.debug("设置分辨率")
             if manicGame.resolution != item.resolution {
                 Game.change { realm in
@@ -1310,9 +1499,19 @@ extension PlayViewController {
                     LibretroCore.sharedInstance().setPSPResolution(UInt32(item.resolution == .undefine ? 1 : item.resolution.rawValue), reload: true)
                 } else if manicGame.gameType == .n64 {
                     updateN64Resolution(item.resolution, reload: true)
+                } else if manicGame.gameType == .ps1 {
+                    LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetlePSXHW.name, key: "beetle_psx_hw_internal_resolution", value: item.resolution.resolutionTitleForPS1, reload: true)
                 }
             }
-            UIView.makeToast(message: item.resolution.title, identifier: "resolution")
+            let message: String
+            if manicGame.gameType == .ps1 {
+                message = R.string.localizable.gameSettingResolution(item.resolution.resolutionTitleForPS1)
+            } else if manicGame.isN64ParaLLEl {
+                message = R.string.localizable.gameSettingResolution(item.resolution.resolutionTitleForN64ParaLLEl)
+            } else {
+                message = item.resolution.title
+            }
+            UIView.makeToast(message: message, identifier: "resolution")
             return manicGame.gameType == .psp //psp需要隐藏菜单(恢复游戏) 才能生效
         case .swapScreen:
             if enableSwapScreen() {
@@ -1327,8 +1526,7 @@ extension PlayViewController {
         case .consoleHome:
             //回到主页
             if manicGame.gameType == ._3ds, let threeDSCore {
-                if Constants.Strings.ThreeDSHomeMenuIdentifier == "\(manicGame.identifierFor3DS)" ||
-                    Constants.Strings.ThreeDSHomeMenuIdentifier2 == "\(manicGame.identifierFor3DS)" {
+                if manicGame.is3DSHomeMenuGame {
                     DispatchQueue.main.asyncAfter(delay: 0.5) {
                         threeDSCore.jumpToHome()
                     }
@@ -1341,7 +1539,7 @@ extension PlayViewController {
             if manicGame.gameType == ._3ds, let threeDSCore {
                 if threeDSCore.isAmiiboSearching() {
                     if menuSheet == nil {
-                        threeDSCore.pause()
+                        pauseEmulation()
                     }
                     Log.debug("amiibo正在搜索中")
                     FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: false) { [weak self] urls in
@@ -1374,20 +1572,53 @@ extension PlayViewController {
             }
             
         case .palette:
-            guard (manicGame.gameType == .gbc || manicGame.gameType == .gb) else { return false }
+            guard (manicGame.gameType == .gb || manicGame.gameType == .vb || manicGame.gameType == .pm) else { return false }
             if manicGame.pallete != item.palette {
                 Game.change { realm in
                     manicGame.pallete = item.palette
                 }
-                manicEmuCore?.manicCore.emulatorConnector.setExtraParameters?(["palette": item.palette.rawValue])
+                if manicGame.gameType == .vb {
+                    LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleVB.name, key: "vb_color_mode", value: item.palette.paletteTitleForVB, reload: true)
+                } else if manicGame.gameType == .pm {
+                    LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PokeMini.name, key: "pokemini_palette", value: item.palette.paletteTitleForPM, reload: true)
+                } else if manicGame.gameType == .gb {
+                    LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, configs: ["gambatte_gb_colorization": item.palette == .None ? "disabled" : "internal", "gambatte_gb_internal_palette": item.palette.option], reload: true)
+                }
             }
         case .swapDisk:
-            guard manicGame.gameType == .mcd || manicGame.gameType == .ss else { return false }
-            if manicGame.fileExtension.lowercased() == "m3u" {
-                LibretroCore.sharedInstance().setDiskIndex(UInt32(item.currentDiskIndex))
+            guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 else { return false }
+            if manicGame.supportSwapDisc {
+                LibretroCore.sharedInstance().setDiskIndex(UInt32(item.currentDiskIndex), delay: manicGame.gameType == .ps1 ? true : false)
+                UIView.makeToast(message: R.string.localizable.discInsert(Int(item.currentDiskIndex + 1)))
             } else {
                 UIView.makeToast(message: R.string.localizable.notSupportSwapDisk())
             }
+            return false
+        case .retro:
+            if menuSheet == nil {
+                pauseEmulation()
+            }
+            func openRetroAchievementsList() {
+                let vc = RetroAchievementsListViewController(game: manicGame)
+                vc.didClose = { [weak self] in
+                    if menuSheet == nil {
+                        self?.resumeEmulationAndHandleAudio()
+                    }
+                }
+                topViewController()?.present(vc, animated: true)
+            }
+            
+            if let _ = AchievementsUser.getUser() {
+                openRetroAchievementsList()
+            } else {
+                //先进行登录
+                let vc = RetroAchievementsViewController()
+                vc.dismissAfterLoginSuccess = {
+                    openRetroAchievementsList()
+                }
+                topViewController()?.present(vc, animated: true)
+            }
+
             return false
         }
         //默认关闭菜单
@@ -1410,6 +1641,16 @@ extension PlayViewController {
                     controler.addReceiver(self)
                     controler.addReceiver(manicEmuCore)
                 }
+                if let mfi = controler as? MFiGameController, manicGame.gameType.isLibretroType, let playerIndex = mfi.playerIndex {
+                    if LibretroCore.sharedInstance().getSensorEnable(Int32(playerIndex)) {
+                        mfi.controller.motion?.sensorsActive = true
+                    } else {
+                        mfi.controller.motion?.sensorsActive = false
+                    }
+                }
+            }
+            if ExternalGameControllerUtils.shared.linkedControllers.count > 0 && Settings.defalut.fullScreenWhenConnectController {
+                self.manicGame.forceFullSkin = true
             }
         }
     }
@@ -1476,6 +1717,8 @@ extension PlayViewController {
     }
     
     private func updateCheatCodes(firstInit: Bool = false) {
+        guard !isWFCConnect else { return }
+        guard !isHardcoreMode else { return }
         if manicGame.gameType == ._3ds {
             let identifier = manicGame.identifierFor3DS
             if identifier != 0 {
@@ -1641,27 +1884,81 @@ extension PlayViewController {
             LibretroCore.sharedInstance().setPSPResolution(UInt32(manicGame.resolution == .undefine ? 1 : manicGame.resolution.rawValue), reload: false)
             LibretroCore.sharedInstance().setPSPLanguage(UInt32(manicGame.region))
         } else if manicGame.gameType == .nes {
-            LibretroCore.sharedInstance().updateConfig("Nestopia", key: "nestopia_aspect", value: "uncorrected", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, key: "nestopia_aspect", value: "uncorrected", reload: false)
         } else if manicGame.gameType == .snes {
-            LibretroCore.sharedInstance().updateConfig("Snes9x", key: "snes9x_aspect", value: "uncorrected", reload: false)
-            LibretroCore.sharedInstance().updateConfig("Snes9x", key: "snes9x_block_invalid_vram_access", value: "disabled", reload: false)
-        } else if manicGame.isPicodriveCore {
-            LibretroCore.sharedInstance().updateConfig("PicoDrive", key: "picodrive_input1", value: "6 button pad", reload: false)
-            LibretroCore.sharedInstance().updateConfig("PicoDrive", key: "picodrive_input2", value: "6 button pad", reload: false)
-        } else if manicGame.gameType == .ss {
-            LibretroCore.sharedInstance().updateConfig("Yabause", key: "yabause_addon_cartridge", value: "4M_ram", reload: false)
-            LibretroCore.sharedInstance().updateConfig("Beetle Saturn", key: "beetle_saturn_cart", value: "Extended RAM (4MB)", reload: false)
-            LibretroCore.sharedInstance().updateConfig("Beetle Saturn", key: "beetle_saturn_region", value: Constants.Strings.SaturnConsoleLanguage[manicGame.region], reload: false)
-            LibretroCore.sharedInstance().updateConfig("Beetle Saturn", key: "beetle_saturn_horizontal_overscan", value: "20", reload: false)
-        } else if manicGame.gameType == .ds {
-            if manicGame.region != 0 {
-                manicEmuCore?.manicCore.emulatorConnector.setExtraParameters?(["language": manicGame.region - 1])
+            if manicGame.defaultCore == 0 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.bsnes.name, key: "bsnes_ppu_no_vram_blocking", value: "ON", reload: false)
+            } else {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Snes9x.name, key: "snes9x_aspect", value: "uncorrected", reload: false)
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Snes9x.name, key: "snes9x_block_invalid_vram_access", value: "disabled", reload: false)
             }
-        } else if manicGame.gameType == .gbc || manicGame.gameType == .gb {
-            manicEmuCore?.manicCore.emulatorConnector.setExtraParameters?(["palette": manicGame.pallete.rawValue])
+        } else if manicGame.isPicodriveCore {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PicoDrive.name, key: "picodrive_input1", value: "6 button pad", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PicoDrive.name, key: "picodrive_input2", value: "6 button pad", reload: false)
+        } else if manicGame.gameType == .ss {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Yabause.name, key: "yabause_addon_cartridge", value: "4M_ram", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_cart", value: "Extended RAM (4MB)", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_region", value: Constants.Strings.SaturnConsoleLanguage[manicGame.region], reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_horizontal_overscan", value: "20", reload: false)
+        } else if manicGame.gameType == .ds {
+            var parameters = [String: Any]()
+            //语言选项
+            if manicGame.region != 0 {
+                parameters["language"] = manicGame.region - 1
+            }
+            
+            //systemType
+            if manicGame.isDSHomeMenuGame {
+                parameters["systemType"] = 0
+            } else if manicGame.isDSiHomeMenuGame {
+                parameters["systemType"] = 1
+            } else if let mode = manicGame.getExtraString(key: ExtraKey.ndsSystemMode.rawValue), mode == "DSi" {
+                parameters["systemType"] = 1
+            } else {
+                parameters["systemType"] = 0
+            }
+            
+            //wfc
+            parameters["wfcDNS"] = WFC.currentDNS()
+
+            if parameters.count > 0 {
+                manicEmuCore?.manicCore.emulatorConnector.setExtraParameters?(parameters)
+            }
+        } else if manicGame.gameType == .gbc {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, key: "gambatte_gbc_color_correction", value: "disabled", reload: false)
+        } else if manicGame.gameType == .gb {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, configs: ["gambatte_gb_colorization": manicGame.pallete == .None ? "disabled" : "internal", "gambatte_gb_internal_palette": manicGame.pallete.option], reload: false)
         } else if manicGame.gameType == .n64 {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-rdp-plugin", value: manicGame.isN64ParaLLEl ? "parallel" : "gliden64", reload: false)
             updateN64Resolution(manicGame.resolution, reload: false)
-            LibretroCore.sharedInstance().updateConfig("Mupen64Plus-Next", key: "mupen64plus-pak1", value: manicGame.hasTransferPak ? "transfer" : "memory", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-pak1", value: manicGame.hasTransferPak ? "transfer" : "memory", reload: false)
+        } else if manicGame.gameType == .vb {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleVB.name, key: "vb_color_mode", value: manicGame.pallete.paletteTitleForVB, reload: false)
+        } else if manicGame.gameType == .pm {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PokeMini.name, key: "pokemini_palette", value: manicGame.pallete.paletteTitleForPM, reload: false)
+        } else if manicGame.gameType == .ps1 {
+            let isHardwareRenderer = manicGame.getExtraBool(key: ExtraKey.psxRenderer.rawValue) ?? true
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetlePSXHW.name,
+                                                       configs: [
+                                                        //video
+                                                        "beetle_psx_hw_internal_resolution": manicGame.resolution.resolutionTitleForPS1,
+                                                        "beetle_psx_hw_dither_mode": "disabled",
+                                                        "beetle_psx_hw_msaa": "8x",
+                                                        "beetle_psx_hw_mdec_yuv": "enabled",
+                                                        "beetle_psx_hw_aspect_ratio": "4:3",
+                                                        //memory card
+                                                        "beetle_psx_hw_enable_memcard1": "disabled",
+                                                        //pgxp
+                                                        "beetle_psx_hw_pgxp_mode": "memory only",
+                                                        "beetle_psx_hw_pgxp_nclip": "enabled",
+                                                        "beetle_psx_hw_pgxp_texture": "enabled",
+                                                        //hacks
+                                                        "beetle_psx_hw_gte_overclock": "enabled",
+                                                        "beetle_psx_hw_override_bios": manicGame.ps1OverrideBIOSConfig,
+                                                        //common
+                                                        "beetle_psx_hw_renderer": isHardwareRenderer ? "hardware_vk" : "software",
+                                                       ],
+                                                       reload: false)
         }
         
         //配置静音模式
@@ -1680,6 +1977,46 @@ extension PlayViewController {
                     self.updateAudio()
                 }
             }
+        }
+        
+        //Libretro配置
+        if manicGame.gameType.isLibretroType {
+            LibretroCore.sharedInstance().updateLibretroConfig("fastforward_frameskip", value: manicGame.gameType == .ps1 ? "false" : "true")
+            if manicGame.isN64ParaLLEl {
+                LibretroCore.sharedInstance().setReloadDelay(1)
+            } else {
+                LibretroCore.sharedInstance().setReloadDelay(0)
+            }
+            
+            //RetroAchievements配置
+            if manicGame.supportRetroAchievements, let user = AchievementsUser.getUser() {
+                let enableAchievements = manicGame.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false
+                let hardcore = enableAchievements ? (manicGame.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue) ?? false) : false
+                isHardcoreMode = hardcore
+                LibretroCore.sharedInstance().updateLibretroConfigs(["cheevos_enable": enableAchievements ? "true" : "false",
+                                                                     "cheevos_hardcore_mode_enable": hardcore ? "true" : "false",
+                                                                     "cheevos_token": user.token,
+                                                                     "cheevos_username": user.username])
+                if enableAchievements {
+                    updateLeaderboard()
+                }
+            } else {
+                LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
+            }
+            
+            //适配PKSM修改存档位置
+            if manicGame.gameType == .gb {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBSavePath.libretroPath)
+            } else if manicGame.gameType == .gbc {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBCSavePath.libretroPath)
+            } else if manicGame.gameType == .gba {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBASavePath.libretroPath)
+            } else {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
+            }
+            
+            //配置Rumble
+            LibretroCore.sharedInstance().setEnableRumble(Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false)
         }
     }
     
@@ -1725,7 +2062,7 @@ extension PlayViewController {
         }
         
 #if !targetEnvironment(simulator)
-        if manicGame.forceFullSkin || (ExternalGameControllerUtils.shared.linkedControllers.count > 0 && Settings.defalut.fullScreenWhenConnectController) {
+        if manicGame.forceFullSkin {
             //设置全屏皮肤
             let realm = Database.realm
             if let coreName = manicEmuCore?.manicCore.name,
@@ -1794,14 +2131,14 @@ extension PlayViewController {
             } else if manicGame.orientation == .portrait {
                 return .portrait
             } else {
-                return UIDevice.isPad ? .all : .allButUpsideDown
+                return Constants.Config.DefaultOrientation
             }
         }()
     }
     
     /// 恢复默认旋转配置
     private func resetOrientationConfig() {
-        AppDelegate.orientation = UIDevice.isPad ? .all : .portrait
+        AppDelegate.orientation = Constants.Config.DefaultOrientation
     }
     
     ///固定旋转配置
@@ -1994,6 +2331,11 @@ extension PlayViewController {
                                     newGameSetting.palette = self.manicGame.pallete.next
                                 case .toggleFullscreen:
                                     newGameSetting.isFullScreen = !self.manicGame.forceFullSkin
+                                case .swapDisk:
+                                    let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
+                                    let totalCount = LibretroCore.sharedInstance().getDiskCount()
+                                    let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
+                                    newGameSetting.currentDiskIndex = nextIndex
                                 default:
                                     break
                                 }
@@ -2087,7 +2429,22 @@ extension PlayViewController {
         } else {
             DispatchQueue.main.asyncAfter(delay: 0.35) { [weak self] in
                 guard let self = self else { return }
-                let vc = LibretroCore.sharedInstance().start()
+                
+                //为了适配PSKM GB GBC GBA的存档路径进行特别处理
+                var customSaveDir: String? = nil
+                var customSaveExtension: String? = nil
+                if manicGame.gameType == .gb {
+                    customSaveDir = Constants.Path.GBSavePath
+                    customSaveExtension = ".sav"
+                } else if manicGame.gameType == .gbc {
+                    customSaveDir = Constants.Path.GBCSavePath
+                    customSaveExtension = ".sav"
+                } else if manicGame.gameType == .gba {
+                    customSaveDir = Constants.Path.GBASavePath
+                    customSaveExtension = ".sav"
+                }
+                
+                let vc = LibretroCore.sharedInstance().start(withCustomSaveDir: customSaveDir)
                 gameMetalView = vc.view
                 guard let gameMetalView else { return }
                 self.view.insertSubview(gameMetalView, belowSubview: controllerView)
@@ -2105,12 +2462,19 @@ extension PlayViewController {
                             }
                         }
                     }
+                    LibretroCore.sharedInstance().setCustomSaveExtension(customSaveExtension)
                     LibretroCore.sharedInstance().loadGame(manicGame.romUrl.path, corePath: corePath, completion: compltion)
                     DispatchQueue.main.asyncAfter(delay: 0.5) { [weak self] in
                         guard let self = self else { return }
                         self.gameMetalView?.isHidden = false
                         self.updateFilter()
                         self.updateAirPlay()
+                        if self.manicGame.gameType == .ps1 {
+                            self.updateAnalogMode(toastAllow: false, toggle: false)
+                        }
+                        DispatchQueue.main.asyncAfter(delay: 2.5) {
+                            self.manicEmuCore?.setRate(speed: self.manicGame.speed)
+                        }
                     }
                 }
             }
@@ -2180,12 +2544,132 @@ extension PlayViewController {
     }
     
     private func updateN64Resolution(_ resolution: GameSetting.Resolution, reload: Bool) {
-        let options = ["640x480", "960x720", "1280x960", "1440x1080", "1600x1200", "1920x1440", "2240x1680", "2560x1920", "2880x2160", "3520x2640"]
-        var option = "640x480"
-        if resolution != .undefine {
-            option = options[resolution.rawValue - 1]
+        if manicGame.isN64ParaLLEl {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-parallel-rdp-upscaling", value: resolution.resolutionTitleForN64ParaLLEl, reload: reload)
+        } else {
+            let options = ["640x480", "960x720", "1280x960", "1440x1080", "1600x1200", "1920x1440", "2240x1680", "2560x1920", "2880x2160", "3520x2640"]
+            var option = "640x480"
+            if resolution != .undefine {
+                option = options[resolution.rawValue - 1]
+            }
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-43screensize", value: option, reload: reload)
         }
-        LibretroCore.sharedInstance().updateConfig("Mupen64Plus-Next", key: "mupen64plus-43screensize", value: option, reload: reload)
+    }
+    
+    private func updateAnalogMode(toastAllow: Bool, toggle: Bool) {
+        if manicGame.gameType == .ps1 {
+            var deviceType = Constants.Strings.PSXController
+            if var isAnalog = manicGame.getExtra(key: ExtraKey.isAnalog.rawValue) as? Bool {
+                isAnalog = toggle ? !isAnalog : isAnalog
+                LibretroCore.sharedInstance().setPSXAnalog(isAnalog)
+                if toggle {
+                    manicGame.updateExtra(key: ExtraKey.isAnalog.rawValue, value: isAnalog)
+                }
+                if isAnalog {
+                    deviceType = Constants.Strings.PSXDualShock
+                }
+                Log.debug("读取数据库 使用\(deviceType)")
+            } else {
+                //默认使用DualShock
+                LibretroCore.sharedInstance().setPSXAnalog(true)
+                manicGame.updateExtra(key: ExtraKey.isAnalog.rawValue, value: true)
+                Log.debug("加载默认值 使用\(Constants.Strings.PSXDualShock)")
+            }
+            if toastAllow {
+                UIView.makeToast(message: R.string.localizable.analogModeChange(deviceType))
+            }
+        }
+    }
+    
+    private func showRetroAchievements(badgeUrl: String? = nil, title: String, message: String? = nil, hideIcon: Bool = false, onTaped: (()->Void)? = nil) {
+        Toast(.init(duration: 4)) { [weak self] toast in
+            guard let self else { return }
+            toast.config.cardEdgeInsets = .zero
+            toast.config.cardCornerRadius = Constants.Size.CornerRadiusMid
+            toast.config.cardMaxWidth = Constants.Size.WindowSize.minDimension - 2*Constants.Size.ContentSpaceHuge
+            toast.config.cardMaxHeight = 64
+            toast.contentView.layerBorderColor = Constants.Color.Border
+            toast.contentView.layerBorderWidth = 1
+            toast.config.dynamicBackgroundColor = Constants.Color.BackgroundPrimary.withAlphaComponent(0.95)
+            
+            let contentView = UIView()
+            
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFill
+            if let badgeUrl {
+                imageView.kf.setImage(with: URL(string: badgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(40)))
+            } else if let coverUrl = manicGame.onlineCoverUrl, manicGame.gameCover == nil {
+                imageView.kf.setImage(with: URL(string: coverUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(40)))
+            } else if let data = manicGame.gameCover?.storedData() {
+                imageView.image = UIImage.tryDataImageOrPlaceholder(tryData: data, preferenceSize: .init(40))
+            }
+            
+            contentView.addSubview(imageView)
+            imageView.snp.makeConstraints { make in
+                make.size.equalTo(40)
+                make.centerY.equalToSuperview()
+                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            }
+            
+            let label = UILabel()
+            label.numberOfLines = 2
+            let matt = NSMutableAttributedString(string: title, attributes: [.font: Constants.Font.title(size: .s, weight: .regular), .foregroundColor: UIColor.white])
+            if let message {
+                matt.append(NSAttributedString(string: "\n\(message)", attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.LabelSecondary]))
+            }
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            label.attributedText = matt.applying(attributes: [.paragraphStyle: style])
+            contentView.addSubview(label)
+            label.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                make.leading.equalTo(imageView.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+                if hideIcon {
+                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                }
+            }
+            
+            if !hideIcon {
+                let image: UIImage?
+                image = R.image.trophy_gold()
+//                image = R.image.trophy_silver()
+//                image = R.image.trophy_bronze()
+                let icon = UIImageView(image: image)
+                icon.contentMode = .scaleAspectFit
+                contentView.addSubview(icon)
+                icon.snp.makeConstraints { make in
+                    make.size.equalTo(CGSize(width: 27.47, height: 26))
+                    make.centerY.equalToSuperview()
+                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                    make.leading.equalTo(label.snp.trailing)
+                }
+            }
+            
+            toast.add(subview: contentView).snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            
+            toast.onTapped { toast in
+                if onTaped != nil {
+                    toast.pop()
+                    onTaped?()
+                }
+            }
+        }
+    }
+    
+    private func updateLeaderboard() {
+        if leaderboardView == nil {
+            let leaderboardView = LeaderboardView()
+            view.addSubview(leaderboardView)
+            leaderboardView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.height.equalTo(32)
+            }
+            leaderboardView.isHidden = true
+            self.leaderboardView = leaderboardView
+        }
     }
 }
 
@@ -2204,7 +2688,7 @@ extension PlayViewController: GameViewControllerDelegate {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {
             return false
         }
-        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow) ? false : true
+        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow) ? false : true
     }
     
 }

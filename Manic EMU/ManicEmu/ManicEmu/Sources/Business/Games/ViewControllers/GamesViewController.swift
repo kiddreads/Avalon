@@ -10,6 +10,7 @@
 import UIKit
 import SideMenu
 import RealmSwift
+import KeyboardKit
 
 class GamesViewController: BaseViewController {
     private var cornerMaskViewForiPad: TransparentHoleView = {
@@ -45,6 +46,9 @@ class GamesViewController: BaseViewController {
         view.didSearchChange = { [weak self] string in
             guard let self = self else { return }
             if let s = string, !s.isEmpty {
+                if !view.selectIcon.isSelected, (self.gamesListView.collectionView.indexPathsForSelectedItems ?? []).count > 0 {
+                    self.gamesListView.collectionView.selectItem(at: nil, animated: false, scrollPosition: [])
+                }
                 self.gamesListView.searchDatas(string: s)
             } else {
                 self.gamesListView.stopSearch()
@@ -70,6 +74,9 @@ class GamesViewController: BaseViewController {
                 self.setEditToolBar(show: false)
             }
             self.updateTopBlurView()
+        }
+        view.didSearchTextResignFirstResponder = { [weak self] in
+            self?.gamesListView.collectionView.becomeFirstResponder()
         }
         return view
     }()
@@ -149,6 +156,21 @@ class GamesViewController: BaseViewController {
                 }
             }
         }
+        view.didTapGameRetro = { [weak self] game in
+            guard let self = self else { return }
+            self.hideSideMenu {
+                if let _ = AchievementsUser.getUser() {
+                    topViewController()?.present(RetroAchievementsListViewController(game: game), animated: true)
+                } else {
+                    //先进行登录
+                    let vc = RetroAchievementsViewController()
+                    vc.dismissAfterLoginSuccess = { [weak self] in
+                        topViewController()?.present(RetroAchievementsListViewController(game: game), animated: true)
+                    }
+                    topViewController()?.present(vc, animated: true)
+                }
+            }
+        }
         return view
     }()
     
@@ -177,11 +199,31 @@ class GamesViewController: BaseViewController {
         }
     }
     
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
+        Log.debug("gamesListView becomeFirstResponder")
+        return gamesListView.collectionView.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        Log.debug("gamesListView resignFirstResponder")
+        return gamesListView.collectionView.resignFirstResponder()
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         if UIDevice.isPad {
             hideSideMenu { [weak self] in
                 self?.updateViews()
+            }
+        } else if UIDevice.isPhone {
+            self.gamesToolView.stopSearch()
+            self.gamesToolView.stopSelect()
+            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+                self?.hideSideMenu { [weak self] in
+                    self?.updateViews()
+                }
             }
         }
     }
@@ -222,6 +264,11 @@ class GamesViewController: BaseViewController {
                 make.height.equalTo(GameEditToolBarHeightMax)
                 make.bottom.equalToSuperview().offset(GameEditToolBarHeightMax)
             }
+            
+            if UIDevice.isLandscape {
+                updateViews()
+            }
+            
         } else {
             //iPad布局
             view.backgroundColor = .black
@@ -313,6 +360,9 @@ class GamesViewController: BaseViewController {
     }
     
     private func setEditToolBar(show: Bool, singleSelect: Bool = true) {
+        
+        let show = gamesToolView.selectIcon.isSelected ? show : false
+        
         gamesEditToolBar.isSingleGame = singleSelect
         gamesEditToolBar.snp.updateConstraints { make in
             if show {
@@ -338,7 +388,7 @@ class GamesViewController: BaseViewController {
             vc = leftSide ? ControllersSettingViewController(controllersSettingView: controllersSettingView) : PlayHistoryViewController(playHistoryView: playHistoryView)
         }
         UIDevice.generateHaptic()
-        let menu = SideMenuNavigationController(rootViewController: vc)
+        let menu = ControllableSideMenu(rootViewController: vc)
         menu.navigationBar.isHidden = true
         menu.presentDuration = Constants.Numbers.LongAnimationDuration
         menu.dismissDuration = Constants.Numbers.LongAnimationDuration
@@ -421,6 +471,27 @@ class GamesViewController: BaseViewController {
             DispatchQueue.main.asyncAfter(delay: 0.35) {
                 self.gamesListView.collectionView.reloadData()
             }
+        } else if UIDevice.isPhone {
+            if UIDevice.isLandscape {
+                gamesNavigationView.snp.updateConstraints { make in
+                    make.top.equalToSuperview().offset(0)
+                }
+                gamesToolView.isHidden = true
+                topBlurView.snp.updateConstraints { make in
+                    make.leading.equalToSuperview().inset(-Constants.Size.SafeAera.left)
+                    make.trailing.equalToSuperview().inset(-Constants.Size.SafeAera.right)
+                }
+            } else {
+                gamesNavigationView.snp.updateConstraints { make in
+                    make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
+                }
+                gamesToolView.isHidden = false
+                topBlurView.snp.updateConstraints { make in
+                    make.leading.equalToSuperview()
+                    make.trailing.equalToSuperview()
+                }
+            }
+            gamesListView.updateRotation()
         }
     }
     
@@ -433,4 +504,35 @@ class GamesViewController: BaseViewController {
             }
         }
     }
+}
+
+extension GamesViewController: UIControllerPressable {
+    override var keyCommands: [UIKeyCommand]? {
+        var commands = super.keyCommands ?? []
+        commands.append(UIKeyCommand(input: "[", modifierFlags: [], action: #selector(didGamesViewKeyboardPress)))
+        commands.append(UIKeyCommand(input: "]", modifierFlags: [], action: #selector(didGamesViewKeyboardPress)))
+        return commands
+    }
+    
+    
+    func didControllerPress(key: KeyboardKit.UIControllerKey) {
+        if !(UIDevice.isPad && UIDevice.isLandscape) {
+            if key == .l2 {
+                showSideMenu(leftSide: true)
+            } else if key == .r2 {
+                showSideMenu(leftSide: false)
+            }
+        }
+    }
+    
+    @objc func didGamesViewKeyboardPress(_ sender: UIKeyCommand) {
+        if let inputString = sender.input, !(UIDevice.isPad && UIDevice.isLandscape) {
+            if inputString == "[" {
+                showSideMenu(leftSide: true)
+            } else if inputString == "]" {
+                showSideMenu(leftSide: false)
+            }
+        }
+    }
+    
 }

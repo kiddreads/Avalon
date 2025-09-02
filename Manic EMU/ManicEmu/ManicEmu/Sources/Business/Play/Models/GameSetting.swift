@@ -129,6 +129,48 @@ struct GameSetting: SettingCellItem {
                 return .one
             }
         }
+        
+        //PS1
+        static var ResolutionForPS1: [Resolution] { Array(Resolution.allCases[1..<5]) }
+        
+        static var AllResolutionTitleForPS1: [String] { ["1x", "2x", "4x", "8x"] }
+        
+        var resolutionTitleForPS1: String {
+            let titles = Self.AllResolutionTitleForPS1
+            if let index = Self.ResolutionForPS1.firstIndex(of: self), index < titles.count {
+                return titles[index]
+            }
+            return "1x"
+        }
+        
+        var nextForPS1: Resolution {
+            if let p = Resolution(rawValue: self.rawValue + 1), Self.ResolutionForPS1.contains([p]) {
+                return p
+            } else {
+                return .one
+            }
+        }
+        
+        //N64ParaLLEl
+        static var ResolutionForN64ParaLLEl: [Resolution] { Array(Resolution.allCases[1..<4]) }
+        
+        static var AllResolutionTitleForN64ParaLLEl: [String] { ["1x", "2x", "4x"] }
+        
+        var resolutionTitleForN64ParaLLEl: String {
+            let titles = Self.AllResolutionTitleForN64ParaLLEl
+            if let index = Self.ResolutionForN64ParaLLEl.firstIndex(of: self), index < titles.count {
+                return titles[index]
+            }
+            return "1x"
+        }
+        
+        var nextForN64ParaLLEl: Resolution {
+            if let p = Resolution(rawValue: self.rawValue + 1), Self.ResolutionForN64ParaLLEl.contains([p]) {
+                return p
+            } else {
+                return .one
+            }
+        }
     }
     
     enum Palette: Int, CaseIterable, PersistableEnum {
@@ -155,6 +197,43 @@ struct GameSetting: SettingCellItem {
             }
         }
         
+        var option: String {
+            switch self {
+            case .None:
+                ""
+            case .DMG:
+                "GB - DMG"
+            case .Light:
+                "GB - Light"
+            case .Pocket:
+                "GB - Pocket"
+            case .Blue:
+                "GBC - Blue"
+            case .Brown:
+                "GBC - Brown"
+            case .DarkBlue:
+                "GBC - Dark Blue"
+            case .DarkBrown:
+                "GBC - Dark Brown"
+            case .DarkGreen:
+                "GBC - Dark Green"
+            case .Grayscale:
+                "GBC - Grayscale"
+            case .Green:
+                "GBC - Green"
+            case .Inverted:
+                "GBC - Inverted"
+            case .Orange:
+                "GBC - Orange"
+            case .PastelMix:
+                "GBC - Pastel Mix"
+            case .Red:
+                "GBC - Red"
+            case .Yellow:
+                "GBC - Yellow"
+            }
+        }
+        
         var title: String {
             return R.string.localizable.paletteTitle() +  (self == .None ? "" : "\n") + shortTitle
         }
@@ -166,11 +245,53 @@ struct GameSetting: SettingCellItem {
                 return .None
             }
         }
+        
+        //For VB
+        static var PalettesForVB: [Palette] { Array(Palette.allCases[0..<8]) }
+        
+        static var AllPaletteTitleForVB: [String] { ["black & red", "black & white", "black & blue", "black & cyan", "black & electric cyan", "black & green", "black & magenta", "black & yellow"] }
+        
+        var paletteTitleForVB: String {
+            let titles = Self.AllPaletteTitleForVB
+            if let index = Self.PalettesForVB.firstIndex(of: self), index < titles.count {
+                return titles[index]
+            }
+            return "black & red"
+        }
+        
+        var nextForVB: Palette {
+            if let p = Palette(rawValue: self.rawValue + 1), Self.PalettesForVB.contains([p]) {
+                return p
+            } else {
+                return .None
+            }
+        }
+        
+        //For PM
+        static var PalettesForPM: [Palette] { Array(Palette.allCases[0..<14]) }
+        
+        static var AllPaletteTitleForPM: [String] { ["Default", "Old", "Monochrome", "Green", "Green Vector", "Red", "Red Vector", "Blue LCD", "LEDBacklight", "Girl Power", "Blue", "Blue Vector", "Sepia", "Monochrome Vector"] }
+        
+        var paletteTitleForPM: String {
+            let titles = Self.AllPaletteTitleForPM
+            if let index = Self.PalettesForPM.firstIndex(of: self), index < titles.count {
+                return titles[index]
+            }
+            return "Default"
+        }
+        
+        var nextForPM: Palette {
+            if let p = Palette(rawValue: self.rawValue + 1), Self.PalettesForPM.contains([p]) {
+                return p
+            } else {
+                return .None
+            }
+        }
     }
     
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
-        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk
+        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro
     }
     
     var type: ItemType
@@ -224,7 +345,7 @@ struct GameSetting: SettingCellItem {
         case .quit:
             UIImage(symbol: .rectanglePortraitAndArrowRight)
         case .swapScreen:
-            UIImage(symbol: .arrow2Squarepath)
+            UIImage(symbol: .rectangle2Swap)
         case .resolution:
             UIImage(symbol: .sparklesTv)
         case .consoleHome:
@@ -239,6 +360,8 @@ struct GameSetting: SettingCellItem {
             UIImage(symbol: .paintpalette)
         case .swapDisk:
             UIImage(symbol: .opticaldisc)
+        case .retro:
+            R.image.customTrophy()!.applySymbolConfig()
         }
     }
     
@@ -296,13 +419,15 @@ struct GameSetting: SettingCellItem {
             palette.title
         case .swapDisk:
             R.string.localizable.swapDisk() + "\nDisc \(currentDiskIndex + 1)"
+        case .retro:
+            R.string.localizable.retroAchievements2()
         }
     }
     
     func enable(for gameType: GameType) -> Bool {
         switch gameType {
         case ._3ds:
-            if type == .fastForward || type == .filter || type == .palette || type == .swapDisk {
+            if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro {
                 return false
             }
             return true
@@ -311,8 +436,8 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             return true
-        case .gba, .gbc, .gb, .nes, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss:
-            if (gameType == .gbc || gameType == .gb) && type == .palette {
+        case .gba, .gbc, .gb, .nes, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm:
+            if (gameType == .gb || gameType == .vb || gameType == .pm) && type == .palette {
                 return true
             }
             
@@ -320,17 +445,21 @@ struct GameSetting: SettingCellItem {
                 return true
             }
             
+            if (gameType == .vb || gameType == .pm) && type == .cheatCode {
+                return false
+            }
+            
             if type == .swapScreen || type == .resolution || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
                 return false
             }
             return true
-        case .psp:
+        case .psp, .n64:
             if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
                 return false
             }
             return true
-        case .n64:
-            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
+        case .ps1:
+            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette {
                 return false
             }
             return true
@@ -398,10 +527,12 @@ struct GameSetting: SettingCellItem {
             "palette"
         case .swapDisk:
             "swapDisk"
+        case .retro:
+            "retroAchievements"
         }
     }
     
     static func isValidInputKey(_ inputKey: String) -> Bool {
-        return ["quickSave", "quickLoad", "volume", "toggleFastForward", "saveStates", "cheatCodes", "skins", "filters", "screenshot", "haptics", "airplay", "controllers", "orientation", "functionLayout", "restart", "quit", "reverseScreens", "resolution", "homeMenu", "amiibo", "toggleControlls", "blowing", "palette", "swapDisk"].contains([inputKey])
+        return ["quickSave", "quickLoad", "volume", "toggleFastForward", "saveStates", "cheatCodes", "skins", "filters", "screenshot", "haptics", "airplay", "controllers", "orientation", "functionLayout", "restart", "quit", "reverseScreens", "resolution", "homeMenu", "amiibo", "toggleControlls", "blowing", "palette", "swapDisk", "retroAchievements"].contains([inputKey])
     }
 }

@@ -11,6 +11,8 @@ import ManicEmuCore
 import Kingfisher
 
 class GameCoverView: UIView {
+    private var gameCoverChangeNotification: Any? = nil
+    
     var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -48,6 +50,19 @@ class GameCoverView: UIView {
         addSubview(barShadowView)
         
         addSubview(platformView)
+        
+        gameCoverChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GameCoverChange, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            DispatchQueue.main.asyncAfter(delay: 0.35) {
+                self.updateCornerRadius(self.layerCornerRadius)
+            }
+        }
+    }
+    
+    deinit {
+        if let gameCoverChangeNotification {
+            NotificationCenter.default.removeObserver(gameCoverChangeNotification)
+        }
     }
     
     override func layoutSubviews() {
@@ -66,6 +81,7 @@ class GameCoverView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    ///设置游戏封面
     func setData(game: Game, coverSize: CGSize, style: CoverStyle) {
         if height > 0 {
             autoCornerRadius = false
@@ -77,6 +93,7 @@ class GameCoverView: UIView {
         updateStyle(style, gameType: game.gameType)
     }
     
+    ///主题圆角配置时使用
     func setData(gameType: GameType, image: UIImage?, style: CoverStyle, cornerRadius: CGFloat, scalePlatform: Bool = true) {
         autoCornerRadius = false
         layerCornerRadius = cornerRadius
@@ -138,7 +155,7 @@ class GameCoverView: UIView {
     private static var platformImageCaches = [String: UIImage?]()
     static func getPlatformImage(gameType: GameType, style: CoverStyle, scalePlatform: Bool = true) -> UIImage? {
         guard style != .style1 else { return nil }
-        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && scalePlatform ? "_\(Constants.Size.GamesPerRow)" : "")
+        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && !UIDevice.isLandscape && scalePlatform ? "_\(Constants.Size.GamesPerRow)" : "")
         if let image = GameCoverView.platformImageCaches[key] {
             return image
         } else {
@@ -187,8 +204,14 @@ class GameCoverView: UIView {
                 image = style == .style2 ? R.image.ms_cover_v() : R.image.ms_cover_h()
             } else if gameType == .n64 {
                 image = style == .style2 ? R.image.n64_cover_v() : R.image.n64_cover_h()
+            } else if gameType == .vb {
+                image = style == .style2 ? R.image.vb_cover_v() : R.image.vb_cover_h()
+            } else if gameType == .pm {
+                image = style == .style2 ? R.image.pm_cover_v() : R.image.pm_cover_h()
+            } else if gameType == .ps1 {
+                image = style == .style2 ? R.image.ps1_cover_v() : R.image.ps1_cover_h()
             }
-            if UIDevice.isPhone, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
+            if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))
             }
             GameCoverView.platformImageCaches[key] = image

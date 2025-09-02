@@ -10,11 +10,79 @@
 import StoreKit
 
 class SettingsListFooterCollectionReusableView: UICollectionReusableView {
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        #if SIDE_LOAD
+        //donate
+        let donateContainerView = UIView()
+        donateContainerView.addTapGesture { gesture in
+            UIApplication.shared.open(Constants.URLs.Donate)
+        }
         
+        donateContainerView.backgroundColor = Constants.Color.BackgroundPrimary
+        donateContainerView.layerCornerRadius = Constants.Size.ContentSpaceMax
+        addSubview(donateContainerView)
+        donateContainerView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+        }
+        
+        let donateIconView: UIImageView = {
+            let view = UIImageView()
+            view.contentMode = .center
+            view.layerCornerRadius = 6
+            view.backgroundColor = Constants.Color.Red
+            view.image = UIImage(symbol: .boltHeartFill, font: Constants.Font.body(size: .s, weight: .medium))
+            return view
+        }()
+        
+        let donateTitleLabel: UILabel = {
+            let view = UILabel()
+            view.numberOfLines = 3
+            var matt = NSMutableAttributedString(string: R.string.localizable.donateTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.donateDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
+            let style1 = NSMutableParagraphStyle()
+            style1.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            matt = matt.applying(attributes: [.paragraphStyle: style1]) as! NSMutableAttributedString
+            let style2 = NSMutableParagraphStyle()
+            style2.lineBreakMode = .byTruncatingTail
+            matt = matt.applying(attributes: [.paragraphStyle: style2]) as! NSMutableAttributedString
+            view.attributedText = matt
+            return view
+        }()
+        
+        let donateChevronIconView: UIImageView = {
+            let view = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundTertiary))
+            view.contentMode = .center
+            return view
+        }()
+        
+        donateContainerView.addSubview(donateIconView)
+        donateIconView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.centerY.equalToSuperview()
+        }
+        
+        donateContainerView.addSubview(donateTitleLabel)
+        donateTitleLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(donateIconView)
+            make.leading.equalTo(donateIconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.trailing.equalToSuperview().offset(-46-Constants.Size.ContentSpaceMid-Constants.Size.ContentSpaceMin)
+        }
+        
+        donateContainerView.addSubview(donateChevronIconView)
+        donateChevronIconView.snp.makeConstraints { make in
+            make.centerY.equalTo(donateIconView)
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.size.equalTo(16)
+        }
+        #endif
+        
+        //review
         let containerView = UIView()
-        
         containerView.addTapGesture { gesture in
             UIApplication.shared.open(Constants.URLs.AppReview)
         }
@@ -23,8 +91,18 @@ class SettingsListFooterCollectionReusableView: UICollectionReusableView {
         containerView.layerCornerRadius = Constants.Size.ContentSpaceMax
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
+            #if SIDE_LOAD
+            make.top.equalTo(donateContainerView.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+            #else
             make.top.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
+            #endif
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+        }
+        
+        let backgroundImageView = RadialGradientView()
+        containerView.addSubview(backgroundImageView)
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         let descLabelLeft = UILabel()
@@ -67,7 +145,7 @@ class SettingsListFooterCollectionReusableView: UICollectionReusableView {
         
         let starContainer = UIView()
         (0..<5).forEach { index in
-            let starView = UIImageView(image: UIImage(symbol: .starFill, font: Constants.Font.body(size: .l, weight: .medium), color: UIColor(hexString: "#FFC546")!))
+            let starView = UIImageView(image: R.image.settings_star())
             starView.contentMode = .center
             starContainer.addSubview(starView)
             starView.snp.makeConstraints { make in
@@ -92,11 +170,11 @@ class SettingsListFooterCollectionReusableView: UICollectionReusableView {
             make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
         }
         
-        let seperator = SparkleSeperatorView()
+        let seperator = SparkleSeperatorView(isGradient: true)
         addSubview(seperator)
         seperator.snp.makeConstraints { make in
             make.leading.trailing.equalTo(containerView).inset(Constants.Size.ContentSpaceMax)
-            make.height.equalTo(16)
+            make.height.equalTo(24)
             make.top.equalTo(containerView.snp.bottom).offset(40)
         }
         

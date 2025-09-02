@@ -38,6 +38,7 @@
 #include "../../retroarch.h"
 #include "../../tasks/task_content.h"
 #include "../../verbosity.h"
+#include "../../cheevos/cheevos.h"
 
 #ifdef HAVE_MENU
 #include "../../menu/menu_setting.h"
@@ -982,7 +983,7 @@ enum
 
 static BOOL LibretroInitial = false;
 static BOOL RespectSilentMode = false;
-- (void)start {
+- (void)startWithCustomSaveDir:(NSString *_Nullable)customSaveDir {
     if (LibretroInitial) {
         return;
     }
@@ -1002,6 +1003,12 @@ static BOOL RespectSilentMode = false;
 
     extern void manic_input_set_deinit(void);
     manic_input_set_deinit();
+    
+    if (customSaveDir) {
+        set_custom_save_dir(customSaveDir.UTF8String);
+    } else {
+        set_custom_save_dir(NULL);
+    }
     
     rarch_main(argc, argv, NULL);
 
@@ -1062,12 +1069,18 @@ static BOOL RespectSilentMode = false;
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
     else
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
-    settings->bools.audio_sync = false;
     command_event(CMD_EVENT_RESUME, NULL);
     if (needToLoadStatePath) {
         [self loadGame:self.gamePath corePath:self.corePath completion:nil];
-        [self loadState:needToLoadStatePath];
-        needToLoadStatePath = nil;
+        if (needToLoadStateDelay > 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(needToLoadStateDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self loadState:needToLoadStatePath];
+                needToLoadStatePath = nil;
+            });
+        } else {
+            [self loadState:needToLoadStatePath];
+            needToLoadStatePath = nil;
+        }
     }
 }
 
@@ -1075,6 +1088,7 @@ static BOOL RespectSilentMode = false;
     settings_t *settings = config_get_ptr();
     settings->bools.video_font_enable = false;//禁用通知
     settings->bools.audio_respect_silent_mode = RespectSilentMode;
+    set_custom_save_ext(g_customSaveExtension ? g_customSaveExtension.UTF8String : NULL);
     content_ctx_info_t content_info;
     content_info.argc        = 0;
     content_info.argv        = NULL;
@@ -1139,7 +1153,6 @@ static BOOL RespectSilentMode = false;
             completion(nil);
         }
     }
-    
     return YES;
 }
 
@@ -1176,11 +1189,14 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
     if (!completion) {
         return;
     }
-    // 获取截图目录
     settings_t *settings = config_get_ptr();
-    NSString *screenShotDir = [[NSString stringWithCString:settings->paths.directory_screenshot encoding:NSUTF8StringEncoding] stringByDeletingPathExtension];
-    // 执行截图命令
-    command_event(CMD_EVENT_TAKE_SCREENSHOT, NULL);
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    const char *dir_screenshot      = settings->paths.directory_screenshot;
+    video_driver_state_t *video_st  = video_state_get_ptr();
+    const char *name_base = runloop_st->runtime_content_path_basename;
+    take_screenshot(dir_screenshot, name_base, false, video_st->frame_cache_data && (video_st->frame_cache_data == RETRO_HW_FRAME_BUFFER_VALID), false, false);
+    
+    NSString *screenShotDir = [[NSString stringWithCString:dir_screenshot encoding:NSUTF8StringEncoding] stringByDeletingPathExtension];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
         __block BOOL cancelledByCondition = NO;
@@ -1213,36 +1229,17 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
                 NSDate *creationDate = [[fileManager attributesOfItemAtPath:latestPath error:nil] fileCreationDate];
                 if ([NSDate now].timeIntervalSince1970 - creationDate.timeIntervalSince1970 < 1.0) {
                     NSString *imageFilePath = [screenShotDir stringByAppendingPathComponent:latestFile];
-                    if (@available(iOS 17.0, *)) {
-                        UIImage *image = [UIImage imageWithContentsOfFile:imageFilePath];
-                        if (image) {
-                            dispatch_source_cancel(timer);
-                            cancelledByCondition = YES;
-                            // 在主线程回调
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                if (completion) {
-                                    NSLog(@"保存图片成功!!");
-                                    completion(image);
-                                }
-                                [fileManager removeItemAtPath:imageFilePath error:nil];
-                            });
-                        }
-                    } else {
+                    UIImage *image = [UIImage imageWithContentsOfFile:imageFilePath];
+                    if (image) {
                         dispatch_source_cancel(timer);
                         cancelledByCondition = YES;
-                        CGFloat delay = 3;
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            UIImage *image = [UIImage imageWithContentsOfFile:imageFilePath];
-                            if (image) {
-                                // 在主线程回调
-                                if (completion) {
-                                    NSLog(@"保存图片成功!!");
-                                    completion(image);
-                                } else {
-                                    completion(nil);
-                                }
-                                [fileManager removeItemAtPath:imageFilePath error:nil];
+                        // 在主线程回调
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (completion) {
+                                NSLog(@"保存图片成功!!");
+                                completion(image);
                             }
+                            [fileManager removeItemAtPath:imageFilePath error:nil];
                         });
                     }
                 }
@@ -1251,7 +1248,7 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
         // 启动定时器
         dispatch_resume(timer);
         // 设置超时（2秒）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             if (cancelledByCondition) {
                 return;
             }
@@ -1264,6 +1261,7 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
             });
         });
     });
+    
 }
 
 - (BOOL)saveState:(void(^ _Nullable)(NSString *_Nullable path))completion {
@@ -1291,6 +1289,9 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
 
 - (void)fastForward:(float)rate {
     settings_t *settings = config_get_ptr();
+    if (!settings) {
+        return;
+    }
     runloop_state_t *runloop_st = runloop_state_get_ptr();
     input_driver_state_t *input_st = input_state_get_ptr();
     audio_driver_state_t *audio_st = audio_state_get_ptr();
@@ -1337,7 +1338,13 @@ static NSString *_Nullable needToLoadStatePath = nil;
             if (iterate_observer) {
                 //游戏运行状态 直接加载存档
                 [self loadGame:self.gamePath corePath:self.corePath completion:nil];
-                [self loadState:path];
+                if (needToLoadStateDelay > 0) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(needToLoadStateDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self loadState:path];
+                    });
+                } else {
+                    [self loadState:path];
+                }
             } else {
                 //暂停中 标记在恢复的时候需要加载游戏和存档
                 needToLoadStatePath = path;
@@ -1488,6 +1495,110 @@ static NSString *_Nullable needToLoadStatePath = nil;
     }
 }
 
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload {
+    if (configs.count == 0) return;
+
+    NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
+    NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:configFilePath]) {
+        core_options_flush();
+    }
+    
+    NSError *error = nil;
+    NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
+    
+    if (error || !fileContents) {
+        NSLog(@"读取文件失败: %@", error.localizedDescription);
+        [NSFileManager.defaultManager createDirectoryAtPath:[configFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSMutableArray *newLines = [NSMutableArray array];
+        [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+            [newLines addObject:[NSString stringWithFormat:@"%@ = \"%@\"", key, value]];
+        }];
+        NSString *newFileContent = [newLines componentsJoinedByString:@"\n"];
+        [newFileContent writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        
+        if (reload) {
+            [self reloadByKeepState:YES];
+        }
+        return;
+    }
+
+    NSMutableString *updatedContents = [fileContents mutableCopy];
+    __block BOOL changed = NO;
+
+    [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+        NSString *oldValue = [self configValueForKey:key inFileContents:fileContents];
+        if ([oldValue isEqualToString:value]) return;
+
+        NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        NSString *replacement = [NSString stringWithFormat:@"%@ = \"%@\"", key, value];
+
+        if ([regex numberOfMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length)] > 0) {
+            [regex replaceMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length) withTemplate:replacement];
+        } else {
+            [updatedContents appendFormat:@"\n%@", replacement];
+        }
+
+        changed = YES;
+    }];
+    
+    if (changed) {
+        [updatedContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        if (reload) {
+            [self reloadByKeepState:YES];
+        }
+    }
+}
+
+- (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs {
+    if (configs.count == 0) return;
+
+    NSString *configFilePath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/Libretro/config/retroarch.cfg"];
+
+    NSError *error = nil;
+    NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
+
+    if (error || !fileContents) {
+        NSLog(@"读取文件失败: %@", error.localizedDescription);
+        [NSFileManager.defaultManager createDirectoryAtPath:[configFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSMutableArray *newLines = [NSMutableArray array];
+        [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+            [newLines addObject:[NSString stringWithFormat:@"%@ = \"%@\"", key, value]];
+        }];
+        NSString *newFileContent = [newLines componentsJoinedByString:@"\n"];
+        [newFileContent writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        return;
+    }
+
+    NSMutableString *updatedContents = [fileContents mutableCopy];
+    __block BOOL changed = NO;
+
+    [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+        NSString *oldValue = [self configValueForKey:key inFileContents:fileContents];
+        if ([oldValue isEqualToString:value]) return;
+
+        NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        NSString *replacement = [NSString stringWithFormat:@"%@ = \"%@\"", key, value];
+
+        if ([regex numberOfMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length)] > 0) {
+            [regex replaceMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length) withTemplate:replacement];
+        } else {
+            [updatedContents appendFormat:@"\n%@", replacement];
+        }
+
+        changed = YES;
+    }];
+
+    if (changed) {
+        [updatedContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    }
+}
+
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value {
     NSString *configFilePath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/Libretro/config/retroarch.cfg"];
     
@@ -1504,6 +1615,13 @@ static NSString *_Nullable needToLoadStatePath = nil;
     
     NSString *oldValue = [self configValueForKey:key inFileContents:fileContents];
     if ([oldValue isEqualToString:value]) {
+        return;
+    }
+    
+    if (!oldValue) {
+        //当前key不存在 直接添加到末尾
+        fileContents = [fileContents stringByAppendingString:[NSString stringWithFormat:@"\n%@ = \"%@\"", key, value]];
+        [fileContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
         return;
     }
 
@@ -1644,10 +1762,28 @@ void set_shader_preset(const char * _Nullable preset_path)
     RespectSilentMode = respect;
 }
 
-- (void)setDiskIndex:(unsigned)index {
+- (void)setDiskIndex:(unsigned)index delay:(BOOL)delay {
     command_event(CMD_EVENT_DISK_EJECT_TOGGLE, NULL);
-    command_event(CMD_EVENT_DISK_INDEX, &index);
-    command_event(CMD_EVENT_DISK_EJECT_TOGGLE, NULL);
+    if (delay) {
+        BOOL isPause = NO;
+        uint32_t runloop_flags = runloop_get_flags();
+        if (runloop_flags & RUNLOOP_FLAG_PAUSED) {
+            isPause = YES;
+        }
+        
+        [self resume];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            unsigned mutableIndex = index;
+            command_event(CMD_EVENT_DISK_INDEX, &mutableIndex);
+            command_event(CMD_EVENT_DISK_EJECT_TOGGLE, NULL);
+            if (isPause) {
+                [self pause];
+            }
+        });
+    } else {
+        command_event(CMD_EVENT_DISK_INDEX, &index);
+        command_event(CMD_EVENT_DISK_EJECT_TOGGLE, NULL);
+    }
 }
 
 - (NSUInteger)getCurrentDiskIndex {
@@ -1682,6 +1818,54 @@ void set_shader_preset(const char * _Nullable preset_path)
     }
     unsigned num_images  = disk_control->cb.get_num_images();
     return num_images;
+}
+
+- (void)setPSXAnalog:(BOOL)isAnalog {
+    if (isAnalog) {
+        for (unsigned i = 0; i < 8; i++) {
+            retro_ctx_controller_info_t pad;
+            pad.port   = i;
+            pad.device = 517;
+            core_set_controller_port_device(&pad);
+            input_config_set_device(i, 517);
+        }
+    } else {
+        for (unsigned i = 0; i < 8; i++) {
+            retro_ctx_controller_info_t pad;
+            pad.port   = i;
+            pad.device = 1;
+            core_set_controller_port_device(&pad);
+            input_config_set_device(i, 1);
+        }
+    }
+}
+
+static double needToLoadStateDelay = 0;
+- (void)setReloadDelay:(double)delay {
+    needToLoadStateDelay = delay;
+}
+
+- (void)turnOffHardcode {
+    settings_t *settings = config_get_ptr();
+    configuration_set_bool(settings, settings->bools.cheevos_hardcore_mode_enable, false);
+    rcheevos_hardcore_enabled_changed();
+}
+
+- (void)resetRetroAchievements {
+    rcheevos_reset_game(false);
+}
+
+static NSString * _Nullable g_customSaveExtension = nil;
+- (void)setCustomSaveExtension:(NSString *_Nullable)customSaveExtension {
+    g_customSaveExtension = customSaveExtension;
+}
+
+- (void)setEnableRumble:(BOOL)enable {
+    set_enable_rumble(enable);
+}
+
+- (BOOL)getSensorEnable:(int)playerIndex {
+    return input_get_sensor_enable(playerIndex);
 }
 
 @end

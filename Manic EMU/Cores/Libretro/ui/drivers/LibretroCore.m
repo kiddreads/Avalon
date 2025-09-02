@@ -51,6 +51,10 @@
 #endif
 
 #import "JITSupport.h"
+#include "../../cheevos/cheevos.h"
+#include "../../deps/rcheevos/include/rc_client.h"
+
+NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification";
 
 @interface LibretroCore()
 
@@ -88,9 +92,10 @@
     return self;
 }
 
-- (UIViewController *)start {
+- (UIViewController *)startWithCustomSaveDir:(NSString *_Nullable)customSaveDir {
     self.isRunning = YES;
-    [[self getRetroArch] start];
+    [[self getRetroArch] startWithCustomSaveDir:customSaveDir];
+    cheevos_event_register_callback(cheevosDidTrigger);
     return [CocoaView get];
 }
 
@@ -104,6 +109,7 @@
 
 - (void)stop {
     [[self getRetroArch] stop];
+    cheevos_event_register_callback(NULL);
 }
 
 - (void)mute:(BOOL)mute {
@@ -162,8 +168,16 @@
     [[self getRetroArch] updateCoreConfig:coreName key:key value:value reload:reload];
 }
 
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload {
+    [[self getRetroArch] updateCoreConfig:coreName configs:configs reload:reload];
+}
+
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value {
     [[self getRetroArch] updateLibretroConfig:key value:value];
+}
+
+- (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs {
+    [[self getRetroArch] updateLibretroConfigs:configs];
 }
 
 - (void)setShader:(NSString *_Nullable)path {
@@ -216,8 +230,8 @@
     [[self getRetroArch] setRespectSilentMode:respect];
 }
 
-- (void)setDiskIndex:(unsigned)index {
-    [[self getRetroArch] setDiskIndex:index];
+- (void)setDiskIndex:(unsigned)index delay:(BOOL)delay {
+    [[self getRetroArch] setDiskIndex:index delay:delay];
 }
 
 - (NSUInteger)getCurrentDiskIndex {
@@ -226,6 +240,176 @@
 
 - (NSUInteger)getDiskCount {
     return [[self getRetroArch] getDiskCount];
+}
+
+- (void)setPSXAnalog:(BOOL)isAnalog {
+    [[self getRetroArch] setPSXAnalog:isAnalog];
+}
+
+- (void)setReloadDelay:(double)delay {
+    [[self getRetroArch] setReloadDelay:delay];
+}
+
+static void cheevosDidTrigger(uint32_t type, void* object1, void* object2) {
+    if (type == RC_CLIENT_EVENT_ACHIEVEMENT_TRIGGERED) {
+        //获得成就
+        if (object1) {
+            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
+            if ([[NSString stringWithUTF8String:a->badge_name] isEqualToString:@"00000"]) {
+                return;
+            }
+            CheevosAchievement* obj = [CheevosAchievement new];
+            obj.title = a->title ? [NSString stringWithUTF8String:a->title] : nil;
+            obj._description = a->description ? [NSString stringWithUTF8String:a->description] : nil;
+            obj.badgeName = [NSString stringWithUTF8String:a->badge_name];
+            obj.measuredProgress = [NSString stringWithUTF8String:a->measured_progress];
+            obj.measuredPercent = (CGFloat)a->measured_percent;
+            obj._id = (NSInteger)a->id;
+            obj.points = (NSInteger)a->points;
+            obj.unlockTime = (a->unlock_time ? [NSDate dateWithTimeIntervalSince1970:a->unlock_time] : nil);
+            obj.state = (NSInteger)a->state;
+            obj.category = (NSInteger)a->state;
+            obj.bucket = (NSInteger)a->bucket;
+            obj.unlocked = (a->unlocked != 0);
+            obj.rarity = (CGFloat)a->rarity;
+            obj.rarityHardcore = (CGFloat)a->rarity_hardcore;
+            obj.type = (NSInteger)a->type;
+            char url1[256];
+            if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
+                obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];
+            }
+            char url2[256];
+            if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url2, sizeof(url2)) == RC_OK) {
+                obj.activeBadgeUrl = [NSString stringWithCString:url2 encoding:NSUTF8StringEncoding];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+        
+    } else if (type == 8888) {
+        //启动游戏
+        if (object1 && object2) {
+            rc_client_game_t *g = (rc_client_game_t *)object1;
+            rc_client_user_game_summary_t *s = (rc_client_user_game_summary_t *)object2;
+            
+            CheevosSummary* summary = [CheevosSummary new];
+            summary.title = g->title ? [NSString stringWithUTF8String:g->title] : nil;
+            summary.coreAchievementsNum = (NSInteger)s->num_core_achievements;
+            summary.unofficialAchievementsNum = (NSInteger)s->num_unofficial_achievements;
+            summary.unlockedAchievementsNum = (NSInteger)s->num_unlocked_achievements;
+            summary.unsupportedAchievementsNum = (NSInteger)s->num_unsupported_achievements;
+            summary.corePoints = (NSInteger)s->points_core;
+            summary.unlockedPoints = (NSInteger)s->points_unlocked;
+            char url[256];
+            if (rc_client_game_get_image_url(g, url, sizeof(url)) == RC_OK) {
+                summary.badgeUrl = [NSString stringWithCString:url encoding:NSUTF8StringEncoding];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:summary];
+            });
+            
+        }
+    } else if (type == RC_CLIENT_EVENT_GAME_COMPLETED) {
+        //所有成就收集完成
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:[CheevosCompletion new]];
+        });
+        
+    } else if (type == RC_CLIENT_EVENT_SERVER_ERROR) {
+        //发生错误
+        if (object1) {
+            rc_client_server_error_t *error = (rc_client_server_error_t *)object1;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:error->error_message ? [NSString stringWithUTF8String:error->error_message] : @"RetroAchievements Server Error"];
+            });
+        }
+    } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_CHALLENGE_INDICATOR_SHOW) {
+        //挑战提示
+        if (object1) {
+            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
+            if ([[NSString stringWithUTF8String:a->badge_name] isEqualToString:@"00000"]) {
+                return;
+            }
+            CheevosChallenge* obj = [CheevosChallenge new];
+            obj._description = a->description ? [NSString stringWithUTF8String:a->description] : nil;
+            char url1[256];
+            if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
+                obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+    } else if (type == RC_CLIENT_EVENT_LEADERBOARD_TRACKER_SHOW) {
+        //排行榜追踪展示
+        if (object1) {
+            rc_client_leaderboard_tracker_t *a = (rc_client_leaderboard_tracker_t *)object1;
+            CheevosLeaderboardTracker* obj = [CheevosLeaderboardTracker new];
+            obj.show = YES;
+            obj._id = a->id;
+            obj.display = [NSString stringWithUTF8String:a->display];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+        
+    } else if (type == RC_CLIENT_EVENT_LEADERBOARD_TRACKER_HIDE) {
+        //排行榜追踪隐藏
+        if (object1) {
+            rc_client_leaderboard_tracker_t *a = (rc_client_leaderboard_tracker_t *)object1;
+            CheevosLeaderboardTracker* obj = [CheevosLeaderboardTracker new];
+            obj.show = NO;
+            obj._id = a->id;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+    } else if (type == RC_CLIENT_EVENT_LEADERBOARD_TRACKER_UPDATE) {
+        //排行榜追踪更新
+        if (object1) {
+            rc_client_leaderboard_tracker_t *a = (rc_client_leaderboard_tracker_t *)object1;
+            CheevosLeaderboardTracker* obj = [CheevosLeaderboardTracker new];
+            obj.show = YES;
+            obj._id = a->id;
+            obj.display = [NSString stringWithUTF8String:a->display];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+    } else if (type == RC_CLIENT_EVENT_LEADERBOARD_STARTED) {
+        //排行榜开始
+        if (object1) {
+            rc_client_leaderboard_t *a = (rc_client_leaderboard_t *)object1;
+            CheevosLeaderboard* obj = [CheevosLeaderboard new];
+            obj.title = a->title ? [NSString stringWithUTF8String:a->title] : nil;
+            obj._description = a->description ? [NSString stringWithUTF8String:a->description] : nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+    }
+}
+
+- (void)turnOffHardcode {
+    [[self getRetroArch] turnOffHardcode];
+}
+
+- (void)resetRetroAchievements {
+    [[self getRetroArch] resetRetroAchievements];
+}
+
+- (void)setCustomSaveExtension:(NSString *_Nullable)customSaveExtension {
+    [[self getRetroArch] setCustomSaveExtension:customSaveExtension];
+}
+
+- (void)setEnableRumble:(BOOL)enable {
+    [[self getRetroArch] setEnableRumble:enable];
+}
+
+- (BOOL)getSensorEnable:(int)playerIndex {
+    return [[self getRetroArch] getSensorEnable:playerIndex];
 }
 
 @end

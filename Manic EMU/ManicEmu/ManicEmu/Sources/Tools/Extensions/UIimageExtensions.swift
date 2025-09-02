@@ -74,7 +74,7 @@ extension UIImage {
                            font: UIFont? = nil,
                            color: UIColor = Constants.Color.LabelPrimary,
                            colors: [UIColor]? = nil) -> UIImage {
-        let sizeConfig = UIImage.SymbolConfiguration(font: font ?? UIFont.systemFont(ofSize: Constants.Size.SymbolSize))
+        let sizeConfig = UIImage.SymbolConfiguration(font: font ?? UIFont.systemFont(ofSize: size))
         let colorConfig = UIImage.SymbolConfiguration(paletteColors: colors ?? [color])
         return self.withConfiguration(sizeConfig.applying(colorConfig))
     }
@@ -104,10 +104,12 @@ extension UIImage {
         var isMaxHeight: Bool = false
         var isSideEqual: Bool = false
         let scaledImage: UIImage?
-        if toSize.width >= toSize.height {
+        if toSize.width == toSize.height {
             scaledImage = scaled(toHeight: toSize.height, opaque: opaque)
             isSideEqual = true
-        }else {
+        } else if toSize.width > toSize.height {
+            scaledImage = scaled(toHeight: toSize.height, opaque: opaque)
+        }  else {
             scaledImage = scaled(toWidth: toSize.width, opaque: opaque)
             isMaxHeight = true
         }
@@ -117,7 +119,7 @@ extension UIImage {
         if isSideEqual {
             return scaledImage
         } else {
-            let croppedRect = CGRect(center: isMaxHeight ? .init(x: scaledImage.size.width/2, y: 0) : .init(x: 0, y: scaledImage.size.height/2), size: toSize)
+            let croppedRect = CGRect(origin: isMaxHeight ? .init(x: (scaledImage.size.width - toSize.width)/2, y: 0) : .init(x: 0, y: (scaledImage.size.height - toSize.height)/2), size: toSize)
             return scaledImage.cropped(to: croppedRect)
         }
     }
@@ -173,5 +175,48 @@ extension UIImage {
         guard let cgImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else { return nil }
         let filteredImage = UIImage(cgImage: cgImage)
         return filteredImage
+    }
+    
+    static func radialGradientImage(size: CGSize,
+                                    colors: [UIColor],
+                                    completion: ((UIImage?)->Void)? = nil) {
+        DispatchQueue.global().async {
+            let scale = UIScreen.main.scale
+            
+            let locations = colors.gradientLocations()
+            
+            UIGraphicsBeginImageContextWithOptions(size, false, scale)
+            guard let context = UIGraphicsGetCurrentContext() else {
+                DispatchQueue.main.async {
+                    completion?(nil)
+                }
+                return
+            }
+            
+            let cgColors = colors.map { $0.cgColor } as CFArray
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let gradient = CGGradient(colorsSpace: colorSpace,
+                                      colors: cgColors,
+                                      locations: locations)
+            
+            // 渐变中心：底部中点 (0.5, 1.0)
+            let center = CGPoint(x: size.width / 2 - 50, y: size.height)
+            let radius = size.height - 10
+            
+            context.drawRadialGradient(
+                gradient!,
+                startCenter: center,
+                startRadius: 0,
+                endCenter: CGPoint(x: center.x + 50, y: center.y),
+                endRadius: radius,
+                options: [.drawsBeforeStartLocation, .drawsAfterEndLocation]
+            )
+            
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            DispatchQueue.main.async {
+                completion?(image)
+            }
+        }
     }
 }

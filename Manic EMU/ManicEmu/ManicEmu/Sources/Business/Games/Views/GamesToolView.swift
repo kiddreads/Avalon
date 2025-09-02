@@ -43,8 +43,9 @@ class GamesToolView: UIView {
         textField.clearButtonMode = .never
         textField.returnKeyType = .search
         textField.modifyClearButton(with: UIImage(symbol: .xmarkCircleFill, color: Constants.Color.LabelSecondary), size: 28)
-        textField.onReturnKeyPress { [weak textField] in
+        textField.onReturnKeyPress { [weak textField, weak self] in
             textField?.resignFirstResponder()
+            self?.didSearchTextResignFirstResponder?()
         }
         textField.onEditingEnded { [weak textField, weak self] in
             self?.didSearchChange?(textField?.text)
@@ -114,6 +115,7 @@ class GamesToolView: UIView {
     
     var didToolViewSelectionChange: ((SelectionChangeMode)->Void)?
     var didSearchChange: ((String?)->Void)?
+    var didSearchTextResignFirstResponder: (()->Void)? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -167,13 +169,24 @@ class GamesToolView: UIView {
             searchTextField.text = nil
             searchTextField.resignFirstResponder()
             didSearchChange?(nil)
+            didSearchTextResignFirstResponder?()
         }
         
+    }
+    
+    func stopSelect() {
+        if selectIcon.isSelected {
+            selectIcon.isSelected = false
+            isSelectAll = false
+            selectIconLabel.text = R.string.localizable.selectAll()
+            didToolViewSelectionChange?(.normalMode)
+        }
     }
     
     func foldKeyboard() {
         if searchTextField.isFirstResponder {
             searchTextField.resignFirstResponder()
+            didSearchTextResignFirstResponder?()
         }
     }
     

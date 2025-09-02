@@ -11,14 +11,14 @@
 import MarqueeLabel
 
 class PlayHistoryItemCollectionCell: UICollectionViewCell {
-    private var iconView: UIImageView = {
+    private let iconView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
         view.layerCornerRadius = Constants.Size.CornerRadiusTiny
         return view
     }()
     
-    private var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let view = MarqueeLabel()
         view.font = Constants.Font.body()
         view.textColor = Constants.Color.LabelPrimary
@@ -26,11 +26,17 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
         return view
     }()
     
-    private var subTitleLabel: UILabel = {
+    private let subTitleLabel: UILabel = {
         let view = MarqueeLabel()
         view.font = Constants.Font.caption()
         view.textColor = Constants.Color.LabelSecondary
         view.type = .leftRight
+        return view
+    }()
+    
+    private let retroView: RetroAchievementCountView = {
+        let view = RetroAchievementCountView(count: 0)
+        view.isHidden = true
         return view
     }()
     
@@ -49,12 +55,19 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
             make.size.equalTo(50)
         }
         
+        addSubview(retroView)
+        retroView.snp.makeConstraints { make in
+            make.height.equalTo(24)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+        }
+        
         let titleContainerView = UIView()
         addSubview(titleContainerView)
         titleContainerView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceTiny)
+            make.trailing.equalTo(retroView.snp.leading).offset(-Constants.Size.ContentSpaceTiny)
         }
         
         titleContainerView.addSubviews([titleLabel, subTitleLabel])
@@ -67,6 +80,11 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
             make.trailing.lessThanOrEqualToSuperview()
             make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
         }
+        
+        retroView.countLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        retroView.countLabel.setContentHuggingPriority(.required, for: .horizontal)
+        titleContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        titleContainerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
     }
     
     required init?(coder: NSCoder) {
@@ -74,7 +92,7 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
     }
     
     //TODO: 需要处理图片的尺寸
-    func setData(game: Game) {
+    func setData(game: Game, didTapRetro: (()->Void)? = nil) {
         let estimated = iconView.size == .zero ? .init(40) : iconView.size
         iconView.setGameCover(game: game, size: estimated)
         if game.gameType == .nes || game.gameType == .snes || game.gameType == .psp {
@@ -87,6 +105,17 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
             subTitleLabel.text = R.string.localizable.readyGameInfoSubTitle(timeAgo, Date.timeDuration(milliseconds: Int(game.totalPlayDuration)))
         } else {
             subTitleLabel.text = ""
+        }
+        
+        if game.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false {
+            retroView.isHidden = false
+            retroView.countLabel.text = ""
+            retroView.removeGestureRecognizers()
+            retroView.addTapGesture { gesture in
+                didTapRetro?()
+            }
+        } else {
+            retroView.isHidden = true
         }
     }
 }

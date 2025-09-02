@@ -9,25 +9,25 @@
 
 import ManicEmuCore
 import AVFoundation
-import GBCDeltaCore
 
-extension GameType {
+extension GameType
+{
     static let gb = GameType("public.aoshuang.game.gb")
 }
 
-enum GBGameInput: Int, Input {
-    case up = 0x40
-    case down = 0x80
-    case left = 0x20
-    case right = 0x10
-    case a = 0x01
-    case b = 0x02
-    case start = 0x08
-    case select = 0x04
-    
+@objc enum GBGameInput: Int, Input {
+    case a
+    case b
+    case start
+    case select
+    case up
+    case down
+    case left
+    case right
+
     case flex
     case menu
-    
+
     public var type: InputType {
         return .game(.gb)
     }
@@ -47,8 +47,7 @@ enum GBGameInput: Int, Input {
     }
 }
 
-public struct GB: ManicEmuCoreProtocol
-{
+struct GB: ManicEmuCoreProtocol {
     public static let core = GB()
     
     public var name: String { "GB" }
@@ -56,8 +55,8 @@ public struct GB: ManicEmuCoreProtocol
     
     public var gameType: GameType { GameType.gb }
     public var gameInputType: Input.Type { GBGameInput.self }
-    public var gameSaveExtension: String { "gb.sav" }
-    
+    public var gameSaveExtension: String { "sav" }
+        
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 35112 * 60, channels: 2, interleaved: true)!
     public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 160, height: 144))
     
@@ -67,9 +66,83 @@ public struct GB: ManicEmuCoreProtocol
         return [gameGenieFormat, gameSharkFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { GBCEmulatorBridge.shared }
+    public var emulatorConnector: EmulatorBase { GBEmulatorBridge.shared }
     
-    private init()
-    {
+    private init() {}
+}
+
+
+class GBEmulatorBridge : NSObject, EmulatorBase {
+    static let shared = GBEmulatorBridge()
+    
+    var gameURL: URL?
+    
+    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
+    
+    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
+    
+    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
+    
+    var saveUpdateHandler: (() -> Void)?
+    
+    private var thumbstickPosition: CGPoint = .zero
+    
+    func start(withGameURL gameURL: URL) {}
+    
+    func stop() {}
+    
+    func pause() {}
+    
+    func resume() {}
+    
+    func runFrame(processVideo: Bool) {}
+    
+    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+        guard playerIndex >= 0 else { return }
+        if let gameInput = GBGameInput(rawValue: input),
+            let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+#if DEBUG
+Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+#endif
+            LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
+        }
     }
+    
+    func gameInputToCoreInput(gameInput: GBGameInput) -> LibretroButton? {
+        if gameInput == .a { return .A }
+        else if gameInput == .b { return .B }
+        else if gameInput == .start { return .start }
+        else if gameInput == .select { return .select }
+        else if gameInput == .up { return .up }
+        else if gameInput == .down { return .down }
+        else if gameInput == .left { return .left }
+        else if gameInput == .right { return .right }
+        return nil
+    }
+    
+    func deactivateInput(_ input: Int, playerIndex: Int) {
+        if let gameInput = GBGameInput(rawValue: input),
+            let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+            LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
+        }
+    }
+    
+    func resetInputs() {}
+    
+    func saveSaveState(to url: URL) {}
+    
+    func loadSaveState(from url: URL) {}
+    
+    func saveGameSave(to url: URL) {}
+    
+    func loadGameSave(from url: URL) {}
+    
+    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
+        return false
+    }
+    
+    func resetCheats() {}
+    
+    func updateCheats() {}
+    
 }

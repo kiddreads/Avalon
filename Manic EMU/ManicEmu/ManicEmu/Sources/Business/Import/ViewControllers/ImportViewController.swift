@@ -9,6 +9,7 @@
 
 import UIKit
 import SideMenu
+import KeyboardKit
 
 class ImportViewController: BaseViewController {
     private var cornerMaskViewForiPad: TransparentHoleView = {
@@ -39,6 +40,16 @@ class ImportViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupViews()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.isPhone {
+            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+                self?.hideSideMenu()
+                self?.importServiceListView.updateViews()
+            }
+        }
     }
     
     private func setupViews() {
@@ -78,10 +89,22 @@ class ImportViewController: BaseViewController {
         }
     }
     
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
+        Log.debug("importServiceListView becomeFirstResponder")
+        return importServiceListView.collectionView.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        Log.debug("importServiceListView resignFirstResponder")
+        return importServiceListView.collectionView.resignFirstResponder()
+    }
+    
     private func showSideMenu() {
         UIDevice.generateHaptic()
         let vc = AddImportServiceViewController(addImportServiceView: addImportServiceView)
-        let menu = SideMenuNavigationController(rootViewController: vc)
+        let menu = ControllableSideMenu(rootViewController: vc)
         menu.navigationBar.isHidden = true
         menu.presentDuration = Constants.Numbers.LongAnimationDuration
         menu.dismissDuration = Constants.Numbers.LongAnimationDuration
@@ -94,5 +117,29 @@ class ImportViewController: BaseViewController {
     
     private func hideSideMenu() {
         sideMenu?.dismiss(animated: true)
+    }
+}
+
+extension ImportViewController: UIControllerPressable {
+    override var keyCommands: [UIKeyCommand]? {
+        var commands = super.keyCommands ?? []
+        commands.append(UIKeyCommand(input: "[", modifierFlags: [], action: #selector(didImportViewKeyboardPress)))
+        return commands
+    }
+    
+    func didControllerPress(key: UIControllerKey) {
+        if !UIDevice.isPad {
+            if key == .l2 {
+                showSideMenu()
+            }
+        }
+    }
+    
+    @objc func didImportViewKeyboardPress(_ sender: UIKeyCommand) {
+        if let inputString = sender.input, !(UIDevice.isPad && UIDevice.isLandscape) {
+            if inputString == "[" {
+                showSideMenu()
+            }
+        }
     }
 }

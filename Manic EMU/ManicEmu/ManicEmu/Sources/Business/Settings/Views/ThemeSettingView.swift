@@ -45,7 +45,7 @@ class ThemeSettingView: BaseView {
         view.register(cellWithClass: CoverStyleCollectionViewCell.self)
         view.register(cellWithClass: GameListStyleCollectionViewCell.self)
         view.register(cellWithClass: PlatformSortCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: TitleBackgroundPrimaryColorHaderCollectionReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: PrimaryHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -138,7 +138,7 @@ class ThemeSettingView: BaseView {
             } else if sectionIndex == SectionIndex.coverStyle.rawValue {
                 itemHeight = 370 + 76
             }  else if sectionIndex == SectionIndex.gameList.rawValue {
-                itemHeight = 205 + 76 + 106
+                itemHeight = 205 + 76 + 220
             }  else if sectionIndex == SectionIndex.platformOrder.rawValue {
                 itemHeight = 50
             }
@@ -262,7 +262,7 @@ extension ThemeSettingView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: TitleBackgroundPrimaryColorHaderCollectionReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: PrimaryHaderReusableView.self, for: indexPath)
         let section = SectionIndex(rawValue: indexPath.section)!
         header.titleLabel.text = section.title
         return header

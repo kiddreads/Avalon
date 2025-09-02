@@ -8,6 +8,7 @@
 import UIKit
 import OAuthSwift
 import UniformTypeIdentifiers
+import ManicEmuCore
 
 class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
     static weak var applicationScene: UIWindowScene?
@@ -37,6 +38,27 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     if connectionOptions.urlContexts.count > 0 {
                         self.scene(scene, openURLContexts: connectionOptions.urlContexts)
                     }
+                    
+                    //设置控制器死区配置
+                    ExternalGameControllerUtils.shared.deadZone = Settings.defalut.getExtraFloat(key: ExtraKey.deadZone.rawValue) ?? 0
+                    
+                    //设置RetroAchievement
+                    CheevosBridge.setup(with: Constants.Config.AppVersion, requireCredentials: {
+                        if let user = AchievementsUser.getUser() {
+                            let cheevosUser = CheevosUser()
+                            cheevosUser.userName = user.username
+                            cheevosUser.password = user.password
+                            cheevosUser.token = user.token
+                            return cheevosUser
+                        }                        
+                        return nil
+                    }, updateCredentials: { cheevosUser in
+                        if let u = cheevosUser?.userName,
+                           let p = cheevosUser?.password,
+                           let t = cheevosUser?.token {
+                            AchievementsUser.updateUser(username: u, password: p, token: t)
+                        }
+                    })
                 }
             }
             let dropInteraction = UIDropInteraction(delegate: self)

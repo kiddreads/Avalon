@@ -21,14 +21,16 @@ class GradientLabelView: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        gradientLayer.colors = Constants.Color.Gradient.reversed().map({ $0.cgColor })
+        gradientLayer.colors = Constants.Color.Gradient.map({ $0.cgColor })
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        gradientLayer.locations = Constants.Color.Gradient.gradientLocations().map({ NSNumber(floatLiteral: $0) })
         layer.addSublayer(gradientLayer)
         
         gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
-            self.gradientLayer.colors = Constants.Color.Gradient.reversed().map({ $0.cgColor })
+            self.gradientLayer.colors = Constants.Color.Gradient.map({ $0.cgColor })
+            self.gradientLayer.locations = Constants.Color.Gradient.gradientLocations().map({ NSNumber(floatLiteral: $0) })
         }
     }
     

@@ -27,6 +27,8 @@ public extension MelonDS
 {
     static let didConnectToWFCNotification = NSNotification.Name.__MelonDSDidConnectToWFC
     static let didDisconnectFromWFCNotification = NSNotification.Name.__MelonDSDidDisconnectFromWFC
+    static let wfcIDUserDefaultsKey = __MelonDSWFCIDUserDefaultsKey
+    static let wfcFlagsUserDefaultsKey = __MelonDSWFCFlagsUserDefaultsKey
 }
 
 @objc public enum MelonDSGameInput: Int, Input
@@ -72,7 +74,11 @@ public struct MelonDS: ManicEmuCoreProtocol
     
     public var gameType: GameType { GameType.ds }
     public var gameInputType: Input.Type { MelonDSGameInput.self }
-    public var gameSaveExtension: String { "dsv" }
+    public var gameSaveCustomPath: String? {
+        let document = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        return document.appending("/3DS/sdmc/saves/nds")
+    }
+    public var gameSaveExtension: String { "srm" }
     
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
     public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 256, height: 384))
@@ -98,6 +104,10 @@ public extension MelonDSEmulatorBridge
     
     @objc(coreDirectoryURL) class var __coreDirectoryURL: URL {
         return _coreDirectoryURL
+    }
+    
+    @objc(biosDirectoryURL) class var __biosDirectoryURL: URL {
+        return URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!.appending("/Libretro/system"))
     }
 }
 

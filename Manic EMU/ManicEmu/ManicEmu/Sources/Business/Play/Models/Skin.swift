@@ -14,18 +14,8 @@ import IceCream
 extension Skin: CKRecordConvertible & CKRecordRecoverable { }
 
 enum SkinType: Int, PersistableEnum {
-    case `default`, manic, delta
-    
-    init?(fileExtension: String) {
-        if fileExtension == "manicskin" {
-            self = .manic
-        } else if fileExtension == "deltaskin" {
-            self = .delta
-        } else {
-            return nil
-        }
-    }
-    
+//    case `default`, manic, delta
+    case `default`, buildIn, `import`
 }
 
 ///只存储用户皮肤 自带的默认皮肤不会进行存储
@@ -46,6 +36,8 @@ class Skin: Object, ObjectUpdatable {
     @Persisted var skinData: CreamAsset?
     ///用于iCloud同步删除
     @Persisted var isDeleted: Bool = false
+    ///额外数据备用
+    @Persisted var extras: Data?
     
     ///文件是否存在
     var isFileExtsts: Bool {
@@ -60,5 +52,24 @@ class Skin: Object, ObjectUpdatable {
         }
         //这里没什么用 如果返回下面的地址 说明该皮肤不可用 或者 是嵌入式manic皮肤
         return URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent(fileName))
+    }
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
     }
 }

@@ -112,44 +112,56 @@ extension BlankSlate {
 #endif
         }
 
-        override func didMoveToSuperview() {
-            updateForCurrentOrientation()
-        }
-
-        override func didMoveToWindow() {
-            updateForCurrentOrientation()
-        }
+//        override func didMoveToSuperview() {
+//            updateForCurrentOrientation()
+//        }
+//
+//        override func didMoveToWindow() {
+//            updateForCurrentOrientation()
+//        }
 
         @objc
         private func updateForCurrentOrientation() {
-            guard window != nil, let superview else { return }
-
-            guard let scrollView = superview as? UIScrollView else {
-                frame = CGRect(x: superview.safeAreaInsets.left,
-                               y: superview.safeAreaInsets.top,
-                               width: superview.bounds.width - superview.safeAreaInsets.left - superview.safeAreaInsets.right,
-                               height: superview.bounds.height - superview.safeAreaInsets.top - superview.safeAreaInsets.bottom)
-                return
+            guard window != nil else { return }
+            
+            if let superview = superview as? UIScrollView, let centerYConstraint {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    centerYConstraint.constant = superview.contentOffset.y
+                    self.layoutIfNeeded()
+                }
             }
-
-            func syncFrame() {
-                let size = scrollView.bounds.size
-                let safeInsets = scrollView.safeAreaInsets
-                let isVerticalScroll = scrollView.contentSize.width == scrollView.bounds.width
-
-                var inset = scrollView.contentInset
-                inset = UIEdgeInsets(top: safeInsets.top + inset.top,
-                                     left: safeInsets.left + inset.left,
-                                     bottom: safeInsets.bottom + inset.bottom,
-                                     right: safeInsets.right + inset.right)
-                frame = CGRect(x: isVerticalScroll ? inset.left : 0.0, y: 0.0,
-                               width: size.width - inset.left - inset.right,
-                               height: size.height - inset.top - inset.bottom)
-                scrollView.scrollRectToVisible(frame, animated: false)
-            }
-
-            syncFrame()
-            DispatchQueue.main.async { syncFrame() }
+            
+            
+            
+//            guard let scrollView = superview as? UIScrollView else {
+//                frame = CGRect(x: superview.safeAreaInsets.left,
+//                               y: superview.safeAreaInsets.top,
+//                               width: superview.bounds.width - superview.safeAreaInsets.left - superview.safeAreaInsets.right,
+//                               height: superview.bounds.height - superview.safeAreaInsets.top - superview.safeAreaInsets.bottom)
+//                return
+//            }
+//
+//            func syncFrame() {
+//                let size = scrollView.bounds.size
+//                let safeInsets = scrollView.safeAreaInsets
+//                let isVerticalScroll = scrollView.contentSize.width == scrollView.bounds.width
+//
+//                var inset = scrollView.contentInset
+//                inset = UIEdgeInsets(top: safeInsets.top + inset.top,
+//                                     left: safeInsets.left + inset.left,
+//                                     bottom: safeInsets.bottom + inset.bottom,
+//                                     right: safeInsets.right + inset.right)
+//                frame = CGRect(x: isVerticalScroll ? inset.left : 0.0, y: scrollView.contentOffset.y,
+//                               width: size.width - inset.left - inset.right,
+//                               height: size.height)
+//                scrollView.scrollRectToVisible(frame, animated: false)
+//            }
+//
+//            syncFrame()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+//                print(">>>>\(scrollView)")
+//                syncFrame()
+//            })
         }
 
         override func layoutSubviews() {
@@ -176,26 +188,47 @@ extension BlankSlate {
             removeConstraints(constraints)
             contentView.removeConstraints(contentView.constraints)
         }
+        
+        private var centerYConstraint: NSLayoutConstraint!
 
         func setupConstraints() {
             guard elements.isEmpty == false else { return }
 
             // First, configure the content view constaints The content view must alway be centered to its superview
-            var constraints: [NSLayoutConstraint] = [contentView.widthAnchor.constraint(equalTo: widthAnchor)]
+            var constraints: [NSLayoutConstraint] = []
             
-            let offsetX: CGFloat
-            switch alignment {
-            case let .center(offset):
-                offsetX = offset.x
-                constraints.append(contentView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: offset.y))
-            case let .top(offset):
-                offsetX = offset.x
-                constraints.append(contentView.topAnchor.constraint(equalTo: topAnchor, constant: offset.y))
-            case let .bottom(offset):
-                offsetX = offset.x
-                constraints.append(contentView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset.y))
+            if let superview = superview as? UIScrollView {
+                if let centerYConstraint {
+                    centerYConstraint.constant = superview.contentOffset.y
+                } else {
+                    centerYConstraint = self.centerYAnchor.constraint(equalTo: superview.centerYAnchor, constant: superview.contentOffset.y)
+                }
+                NSLayoutConstraint.activate([
+                    self.centerXAnchor.constraint(equalTo: superview.centerXAnchor),
+                    self.widthAnchor.constraint(equalTo: superview.widthAnchor),
+                    self.heightAnchor.constraint(equalTo: superview.heightAnchor),
+                    centerYConstraint
+                ])
             }
-            constraints.append(contentView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offsetX))
+            
+            constraints.append(contentView.leadingAnchor.constraint(equalTo: leadingAnchor))
+            constraints.append(contentView.trailingAnchor.constraint(equalTo: trailingAnchor))
+            constraints.append(contentView.topAnchor.constraint(equalTo: topAnchor))
+            constraints.append(contentView.bottomAnchor.constraint(equalTo: bottomAnchor))
+            
+//            let offsetX: CGFloat
+//            switch alignment {
+//            case let .center(offset):
+//                offsetX = offset.x
+//                constraints.append(contentView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: offset.y))
+//            case let .top(offset):
+//                offsetX = offset.x
+//                constraints.append(contentView.topAnchor.constraint(equalTo: topAnchor, constant: offset.y))
+//            case let .bottom(offset):
+//                offsetX = offset.x
+//                constraints.append(contentView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset.y))
+//            }
+//            constraints.append(contentView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offsetX))
 
             // If applicable, set the custom view's constraints
             if let element = elements[.custom] {
@@ -206,9 +239,9 @@ extension BlankSlate {
                     view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: layout.edgeInsets.top),
                     view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -layout.edgeInsets.bottom)
                 ]
-                if let height = layout.height {
-                    constraints.append(view.heightAnchor.constraint(equalToConstant: height))
-                }
+//                if let height = layout.height {
+//                    constraints.append(view.heightAnchor.constraint(equalToConstant: height))
+//                }
             } else {
                 var previous: ElementView?
                 for key in Element.allCases {

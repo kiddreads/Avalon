@@ -6,8 +6,6 @@ target 'ManicEmu' do
   
   pod 'ManicSupport', :path => '../ManicSupport'
   pod 'ManicEmuCore', :path => '../Cores/DeltaCore'
-  pod 'GBADeltaCore', :path => '../Cores/GBADeltaCore'
-  pod 'GBCDeltaCore', :path => '../Cores/GBCDeltaCore'
   pod 'MelonDSDeltaCore', :path => '../Cores/MelonDSDeltaCore'
   
   pod 'DNSPageView', :path => '../DNSPageView'
@@ -29,7 +27,6 @@ target 'ManicEmu' do
   
   pod 'RealmSwift', '= 10.54.2'
   pod 'UMCommon', '~> 7.5.2'
-#  pod 'UMAPM', '~> 2.0.3'
   pod 'Fireworks', :git => 'https://github.com/tomkowz/fireworks.git', :branch => 'master'
   pod 'SnapKit', '~> 5.0'
   pod 'SwifterSwift', '~> 7.0'
@@ -53,6 +50,7 @@ target 'ManicEmu' do
   pod 'Schedule', '~> 2.0'
   pod "Fuse", '~> 1.4.0'
   pod 'Kingfisher', '~> 8.0'
+  pod 'SQLite.swift/SQLCipher'
 end
 
 post_install do |installer|

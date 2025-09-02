@@ -211,13 +211,13 @@ public class DynamicEffectView: UIView {
             var transform = CATransform3DIdentity
             transform.m34 = -1.0 / 500.0 // 透视效果
             switch StandardGameControllerInput(stringValue: input.stringValue) {
-            case .up:
+            case .up, .rightDpadUp:
                 transform =  CATransform3DScale(CATransform3DTranslate(CATransform3DRotate(transform, .pi / 10, 1, 0, 0), 0, -1.75, 0), 0.95, 1, 1) // 绕 X 轴旋转
-            case .down:
+            case .down, .rightDpadDown:
                 transform =  CATransform3DScale(CATransform3DTranslate(CATransform3DRotate(transform, -.pi / 10, 1, 0, 0), 0, 1.75, 0), 0.95, 1, 1) // 绕 X 轴旋转
-            case .left:
+            case .left, .rightDpadLeft:
                 transform = CATransform3DScale(CATransform3DTranslate(CATransform3DRotate(transform, -.pi / 10, 0, 1, 0), -1.75, 0, 0), 1, 0.95, 1) // 绕 Y 轴旋转
-            case .right:
+            case .right, .rightDpadRight:
                 transform = CATransform3DScale(CATransform3DTranslate(CATransform3DRotate(transform, .pi / 10, 0, 1, 0), 1.75, 0, 0), 1, 0.95, 1) // 绕 Y 轴旋转
             default:
                 break

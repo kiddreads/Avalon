@@ -1417,7 +1417,7 @@
 #define DEFAULT_SLOWMOTION_RATIO 3.0f
 
 /* Maximum fast forward ratio. */
-#define DEFAULT_FASTFORWARD_RATIO 0.0f
+#define DEFAULT_FASTFORWARD_RATIO 1.0f
 #define MAXIMUM_FASTFORWARD_RATIO 50.0f
 
 /* Skip frames when fast forwarding. */

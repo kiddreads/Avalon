@@ -254,4 +254,11 @@ extension String {
         }
         return querys.keys.count > 0 ? querys : nil
     }
+    
+    var libretroPath: String {
+        if let range = self.range(of: "/Documents/") ?? self.range(of: "/Library/") {
+            return "~" + String(self[range.lowerBound...])
+        }
+        return self
+    }
 }

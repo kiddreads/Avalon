@@ -131,7 +131,7 @@ extension PriceView: UICollectionViewDataSource {
                     } else {
                         //购买成功
                         self?.needToClosePurchaseView?()
-                        CheersView.makeCheers()
+                        CheersView.makePurchaseCheers()
                     }
                 }
             }

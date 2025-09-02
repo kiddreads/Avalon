@@ -24,9 +24,30 @@ class ControllerMapping: Object, ObjectUpdatable {
     @Persisted var mapping: String
     ///用于iCloud同步删除
     @Persisted var isDeleted: Bool = false
+    ///额外数据备用
+    @Persisted var extras: Data?
         
     var inputMapping: GameControllerInputMappingBase? {
         try? GameControllerInputMapping(mapping: mapping)
+    }
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
     }
 }
 

@@ -418,7 +418,7 @@ extension GameSaveMatchGameView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: GameCollectionViewCell.self, for: indexPath)
         if let game = getGame(at: indexPath) {
-            cell.setData(game: game, coverSize: coverSizes[game.gameType] ?? .zero)
+            cell.setData(game: game, coverSize: coverSizes[game.gameType] ?? .zero, indexPath: indexPath)
         }
         return cell
     }

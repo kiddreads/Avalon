@@ -13,10 +13,6 @@ PODS:
   - FLEX (5.22.10)
   - FluentDarkModeKit (1.0.4)
   - Fuse (1.4.0)
-  - GBADeltaCore (0.1):
-    - ManicEmuCore
-  - GBCDeltaCore (0.1):
-    - ManicEmuCore
   - GCDWebServer/Core (3.5.4)
   - GCDWebServer/WebUploader (3.5.4):
     - GCDWebServer/Core
@@ -144,6 +140,13 @@ PODS:
   - ShowTouches (1.0.0)
   - SideMenu (6.5.0)
   - SnapKit (5.7.1)
+  - SQLCipher (4.10.0):
+    - SQLCipher/standard (= 4.10.0)
+  - SQLCipher/common (4.10.0)
+  - SQLCipher/standard (4.10.0):
+    - SQLCipher/common
+  - SQLite.swift/SQLCipher (0.15.4):
+    - SQLCipher (>= 4.0.0)
   - SSZipArchive (2.6.1)
   - SwifterSwift (7.0.0):
     - SwifterSwift/AppKit (= 7.0.0)
@@ -197,8 +200,6 @@ DEPENDENCIES:
   - FLEX
   - FluentDarkModeKit (~> 1.0.4)
   - Fuse (~> 1.4.0)
-  - GBADeltaCore (from `../Cores/GBADeltaCore`)
-  - GBCDeltaCore (from `../Cores/GBCDeltaCore`)
   - GCDWebServer/WebUploader (from `../GCDWebServer`)
   - Haptica (~> 3.0)
   - HXPhotoPicker/Lite (from `../HXPhotoPicker`)
@@ -224,6 +225,7 @@ DEPENDENCIES:
   - ShowTouches
   - SideMenu (~> 6.5)
   - SnapKit (~> 5.0)
+  - SQLite.swift/SQLCipher
   - SSZipArchive (from `../ZipArchive`)
   - SwifterSwift (~> 7.0)
   - SwipeCellKit (from `../SwipeCellKit`)
@@ -263,6 +265,8 @@ SPEC REPOS:
     - ShowTouches
     - SideMenu
     - SnapKit
+    - SQLCipher
+    - SQLite.swift
     - SwifterSwift
     - Tiercel
     - UMCommon
@@ -283,10 +287,6 @@ EXTERNAL SOURCES:
   Fireworks:
     :branch: master
     :git: https://github.com/tomkowz/fireworks.git
-  GBADeltaCore:
-    :path: "../Cores/GBADeltaCore"
-  GBCDeltaCore:
-    :path: "../Cores/GBCDeltaCore"
   GCDWebServer:
     :path: "../GCDWebServer"
   HXPhotoPicker:
@@ -333,8 +333,6 @@ SPEC CHECKSUMS:
   FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   Fuse: 48eaf66d0c407c7f8b0ddb168888dc4637e87f14
-  GBADeltaCore: 7b00d92a6acd276fe9a5348733aafe90011bf0ba
-  GBCDeltaCore: 9bd060ba84e628d178e9e972397e9f94343ff95a
   GCDWebServer: dbf897b7c0602d936e1f368f0f0451597575a397
   Haptica: 23497230b2d7476621f7860263ae0667279a0a89
   HXPhotoPicker: c200bc265eab96411f22a7f2ff32447734c7dc2a
@@ -368,6 +366,8 @@ SPEC CHECKSUMS:
   ShowTouches: d92e379beb451d6d63242abd38640182fb597a4e
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
+  SQLite.swift: a107c734115fea616a4ad31371d39f1637e8de56
   SSZipArchive: 83768be78cdddec97f2aac25d57cc0cd33cf7b72
   SwifterSwift: e9caf990fc72e835432280755d1f4c43f2a483d5
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
@@ -378,6 +378,6 @@ SPEC CHECKSUMS:
   VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 03035eb896d7b1bcacbfb58f4465c5fd4b55b361
+PODFILE CHECKSUM: cc4c8f981e09ce8534f6ff56af8841770c085798
 
 COCOAPODS: 1.16.2

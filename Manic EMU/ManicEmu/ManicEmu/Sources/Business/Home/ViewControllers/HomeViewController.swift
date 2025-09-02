@@ -14,6 +14,7 @@ import ColorfulX
 import ManicEmuCore
 import UniformTypeIdentifiers
 import BlurUIKit
+import KeyboardKit
 
 class HomeViewController: BaseViewController {
     private lazy var gamesViewController: GamesViewController = {
@@ -50,6 +51,13 @@ class HomeViewController: BaseViewController {
         let style = PageStyle()
         style.contentViewBackgroundColor = UIDevice.isPad ? .black : Constants.Color.Background
         let manager = PageViewManager(style: style, titles: HomeTabBar.BarSelection.allCases.map { String($0.rawValue) }, childViewControllers: childControllers)
+        manager.contentView.getContentEdgeInsets = {
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                return .init(top: 0, left: Constants.Size.SafeAera.left, bottom: 0, right: Constants.Size.SafeAera.right)
+            } else {
+                return .zero
+            }
+        }
         childControllers.forEach {
             addChild($0)
             $0.didMove(toParent: self)
@@ -57,7 +65,7 @@ class HomeViewController: BaseViewController {
         return manager
     }()
     
-    private lazy var homeTabBar: HomeTabBar = {
+    lazy var homeTabBar: HomeTabBar = {
         let view = HomeTabBar()
         view.selectionChange = { [weak self] selection in
             var selection = selection
@@ -69,6 +77,23 @@ class HomeViewController: BaseViewController {
                 }
             }
             self?.pageViewManager.setCurrentPage(selection.rawValue)
+            switch selection {
+            case .games:
+                Log.debug("切换到游戏")
+                if UIDevice.isPhone, UIDevice.isLandscape {
+                    self?.gamesViewController.view.masksToBounds = false
+                }
+                self?.gamesViewController.becomeFirstResponder()
+            case .imports:
+                Log.debug("切换到导入")
+                if UIDevice.isPhone, UIDevice.isLandscape {
+                    self?.gamesViewController.view.masksToBounds = true
+                }
+                self?.importViewController.becomeFirstResponder()
+            case .settings:
+                Log.debug("切换到设置")
+                self?.settingsViewController.becomeFirstResponder()
+            }
         }
         return view
     }()
@@ -84,20 +109,14 @@ class HomeViewController: BaseViewController {
     
     private var homeSelectionChangeNotification: Any? = nil
     
-    private(set) var currentSelection: HomeTabBar.BarSelection {
-        set {
-            self.homeTabBar.currentSelection = newValue
-            switch newValue {
-            case .games:
-                Log.debug("切换到游戏")
-            case .imports:
-                Log.debug("切换到导入")
-            case .settings:
-                Log.debug("切换到设置")
-            }
-        }
-        get {
-            self.homeTabBar.currentSelection
+    private var currentChildViewController: BaseViewController {
+        switch homeTabBar.currentSelection {
+        case .games:
+            return gamesViewController
+        case .imports:
+            return importViewController
+        case .settings:
+            return settingsViewController
         }
     }
     
@@ -112,18 +131,51 @@ class HomeViewController: BaseViewController {
         view.backgroundColor = .black
         
         self.setupViews()
-        self.setupDatas()
         
         homeSelectionChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.HomeSelectionChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             if let selection = notification.object as? HomeTabBar.BarSelection {
                 if self.presentedViewController == nil {
-                    if self.currentSelection != selection {
-                        self.currentSelection = selection
+                    if self.homeTabBar.currentSelection != selection {
+                        self.homeTabBar.currentSelection = selection
                     }
                 }
             }
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.becomeFirstResponder()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.resignFirstResponder()
+    }
+    
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+        self.resignFirstResponder()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.isPhone {
+            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+                self?.pageViewManager.contentView.updateContentEdgeInsets()
+            }
+        }
+    }
+    
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
+        currentChildViewController.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        currentChildViewController.resignFirstResponder()
     }
     
     private func setupViews() {
@@ -166,10 +218,6 @@ class HomeViewController: BaseViewController {
             make.bottom.equalTo(safeAeraBottom > 0 ? -safeAeraBottom: -Constants.Size.ContentSpaceMax)
         }
     }
-    
-    private func setupDatas() {
-
-    }
 }
 
 extension HomeViewController: UIGestureRecognizerDelegate {
@@ -202,4 +250,35 @@ extension HomeViewController: PageContentViewDelegate {
     func contentView(_ contentView: DNSPageView.PageContentView, scrollingWith sourceIndex: Int, targetIndex: Int, progress: CGFloat) {
         
     }
+}
+
+extension HomeViewController: UIControllerPressable {
+    override var keyCommands: [UIKeyCommand]? {
+        var commands = super.keyCommands ?? []
+        commands.append(UIKeyCommand(input: "1", modifierFlags: .control, action: #selector(didHomeViewKeyboardPress)))
+        commands.append(UIKeyCommand(input: "2", modifierFlags: .control, action: #selector(didHomeViewKeyboardPress)))
+        commands.append(UIKeyCommand(input: "3", modifierFlags: .control, action: #selector(didHomeViewKeyboardPress)))
+        return commands
+    }
+    
+    func didControllerPress(key: KeyboardKit.UIControllerKey) {
+        if key == .l1 {
+            homeTabBar.currentSelection = homeTabBar.currentSelection.previous()
+        } else if key == .r1 {
+            homeTabBar.currentSelection = homeTabBar.currentSelection.next()
+        }
+    }
+    
+    @objc func didHomeViewKeyboardPress(_ sender: UIKeyCommand) {
+        if let inputString = sender.input, sender.modifierFlags == .control {
+            if inputString == "1" {
+                homeTabBar.currentSelection = .games
+            } else if inputString == "2" {
+                homeTabBar.currentSelection = .imports
+            } else if inputString == "3" {
+                homeTabBar.currentSelection = .settings
+            }
+        }
+    }
+    
 }

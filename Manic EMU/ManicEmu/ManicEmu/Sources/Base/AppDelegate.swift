@@ -16,25 +16,28 @@ import CloudKit
 #if DEBUG
 import FLEX
 import ShowTouches
+#endif
 
 extension UIWindow {
     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
         if motion == .motionShake {
+            NotificationCenter.default.post(name: Constants.NotificationName.MotionShake, object: nil)
+#if DEBUG
             if FLEXManager.shared.isHidden {
                 FLEXManager.shared.showExplorer()
             } else {
                 FLEXManager.shared.hideExplorer()
             }
             UIWindow.startShowingTouches()
+#endif
         }
     }
 }
-#endif
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     //支持的旋转方向
-    static var orientation: UIInterfaceOrientationMask = UIDevice.isPad ? .all : .portrait {
+    static var orientation: UIInterfaceOrientationMask = Constants.Config.DefaultOrientation {
         didSet {
             UIViewController.attemptRotationToDeviceOrientation()
         }
@@ -56,6 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
         //启动游戏手柄监听
         ExternalGameControllerUtils.shared.startDetecting()
+        //启动游戏手柄点击监听
+        UIControllerKit.shared.start()
         
         //启动清理
         //wifi缓存 粘贴版缓存 下载的缓存

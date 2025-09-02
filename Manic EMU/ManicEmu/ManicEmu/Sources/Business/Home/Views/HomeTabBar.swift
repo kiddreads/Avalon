@@ -91,6 +91,28 @@ class HomeTabBar: UIView {
     
     enum BarSelection: Int, CaseIterable {
         case games = 0, imports, settings
+        
+        func next() -> BarSelection {
+            switch self {
+            case .games:
+                return .imports
+            case .imports:
+                return .settings
+            case .settings:
+                return .games
+            }
+        }
+        
+        func previous() -> BarSelection {
+            switch self {
+            case .games:
+                return .settings
+            case .imports:
+                return .games
+            case .settings:
+                return .imports
+            }
+        }
     }
     
     private let gamesBar = BarView(frame: .zero,

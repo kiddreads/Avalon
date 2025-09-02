@@ -391,7 +391,12 @@ static void frontend_darwin_get_env(int *argc, char *argv[],
    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_RECORD_OUTPUT], documents_dir_buf, "records", sizeof(g_defaults.dirs[DEFAULT_DIR_RECORD_OUTPUT]));
    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_RECORD_CONFIG], documents_dir_buf, "records_config", sizeof(g_defaults.dirs[DEFAULT_DIR_RECORD_CONFIG]));
     //强制将saves设置到~/Documents
-   fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SRAM], NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject.UTF8String, "/", sizeof(g_defaults.dirs[DEFAULT_DIR_SRAM]));
+   const char *custom_save_dir = get_custom_save_dir();
+   if (custom_save_dir) {
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SRAM], custom_save_dir, "/", sizeof(g_defaults.dirs[DEFAULT_DIR_SRAM]));
+   } else {
+       fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SRAM], NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,      YES).firstObject.UTF8String, "/", sizeof(g_defaults.dirs[DEFAULT_DIR_SRAM]));
+   }
    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SCREENSHOT], documents_dir_buf, "screenshots", sizeof(g_defaults.dirs[DEFAULT_DIR_SCREENSHOT]));
    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SAVESTATE], documents_dir_buf, "states", sizeof(g_defaults.dirs[DEFAULT_DIR_SAVESTATE]));
    fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SYSTEM], documents_dir_buf, "system", sizeof(g_defaults.dirs[DEFAULT_DIR_SYSTEM]));

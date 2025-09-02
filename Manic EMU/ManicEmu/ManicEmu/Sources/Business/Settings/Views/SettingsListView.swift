@@ -19,13 +19,13 @@ class SettingsListView: BaseView {
         return view
     }()
     
-    private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+    lazy var collectionView: UICollectionView = {
+        let view = NoControllCollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: SettingsItemCollectionViewCell.self)
         view.register(cellWithClass: MembershipCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: TitleBackgroundColorHaderCollectionReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundHaderReusableView.self)
         view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withClass: SettingsListFooterCollectionReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
@@ -109,6 +109,9 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .fullScreenWhenConnectController, isOn: Settings.defalut.fullScreenWhenConnectController),
                                   SettingItem(type: .bios),
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
+                                  SettingItem(type: .onlinePlay),
+                                  SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
+                                  SettingItem(type: .retro)
                 ]
 #else
                 datas[section] = [SettingItem(type: .airPlay, isOn: Settings.defalut.airPlay),
@@ -116,6 +119,9 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .fullScreenWhenConnectController, isOn: Settings.defalut.fullScreenWhenConnectController),
                                   SettingItem(type: .bios),
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
+                                  SettingItem(type: .onlinePlay),
+                                  SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
+                                  SettingItem(type: .retro)
                 ]
 #endif
             } else if section == .support {
@@ -125,7 +131,8 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .telegram),
                                   SettingItem(type: .discord)]
             } else if section == .others {
-                datas[section] = [SettingItem(type: .shareApp),
+                datas[section] = [SettingItem(type: .about),
+                                  SettingItem(type: .shareApp),
                                   SettingItem(type: .clearCache, arrowDetail: CacheManager.totleSize),
                                   SettingItem(type: .language, arrowDetail: Locale.getSystemLanguageDisplayName(preferredLanguage: Settings.defalut.language)),
                                   SettingItem(type: .userAgreement),
@@ -136,6 +143,12 @@ class SettingsListView: BaseView {
     }()
     
     private let MembershipViewHeight = 130.0
+    
+    #if SIDE_LOAD
+    private static let FooterHeight = 538.0
+    #else
+    private static let FooterHeight = 538 + Constants.Size.ContentSpaceHuge + Constants.Size.ItemHeightMax
+    #endif
     
     private var membershipNotification: Any? = nil
     
@@ -158,7 +171,11 @@ class SettingsListView: BaseView {
         addSubview(topBlurView)
         topBlurView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                make.height.equalTo(Constants.Size.ItemHeightMid)
+            } else {
+                make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
+            }
         }
         
         let headerTitleLabel = UILabel()
@@ -169,7 +186,7 @@ class SettingsListView: BaseView {
         topBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
+            make.bottom.equalToSuperview()
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -218,7 +235,7 @@ class SettingsListView: BaseView {
             
             if sectionIndex == lastSectionIndex {
                 let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                                                heightDimension: .absolute(538)),
+                                                                                                                heightDimension: .absolute(Self.FooterHeight)),
                                                                              elementKind: UICollectionView.elementKindSectionFooter,
                                                                              alignment: .bottom)
                 section.boundarySupplementaryItems.append(footerItem)
@@ -269,13 +286,30 @@ class SettingsListView: BaseView {
             addSubview(backgroundView)
             backgroundView.snp.makeConstraints { make in
                 make.top.equalToSuperview().offset(Constants.Size.ItemHeightMin)
-                make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceMin-526)
+                make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceMin-SettingsListView.FooterHeight)
                 make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             }
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    func updateViews() {
+        if UIDevice.isPhone {
+            topBlurView.snp.updateConstraints { make in
+                if UIDevice.isLandscape {
+                    make.height.equalTo(Constants.Size.ItemHeightMid)
+                } else {
+                    make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
+                }
+            }
+            if UIDevice.isLandscape {
+                collectionView.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax, right: 0)
+            } else {
+                collectionView.contentInset = UIEdgeInsets(top: Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax, right: 0)
+            }
         }
     }
 }
@@ -362,6 +396,11 @@ extension SettingsListView: UICollectionViewDataSource {
                         Settings.defalut.respectSilentMode = value
                     }
                 }
+            } else if item.type == .rumble {
+                cell.switchButton.onChange { value in
+                    //设置震动触感
+                    Settings.defalut.updateExtra(key: ExtraKey.rumble.rawValue, value: value)
+                }
             } else {
                 cell.switchButton.onChange { value in }
             }
@@ -371,8 +410,7 @@ extension SettingsListView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: TitleBackgroundColorHaderCollectionReusableView.self, for: indexPath)
-            header.titleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundHaderReusableView.self, for: indexPath)
             header.titleLabel.text = SectionIndex(rawValue: indexPath.section)?.title
             if UIDevice.isPad {
                 header.makeBlur(blurColor: Constants.Color.Background)
@@ -394,6 +432,22 @@ extension SettingsListView: UICollectionViewDelegate {
         } else {
             let item = items[SectionIndex(rawValue: indexPath.section)!]![indexPath.row]
             switch item.type {
+            case .retro:
+                let vc = RetroAchievementsViewController()
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+                
+            case .onlinePlay:
+                let vc = OnlinePlaySettingViewController(showClose: UIDevice.isPad ? false : true)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+                
             case .bios:
                 let vc = BIOSSelectionViewController(showClose: UIDevice.isPad ? false : true)
                 if UIDevice.isPad {
@@ -433,9 +487,7 @@ extension SettingsListView: UICollectionViewDelegate {
             case .telegram:
                 UIApplication.shared.open(Constants.URLs.JoinTelegram)
             case .discord:
-                UIView.makeAlert(detail: R.string.localizable.joinDiscordAlertMessage("Maftyマフティー"), confirmTitle: R.string.localizable.confirmTitle(), confirmAction: {
-                    UIApplication.shared.open(Constants.URLs.JoinDiscord)
-                })
+                UIApplication.shared.open(Constants.URLs.JoinDiscord)
             case .clearCache:
                 UIView.makeLoading()
                 CacheManager.clear { [weak self] in
@@ -460,6 +512,13 @@ extension SettingsListView: UICollectionViewDelegate {
                 
             case .privacyPolicy:
                 let vc = WebViewController(url: Constants.URLs.PrivacyPolicy, showClose: UIDevice.isPhone)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+            case .about:
+                let vc = WebViewController(url: Constants.URLs.AboutUS, showClose: UIDevice.isPhone)
                 if UIDevice.isPad {
                     didTapDetail?(vc)
                 } else {

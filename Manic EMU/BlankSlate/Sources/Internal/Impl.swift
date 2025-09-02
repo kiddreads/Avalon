@@ -214,7 +214,8 @@ extension UIView {
 
     private func makeBlankSlateView() -> BlankSlate.View {
         let view = BlankSlate.View(frame: .zero)
-        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
         view.isTouchAllowed = { [weak self] in
             guard let self, let blankSlateDelegate else { return true }

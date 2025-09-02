@@ -7,8 +7,6 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import ManicEmuCore
-import GBADeltaCore
-import GBCDeltaCore
 import MelonDSDeltaCore
 
 extension EmulatorCore {
@@ -26,7 +24,7 @@ extension EmulatorCore {
                 case .one:
                     LibretroCore.sharedInstance().fastForward(1.0)
                 case .two:
-                    LibretroCore.sharedInstance().fastForward(1.3)
+                    LibretroCore.sharedInstance().fastForward(1.4)
                 case .three:
                     LibretroCore.sharedInstance().fastForward(3.0)
                 case .four:
@@ -45,9 +43,8 @@ extension EmulatorCore {
     var maximumFastForwardSpeed: Double {
         switch self.manicCore
         {
-        case GBC.core, GBA.core, GB.core: return 5
-        case MelonDS.core where UIDevice.current.hasA15ProcessorOrBetter: return 5
-        case MelonDS.core where UIDevice.current.hasA11ProcessorOrBetter: return 3
+        case MelonDS.core where UIDevice.current.hasA15ProcessorOrBetter: return 10
+        case MelonDS.core where UIDevice.current.hasA11ProcessorOrBetter: return 5
         default: return 1
         }
     }

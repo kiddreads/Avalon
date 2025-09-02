@@ -71,7 +71,7 @@ struct ResourcesKit {
                         }
                         try archive.addEntry(with: "info.json", fileURL: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("\(reuse.name).skininfo")))
                     } catch {
-                        print("复用皮肤出错:\(error)")
+                        Log.debug("复用皮肤出错:\(error)")
                     }
                     
                     let templateFlexSkinPath = Constants.Path.Resource.appendingPathComponent("\(reuse.gameType.reuseGameType().localizedShortName)_FLEX.manicskin")
@@ -84,7 +84,7 @@ struct ResourcesKit {
                         }
                         try archive.addEntry(with: "info.json", fileURL: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("\(reuse.name)_FLEX.skininfo")))
                     } catch {
-                        print("复用皮肤出错:\(error)")
+                        Log.debug("复用皮肤出错:\(error)")
                     }
                 }
                 
@@ -104,8 +104,46 @@ struct ResourcesKit {
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/info")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("info")), shouldReplace: true)
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/autoconfig")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("autoconfig")), shouldReplace: true)
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/shaders")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("shaders")), shouldReplace: true)
-                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/system")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("system")), shouldReplace: true)
+                    try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/system")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("system")))
+                    try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/config")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("config")))
+                    
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.ThreeDSDefaultConfig), to: URL(fileURLWithPath: Constants.Path.ThreeDSConfig), shouldReplace: true)
+                    
+                    if let systemCoreVersion = UserDefaults.standard.string(forKey: Constants.DefaultKey.SystemCoreVersion) {
+                        let systemCoreVersionNumber = UInt64(systemCoreVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!
+                        if systemCoreVersionNumber < 153 {
+                            //适配PKSM 将存档位置进行调整
+                            if let contents = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.Data) {
+                                for content in contents {
+                                    var newSaveUrl: URL? = nil
+                                    if content.hasSuffix(".dsv") {
+                                        //将dsv后缀改为srm
+                                        newSaveUrl = URL(fileURLWithPath: Constants.Path.DSSavePath.appendingPathComponent("\(content.deletingPathExtension).srm"))
+                                    } else if content.hasSuffix(".gba.sav") {
+                                        //将.gba.sav 改成 .sav
+                                        newSaveUrl = URL(fileURLWithPath: Constants.Path.GBASavePath.appendingPathComponent("\(content.replacingOccurrences(of: ".gba.sav", with: ".sav"))"))
+                                    }else if content.hasSuffix(".gb.sav") {
+                                        //将.gb.sav 改成 .sav
+                                        //GB和GBC 都使用了.gb.sav的后缀格式，在这里需要将他们区分开
+                                        let gameFileName = content.deletingPathExtension
+                                        var isGBC = true
+                                        if FileManager.default.fileExists(atPath: Constants.Path.Data.appendingPathComponent(gameFileName)), gameFileName.pathExtension.lowercased() == "gb" {
+                                            isGBC = false
+                                        }
+                                        if isGBC {
+                                            newSaveUrl = URL(fileURLWithPath: Constants.Path.GBCSavePath.appendingPathComponent("\(content.replacingOccurrences(of: ".gb.sav", with: ".sav"))"))
+                                        } else {
+                                            newSaveUrl = URL(fileURLWithPath: Constants.Path.GBSavePath.appendingPathComponent("\(content.replacingOccurrences(of: ".gb.sav", with: ".sav"))"))
+                                        }
+                                    }
+                                    if let newSaveUrl {
+                                        try? FileManager.safeMoveItem(at: URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(content)), to: newSaveUrl, shouldReplace: true)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                     Log.info("资源解压成功!")
                     UserDefaults.standard.set(Constants.Config.AppVersion, forKey: Constants.DefaultKey.SystemCoreVersion)
                 } else {

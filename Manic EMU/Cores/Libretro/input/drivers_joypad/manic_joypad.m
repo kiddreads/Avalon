@@ -38,6 +38,15 @@
 #if TARGET_OS_IOS
 #include "../../configuration.h"
 
+#ifdef HAVE_COREMOTION
+#import <CoreHaptics/CoreHaptics.h>
+static CHHapticEngine *hapticEngine;
+// 使用 id 类型来避免编译错误
+static id strongRumblePlayer;
+static id weakRumblePlayer;
+static bool hapticsSupported = false;
+#endif
+
 /* TODO/FIXME - static globals */
 static uint32_t manic_buttons[MAX_USERS];
 static int16_t  manic_axes[MAX_USERS][MAX_MANIC_AXES];
@@ -186,9 +195,102 @@ static void manic_gamecontroller_joypad_poll(void) { }
 
 #endif
 
+// 创建默认的触觉模式
+#ifdef HAVE_COREMOTION
+static void manic_create_default_haptic_patterns(void) {
+    if (@available(iOS 13.0, *)) {
+        if (!hapticEngine || !hapticsSupported) return;
+        
+        // 创建强震动模式 (RETRO_RUMBLE_STRONG)
+        CHHapticEvent *strongEvent = [[CHHapticEvent alloc] initWithEventType:CHHapticEventTypeHapticTransient
+                                                                   parameters:@[
+            [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticIntensity value:1.0],
+            [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticSharpness value:0.5]
+                                                                   ]
+                                                                       relativeTime:0];
+        
+        CHHapticPattern *strongPattern = [[CHHapticPattern alloc] initWithEvents:@[strongEvent] parameters:@[] error:nil];
+        if (strongPattern) {
+            strongRumblePlayer = [hapticEngine createPlayerWithPattern:strongPattern error:nil];
+        }
+        
+        // 创建弱震动模式 (RETRO_RUMBLE_WEAK)
+        CHHapticEvent *weakEvent = [[CHHapticEvent alloc] initWithEventType:CHHapticEventTypeHapticTransient
+                                                                 parameters:@[
+            [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticIntensity value:0.5],
+            [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticSharpness value:0.3]
+                                                                 ]
+                                                                     relativeTime:0];
+        
+        CHHapticPattern *weakPattern = [[CHHapticPattern alloc] initWithEvents:@[weakEvent] parameters:@[] error:nil];
+        if (weakPattern) {
+            weakRumblePlayer = [hapticEngine createPlayerWithPattern:weakPattern error:nil];
+        }
+    }
+}
+
+// 创建自定义震动模式
+static id manic_create_custom_rumble_pattern(float intensity, float sharpness, float duration) {
+    if (@available(iOS 13.0, *)) {
+        if (!hapticEngine || !hapticsSupported) return nil;
+        
+        // 创建多个震动事件来模拟持续的震动效果
+        NSMutableArray *events = [[NSMutableArray alloc] init];
+        float eventInterval = 0.05f; // 50ms 间隔
+        int eventCount = (int)(duration / eventInterval);
+        
+        for (int i = 0; i < eventCount; i++) {
+            CHHapticEvent *event = [[CHHapticEvent alloc] initWithEventType:CHHapticEventTypeHapticTransient
+                                                                 parameters:@[
+                [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticIntensity value:intensity],
+                [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticSharpness value:sharpness]
+                                                                 ]
+                                                                     relativeTime:i * eventInterval];
+            [events addObject:event];
+        }
+        
+        CHHapticPattern *pattern = [[CHHapticPattern alloc] initWithEvents:events parameters:@[] error:nil];
+        if (pattern) {
+            return [hapticEngine createPlayerWithPattern:pattern error:nil];
+        }
+    }
+    return nil;
+}
+#endif
+
 void *manic_gamecontroller_joypad_init(void *data) {
     if (manic_inited)
         return (void*)-1;
+    
+#ifdef HAVE_COREMOTION
+    // 初始化 Core Haptics
+    if (@available(iOS 13.0, *)) {
+        if (CHHapticEngine.capabilitiesForHardware.supportsHaptics) {
+            NSError *error = nil;
+            hapticEngine = [[CHHapticEngine alloc] initAndReturnError:&error];
+            if (hapticEngine && !error) {
+                hapticEngine.autoShutdownEnabled = YES;
+                
+                // 启动 haptic engine
+                [hapticEngine startWithCompletionHandler:^(NSError * _Nullable error) {
+                    if (error) {
+                        hapticsSupported = false;
+                    } else {
+                        hapticsSupported = true;
+                        // 创建默认的震动模式
+                        manic_create_default_haptic_patterns();
+                    }
+                }];
+            } else {
+                hapticsSupported = false;
+            }
+        } else {
+            hapticsSupported = false;
+        }
+    } else {
+        hapticsSupported = false;
+    }
+#endif
     
     manic_inited = true;
     for (unsigned i = 0; i < MAX_USERS; i++) {
@@ -197,7 +299,7 @@ void *manic_gamecontroller_joypad_init(void *data) {
     return (void*)-1;
 }
 
-static void manic_gamecontroller_joypad_destroy(void) { }
+static void manic_gamecontroller_joypad_destroy(void) {}
 
 static int32_t manic_gamecontroller_joypad_button(unsigned port, uint16_t joykey) {
     if (port >= DEFAULT_MAX_PADS)
@@ -264,6 +366,85 @@ static int16_t manic_gamecontroller_joypad_state(rarch_joypad_info_t *joypad_inf
 
 static bool manic_gamecontroller_joypad_set_rumble(unsigned pad,
                                                    enum retro_rumble_effect type, uint16_t strength) {
+    if (!get_enable_rumble()) {
+        return false;
+    }
+    
+    if (@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)) {
+      for (GCController *controller in [GCController controllers]) {
+         if (!controller)
+            continue;
+         if (!controller.motion)
+             continue;
+         if (controller.motion.sensorsRequireManualActivation) {
+             controller.motion.sensorsActive = YES;
+         }
+      }
+   }
+    
+#ifdef HAVE_COREMOTION
+    if (@available(iOS 13.0, *)) {
+        if (!hapticsSupported || !hapticEngine) {
+            return false;
+        }
+        
+        // 将 16 位强度值转换为 0.0-1.0 范围
+        float normalizedStrength = (float)strength / 65535.0f;
+        
+        // 根据震动类型和强度创建相应的触觉反馈
+        switch (type) {
+            case RETRO_RUMBLE_STRONG: {
+                // 强震动 - 使用高强度和中等锐度
+                float intensity = normalizedStrength * 1.0f;
+                float sharpness = 0.7f;
+                float duration = 0.2f; // 200ms
+                
+                id player = manic_create_custom_rumble_pattern(intensity, sharpness, duration);
+                if (player) {
+                    // 使用 performSelector 来避免类型问题
+                    if ([player respondsToSelector:@selector(startAtTime:error:)]) {
+                        [player performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
+                        return true;
+                    }
+                }
+                break;
+            }
+                
+            case RETRO_RUMBLE_WEAK: {
+                // 弱震动 - 使用中等强度和低锐度
+                float intensity = normalizedStrength * 0.6f;
+                float sharpness = 0.3f;
+                float duration = 0.15f; // 150ms
+                
+                id player = manic_create_custom_rumble_pattern(intensity, sharpness, duration);
+                if (player) {
+                    if ([player respondsToSelector:@selector(startAtTime:error:)]) {
+                        [player performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
+                        return true;
+                    }
+                }
+                break;
+            }
+                
+            default:
+                return false;
+        }
+        
+        // 如果自定义模式创建失败，尝试使用默认模式
+        if (type == RETRO_RUMBLE_STRONG && strongRumblePlayer) {
+            if ([strongRumblePlayer respondsToSelector:@selector(startAtTime:error:)]) {
+                [strongRumblePlayer performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
+                return true;
+            }
+        } else if (type == RETRO_RUMBLE_WEAK && weakRumblePlayer) {
+            if ([weakRumblePlayer respondsToSelector:@selector(startAtTime:error:)]) {
+                [weakRumblePlayer performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
+                return true;
+            }
+        }
+    }
+#endif
+    
     return false;
 }
 

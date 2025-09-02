@@ -53,14 +53,39 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private var roundAndBorderView: RoundAndBorderView = {
+        let view = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
+        view.makeBlur(blurColor: Constants.Color.BackgroundSecondary)
+        return view
+    }()
+    
+    override var isSelected: Bool {
+        willSet {
+            if newValue {
+                let scale = CGAffineTransformMakeScale(1.05, 1.05)
+                self.roundAndBorderView.borderColor = .white
+                UIView.springAnimate(animations: {
+                    self.transform = scale
+                }) { _ in
+                    if self.transform != scale && self.isSelected {
+                        self.transform = scale
+                    }
+                }
+            } else {
+                self.roundAndBorderView.borderColor = Constants.Color.Border
+                UIView.springAnimate(animations: {
+                    self.transform = .identity
+                })
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         enableInteractive = true
         delayInteractiveTouchEnd = true
         
-        let roundAndBorderView = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        roundAndBorderView.makeBlur(blurColor: Constants.Color.BackgroundSecondary)
         addSubview(roundAndBorderView)
         roundAndBorderView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -115,7 +140,7 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
     }
     
     //TODO: 需要处理图片的尺寸
-    func setData(item: SettingCellItem, editable: Bool = false, isPlus: Bool = false, enable: Bool = true, mappingMode: Bool = false) {
+    func setData(item: SettingCellItem, editable: Bool = false, isPlus: Bool = false, enable: Bool = true, mappingMode: Bool = false, specialTitle: String? = nil) {
         if item.title == R.string.localizable.gameSettingQuit() {
             iconView.image = item.image.applySymbolConfig(color: Constants.Color.Red)
             titleLabel.textColor = Constants.Color.Red
@@ -123,7 +148,7 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
             iconView.image = item.image
             titleLabel.textColor = Constants.Color.LabelSecondary
         }
-        titleLabel.text = item.title
+        titleLabel.text = specialTitle ?? item.title
         if editable {
             editButton.isHidden = false
             enableInteractive = false

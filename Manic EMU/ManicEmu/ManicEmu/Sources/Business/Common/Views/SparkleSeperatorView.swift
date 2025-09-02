@@ -14,19 +14,24 @@ class SparkleSeperatorView: UIView {
         setupViews()
     }
     
-    init(color: UIColor) {
+    init(color: UIColor, lineColor: UIColor? = nil) {
         super.init(frame: .zero)
-        setupViews(color: color)
+        setupViews(color: color, lineColor: lineColor)
     }
     
-    private func setupViews(color: UIColor = Constants.Color.BackgroundPrimary) {
-        let starView = UIImageView(image: UIImage(symbol: .sparkle, color: color))
+    init(isGradient: Bool) {
+        super.init(frame: .zero)
+        setupViews(isGradient: isGradient)
+    }
+    
+    private func setupViews(color: UIColor = Constants.Color.BackgroundPrimary, lineColor: UIColor? = nil, isGradient: Bool = false) {
+        let starView = isGradient ? GradientImageView(image: UIImage(symbol: .sparkle, size: 24)) : UIImageView(image: UIImage(symbol: .sparkle, color: color))
         addSubview(starView)
         starView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
         let leftLine = UIView()
-        leftLine.backgroundColor = color
+        leftLine.backgroundColor = lineColor ?? color
         addSubview(leftLine)
         leftLine.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.BorderLineHeight)
@@ -34,7 +39,7 @@ class SparkleSeperatorView: UIView {
             make.trailing.equalTo(starView.snp.leading).offset(-Constants.Size.ContentSpaceMin)
         }
         let rightLine = UIView()
-        rightLine.backgroundColor = color
+        rightLine.backgroundColor = lineColor ?? color
         addSubview(rightLine)
         rightLine.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.BorderLineHeight)

@@ -202,6 +202,42 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>VB Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.vb</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PM Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.pm</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PS1 Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.ps1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -683,7 +719,7 @@
 				<array>
 					<string>chd</string>
 					<string>iso</string>
-					<string>mcd</string>
+					<string>mdcd</string>
 					<string>cue</string>
 					<string>m3u</string>
 				</array>
@@ -773,6 +809,7 @@
 					<string>bin</string>
 					<string>sms</string>
 					<string>bms</string>
+					<string>ms</string>
 				</array>
 			</dict>
 		</dict>
@@ -828,6 +865,75 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>VB Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.vb</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>vb</string>
+					<string>vboy</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PM Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.pm</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>min</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PS1 Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.ps1</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cue</string>
+					<string>m3u</string>
+					<string>pbp</string>
+					<string>chd</string>
+					<string>ccd</string>
+					<string>ps1</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -844,6 +950,7 @@
 				<array>
 					<string>manicskin</string>
 					<string>deltaskin</string>
+					<string>gammaskin</string>
 				</array>
 			</dict>
 		</dict>
@@ -869,6 +976,9 @@
 					<string>dsv</string>
 					<string>srm</string>
 					<string>bkr</string>
+					<string>eep</string>
+					<string>mcd</string>
+					<string>mcr</string>
 				</array>
 			</dict>
 		</dict>
@@ -915,6 +1025,7 @@
 				<array>
 					<string>bin</string>
 					<string>ic1</string>
+					<string>sbi</string>
 				</array>
 			</dict>
 		</dict>

@@ -245,6 +245,10 @@ public extension EmulatorCore {
     }
     
     public func save() {
+        let parentUrl = gameSaveURL.deletingLastPathComponent()
+        if !FileManager.default.fileExists(atPath: parentUrl.path) {
+            try! FileManager.default.createDirectory(at: parentUrl, withIntermediateDirectories: true)
+        }
         manicCore.emulatorConnector.saveGameSave(to: gameSaveURL)
         saveHandler?(self)
     }
@@ -428,6 +432,13 @@ extension EmulatorCore: ControllerReceiverProtocol {
         }
         
         gameControllers.add(gameController)
+        
+//        if let input = mappedInput(for: controllerInput) {
+//            print(">>>>controllerInput:\(controllerInput) \(controllerInput.type)\n mappedInput:\(input) \(input.type)")
+//        } else {
+//            print(">>>>controllerInput:\(controllerInput) \(controllerInput.type)\n 映射失败")
+//        }
+        
         
         guard let input = mappedInput(for: controllerInput), input.type == .game(gameType) else { return }
         

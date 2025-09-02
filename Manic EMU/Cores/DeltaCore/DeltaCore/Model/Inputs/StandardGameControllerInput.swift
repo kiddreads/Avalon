@@ -43,11 +43,18 @@ public enum StandardGameControllerInput: String, Codable
     case blowing
     case palette
     case swapDisk
+    case toggleAnalog
+    case retroAchievements
 
     case up
     case down
     case left
     case right
+    
+    case rightDpadUp
+    case rightDpadDown
+    case rightDpadLeft
+    case rightDpadRight
     
     case leftThumbstickUp
     case leftThumbstickDown
@@ -61,8 +68,10 @@ public enum StandardGameControllerInput: String, Codable
     
     case a
     case b
+    case c
     case x
     case y
+    case z
     
     case start
     case select

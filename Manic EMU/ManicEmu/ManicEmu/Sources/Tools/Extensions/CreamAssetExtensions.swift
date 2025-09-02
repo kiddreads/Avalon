@@ -28,4 +28,10 @@ extension CreamAsset: ObjectUpdatable {
         }
         realm.delete(assets)
     }
+    
+    func getExtra(key: String) -> Any? {
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {}
 }

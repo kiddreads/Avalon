@@ -56,9 +56,29 @@ struct Database {
                     }
                     //添加默认皮肤
                     let genDefaultSkins = generateDefaultSkins()
+                    
+                    var newSkinConfig: String? = nil
+                    if let oldSkinConfigs = SkinConfig.deserialize(from: oldSettings.skinConfig),
+                       var newSkinConfigs = SkinConfig.deserialize(from: genDefaultSkins.defaultSkinMap) {
+                        newSkinConfigs.portraitSkins.forEach { key, newValue in
+                            if let oldValue = oldSkinConfigs.portraitSkins[key], oldValue != newValue {
+                                Log.debug("保留竖屏旧皮肤默认设置:\(key)")
+                                newSkinConfigs.portraitSkins[key] = oldValue
+                            }
+                        }
+                        newSkinConfigs.landscapeSkins.forEach { key, newValue in
+                            if let oldValue = oldSkinConfigs.landscapeSkins[key], oldValue != newValue {
+                                Log.debug("保留横屏旧皮肤默认设置:\(key)")
+                                newSkinConfigs.landscapeSkins[key] = oldValue
+                            }
+                        }
+                        newSkinConfig = newSkinConfigs.toJSONString()
+                    }
+                    
+                    
                     try? realm.write {
                         realm.add(genDefaultSkins.defaultSkins)
-                        oldSettings.skinConfig = genDefaultSkins.defaultSkinMap
+                        oldSettings.skinConfig = newSkinConfig ?? genDefaultSkins.defaultSkinMap
                     }
                 }
                 
@@ -133,23 +153,26 @@ struct Database {
                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
             }
             
-            //调整1.4.0的gameType问题
-            let mds = realm.objects(Game.self).where { $0.gameType == .md && ($0.fileExtension.equals("chd", options: .caseInsensitive) || $0.fileExtension.equals("32x", options: .caseInsensitive)) }
-            if mds.count > 0 {
-                try? realm.write {
-                    for md in mds {
-                        if md.fileExtension.lowercased() == "chd" {
-                            md.gameType = .mcd
-                        } else if md.fileExtension.lowercased() == "32x" {
-                            md.gameType = ._32x
-                        }
-                    }
-                }
-            }
-            
             if let systemCoreVersion = UserDefaults.standard.string(forKey: Constants.DefaultKey.SystemCoreVersion) {
                 //如果存在版本记录，说明是旧版本升级到新版本，需要处理一下
                 let systemCoreVersionNumber = UInt64(systemCoreVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!
+                
+                if systemCoreVersionNumber < 141 {
+                    //调整1.4.0的gameType问题
+                    let mds = realm.objects(Game.self).where { $0.gameType == .md && ($0.fileExtension.equals("chd", options: .caseInsensitive) || $0.fileExtension.equals("32x", options: .caseInsensitive)) }
+                    if mds.count > 0 {
+                        try? realm.write {
+                            for md in mds {
+                                if md.fileExtension.lowercased() == "chd" {
+                                    md.gameType = .mcd
+                                } else if md.fileExtension.lowercased() == "32x" {
+                                    md.gameType = ._32x
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 
                 if systemCoreVersionNumber < 142 {
                     //调整土星的默认使用核心
@@ -183,6 +206,62 @@ struct Database {
                                 gbc.gameType = .gb
                             }
                         })
+                    }
+                }
+                
+                if systemCoreVersionNumber < 155 {
+                    let allSkins = realm.objects(Skin.self)
+                    //调整skinType
+                    //.buildIn的值等于原来的.manic .import等于原来的.delta
+                    let oldSkins = allSkins.where({ $0.skinType == .buildIn || $0.skinType == .import })
+                    try? realm.write({
+                        for oldSkin in oldSkins {
+                            if !oldSkin.fileName.contains("_FLEX.manicskin") {
+                                oldSkin.skinType = .import
+                            }
+                        }
+                    })
+                    
+                    //修复可能皮肤的identifier相同的错误
+                    let defaultSkins = allSkins.where({ $0.skinType == .default })
+                    for defaultSkin in defaultSkins {
+                        let otherSkins = allSkins.where({ $0.identifier == defaultSkin.identifier && $0.skinType != .default && $0.gameType == defaultSkin.gameType })
+                        if otherSkins.count > 0 {
+                            for (index, otherSkin) in otherSkins.enumerated() {
+                                try? realm.write {
+                                    otherSkin.identifier = otherSkin.identifier + "_\(index)"
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if systemCoreVersionNumber < 161 {
+                    //调整snes gba的默认核心
+                    let games = realm.objects(Game.self).where({ $0.gameType == .snes || $0.gameType == .gba })
+                    if games.count > 0 {
+                        try? realm.write({
+                            for g in games {
+                                if g.gameSaveStates.count > 0 {
+                                    g.defaultCore = 1
+                                } else if g.gameType == .snes {
+                                    //如果将snes游戏迁移至bsnes 则将存档文件从Snes9x迁移到bsnes
+                                    let oldSaveUrl = URL(fileURLWithPath: Constants.Path.Snes9x.appendingPathComponent("\(g.name).srm"))
+                                    if FileManager.default.fileExists(atPath: oldSaveUrl.path) {
+                                        try? FileManager.safeMoveItem(at: oldSaveUrl, to: URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(g.name).srm")), shouldReplace: true)
+                                    }
+                                }
+                            }
+                        })
+                        
+                        //将存档文件都进行核心标记
+                        for g in games {
+                            if g.gameSaveStates.count > 0 {
+                                for s in g.gameSaveStates {
+                                    s.updateExtra(key: ExtraKey.saveStateCore.rawValue, value: 1)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -260,7 +339,7 @@ struct Database {
                             Log.debug("皮肤:\(skin.name)已存在")
                         } else {
                             //有可能是更新了皮肤
-                            var newSkinType = SkinType.manic
+                            var newSkinType = SkinType.buildIn
                             let oldSkins = realm.objects(Skin.self).where { $0.identifier == controllerSkin.identifier }
                             if oldSkins.count > 0 {
                                 newSkinType = oldSkins.first!.skinType

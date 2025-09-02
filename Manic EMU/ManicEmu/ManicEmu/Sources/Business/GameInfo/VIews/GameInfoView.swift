@@ -40,17 +40,20 @@ class GameInfoView: BaseView {
         return view
     }()
     
-    private lazy var threeDSAdvancedButton: HowToButton = {
-        let view = HowToButton(title: Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()) { [weak self] in
+    private lazy var infoButton: SymbolButton = {
+        let view = SymbolButton(image: UIImage(symbol: .info, font: Constants.Font.body(weight: .bold)))
+        view.enableRoundCorner = true
+        view.addTapGesture { [weak self] gesture in
             guard let self else { return }
-            Settings.change { realm in
-                Settings.defalut.threeDSAdvancedSettingMode.toggle()
+            if !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowJumpGameInfoAlert) {
+                UIView.makeAlert(title: R.string.localizable.jumpTips(), detail: R.string.localizable.thirdPartGameInfoTips(), cancelTitle: R.string.localizable.gotIt(), hideAction: {
+                    UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowJumpGameInfoAlert)
+                    topViewController(appController: true)?.present(WebViewController(searchGame: self.game), animated: true)
+                })
+            } else {
+                topViewController()?.present(WebViewController(searchGame: self.game), animated: true)
             }
-            self.threeDSAdvancedButton.label.text = Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()
-            self.gameInfoView?.update3DSFunctionButton()
         }
-        view.label.font = Constants.Font.body(size: .l)
-        view.label.textColor = Constants.Color.LabelPrimary
         return view
     }()
     
@@ -223,13 +226,11 @@ class GameInfoView: BaseView {
                 make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
             }
             
-            if game.gameType == ._3ds {
-                addSubview(threeDSAdvancedButton)
-                threeDSAdvancedButton.snp.makeConstraints { make in
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-                    make.centerY.equalTo(closeButton)
-                    make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-                }
+            addSubview(infoButton)
+            infoButton.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
             }
         }
     }
@@ -342,10 +343,26 @@ extension GameInfoView: UICollectionViewDataSource {
                     guard let self = self else { return }
                     let state = (self.isManualGameSaveStatesPage ? self.manualGameSaveStates : self.autoGameSaveStates)[indexPath.row]
                     func loadState() {
-                        if self.showGameSaveOnly {
-                            self.forGamingSelection?(state)
+                        let supportCores = self.game.gameType.supportCores
+                        let saveSateCore = state.getExtraInt(key: ExtraKey.saveStateCore.rawValue) ?? 0
+                        if supportCores.count > 0,
+                            saveSateCore != self.game.defaultCore {
+                            //由不同核心创建的state 需要提示
+                            UIView.makeAlert(title: R.string.localizable.gameSaveUnCompatibleTitle(),
+                                             detail: R.string.localizable.saveStateCoreUnCompatible(supportCores[saveSateCore], supportCores[self.game.defaultCore]),
+                                             confirmTitle: R.string.localizable.gameSaveStateForceLoad(), confirmAction: {
+                                if self.showGameSaveOnly {
+                                    self.forGamingSelection?(state)
+                                } else {
+                                    PlayViewController.startGame(game: self.game, saveState: state)
+                                }
+                            })
                         } else {
-                            PlayViewController.startGame(game: self.game, saveState: state)
+                            if self.showGameSaveOnly {
+                                self.forGamingSelection?(state)
+                            } else {
+                                PlayViewController.startGame(game: self.game, saveState: state)
+                            }
                         }
                     }
                     if state.isCompatible {
@@ -356,7 +373,6 @@ extension GameInfoView: UICollectionViewDataSource {
                             loadState()
                         })
                     }
-                    
                 }
                 return cell
             }

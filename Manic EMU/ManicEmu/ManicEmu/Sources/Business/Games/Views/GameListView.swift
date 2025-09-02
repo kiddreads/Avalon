@@ -15,6 +15,7 @@ import Fireworks
 import VisualEffectView
 import IceCream
 import Kingfisher
+import KeyboardKit
 
 class GameListView: BaseView {
     lazy var collectionView: BlankSlateCollectionView = {
@@ -32,6 +33,28 @@ class GameListView: BaseView {
         let bottom = Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax
         view.contentInset = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
         view.blankSlateView = GamesListBlankSlateView()
+        view.isOrthogonalSection = { [weak self] section in
+            guard let self else { return false }
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                return true
+            }
+            return false
+        }
+        view.buttonPress = { [weak self] key in
+            guard let self else { return }
+            if key == .a {
+                if let selectedItems = self.collectionView.indexPathsForSelectedItems,
+                    selectedItems.count == 1,
+                    let selectedItem = selectedItems.first {
+                    self.controllerButtonPress = true
+                    let _ = self.collectionView(self.collectionView, shouldSelectItemAt: selectedItem)
+                    self.controllerButtonPress = false
+                }
+                
+            } else if key == .b {
+                self.collectionView.selectItem(at: nil, animated: true, scrollPosition: [])
+            }
+        }
         return view
     }()
     
@@ -109,20 +132,42 @@ class GameListView: BaseView {
     
     ///UI辅助
     private var lastContentOffsetY = 0.0
-    private let gamesNavigationBottom = (Constants.Size.SafeAera.top > 0 ? Constants.Size.SafeAera.top : Constants.Size.ContentSpaceMax) + Constants.Size.ItemHeightMid
-    private var gamesToolBottom: CGFloat { gamesNavigationBottom + Constants.Size.ItemHeightHuge }
+    private var lastSelectSection = 0
+    private var gamesNavigationBottom: CGFloat {
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            return Constants.Size.ItemHeightMid
+        } else {
+            return (Constants.Size.SafeAera.top > 0 ? Constants.Size.SafeAera.top : Constants.Size.ContentSpaceMax) + Constants.Size.ItemHeightMid
+        }
+    }
+    private var gamesToolBottom: CGFloat {
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            return gamesNavigationBottom
+        } else {
+            return gamesNavigationBottom + Constants.Size.ItemHeightHuge
+        }
+    }
+    private var landscapePhonePagingHeight = 0.0
+    private var controllerButtonPress: Bool = false
     
     private var gameCoverChangeNotification: Any? = nil
     private var platformOrderChangeNotification: Any? = nil
     private var platformSelectionNotification: Any? = nil
     private var gameListStyleChangeNotification: Any? = nil
+    private var keyboardDidConnectNotification: Any? = nil
+    private var keyboardDidDisConnectNotification: Any? = nil
+    private var gameControllerDidConnectNotification: Any? = nil
+    private var gameControllerDidDisConnectNotification: Any? = nil
+    private var stopPlayGameNotification: Any? = nil
+    private var gameSortChangeNotification: Any? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         Log.debug("\(String(describing: Self.self)) init")
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.equalToSuperview().offset(0)
+            make.top.bottom.equalToSuperview()
         }
         
         addSubview(indexView)
@@ -158,6 +203,34 @@ class GameListView: BaseView {
             self.collectionView.reloadData()
             self.reloadIndexView()
         }
+        
+        if UIDevice.isPhone {
+            gameControllerDidConnectNotification = NotificationCenter.default.addObserver(forName: .externalGameControllerDidConnect, object: nil, queue: .main) { [weak self] notification in
+                self?.collectionView.reloadData()
+            }
+            gameControllerDidDisConnectNotification = NotificationCenter.default.addObserver(forName: .externalGameControllerDidDisconnect, object: nil, queue: .main) { [weak self] notification in
+                self?.collectionView.reloadData()
+            }
+            keyboardDidConnectNotification = NotificationCenter.default.addObserver(forName: .externalKeyboardDidConnect, object: nil, queue: .main) { [weak self] notification in
+                self?.collectionView.reloadData()
+            }
+            keyboardDidDisConnectNotification = NotificationCenter.default.addObserver(forName: .externalKeyboardDidDisconnect, object: nil, queue: .main) { [weak self] notification in
+                self?.collectionView.reloadData()
+            }
+        }
+        
+        //监听结束游戏
+        stopPlayGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StopPlayGame, object: nil, queue: .main) { [weak self] notification in
+            self?.collectionView.reloadData()
+        }
+        
+        //游戏排序变更
+        gameSortChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GameSortChange, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            self.updateDatas()
+            self.collectionView.reloadData()
+            self.reloadIndexView()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -180,6 +253,21 @@ class GameListView: BaseView {
         
         if let gameListStyleChangeNotification = gameListStyleChangeNotification {
             NotificationCenter.default.removeObserver(gameListStyleChangeNotification)
+        }
+        if let keyboardDidConnectNotification {
+            NotificationCenter.default.removeObserver(keyboardDidConnectNotification)
+        }
+        if let keyboardDidDisConnectNotification {
+            NotificationCenter.default.removeObserver(keyboardDidDisConnectNotification)
+        }
+        if let gameControllerDidConnectNotification {
+            NotificationCenter.default.removeObserver(gameControllerDidConnectNotification)
+        }
+        if let gameControllerDidDisConnectNotification {
+            NotificationCenter.default.removeObserver(gameControllerDidDisConnectNotification)
+        }
+        if let stopPlayGameNotification {
+            NotificationCenter.default.removeObserver(stopPlayGameNotification)
         }
     }
     
@@ -226,12 +314,62 @@ class GameListView: BaseView {
     ///构造符合UI展示的数据源
     private func updateDatas() {
         let groupGames = Dictionary(grouping: games, by: { $0.gameType })
-        normalDatas = groupGames.mapValues { $0.sorted(by: { $0.name < $1.name }) } // 数据结果 [GameType: [Game]]
+        // 数据结果 [GameType: [Game]]
+        let sortType = GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0) ?? .title
+        let sortOrder = GameSortOrder(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortOrder.rawValue) ?? 0) ?? .ascending
+        normalDatas = groupGames.mapValues { $0.sorted(by: {
+            if $0.gameType == .ds {
+                //特殊处理NDS排序 总是保证Home Menu排在首位
+                let priority: [String: Int] = [ Game.DsHomeMenuPrimaryKey: 0, Game.DsiHomeMenuPrimaryKey: 1 ]
+                let lhsPriority = priority[$0.id] ?? Int.max
+                    let rhsPriority = priority[$1.id] ?? Int.max
+                    if lhsPriority != rhsPriority {
+                        return lhsPriority < rhsPriority
+                    } else {
+                        //和其他机型一样
+                        return self.sortDatas(game1: $0, game2: $1, sortType: sortType, sortOrder: sortOrder)
+                    }
+            } else {
+                return self.sortDatas(game1: $0, game2: $1, sortType: sortType, sortOrder: sortOrder)
+            }
+        }) }
+        
         if isSearchMode {
             //如果当前处于搜索模式 则搜索数据也进行更新
             updateSearchDatas()
         }
         didDatasUpdate?(normalDatas.isEmpty)
+    }
+    
+    private func sortDatas(game1: Game, game2: Game, sortType: GameSortType, sortOrder: GameSortOrder) -> Bool {
+        switch sortType {
+        case .title:
+            if sortOrder == .ascending {
+                return game1.name < game2.name
+            } else {
+                return game1.name > game2.name
+            }
+        case .latestPlayed:
+            let game1LatestPlayTime = (game1.latestPlayDate ?? Date(timeIntervalSince1970: 0)).timeIntervalSinceNow
+            let game2LatestPlayTime = (game2.latestPlayDate ?? Date(timeIntervalSince1970: 0)).timeIntervalSinceNow
+            if sortOrder == .ascending {
+                return game1LatestPlayTime < game2LatestPlayTime
+            } else {
+                return game1LatestPlayTime > game2LatestPlayTime
+            }
+        case .addTime:
+            if sortOrder == .ascending {
+                return game1.importDate.timeIntervalSinceNow > game2.importDate.timeIntervalSinceNow
+            } else {
+                return game1.importDate.timeIntervalSinceNow < game2.importDate.timeIntervalSinceNow
+            }
+        case .playTime:
+            if sortOrder == .ascending {
+                return game1.totalPlayDuration < game2.totalPlayDuration
+            } else {
+                return game1.totalPlayDuration > game2.totalPlayDuration
+            }
+        }
     }
     
     ///构造符合搜索UI展示的数据源
@@ -256,53 +394,83 @@ class GameListView: BaseView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout  { [weak self] sectionIndex, env in
             guard let self = self else { return nil }
-            //section的边距
-            let sectionInset = Constants.Size.ContentSpaceHuge
-            let itemSpacing = Constants.Size.ContentSpaceMax - Constants.Size.GamesListSelectionEdge*2
-            var column = Constants.Size.GamesPerRow
-            if UIDevice.isPad {
-                column = UIDevice.isLandscape ? 3 : (UIDevice.isPadMini ? 4 : 5 )
-            }
-            let widthDimension: NSCollectionLayoutDimension = .fractionalWidth(1/column)
-            //item布局
-            let totleSpacing = (Constants.Size.ContentSpaceHuge-Constants.Size.GamesListSelectionEdge)*2 + itemSpacing*(column-1)//横向间距总和
-            let itemEstimatedWidth = (env.container.contentSize.width - totleSpacing)/column //一个item的宽
+            let isLandscapePhone = UIDevice.isPhone && UIDevice.isLandscape
             let gameType = self.sortDatasKeys()[sectionIndex]
-            let coverWidth = itemEstimatedWidth-Constants.Size.GamesListSelectionEdge*2
-            let coverHeight = coverWidth/Constants.Size.GameCoverRatio(gameType: gameType) //书籍封面的高度
-            //一个item的高度 = 间距 + 封面高度 + 间距 + title高度 + 间距
-            let itemEstimatedHeight = Constants.Size.GamesListSelectionEdge + coverHeight + (self.isSearchMode || !Constants.Size.GamesHideTitle ? Constants.Size.ContentSpaceMin + Constants.Font.body().lineHeight : 0) + Constants.Size.GamesListSelectionEdge
-            let coverSize = CGSize(width: coverWidth, height: coverHeight)
-            if let size =  self.coverSizes[gameType] {
-                //尺寸存在
-                if size != coverSize {
+            let itemSpacing = Constants.Size.ContentSpaceMax - Constants.Size.GamesListSelectionEdge*2
+            let sectionInset = Constants.Size.ContentSpaceHuge
+            
+            //group布局
+            let group: NSCollectionLayoutGroup
+            if isLandscapePhone {
+                let itemEstimatedHeight = min(env.container.contentSize.height, env.container.contentSize.width) - Constants.Size.ItemHeightMid - Constants.Size.ItemHeightMin - 106
+                self.landscapePhonePagingHeight = Constants.Size.ItemHeightMid + Constants.Size.ContentSpaceUltraTiny + itemEstimatedHeight + Constants.Size.ContentSpaceHuge*2
+                let coverHeight = itemEstimatedHeight - Constants.Size.GamesListSelectionEdge - (self.isSearchMode || !Constants.Size.GamesHideTitle ? Constants.Size.ContentSpaceMin + Constants.Font.body().lineHeight : 0) - Constants.Size.GamesListSelectionEdge
+                let coverWidth = coverHeight
+                let itemEstimatedWidth = coverWidth + Constants.Size.GamesListSelectionEdge*2
+                let coverSize = CGSize(width: coverWidth, height: coverHeight)
+                if let size =  self.coverSizes[gameType] {
+                    //尺寸存在
+                    if size != coverSize {
+                        self.coverSizes[gameType] = coverSize
+                    }
+                } else {
+                    //尺寸不存在
                     self.coverSizes[gameType] = coverSize
                 }
+                let newItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                        heightDimension: .fractionalHeight(1)))
+                
+                group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(itemEstimatedWidth),
+                                                                                              heightDimension: .absolute(itemEstimatedHeight)),
+                                                           subitems: [newItem])
             } else {
-                //尺寸不存在
-                self.coverSizes[gameType] = coverSize
-            }
-            
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: widthDimension,
-                                                                                 heightDimension: .absolute(itemEstimatedHeight)))
-            //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                var column = Constants.Size.GamesPerRow
+                if UIDevice.isPad {
+                    column = UIDevice.isLandscape ? 3 : (UIDevice.isPadMini ? 4 : 5 )
+                }
+                let widthDimension: NSCollectionLayoutDimension = .fractionalWidth(1/column)
+                //item布局
+                let totleSpacing = (Constants.Size.ContentSpaceHuge-Constants.Size.GamesListSelectionEdge)*2 + itemSpacing*(column-1)//横向间距总和
+                let itemEstimatedWidth = (env.container.contentSize.width - totleSpacing)/column //一个item的宽
+                let coverWidth = itemEstimatedWidth-Constants.Size.GamesListSelectionEdge*2
+                let coverHeight = coverWidth/Constants.Size.GameCoverRatio(gameType: gameType) //书籍封面的高度
+                //一个item的高度 = 间距 + 封面高度 + 间距 + title高度 + 间距
+                let itemEstimatedHeight = Constants.Size.GamesListSelectionEdge + coverHeight + (self.isSearchMode || !Constants.Size.GamesHideTitle ? Constants.Size.ContentSpaceMin + Constants.Font.body().lineHeight : 0) + Constants.Size.GamesListSelectionEdge
+                let coverSize = CGSize(width: coverWidth, height: coverHeight)
+                if let size =  self.coverSizes[gameType] {
+                    //尺寸存在
+                    if size != coverSize {
+                        self.coverSizes[gameType] = coverSize
+                    }
+                } else {
+                    //尺寸不存在
+                    self.coverSizes[gameType] = coverSize
+                }
+                
+                let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: widthDimension,
+                                                                                     heightDimension: .absolute(itemEstimatedHeight)))
+                group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                               heightDimension: .absolute(itemEstimatedHeight)),
                                                            subitem: item, count: Int(column))
-            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(itemSpacing)
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                          leading: sectionInset-Constants.Size.GamesListSelectionEdge,
-                                                          bottom: 0,
-                                                          trailing: sectionInset-Constants.Size.GamesListSelectionEdge)
+                
+                group.interItemSpacing = NSCollectionLayoutSpacing.fixed(itemSpacing)
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: sectionInset-Constants.Size.GamesListSelectionEdge,
+                                                              bottom: 0,
+                                                              trailing: sectionInset-Constants.Size.GamesListSelectionEdge)
+            }
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
+            if isLandscapePhone {
+                section.orthogonalScrollingBehavior = .continuous
+            }
             section.interGroupSpacing = itemSpacing
             section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceUltraTiny,
-                                                            leading: 0,
-                                                            bottom: (sectionIndex != (self.normalDatas.count - 1)) ? Constants.Size.ContentSpaceHuge : 0,
-                                                            trailing: 0)
-            if self.isSearchMode || !Constants.Size.GamesHideGroupTitle {
+                                                            leading: isLandscapePhone ? Constants.Size.SafeAera.left : 0,
+                                                            bottom: (sectionIndex != (self.normalDatas.count - 1)) ? (isLandscapePhone ? Constants.Size.ContentSpaceHuge*2 : Constants.Size.ContentSpaceHuge) : 0,
+                                                            trailing: isLandscapePhone ? Constants.Size.SafeAera.right : 0)
+            if self.isSearchMode || !Constants.Size.GamesHideGroupTitle || isLandscapePhone {
                 //header布局
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                                                 heightDimension: .estimated(Constants.Size.ItemHeightMin)),
@@ -312,7 +480,7 @@ class GameListView: BaseView {
                 section.boundarySupplementaryItems = [headerItem]
             }
             
-            if !self.isSearchMode && sectionIndex == self.normalDatas.count - 1 && self.collectionView.numberOfItems() > Constants.Numbers.RandomGameLimit {
+            if !self.isSearchMode && sectionIndex == self.normalDatas.count - 1 && self.collectionView.numberOfItems() > Constants.Numbers.RandomGameLimit && !isLandscapePhone {
                 //最后一个section添加footer
                 let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                                                 heightDimension: .absolute(55)),
@@ -396,7 +564,11 @@ class GameListView: BaseView {
         indexView.reloadData()
         indexView.deselectCurrentItem()
         indexView.selectItem(at: 0)
-        indexView.isHidden = Constants.Size.GamesHideScrollIndicator
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            indexView.isHidden = true
+        } else {
+            indexView.isHidden = Constants.Size.GamesHideScrollIndicator
+        }
     }
     
     func editGame(item: GameEditToolItem, indexPath: IndexPath? = nil) {
@@ -512,6 +684,27 @@ class GameListView: BaseView {
             })
         }
     }
+    
+    func updateRotation() {
+        if UIDevice.isPhone {
+            collectionView.snp.updateConstraints { make in
+                make.leading.equalToSuperview().offset(-Constants.Size.SafeAera.left)
+                make.trailing.equalToSuperview().offset(Constants.Size.SafeAera.right)
+            }
+            DispatchQueue.main.asyncAfter(delay: 0.35) { [weak self] in
+                guard let self else { return }
+                self.collectionView.reloadData {
+                    if UIDevice.isLandscape {
+                        self.collectionView.contentInset.top = self.gamesNavigationBottom
+                        if self.normalDatas.count > 0 {
+                            self.collectionView.scrollToItem(at: IndexPath(row: 0, section: self.lastSelectSection), at: .top, animated: true)
+                        }
+                    }
+                }
+                self.reloadIndexView()
+            }
+        }
+    }
 }
 
 extension GameListView: UICollectionViewDataSource {
@@ -586,7 +779,7 @@ extension GameListView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: GameCollectionViewCell.self, for: indexPath)
         if let game = getGame(at: indexPath) {
-            cell.setData(game: game, isSelect: isSelectionMode, highlightString: searchString, coverSize: coverSizes[game.gameType] ?? .zero, showTitle: !Constants.Size.GamesHideTitle || isSearchMode)
+            cell.setData(game: game, isSelect: isSelectionMode, highlightString: searchString, coverSize: coverSizes[game.gameType] ?? .zero, showTitle: !Constants.Size.GamesHideTitle || isSearchMode, indexPath: indexPath)
         }
         return cell
     }
@@ -596,7 +789,7 @@ extension GameListView: UICollectionViewDataSource {
             //header
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: GamesCollectionReusableView.self, for: indexPath)
             let gameType = sortDatasKeys()[indexPath.section]
-            header.setData(gameType: gameType, highlightString: searchString)
+            header.setData(gameType: gameType, highlightString: searchString, contentInsets: UIDevice.isPhone && UIDevice.isLandscape ? .init(top: 0, left: Constants.Size.SafeAera.left, bottom: 0, right: Constants.Size.SafeAera.right) : .zero)
             if gameType == .unknown {
                 header.skinButton.isHidden = true
             } else {
@@ -620,7 +813,7 @@ extension GameListView: UICollectionViewDataSource {
                 self.fireworks.addFireworks(count: 2, around: header.iconImage)
                 header.iconImage.rotateShake(completion: { [weak self] in
                     guard let self = self else { return }
-                    let randomSection = 0//Int(arc4random()) % self.normalDatas.count
+                    let randomSection = Int(arc4random()) % self.normalDatas.count
                     if let games = self.normalDatas[self.sortDatasKeys()[randomSection]] {
                         let randomGame = games[Int(arc4random()) % games.count]
                         Log.debug("开始随机游戏:\(randomGame.aliasName ?? randomGame.name)")
@@ -665,14 +858,27 @@ extension GameListView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         if isSelectionMode {
-            if let game = getGame(at: indexPath), game.gameType == .unknown {
-                UIView.makeToast(message: R.string.localizable.unknownPlatformGameSelectWarn())
-                return false
+            if let game = getGame(at: indexPath) {
+                if game.gameType == .unknown {
+                    UIView.makeToast(message: R.string.localizable.unknownPlatformGameSelectWarn())
+                    return false
+                } else if game.id == Game.DsHomeMenuPrimaryKey || game.id == Game.DsiHomeMenuPrimaryKey {
+                    UIView.makeToast(message: R.string.localizable.homeMenuSelectWarn())
+                    return false
+                }
             }
             return true
         }
         if let game = getGame(at: indexPath) {
-            if Settings.defalut.quickGame {
+            if game.isNDSHomeMenuGame {
+                let biosCompletion = game.gameType.isNDSBiosComplete()
+                if (game.id == Game.DsHomeMenuPrimaryKey && !biosCompletion.isDSComplete) || (game.id == Game.DsiHomeMenuPrimaryKey && !biosCompletion.isDsiComplete) {
+                    //弹出bios导入页面
+                    topViewController(appController: true)?.present(BIOSSelectionViewController(gameType: game.gameType), animated: true)
+                } else {
+                    PlayViewController.startGame(game: game)
+                }
+            } else if Settings.defalut.quickGame || controllerButtonPress {
                 PlayViewController.startGame(game: game)
             } else {
                 if game.gameType == .unknown {
@@ -758,6 +964,37 @@ extension GameListView: UICollectionViewDelegate {
             guard !(self.indexView.selectedItem?.isEqual(item) ?? false) else { return }
             self.indexView.deselectCurrentItem()
             self.indexView.selectItem(at: pinnedSection)
+            self.lastSelectSection = pinnedSection
+        }
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            targetContentOffset.pointee = scrollView.contentOffset
+            
+            let contentInsetTop: CGFloat = scrollView.contentInset.top
+            let adjustedOffsetY = scrollView.contentOffset.y + contentInsetTop + Constants.Size.ItemHeightMid
+            let sectionFullHeight = landscapePhonePagingHeight
+            let currentSectionFloat = adjustedOffsetY / sectionFullHeight
+            let isScrollingDown = velocity.y > 0
+            let isScrollingUp = velocity.y < 0
+            
+            var targetSection = Int(round(currentSectionFloat))
+            
+            // 根据速度判断是否翻页
+            if abs(velocity.y) > 0.5 {
+                if isScrollingDown {
+                    targetSection = Int(floor(currentSectionFloat)) + 1
+                } else if isScrollingUp {
+                    targetSection = Int(ceil(currentSectionFloat)) - 1
+                }
+            }
+            
+            // 限制范围
+            targetSection = max(0, min(targetSection, collectionView.numberOfSections - 1))
+            
+            // 可选：如果你仍想使用 scrollToItem，也可以这样写
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: targetSection), at: .top, animated: true)
         }
     }
     
@@ -770,30 +1007,43 @@ extension GameListView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         guard selectionMode == .normalMode, let indexPath = indexPaths.first else { return nil }
         
-        let editItems = GameEditToolItem.singleGameEditItems
-        var firstGroup: [UIMenuElement] = []
-        var secondGroup: [UIMenuElement] = []
-        var thirdGroup: [UIMenuElement] = []
-        for (index, editItem) in editItems.enumerated() {
-            let action = UIAction(title: editItem.title, image: editItem.image, attributes: editItem == .delete ? .destructive : []) { [weak self] _ in
-                guard let self = self else { return }
-                self.editGame(item: editItems[index], indexPath: indexPath)
-            }
-            if index < 4 {
-                //0-3为一组
-                firstGroup.append(action)
-            } else if index < 7 {
-                //4-6为一组
-                secondGroup.append(action)
-            } else {
-                //删除按钮为单独一组
-                thirdGroup.append(action)
-            }
-        }
-
         if let game = getGame(at: indexPath), let imageView = (collectionView.cellForItem(at: indexPath) as? GameCollectionViewCell)?.imageView {
             
-            if game.gameType == .unknown {
+            let editItems = GameEditToolItem.singleGameEditItems
+            var firstGroup: [UIMenuElement] = []
+            var secondGroup: [UIMenuElement] = []
+            var thirdGroup: [UIMenuElement] = []
+            for (index, editItem) in editItems.enumerated() {
+                let action = UIAction(title: editItem.title, image: editItem.image, attributes: editItem == .delete ? .destructive : []) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editGame(item: editItems[index], indexPath: indexPath)
+                }
+                if index < 4 {
+                    //0-3为一组
+                    firstGroup.append(action)
+                } else if index < 7 {
+                    //4-6为一组
+                    secondGroup.append(action)
+                } else {
+                    //删除按钮为单独一组
+                    thirdGroup.append(action)
+                }
+            }
+            
+            if game.isNDSHomeMenuGame {
+                //NDS Home Menu只保留删除操作
+                return UIContextMenuConfiguration(previewProvider: {
+                    let previewImageView = imageView.snapshotView(afterScreenUpdates: false) ?? UIView()
+                    previewImageView.layerCornerRadius = imageView.layerCornerRadius
+                    let viewController = UIViewController()
+                    viewController.view.addSubview(previewImageView)
+                    viewController.preferredContentSize = imageView.size
+                    return  viewController
+                }, actionProvider: { _ in
+                    UIMenu(title: game.aliasName ?? game.name, children: [UIMenu(options: .displayInline, children: thirdGroup)])
+                })
+                
+            } else if game.gameType == .unknown {
                 //只保留切换平台和删除操作
                 let action = UIAction(title: R.string.localizable.platformChange(), image: .symbolImage(.arrowLeftArrowRight)) { _ in
                     PlatformSelectionView.show(game: game)
@@ -819,7 +1069,7 @@ extension GameListView: UICollectionViewDelegate {
                     firstGroup.append(action)
                 }
                 
-                if game.gameType == .ss {
+                if game.gameType.supportCores.count > 0 {
                     //添加切换核心的操作
                     let action = UIAction(title: R.string.localizable.switchEmulationCore(), image: .symbolImage(.memorychip)) { _ in
                         if game.gameType == .ss, game.fileExtension.lowercased() == "iso" {

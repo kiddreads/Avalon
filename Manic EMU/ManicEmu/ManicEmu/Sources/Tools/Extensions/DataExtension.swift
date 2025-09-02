@@ -7,6 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import Accelerate
+import CryptoKit
 
 protocol Bufferable {
     var buffer: vImage_Buffer { get }
@@ -90,5 +91,10 @@ extension Data {
         return vImage.flatMap {
             UIImage(cgImage: $0.takeRetainedValue(), scale: 1.0, orientation: .up)
         }
+    }
+    
+    var md5String: String {
+        let digest = Insecure.MD5.hash(data: self)
+        return digest.map { String(format: "%02hhx", $0) }.joined()
     }
 }

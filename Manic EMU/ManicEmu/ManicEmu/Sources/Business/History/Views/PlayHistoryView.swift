@@ -50,6 +50,7 @@ class PlayHistoryView: BaseView {
     private var favouriteGame: Game? = nil
     var needToHideSideMenu: (()->Void)? = nil
     var didTapGame:((Game)->Void)? = nil
+    var didTapGameRetro:((Game)->Void)? = nil
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
@@ -159,11 +160,18 @@ extension PlayHistoryView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withClass: PlayHistoryFavouriteCollectionCell.self, for: indexPath)
-            cell.setData(game: favouriteGame!)
+            cell.setData(game: favouriteGame!) { [weak self] in
+                if let game = self?.favouriteGame {
+                    self?.didTapGameRetro?(game)
+                }
+            }
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withClass: PlayHistoryItemCollectionCell.self, for: indexPath)
-            cell.setData(game: histories[indexPath.row])
+            let game = histories[indexPath.row]
+            cell.setData(game: game) { [weak self] in
+                self?.didTapGameRetro?(game)
+            }
             return cell
         }
     }

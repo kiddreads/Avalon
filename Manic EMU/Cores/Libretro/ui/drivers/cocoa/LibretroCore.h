@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "CheevosBridge.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,6 +31,8 @@ typedef NS_ENUM(NSUInteger, LibretroButton) {
    LibretroButtonR3 = 15,
 };
 
+extern NSString * const RetroAchievementsNotification;
+
 @interface LibretroCore : NSObject
 
 @property(nonatomic, strong) id retroArch_iOS;
@@ -37,7 +40,7 @@ typedef NS_ENUM(NSUInteger, LibretroButton) {
 
 + (instancetype)sharedInstance;
 
-- (UIViewController *)start;
+- (UIViewController *)startWithCustomSaveDir:(NSString *_Nullable)customSaveDir;
 - (void)pause;
 - (void)resume;
 - (void)stop;
@@ -57,7 +60,9 @@ typedef NS_ENUM(NSUInteger, LibretroButton) {
 - (void)setPSPResolution:(unsigned)resolution reload:(BOOL)reload;
 - (void)setPSPLanguage:(unsigned)language;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload;
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload;
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value;
+- (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs;
 - (void)setShader:(NSString *_Nullable)path;
 - (void)addCheatCode:(NSString *_Nonnull)code index:(unsigned)index enable:(BOOL)enable;
 - (void)resetCheatCode;
@@ -65,9 +70,16 @@ typedef NS_ENUM(NSUInteger, LibretroButton) {
 - (NSString * _Nullable)coreConfigValue:(NSString * _Nonnull)coreName key:(NSString * _Nonnull)key;
 - (NSString * _Nullable)libretroConfigValue:(NSString * _Nonnull)key;
 - (void)setRespectSilentMode:(BOOL)respect;
-- (void)setDiskIndex:(unsigned)index;
+- (void)setDiskIndex:(unsigned)index delay:(BOOL)delay;
 - (NSUInteger)getCurrentDiskIndex;
 - (NSUInteger)getDiskCount;
+- (void)setPSXAnalog:(BOOL)isAnalog;
+- (void)setReloadDelay:(double)delay;
+- (void)turnOffHardcode;
+- (void)resetRetroAchievements;
+- (void)setCustomSaveExtension:(NSString *_Nullable)customSaveExtension;
+- (void)setEnableRumble:(BOOL)enable;
+- (BOOL)getSensorEnable:(int)playerIndex;
 
 @end
 

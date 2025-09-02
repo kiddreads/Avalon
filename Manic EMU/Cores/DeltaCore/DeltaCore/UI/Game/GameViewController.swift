@@ -683,7 +683,7 @@ open class GameViewController: UIViewController, ControllerReceiverProtocol
         }
     }
     
-    @discardableResult public func pauseEmulation() -> Bool
+    @discardableResult open func pauseEmulation() -> Bool
     {
         return manicEmuCoreQueue.sync {
             return self._pauseEmulation()

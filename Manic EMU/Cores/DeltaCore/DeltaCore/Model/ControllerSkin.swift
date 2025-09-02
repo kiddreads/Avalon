@@ -105,6 +105,8 @@ public struct ControllerSkin: ControllerSkinBase
             var gameType: GameType
             if gameTypeString == "com.rileytestut.delta.game.genesis" {
                 gameType = GameType("public.aoshuang.game.md")
+            } else if gameTypeString == "com.Spookysoft.gamma.game.ps1" {
+                gameType = GameType("public.aoshuang.game.ps1")
             } else {
                 gameType = GameType(gameTypeString.replacingOccurrences(of: "com.rileytestut.delta", with: "public.aoshuang"))
             }

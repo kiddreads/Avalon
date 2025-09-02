@@ -37,7 +37,7 @@ class ControllersSettingView: BaseView {
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: ControllersCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: TitleBlackHaderCollectionReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BlackHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -220,17 +220,38 @@ extension ControllersSettingView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: TitleBlackHaderCollectionReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BlackHaderReusableView.self, for: indexPath)
         header.titleLabel.text = R.string.localizable.controllersHeaderTitle()
-        if !header.subviews.contains(where: { $0 is HowToButton }) {
-            let howToConnect = HowToButton(title: R.string.localizable.controllersHowToConnect()) {
-                topViewController()?.present(WebViewController(url: Constants.URLs.ControllerUsageGuide), animated: true)
+        if !header.subviews.contains(where: { $0 is SymbolButton }) {
+            let moreContextMenuButton: ContextMenuButton = {
+                var actions: [UIMenuElement] = []
+                actions.append((UIAction(title: R.string.localizable.controllersHowToConnect()) { _ in
+                    topViewController()?.present(WebViewController(url: Constants.URLs.ControllerUsageGuide), animated: true)
+                }))
+                actions.append(UIAction(title: R.string.localizable.deadZoneSetting()) { _ in
+                    DeadZoneControl.show()
+                })
+                let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+                return view
+            }()
+            
+            let moreButton: SymbolButton = {
+                let view = SymbolButton(symbol: .ellipsis)
+                view.enableRoundCorner = true
+                return view
+            }()
+            moreButton.addTapGesture { [weak moreContextMenuButton] gesture in
+                moreContextMenuButton?.triggerTapGesture()
             }
-            header.addSubview(howToConnect)
-            howToConnect.snp.makeConstraints { make in
-                make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+            header.addSubview(moreContextMenuButton)
+            header.addSubview(moreButton)
+            moreButton.snp.makeConstraints { make in
+                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
                 make.centerY.equalToSuperview()
                 make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            }
+            moreContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(moreButton)
             }
         }
         if !asSideMenu {

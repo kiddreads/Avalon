@@ -21,6 +21,7 @@ enum ThreeDSMode: Int, PersistableEnum {
 extension Game: CKRecordConvertible & CKRecordRecoverable {}
 
 class Game: Object, ObjectUpdatable {
+    
     ///id 由文件的Hash值决定
     @Persisted(primaryKey: true) var id: String
     ///游戏名称 默认是文件名 不包含扩展名
@@ -91,7 +92,9 @@ class Game: Object, ObjectUpdatable {
     var currentDiskIndex: UInt = 0
     ///当前游戏总共有多少张光盘 多碟游戏才有效
     var totalDiskCount: UInt = 0
-
+    static let DsHomeMenuPrimaryKey = "Home Menu"
+    static let DsiHomeMenuPrimaryKey = "Home Menu (DSi)"
+    
     ///文件是否存在
     var isRomExtsts: Bool {
         FileManager.default.fileExists(atPath: romUrl.path)
@@ -138,30 +141,38 @@ class Game: Object, ObjectUpdatable {
                     return URL(fileURLWithPath: Constants.Path.PSPSave.appendingPathComponent(path))
                 }
             }
-        }
-        
-        if gameType == .nes {
+        } else if gameType == .nes {
             return URL(fileURLWithPath: Constants.Path.Nestopia.appendingPathComponent("\(name).srm"))
-        }
-        
-        if gameType == .snes {
-            return URL(fileURLWithPath: Constants.Path.Snes9x.appendingPathComponent("\(name).srm"))
-        }
-        
-        if isPicodriveCore {
+        } else if gameType == .snes {
+            if defaultCore == 0 {
+                return URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(name).srm"))
+            } else {
+                return URL(fileURLWithPath: Constants.Path.Snes9x.appendingPathComponent("\(name).srm"))
+            }
+        } else if isPicodriveCore {
             return URL(fileURLWithPath: Constants.Path.PicoDrive.appendingPathComponent("\(name).srm"))
-        }
-        
-        if gameType == .n64 {
+        } else if gameType == .n64 {
             return URL(fileURLWithPath: Constants.Path.Mupen64PlushNext.appendingPathComponent("\(name).srm"))
-        }
-        
-        if gameType == .ss {
+        } else if gameType == .ss {
             if defaultCore == 0 {
                 return URL(fileURLWithPath: Constants.Path.BeetleSaturn.appendingPathComponent("\(name).bkr"))
             } else {
                 return URL(fileURLWithPath: Constants.Path.Yabause.appendingPathComponent("\(name).srm"))
             }
+        } else if gameType == .ds {
+            return URL(fileURLWithPath: Constants.Path.DSSavePath.appendingPathComponent("\(name).srm"))
+        } else if gameType == .gba {
+            return URL(fileURLWithPath: Constants.Path.GBASavePath.appendingPathComponent("\(name).sav"))
+        } else if gameType == .gbc {
+            return URL(fileURLWithPath: Constants.Path.GBCSavePath.appendingPathComponent("\(name).sav"))
+        } else if gameType == .gb {
+            return URL(fileURLWithPath: Constants.Path.GBSavePath.appendingPathComponent("\(name).sav"))
+        } else if gameType == .vb {
+            return URL(fileURLWithPath: Constants.Path.BeetleVB.appendingPathComponent("\(name).srm"))
+        } else if gameType == .pm {
+            return URL(fileURLWithPath: Constants.Path.PokeMini.appendingPathComponent("\(name).eep"))
+        } else if gameType == .ps1 {
+            return URL(fileURLWithPath: Constants.Path.BeetlePSXHW.appendingPathComponent("\(name).srm"))
         }
         
         let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
@@ -170,9 +181,9 @@ class Game: Object, ObjectUpdatable {
     
     var identifierFor3DS: UInt64 {
         if gameType == ._3ds,
-            let extras,
+           let extras,
            let extraInfos = try? extras.jsonObject() as? [String: Any],
-            let identifier = extraInfos["identifier"] as? UInt64 {
+           let identifier = extraInfos["identifier"] as? UInt64 {
             return identifier
         } else {
 #if !targetEnvironment(simulator)
@@ -186,7 +197,7 @@ class Game: Object, ObjectUpdatable {
     
     var gameCodeForPSP: String? {
         if gameType == .psp,
-            let extras,
+           let extras,
            let extraInfos = try? extras.jsonObject() as? [String: Any],
            let gameTitle = extraInfos["PSPGameCode"] as? String {
             return gameTitle
@@ -224,12 +235,29 @@ class Game: Object, ObjectUpdatable {
             requireBIOS = Constants.BIOS.MegaCDBios.filter({ required ? $0.required : true })
         } else if gameType == .ss {
             if defaultCore == 0 {
-                requireBIOS = Array(Constants.BIOS.SaturnBios[1...]).filter({ required ? $0.required : true })
+                requireBIOS = Array(Constants.BIOS.SaturnBios[1...2]).filter({ required ? $0.required : true })
             } else {
                 requireBIOS = [Constants.BIOS.SaturnBios[0]].filter({ required ? $0.required : true })
             }
         } else if gameType == .ds {
             requireBIOS = Constants.BIOS.DSBios.filter({ required ? $0.required : true })
+        } else if gameType == .ps1 {
+            //PS1的BIOS必须确保至少拥有一个
+            var isPS1BIOSMissing = true
+            let fileManager = FileManager.default
+            for bios in Constants.BIOS.PS1Bios {
+                let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+                let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
+                if fileManager.fileExists(atPath: biosInLib) {
+                    isPS1BIOSMissing = false
+                    break
+                } else if fileManager.fileExists(atPath: biosInDoc) {
+                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc), to: URL(fileURLWithPath: biosInLib))
+                    isPS1BIOSMissing = false
+                    break
+                }
+            }
+            return isPS1BIOSMissing
         } else {
             return false
         }
@@ -249,13 +277,33 @@ class Game: Object, ObjectUpdatable {
         return false
     }
     
+    var ps1OverrideBIOSConfig: String {
+        let regionFreeBios = ["ps1_rom.bin", "PSXONPSP660.bin"]
+        let fileManager = FileManager.default
+        for (index, bios) in regionFreeBios.enumerated() {
+            let biosInLib = Constants.Path.System.appendingPathComponent(bios)
+            let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios)
+            if fileManager.fileExists(atPath: biosInLib) {
+                return index == 0 ? "ps1_rom" : "psxonpsp"
+            } else if fileManager.fileExists(atPath: biosInDoc) {
+                try? FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc), to: URL(fileURLWithPath: biosInLib))
+                return index == 0 ? "ps1_rom" : "psxonpsp"
+            }
+        }
+        return "disabled"
+    }
+    
     var libretroCorePath: String? {
         if gameType == .psp {
             return Bundle.main.path(forResource: "ppsspp.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .nes {
             return Bundle.main.path(forResource: "nestopia.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .snes {
-            return Bundle.main.path(forResource: "snes9x.libretro", ofType: "framework", inDirectory: "Frameworks")
+            if defaultCore == 0 {
+                return Bundle.main.path(forResource: "bsnes.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else {
+                return Bundle.main.path(forResource: "snes9x.libretro", ofType: "framework", inDirectory: "Frameworks")
+            }
         } else if isPicodriveCore {
             return Bundle.main.path(forResource: "picodrive.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .ss {
@@ -266,6 +314,20 @@ class Game: Object, ObjectUpdatable {
             }
         } else if gameType == .n64 {
             return Bundle.main.path(forResource: "mupen64plus.next.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .vb {
+            return Bundle.main.path(forResource: "mednafen.vb.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .pm {
+            return Bundle.main.path(forResource: "pokemini.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .ps1 {
+            return Bundle.main.path(forResource: "mednafen.psx.hw.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .gb || gameType == .gbc {
+            return Bundle.main.path(forResource: "gambatte.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .gba {
+            if defaultCore == 0 {
+                return Bundle.main.path(forResource: "mgba.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else {
+                return Bundle.main.path(forResource: "vbam.libretro", ofType: "framework", inDirectory: "Frameworks")
+            }
         }
         return nil
     }
@@ -281,6 +343,83 @@ class Game: Object, ObjectUpdatable {
         guard gameType == .n64 else { return false }
         let romPath = romUrl.path
         if FileManager.default.fileExists(atPath: romPath + ".gb"), FileManager.default.fileExists(atPath: romPath + ".sav") {
+            return true
+        }
+        return false
+    }
+    
+    var isNDSHomeMenuGame: Bool {
+        guard gameType == .ds else { return false }
+        if isDSHomeMenuGame || isDSiHomeMenuGame {
+            return true
+        }
+        return false
+    }
+    
+    var isDSHomeMenuGame: Bool {
+        guard gameType == .ds else { return false }
+        if id == Game.DsHomeMenuPrimaryKey {
+            return true
+        }
+        return false
+    }
+    
+    var isDSiHomeMenuGame: Bool {
+        guard gameType == .ds else { return false }
+        if id == Game.DsiHomeMenuPrimaryKey {
+            return true
+        }
+        return false
+    }
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
+    }
+    
+    var hasGBASlotInsert: Bool {
+        guard gameType == .ds else { return false }
+        if FileManager.default.fileExists(atPath: romUrl.path + ".slot.gba") {
+            return true
+        }
+        return false
+    }
+    
+    var isN64ParaLLEl: Bool {
+        return gameType == .n64 && !(getExtraBool(key: ExtraKey.rdpPlugin.rawValue) ?? true)
+    }
+    
+    var is3DSHomeMenuGame: Bool {
+        if Constants.Strings.ThreeDSHomeMenuIdentifier == "\(identifierFor3DS)" ||
+            Constants.Strings.ThreeDSHomeMenuIdentifier2 == "\(identifierFor3DS)" {
+            return true
+        }
+        return false
+    }
+    
+    var supportRetroAchievements: Bool {
+        if gameType == ._3ds || gameType == .ds {
+            return false
+        }
+        return true
+    }
+    
+    var supportSwapDisc: Bool {
+        if fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "pbp" {
             return true
         }
         return false

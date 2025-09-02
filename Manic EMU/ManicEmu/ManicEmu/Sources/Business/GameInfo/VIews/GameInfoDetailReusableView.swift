@@ -13,7 +13,7 @@ import RealmSwift
 import UniformTypeIdentifiers
 
 class GameInfoDetailReusableView: UICollectionReusableView {
-    var backgroundBlurView: UIView = {
+    let backgroundBlurView: UIView = {
         let view = UIView()
         view.makeBlur()
         view.alpha = 0
@@ -62,26 +62,49 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
-    private var subtitleIcon: UIImageView = {
+    private let subtitleIcon: UIImageView = {
         let view = UIImageView()
-        view.image = .symbolImage(.starCircleFill)
+        view.image = .symbolImage(.starCircleFill).applySymbolConfig(color: Constants.Color.LabelSecondary)
         return view
     }()
     
-    private var subtitleLabel: UILabel = {
+    private let subtitleLabel: UILabel = {
         let view = UILabel()
         view.textColor = Constants.Color.LabelSecondary
         view.font = Constants.Font.body()
         return view
     }()
     
-    private var functionButtonContainerView: UIScrollView = {
+    private let functionButtonContainerView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.alwaysBounceHorizontal = true
         if Locale.isRTLLanguage {
             view.semanticContentAttribute = .forceLeftToRight
+        }
+        return view
+    }()
+    
+    private lazy var retroButton: SymbolButton = {
+        let view = SymbolButton(image: R.image.customTrophy()?.applySymbolConfig(), title: R.string.localizable.retroAchievements2())
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self, let game else { return }
+            if !game.supportRetroAchievements {
+                UIView.makeToast(message: R.string.localizable.achievementsNotSupport(game.gameType.localizedShortName))
+                return
+            }
+            if let _ = AchievementsUser.getUser() {
+                topViewController()?.present(RetroAchievementsListViewController(game: game), animated: true)
+            } else {
+                //先进行登录
+                let vc = RetroAchievementsViewController()
+                vc.dismissAfterLoginSuccess = { [weak self] in
+                    topViewController()?.present(RetroAchievementsListViewController(game: game), animated: true)
+                }
+                topViewController()?.present(vc, animated: true)
+            }
         }
         return view
     }()
@@ -104,6 +127,21 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             if let game = self.game {
                 topViewController()?.present(CheatCodeViewController(game: game), animated: true)
             }
+        }
+        return view
+    }()
+    
+    private lazy var threeDSAdvancedModeButton: SymbolButton = {
+        let title = Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()
+        let view = SymbolButton(symbol: .sliderHorizontal3, title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            Settings.change { realm in
+                Settings.defalut.threeDSAdvancedSettingMode.toggle()
+            }
+            self.threeDSAdvancedModeButton.titleLabel.text = Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()
+            self.update3DSFunctionButton()
         }
         return view
     }()
@@ -453,6 +491,260 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var rdpPluginContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: "GLideN64") { [weak self] _ in
+            guard let self = self else { return }
+            self.rdpPluginButton.titleLabel.text = "RDP Plugin\nGLideN64"
+            if let game = self.game {
+                Game.change { realm in
+                    game.resolution = .one
+                }
+                game.updateExtra(key: ExtraKey.rdpPlugin.rawValue, value: true)
+            }
+        })
+        actions.append(UIAction(title: "ParaLLEl-RDP") { [weak self] _ in
+            guard let self = self else { return }
+            self.rdpPluginButton.titleLabel.text = "RDP Plugin\nParaLLEl-RDP"
+            if let game = self.game {
+                Game.change { realm in
+                    game.resolution = .one
+                }
+                game.updateExtra(key: ExtraKey.rdpPlugin.rawValue, value: false)
+            }
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.n64RDPDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var rdpPluginButton: SymbolButton = {
+        let title = "RDP Plugin\n" + ((self.game?.isN64ParaLLEl ?? false) ? "ParaLLEl-RDP" : "GLideN64")
+        let view = SymbolButton(image: R.image.customLightspectrumHorizontal()?.applySymbolConfig(color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.rdpPluginContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var ndsSystemTypeContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: "DS") { [weak self] _ in
+            guard let self = self else { return }
+            self.ndsSystemTypeButton.titleLabel.text = R.string.localizable.ndsSystemTypeTitle() + "\nDS"
+            self.game?.updateExtra(key: ExtraKey.ndsSystemMode.rawValue, value: "DS")
+            self.updateDSFunctionButton()
+        })
+        actions.append(UIAction(title: "DSi") { [weak self] _ in
+            guard let self = self else { return }
+            self.ndsSystemTypeButton.titleLabel.text = R.string.localizable.ndsSystemTypeTitle() + "\nDSi"
+            self.game?.updateExtra(key: ExtraKey.ndsSystemMode.rawValue, value: "DSi")
+            self.updateDSFunctionButton()
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.ndsSystemTypeDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var ndsSystemTypeButton: SymbolButton = {
+        var type = "\n" + (self.game?.getExtraString(key: ExtraKey.ndsSystemMode.rawValue) ?? "DS")
+        let view = SymbolButton(symbol: .squareSplit1x2, title: R.string.localizable.ndsSystemTypeTitle() + type, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.ndsSystemTypeContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var gbaSlotContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: R.string.localizable.transferPakFromLibrary()) { [weak self] _ in
+            guard let self = self else { return }
+            //从游戏库导入
+            let realm = Database.realm
+            let objects = realm.objects(Game.self).where({ !$0.isDeleted && $0.gameType == .gba })
+            var games = [Game]()
+            games.append(contentsOf: objects)
+            if games.count > 0 {
+                GameSaveMatchGameView.show(showGames: games, title: "GBA Slot", detail: R.string.localizable.transferPakFromLibraryDesc(), cancelTitle: R.string.localizable.cancelTitle()) { [weak self] selectedGame in
+                    guard let self = self else { return }
+                    if let game = self.game, let selectedGame, selectedGame.isRomExtsts {
+                        try? FileManager.safeCopyItem(at: selectedGame.romUrl, to: URL(fileURLWithPath: game.romUrl.path + ".slot.gba"), shouldReplace: true)
+                        try? FileManager.safeCopyItem(at: selectedGame.gameSaveUrl, to: URL(fileURLWithPath: game.romUrl.path + ".slot.sav"), shouldReplace: true)
+                        self.gbaSlotButton.titleLabel.text = "GBA Slot\n\(R.string.localizable.gbaSlotInsert())"
+                        self.gbaSlotButton.imageView.image = .symbolImage(.externaldriveBadgeCheckmark)
+                        UIView.makeToast(message: R.string.localizable.alertImportFilesSuccess())
+                    }
+                }
+            } else {
+                UIView.makeToast(message: R.string.localizable.transferPakNoGames())
+            }
+        })
+        actions.append(UIAction(title: R.string.localizable.transferPakFromFiles()) { [weak self] _ in
+            guard let self = self else { return }
+            //从文件导入
+            if let gba = UTType(filenameExtension: "gba"), let sav = UTType(filenameExtension: "sav") {
+                FilesImporter.shared.presentImportController(supportedTypes: [gba, sav]) { [weak self] urls in
+                    guard let self = self else { return }
+                    guard urls.count == 1 || urls.count == 2 else {
+                        UIView.makeToast(message: R.string.localizable.gbaSlotImportError())
+                        return
+                    }
+                    
+                    var romPath = ""
+                    var savePath = ""
+                    let firstPath = urls.first!.path
+                    let firstPathExtension = firstPath.pathExtension.lowercased()
+                    if firstPathExtension == "gba" {
+                        romPath = firstPath
+                    } else if firstPathExtension == "sav" {
+                        savePath = firstPath
+                    } else {
+                        UIView.makeToast(message: R.string.localizable.gbaSlotImportError())
+                        return
+                    }
+                    
+                    if urls.count == 1, romPath.isEmpty {
+                        UIView.makeToast(message: R.string.localizable.gbaSlotImportError())
+                        return
+                    }
+                    
+                    if urls.count == 2 {
+                        let lastPath = urls.last!.path
+                        let lastPathExtension = lastPath.pathExtension.lowercased()
+                        if romPath.isEmpty {
+                            if lastPathExtension == "gba" {
+                                romPath = lastPath
+                            } else {
+                                UIView.makeToast(message: R.string.localizable.gbaSlotImportError())
+                                return
+                            }
+                        } else {
+                            if lastPathExtension == "sav" {
+                                savePath = lastPath
+                            } else {
+                                UIView.makeToast(message: R.string.localizable.gbaSlotImportError())
+                                return
+                            }
+                        }
+                    }
+                    
+                    if let game = self.game {
+                        try? FileManager.safeCopyItem(at: URL(fileURLWithPath: romPath), to: URL(fileURLWithPath: game.romUrl.path + ".slot.gba"), shouldReplace: true)
+                        if !savePath.isEmpty {
+                            try? FileManager.safeCopyItem(at: URL(fileURLWithPath: savePath), to: URL(fileURLWithPath: game.romUrl.path + ".slot.sav"), shouldReplace: true)
+                        }
+                        self.gbaSlotButton.titleLabel.text = "GBA Slot\n\(R.string.localizable.gbaSlotInsert())"
+                        self.gbaSlotButton.imageView.image = .symbolImage(.externaldriveBadgeCheckmark)
+                        UIView.makeToast(message: R.string.localizable.alertImportFilesSuccess())
+                    }
+                    
+                }
+            }
+        })
+        actions.append(UIAction(title: R.string.localizable.off()) { [weak self] _ in
+            guard let self = self else { return }
+            //关闭Transfer Pak
+            if let game = self.game {
+                try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: game.romUrl.path + ".slot.gba"))
+                try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: game.romUrl.path + ".slot.sav"))
+                self.gbaSlotButton.titleLabel.text = "GBA Slot\n\(R.string.localizable.gbaSlotUnInsert())"
+                self.gbaSlotButton.imageView.image = .symbolImage(.externaldriveBadgeXmark)
+            }
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.gbaSlotDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var gbaSlotButton: SymbolButton = {
+        var state = "\n" + R.string.localizable.gbaSlotUnInsert()
+        var symbol = SFSymbol.externaldriveBadgeXmark
+        if let game = self.game, game.hasGBASlotInsert {
+            state = "\n" + R.string.localizable.gbaSlotInsert()
+            symbol = SFSymbol.externaldriveBadgeCheckmark
+        }
+        let view = SymbolButton(symbol: symbol, title: "GBA Slot\(state)", horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            if let game = self.game {
+                if game.gameType.isNDSBiosComplete().isDSComplete {
+                    self.gbaSlotContextMenuButton.triggerTapGesture()
+                } else {
+                    topViewController(appController: true)?.present(BIOSSelectionViewController(gameType: game.gameType), animated: true)
+                }
+            }
+        }
+        return view
+    }()
+    
+    private lazy var psxModeContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: Constants.Strings.PSXController) { [weak self] _ in
+            guard let self = self else { return }
+            self.psxModeButton.titleLabel.text = Constants.Strings.PSXController
+            self.game?.updateExtra(key: ExtraKey.isAnalog.rawValue, value: false)
+        })
+        actions.append(UIAction(title: Constants.Strings.PSXDualShock) { [weak self] _ in
+            guard let self = self else { return }
+            self.psxModeButton.titleLabel.text = Constants.Strings.PSXDualShock
+            self.game?.updateExtra(key: ExtraKey.isAnalog.rawValue, value: true)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.analogModeDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var psxModeButton: SymbolButton = {
+        let title = (self.game?.getExtraBool(key: ExtraKey.isAnalog.rawValue) ?? true) ? Constants.Strings.PSXDualShock : Constants.Strings.PSXController
+        let view = SymbolButton(symbol: .gamecontroller, title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.psxModeContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var psxImportSbiButton: SymbolButton = {
+        let view = SymbolButton(symbol: .lockRectangleStack, title: R.string.localizable.sbiImport(), horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self else { return }
+            if let game = self.game {
+                topViewController()?.present(PSXSBIImportViewController(game: game), animated: true)
+            }
+        }
+        return view
+    }()
+    
+    private lazy var psxRendererContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: "Hardware") { [weak self] _ in
+            guard let self = self else { return }
+            self.psxRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nHardware"
+            self.game?.updateExtra(key: ExtraKey.psxRenderer.rawValue, value: true)
+        })
+        actions.append(UIAction(title: "Software") { [weak self] _ in
+            guard let self = self else { return }
+            self.psxRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nSoftware"
+            self.game?.updateExtra(key: ExtraKey.psxRenderer.rawValue, value: false)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.rendererDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var psxRendererButton: SymbolButton = {
+        let title = "\(R.string.localizable.rendererTitle())\n" + ((self.game?.getExtraBool(key: ExtraKey.psxRenderer.rawValue) ?? true) ? "Hardware" : "Software")
+        let view = SymbolButton(image: R.image.customLightspectrumHorizontal()?.applySymbolConfig(color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.psxRendererContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
     private lazy var startGameButton: SymbolButton = {
         let view = SymbolButton(symbol: .playFill)
         view.backgroundColor = Constants.Color.Main
@@ -493,8 +785,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     private class GameInfoSymbolButton: SymbolButton {}
     var didDeleteSaveState: (()->Void)?
     private lazy var deleteSaveStateButton: GameInfoSymbolButton = {
-        let view = GameInfoSymbolButton(symbol: .trash)
-        view.layerCornerRadius = Constants.Size.ItemHeightMin/2
+        let view = GameInfoSymbolButton(image: .symbolImage(.trash).applySymbolConfig(color: Constants.Color.Red))
+        view.layerCornerRadius = Constants.Size.CornerRadiusMid
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
             self.didDeleteSaveState?()
@@ -523,6 +815,10 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                     updateDSFunctionButton()
                 } else if game.gameType == .n64 {
                     updateN64FunctionButton()
+                } else if game.gameType == .vb || game.gameType == .pm {
+                    updateVBOrPMFunctionButton()
+                } else if game.gameType == .ps1 {
+                    updatePS1FunctionButton()
                 }
             }
         }
@@ -540,7 +836,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             } else if $0 is GameInfoSymbolButton {
                 $0.snp.remakeConstraints { make in
                     make.centerY.equalTo(segmentView)
-                    make.size.equalTo(Constants.Size.ItemHeightMin)
+                    make.size.equalTo(Constants.Size.ItemHeightMid)
                     make.leading.equalTo(segmentView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                     make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
                 }
@@ -595,9 +891,15 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             make.height.equalTo(Constants.Size.IconSizeHuge.height)
         }
         
+        functionButtonContainerView.addSubview(retroButton)
+        retroButton.snp.makeConstraints { make in
+            make.leading.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+        }
+        
         functionButtonContainerView.addSubview(skinButton)
         skinButton.snp.makeConstraints { make in
-            make.leading.centerY.equalToSuperview()
+            make.leading.equalTo(retroButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
             make.size.equalTo(Constants.Size.IconSizeHuge)
         }
         
@@ -627,7 +929,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         addSubview(deleteSaveStateButton)
         deleteSaveStateButton.snp.makeConstraints { make in
             make.centerY.equalTo(segmentView)
-            make.size.equalTo(Constants.Size.ItemHeightMin)
+            make.size.equalTo(Constants.Size.ItemHeightMid)
             make.leading.equalTo(segmentView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
             make.trailing.equalTo(startGameButton)
         }
@@ -637,7 +939,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update3DSFunctionButton() {
+    private func update3DSFunctionButton() {
+        threeDSAdvancedModeButton.removeFromSuperview()
         jitContextMenuButton.removeFromSuperview()
         jitButton.removeFromSuperview()
         threeDSModecontextMenuButton.removeFromSuperview()
@@ -650,21 +953,28 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         rightEyeRenderButton.removeFromSuperview()
         threeDSAdvancedSettingButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
+            functionButtonContainerView.addSubview(threeDSAdvancedModeButton)
+            threeDSAdvancedModeButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            
+            
             if Settings.defalut.threeDSAdvancedSettingMode {
                 functionButtonContainerView.addSubview(threeDSAdvancedSettingButton)
                 threeDSAdvancedSettingButton.snp.makeConstraints { make in
-                    make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.leading.equalTo(threeDSAdvancedModeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                     make.centerY.equalToSuperview()
                     make.size.equalTo(Constants.Size.IconSizeHuge)
                     make.trailing.equalToSuperview()
                 }
-                
             } else {
                 //JIT按钮
                 functionButtonContainerView.addSubview(jitContextMenuButton)
                 functionButtonContainerView.addSubview(jitButton)
                 jitButton.snp.makeConstraints { make in
-                    make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.leading.equalTo(threeDSAdvancedModeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                     make.centerY.equalToSuperview()
                     make.size.equalTo(Constants.Size.IconSizeHuge)
                 }
@@ -763,6 +1073,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateDSFunctionButton() {
+        languageContextMenuButton.removeFromSuperview()
+        languageButton.removeFromSuperview()
+        ndsSystemTypeContextMenuButton.removeFromSuperview()
+        ndsSystemTypeButton.removeFromSuperview()
+        gbaSlotContextMenuButton.removeFromSuperview()
+        gbaSlotButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
             //语言选择按钮
             functionButtonContainerView.addSubview(languageContextMenuButton)
@@ -771,28 +1087,127 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             languageContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(languageButton)
+            }
+            
+            var enableGBASlot = true
+            if let game, let mode = game.getExtraString(key: ExtraKey.ndsSystemMode.rawValue), mode == "DSi" {
+                enableGBASlot = false
+            }
+            
+            //系统类型
+            functionButtonContainerView.addSubview(ndsSystemTypeContextMenuButton)
+            functionButtonContainerView.addSubview(ndsSystemTypeButton)
+            ndsSystemTypeButton.snp.makeConstraints { make in
+                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                if !enableGBASlot {
+                    make.trailing.equalToSuperview()
+                }
+            }
+            ndsSystemTypeContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(ndsSystemTypeButton)
+            }
+            
+            if enableGBASlot {
+                //GBA Slot
+                functionButtonContainerView.addSubview(gbaSlotContextMenuButton)
+                functionButtonContainerView.addSubview(gbaSlotButton)
+                gbaSlotButton.snp.makeConstraints { make in
+                    make.leading.equalTo(ndsSystemTypeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                    make.trailing.equalToSuperview()
+                }
+                gbaSlotContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(gbaSlotButton)
+                }
             }
         }
     }
     
     private func updateN64FunctionButton() {
         if let lastView = functionButtonContainerView.subviews.last {
-            //语言选择按钮
+            //transferPak
             functionButtonContainerView.addSubview(transferPakContextMenuButton)
             functionButtonContainerView.addSubview(transferPakButton)
             transferPakButton.snp.makeConstraints { make in
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             transferPakContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(transferPakButton)
             }
+            
+            //RDP
+            functionButtonContainerView.addSubview(rdpPluginContextMenuButton)
+            functionButtonContainerView.addSubview(rdpPluginButton)
+            rdpPluginButton.snp.makeConstraints { make in
+                make.leading.equalTo(transferPakButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            rdpPluginContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(rdpPluginButton)
+            }
+        }
+    }
+    
+    private func updateVBOrPMFunctionButton() {
+        cheatCodeButton.removeFromSuperview()
+        
+        retroButton.snp.makeConstraints { make in
+            make.leading.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+        }
+        
+        skinButton.snp.makeConstraints { make in
+            make.leading.equalTo(retroButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+            make.trailing.equalToSuperview()
+        }
+    }
+    
+    private func updatePS1FunctionButton() {
+        if let lastView = functionButtonContainerView.subviews.last {
+            //导入sbi文件
+            functionButtonContainerView.addSubview(psxImportSbiButton)
+            psxImportSbiButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            
+            //手柄模式
+            functionButtonContainerView.addSubview(psxModeContextMenuButton)
+            functionButtonContainerView.addSubview(psxModeButton)
+            psxModeButton.snp.makeConstraints { make in
+                make.leading.equalTo(psxImportSbiButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            psxModeContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(psxModeButton)
+            }
+            
+            //Renderer
+            functionButtonContainerView.addSubview(psxRendererContextMenuButton)
+            functionButtonContainerView.addSubview(psxRendererButton)
+            psxRendererButton.snp.makeConstraints { make in
+                make.leading.equalTo(psxModeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            psxRendererContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(psxRendererButton)
+            }
+            
         }
     }
     

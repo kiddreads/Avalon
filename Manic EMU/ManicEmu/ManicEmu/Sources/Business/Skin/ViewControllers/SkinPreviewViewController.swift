@@ -79,26 +79,22 @@ class SkinPreviewViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if UIDevice.isPad {
-            switch UIDevice.currentOrientation {
-            case .portrait:
-                AppDelegate.orientation = .portrait
-            case .portraitUpsideDown:
-                AppDelegate.orientation = .portraitUpsideDown
-            case .landscapeLeft:
-                AppDelegate.orientation = .landscapeLeft
-            case .landscapeRight:
-                AppDelegate.orientation = .landscapeRight
-            default: break
-            }
+        switch UIDevice.currentOrientation {
+        case .portrait:
+            AppDelegate.orientation = .portrait
+        case .portraitUpsideDown:
+            AppDelegate.orientation = .portraitUpsideDown
+        case .landscapeLeft:
+            AppDelegate.orientation = .landscapeLeft
+        case .landscapeRight:
+            AppDelegate.orientation = .landscapeRight
+        default: break
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if UIDevice.isPad {
-            AppDelegate.orientation = UIDevice.isPad ? .all : .portrait
-        }
+        AppDelegate.orientation = Constants.Config.DefaultOrientation
     }
 }
 

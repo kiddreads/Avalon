@@ -40,6 +40,17 @@ namespace WifiAP
 extern int ClientStatus;
 }
 
+namespace SPI_Firmware
+{
+extern u8* Firmware;
+extern u32 FirmwareLength;
+extern u32 FirmwareMask;
+
+extern std::array<u8, 4> DNS;
+extern int64_t wfcID;
+extern int64_t wfcFlags; // Required to ensure we don't generate invalid WFC ID after erasing WFC configuration
+}
+
 // Copied from melonDS source (no longer exists in HEAD)
 void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever this should be named?
 {
@@ -121,6 +132,7 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
 @property (nonatomic, readonly) dispatch_queue_t microphoneQueue;
 
 @property (nonatomic, assign) NSInteger language;
+@property (nonatomic) int closedLidFrameCount;
 @end
 
 @implementation MelonDSEmulatorBridge
@@ -154,6 +166,8 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
         _microphoneBuffer = [[MANCRingingBuffer alloc] initWithPreferredBufferSize:100 * 1024];
         _microphoneQueue = dispatch_queue_create("com.aoshuang.DSCore.Microphone", DISPATCH_QUEUE_SERIAL);
         
+        _closedLidFrameCount = 0;
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
     }
     
@@ -164,13 +178,59 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
 
 - (void)setExtraParameters:(NSDictionary<NSString *,id> *)paramaters {
     NSNumber *region = paramaters[@"language"];
-    if ([region isKindOfClass:NSNumber.class]) {
+    if (region && [region isKindOfClass:NSNumber.class]) {
         _language = [region integerValue];
+    }
+    
+    NSNumber *systemType = paramaters[@"systemType"];
+    if (systemType && [systemType isKindOfClass:NSNumber.class]) {
+        if (systemType.integerValue == 1) {
+            _systemType = MelonDSSystemTypeDSi;
+        } else {
+            _systemType = MelonDSSystemTypeDS;
+        }
+    }
+    
+    NSString *wfcDNS = paramaters[@"wfcDNS"];
+    if (wfcDNS && [wfcDNS isKindOfClass:NSString.class]) {
+        _wfcEnabled = YES;
+        _wfcDNS = wfcDNS;
     }
 }
 
 - (void)startWithGameURL:(NSURL *)gameURL
 {
+    if (self.wfcDNS != nil)
+    {
+        NSArray *components = [self.wfcDNS componentsSeparatedByString:@"."];
+        if (components.count == 4)
+        {
+            SPI_Firmware::DNS = { (u8)[components[0] intValue], (u8)[components[1] intValue], (u8)[components[2] intValue], (u8)[components[3] intValue] };
+        }
+        else
+        {
+            SPI_Firmware::DNS = { 0, 0, 0, 0 };
+        }
+    }
+    else
+    {
+        SPI_Firmware::DNS = { 0, 0, 0, 0 };
+    }
+    
+    int64_t wfcID = [[[NSUserDefaults standardUserDefaults] objectForKey:MelonDSWFCIDUserDefaultsKey] longLongValue];
+    int64_t wfcFlags = [[[NSUserDefaults standardUserDefaults] objectForKey:MelonDSWFCFlagsUserDefaultsKey] longLongValue];
+    
+    if (wfcID != 0)
+    {
+        SPI_Firmware::wfcID = wfcID;
+        SPI_Firmware::wfcFlags = wfcFlags;
+    }
+    else
+    {
+        SPI_Firmware::wfcID = 0;
+        SPI_Firmware::wfcFlags = 0;
+    }
+    
     self.gameURL = gameURL;
     
     if ([self isInitialized])
@@ -184,9 +244,9 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
     {
         Config::Load();
         
-        Config::FirmwareUsername = "ManicEmu";
-        Config::FirmwareBirthdayDay = 7;
-        Config::FirmwareBirthdayMonth = 10;
+        Config::FirmwareUsername = "ManicEMU";
+        Config::FirmwareBirthdayDay = 1;
+        Config::FirmwareBirthdayMonth = 1;
         if (_language > -1) {
             Config::FirmwareLanguage = _language;
         }
@@ -262,12 +322,14 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
             NSLog(@"Failed to load Nintendo DS ROM.");
         }
         
-        if (self.gbaGameURL != nil)
+        NSURL *documentURL = [NSURL fileURLWithPath:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
+        NSURL *gbaGameURL = [documentURL URLByAppendingPathComponent:[NSString stringWithFormat:@"Datas/%@.slot.gba", gameURL.lastPathComponent]];
+        if ([NSFileManager.defaultManager fileExistsAtPath:gbaGameURL.path])
         {
-            NSData *gbaROMData = [NSData dataWithContentsOfURL:self.gbaGameURL options:0 error:&error];
+            NSData *gbaROMData = [NSData dataWithContentsOfURL:gbaGameURL options:0 error:&error];
             if (gbaROMData)
             {
-                NSURL *gbaSaveURL = [[self.gbaGameURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"sav"];
+                NSURL *gbaSaveURL = [[gbaGameURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"sav"];
                 
                 NSData *saveData = [NSData dataWithContentsOfURL:gbaSaveURL options:0 error:&error];
                 if (saveData == nil && !([error.domain isEqualToString:NSCocoaErrorDomain] && error.code == NSFileReadNoSuchFileError))
@@ -279,7 +341,7 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
                 if (NDS::LoadGBACart((const u8 *)gbaROMData.bytes, gbaROMData.length, (const u8 *)saveData.bytes, saveData.length))
                 {
                     // Cache save URL so we don't accidentally overwrite save data for the wrong game when switching.
-                    self.gbaSaveURL = gbaSaveURL;
+//                    self.gbaSaveURL = gbaSaveURL; //不要擦除GBA的存档
                 }
                 else
                 {
@@ -353,10 +415,19 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
     if (self.activatedInputs & MelonDSGameInputLid)
     {
         NDS::SetLidClosed(true);
+        self.closedLidFrameCount = 0;
     }
     else if (NDS::IsLidClosed())
     {
-        NDS::SetLidClosed(false);
+        if (self.closedLidFrameCount >= 7) // Derived from quick experiments - 6 is too low for resuming iPad Pro from background non-AirPlay
+        {
+            NDS::SetLidClosed(false);
+            self.closedLidFrameCount = 0;
+        }
+        else
+        {
+            self.closedLidFrameCount += 1;
+        }
     }
     
     static int16_t micBuffer[735];
@@ -482,6 +553,31 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
         if (![self.gbaSaveData writeToURL:self.gbaSaveURL options:NSDataWritingAtomic error:&error])
         {
             NSLog(@"Failed write GBA save data. %@", error);
+        }
+    }
+    
+    if (SPI_Firmware::Firmware)
+    {
+        // Save WFC ID to NSUserDefaults
+        
+        u32 userdata = 0x7FE00 & SPI_Firmware::FirmwareMask;
+        u32 apdata = userdata - 0x400;
+        
+        int64_t wfcID = 0;
+        int64_t wfcFlags = 0;
+        
+        memcpy(&wfcID, &SPI_Firmware::Firmware[apdata + 0xF0], 6);
+        memcpy(&wfcFlags, &SPI_Firmware::Firmware[apdata + 0xF6], 8);
+        
+        if (wfcID != 0)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:@(wfcID) forKey:MelonDSWFCIDUserDefaultsKey];
+            [[NSUserDefaults standardUserDefaults] setObject:@(wfcFlags) forKey:MelonDSWFCFlagsUserDefaultsKey];
+        }
+        else
+        {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:MelonDSWFCIDUserDefaultsKey];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:MelonDSWFCFlagsUserDefaultsKey];
         }
     }
 }
@@ -704,56 +800,39 @@ void ParseTextCode(char* text, int tlen, u32* code, int clen) // or whatever thi
     return (1.0 / 60.0);
 }
 
-+ (void)checkAndReadyForUrl:(NSURL *)url {
-    if (![NSFileManager.defaultManager fileExistsAtPath:url.path]) {
-        NSString *fileName = url.lastPathComponent;
-        NSString *fileNameWithoutExtension = [fileName stringByReplacingOccurrencesOfString:@".bin" withString:@""];
-        NSURL *fileInBundleUrl = [MelonDSEmulatorBridge.dsResources URLForResource:fileNameWithoutExtension withExtension:fileName.pathExtension];
-        if ([NSFileManager.defaultManager fileExistsAtPath:[fileInBundleUrl path]]) {
-            [NSFileManager.defaultManager copyItemAtURL:fileInBundleUrl toURL:url error:nil];
-        }
-    }
-}
-
 - (NSURL *)bios7URL
 {
-    NSURL *bios7url = [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"bios7.bin"];
-    [MelonDSEmulatorBridge checkAndReadyForUrl:bios7url];
-    return bios7url;
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"bios7.bin"];
 }
 
 - (NSURL *)bios9URL
 {
-    NSURL *bios9url = [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"bios9.bin"];
-    [MelonDSEmulatorBridge checkAndReadyForUrl:bios9url];
-    return bios9url;
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"bios9.bin"];
 }
 
 - (NSURL *)firmwareURL
 {
-    NSURL *firmwareUrl = [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"firmware.bin"];
-    [MelonDSEmulatorBridge checkAndReadyForUrl:firmwareUrl];
-    return firmwareUrl;
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"firmware.bin"];
 }
 
 - (NSURL *)dsiBIOS7URL
 {
-    return [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"dsibios7.bin"];
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"dsi_bios7.bin"];
 }
 
 - (NSURL *)dsiBIOS9URL
 {
-    return [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"dsibios9.bin"];
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"dsi_bios9.bin"];
 }
 
 - (NSURL *)dsiFirmwareURL
 {
-    return [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"dsifirmware.bin"];
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"dsi_firmware.bin"];
 }
 
 - (NSURL *)dsiNANDURL
 {
-    return [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@"dsinand.bin"];
+    return [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@"dsi_nand.bin"];
 }
 
 - (AVAudioConverter *)audioConverter
@@ -933,10 +1012,10 @@ namespace Platform
     
     FILE* OpenLocalFile(std::string path, std::string mode)
     {
-        NSURL *relativeURL = [MelonDSEmulatorBridge.coreDirectoryURL URLByAppendingPathComponent:@(path.c_str())];
+        NSURL *relativeURL = [MelonDSEmulatorBridge.biosDirectoryURL URLByAppendingPathComponent:@(path.c_str())];
         
         NSURL *fileURL = nil;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:relativeURL.path])
+        if ([[NSFileManager defaultManager] fileExistsAtPath:relativeURL.path] || path.find(".bak") != std::string::npos)
         {
             fileURL = relativeURL;
         }

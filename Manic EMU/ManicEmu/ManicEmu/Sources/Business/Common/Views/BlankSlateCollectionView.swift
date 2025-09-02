@@ -9,12 +9,17 @@
 
 import UIKit
 import BlankSlate
+import KeyboardKit
 
 class BlankSlateEmptyView: UIView {
-    init(title: String) {
+    let imageView = UIImageView()
+    
+    let label = UILabel()
+    
+    init(image: UIImage? = nil, title: String) {
         super.init(frame: .zero)
         
-        let imageView = UIImageView(image: R.image.empty_icon())
+        imageView.image = image ?? R.image.empty_icon()
         imageView.contentMode = .center
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
@@ -22,11 +27,11 @@ class BlankSlateEmptyView: UIView {
             make.centerY.equalToSuperview().offset(-Constants.Size.ItemHeightMin)
         }
         
-        let label = UILabel()
         label.font = Constants.Font.body(size: .l)
         label.textColor = Constants.Color.LabelSecondary
         label.text = title
         label.numberOfLines = 0
+        label.textAlignment = .center
         addSubview(label)
         label.snp.makeConstraints { make in
             make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMax)
@@ -41,7 +46,7 @@ class BlankSlateEmptyView: UIView {
     }
 }
 
-class BlankSlateCollectionView: UICollectionView {
+class BlankSlateCollectionView: KeyboardCollectionView {
     
     var blankSlateView: UIView? = nil
     
@@ -66,7 +71,7 @@ extension BlankSlateCollectionView: BlankSlate.DataSource {
     }
     
     func layout(forBlankSlate view: UIView, for element: BlankSlate.Element) -> BlankSlate.Layout {
-        .init(edgeInsets: .zero, height: Constants.Size.WindowHeight)
+        return .init(edgeInsets: .zero, height: Constants.Size.WindowHeight)
     }
     
 }

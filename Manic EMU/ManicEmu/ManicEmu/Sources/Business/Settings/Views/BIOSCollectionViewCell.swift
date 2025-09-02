@@ -48,7 +48,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             return view
         }()
         
-        init(enableButton: Bool = true) {
+        init(enableButton: Bool = true, enableOptionButton: Bool = true) {
             super.init(frame: .zero)
             layerCornerRadius = Constants.Size.CornerRadiusMid
             backgroundColor = Constants.Color.BackgroundPrimary
@@ -66,13 +66,18 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             titleContainer.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.leading.top.equalToSuperview()
+                if !enableOptionButton {
+                    make.trailing.equalToSuperview()
+                }
             }
             
-            titleContainer.addSubview(optionButton)
-            optionButton.snp.makeConstraints { make in
-                make.trailing.lessThanOrEqualToSuperview()
-                make.centerY.equalTo(titleLabel)
-                make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            if enableOptionButton {
+                titleContainer.addSubview(optionButton)
+                optionButton.snp.makeConstraints { make in
+                    make.trailing.lessThanOrEqualToSuperview()
+                    make.centerY.equalTo(titleLabel)
+                    make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                }
             }
             
             titleContainer.addSubview(detailLabel)
@@ -111,6 +116,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = Constants.BIOS.SaturnBios
             } else if gameType == .ds {
                 biosItems = Constants.BIOS.DSBios
+            } else if gameType == .ps1 {
+                biosItems = Constants.BIOS.PS1Bios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
@@ -222,6 +229,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = Constants.BIOS.SaturnBios.count
         } else if gameType == .ds {
             itemCount = Constants.BIOS.DSBios.count
+        } else if gameType == .ps1 {
+            itemCount = Constants.BIOS.PS1Bios.count
         }
         return (Double(itemCount) * Constants.Size.ItemHeightMax) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid)
     }

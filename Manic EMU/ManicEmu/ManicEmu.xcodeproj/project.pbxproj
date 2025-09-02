@@ -22,7 +22,7 @@
 		5706AFBD2DF7D8AF0066122E /* BIOSSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */; };
 		5706AFC22DF7D94F0066122E /* BIOSSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */; };
 		5706AFC62DF7DABD0066122E /* BIOSCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */; };
-		5706AFCF2DF7FC730066122E /* BOISDescriptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFCE2DF7FC510066122E /* BOISDescriptionCollectionViewCell.swift */; };
+		5706AFCF2DF7FC730066122E /* SettingDescriptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFCE2DF7FC510066122E /* SettingDescriptionCollectionViewCell.swift */; };
 		5706B0372DFBEC1E0066122E /* SG1000.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706B0362DFBEC190066122E /* SG1000.swift */; };
 		5706B03B2DFBEC240066122E /* GG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706B0382DFBEC220066122E /* GG.swift */; };
 		5706B0402DFBEC300066122E /* MS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706B03F2DFBEC2E0066122E /* MS.swift */; };
@@ -60,6 +60,21 @@
 		5720D1C12DB9DCBB0090C0F6 /* ControllerMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720D1C02DB9DCB10090C0F6 /* ControllerMapping.swift */; };
 		5720D1C32DBA01990090C0F6 /* MappingTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720D1C22DBA01740090C0F6 /* MappingTipView.swift */; };
 		5720D1C52DBA0DF10090C0F6 /* ControllerMappingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720D1C42DBA0DE70090C0F6 /* ControllerMappingViewController.swift */; };
+		5720E7612E540F3500EC0DA5 /* RetroAchievementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7602E540F1A00EC0DA5 /* RetroAchievementsViewController.swift */; };
+		5720E7652E540F7200EC0DA5 /* RetroAchievementsLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7642E540F5F00EC0DA5 /* RetroAchievementsLoginView.swift */; };
+		5720E76D2E540FDB00EC0DA5 /* RetroAchievementsProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E76C2E540FC200EC0DA5 /* RetroAchievementsProfileView.swift */; };
+		5720E7842E5410B100EC0DA5 /* RetroAchievementsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7812E54108F00EC0DA5 /* RetroAchievementsDetailViewController.swift */; };
+		5720E7882E5410D000EC0DA5 /* RetroAchievementsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7872E5410C000EC0DA5 /* RetroAchievementsDetailView.swift */; };
+		5720E78C2E54112700EC0DA5 /* RetroAchievementsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E78B2E54111C00EC0DA5 /* RetroAchievementsListViewController.swift */; };
+		5720E7922E54113500EC0DA5 /* RetroAchievementListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E78D2E54112A00EC0DA5 /* RetroAchievementListView.swift */; };
+		5720E7A32E541BF500EC0DA5 /* CheevosBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7A22E541BF500EC0DA5 /* CheevosBridge.m */; };
+		5720E7AA2E541F2000EC0DA5 /* RadialGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7A92E541F1100EC0DA5 /* RadialGradientView.swift */; };
+		5720E7CA2E54470000EC0DA5 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7C92E5446F700EC0DA5 /* ArrayExtensions.swift */; };
+		5720E7E72E5461CA00EC0DA5 /* RetroAchievementsProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7E62E5461C600EC0DA5 /* RetroAchievementsProfileCell.swift */; };
+		5720E7ED2E547FE100EC0DA5 /* AchievementsProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7EC2E547FD800EC0DA5 /* AchievementsProfile.swift */; };
+		5720E7F62E5569DC00EC0DA5 /* RetroAchievementsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E7F52E5569D600EC0DA5 /* RetroAchievementsListCell.swift */; };
+		5720E8112E559EE600EC0DA5 /* RetroAchievementCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E8102E559ED600EC0DA5 /* RetroAchievementCountView.swift */; };
+		5720E8462E5C4AA900EC0DA5 /* AchievementsUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720E8452E5C4AA600EC0DA5 /* AchievementsUser.swift */; };
 		5726FED82D71B63E00041AD5 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726FED72D71B63A00041AD5 /* CacheManager.swift */; };
 		5726FEDA2D71B95600041AD5 /* MembershipCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726FED92D71B94700041AD5 /* MembershipCollectionViewCell.swift */; };
 		5726FEDD2D71BF0400041AD5 /* SettingsItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726FEDC2D71BEF900041AD5 /* SettingsItemCollectionViewCell.swift */; };
@@ -67,13 +82,36 @@
 		5726FEF22D720B8800041AD5 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FEF12D720B8800041AD5 /* ColorfulX */; };
 		5726FF462D741F5C00041AD5 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FF452D741F5C00041AD5 /* ColorfulX */; };
 		5726FF812D74AC9D00041AD5 /* RoundAndBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726FF802D74AC8D00041AD5 /* RoundAndBorderView.swift */; };
+		57399AC52E40ACE100AB73DD /* PSXSBIImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */; };
+		57399AC82E40AFBA00AB73DD /* PSXSBICollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */; };
+		57399ACF2E40BB4D00AB73DD /* PSXSBIDescCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */; };
+		57399B192E42EDEA00AB73DD /* DeadZoneControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399B182E42EDE800AB73DD /* DeadZoneControl.swift */; };
 		5739D1BE2DA79D2A0090409D /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5739D1BD2DA79D220090409D /* DataExtension.swift */; };
 		573BECBD2D1D3F6B008AD18D /* HomeTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573BECBC2D1D3F6B008AD18D /* HomeTabBar.swift */; };
+		5744C6622E34D6E20088081A /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5744C6612E34D6E20088081A /* KeyboardKit */; };
+		5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C6CE2E360AD50088081A /* UIControllerKit.swift */; };
+		5744C6FF2E368BB40088081A /* NoControllCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */; };
+		5744C7182E375BF40088081A /* PM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C7172E375BF00088081A /* PM.swift */; };
+		5744C71D2E375F0F0088081A /* pokemini.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5744C71B2E375EFF0088081A /* pokemini.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5744C72B2E377C800088081A /* ControllableSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C72A2E377C430088081A /* ControllableSideMenu.swift */; };
 		574789912D4CD185006F0D99 /* GameEditToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574789902D4CD185006F0D99 /* GameEditToolBar.swift */; };
 		574789BC2D4F8769006F0D99 /* SectionIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574789B92D4F8769006F0D99 /* SectionIndexView.swift */; };
 		574789BD2D4F8769006F0D99 /* SectionIndexViewItemIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574789BB2D4F8769006F0D99 /* SectionIndexViewItemIndicator.swift */; };
 		574789BE2D4F8769006F0D99 /* SectionIndexViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574789BA2D4F8769006F0D99 /* SectionIndexViewItem.swift */; };
 		57478A712D52037F006F0D99 /* RandomGameCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57478A702D52037F006F0D99 /* RandomGameCollectionReusableView.swift */; };
+		574ABE882E5F537C0045F76E /* bsnes.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 574ABE872E5F53620045F76E /* bsnes.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		574ABE992E6021550045F76E /* GBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574ABE982E6021520045F76E /* GBC.swift */; };
+		574ABE9E2E6024800045F76E /* gambatte.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 574ABE932E6020880045F76E /* gambatte.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		574ABEBC2E609FE60045F76E /* GBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574ABEBB2E609FE30045F76E /* GBA.swift */; };
+		574ABEC42E60A3C30045F76E /* vbam.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 574ABE952E6020880045F76E /* vbam.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		574ABEC52E60A3C90045F76E /* mgba.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 574ABE942E6020880045F76E /* mgba.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */; };
+		5754D88B2E274AC7001EA5ED /* OnlinePlaySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */; };
+		5754D88F2E274B27001EA5ED /* DSOnlinePlaySettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D88E2E274B1A001EA5ED /* DSOnlinePlaySettingCell.swift */; };
+		5754D8932E2751CA001EA5ED /* WFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D8922E2751C0001EA5ED /* WFC.swift */; };
+		5754D8962E2752C6001EA5ED /* ExtraKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D8952E2752C0001EA5ED /* ExtraKey.swift */; };
+		5754D8C42E27A573001EA5ED /* mednafen.vb.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5754D8C22E27A562001EA5ED /* mednafen.vb.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5754D8C82E27A864001EA5ED /* VB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D8C72E27A861001EA5ED /* VB.swift */; };
 		575A39CC2DCCFA6B00B28FC2 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 575A39CB2DCCFA6B00B28FC2 /* SwiftSoup */; };
 		575A39CE2DCD011500B28FC2 /* OnlineCoverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575A39CD2DCD00FE00B28FC2 /* OnlineCoverManager.swift */; };
 		575A39D02DCD2B3E00B28FC2 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575A39CF2DCD2B3500B28FC2 /* UIImageViewExtensions.swift */; };
@@ -499,6 +537,8 @@
 		5768FE6C2DAE018E009974D1 /* MoltenVK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5768FE4C2DAE00F8009974D1 /* MoltenVK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5768FE6D2DAE031F009974D1 /* ThreeDSCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768F82A2DAE0082009974D1 /* ThreeDSCore.swift */; };
 		5768FE6E2DAE0325009974D1 /* ThreeDSObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5768F82C2DAE0082009974D1 /* ThreeDSObjC.mm */; };
+		576A7DA82E3B4B1400008E35 /* PS1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576A7DA72E3B4B1200008E35 /* PS1.swift */; };
+		576A7DAE2E3B4FD400008E35 /* mednafen.psx.hw.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576A7DAA2E3B4FBC00008E35 /* mednafen.psx.hw.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		576C46292E16D1060008D087 /* MultiDiscBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C46282E16D0F20008D087 /* MultiDiscBuilderViewController.swift */; };
 		576C46312E16D9090008D087 /* MultiDiscDescCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C46302E16D8F20008D087 /* MultiDiscDescCollectionCell.swift */; };
 		576C46352E16DA1B0008D087 /* MultiDiscItemCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C46342E16DA0D0008D087 /* MultiDiscItemCollectionCell.swift */; };
@@ -529,7 +569,7 @@
 		577005D42D3F2F8E00762E8F /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D32D3F2F8200762E8F /* WebServer.swift */; };
 		577005D62D3F398100762E8F /* PasteImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D52D3F396C00762E8F /* PasteImporter.swift */; };
 		577005DA2D3F404F00762E8F /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D92D3F404D00762E8F /* ImportError.swift */; };
-		577006092D3F980400762E8F /* TitleBlackHaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006082D3F980400762E8F /* TitleBlackHaderCollectionReusableView.swift */; };
+		577006092D3F980400762E8F /* BlackHaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006082D3F980400762E8F /* BlackHaderReusableView.swift */; };
 		5770061B2D4089ED00762E8F /* CloudDriveConnetor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770061A2D4089DD00762E8F /* CloudDriveConnetor.swift */; };
 		5770064F2D40E45F00762E8F /* CloudDriveBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770064E2D40E45F00762E8F /* CloudDriveBrowserViewController.swift */; };
 		577006572D410D7F00762E8F /* BrowserItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */; };
@@ -543,6 +583,8 @@
 		5770069C2D44BDEA00762E8F /* GameCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770069B2D44BDEA00762E8F /* GameCollectionViewCell.swift */; };
 		5770069E2D44C01800762E8F /* GamesCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770069D2D44C01800762E8F /* GamesCollectionReusableView.swift */; };
 		577006A22D44CB9C00762E8F /* SkinSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006A12D44CB9B00762E8F /* SkinSettingsViewController.swift */; };
+		5771C1AA2E62077A0062EDE0 /* MobyGamesKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */; };
+		5771C20A2E6569BE0062EDE0 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C2092E6569B60062EDE0 /* LeaderboardView.swift */; };
 		579076E32D8A990700ED90FB /* FunctionButtonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */; };
 		579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
@@ -574,6 +616,7 @@
 		57B6ECEC2D79E19E002E619C /* BlankSlateTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECEB2D79E19B002E619C /* BlankSlateTableView.swift */; };
 		57B6ECF52D79F1EA002E619C /* SkinSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */; };
 		57B6ED1E2D7ADED5002E619C /* CRTFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ED1D2D7ADED5002E619C /* CRTFilter.swift */; };
+		57BA59B52E3F13D100110849 /* LibretroCoreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */; };
 		57BFBE1E2DD32F7700AABF98 /* Libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57BFBE172DD32F7700AABF98 /* Libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57BFBE262DD32F9800AABF98 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5720CF202DB775850090C0F6 /* UIKit.framework */; };
 		57BFBE272DD32F9F00AABF98 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5720CF342DB775DF0090C0F6 /* QuartzCore.framework */; };
@@ -673,6 +716,7 @@
 		57E48D932D8D73AD008000A3 /* CheersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E48D922D8D7395008000A3 /* CheersView.swift */; };
 		57E8B0822E1CDB8B00F93E60 /* GB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8B0812E1CDB8800F93E60 /* GB.swift */; };
 		57E8B1022E2366DC00F93E60 /* BIOSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8B1012E2366D800F93E60 /* BIOSItem.swift */; };
+		57E8B18D2E2553CE00F93E60 /* HomeMenuImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8B18A2E2553CC00F93E60 /* HomeMenuImage.swift */; };
 		57E962F82D6AB4540022914C /* PlayHistoryItemCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E962F72D6AB43D0022914C /* PlayHistoryItemCollectionCell.swift */; };
 		57E962FA2D6AB4790022914C /* PlayHistoryFavouriteCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E962F92D6AB45B0022914C /* PlayHistoryFavouriteCollectionCell.swift */; };
 		57E9632A2D6B01450022914C /* ImportFileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E963292D6B013B0022914C /* ImportFileCollectionViewCell.swift */; };
@@ -760,6 +804,13 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				574ABEC52E60A3C90045F76E /* mgba.libretro.framework in Embed Frameworks */,
+				574ABEC42E60A3C30045F76E /* vbam.libretro.framework in Embed Frameworks */,
+				574ABE9E2E6024800045F76E /* gambatte.libretro.framework in Embed Frameworks */,
+				574ABE882E5F537C0045F76E /* bsnes.libretro.framework in Embed Frameworks */,
+				576A7DAE2E3B4FD400008E35 /* mednafen.psx.hw.libretro.framework in Embed Frameworks */,
+				5744C71D2E375F0F0088081A /* pokemini.libretro.framework in Embed Frameworks */,
+				5754D8C42E27A573001EA5ED /* mednafen.vb.libretro.framework in Embed Frameworks */,
 				57D0BC0F2E1AD35D008C3049 /* mupen64plus.next.libretro.framework in Embed Frameworks */,
 				57DCE8542E0F978B0079E3AA /* yabause.libretro.framework in Embed Frameworks */,
 				57DCE7A12E0C434C0079E3AA /* mednafen.saturn.libretro.framework in Embed Frameworks */,
@@ -802,7 +853,7 @@
 		5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSSelectionViewController.swift; sourceTree = "<group>"; };
 		5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSSelectionView.swift; sourceTree = "<group>"; };
 		5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSCollectionViewCell.swift; sourceTree = "<group>"; };
-		5706AFCE2DF7FC510066122E /* BOISDescriptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BOISDescriptionCollectionViewCell.swift; sourceTree = "<group>"; };
+		5706AFCE2DF7FC510066122E /* SettingDescriptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDescriptionCollectionViewCell.swift; sourceTree = "<group>"; };
 		5706B0362DFBEC190066122E /* SG1000.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SG1000.swift; sourceTree = "<group>"; };
 		5706B0382DFBEC220066122E /* GG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GG.swift; sourceTree = "<group>"; };
 		5706B03F2DFBEC2E0066122E /* MS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MS.swift; sourceTree = "<group>"; };
@@ -851,18 +902,56 @@
 		5720D1C02DB9DCB10090C0F6 /* ControllerMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerMapping.swift; sourceTree = "<group>"; };
 		5720D1C22DBA01740090C0F6 /* MappingTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingTipView.swift; sourceTree = "<group>"; };
 		5720D1C42DBA0DE70090C0F6 /* ControllerMappingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerMappingViewController.swift; sourceTree = "<group>"; };
+		5720E7602E540F1A00EC0DA5 /* RetroAchievementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsViewController.swift; sourceTree = "<group>"; };
+		5720E7642E540F5F00EC0DA5 /* RetroAchievementsLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsLoginView.swift; sourceTree = "<group>"; };
+		5720E76C2E540FC200EC0DA5 /* RetroAchievementsProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsProfileView.swift; sourceTree = "<group>"; };
+		5720E7812E54108F00EC0DA5 /* RetroAchievementsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsDetailViewController.swift; sourceTree = "<group>"; };
+		5720E7872E5410C000EC0DA5 /* RetroAchievementsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsDetailView.swift; sourceTree = "<group>"; };
+		5720E78B2E54111C00EC0DA5 /* RetroAchievementsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsListViewController.swift; sourceTree = "<group>"; };
+		5720E78D2E54112A00EC0DA5 /* RetroAchievementListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementListView.swift; sourceTree = "<group>"; };
+		5720E7A12E541BE900EC0DA5 /* CheevosBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CheevosBridge.h; path = ../Cores/Libretro/ui/drivers/cocoa/CheevosBridge.h; sourceTree = SOURCE_ROOT; };
+		5720E7A22E541BF500EC0DA5 /* CheevosBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CheevosBridge.m; path = ../Cores/Libretro/ui/drivers/CheevosBridge.m; sourceTree = SOURCE_ROOT; };
+		5720E7A92E541F1100EC0DA5 /* RadialGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialGradientView.swift; sourceTree = "<group>"; };
+		5720E7C92E5446F700EC0DA5 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		5720E7E62E5461C600EC0DA5 /* RetroAchievementsProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsProfileCell.swift; sourceTree = "<group>"; };
+		5720E7EC2E547FD800EC0DA5 /* AchievementsProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsProfile.swift; sourceTree = "<group>"; };
+		5720E7F52E5569D600EC0DA5 /* RetroAchievementsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementsListCell.swift; sourceTree = "<group>"; };
+		5720E8102E559ED600EC0DA5 /* RetroAchievementCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroAchievementCountView.swift; sourceTree = "<group>"; };
+		5720E8452E5C4AA600EC0DA5 /* AchievementsUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsUser.swift; sourceTree = "<group>"; };
 		5726FED72D71B63A00041AD5 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		5726FED92D71B94700041AD5 /* MembershipCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipCollectionViewCell.swift; sourceTree = "<group>"; };
 		5726FEDC2D71BEF900041AD5 /* SettingsItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		5726FEE62D71D7F100041AD5 /* SettingsListFooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsListFooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		5726FF802D74AC8D00041AD5 /* RoundAndBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundAndBorderView.swift; sourceTree = "<group>"; };
+		57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIImportViewController.swift; sourceTree = "<group>"; };
+		57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBICollectionCell.swift; sourceTree = "<group>"; };
+		57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIDescCollectionCell.swift; sourceTree = "<group>"; };
+		57399B182E42EDE800AB73DD /* DeadZoneControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadZoneControl.swift; sourceTree = "<group>"; };
 		5739D1BD2DA79D220090409D /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		573BECBC2D1D3F6B008AD18D /* HomeTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBar.swift; sourceTree = "<group>"; };
+		5744C6CE2E360AD50088081A /* UIControllerKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControllerKit.swift; sourceTree = "<group>"; };
+		5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoControllCollectionView.swift; sourceTree = "<group>"; };
+		5744C7172E375BF00088081A /* PM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PM.swift; sourceTree = "<group>"; };
+		5744C71B2E375EFF0088081A /* pokemini.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pokemini.libretro.framework; path = ../Cores/pokemini.libretro.framework; sourceTree = SOURCE_ROOT; };
+		5744C72A2E377C430088081A /* ControllableSideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllableSideMenu.swift; sourceTree = "<group>"; };
 		574789902D4CD185006F0D99 /* GameEditToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEditToolBar.swift; sourceTree = "<group>"; };
 		574789B92D4F8769006F0D99 /* SectionIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionIndexView.swift; sourceTree = "<group>"; };
 		574789BA2D4F8769006F0D99 /* SectionIndexViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionIndexViewItem.swift; sourceTree = "<group>"; };
 		574789BB2D4F8769006F0D99 /* SectionIndexViewItemIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionIndexViewItemIndicator.swift; sourceTree = "<group>"; };
 		57478A702D52037F006F0D99 /* RandomGameCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomGameCollectionReusableView.swift; sourceTree = "<group>"; };
+		574ABE872E5F53620045F76E /* bsnes.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = bsnes.libretro.framework; path = ../Cores/bsnes.libretro.framework; sourceTree = SOURCE_ROOT; };
+		574ABE932E6020880045F76E /* gambatte.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gambatte.libretro.framework; path = ../Cores/gambatte.libretro.framework; sourceTree = SOURCE_ROOT; };
+		574ABE942E6020880045F76E /* mgba.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mgba.libretro.framework; path = ../Cores/mgba.libretro.framework; sourceTree = SOURCE_ROOT; };
+		574ABE952E6020880045F76E /* vbam.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vbam.libretro.framework; path = ../Cores/vbam.libretro.framework; sourceTree = SOURCE_ROOT; };
+		574ABE982E6021520045F76E /* GBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GBC.swift; sourceTree = "<group>"; };
+		574ABEBB2E609FE30045F76E /* GBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GBA.swift; sourceTree = "<group>"; };
+		5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlaySettingViewController.swift; sourceTree = "<group>"; };
+		5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlaySettingView.swift; sourceTree = "<group>"; };
+		5754D88E2E274B1A001EA5ED /* DSOnlinePlaySettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSOnlinePlaySettingCell.swift; sourceTree = "<group>"; };
+		5754D8922E2751C0001EA5ED /* WFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFC.swift; sourceTree = "<group>"; };
+		5754D8952E2752C0001EA5ED /* ExtraKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraKey.swift; sourceTree = "<group>"; };
+		5754D8C22E27A562001EA5ED /* mednafen.vb.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.vb.libretro.framework; path = ../Cores/mednafen.vb.libretro.framework; sourceTree = SOURCE_ROOT; };
+		5754D8C72E27A861001EA5ED /* VB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VB.swift; sourceTree = "<group>"; };
 		575A39CD2DCD00FE00B28FC2 /* OnlineCoverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineCoverManager.swift; sourceTree = "<group>"; };
 		575A39CF2DCD2B3500B28FC2 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		575A39D12DCD2F9000B28FC2 /* GameCoverSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoverSearchViewController.swift; sourceTree = "<group>"; };
@@ -1385,6 +1474,8 @@
 		5768FE4A2DAE00F8009974D1 /* libswscale.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libswscale.xcframework; path = ../Cores/Citra/Dependencies/XCFrameworks/libswscale.xcframework; sourceTree = SOURCE_ROOT; };
 		5768FE4B2DAE00F8009974D1 /* libteakra.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libteakra.xcframework; path = ../Cores/Citra/Dependencies/XCFrameworks/libteakra.xcframework; sourceTree = SOURCE_ROOT; };
 		5768FE4C2DAE00F8009974D1 /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = ../Cores/Citra/Dependencies/XCFrameworks/MoltenVK.xcframework; sourceTree = SOURCE_ROOT; };
+		576A7DA72E3B4B1200008E35 /* PS1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PS1.swift; sourceTree = "<group>"; };
+		576A7DAA2E3B4FBC00008E35 /* mednafen.psx.hw.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.psx.hw.libretro.framework; path = ../Cores/mednafen.psx.hw.libretro.framework; sourceTree = SOURCE_ROOT; };
 		576C46282E16D0F20008D087 /* MultiDiscBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDiscBuilderViewController.swift; sourceTree = "<group>"; };
 		576C46302E16D8F20008D087 /* MultiDiscDescCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDiscDescCollectionCell.swift; sourceTree = "<group>"; };
 		576C46342E16DA0D0008D087 /* MultiDiscItemCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDiscItemCollectionCell.swift; sourceTree = "<group>"; };
@@ -1415,7 +1506,7 @@
 		577005D32D3F2F8200762E8F /* WebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
 		577005D52D3F396C00762E8F /* PasteImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteImporter.swift; sourceTree = "<group>"; };
 		577005D92D3F404D00762E8F /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
-		577006082D3F980400762E8F /* TitleBlackHaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBlackHaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		577006082D3F980400762E8F /* BlackHaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHaderReusableView.swift; sourceTree = "<group>"; };
 		5770061A2D4089DD00762E8F /* CloudDriveConnetor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDriveConnetor.swift; sourceTree = "<group>"; };
 		5770064E2D40E45F00762E8F /* CloudDriveBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDriveBrowserViewController.swift; sourceTree = "<group>"; };
 		577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserItemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1429,6 +1520,8 @@
 		5770069B2D44BDEA00762E8F /* GameCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCollectionViewCell.swift; sourceTree = "<group>"; };
 		5770069D2D44C01800762E8F /* GamesCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesCollectionReusableView.swift; sourceTree = "<group>"; };
 		577006A12D44CB9B00762E8F /* SkinSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSettingsViewController.swift; sourceTree = "<group>"; };
+		5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobyGamesKit.swift; sourceTree = "<group>"; };
+		5771C2092E6569B60062EDE0 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
 		5780E7F42D9586FB005130D5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5780E7F52D9586FB005130D5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5780E7F72D958D6F005130D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1533,6 +1626,7 @@
 		57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSettingsView.swift; sourceTree = "<group>"; };
 		57B6ED1D2D7ADED5002E619C /* CRTFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRTFilter.swift; sourceTree = "<group>"; };
 		57BA45C12D1B235400BCA5E1 /* Config-Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Base.xcconfig"; sourceTree = "<group>"; };
+		57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibretroCoreExtensions.swift; sourceTree = "<group>"; };
 		57BFBE172DD32F7700AABF98 /* Libretro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Libretro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57BFBE472DD3321A00AABF98 /* Libretro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Libretro.h; sourceTree = "<group>"; };
 		57BFBE4A2DD3322B00AABF98 /* LibretroConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LibretroConfig.xcconfig; sourceTree = "<group>"; };
@@ -1622,6 +1716,7 @@
 		57E48D922D8D7395008000A3 /* CheersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheersView.swift; sourceTree = "<group>"; };
 		57E8B0812E1CDB8800F93E60 /* GB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GB.swift; sourceTree = "<group>"; };
 		57E8B1012E2366D800F93E60 /* BIOSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSItem.swift; sourceTree = "<group>"; };
+		57E8B18A2E2553CC00F93E60 /* HomeMenuImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuImage.swift; sourceTree = "<group>"; };
 		57E962F72D6AB43D0022914C /* PlayHistoryItemCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayHistoryItemCollectionCell.swift; sourceTree = "<group>"; };
 		57E962F92D6AB45B0022914C /* PlayHistoryFavouriteCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayHistoryFavouriteCollectionCell.swift; sourceTree = "<group>"; };
 		57E963292D6B013B0022914C /* ImportFileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1762,6 +1857,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				575DD2C72DDB809600EB1DBB /* Libretro.framework in Frameworks */,
+				5744C6622E34D6E20088081A /* KeyboardKit in Frameworks */,
 				571748392DA26F1E007CCE25 /* CoreBluetooth.framework in Frameworks */,
 				5706B0BE2DFDE4570066122E /* BlurUIKit in Frameworks */,
 				570F59BC2DC91FC8007BFD92 /* ChromaColorPicker in Frameworks */,
@@ -1878,6 +1974,48 @@
 			path = ThirdParty;
 			sourceTree = "<group>";
 		};
+		5720E7702E54103100EC0DA5 /* RetroAchievements */ = {
+			isa = PBXGroup;
+			children = (
+				5720E7EB2E547FD200EC0DA5 /* Models */,
+				5720E7732E54106000EC0DA5 /* Views */,
+				5720E7782E54106800EC0DA5 /* ViewControllers */,
+			);
+			path = RetroAchievements;
+			sourceTree = "<group>";
+		};
+		5720E7732E54106000EC0DA5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5720E78D2E54112A00EC0DA5 /* RetroAchievementListView.swift */,
+				5720E7F52E5569D600EC0DA5 /* RetroAchievementsListCell.swift */,
+				5720E7872E5410C000EC0DA5 /* RetroAchievementsDetailView.swift */,
+				5720E76C2E540FC200EC0DA5 /* RetroAchievementsProfileView.swift */,
+				5720E7E62E5461C600EC0DA5 /* RetroAchievementsProfileCell.swift */,
+				5720E7642E540F5F00EC0DA5 /* RetroAchievementsLoginView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5720E7782E54106800EC0DA5 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5720E78B2E54111C00EC0DA5 /* RetroAchievementsListViewController.swift */,
+				5720E7812E54108F00EC0DA5 /* RetroAchievementsDetailViewController.swift */,
+				5720E7602E540F1A00EC0DA5 /* RetroAchievementsViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		5720E7EB2E547FD200EC0DA5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5720E8452E5C4AA600EC0DA5 /* AchievementsUser.swift */,
+				5720E7EC2E547FD800EC0DA5 /* AchievementsProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		574789B82D4F8760006F0D99 /* SectionIndexView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1920,6 +2058,7 @@
 		57605FF62D20F23200A98B0C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */,
 				5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */,
 				570F592D2DC885E3007BFD92 /* ThemeViewController.swift */,
 				57605FFD2D20F29000A98B0C /* SettingsViewController.swift */,
@@ -3405,6 +3544,8 @@
 		577005562D3CC2DE00762E8F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5754D8952E2752C0001EA5ED /* ExtraKey.swift */,
+				57E8B18A2E2553CC00F93E60 /* HomeMenuImage.swift */,
 				577005D92D3F404D00762E8F /* ImportError.swift */,
 				577005572D3CC30400762E8F /* FileType.swift */,
 			);
@@ -3514,6 +3655,7 @@
 		57913B3E2D5ED4A8004D51AA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */,
 				575A39D12DCD2F9000B28FC2 /* GameCoverSearchViewController.swift */,
 				57913B3F2D5ED4C1004D51AA /* GameInfoViewController.swift */,
 				57DCE7D62E0D2EEB0079E3AA /* ThreeDSAdvancedSettingViewController.swift */,
@@ -3524,6 +3666,8 @@
 		57913B432D5ED727004D51AA /* VIews */ = {
 			isa = PBXGroup;
 			children = (
+				57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */,
+				57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */,
 				576F0E042D88005800D2A1BA /* GameSavePurchaseGuideView.swift */,
 				576F0E062D88069900D2A1BA /* GameSavePurchaseGuideReusableView.swift */,
 				57F1A9172D7D25B600D0CC93 /* GameInfoView.swift */,
@@ -3539,6 +3683,7 @@
 		57B6EC612D77F224002E619C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5771C2092E6569B60062EDE0 /* LeaderboardView.swift */,
 				5720CACB2DB5558B0090C0F6 /* ThreeDSKeyboardView.swift */,
 				579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */,
 				57EC6A6C2D7FC1E3002920F0 /* GameSettingSortCollectionReusableView.swift */,
@@ -3576,6 +3721,8 @@
 				57BFBE562DD332A100AABF98 /* cocoa_common.m */,
 				57BFBE572DD332A100AABF98 /* LibretroCore.h */,
 				57BFBE5E2DD332DA00AABF98 /* LibretroCore.m */,
+				5720E7A12E541BE900EC0DA5 /* CheevosBridge.h */,
+				5720E7A22E541BF500EC0DA5 /* CheevosBridge.m */,
 				57BFBE642DD3330900AABF98 /* keyboard_event_apple.h */,
 				57BFBE622DD332FF00AABF98 /* input_keymaps.h */,
 				575F03A62DD59AED00950399 /* manic_joypad.m */,
@@ -3601,6 +3748,13 @@
 		57BFBE702DD335FD00AABF98 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				574ABE932E6020880045F76E /* gambatte.libretro.framework */,
+				574ABE942E6020880045F76E /* mgba.libretro.framework */,
+				574ABE952E6020880045F76E /* vbam.libretro.framework */,
+				574ABE872E5F53620045F76E /* bsnes.libretro.framework */,
+				576A7DAA2E3B4FBC00008E35 /* mednafen.psx.hw.libretro.framework */,
+				5744C71B2E375EFF0088081A /* pokemini.libretro.framework */,
+				5754D8C22E27A562001EA5ED /* mednafen.vb.libretro.framework */,
 				57D0BC0D2E1AD31A008C3049 /* mupen64plus.next.libretro.framework */,
 				57DCE8522E0F97780079E3AA /* yabause.libretro.framework */,
 				57DCE79D2E0C43310079E3AA /* mednafen.saturn.libretro.framework */,
@@ -3635,6 +3789,7 @@
 		57CCB3C62D6770C20036476B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5754D8922E2751C0001EA5ED /* WFC.swift */,
 				57E8B1012E2366D800F93E60 /* BIOSItem.swift */,
 				570F591B2DC7083E007BFD92 /* Theme.swift */,
 				57F632FF2D718360007270E8 /* SettingItem.swift */,
@@ -3757,6 +3912,7 @@
 		57E962EF2D69F4D40022914C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5720E8102E559ED600EC0DA5 /* RetroAchievementCountView.swift */,
 				57EC6AB72D8037FE002920F0 /* PlayHistoryBlankSlateView.swift */,
 				57E962F92D6AB45B0022914C /* PlayHistoryFavouriteCollectionCell.swift */,
 				57E962F72D6AB43D0022914C /* PlayHistoryItemCollectionCell.swift */,
@@ -3768,6 +3924,11 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				574ABEBB2E609FE30045F76E /* GBA.swift */,
+				576A7DA72E3B4B1200008E35 /* PS1.swift */,
+				5744C7172E375BF00088081A /* PM.swift */,
+				5754D8C72E27A861001EA5ED /* VB.swift */,
+				574ABE982E6021520045F76E /* GBC.swift */,
 				57E8B0812E1CDB8800F93E60 /* GB.swift */,
 				57D0BC092E1AD2BB008C3049 /* N64.swift */,
 				5706B0592DFC0F7A0066122E /* SS.swift */,
@@ -3804,7 +3965,9 @@
 		57F632FC2D718224007270E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5706AFCE2DF7FC510066122E /* BOISDescriptionCollectionViewCell.swift */,
+				5754D88E2E274B1A001EA5ED /* DSOnlinePlaySettingCell.swift */,
+				5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */,
+				5706AFCE2DF7FC510066122E /* SettingDescriptionCollectionViewCell.swift */,
 				5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */,
 				5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */,
 				576F0E162D8820AB00D2A1BA /* MembershipInfoView.swift */,
@@ -3836,6 +3999,7 @@
 		A52C1D84257F91430029B15B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				5744C72A2E377C430088081A /* ControllableSideMenu.swift */,
 				579213522D95313800E88819 /* BaseNavigationController.swift */,
 				57AD35E92D7DEB900092FD03 /* WebViewController.swift */,
 				A52C1D85257F91550029B15B /* BaseViewController.swift */,
@@ -3857,9 +4021,12 @@
 		A561F94D257DCB5200E800A8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				57399B182E42EDE800AB73DD /* DeadZoneControl.swift */,
+				5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */,
 				57DCE82E2E0E9ACB0079E3AA /* LimitedTextInputView.swift */,
 				5713300E2D90FF770043C28A /* BaseView.swift */,
 				579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */,
+				5720E7A92E541F1100EC0DA5 /* RadialGradientView.swift */,
 				576F0E112D8816F200D2A1BA /* GradientLabelView.swift */,
 				576F0E0B2D880DD600D2A1BA /* GradientImageView.swift */,
 				57B6EC642D77F81E002E619C /* SettingItemCollectionViewCell.swift */,
@@ -3872,7 +4039,7 @@
 				5760601B2D2393EB00A98B0C /* SymbolView.swift */,
 				57DE10462D606C4700CDD82A /* SymbolButton.swift */,
 				57CCB3FE2D69B3FE0036476B /* ContextMenuButton.swift */,
-				577006082D3F980400762E8F /* TitleBlackHaderCollectionReusableView.swift */,
+				577006082D3F980400762E8F /* BlackHaderReusableView.swift */,
 				57DF840B2D61B3D500AA0AAB /* BlankSlateCollectionView.swift */,
 				57B6ECEB2D79E19B002E619C /* BlankSlateTableView.swift */,
 				57DE104D2D6088BE00CDD82A /* BlankPlaceholderView.swift */,
@@ -3897,6 +4064,7 @@
 				57605FF52D20F21A00A98B0C /* Settings */,
 				57F1A9362D7D701500D0CC93 /* AirPlay */,
 				57047A062D85215400C62FF6 /* Purchase */,
+				5720E7702E54103100EC0DA5 /* RetroAchievements */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -3980,6 +4148,8 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */,
+				5744C6CE2E360AD50088081A /* UIControllerKit.swift */,
 				57DCE8552E0FC9B60079E3AA /* CoreSelectionView.swift */,
 				57DCE7DA2E0D385E0079E3AA /* INIFile.swift */,
 				57655C252DF6BCE3003E4A6E /* PlatformSelectionView.swift */,
@@ -4040,6 +4210,8 @@
 		A5DE1F73256BDE140099425B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5720E7C92E5446F700EC0DA5 /* ArrayExtensions.swift */,
+				57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */,
 				575A39CF2DCD2B3500B28FC2 /* UIImageViewExtensions.swift */,
 				57CC354B2DBF216200DF7418 /* ControllerSkinExtensions.swift */,
 				57CC33BD2DBCDF2C00DF7418 /* CGRectExtensions.swift */,
@@ -4202,7 +4374,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
-				ORGANIZATIONNAME = DavidDay;
+				ORGANIZATIONNAME = "Manic EMU";
 				TargetAttributes = {
 					571744132DA2637F007CCE25 = {
 						CreatedOnToolsVersion = 16.2;
@@ -4262,7 +4434,7 @@
 			);
 			mainGroup = A5A001E624555A5F006E0F0E;
 			packageReferences = (
-				576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */,
+				576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */,
 				57DF84BD2D637A1A00AA0AAB /* XCRemoteSwiftPackageReference "DominantColors" */,
 				57F632CC2D7050B9007270E8 /* XCRemoteSwiftPackageReference "SMBClient" */,
 				57F632E12D714E46007270E8 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */,
@@ -4273,11 +4445,12 @@
 				5717445C2DA264FF007CCE25 /* XCRemoteSwiftPackageReference "zstd" */,
 				5717445F2DA2652F007CCE25 /* XCRemoteSwiftPackageReference "OpenSSL" */,
 				571BB9382DA44D6B00830134 /* XCRemoteSwiftPackageReference "SwiftSDL2" */,
-				570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "ChromaColorPicker" */,
+				570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "../ChromaColorPicker" */,
 				575A39CA2DCCFA6B00B28FC2 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				570A27FE2DCF03CF001249C6 /* XCRemoteSwiftPackageReference "PLzmaSDK" */,
 				57F0D8492DE2E7A600760F57 /* XCRemoteSwiftPackageReference "SwiftCloudDrive" */,
 				5706B0BC2DFDE4570066122E /* XCRemoteSwiftPackageReference "BlurUIKit" */,
+				5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */,
 			);
 			productRefGroup = A5A001F024555A5F006E0F0E /* Products */;
 			projectDirPath = "";
@@ -4343,9 +4516,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManicEmu/Pods-ManicEmu-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManicEmu/Pods-ManicEmu-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4752,6 +4929,7 @@
 				57BFBE6E2DD3331A00AABF98 /* griffin_objc.m in Sources */,
 				57BFBE5F2DD332DA00AABF98 /* LibretroCore.m in Sources */,
 				57BFBE6D2DD3331A00AABF98 /* griffin.c in Sources */,
+				5720E7A32E541BF500EC0DA5 /* CheevosBridge.m in Sources */,
 				57BFBE522DD3328500AABF98 /* JITSupport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4788,14 +4966,18 @@
 				57F632AD2D6FEC32007270E8 /* WebDavServiceProvider.swift in Sources */,
 				570F59102DC5BB03007BFD92 /* ThemeColorCollectionViewCell.swift in Sources */,
 				57B6ECCD2D798425002E619C /* CheatTypeExtensions.swift in Sources */,
+				5754D88B2E274AC7001EA5ED /* OnlinePlaySettingView.swift in Sources */,
 				57913B452D5ED78C004D51AA /* GameInfoDetailReusableView.swift in Sources */,
 				579076E32D8A990700ED90FB /* FunctionButtonContainerView.swift in Sources */,
 				577006572D410D7F00762E8F /* BrowserItemCollectionViewCell.swift in Sources */,
 				5770055A2D3CC36B00762E8F /* Game.swift in Sources */,
 				5713303E2D914C2F0043C28A /* CreamAssetExtensions.swift in Sources */,
 				5726FEDD2D71BF0400041AD5 /* SettingsItemCollectionViewCell.swift in Sources */,
+				5720E76D2E540FDB00EC0DA5 /* RetroAchievementsProfileView.swift in Sources */,
 				57605FFE2D20F29000A98B0C /* SettingsViewController.swift in Sources */,
 				573BECBD2D1D3F6B008AD18D /* HomeTabBar.swift in Sources */,
+				5720E8462E5C4AA900EC0DA5 /* AchievementsUser.swift in Sources */,
+				5720E7882E5410D000EC0DA5 /* RetroAchievementsDetailView.swift in Sources */,
 				A52C1D86257F91550029B15B /* BaseViewController.swift in Sources */,
 				A5DE1F6C256BDD250099425B /* HomeViewController.swift in Sources */,
 				A519A38A256FCA50008AD6CE /* StringExtensions.swift in Sources */,
@@ -4807,6 +4989,7 @@
 				5720D1BE2DB9D3A50090C0F6 /* ControllerMappingView.swift in Sources */,
 				57047A1F2D85C95900C62FF6 /* PurchaseViewController.swift in Sources */,
 				5720D1C52DBA0DF10090C0F6 /* ControllerMappingViewController.swift in Sources */,
+				5720E7F62E5569DC00EC0DA5 /* RetroAchievementsListCell.swift in Sources */,
 				577005A72D3E4CE400762E8F /* GameTypeExtensions.swift in Sources */,
 				57913B422D5ED722004D51AA /* GameInfoCoverView.swift in Sources */,
 				577005582D3CC30A00762E8F /* FileType.swift in Sources */,
@@ -4816,12 +4999,16 @@
 				57EC6AB02D80321B002920F0 /* CheatCodeBlankSlateView.swift in Sources */,
 				57F0D7F22DE1634E00760F57 /* LibretroPreViewFilter.swift in Sources */,
 				A58C3F4F248E44AF0099E068 /* UIDeviceExtensions.swift in Sources */,
+				5720E7E72E5461CA00EC0DA5 /* RetroAchievementsProfileCell.swift in Sources */,
 				57DA89002D828C6A0074052A /* TKSwitchExtensions.swift in Sources */,
 				5720CACC2DB555990090C0F6 /* ThreeDSKeyboardView.swift in Sources */,
 				57047A162D8571D600C62FF6 /* PriceItemCollectionCell.swift in Sources */,
 				57F1A9182D7D25B900D0CC93 /* GameInfoView.swift in Sources */,
+				5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */,
 				5770069C2D44BDEA00762E8F /* GameCollectionViewCell.swift in Sources */,
 				577005782D3D60B700762E8F /* GameCheat.swift in Sources */,
+				574ABEBC2E609FE60045F76E /* GBA.swift in Sources */,
+				5754D8932E2751CA001EA5ED /* WFC.swift in Sources */,
 				5770055F2D3CC40400762E8F /* Skin.swift in Sources */,
 				57913B492D5ED7D7004D51AA /* SaveItemCollectionViewCell.swift in Sources */,
 				577005D42D3F2F8E00762E8F /* WebServer.swift in Sources */,
@@ -4833,6 +5020,7 @@
 				57E962F82D6AB4540022914C /* PlayHistoryItemCollectionCell.swift in Sources */,
 				57CCB33B2D6584BC0036476B /* ObjectUpdatable.swift in Sources */,
 				576C46312E16D9090008D087 /* MultiDiscDescCollectionCell.swift in Sources */,
+				57399AC52E40ACE100AB73DD /* PSXSBIImportViewController.swift in Sources */,
 				570F59152DC5BB48007BFD92 /* PlatformSortCollectionViewCell.swift in Sources */,
 				B2C97B4E2A09F3B900053A4C /* UIColorExtensions.swift in Sources */,
 				57B6ECF52D79F1EA002E619C /* SkinSettingsView.swift in Sources */,
@@ -4854,6 +5042,7 @@
 				57E962FA2D6AB4790022914C /* PlayHistoryFavouriteCollectionCell.swift in Sources */,
 				576F0E152D88209000D2A1BA /* SettingsMembershipGiftView.swift in Sources */,
 				5706B0492DFBF83C0066122E /* 32X.swift in Sources */,
+				5720E7AA2E541F2000EC0DA5 /* RadialGradientView.swift in Sources */,
 				57B6ECC22D796B97002E619C /* CheatCodeCollectionViewCell.swift in Sources */,
 				A52C1D89257F96C90029B15B /* UIViewControllerExtensions.swift in Sources */,
 				57DE0FF82D5F456700CDD82A /* CheatCodeViewController.swift in Sources */,
@@ -4861,7 +5050,10 @@
 				5706236E2D7BE2C9004F09E7 /* OriginFilter.swift in Sources */,
 				57655C262DF6BCF3003E4A6E /* PlatformSelectionView.swift in Sources */,
 				577005552D3CC25700762E8F /* FilesImporter.swift in Sources */,
+				576A7DA82E3B4B1400008E35 /* PS1.swift in Sources */,
+				5720E7842E5410B100EC0DA5 /* RetroAchievementsDetailViewController.swift in Sources */,
 				57CCB3C82D6770CE0036476B /* Settings.swift in Sources */,
+				5720E7612E540F3500EC0DA5 /* RetroAchievementsViewController.swift in Sources */,
 				576F0DCC2D86D7B900D2A1BA /* ProductExtensions.swift in Sources */,
 				57CC35892DC09BDC00DF7418 /* DownloadButton.swift in Sources */,
 				57DCE8302E0E9B040079E3AA /* LimitedTextInputView.swift in Sources */,
@@ -4875,6 +5067,7 @@
 				577005B52D3E6F3000762E8F /* AddImportServiceView.swift in Sources */,
 				57EC6AA62D801F56002920F0 /* GamesListBlankSlateView.swift in Sources */,
 				57F6327C2D6EA8D3007270E8 /* DropGlowEffectView.swift in Sources */,
+				5771C1AA2E62077A0062EDE0 /* MobyGamesKit.swift in Sources */,
 				577005762D3D42FA00762E8F /* FileHashUtil.swift in Sources */,
 				570F590C2DC5B838007BFD92 /* ThemeSettingView.swift in Sources */,
 				577005DA2D3F404F00762E8F /* ImportError.swift in Sources */,
@@ -4885,18 +5078,23 @@
 				57E9632C2D6B06320022914C /* ImportFooterCollectionReusableView.swift in Sources */,
 				57B6ECCB2D797CB8002E619C /* AddCheatCodeContentCell.swift in Sources */,
 				57B6EC632D77F234002E619C /* GameSettingView.swift in Sources */,
+				57399AC82E40AFBA00AB73DD /* PSXSBICollectionCell.swift in Sources */,
 				57CCB3A92D66CE610036476B /* SkinCollectionViewCell.swift in Sources */,
 				5706B0FA2DFFED100066122E /* Shaders.metal in Sources */,
 				576060182D22BC5900A98B0C /* PersistedKit.swift in Sources */,
 				577006872D438EBF00762E8F /* PlayHistoryViewController.swift in Sources */,
 				57DCE7FE2E0D9F300079E3AA /* RowStyle.swift in Sources */,
+				57E8B18D2E2553CE00F93E60 /* HomeMenuImage.swift in Sources */,
 				57DCE7FF2E0D9F300079E3AA /* NavigationRow.swift in Sources */,
 				57DCE8002E0D9F300079E3AA /* TapActionRow.swift in Sources */,
 				57DCE8012E0D9F300079E3AA /* DetailText.swift in Sources */,
+				5720E7ED2E547FE100EC0DA5 /* AchievementsProfile.swift in Sources */,
 				57DCE8022E0D9F300079E3AA /* SwitchRow.swift in Sources */,
+				57399ACF2E40BB4D00AB73DD /* PSXSBIDescCollectionCell.swift in Sources */,
 				57DCE8032E0D9F300079E3AA /* QuickTableViewController.swift in Sources */,
 				57DCE8042E0D9F300079E3AA /* Deprecated.swift in Sources */,
 				57E8B1022E2366DC00F93E60 /* BIOSItem.swift in Sources */,
+				5754D88F2E274B27001EA5ED /* DSOnlinePlaySettingCell.swift in Sources */,
 				57DCE8052E0D9F300079E3AA /* RowCompatible.swift in Sources */,
 				57DCE8062E0D9F300079E3AA /* OptionRow.swift in Sources */,
 				57DCE8072E0D9F300079E3AA /* Icon.swift in Sources */,
@@ -4905,6 +5103,7 @@
 				57DCE80A2E0D9F300079E3AA /* Section.swift in Sources */,
 				57DCE80B2E0D9F300079E3AA /* Subtitle.swift in Sources */,
 				57DCE80C2E0D9F300079E3AA /* Row.swift in Sources */,
+				5754D8962E2752C6001EA5ED /* ExtraKey.swift in Sources */,
 				57DCE80D2E0D9F300079E3AA /* Reusable.swift in Sources */,
 				57DCE80E2E0D9F300079E3AA /* RadioSection.swift in Sources */,
 				57DCE80F2E0D9F300079E3AA /* TapActionCell.swift in Sources */,
@@ -4922,12 +5121,14 @@
 				57605FFC2D20F28100A98B0C /* ImportViewController.swift in Sources */,
 				57B6EC592D77DDFE002E619C /* GameSetting.swift in Sources */,
 				570F59202DC7ACA8007BFD92 /* GameCoverView.swift in Sources */,
+				5720E78C2E54112700EC0DA5 /* RetroAchievementsListViewController.swift in Sources */,
 				5760601C2D2393EB00A98B0C /* SymbolView.swift in Sources */,
 				B26262102A260E4C00174003 /* SideMenuShowStyle.swift in Sources */,
 				576C46292E16D1060008D087 /* MultiDiscBuilderViewController.swift in Sources */,
 				5706B0FD2DFFED170066122E /* menu_pipeline.metal in Sources */,
 				570F59BE2DC91FD9007BFD92 /* ColorPickerViewController.swift in Sources */,
 				57478A712D52037F006F0D99 /* RandomGameCollectionReusableView.swift in Sources */,
+				5720E8112E559EE600EC0DA5 /* RetroAchievementCountView.swift in Sources */,
 				577005B92D3E71BC00762E8F /* ImportService.swift in Sources */,
 				570622EC2D7BD2FE004F09E7 /* FilterManager.swift in Sources */,
 				57B6EC652D77F832002E619C /* SettingItemCollectionViewCell.swift in Sources */,
@@ -4937,21 +5138,27 @@
 				5706AFC22DF7D94F0066122E /* BIOSSelectionView.swift in Sources */,
 				57E0CC8F2D8F0E1F0027FB8C /* EntryExtensions.swift in Sources */,
 				577005D62D3F398100762E8F /* PasteImporter.swift in Sources */,
+				574ABE992E6021550045F76E /* GBC.swift in Sources */,
 				576F0E0C2D880DE600D2A1BA /* GradientImageView.swift in Sources */,
 				571BB8072DA4357D00830134 /* ThreeDS.swift in Sources */,
 				576060222D24E07500A98B0C /* AnimatedGradientView.swift in Sources */,
 				570F59132DC5BB1D007BFD92 /* CoverStyleCollectionViewCell.swift in Sources */,
+				5771C20A2E6569BE0062EDE0 /* LeaderboardView.swift in Sources */,
 				57F632B52D7006B4007270E8 /* LanServiceEditViewController.swift in Sources */,
+				5744C7182E375BF40088081A /* PM.swift in Sources */,
 				57F0D8422DE2CD8D00760F57 /* NES.swift in Sources */,
 				579C114B2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift in Sources */,
 				570622E62D7B334E004F09E7 /* FilterSelectionView.swift in Sources */,
 				576F0E072D8806B500D2A1BA /* GameSavePurchaseGuideReusableView.swift in Sources */,
 				B2C97B502A09F3DE00053A4C /* UIimageExtensions.swift in Sources */,
-				577006092D3F980400762E8F /* TitleBlackHaderCollectionReusableView.swift in Sources */,
+				577006092D3F980400762E8F /* BlackHaderReusableView.swift in Sources */,
 				570F592E2DC885EF007BFD92 /* ThemeViewController.swift in Sources */,
 				57DA89322D8328510074052A /* CKAccountStatusExtensions.swift in Sources */,
+				5720E7652E540F7200EC0DA5 /* RetroAchievementsLoginView.swift in Sources */,
 				B2383F512A2733DF000563E6 /* UIFontExtensions.swift in Sources */,
 				57E0C1A72D56580F00962555 /* UITextFieldExtensions.swift in Sources */,
+				5744C72B2E377C800088081A /* ControllableSideMenu.swift in Sources */,
+				5720E7CA2E54470000EC0DA5 /* ArrayExtensions.swift in Sources */,
 				57CC338E2DBC78AE00DF7418 /* FlexSkinSettingViewController.swift in Sources */,
 				5726FEDA2D71B95600041AD5 /* MembershipCollectionViewCell.swift in Sources */,
 				5706AFC62DF7DABD0066122E /* BIOSCollectionViewCell.swift in Sources */,
@@ -4959,21 +5166,25 @@
 				576C46352E16DA1B0008D087 /* MultiDiscItemCollectionCell.swift in Sources */,
 				5706B05A2DFC0F7E0066122E /* SS.swift in Sources */,
 				57CC35822DC069BB00DF7418 /* DownloadItemCollectionViewCell.swift in Sources */,
+				5744C6FF2E368BB40088081A /* NoControllCollectionView.swift in Sources */,
 				57E38E9B2D8C74FC001616D3 /* PermissionKit.swift in Sources */,
 				57F632452D6D4A03007270E8 /* AddImportServiceCollectionViewCell.swift in Sources */,
 				A5C889642574D82E00149D82 /* DispatchQueueExtensions.swift in Sources */,
 				5708351C2D3216980079D410 /* Log.swift in Sources */,
 				57047A142D856DBD00C62FF6 /* PriceView.swift in Sources */,
-				5706AFCF2DF7FC730066122E /* BOISDescriptionCollectionViewCell.swift in Sources */,
+				5706AFCF2DF7FC730066122E /* SettingDescriptionCollectionViewCell.swift in Sources */,
 				575FF91D2D350F210043B2F3 /* PlayViewController.swift in Sources */,
 				5706B0452DFBF7DF0066122E /* MCD.swift in Sources */,
 				57B6EBF32D769910002E619C /* ProHUDExtentions.swift in Sources */,
+				57BA59B52E3F13D100110849 /* LibretroCoreExtensions.swift in Sources */,
 				577006892D438F1100762E8F /* GameListView.swift in Sources */,
 				57F632FE2D718236007270E8 /* SettingsListView.swift in Sources */,
+				5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */,
 				57CC35802DC0684500DF7418 /* DownloadManageView.swift in Sources */,
 				5706236A2D7BDCD9004F09E7 /* FilterCollectionViewCell.swift in Sources */,
 				57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */,
 				57CC33BE2DBCDF3400DF7418 /* CGRectExtensions.swift in Sources */,
+				57399B192E42EDEA00AB73DD /* DeadZoneControl.swift in Sources */,
 				57913AFB2D5D8FCF004D51AA /* ControllersCollectionViewCell.swift in Sources */,
 				57F632852D6EB485007270E8 /* UIScreenExtensions.swift in Sources */,
 				57B6ECC92D797CA3002E619C /* AddCheatCodeTitleCell.swift in Sources */,
@@ -5001,6 +5212,7 @@
 				5770069A2D44B9B500762E8F /* GamesNavigationView.swift in Sources */,
 				577006A22D44CB9C00762E8F /* SkinSettingsViewController.swift in Sources */,
 				5770069E2D44C01800762E8F /* GamesCollectionReusableView.swift in Sources */,
+				5720E7922E54113500EC0DA5 /* RetroAchievementListView.swift in Sources */,
 				57B6ECC72D797935002E619C /* AddCheatCodeViewController.swift in Sources */,
 				57047A0C2D852E7F00C62FF6 /* FeaturesView.swift in Sources */,
 				57B6ECAC2D793877002E619C /* EmulatorCoreExtentions.swift in Sources */,
@@ -5010,6 +5222,7 @@
 				57B6ECBD2D7953EC002E619C /* CheatCodeListView.swift in Sources */,
 				5726FEE72D71D7FA00041AD5 /* SettingsListFooterCollectionReusableView.swift in Sources */,
 				57F632B72D700A06007270E8 /* LanServiceEditCollectionViewCell.swift in Sources */,
+				5754D8C82E27A864001EA5ED /* VB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5018,7 +5231,7 @@
 /* Begin PBXTargetDependency section */
 		576DD4482E0FFAC900644424 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 576DD4472E0FFAC900644424 /* plugin:RswiftGenerateInternalResources */;
+			productRef = 576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */;
 		};
 		57BFBEB12DD489C700AABF98 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5366,8 +5579,6 @@
 					"-l\"Device\"",
 					"-l\"Fireworks\"",
 					"-l\"FluentDarkModeKit\"",
-					"-l\"GBADeltaCore\"",
-					"-l\"GBCDeltaCore\"",
 					"-l\"GCDWebServer\"",
 					"-l\"HXPhotoPicker\"",
 					"-l\"Haptica\"",
@@ -5426,8 +5637,6 @@
 					"-framework",
 					"\"Foundation\"",
 					"-framework",
-					"\"Gambatte\"",
-					"-framework",
 					"\"Photos\"",
 					"-framework",
 					"\"PhotosUI\"",
@@ -5447,8 +5656,6 @@
 					"\"UMDevice\"",
 					"-framework",
 					"\"UniversalDetector\"",
-					"-framework",
-					"\"VBA-M\"",
 					"-weak_framework",
 					"\"AuthenticationServices\"",
 					"-weak_framework",
@@ -5867,8 +6074,6 @@
 					"-l\"FLEX\"",
 					"-l\"Fireworks\"",
 					"-l\"FluentDarkModeKit\"",
-					"-l\"GBADeltaCore\"",
-					"-l\"GBCDeltaCore\"",
 					"-l\"GCDWebServer\"",
 					"-l\"HXPhotoPicker\"",
 					"-l\"Haptica\"",
@@ -5931,8 +6136,6 @@
 					"-framework",
 					"\"Foundation\"",
 					"-framework",
-					"\"Gambatte\"",
-					"-framework",
 					"\"ImageIO\"",
 					"-framework",
 					"\"Photos\"",
@@ -5956,8 +6159,6 @@
 					"\"UMDevice\"",
 					"-framework",
 					"\"UniversalDetector\"",
-					"-framework",
-					"\"VBA-M\"",
 					"-framework",
 					"\"WebKit\"",
 					"-weak_framework",
@@ -6162,8 +6363,6 @@
 					"-l\"FLEX\"",
 					"-l\"Fireworks\"",
 					"-l\"FluentDarkModeKit\"",
-					"-l\"GBADeltaCore\"",
-					"-l\"GBCDeltaCore\"",
 					"-l\"GCDWebServer\"",
 					"-l\"HXPhotoPicker\"",
 					"-l\"Haptica\"",
@@ -6227,8 +6426,6 @@
 					"-framework",
 					"\"Foundation\"",
 					"-framework",
-					"\"Gambatte\"",
-					"-framework",
 					"\"ImageIO\"",
 					"-framework",
 					"\"Photos\"",
@@ -6252,8 +6449,6 @@
 					"\"UMDevice\"",
 					"-framework",
 					"\"UniversalDetector\"",
-					"-framework",
-					"\"VBA-M\"",
 					"-framework",
 					"\"WebKit\"",
 					"-weak_framework",
@@ -6522,8 +6717,6 @@
 					"-l\"FLEX\"",
 					"-l\"Fireworks\"",
 					"-l\"FluentDarkModeKit\"",
-					"-l\"GBADeltaCore\"",
-					"-l\"GBCDeltaCore\"",
 					"-l\"GCDWebServer\"",
 					"-l\"HXPhotoPicker\"",
 					"-l\"Haptica\"",
@@ -6587,8 +6780,6 @@
 					"-framework",
 					"\"Foundation\"",
 					"-framework",
-					"\"Gambatte\"",
-					"-framework",
 					"\"ImageIO\"",
 					"-framework",
 					"\"Photos\"",
@@ -6612,8 +6803,6 @@
 					"\"UMDevice\"",
 					"-framework",
 					"\"UniversalDetector\"",
-					"-framework",
-					"\"VBA-M\"",
 					"-framework",
 					"\"WebKit\"",
 					"-weak_framework",
@@ -6687,8 +6876,6 @@
 					"-l\"Device\"",
 					"-l\"Fireworks\"",
 					"-l\"FluentDarkModeKit\"",
-					"-l\"GBADeltaCore\"",
-					"-l\"GBCDeltaCore\"",
 					"-l\"GCDWebServer\"",
 					"-l\"HXPhotoPicker\"",
 					"-l\"Haptica\"",
@@ -6747,8 +6934,6 @@
 					"-framework",
 					"\"Foundation\"",
 					"-framework",
-					"\"Gambatte\"",
-					"-framework",
 					"\"Photos\"",
 					"-framework",
 					"\"PhotosUI\"",
@@ -6768,8 +6953,6 @@
 					"\"UMDevice\"",
 					"-framework",
 					"\"UniversalDetector\"",
-					"-framework",
-					"\"VBA-M\"",
 					"-weak_framework",
 					"\"AuthenticationServices\"",
 					"-weak_framework",
@@ -6851,9 +7034,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "ChromaColorPicker" */ = {
+		570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "../ChromaColorPicker" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../ChromaColorPicker;
+		};
+		5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../KeyboardKit;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -6922,7 +7109,7 @@
 				minimumVersion = 2.8.7;
 			};
 		};
-		576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */ = {
+		576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift";
 			requirement = {
@@ -7037,6 +7224,10 @@
 			package = 5726FF442D741F5C00041AD5 /* XCRemoteSwiftPackageReference "ColorfulX" */;
 			productName = ColorfulX;
 		};
+		5744C6612E34D6E20088081A /* KeyboardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardKit;
+		};
 		575A39CB2DCCFA6B00B28FC2 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 575A39CA2DCCFA6B00B28FC2 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
@@ -7044,12 +7235,12 @@
 		};
 		576060282D24E8BD00A98B0C /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
 			productName = RswiftLibrary;
 		};
-		576DD4472E0FFAC900644424 /* plugin:RswiftGenerateInternalResources */ = {
+		576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
 			productName = "plugin:RswiftGenerateInternalResources";
 		};
 		57DA89122D82B0C20074052A /* SmartCodable */ = {

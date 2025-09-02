@@ -58,7 +58,7 @@ class SymbolButton: UIView {
         super.init(frame: .zero)
         enableInteractive = true
         backgroundColor = Constants.Color.BackgroundSecondary
-        layerCornerRadius = 16
+        layerCornerRadius = Constants.Size.CornerRadiusMid
         
         addSubview(containerView)
         containerView.addSubviews([imageView, titleLabel])

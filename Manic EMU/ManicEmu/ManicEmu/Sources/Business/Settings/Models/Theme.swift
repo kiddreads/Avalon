@@ -44,6 +44,36 @@ enum GroupTitleStyle: Int, PersistableEnum {
     case abbr, fullName, brand
 }
 
+enum GameSortType: Int, CaseIterable {
+    case title, latestPlayed, addTime, playTime
+    
+    var title: String {
+        switch self {
+        case .title:
+            R.string.localizable.gameSortTitleType()
+        case .latestPlayed:
+            R.string.localizable.gameSortLatestPlayed()
+        case .addTime:
+            R.string.localizable.gameSortAddTime()
+        case .playTime:
+            R.string.localizable.gameSortPlayTime()
+        }
+    }
+}
+
+enum GameSortOrder: Int, CaseIterable {
+    case ascending, descending
+    
+    var title: String {
+        switch self {
+        case .ascending:
+            R.string.localizable.ascending()
+        case .descending:
+            R.string.localizable.descending()
+        }
+    }
+}
+
 class Theme: Object, ObjectUpdatable {
     
     //一定要在Database的setup调用后才调用此方法
@@ -90,6 +120,8 @@ class Theme: Object, ObjectUpdatable {
     @Persisted var hideGroupTitle: Bool = false
     ///分组标题样式
     @Persisted var groupTitleStyle: GroupTitleStyle = .abbr
+    ///额外数据备用
+    @Persisted var extras: Data?
     
     private static func initColors() -> [ThemeColor] {
         let now = Date.now.timeIntervalSince1970ms
@@ -138,6 +170,25 @@ class Theme: Object, ObjectUpdatable {
         }
         Theme.change { realm in
             Theme.defalut.colors = colors.toJSONString() ?? ""
+        }
+    }
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
         }
     }
 }

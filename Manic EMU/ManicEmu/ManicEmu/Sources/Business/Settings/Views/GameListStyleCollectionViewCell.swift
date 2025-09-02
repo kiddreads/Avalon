@@ -12,7 +12,7 @@ import TKSwitcherCollection
 
 class GameListStyleCollectionViewCell: UICollectionViewCell {
     
-    lazy var gamesPerRowSegmentView: BetterSegmentedControl = {
+    private lazy var gamesPerRowSegmentView: BetterSegmentedControl = {
         let titles = ["2", "3", "4", "5"]
         let segments = LabelSegment.segments(withTitles: titles,
                                              normalFont: Constants.Font.body(),
@@ -38,7 +38,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var groupTitleStyleSegmentView: BetterSegmentedControl = {
+    private lazy var groupTitleStyleSegmentView: BetterSegmentedControl = {
         let titles = [R.string.localizable.groupTitleStyelAbbr(),
                       R.string.localizable.groupTitleStyelFull(),
                       R.string.localizable.groupTitleStyelBrand()]
@@ -97,6 +97,58 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         view.offColor = Constants.Color.BackgroundTertiary
         view.lineColor = .clear
         view.lineSize = 0
+        return view
+    }()
+    
+    private lazy var gameSortTypeMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        var sortType = GameSortType.allCases.map { $0.title }
+        for (index, type) in sortType.enumerated() {
+            actions.append((UIAction(title: type) { [weak self] _ in
+                guard let self = self else { return }
+                self.gameSortTypeButton.titleLabel.text = type
+                Theme.defalut.updateExtra(key: ExtraKey.gameSortType.rawValue, value: index)
+                NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
+            }))
+        }
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.gameSortType(), children: actions))
+        return view
+    }()
+    
+    private lazy var gameSortTypeButton: SymbolButton = {
+        var title: String = (GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0) ?? .title).title
+        let view = SymbolButton(image: .symbolImage(.arrowUpArrowDown).applySymbolConfig(size: 13), title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
+        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.gameSortTypeMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var gameSortOrderMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        var sortOrder = GameSortOrder.allCases.map { $0.title }
+        for (index, order) in sortOrder.enumerated() {
+            actions.append((UIAction(title: order) { [weak self] _ in
+                guard let self = self else { return }
+                self.gameSortOrderButton.titleLabel.text = order
+                Theme.defalut.updateExtra(key: ExtraKey.gameSortOrder.rawValue, value: index)
+                NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
+            }))
+        }
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.gameSortOrder(), children: actions))
+        return view
+    }()
+    
+    private lazy var gameSortOrderButton: SymbolButton = {
+        var title: String = (GameSortOrder(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortOrder.rawValue) ?? 0) ?? .ascending).title
+        let view = SymbolButton(image: .symbolImage(.chevronUpChevronDown).applySymbolConfig(size: 13), title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
+        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.gameSortOrderMenuButton.triggerTapGesture()
+        }
         return view
     }()
     
@@ -250,6 +302,45 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
             Theme.change { realm in
                 theme.hideGroupTitle = value
             }
+        }
+        
+        //排序
+        let gameSortLabel = UILabel()
+        gameSortLabel.font = Constants.Font.body(size: .l)
+        gameSortLabel.textColor = Constants.Color.LabelPrimary
+        gameSortLabel.text = R.string.localizable.gameSortDesc()
+        addSubview(gameSortLabel)
+        gameSortLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(hideGroupTitleContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        
+        let gameSortContainer = UIView()
+        gameSortContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        gameSortContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
+        addSubview(gameSortContainer)
+        gameSortContainer.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(gameSortLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+        }
+        
+        gameSortContainer.addSubviews([gameSortTypeMenuButton, gameSortTypeButton])
+        gameSortTypeButton.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+        }
+        gameSortTypeMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(gameSortTypeButton)
+        }
+        
+        gameSortContainer.addSubviews([gameSortOrderMenuButton, gameSortOrderButton])
+        gameSortOrderButton.snp.makeConstraints { make in
+            make.leading.equalTo(gameSortTypeButton.snp.trailing).offset(Constants.Size.ContentSpaceMid)
+            make.top.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+            make.width.equalTo(gameSortTypeButton)
+        }
+        gameSortOrderMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(gameSortOrderButton)
         }
         
         mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in

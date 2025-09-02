@@ -4,7 +4,6 @@
 .DS_Store
 ## User settings
 xcuserdata/
-Pods/
 *.generated.swift
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
@@ -69,7 +68,6 @@ playground.xcworkspace
 Carthage/Build/
 
 # Accio dependency management
-Dependencies/
 .accio/
 
 # fastlane

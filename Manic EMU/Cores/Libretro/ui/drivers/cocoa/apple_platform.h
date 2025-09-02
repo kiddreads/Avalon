@@ -107,7 +107,7 @@ UINavigationControllerDelegate> {
 @property (nonatomic, copy, nullable) NSString *workspace;
 
 - (void)sendEvent:(UIEvent * _Nonnull)event;
-- (void)start;
+- (void)startWithCustomSaveDir:(NSString *_Nullable)customSaveDir;
 - (void)pause;
 - (void)resume;
 - (void)stop;
@@ -125,16 +125,25 @@ UINavigationControllerDelegate> {
 - (void)setPSPResolution:(unsigned)resolution reload:(BOOL)reload;
 - (void)setPSPLanguage:(unsigned)language;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload;
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload;
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value;
+- (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs;
 - (void)setShader:(NSString *_Nullable)path;
 - (void)addCheatCode:(NSString *_Nonnull)code index:(unsigned)index enable:(BOOL)enable;
 - (void)resetCheatCode;
 - (void)setRespectSilentMode:(BOOL)respect;
 - (NSString * _Nullable)coreConfigValue:(NSString * _Nonnull)coreName key:(NSString * _Nonnull)key;
 - (NSString * _Nullable)libretroConfigValue:(NSString * _Nonnull)key;
-- (void)setDiskIndex:(unsigned)index;
+- (void)setDiskIndex:(unsigned)index delay:(BOOL)delay;
 - (NSUInteger)getCurrentDiskIndex;
 - (NSUInteger)getDiskCount;
+- (void)setPSXAnalog:(BOOL)isAnalog;
+- (void)setReloadDelay:(double)delay;
+- (void)turnOffHardcode;
+- (void)resetRetroAchievements;
+- (void)setCustomSaveExtension:(NSString *_Nullable)customSaveExtension;
+- (void)setEnableRumble:(BOOL)enable;
+- (BOOL)getSensorEnable:(int)playerIndex;
 @end
 
 #else

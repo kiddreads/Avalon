@@ -9,28 +9,30 @@
 
 import ManicEmuCore
 import RealmSwift
-import GBADeltaCore
-import GBCDeltaCore
 import MelonDSDeltaCore
 
 ///通过文件名后缀生成GameType
 extension GameType {
-    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u"]
+    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd"]
     
     static func gameTypes(multiPlatformFileExtension: String) -> [GameType] {
         let ext = multiPlatformFileExtension.lowercased()
         guard multiPlatformFileExtensions.contains(ext) else { return [] }
         switch ext {
         case "chd":
-            return [.psp, .mcd, .ss]
+            return [.ps1, .psp, .mcd, .ss]
         case "iso":
             return [.psp, .mcd, .ss]
         case "bin":
             return [.md, .gg, .ms, ._32x]
         case "cue":
-            return [.mcd, .ss]
+            return [.ps1, .mcd, .ss]
         case "m3u":
-            return [.mcd, .ss]
+            return [ ps1, .mcd, .ss]
+        case "pbp":
+            return [.ps1, .psp]
+        case "ccd":
+            return [.ps1, .ss]
         default:
             return []
         }
@@ -59,7 +61,7 @@ extension GameType {
             self = .psp
         } else if ["md", "gen", "smd", "bin"].contains(ext) {
             self = .md
-        } else if ["chd", "iso", "mcd", "cue", "m3u"].contains(ext) {
+        } else if ["chd", "iso", "mdcd", "cue", "m3u"].contains(ext) {
             self = .mcd
         } else if ["32x"].contains(ext) {
             self = ._32x
@@ -67,12 +69,18 @@ extension GameType {
             self = .sg1000
         } else if ["gg", "bin"].contains(ext) {
             self = .gg
-        } else if ["sms", "bms", "bin"].contains(ext) {
+        } else if ["ms", "sms", "bms", "bin"].contains(ext) {
             self = .ms
         } else if ["iso", "chd", "ccd", "cue", "m3u"].contains(ext) {
             self = .ss
         } else if ["n64", "v64", "z64"].contains(ext) {
             self = .n64
+        } else if ["vb", "vboy"].contains(ext) {
+            self = .vb
+        } else if ["min"].contains(ext) {
+            self = .pm
+        } else if ["cue", "m3u", "pbp", "chd", "ccd", "ps1"].contains(ext) {
+            self = .ps1
         } else {
             self = .notSupport
         }
@@ -82,6 +90,8 @@ extension GameType {
         switch saveFileExtension.lowercased() {
         case "dsv": self = .ds
         case "bkr": self = .ss
+        case "eep": self = .pm
+        case "mcd", "mcr": self = .ps1
         default: return nil
         }
     }
@@ -119,13 +129,19 @@ extension GameType {
             self = .ss
         } else if shortName.uppercased() == "N64" {
             self = .n64
+        } else if shortName.uppercased() == "VB" {
+            self = .vb
+        } else if shortName.uppercased() == "PM" {
+            self = .pm
+        } else if shortName.uppercased() == "PS1" {
+            self = .ps1
         }  else {
             return nil
         }
     }
     
     var isLibretroType: Bool {
-        if self == ._3ds || self == .ds || self == .gba || self == .gbc || self == .gb {
+        if self == ._3ds || self == .ds {
             return false
         }
         return true
@@ -150,6 +166,9 @@ extension GameType {
         case .ms: return "Sega Master System"
         case .ss: return "Sega Saturn"
         case .n64: return "Nintendo 64"
+        case .vb: return "Virtual Boy"
+        case .pm: return "Pokémon Mini"
+        case .ps1: return "PlayStation"
         default: return ""
         }
     }
@@ -173,6 +192,9 @@ extension GameType {
         case .ms: return NSLocalizedString("MS", comment: "")
         case .ss: return NSLocalizedString("SS", comment: "")
         case .n64: return NSLocalizedString("N64", comment: "")
+        case .vb: return NSLocalizedString("VB", comment: "")
+        case .pm: return NSLocalizedString("PM", comment: "")
+        case .ps1: return NSLocalizedString("PS1", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -197,6 +219,9 @@ extension GameType {
         case .ms: return 1985
         case .ss: return 1994
         case .n64: return 1996
+        case .vb: return 1995
+        case .pm: return 2001
+        case .ps1: return 1995
         default: return 0
         }
     }
@@ -220,6 +245,9 @@ extension GameType {
         case .ms: return MS.core
         case .ss: return SS.core
         case .n64: return N64.core
+        case .vb: return VB.core
+        case .pm: return PM.core
+        case .ps1: return PS1.core
         default: return nil
         }
     }
@@ -237,7 +265,11 @@ extension GameType {
     
     var supportCores: [String] {
         if self == .ss {
-            return ["Beetle Saturn", "Yabause"]
+            return [LibretroCore.Cores.BeetleSaturn.name, LibretroCore.Cores.Yabause.name]
+        } else if self == .snes {
+            return [LibretroCore.Cores.bsnes.name, LibretroCore.Cores.Snes9x.name]
+        } else if self == .gba {
+            return [LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
         }
         return []
     }
@@ -251,6 +283,33 @@ extension GameType {
             return [.ms, .gg, .sg1000]
         }
         return [self]
+    }
+    
+    func isNDSBiosComplete() -> (isDSComplete: Bool, isDsiComplete: Bool) {
+        guard self == .ds else { return (false, false) }
+        let dsBiosItems = Constants.BIOS.DSBios.filter({ !$0.fileName.hasPrefix("dsi_") })
+        let dsiBiosItems = Constants.BIOS.DSBios.filter({ $0.fileName.hasPrefix("dsi_") })
+        
+        func isComplete(biosItems: [BIOSItem]) -> Bool {
+            var isComplete = true
+            let fileManager = FileManager.default
+            for bios in biosItems {
+                let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+                let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
+                if fileManager.fileExists(atPath: biosInLib) {
+                    continue
+                } else if fileManager.fileExists(atPath: biosInDoc) {
+                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc), to: URL(fileURLWithPath: biosInLib))
+                    continue
+                } else {
+                    isComplete = false
+                    break
+                }
+            }
+            return isComplete
+        }
+        
+        return (isComplete(biosItems: dsBiosItems), isComplete(biosItems: dsiBiosItems))
     }
     
 }

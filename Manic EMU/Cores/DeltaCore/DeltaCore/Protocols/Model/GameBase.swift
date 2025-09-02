@@ -19,10 +19,17 @@ public protocol GameBase
 public extension GameBase
 {
     var gameSaveURL: URL {
-        let fileExtension = ManicEmu.core(for: self.type)?.gameSaveExtension ?? "sav"
-        
-        let gameURL = self.fileURL.deletingPathExtension()
-        let gameSaveURL = gameURL.appendingPathExtension(fileExtension)
-        return gameSaveURL
+        let core = ManicEmu.core(for: self.type)
+        let fileExtension = core?.gameSaveExtension ?? "sav"
+        if let customSavePath = core?.gameSaveCustomPath {
+            //使用自定义存档路径
+            let gameName = self.fileURL.deletingPathExtension().lastPathComponent
+            let gameSaveUrl = URL(fileURLWithPath: customSavePath + "/\(gameName).\(fileExtension)" )
+            return gameSaveUrl
+        } else {
+            let gameURL = self.fileURL.deletingPathExtension()
+            let gameSaveURL = gameURL.appendingPathExtension(fileExtension)
+            return gameSaveURL
+        }
     }
 }

@@ -73,6 +73,8 @@ public class PageContentView: UIView {
 
     public weak var eventHandler: PageEventHandleable?
     
+    public var getContentEdgeInsets: (()->UIEdgeInsets)? = nil
+    
     private (set) public var style: PageStyle = PageStyle() {
         didSet {
             collectionView.semanticContentAttribute = style.isRTL ? .forceRightToLeft : .forceLeftToRight
@@ -144,6 +146,22 @@ public class PageContentView: UIView {
 //        layout.offset = CGFloat(currentIndex) * frame.size.width
 //        layout.invalidateLayout()
 //    }
+    
+    public func updateContentEdgeInsets() {
+        var isUpdate = false
+        childViewControllers.forEach {
+            if $0.view.superview != nil {
+                isUpdate = true
+                $0.view.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview().inset(getContentEdgeInsets?() ?? .zero)
+                }
+            }
+        }
+        if isUpdate {
+            guard let layout = collectionView.collectionViewLayout as? CollectionViewPagingLayout else { return }
+            layout.setCurrentPage(currentIndex, animated: false)
+        }
+    }
 }
 
 
@@ -187,11 +205,18 @@ extension PageContentView: UICollectionViewDataSource {
         eventHandler = childViewController as? PageEventHandleable
 //        print("cell.contentView.frame.size:\(cell.contentView.frame.size)")
 //        childViewController.view.frame = CGRect(origin: CGPoint.zero, size: cell.contentView.frame.size)
-            
-        cell.contentView.addSubview(childViewController.view)
+        
+        let containerView = UIView()
+        containerView.addSubview(childViewController.view)
         childViewController.view.snp.remakeConstraints { make in
+            make.edges.equalToSuperview().inset(getContentEdgeInsets?() ?? .zero)
+        }
+            
+        cell.contentView.addSubview(containerView)
+        containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
         return cell
     }
 }

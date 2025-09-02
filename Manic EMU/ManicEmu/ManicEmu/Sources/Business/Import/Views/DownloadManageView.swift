@@ -53,6 +53,23 @@ class DownloadManageView: BaseView {
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
+        let icon = UIImageView(image: UIImage(symbol: .arrowDownCircle))
+        topBlurView.addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.centerY.equalToSuperview()
+        }
+        let headerTitleLabel = UILabel()
+        headerTitleLabel.text = R.string.localizable.cloudDriveBrowserDownload()
+        headerTitleLabel.textColor = Constants.Color.LabelPrimary
+        headerTitleLabel.font = Constants.Font.title(size: .s)
+        topBlurView.addSubview(headerTitleLabel)
+        headerTitleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.centerY.equalTo(icon)
+        }
+        
         let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
         closeButton.enableRoundCorner = true
         topBlurView.addSubview(closeButton)

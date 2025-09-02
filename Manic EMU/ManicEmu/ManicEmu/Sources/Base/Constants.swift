@@ -68,7 +68,7 @@ struct Constants {
         static let ItemHeightUltraTiny = 30.0
         
         ///符号图标size 16
-        static let SymbolSize = 16.0
+        static let SymbolSize = 18.0
         
         ///HomeTabBarSize 300x60
         static let HomeTabBarSize = CGSize(width: 300, height: ItemHeightMax)
@@ -197,24 +197,24 @@ struct Constants {
                                  dark: UIColor(hexString: "#FF2442")!)
         
         static let Green = UIColor(.dm,
-                                   light: UIColor(hexString: "#54D590")!,
-                                   dark: UIColor(hexString: "#54D590")!)
+                                   light: UIColor(hexString: "#06D58F")!,
+                                   dark: UIColor(hexString: "#06D58F")!)
         
         static let Blue = UIColor(.dm,
-                                  light: UIColor(hexString: "#418CFE")!,
-                                  dark: UIColor(hexString: "#418CFE")!)
+                                  light: UIColor(hexString: "#7984FF")!,
+                                  dark: UIColor(hexString: "#7984FF")!)
         
         static let Indigo = UIColor(.dm,
-                                    light: UIColor(hexString: "#0BCDDF")!,
-                                    dark: UIColor(hexString: "#0BCDDF")!)
+                                    light: UIColor(hexString: "#33A9FF")!,
+                                    dark: UIColor(hexString: "#33A9FF")!)
         
         static let Purple = UIColor(.dm,
                                     light: UIColor(hexString: "#9390FF")!,
                                     dark: UIColor(hexString: "#9390FF")!)
         
         static let Yellow = UIColor(.dm,
-                                    light: UIColor(hexString: "#FFC546")!,
-                                    dark: UIColor(hexString: "#FFC546")!)
+                                    light: UIColor(hexString: "#FEC458")!,
+                                    dark: UIColor(hexString: "#FEC458")!)
 
         
         static let Magenta = UIColor(.dm,
@@ -223,8 +223,12 @@ struct Constants {
 
         
         static let Orange = UIColor(.dm,
-                                    light: UIColor(hexString: "#F14A00")!,
-                                    dark: UIColor(hexString: "#F14A00")!)
+                                    light: UIColor(hexString: "#FF7A71")!,
+                                    dark: UIColor(hexString: "#FF7A71")!)
+        
+        static let Pink = UIColor(.dm,
+                                    light: UIColor(hexString: "#FB89DE")!,
+                                    dark: UIColor(hexString: "#FB89DE")!)
     }
     
     struct Cipher {
@@ -241,6 +245,7 @@ struct Constants {
         static let CLoudflareAPIToken = ""
         static let UnzipKey = "123456"
         static let DeepSeek = ""
+        static let RetroAPI = ""
     }
     
     struct Path {
@@ -277,14 +282,24 @@ struct Constants {
         static let Shaders = Libretro.appendingPathComponent("shaders")
         static let Screenshot = Libretro.appendingPathComponent("screenshots")
         static let PSPSave = Document.appendingPathComponent("PPSSPP/PSP/SAVEDATA")
-        static let Nestopia = Document.appendingPathComponent("Nestopia")
-        static let Snes9x = Document.appendingPathComponent("Snes9x")
-        static let PicoDrive = Document.appendingPathComponent("PicoDrive")
-        static let Yabause = Document.appendingPathComponent("Yabause")
-        static let BeetleSaturn = Document.appendingPathComponent("Beetle Saturn")
-        static let Mupen64PlushNext = Document.appendingPathComponent("Mupen64Plus-Next")
+        static let Nestopia = Document.appendingPathComponent(LibretroCore.Cores.Nestopia.name)
+        static let Snes9x = Document.appendingPathComponent(LibretroCore.Cores.Snes9x.name)
+        static let PicoDrive = Document.appendingPathComponent(LibretroCore.Cores.PicoDrive.name)
+        static let Yabause = Document.appendingPathComponent(LibretroCore.Cores.Yabause.name)
+        static let BeetleSaturn = Document.appendingPathComponent(LibretroCore.Cores.BeetleSaturn.name)
+        static let Mupen64PlushNext = Document.appendingPathComponent(LibretroCore.Cores.Mupen64PlushNext.name)
         static let BIOS = Document.appendingPathComponent("BIOS")
         static let System = Libretro.appendingPathComponent("system")
+        static let DSSavePath = ThreeDS.appendingPathComponent("sdmc/saves/nds")
+        static let GBASavePath = ThreeDS.appendingPathComponent("sdmc/saves/gba")
+        static let GBCSavePath = ThreeDS.appendingPathComponent("sdmc/saves/gbc")
+        static let GBSavePath = ThreeDS.appendingPathComponent("sdmc/saves/gb")
+        static let BeetleVB = Document.appendingPathComponent(LibretroCore.Cores.BeetleVB.name)
+        static let PokeMini = Document.appendingPathComponent(LibretroCore.Cores.PokeMini.name)
+        static let BeetlePSXHW = Document.appendingPathComponent(LibretroCore.Cores.BeetlePSXHW.name)
+        static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
+        static let LibretroSavePath = Document
+        static let GamesDB = Resource.appendingPathComponent("Games.db")
     }
     
     struct DefaultKey {
@@ -299,6 +314,8 @@ struct Constants {
         static let HasShow3DSNotSupportAlert = "HasShow3DSNotSupportAlert"
         static let FlexSkinFirstTimeGuide = "FlexSkinFirstTimeGuide"
         static let HasShowSSPlayAlert = "HasShowSSPlayAlert"
+        static let HasShowPS1PlayAlert = "HasShowPS1PlayAlert"
+        static let HasShowJumpGameInfoAlert = "HasShowJumpGameInfoAlert"
     }
     
     struct Font {
@@ -369,6 +386,8 @@ struct Constants {
         static let SaturnConsoleLanguage = ["Auto Detect", "Japan", "North America", "Europe", "South Korea", "Asia (NTSC)", "Asia (PAL)", "Brazil", "Latin America"]
         static let DSConsoleLanguage = ["Automatic", "Japanese", "English", "French", "German", "Italian", "Spanish"]
         static let ManicScheme = "manicemu"
+        static var PSXController = "PlayStation Controller"
+        static var PSXDualShock = "DualShock"
     }
     
     enum Config {
@@ -382,6 +401,9 @@ struct Constants {
             return value
         }
         static var PlatformOrder: [String]? = nil
+        static var DefaultOrientation: UIInterfaceOrientationMask {
+            UIDevice.isPad ? .all : .allButUpsideDown
+        }
     }
     
     struct Numbers {
@@ -436,6 +458,15 @@ struct Constants {
         static let PlatformSelectionChange = NSNotification.Name(rawValue: "PlatformSelectionChange")
         ///游戏列表变更
         static let GameListStyleChange = NSNotification.Name(rawValue: "GameListStyleChange")
+        ///shake
+        static let MotionShake = NSNotification.Name(rawValue: "MotionShake")
+        ///退出游戏
+        static let QuitGaming = NSNotification.Name(rawValue: "QuitGaming")
+        ///关闭硬核模式
+        static let TurnOffHardcore = NSNotification.Name(rawValue: "TurnOffHardcore")
+        ///游戏排序更新
+        static let GameSortChange = NSNotification.Name(rawValue: "GameSortChange")
+        
     }
     
     struct URLs {
@@ -494,12 +525,25 @@ struct Constants {
             case .gg: return URL(string: "https://deltastyles.com/systems/gamegear")!
             case .ms: return URL(string: "https://deltastyles.com/systems/ms")!
             case .ss: return URL(string: "https://deltastyles.com/systems/saturn")!
+            case .vb: return URL(string: "https://deltastyles.com/systems/virtualboy")!
+            case .ps1: return URL(string: "https://deltastyles.com/systems/ps1")!
             default: return URL(string: "https://deltastyles.com")!
             }
         }
         static func History(gameType: GameType) -> URL {
             return URL(string: ManicEMU + "History-" + (gameType == .gb ? GameType.gbc.localizedShortName : gameType.localizedShortName) + "-EN")!
         }
+        static let WFC = URL(string: "https://cdn.altstore.io/file/deltaemulator/delta/wfc-servers.json")!
+        #if SIDE_LOAD
+        static let Donate = URL(string: "https://ko-fi.com/maftymanicemu")!
+        #endif
+        static let AboutUS = URL(string: ManicEMU + "About-US")!
+        static let RetroSignUp = URL(string: "https://retroachievements.org/createaccount.php")!
+        static func RetroProfile(username: String) -> URL {
+            return URL(string: "https://retroachievements.org/user/\(username)")!
+        }
+        static let Retro = URL(string: "https://retroachievements.org")!
+        static let MobyGames = URL(string: "https://www.mobygames.com")!
     }
     
     struct BIOS {
@@ -526,5 +570,14 @@ struct Constants {
             BIOSItem(fileName: "dsi_firmware.bin", imported: false, desc: "DSi Firmware - Required in DSi mode", required: false),
             BIOSItem(fileName: "dsi_nand.bin", imported: false, desc: "DSi NAND - Required in DSi mode", required: false)
         ]
+        
+        static let PS1Bios = [
+            BIOSItem(fileName: "ps1_rom.bin", imported: false, desc: "Comes from the PS3, region-free", required: false),
+            BIOSItem(fileName: "PSXONPSP660.bin", imported: false, desc: "Comes from the PSP, region-free", required: false),
+            BIOSItem(fileName: "scph5500.bin", imported: false, desc: "PS1 JP BIOS - Required for JP games", required: false),
+            BIOSItem(fileName: "scph5501.bin", imported: false, desc: "PS1 US BIOS - Required for US games", required: false),
+            BIOSItem(fileName: "scph5502.bin", imported: false, desc: "PS1 EU BIOS - Required for EU games", required: false)
+        ]
+
     }
 }

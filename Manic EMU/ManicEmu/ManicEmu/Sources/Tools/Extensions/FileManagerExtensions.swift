@@ -32,6 +32,21 @@ extension FileManager {
         }
     }
     
+    static func safeReplaceDirectory(at srcURL: URL, to dstURL: URL) throws {
+        guard isDirectory(at: srcURL) else { return }
+        do {
+            let contents = try FileManager.default.contentsOfDirectory(atPath: srcURL.path)
+            try completePath(url: dstURL)
+            for content in contents {
+                let contentDstURL = dstURL.appendingPathComponent(content)
+                try completePath(url: contentDstURL)
+                try safeCopyItem(at: srcURL.appendingPathComponent(content), to: contentDstURL, shouldReplace: true)
+            }
+        } catch {
+            throw error
+        }
+    }
+    
     static func safeRemoveItem(at url: URL) throws {
         do {
             let manager = FileManager.default

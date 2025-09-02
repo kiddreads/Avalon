@@ -12,7 +12,7 @@ import IceCream
 
 extension GameCheat: CKRecordConvertible & CKRecordRecoverable {}
 
-class GameCheat: Object {
+class GameCheat: Object, ObjectUpdatable {
     ///主键 由创建时间戳ms来生成
     @Persisted(primaryKey: true) var id: Int = PersistedKit.incrementID
     ///名称
@@ -25,4 +25,25 @@ class GameCheat: Object {
     @Persisted var activate: Bool = false
     ///用于iCloud同步删除
     @Persisted var isDeleted: Bool = false
+    ///额外数据备用
+    @Persisted var extras: Data?
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
+    }
 }

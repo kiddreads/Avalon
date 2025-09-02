@@ -8,12 +8,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ManicEmuCore
-import GBADeltaCore
-import GBCDeltaCore
 import MelonDSDeltaCore
 
 enum System: CaseIterable
 {
+    case ps1
+    case pm
+    case vb
     case n64
     case ss
     case ms
@@ -37,7 +38,7 @@ enum System: CaseIterable
     }
     
     static var allCores: [ManicEmuCoreProtocol] {
-        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, MelonDS.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core]
+        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, MelonDS.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core]
     }
 }
 
@@ -62,6 +63,9 @@ extension System {
         case .ms: return .ms
         case .ss: return .ss
         case .n64: return .n64
+        case .vb: return .vb
+        case .pm: return .pm
+        case .ps1: return .ps1
         }
     }
 }

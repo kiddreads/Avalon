@@ -27,7 +27,9 @@ class WebViewController: BaseViewController {
         view.isOpaque = false
         view.backgroundColor = Constants.Color.Background
         view.scrollView.backgroundColor = Constants.Color.Background
-        view.load(URLRequest(url: url))
+        if self.loadUrlWhenInit {
+            view.load(URLRequest(url: url))
+        }
         view.scrollView.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
         return view
     }()
@@ -95,6 +97,8 @@ class WebViewController: BaseViewController {
     
     private var downloadingUrls = [String: String]()
     
+    private var loadUrlWhenInit: Bool
+    
     deinit {
         webView.navigationDelegate = nil
     }
@@ -102,10 +106,23 @@ class WebViewController: BaseViewController {
     init(url: URL = URL(string: Constants.URLs.ManicEMU)!, showClose: Bool = true, isShow: Bool? = nil) {
         self.url = url
         self.showClose = showClose
+        self.loadUrlWhenInit = true
         if let isShow = isShow {
             Self.isShow = isShow
         }
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(searchGame: Game) {
+        self.url = Constants.URLs.MobyGames
+        self.showClose = true
+        self.loadUrlWhenInit = false
+        super.init(nibName: nil, bundle: nil)
+        UIView.makeLoading()
+        MobyGamesKit.getGameInfoUrl(game: searchGame) { url in
+            UIView.hideLoading()
+            self.webView.loadURL(url)
+        }
     }
 
     override func viewDidLoad() {
@@ -245,7 +262,7 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: any Error) {
         Log.debug("WebView错误:\(error)")
         UIView.hideLoading()
-        UIView.makeToast(message: R.string.localizable.lodingFailedTitle())
+//        UIView.makeToast(message: R.string.localizable.lodingFailedTitle())
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {

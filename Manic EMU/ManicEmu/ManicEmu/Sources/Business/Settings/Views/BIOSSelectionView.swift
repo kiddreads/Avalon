@@ -9,17 +9,19 @@
 
 import UIKit
 import ManicEmuCore
+import IceCream
 
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, mcd, ss, ds
+        case desc, mcd, ss, ds, ps1
         var title: String {
             switch self {
             case .desc: ""
             case .mcd: GameType.mcd.localizedName
             case .ss: GameType.ss.localizedName
             case .ds: GameType.ds.localizedName
+            case .ps1: GameType.ps1.localizedName
             }
         }
         
@@ -29,6 +31,7 @@ class BIOSSelectionView: BaseView {
             case .mcd: return .mcd
             case .ss: return .ss
             case .ds: return .ds
+            case .ps1: return .ps1
             }
         }
     }
@@ -46,8 +49,8 @@ class BIOSSelectionView: BaseView {
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: BIOSCollectionViewCell.self)
-        view.register(cellWithClass: BOISDescriptionCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: TitleBackgroundPrimaryColorHaderCollectionReusableView.self)
+        view.register(cellWithClass: SettingDescriptionCollectionViewCell.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: PrimaryHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -79,8 +82,10 @@ class BIOSSelectionView: BaseView {
             self.datas = [.desc, .ss]
         } else if let gameType, gameType == .ds {
             self.datas = [.desc, .ds]
-        } else {
-            self.datas = [.desc, .mcd, .ss, .ds]
+        } else if let gameType, gameType == .ps1 {
+            self.datas = [.desc, .ps1]
+        }  else {
+            self.datas = [.desc, .ps1, .mcd, .ss, .ds]
         }
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
@@ -178,14 +183,40 @@ extension BIOSSelectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let section = datas[indexPath.section]
         if section == .desc {
-            let cell = collectionView.dequeueReusableCell(withClass: BOISDescriptionCollectionViewCell.self, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withClass: SettingDescriptionCollectionViewCell.self, for: indexPath)
+            cell.descLabel.text = R.string.localizable.biosAlert()
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withClass: BIOSCollectionViewCell.self, for: indexPath)
             cell.setData(gameType: section.gameType) { [weak self] in
                 //导入成功 进行刷新
                 self?.collectionView.reloadData()
-                
+                if section.gameType == .ds {
+                    let ndsBiosCompletion = section.gameType.isNDSBiosComplete()
+                    let realm = Database.realm
+                    var games = [Game]()
+                    if ndsBiosCompletion.isDSComplete, realm.object(ofType: Game.self, forPrimaryKey: Game.DsHomeMenuPrimaryKey) == nil {
+                        let game = Game()
+                        game.id = Game.DsHomeMenuPrimaryKey
+                        game.name = Game.DsHomeMenuPrimaryKey
+                        games.append(game)
+                    }
+                    if ndsBiosCompletion.isDsiComplete, realm.object(ofType: Game.self, forPrimaryKey: Game.DsiHomeMenuPrimaryKey) == nil {
+                        //新增Home Menu (DSi)
+                        let game = Game()
+                        game.id = Game.DsiHomeMenuPrimaryKey
+                        game.name = Game.DsiHomeMenuPrimaryKey
+                        games.append(game)
+                    }
+                    if games.count > 0 {
+                        games.forEach { game in
+                            game.fileExtension = "ds"
+                            game.gameType = .ds
+                            game.importDate = Date()
+                        }
+                        try? realm.write { realm.add(games) }
+                    }
+                }
             }
             return cell
         }
@@ -193,9 +224,13 @@ extension BIOSSelectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: TitleBackgroundPrimaryColorHaderCollectionReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: PrimaryHaderReusableView.self, for: indexPath)
         let section = datas[indexPath.section]
-        header.titleLabel.text = section.title
+        let matt = NSMutableAttributedString(string: section.title, attributes: [.font: Constants.Font.title(size: .s), .foregroundColor: Constants.Color.LabelPrimary])
+        if section == .ps1 {
+            matt.append(NSAttributedString(string: " (\(R.string.localizable.chooseOne()))", attributes: [.font: Constants.Font.body(size: .m), .foregroundColor: Constants.Color.LabelSecondary]))
+        }
+        header.titleLabel.attributedText = matt
         return header
     }
 }

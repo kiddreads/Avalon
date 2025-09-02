@@ -18,6 +18,8 @@ enum ImportError: Error, LocalizedError {
     case decryptFailed(fileName: String)
     case ciaGameNotExist(fileName: String)
     case missingFile(errorFileName:String, missingFileName: String)
+    case skinIdentifierConflict(identifier: String)
+    case badCue(fileName: String)
     
     case saveNoMatchGames(gameSaveUrl: URL)
     case saveAlreadyExist(gameSaveUrl: URL, game: Game)
@@ -81,6 +83,10 @@ enum ImportError: Error, LocalizedError {
             R.string.localizable.importDownloadError(fileNames)
         case .missingFile(let errorFileName, let missingFileName):
             R.string.localizable.importMissingFile(errorFileName, missingFileName)
+        case .skinIdentifierConflict(let identifier):
+            R.string.localizable.skinIdentifierExist(identifier)
+        case .badCue(let string):
+            R.string.localizable.filesImporterErrorBadCue(string)
         }
     }
 }

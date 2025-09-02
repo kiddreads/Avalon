@@ -15,6 +15,7 @@ class GameCollectionViewCell: UICollectionViewCell {
     
     private var gameType: GameType? = nil
     private var lastFrame: CGRect? = nil
+    private var indexPath: IndexPath = IndexPath(row: 0, section: 0)
     
     var imageView: GameCoverView = {
         let view = GameCoverView()
@@ -52,11 +53,31 @@ class GameCollectionViewCell: UICollectionViewCell {
                                                      weight: .bold,
                                                      colors: [Constants.Color.LabelPrimary, Constants.Color.Main])
                 self.selectedBackground.alpha = 1
+                if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerUtils.shared.linkedControllers.count > 0 {
+                    UIView.springAnimate(animations: {
+                        self.selectedBackground.backgroundColor = .white
+                        self.transform = .identity
+                    }) { _ in
+                        if self.transform != .identity && self.isSelected {
+                            self.transform = .identity
+                        }
+                    }
+                } else {
+                    self.selectedBackground.backgroundColor = Constants.Color.BackgroundSecondary
+                }
             } else {
                 self.selectImageView.image = UIImage(symbol: .circle,
                                                      size: Constants.Size.IconSizeMin.height,
                                                      color: Constants.Color.LabelPrimary.forceStyle(.dark))
                 self.selectedBackground.alpha = 0
+                if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerUtils.shared.linkedControllers.count > 0 {
+                    UIView.springAnimate(animations: {
+                        self.selectedBackground.backgroundColor = Constants.Color.BackgroundSecondary
+                        self.transform = CGAffineTransformMakeScale(0.8, 0.8)
+                    })
+                } else {
+                    self.selectedBackground.backgroundColor = Constants.Color.BackgroundSecondary
+                }
             }
         }
     }
@@ -94,7 +115,8 @@ class GameCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setData(game: Game, isSelect: Bool = false, highlightString: String? = nil, coverSize: CGSize, showTitle: Bool = true) {
+    func setData(game: Game, isSelect: Bool = false, highlightString: String? = nil, coverSize: CGSize, showTitle: Bool = true, indexPath: IndexPath) {
+        self.indexPath = indexPath
         gameType = game.gameType
         titleLabel.isHidden = !showTitle
         titleLabel.attributedText = NSAttributedString(string: game.aliasName ?? game.name, attributes: [.font: Constants.Font.body(), .foregroundColor: Constants.Color.LabelSecondary]).highlightString(highlightString)
@@ -107,5 +129,14 @@ class GameCollectionViewCell: UICollectionViewCell {
     
     func updateViews(isSelect: Bool) {
         self.selectImageView.alpha = isSelect ? 1 : 0
+        if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerUtils.shared.linkedControllers.count > 0 {
+            if isSelect {
+                self.transform = .identity
+            } else {
+                self.transform = CGAffineTransformMakeScale(0.8, 0.8)
+            }
+        } else {
+            self.transform = .identity
+        }
     }
 }

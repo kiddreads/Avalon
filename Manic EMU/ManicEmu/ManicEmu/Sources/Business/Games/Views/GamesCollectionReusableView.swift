@@ -9,6 +9,7 @@
 
 import UIKit
 import ManicEmuCore
+import VisualEffectView
 
 class GamesCollectionReusableView: UICollectionReusableView {
     var titleLabel: UILabel = {
@@ -72,7 +73,7 @@ class GamesCollectionReusableView: UICollectionReusableView {
         }
     }
     
-    func setData(gameType: GameType, highlightString: String? = nil) {
+    func setData(gameType: GameType, highlightString: String? = nil, contentInsets: UIEdgeInsets = .zero) {
         if Constants.Size.GamesGroupTitleStyle == .brand && gameType != .unknown {
             titleLabel.isHidden = true
             brandImageView.isHidden = false
@@ -89,6 +90,16 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 title = gameType.localizedShortName
             }
             titleLabel.attributedText = NSAttributedString(string: title, attributes: [.font: Constants.Font.title(), .foregroundColor: Constants.Color.LabelPrimary]).highlightString(highlightString)
+        }
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            //隐藏模糊
+            if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+                blurView.isHidden = true
+            }
+        } else {
+            if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+                blurView.isHidden = false
+            }
         }
     }
     
@@ -147,6 +158,12 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.ms_group_brand()
             } else if gameType == .n64 {
                 image = R.image.n64_group_brand()
+            } else if gameType == .vb {
+                image = R.image.vb_group_brand()
+            } else if gameType == .pm {
+                image = R.image.pm_group_brand()
+            } else if gameType == .ps1 {
+                image = R.image.ps1_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image

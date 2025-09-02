@@ -73,6 +73,27 @@ class Settings: Object, ObjectUpdatable {
     @Persisted var threeDSAdvancedSettingMode: Bool = false
     ///跟随系统静音
     @Persisted var respectSilentMode: Bool = false
+    ///额外数据备用
+    @Persisted var extras: Data?
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
+    }
 }
 
 struct SkinConfig: SmartCodable {

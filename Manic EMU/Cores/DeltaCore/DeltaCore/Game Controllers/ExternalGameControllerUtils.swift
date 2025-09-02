@@ -29,6 +29,9 @@ public extension Notification.Name
     
     static let externalKeyboardDidConnect = Notification.Name("ExternalKeyboardDidConnect")
     static let externalKeyboardDidDisconnect = Notification.Name("ExternalKeyboardDidDisconnect")
+    
+    static let externalGameControllerDidPress = Notification.Name("ExternalGameControllerDidPressNotification")
+    static let externalGameControllerDidRelease = Notification.Name("ExternalGameControllerDidReleaseNotification")
 }
 
 public class ExternalGameControllerUtils: UIResponder
@@ -42,6 +45,16 @@ public class ExternalGameControllerUtils: UIResponder
     public var autoPlayerIndexes: Bool
     
     public var forceSetPlayerIndex: Int? = nil
+    
+    public var deadZone: Float = 0.0 {
+        didSet {
+            linkedControllers.forEach {
+                if let mfi = $0 as? MFiGameController {
+                    mfi.deadZone = deadZone
+                }
+            }
+        }
+    }
     
     internal var keyboardController: KeyboardGameController? {
         let keyboardController = linkedControllers.lazy.compactMap { $0 as? KeyboardGameController }.first
@@ -199,6 +212,7 @@ public class ExternalGameControllerUtils: UIResponder
         guard let controller = notification.object as? GCController else { return }
         
         let externalController = MFiGameController(controller: controller)
+        externalController.deadZone = deadZone
         add(externalController)
     }
     

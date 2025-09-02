@@ -1,0 +1,115 @@
+# KeyboardKit change log
+
+- 9.0.3
+    - Adds support for building with complete strict concurrency checking with Swift 5 language mode.
+- 9.0.2
+    - Fixes a deprecation warning when building on macOS 15.
+- 9.0.1
+    - Fixes build with Swift Package Manager.
+- 9.0.0
+    - Xcode 15.3 or later is now required.
+    - Increases the macOS deployment target (for Mac Catalyst) from macOS 10.15 Catalina to macOS 11 Big Sur.
+    - Adds support for iOS 18 and Xcode 16.
+    - Adds support for building with Swift 6 language mode.
+- 8.3.0
+    - Adds a (completely empty) [privacy manifest](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files).
+    - Fixes build with Swift Package Manager.
+- 8.2.0
+    - Adds support for iOS 17 and Xcode 15. Xcode 14 is still supported.
+- 8.1.0
+    - Adds `KeyboardMapView` to let users scroll, zoom and rotate maps using a keyboard.
+- 8.0.0
+    - Increases the deployment target from iOS 12 to iOS 13.
+        - The following deprecated UIKit APIs are no longer respected: `isModalInPopover`, `popoverPresentationControllerShouldDismissPopover(_:)`, `popoverPresentationControllerDidDismissPopover(_:)`.
+        - KeyboardKit didn’t run correctly on iOS 12 since version 5.1.0.
+    - Adds a localised title (shown in the discoverability HUD) for `KeyboardDatePicker`’s Go to Today command, which is now available as `KeyboardDatePicker.goToTodayKeyCommand`.
+- 7.1.0
+    - Adds common SwiftUI `KeyboardShortcut`s that can be used with the `.keyboardShortcut` modifier on a `Button`.  
+- 7.0.0
+    - Xcode 14.0 or later is now required. (Xcode 14.1 or later for Mac Catalyst)
+    - Adds support for iOS 16.
+    - Disables `KeyboardTextView`’s find commands when the text view’s built-in `UIFindInteraction` is enabled.
+    - Fixes adjustments to the date of `KeyboardDatePicker` within the same month being animated on iOS 16, which made it feel less responsive.
+- 6.0.0
+    - Xcode 13.1 is now required.
+    - Adds support for macOS 12 Monterey.
+    - Restores demo app key commands on iOS 14 and lower. (This was a regression in 5.1.0.)
+- 5.1.0
+    - Adds support for including key commands from KeyboardKit in the discoverability HUD on iPad or menu bar on Mac using `UIMenuBuilder` via many new public `DiscoverableKeyCommand` properties.
+    - Adds demonstrating setting up the main menu in demo app’s `AppDelegate`.
+    - Changes the default value of the `canOpenSettings` property of `KeyboardApplication` to true if the app provides a `Settings.bundle` resource.
+    - Removes unnecessary commands on Mac Catalyst to open Preferences, open a new window, close a window, and cycle the active window. These are all provided by the system on Mac Catalyst.
+    - Improves conditions for when text view key commands can be performed.
+- 5.0.1
+    - Fixes a potential crash when selecting or moving items in a collection view. This might occur if the collection view is hidden.
+- 5.0.0
+    - Xcode 13 is now required.
+    - Adds support for iOS 15.
+    - Adds integration with the UIKit focus system where it’s available.
+        - When the focus system is available, KeyboardKit will no longer provide key commands for tab navigation in split views and arrow key navigation in collection views and table views. The focus system is in some ways less capable than KeyboardKit’s implementation, but it provides other significant advantages. Please see [Features.md](/Features.md#keyboard-navigation-without-the-focus-system) for more details about the pros of cons of each.
+        - First responder management should no longer be necessary when a focus system is available. The demo app has been updated to show this.
+        - `KeyboardScrollView` and `KeyboardDatePicker` are now focusable as part of the tab loop. They will consume arrow key inputs to scroll or change the date while focused.
+        - `KeyboardDatePicker` uses a `UIFocusHaloEffect` by default to show a halo when focused.
+        - Moving items in a table view or collection view and deleting items in a table view will act on the focused item instead of the selected item.
+    - Adds the `KeyboardBarButtonItem` properties `keyCommandWantsPriorityOverSystemBehavior`, `keyCommandAllowsAutomaticLocalization` and `keyCommandAllowsAutomaticMirroring` to forward to iOS 15’s new properties on the bar button item’s `UIKeyCommand`.
+    - `KeyboardWindow` no longer allows the window to become the first responder, which increases the length of the responder chain at scene connection.
+    - Fixes key commands for rewind and fast-forward not being possible due to the commands for going back taking precedence even when unavailable.
+- 4.4.1
+    - Fixes keyboard scrolling sometimes being allowed when content should not be scrollable due to content insets.
+    - Fixes the UIKit focus system interfering with `KeyboardDatePicker` on Mac Catalyst.
+    - Fixes a reference to the first responder being kept longer than needed.
+- 4.4.0
+    - Adds commands to move (reorder) the selected item in collection views and table views.
+- 4.3.1
+    - Fixes overriding some API from some KeyboardKit classes not being possible because it was marked `public` instead of `open`.
+    - Fixes the Jump to Selection command in `KeyboardTextView` not working for a plain insertion point (i.e. no selection, which is modelled as a selection with a length of zero).
+- 4.3.0
+    - Adds a Define command in `KeyboardTextView` to show `UIReferenceLibraryViewController` for the selected text.
+- 4.2.0
+    - Adds `KeyboardDatePicker` to let users use arrow keys to spatially change the selected date.
+- 4.1.1
+    - Fixes spatial arrow key selection in collections views not respecting `flipsHorizontallyInOppositeLayoutDirection`, `developmentLayoutDirection` and the way `UICollectionViewCompositionalLayout` and `UICollectionViewFlowLayout` can flip even when these properties specify that flipping should not occur.
+- 4.1.0
+    - Adds calling the `UITabBarControllerDelegate` methods `shouldSelect` and `didSelect` when changing tab using a keyboard in `KeyboardTabBarController`.
+    - Adds deleting rows using the delete key in the table view example in the demo app.
+    - Improves demo app by making the large title visible initially in the sidebar without needing to manually scroll it a tiny little bit.
+- 4.0.1
+    - Improves table view deletion by selecting the new bottom row after deleting the bottom row.
+    - Fixes the Delete command not being available in `KeyboardTableViewController` when the view controller was first responder rather than the table view.
+    - Fixes the Back command being available incorrectly when the responder chain contains both a `KeyboardNavigationController` and another `UINavigationController` that is not a `KeyboardNavigationController`. Code style has been improved in other places to avoid this sort of thing happening again.
+    - Fixes `KeyboardSplitViewController` disabling collapsing into the `compact` column.
+- 4.0.0
+    - Xcode 12.2 is now required.
+    - Add support for Mac Catalyst in the demo app (optimised for Mac).
+    - Fixes the UIKit focus system interfering with selection on Mac Catalyst.
+- 3.0.2
+    - Works around a UIKit issue where responders in the primary column of a `UISplitViewController` could unexpectedly provide key commands when the first responder is in the secondary column.
+- 3.0.0 / 3.0.1 — Read more in the blog post: [What’s New in KeyboardKit for iOS 14?](https://douglashill.co/whats-new-in-keyboardkit-for-ios-14/)
+    - Xcode 12 is now required.
+    - Adds support for iOS 14.
+    - Increases the deployment target from iOS 11 to iOS 12.
+    - The demo app now requires iOS 14.
+    - Adds `KeyboardSplitViewController` to help moving first responder status between columns in a split view.
+    - Adds warning logging when trying to set the `primaryAction` or `menu` on a `KeyboardBarButton` since those can’t be activated with a keyboard.
+    - Adds `KeyboardCollectionViewDelegate` and `KeyboardTableViewDelegate` to be notified of selection changes using arrow keys and to disallow clearing selection with escape.
+    - Adds an overhaul of the demo app to use a sidebar (or navigation stack) as the root view. The tab bar example has been moved to a modal.
+    - Adds more sophisticated first responder management in the demo app.
+    - Adds an example showing a list with `UICollectionView`.
+    - Adds an example showing `UICollectionViewCompositionalLayout` with nested groups.
+    - Adds an example showing a triple column split view (available as a modal).
+- 2.1.0
+    - Resolves project settings warnings with Xcode 12.
+    - Adds support for selection wrapping in any `UICollectionViewLayout`.
+    - Adds selecting the last item initially with `UICollectionViewCompositionalLayout` when pressing the up arrow with vertical scrolling or the trailing arrow with a horizontal scrolling.
+    - Fixes selection in collection views not working as expected when there are supplementary views, decoration views, cells with an alpha of zero, or items for which the delegate returns false to `collectionView(_:shouldHighlightItemAt:)`. This issue affected  `UICollectionLayoutListConfiguration`.
+    - Fixes selection in collection views sometimes shifting into an adjacent row or column when there is no padding between items.
+    - Fixes the back command not working with nested `UINavigationControllers`s.
+- 2.0.1
+    - Adds support for Swift Packager Manager.
+- 2.0.0
+    - Xcode 11.4 is now required.
+    - KeyboardKit scroll views will no longer send their delegate `scrollViewDidEndScrollingAnimation(_:)` after keyboard-driven animations end. Instead, the scroll view’s delegate can conform to `KeyboardScrollingDelegate` to receive callbacks when keyboard-driven scrolling animations start or finish.
+- 1.2.1
+    - Changes Page Up and Page Down to semantic directions so they will scroll horizontally in a scroll view that can only scroll horizontally.
+    - Fixes scroll views with `isPagingEnabled` set ending up off page boundaries if starting keyboard scrolling while the scrolling view was in-between pages while decelerating from touch scrolling.
+    - Fixes keyboard scrolling resulting in an incorrect scroll position when content size is smaller than the bounds (seen as unwanted scrolling in the non-scrolling direction).

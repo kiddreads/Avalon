@@ -7992,10 +7992,11 @@ void runloop_path_set_redirect(settings_t *settings,
                   sizeof(new_savefile_dir));
 
             /* Append library_name to the save location */
+            const char *custom_save_dir = get_custom_save_dir();
             if (sort_savefiles_enable)
                fill_pathname_join(new_savefile_dir,
                   new_savefile_dir,
-                  sysinfo->library_name,
+                  (custom_save_dir == NULL ? sysinfo->library_name : ""),
                   sizeof(new_savefile_dir));
 
             /* If path doesn't exist, try to create it,
@@ -8087,11 +8088,14 @@ void runloop_path_set_redirect(settings_t *settings,
 
       if (savefile_is_dir)
       {
+         //适配PKSM
+         const char *custom_save_ext = get_custom_save_ext();
+         const char *custom_save_dir = get_custom_save_dir();
          fill_pathname_dir(runloop_st->name.savefile,
                            !string_is_empty(runloop_st->runtime_content_path_basename)
                            ? runloop_st->runtime_content_path_basename
-                           : sysinfo->library_name,
-                           FILE_PATH_SRM_EXTENSION,
+                           : (custom_save_dir == NULL ? sysinfo->library_name : ""),
+                           custom_save_ext == NULL ? FILE_PATH_SRM_EXTENSION : custom_save_ext,
                            sizeof(runloop_st->name.savefile));
          RARCH_LOG("[Overrides]: %s \"%s\".\n",
                    msg_hash_to_str(MSG_REDIRECTING_SAVEFILE_TO),

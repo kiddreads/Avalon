@@ -162,4 +162,23 @@ class ImportService: Object, ObjectUpdatable {
         }
         return provider
     }
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data.string(encoding: .utf8)
+            }
+        } else if let data = [key: value].jsonString() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
+    }
 }

@@ -72,7 +72,8 @@ extension UIView {
             }
             let textSize = NSAttributedString(string: message, attributes: [.font: font]).size()
             let textMaxWidth = textSize.width.ceil
-            toast.config.cardCornerRadius = (insets.top + textSize.height + insets.bottom)/2
+            let cornerRadius = (insets.top + textSize.height + insets.bottom)/2
+            toast.config.cardCornerRadius = cornerRadius > 24 ? Constants.Size.CornerRadiusMax : cornerRadius
             if insets.left + textMaxWidth + insets.right < maxWidth {
                 toast.config.cardMaxWidth = insets.left + textMaxWidth + insets.right
             } else {

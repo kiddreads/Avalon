@@ -9,6 +9,7 @@
 
 import ProHUD
 import ManicEmuCore
+import KeyboardKit
 
 
 class GameSettingView: BaseView {
@@ -35,7 +36,7 @@ class GameSettingView: BaseView {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        let view = KeyboardCollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: SettingItemCollectionViewCell.self)
@@ -67,6 +68,19 @@ class GameSettingView: BaseView {
                     self.collectionView.cancelInteractiveMovement()
                 default:
                     break
+                }
+            }
+        } else {
+            view.buttonPress = { [weak self] key in
+                guard let self else { return }
+                if key == .a {
+                    if let selectedItems = self.collectionView.indexPathsForSelectedItems,
+                        selectedItems.count == 1,
+                        let selectedItem = selectedItems.first {
+                        let _ = self.collectionView(self.collectionView, didSelectItemAt: selectedItem)
+                    }
+                } else if key == .b {
+                    self.didTapClose?()
                 }
             }
         }
@@ -123,7 +137,17 @@ class GameSettingView: BaseView {
                                 var item = setting
                                 item.fastForwardSpeed = self.game.speed
                                 self.gameSettings[index] = item
-                                self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+                                let indexPath = IndexPath(row: index, section: 0)
+                                var isSelected = false
+                                if let selectedItems = self.collectionView.indexPathsForSelectedItems, selectedItems.contains([indexPath]) {
+                                    isSelected = true
+                                }
+                                self.collectionView.reloadItems(at: [indexPath])
+                                if isSelected {
+                                    DispatchQueue.main.asyncAfter(delay: 0.35) {
+                                        self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                                    }
+                                }
                                 break
                             }
                         }
@@ -165,6 +189,10 @@ class GameSettingView: BaseView {
                 make.top.equalTo(navigationBlurView.snp.bottom)
                 make.leading.trailing.bottom.equalToSuperview()
             }
+        }
+        
+        if isEditingMode {
+            collectionView.allowsSelection = false
         }
     }
     
@@ -298,7 +326,22 @@ extension GameSettingView: UICollectionViewDataSource {
             item = gameSettings[indexPath.row]
         }
         let cell = collectionView.dequeueReusableCell(withClass: SettingItemCollectionViewCell.self, for: indexPath)
-        cell.setData(item: item, editable: isEditingMode, isPlus: indexPath.section != 0, enable: item.enable(for: game.gameType), mappingMode: isMappingMode)
+        var specialTitle: String? = nil
+        if item.type == .palette {
+            if game.gameType == .vb {
+                specialTitle = item.palette.paletteTitleForVB
+            } else if game.gameType == .pm {
+                specialTitle = item.palette.paletteTitleForPM
+            }
+        } else if item.type == .resolution {
+            if game.gameType == .ps1 {
+                specialTitle = R.string.localizable.gameSettingResolution(item.resolution.resolutionTitleForPS1)
+            } else if game.isN64ParaLLEl {
+                specialTitle = R.string.localizable.gameSettingResolution(item.resolution.resolutionTitleForN64ParaLLEl)
+            }
+        }
+        
+        cell.setData(item: item, editable: isEditingMode, isPlus: indexPath.section != 0, enable: item.enable(for: game.gameType), mappingMode: isMappingMode, specialTitle: specialTitle)
         if isEditingMode {
             cell.editButton.addTapGesture { [weak self] gesture in
                 guard let self = self else { return }
@@ -374,8 +417,17 @@ extension GameSettingView: UICollectionViewDataSource {
 extension GameSettingView: UICollectionViewDelegate {
     private func updateCellAndCallBack(item: GameSetting, indexPath: IndexPath, reload: Bool = true) {
         if reload {
+            var isSelected = false
+            if let selectedItems = collectionView.indexPathsForSelectedItems, selectedItems.contains([indexPath]) {
+                isSelected = true
+            }
             gameSettings[indexPath.row] = item
             collectionView.reloadItems(at: [indexPath])
+            if isSelected {
+                DispatchQueue.main.asyncAfter(delay: 0.35) {
+                    self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                }
+            }
         }
         didSelectItem?(item)
     }
@@ -407,7 +459,13 @@ extension GameSettingView: UICollectionViewDelegate {
                 }
                 return
             case .resolution:
-                item.resolution = item.resolution.next
+                if game.gameType == .ps1 {
+                    item.resolution = item.resolution.nextForPS1
+                } else if game.isN64ParaLLEl {
+                    item.resolution = item.resolution.nextForN64ParaLLEl
+                } else {
+                    item.resolution = item.resolution.next
+                }
                 updateCellAndCallBack(item: item, indexPath: indexPath)
                 return
             case .haptic:
@@ -419,14 +477,20 @@ extension GameSettingView: UICollectionViewDelegate {
                 updateCellAndCallBack(item: item, indexPath: indexPath)
                 return
             case .palette:
-                item.palette = item.palette.next
+                if game.gameType == .vb {
+                    item.palette = item.palette.nextForVB
+                } else if game.gameType == .pm {
+                    item.palette = item.palette.nextForPM
+                } else {
+                    item.palette = item.palette.next
+                }
                 updateCellAndCallBack(item: item, indexPath: indexPath)
                 return
             case .toggleFullscreen:
                 item.isFullScreen = !item.isFullScreen
                 updateCellAndCallBack(item: item, indexPath: indexPath)
             case .swapDisk:
-                if game.fileExtension.lowercased() == "m3u" {
+                if game.supportSwapDisc {
                     item.currentDiskIndex = item.currentDiskIndex + 1 < game.totalDiskCount ? item.currentDiskIndex + 1 : 0
                     game.currentDiskIndex = item.currentDiskIndex
                     updateCellAndCallBack(item: item, indexPath: indexPath)
@@ -474,15 +538,37 @@ extension GameSettingView: UICollectionViewDelegate {
             return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
         } else if item.type == .resolution {
             //设置分辨率
-            let actions = GameSetting.Resolution.allCases.filter({ $0 != .undefine }).map { resolution in
-                UIAction(title: resolution.title,
-                         image: resolution == game.resolution ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
-                    guard let self = self else { return }
-                    item.resolution = resolution
-                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+            if game.gameType == .ps1 {
+                let actions = GameSetting.Resolution.ResolutionForPS1.filter({ $0 != .undefine }).map { resolution in
+                    UIAction(title: R.string.localizable.gameSettingResolution(resolution.resolutionTitleForPS1),
+                             image: resolution == game.resolution ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.resolution = resolution
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
                 }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+            } else if game.isN64ParaLLEl {
+                let actions = GameSetting.Resolution.ResolutionForN64ParaLLEl.filter({ $0 != .undefine }).map { resolution in
+                    UIAction(title: R.string.localizable.gameSettingResolution(resolution.resolutionTitleForN64ParaLLEl),
+                             image: resolution == game.resolution ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.resolution = resolution
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
+                }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+            } else {
+                let actions = GameSetting.Resolution.allCases.filter({ $0 != .undefine }).map { resolution in
+                    UIAction(title: resolution.title,
+                             image: resolution == game.resolution ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.resolution = resolution
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
+                }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             }
-            return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
         } else if item.type == .haptic {
             //震感设置
             let actions = GameSetting.HapticType.allCases.map { hapticType in
@@ -506,16 +592,39 @@ extension GameSettingView: UICollectionViewDelegate {
             return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
         } else if item.type == .palette {
             //设置调色板
-            let actions = GameSetting.Palette.allCases.map { palette in
-                UIAction(title: palette == .None ? "None" : palette.shortTitle,
-                         image: item.image) { [weak self] _ in
-                    guard let self = self else { return }
-                    item.palette = palette
-                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+            if game.gameType == .vb {
+                let actions = GameSetting.Palette.PalettesForVB.map { palette in
+                    UIAction(title: palette.paletteTitleForVB,
+                             image: item.image) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.palette = palette
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
                 }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+            } else if game.gameType == .pm {
+                let actions = GameSetting.Palette.PalettesForPM.map { palette in
+                    UIAction(title: palette.paletteTitleForPM,
+                             image: item.image) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.palette = palette
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
+                }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+            } else {
+                let actions = GameSetting.Palette.allCases.map { palette in
+                    UIAction(title: palette == .None ? "None" : palette.shortTitle,
+                             image: item.image) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.palette = palette
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
+                }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             }
-            return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
-        } else if item.type == .swapDisk, game.fileExtension.lowercased() == "m3u" {
+            
+        } else if item.type == .swapDisk, game.supportSwapDisc {
             var actions = [UIAction]()
             for index in 0..<game.totalDiskCount {
                 actions.append(UIAction(title: "Disc \(index + 1)",
@@ -636,6 +745,7 @@ extension GameSettingView {
             }
             
             let settingView = GameSettingView(game: game, isEditingMode: isEditingMode)
+            settingView.collectionView.becomeFirstResponder()
             settingView.didSelectItem = { [weak sheet] gameSetting in
                 if let needToHide = didSelectItem?(gameSetting, sheet), needToHide {
                     sheet?.pop(completon: hideCompletion)

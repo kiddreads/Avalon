@@ -59,9 +59,10 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
         if item.files.count > 0 {
             matt.append(NSAttributedString(string: "\n" + item.url.lastPathComponent, attributes: [.foregroundColor: Constants.Color.LabelSecondary, .font: Constants.Font.body(size: .l)]))
             item.files.forEach { url in
-                let itemView = BIOSCollectionViewCell.ItemView(enableButton: false)
+                let itemView = BIOSCollectionViewCell.ItemView(enableButton: false, enableOptionButton: false)
                 itemView.titleLabel.text = url.lastPathComponent
                 itemView.titleLabel.lineBreakMode = .byTruncatingMiddle
+                itemView.optionButton.isHidden = true
                 itemView.button.isHidden = true
                 itemViews.append(itemView)
                 addSubview(itemView)
@@ -78,9 +79,10 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
                 }
             }
         } else {
-            let itemView = BIOSCollectionViewCell.ItemView(enableButton: false)
+            let itemView = BIOSCollectionViewCell.ItemView(enableButton: false, enableOptionButton: false)
             itemView.titleLabel.text = item.url.lastPathComponent
             itemView.titleLabel.lineBreakMode = .byTruncatingMiddle
+            itemView.optionButton.isHidden = true
             itemView.button.isHidden = true
             itemViews.append(itemView)
             addSubview(itemView)
@@ -97,9 +99,9 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
     }
     
     static func CellHeight(itemCount: Int) -> Double {
-        let deleteButtonHeight = Constants.Size.ItemHeightMin + Constants.Size.ContentSpaceMid
+        let deleteButtonHeight = Constants.Size.ContentSpaceMid + Constants.Size.ItemHeightMin
+        let titleLabelHeight = itemCount == 0 ? 21 : 43.0
         let itemCount = itemCount == 0 ? 1 : itemCount
-        let titleLabelHeight = itemCount > 1 ? 43.0 : 21
         return Constants.Size.ContentSpaceMid + titleLabelHeight + (Double(itemCount) * Constants.Size.ItemHeightMid) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid) + deleteButtonHeight
     }
 }

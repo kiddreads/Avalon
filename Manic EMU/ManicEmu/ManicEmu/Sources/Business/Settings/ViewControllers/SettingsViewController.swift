@@ -80,4 +80,25 @@ class SettingsViewController: BaseViewController {
             }
         }
     }
+    
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
+        Log.debug("settingsListView becomeFirstResponder")
+        return settingsListView.collectionView.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        Log.debug("settingsListView resignFirstResponder")
+        return settingsListView.collectionView.resignFirstResponder()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.isPhone {
+            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+                self?.settingsListView.updateViews()
+            }
+        }
+    }
 }

@@ -8,6 +8,7 @@
 #include "InputManager.h"
 
 #import <CoreMotion/CoreMotion.h>
+#import <GameController/GameController.h>
 
 #ifdef __cplusplus
 #include <cmath>
@@ -380,20 +381,49 @@ public:
     }
 
     std::tuple<Vec3<float>, Vec3<float>> GetStatus() const override {
+        
+        if (@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)) {
+          for (GCController *controller in [GCController controllers]) {
+             if (!controller)
+                continue;
+             if (!controller.motion)
+                 continue;
+             if (controller.motion.sensorsActive) {
+                 Vec3<float> acceleration = {
+                     static_cast<float>(-(controller.motion.acceleration.x + controller.motion.userAcceleration.x)),
+                     static_cast<float>(-(controller.motion.acceleration.y + controller.motion.userAcceleration.y)),
+                     static_cast<float>(-(controller.motion.acceleration.z + controller.motion.userAcceleration.z))
+                 };
+                 
+                 Vec3<float> rotationRate = {
+                     static_cast<float>(-controller.motion.rotationRate.x),
+                     static_cast<float>(controller.motion.rotationRate.y),
+                     static_cast<float>(controller.motion.rotationRate.z)
+                 };
+                 
+                 return {acceleration, rotationRate};
+             }
+          }
+       }
+        
         CMDeviceMotion *motion = [motionManager deviceMotion];
-        CMAttitude *attitude = motion.attitude;
-        CMRotationMatrix r = attitude.rotationMatrix;
+//        CMAttitude *attitude = motion.attitude;
+//        CMRotationMatrix r = attitude.rotationMatrix;
 
-        const float RAD_TO_DEG = 180.0f / M_PI;
-
-        float gx = static_cast<float>(motion.gravity.x);
-        float gy = static_cast<float>(motion.gravity.y);
-        float gz = static_cast<float>(motion.gravity.z);
-
+//        float gx = static_cast<float>(motion.gravity.x);
+//        float gy = static_cast<float>(motion.gravity.y);
+//        float gz = static_cast<float>(motion.gravity.z);
+//
+//        Vec3<float> worldGravity = {
+//            static_cast<float>(r.m11 * gx + r.m12 * gy + r.m13 * gz),
+//            static_cast<float>(r.m21 * gx + r.m22 * gy + r.m23 * gz),
+//            static_cast<float>(r.m31 * gx + r.m32 * gy + r.m33 * gz)
+//        };
+        
         Vec3<float> worldGravity = {
-            static_cast<float>(r.m11 * gx + r.m12 * gy + r.m13 * gz),
-            static_cast<float>(r.m21 * gx + r.m22 * gy + r.m23 * gz),
-            static_cast<float>(r.m31 * gx + r.m32 * gy + r.m33 * gz)
+            static_cast<float>(motion.gravity.x + motion.userAcceleration.x),
+            static_cast<float>(motion.gravity.y + motion.userAcceleration.y),
+            static_cast<float>(motion.gravity.z + motion.userAcceleration.z)
         };
 
         Vec3<float> raw_accel = {
@@ -401,11 +431,13 @@ public:
             -worldGravity.y,
             -worldGravity.z
         };
-
+        
+        const float RAD_TO_DEG = 180.0f / M_PI;
+        
         Vec3<float> raw_rotation = {
-            static_cast<float>(motion.rotationRate.x * RAD_TO_DEG),
+            static_cast<float>(-motion.rotationRate.x * RAD_TO_DEG),
             static_cast<float>(motion.rotationRate.y * RAD_TO_DEG),
-            static_cast<float>(motion.rotationRate.z * RAD_TO_DEG)
+            static_cast<float>(-motion.rotationRate.z * RAD_TO_DEG)
         };
 
         // 平滑处理
@@ -450,10 +482,34 @@ public:
     
     void DisableSensors() {
         [motionManager stopDeviceMotionUpdates];
+        
+        if (@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)) {
+          for (GCController *controller in [GCController controllers]) {
+             if (!controller)
+                continue;
+             if (!controller.motion)
+                 continue;
+             if (controller.motion.sensorsRequireManualActivation) {
+                 controller.motion.sensorsActive = NO;
+             }
+          }
+       }
     }
     
     void EnableSensors() {
         [motionManager startDeviceMotionUpdates];
+        
+        if (@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)) {
+          for (GCController *controller in [GCController controllers]) {
+             if (!controller)
+                continue;
+             if (!controller.motion)
+                 continue;
+             if (controller.motion.sensorsRequireManualActivation) {
+                 controller.motion.sensorsActive = YES;
+             }
+          }
+       }
     }
 };
 

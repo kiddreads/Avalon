@@ -5027,6 +5027,33 @@ const char *input_config_get_prefix(unsigned user, bool meta)
    return bind_user_prefix[user];
 }
 
+static const char *g_custom_save_dir = NULL;
+void set_custom_save_dir(const char *dir) {
+   g_custom_save_dir = dir;
+}
+
+const char* get_custom_save_dir(void) {
+   return g_custom_save_dir;
+}
+
+static const char *g_custom_save_ext = NULL;
+void set_custom_save_ext(const char *ext) {
+   g_custom_save_ext = ext;
+}
+
+const char* get_custom_save_ext(void) {
+   return g_custom_save_ext;
+}
+
+static bool g_enable_rumble = false;
+void set_enable_rumble(bool enable) {
+   g_enable_rumble = enable;
+}
+
+bool get_enable_rumble(void) {
+   return g_enable_rumble;
+}
+
 /**
  * input_config_save_keybinds_user:
  * @conf               : pointer to config file object

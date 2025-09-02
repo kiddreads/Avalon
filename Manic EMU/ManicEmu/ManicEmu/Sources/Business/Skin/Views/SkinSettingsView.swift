@@ -82,15 +82,12 @@ class SkinSettingsView: BaseView {
         return view
     }()
     
-    private var howToFetchSkinButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.howToFetch()) {
-            topViewController()?.present(WebViewController(url: Constants.URLs.SkinUsageGuide), animated: true)
-        }
-        return view
-    }()
-    
     private lazy var moreContextMenuButton: ContextMenuButton = {
         var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: R.string.localizable.howToFetch()) { _ in
+            //how to
+            topViewController()?.present(WebViewController(url: Constants.URLs.SkinUsageGuide), animated: true)
+        }))
         actions.append((UIAction(title: R.string.localizable.skinResetForAll()) { [weak self] _ in
             guard let self = self else { return }
             //重置所有平台皮肤
@@ -265,6 +262,7 @@ class SkinSettingsView: BaseView {
         navigationSubTitle.snp.makeConstraints { make in
             make.leading.equalTo(navigationSymbolTitle)
             make.top.equalTo(navigationSymbolTitle.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny/2)
+            make.trailing.equalTo(-Constants.Size.ContentSpaceMax)
         }
         
         navigationBlurView.addSubview(segmentView)
@@ -296,16 +294,6 @@ class SkinSettingsView: BaseView {
         navigationBlurView.addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.edges.equalTo(moreContextMenuButton)
-        }
-        
-        navigationBlurView.addSubview(howToFetchSkinButton)
-        howToFetchSkinButton.label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        howToFetchSkinButton.label.setContentHuggingPriority(.required, for: .horizontal)
-        howToFetchSkinButton.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.leading.equalTo(navigationSubTitle.snp.trailing).offset(Constants.Size.ContentSpaceMid)
-            make.trailing.equalTo(moreButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
-            make.centerY.equalTo(closeButton)
         }
         
         updateDatas()
@@ -375,7 +363,7 @@ class SkinSettingsView: BaseView {
                 return false
             }
             if reuseSkinGameType.contains([$0.gameType]) {
-                if $0.gameType != self.gameType && ($0.skinType == .default || $0.skinType == .manic) {
+                if $0.gameType != self.gameType && ($0.skinType == .default || $0.skinType == .buildIn) {
                     //皮肤的游戏类型与当前选中的游戏类型不一致 则需要排除掉default和manic的皮肤
                     return false
                 } else {
@@ -388,9 +376,9 @@ class SkinSettingsView: BaseView {
                 return true
             } else if $1.skinType == .default {
                 return false
-            } else if $0.skinType == .manic {
+            } else if $0.skinType == .buildIn {
                 return true
-            } else if $1.skinType == .manic {
+            } else if $1.skinType == .buildIn {
                 return false
             }
             return true

@@ -13,7 +13,7 @@ import Device
 
 extension GameSaveState: CKRecordConvertible & CKRecordRecoverable { }
 
-class GameSaveState: Object {
+class GameSaveState: Object, ObjectUpdatable {
     ///主键 rom的id+时间戳 xxx_2025-03-03_12-00-00 3DS的话就是存档的名称
     @Persisted(primaryKey: true) var name: String
     ///状态存档类型
@@ -30,6 +30,8 @@ class GameSaveState: Object {
     @Persisted var osVersion: String = UIDevice.current.systemVersion
     ///用于iCloud同步删除
     @Persisted var isDeleted: Bool = false
+    ///额外数据备用
+    @Persisted var extras: Data?
     
     ///该即时存档是否适配本系统
     var isCompatible: Bool {
@@ -45,6 +47,25 @@ class GameSaveState: Object {
     
     var currentDeviceInfo: String {
         Device.version().rawValue + " " + UIDevice.current.systemVersion
+    }
+    
+    func getExtra(key: String) -> Any? {
+        if let extras {
+            return Self.getExtra(extras: extras, key: key)
+        }
+        return nil
+    }
+    
+    func updateExtra(key: String, value: Any) {
+        if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
+            Self.change { realm in
+                self.extras = data
+            }
+        } else if let data = [key: value].jsonData() {
+            Self.change { realm in
+                self.extras = data
+            }
+        }
     }
 }
 

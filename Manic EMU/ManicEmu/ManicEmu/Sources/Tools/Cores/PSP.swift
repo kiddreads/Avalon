@@ -129,6 +129,9 @@ class PSPEmulatorBridge : NSObject, EmulatorBase {
         } else {
             if let gameInput = PSPGameInput(rawValue: input),
                 let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+#if DEBUG
+Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+#endif
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
             }
         }

@@ -16,6 +16,7 @@ public protocol ManicEmuCoreProtocol: CustomStringConvertible
     var version: String? { get }
     
     var gameType: GameType { get }
+    var gameSaveCustomPath: String? { get }
     var gameSaveExtension: String { get }
     
     // Should be associated type, but Swift type system makes this difficult, so ¯\_(ツ)_/¯
@@ -37,6 +38,10 @@ public protocol ManicEmuCoreProtocol: CustomStringConvertible
 public extension ManicEmuCoreProtocol
 {
     var version: String? {
+        return nil
+    }
+    
+    var gameSaveCustomPath: String? {
         return nil
     }
     
