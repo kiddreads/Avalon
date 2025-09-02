@@ -71,12 +71,12 @@
         Command="{Binding OpenTitleUpdateManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageTitleUpdates}"
-        Icon="{ext:Icon fa-solid fa-code-compare}" />
+        Icon="{ext:Icon fa-solid fa-diagram-predecessor}" />
     <MenuItem
         Command="{Binding OpenDownloadableContentManager}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuManageDlc}"
-        Icon="{ext:Icon fa-solid fa-download}" />
+        Icon="{ext:Icon fa-solid fa-puzzle-piece}" />
     <MenuItem
         Command="{Binding OpenCheatManager}"
         CommandParameter="{Binding}"
@@ -92,12 +92,12 @@
         Command="{Binding OpenModsDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenModsDirectory}"
-        Icon="{ext:Icon fa-solid fa-folder}" />
+        Icon="{ext:Icon fa-solid fa-folder-closed}" />
     <MenuItem
         Command="{Binding OpenSdModsDirectory}"
         CommandParameter="{Binding}"
         Header="{ext:Locale GameListContextMenuOpenSdModsDirectory}"
-        Icon="{ext:Icon fa-solid fa-folder}"
+        Icon="{ext:Icon fa-solid fa-folder-closed}"
         ToolTip.Tip="{ext:Locale GameListContextMenuOpenSdModsDirectoryToolTip}" />
     <Separator />
 	<MenuItem
@@ -128,12 +128,12 @@
             Command="{Binding OpenPtcDirectory}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementOpenPptcDirectory}"
-            Icon="{ext:Icon fa-solid fa-folder}" />
+            Icon="{ext:Icon fa-solid fa-folder-closed}" />
         <MenuItem
             Command="{Binding OpenShaderCacheDirectory}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementOpenShaderCacheDirectory}"
-            Icon="{ext:Icon fa-solid fa-folder}" />
+            Icon="{ext:Icon fa-solid fa-folder-closed}" />
     </MenuItem>
     <MenuItem Header="{ext:Locale GameListContextMenuExtractData}" Icon="{ext:Icon fa-solid fa-file-export}">
         <MenuItem

@@ -40,35 +40,28 @@
                     Icon="{ext:Icon fa-solid fa-folder-open}"
                     IsEnabled="{Binding EnableNonGameRunningControls}" />
                 <MenuItem
-                    Command="{Binding LoadDlcFromFolder}"
-                    Header="{ext:Locale MenuBarFileLoadDlcFromFolder}"
-                    Icon="{ext:Icon fa-solid fa-download}"
-                    IsEnabled="{Binding EnableNonGameRunningControls}" />
-                <MenuItem
                     Command="{Binding LoadTitleUpdatesFromFolder}"
                     Header="{ext:Locale MenuBarFileLoadTitleUpdatesFromFolder}"
-                    Icon="{ext:Icon fa-solid fa-code-compare}"
+                    Icon="{ext:Icon fa-solid fa-diagram-predecessor}"
                     IsEnabled="{Binding EnableNonGameRunningControls}" />
-                <MenuItem Header="{ext:Locale MenuBarFileOpenApplet}" IsEnabled="{Binding IsAppletMenuActive}" Icon="{ext:Icon fa-solid fa-microchip}">
-                    <MenuItem
-                        Name="MiiAppletMenuItem"
-                        Header="{ext:Locale MenuBarFileOpenAppletOpenMiiApplet}"
-                        Icon="{ext:Icon fa-solid fa-person}"
-                        ToolTip.Tip="{ext:Locale MenuBarFileOpenAppletOpenMiiAppletToolTip}" />
-                </MenuItem>
+                <MenuItem
+                    Command="{Binding LoadDlcFromFolder}"
+                    Header="{ext:Locale MenuBarFileLoadDlcFromFolder}"
+                    Icon="{ext:Icon fa-solid fa-puzzle-piece}"
+                    IsEnabled="{Binding EnableNonGameRunningControls}" />
                 <Separator />
                 <MenuItem
                     Command="{Binding OpenRyujinxFolder}"
                     Header="{ext:Locale MenuBarFileOpenEmuFolder}"
                     Icon="{ext:Icon fa-solid fa-folder-closed}" />
                 <MenuItem
-                    Command="{Binding OpenScreenshotsFolder}"
-                    Header="{ext:Locale MenuBarFileOpenScreenshotsFolder}"
-                    Icon="{ext:Icon fa-solid fa-desktop}" />
-                <MenuItem
                     Command="{Binding OpenLogsFolder}"
                     Header="{ext:Locale MenuBarFileOpenLogsFolder}"
-                    Icon="{ext:Icon fa-solid fa-file-lines}" />
+                    Icon="{ext:Icon fa-solid fa-terminal}" />
+                <MenuItem
+                    Command="{Binding OpenScreenshotsFolder}"
+                    Header="{ext:Locale MenuBarFileOpenScreenshotsFolder}"
+                    Icon="{ext:Icon fa-solid fa-image}" />
                 <Separator />
                 <MenuItem
                     Name="CloseRyujinxMenuItem"
@@ -132,11 +125,6 @@
                     Icon="{ext:Icon fa-solid fa-globe}"
                     Classes="withCheckbox">
                 </MenuItem>
-                <MenuItem 
-                    Name="ToggleFileTypesMenuItem" 
-                    Padding="-10,0,0,0"
-                    Header="{ext:Locale MenuBarShowFileTypes}" />
-                <Separator />
                 <MenuItem
                     Name="OpenSettingsMenuItem"
                     Padding="0"
@@ -222,20 +210,25 @@
                     <MenuItem Command="{Binding InstallFirmwareFromFile}" Header="{ext:Locale MenuBarActionsInstallFirmwareFromFile}" Icon="{ext:Icon fa-solid fa-file-code}" />
                     <MenuItem Command="{Binding InstallFirmwareFromFolder}" Header="{ext:Locale MenuBarActionsInstallFirmwareFromDirectory}" Icon="{ext:Icon fa-solid fa-folder-closed}" />
                 </MenuItem>
-                <MenuItem Header="{ext:Locale MenuBarActionsManageFileTypes}" IsVisible="{Binding ManageFileTypesVisible}">
-                    <MenuItem Name="InstallFileTypesMenuItem" Header="{ext:Locale MenuBarActionsInstallFileTypes}" IsEnabled="{Binding AreMimeTypesRegistered, Converter={x:Static BoolConverters.Not}}" />
-                    <MenuItem Name="UninstallFileTypesMenuItem" Header="{ext:Locale MenuBarActionsUninstallFileTypes}" IsEnabled="{Binding AreMimeTypesRegistered}" />
+                <MenuItem Header="{ext:Locale MenuBarActionsManageFileTypes}" IsVisible="{Binding ManageFileTypesVisible}" Icon="{ext:Icon fa-solid fa-clipboard}">
+                    <MenuItem Name="InstallFileTypesMenuItem" Header="{ext:Locale MenuBarActionsInstallFileTypes}" IsEnabled="{Binding AreMimeTypesRegistered, Converter={x:Static BoolConverters.Not}}" Icon="{ext:Icon fa-solid fa-square-plus}" />
+                    <MenuItem Name="UninstallFileTypesMenuItem" Header="{ext:Locale MenuBarActionsUninstallFileTypes}" IsEnabled="{Binding AreMimeTypesRegistered}" Icon="{ext:Icon fa-solid fa-square-minus}" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Name="XciTrimmerMenuItem" Header="{ext:Locale MenuBarActionsXCITrimmer}" Icon="{ext:Icon fa-solid fa-scissors}" />
+                <MenuItem Header="{ext:Locale MenuBarActionsTools}" Icon="{ext:Icon fa-solid fa-toolbox}">
+                    <MenuItem
+                        Name="MiiAppletMenuItem" Header="{ext:Locale MenuBarActionsOpenMiiEditor}" Icon="{ext:Icon fa-solid fa-face-grin-wide}" ToolTip.Tip="{ext:Locale MenuBarActionsOpenMiiEditorToolTip}" />
+                    <MenuItem Name="XciTrimmerMenuItem" Header="{ext:Locale MenuBarActionsXCITrimmer}" Icon="{ext:Icon fa-solid fa-scissors}" />
+                </MenuItem>
             </MenuItem>
             <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarView}">
-                <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarViewWindow}">
+                <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarViewWindow}" Icon="{ext:Icon fa-solid fa-window-restore}">
                     <MenuItem Name="WindowSize720PMenuItem" Header="{ext:Locale MenuBarViewWindow720}" CommandParameter="1280 720" />
                     <MenuItem Name="WindowSize1080PMenuItem" Header="{ext:Locale MenuBarViewWindow1080}" CommandParameter="1920 1080" />
                     <MenuItem Name="WindowSize1440PMenuItem" Header="{ext:Locale MenuBarViewWindow1440}" CommandParameter="2560 1440" />
                     <MenuItem Name="WindowSize2160PMenuItem" Header="{ext:Locale MenuBarViewWindow2160}" CommandParameter="3840 2160" />
                 </MenuItem>
+                <MenuItem Name="ToggleFileTypesMenuItem" Header="{ext:Locale MenuBarShowFileTypes}" Icon="{ext:Icon fa-solid fa-tags}" />
             </MenuItem>
             <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarHelp}">
                 <MenuItem
@@ -259,12 +252,6 @@
                 <Separator />
                 <MenuItem VerticalAlignment="Center" Header="{ext:Locale MenuBarHelpFaqAndGuides}" Icon="{ext:Icon fa-solid fa-question}" >
                     <MenuItem
-                        Name="FaqMenuItem"
-                        Header="{ext:Locale MenuBarHelpFaq}"
-                        Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="{x:Static common:SharedConstants.FaqWikiUrl}"
-                        ToolTip.Tip="{ext:Locale MenuBarHelpFaqTooltip}" />
-                    <MenuItem
                         Name="SetupGuideMenuItem"
                         Header="{ext:Locale MenuBarHelpSetup}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
@@ -276,6 +263,12 @@
                         Icon="{ext:Icon fa-brands fa-gitlab}"
                         CommandParameter="{x:Static common:SharedConstants.MultiplayerWikiUrl}"
                         ToolTip.Tip="{ext:Locale MenuBarHelpMultiplayerTooltip}" />
+                    <MenuItem
+                        Name="FaqMenuItem"
+                        Header="{ext:Locale MenuBarHelpFaq}"
+                        Icon="{ext:Icon fa-brands fa-gitlab}"
+                        CommandParameter="{x:Static common:SharedConstants.FaqWikiUrl}"
+                        ToolTip.Tip="{ext:Locale MenuBarHelpFaqTooltip}" />
                 </MenuItem>
             </MenuItem>
         </Menu>

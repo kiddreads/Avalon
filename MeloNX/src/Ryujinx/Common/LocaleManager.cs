@@ -19,7 +19,7 @@ namespace Ryujinx.Ava.Common.Locale
         private readonly Dictionary<LocaleKeys, string> _localeStrings;
         private readonly ConcurrentDictionary<LocaleKeys, object[]> _dynamicValues;
         private string _localeLanguageCode;
-
+        public string CurrentLanguageCode => _localeLanguageCode;
         public static LocaleManager Instance { get; } = new();
         public event Action LocaleChanged;
 

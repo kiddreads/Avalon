@@ -1204,11 +1204,11 @@ namespace Ryujinx.Ava.UI.ViewModels
             _rendererWaitEvent.Set();
         }
 
-        private async Task LoadContentFromFolder(LocaleKeys localeMessageAddedKey, LocaleKeys localeMessageRemovedKey, LoadContentFromFolderDelegate onDirsSelected)
+        private async Task LoadContentFromFolder(LocaleKeys localeMessageAddedKey, LocaleKeys localeMessageRemovedKey, LoadContentFromFolderDelegate onDirsSelected, LocaleKeys dirSelectDialogTitle)
         {
             IReadOnlyList<IStorageFolder> result = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
-                Title = LocaleManager.Instance[LocaleKeys.OpenFolderDialogTitle],
+                Title = LocaleManager.Instance[dirSelectDialogTitle],
                 AllowMultiple = true,
             });
 
@@ -1505,7 +1505,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         {
             IReadOnlyList<IStorageFile> result = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = LocaleManager.Instance[LocaleKeys.OpenFileDialogTitle],
+                Title = LocaleManager.Instance[LocaleKeys.LoadApplicationFromFileDialogTitle],
                 AllowMultiple = false,
                 FileTypeFilter = new List<FilePickerFileType>
                 {
@@ -1581,7 +1581,8 @@ namespace Ryujinx.Ava.UI.ViewModels
             await LoadContentFromFolder(
                 LocaleKeys.AutoloadDlcAddedMessage,
                 LocaleKeys.AutoloadDlcRemovedMessage,
-                ApplicationLibrary.AutoLoadDownloadableContents);
+                ApplicationLibrary.AutoLoadDownloadableContents,
+                LocaleKeys.LoadDLCFromFolderDialogTitle);
         }
 
         public async Task LoadTitleUpdatesFromFolder()
@@ -1589,14 +1590,15 @@ namespace Ryujinx.Ava.UI.ViewModels
             await LoadContentFromFolder(
                 LocaleKeys.AutoloadUpdateAddedMessage,
                 LocaleKeys.AutoloadUpdateRemovedMessage,
-                ApplicationLibrary.AutoLoadTitleUpdates);
+                ApplicationLibrary.AutoLoadTitleUpdates,
+                LocaleKeys.LoadTitleUpdatesFromFolderDialogTitle);
         }
 
         public async Task OpenFolder()
         {
             IReadOnlyList<IStorageFolder> result = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
-                Title = LocaleManager.Instance[LocaleKeys.OpenFolderDialogTitle],
+                Title = LocaleManager.Instance[LocaleKeys.LoadUnpackedGameFromFolderDialogTitle],
                 AllowMultiple = false,
             });
 
