@@ -20,6 +20,18 @@ namespace Ryujinx.HLE
 {
     public class Switch : IDisposable
     {
+        /// <summary>
+        /// Currently running emulated Switch, if there is one.
+        /// <para>
+        /// Proper usage of this property null checks it before use, unless the caller is certain that the emulation is running.
+        /// </para>
+        /// <para>
+        /// In case the emulation is running, there might be a way to directly pass the <see cref="Switch" /> instance, which is preferred.
+        /// </para>
+        /// <para>
+        /// The instance is set to <c>this</c> on any <see cref="Switch" /> instantiation, and set to <c>null</c> on any <see cref="Switch" /> disposal.
+        /// </para>
+        /// </summary>
         public static Switch Shared { get; private set; }
 
         public HleConfiguration Configuration { get; }
