@@ -50,6 +50,7 @@ extension AltAppIconsViewController
 {
     private enum Section: String, CaseIterable, Decodable, CodingKeyRepresentable
     {
+        case glass
         case modern
         case classic
         case patrons
@@ -58,6 +59,7 @@ extension AltAppIconsViewController
         var localizedName: String {
             switch self
             {
+            case .glass: return NSLocalizedString("Glass", comment: "")
             case .modern: return NSLocalizedString("Modern", comment: "")
             case .classic: return NSLocalizedString("Classic", comment: "")
             case .patrons: return NSLocalizedString("Patrons", comment: "")
@@ -68,7 +70,7 @@ extension AltAppIconsViewController
         var isPatronExclusive: Bool {
             switch self
             {
-            case .modern, .classic: return false
+            case .modern, .classic, .glass: return false
             case .patrons, .patronsButtonPack: return true
             }
         }
@@ -177,7 +179,7 @@ class AltAppIconsViewController: UICollectionViewController
                 }
                 #endif
                 
-            case .classic, .modern, .patrons: break
+            case .classic, .modern, .patrons, .glass: break
             }
                         
             footerView.contentConfiguration = configuration
@@ -216,7 +218,7 @@ private extension AltAppIconsViewController
             switch section
             {
             case .patronsButtonPack: configuration.footerMode = .supplementary
-            case .modern, .classic, .patrons: break
+            case .modern, .classic, .patrons, .glass: break
             }
             
             let layoutSection = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)

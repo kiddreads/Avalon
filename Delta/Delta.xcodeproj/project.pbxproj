@@ -42,6 +42,7 @@
 		82B3FAA92E3D592D002F179E /* GBCCoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3FAA02E3D5926002F179E /* GBCCoreSettingsView.swift */; };
 		82C63BDB2E57BB4700B0C812 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C63BDA2E57BB4700B0C812 /* UIColor+Hex.swift */; };
 		82C83A732E4FCC030020711E /* CoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C83A722E4FCC030020711E /* CoreSettingsView.swift */; };
+		82F450AB2E6A1CD00097CE1C /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 82F450AA2E6A1CD00097CE1C /* AppIcon.icon */; };
 		87343D7B985519A5890A61C6 /* libPods-DeltaPreviews.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E3E5A45AB20C8A87754453B /* libPods-DeltaPreviews.a */; };
 		AC1C991029F8B8C30020E6E4 /* ToastNotificationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C990F29F8B8C30020E6E4 /* ToastNotificationOptions.swift */; };
 		AC1C992729F9F1CF0020E6E4 /* GameViewController+ExperimentalToasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C992629F9F1CF0020E6E4 /* GameViewController+ExperimentalToasts.swift */; };
@@ -564,6 +565,7 @@
 		82B3FAA02E3D5926002F179E /* GBCCoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GBCCoreSettingsView.swift; sourceTree = "<group>"; };
 		82C63BDA2E57BB4700B0C812 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		82C83A722E4FCC030020711E /* CoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreSettingsView.swift; sourceTree = "<group>"; };
+		82F450AA2E6A1CD00097CE1C /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		8ECE6641DE30D01EA30FE7F6 /* Pods-DeltaPreviews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DeltaPreviews.release.xcconfig"; path = "Pods/Target Support Files/Pods-DeltaPreviews/Pods-DeltaPreviews.release.xcconfig"; sourceTree = "<group>"; };
 		A01281C7023C0041B25963BE /* Pods-DeltaPreviews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DeltaPreviews.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DeltaPreviews/Pods-DeltaPreviews.debug.xcconfig"; sourceTree = "<group>"; };
 		A19FF50F55441BC2B2248241 /* Pods-Delta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Delta.release.xcconfig"; path = "Pods/Target Support Files/Pods-Delta/Pods-Delta.release.xcconfig"; sourceTree = "<group>"; };
@@ -1338,6 +1340,7 @@
 				D5E12AEC2D01163A000C7531 /* Profanity.txt */,
 				D5BE1BD62D0B9CBE00D2142E /* PatreonAPI.plist */,
 				D5B0F4E42D67F0660069F4DB /* WhatsNew.plist */,
+				82F450AA2E6A1CD00097CE1C /* AppIcon.icon */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2115,6 +2118,7 @@
 				D5B6F5D52D6FC23E0061C365 /* FollowUsFooterView.xib in Resources */,
 				D5AE76C62C2B7F3D0086471B /* Icons.xcassets in Resources */,
 				D5AA0F1A2CE404E90015D134 /* AboutPatreonHeaderView.xib in Resources */,
+				82F450AB2E6A1CD00097CE1C /* AppIcon.icon in Resources */,
 				D5AE76CD2C2B81870086471B /* AltIcons.plist in Resources */,
 				BF6BF3211EB82362008E83CD /* GamesDatabase.storyboard in Resources */,
 				D5E12AED2D011640000C7531 /* Profanity.txt in Resources */,
