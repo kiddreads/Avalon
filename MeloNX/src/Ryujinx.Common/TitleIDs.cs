@@ -182,6 +182,7 @@ namespace Ryujinx.Common
             "01001cc01b2d4000", // Goat Simulator 3
             "01003620068ea000", // Hand of Fate 2
             "0100f7e00c70e000", // Hogwarts Legacy
+            "010013c00e930000", // Hollow Knight: Silksong
             "010085500130a000", // Lego City: Undercover
             "010073c01af34000", // LEGO Horizon Adventures
             "0100d71004694000", // Minecraft
