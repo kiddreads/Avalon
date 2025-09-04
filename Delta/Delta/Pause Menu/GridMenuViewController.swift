@@ -34,6 +34,7 @@ class GridMenuViewController: UICollectionViewController
     }
     
     @IBOutlet private(set) var closeButton: UIBarButtonItem!
+    @IBOutlet private(set) var resumeButton: UIBarButtonItem!
     
     override var preferredContentSize: CGSize {
         set { }

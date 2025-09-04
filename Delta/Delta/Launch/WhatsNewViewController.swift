@@ -62,6 +62,7 @@ class WhatsNewViewController: UICollectionViewController
     
     @IBOutlet private var titleLabel: UILabel!
     @IBOutlet private var titleStackView: UIStackView!
+    @IBOutlet private var closeButton: UIButton!
     
     @IBOutlet private var headerViewTopSpacingLayoutConstraint: NSLayoutConstraint!
     @IBOutlet private var headerViewBottomSpacingLayoutConstraint: NSLayoutConstraint!
@@ -94,6 +95,11 @@ class WhatsNewViewController: UICollectionViewController
         self.footerView = FollowUsFooterView(prefersFullColorIcons: true)
         self.footerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.footerView)
+        
+        if #available(iOS 26, *)
+        {
+            self.closeButton.configuration = .glass()
+        }
         
         if self.dataSource.itemCount >= Self.maxFeatureCount
         {

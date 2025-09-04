@@ -89,7 +89,16 @@ class PauseViewController: UIViewController, PauseInfoProviding
         
         if let gridMenuViewController = self.navigationController?.topViewController as? GridMenuViewController
         {
-            gridMenuViewController.closeButton.title = self.closeButtonTitle
+            if #unavailable(iOS 26)
+            {
+                gridMenuViewController.resumeButton.image = nil
+                gridMenuViewController.resumeButton.title = String(localized: "Resume")
+                
+                gridMenuViewController.closeButton.image = nil
+                gridMenuViewController.closeButton.title = self.closeButtonTitle
+                gridMenuViewController.closeButton.tintColor = .systemRed
+                gridMenuViewController.closeButton.style = .done
+            }
             
             if UIApplication.shared.supportsMultipleScenes
             {

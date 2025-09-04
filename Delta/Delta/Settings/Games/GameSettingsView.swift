@@ -10,6 +10,7 @@ import SwiftUI
 
 import DeltaCore
 import MelonDSDeltaCore
+import Roxas
 
 struct GameSettingsView: View
 {
@@ -98,9 +99,20 @@ struct GameSettingsView: View
         .navigationTitle(game.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    presentationMode.wrappedValue.dismiss()
+            if #available(iOS 26.0, *)
+            {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .cancel) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            else
+            {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(RSTSystemLocalizedString("Done")) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
         }

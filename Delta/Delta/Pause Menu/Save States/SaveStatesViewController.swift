@@ -175,6 +175,11 @@ extension SaveStatesViewController
             self.navigationItem.rightBarButtonItems?.removeFirst()
         }
         
+        if #available(iOS 26, *)
+        {
+            self.optionsButton.image = UIImage(systemName: "ellipsis")
+        }
+        
         self.prototypeCellWidthConstraint = self.prototypeCell.contentView.widthAnchor.constraint(equalToConstant: 0)
         self.prototypeCellWidthConstraint.isActive = true
         
