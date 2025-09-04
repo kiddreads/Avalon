@@ -137,6 +137,11 @@ private extension GridMenuViewController
         
         cell.isImageViewVibrancyEnabled = self.isVibrancyEnabled
         cell.isTextLabelVibrancyEnabled = self.isVibrancyEnabled
+        
+        if #available(iOS 26.0, *)
+        {
+            cell.isImageViewGlassEnabled = false
+        }
     }
     
     func updateItems()

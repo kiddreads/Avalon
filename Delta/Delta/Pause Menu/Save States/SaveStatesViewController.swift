@@ -596,12 +596,28 @@ private extension SaveStatesViewController
         switch self.theme
         {
         case .opaque:
+            if #available(iOS 26, *)
+            {
+                cell.isImageViewGlassEnabled = true
+            }
+            else
+            {
+                cell.isImageViewVibrancyEnabled = false
+            }
+            
             cell.isTextLabelVibrancyEnabled = false
-            cell.isImageViewVibrancyEnabled = false
             
         case .translucent:
+            if #available(iOS 26, *)
+            {
+                cell.isImageViewGlassEnabled = true
+            }
+            else
+            {
+                cell.isImageViewVibrancyEnabled = true
+            }
+            
             cell.isTextLabelVibrancyEnabled = true
-            cell.isImageViewVibrancyEnabled = true
         }
         
         let dimensions: CGSize

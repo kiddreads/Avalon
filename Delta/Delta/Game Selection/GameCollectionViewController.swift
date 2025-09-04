@@ -453,6 +453,11 @@ private extension GameCollectionViewController
             let cell = cell as! GridCollectionViewCell
             cell.imageView.image = image
             cell.isImageViewVibrancyEnabled = false
+            
+            if #available(iOS 26.0, *)
+            {
+                cell.isImageViewGlassEnabled = false
+            }
         }
     }
     
@@ -487,8 +492,17 @@ private extension GameCollectionViewController
             cell.isImageViewVibrancyEnabled = true
         }
         
+        if #available(iOS 26.0, *)
+        {
+            cell.isImageViewGlassEnabled = true
+            cell.imageView.image = #imageLiteral(resourceName: "BoxArtGlass")
+        }
+        else
+        {
+            cell.imageView.image = #imageLiteral(resourceName: "BoxArt")
+        }
+        
         cell.imageView.shouldAlignBaselines = true
-        cell.imageView.image = #imageLiteral(resourceName: "BoxArt")
         
         if game.identifier == Game.melonDSBIOSIdentifier || game.identifier == Game.melonDSDSiBIOSIdentifier
         {
