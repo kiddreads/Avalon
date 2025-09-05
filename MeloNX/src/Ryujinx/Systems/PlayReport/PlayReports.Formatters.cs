@@ -97,8 +97,10 @@ namespace Ryujinx.Ava.Systems.PlayReport
                 //TODO DLC Locations
                 _ => FormattedValue.ForceReset
             };
-
-            return $"{playStatus} in {locations}";
+            
+            return locations.Reset 
+                ? FormattedValue.ForceReset 
+                : $"{playStatus} in {locations}";
         }
 
         private static FormattedValue SuperSmashBrosUltimate_Mode(SparseMultiValue values)
