@@ -501,53 +501,13 @@ namespace Ryujinx.HLE.FileSystem
 
             using FileStream file = File.OpenRead(keysSource);
 
-            switch (info.Extension)
+            if (info.Extension is ".keys")
             {
-                case ".zip":
-                    using (ZipArchive archive = ZipFile.OpenRead(keysSource))
-                    {
-                        InstallKeysFromZip(archive, installDirectory);
-                    }
-
-                    break;
-                case ".keys":
-                    VerifyKeysFile(keysSource);
-                    File.Copy(keysSource, Path.Combine(installDirectory, info.Name), true);
-                    break;
-                default:
-                    throw new InvalidFirmwarePackageException("Input file is not a valid key package");
-            }
-        }
-
-        private static void InstallKeysFromZip(ZipArchive archive, string installDirectory)
-        {
-            string temporaryDirectory = Path.Combine(installDirectory, "temp");
-            if (Directory.Exists(temporaryDirectory))
-            {
-                Directory.Delete(temporaryDirectory, true);
-            }
-
-            Directory.CreateDirectory(temporaryDirectory);
-            foreach (ZipArchiveEntry entry in archive.Entries)
-            {
-                if (Path.GetExtension(entry.FullName).Equals(".keys", StringComparison.OrdinalIgnoreCase))
-                {
-                    string extractDestination = Path.Combine(temporaryDirectory, entry.Name);
-                    entry.ExtractToFile(extractDestination, overwrite: true);
-                    try
-                    {
-                        VerifyKeysFile(extractDestination);
-                        File.Move(extractDestination, Path.Combine(installDirectory, entry.Name), true);
-                    }
-                    catch (Exception)
-                    {
-                        Directory.Delete(temporaryDirectory, true);
-                        throw;
-                    }
-                }
-            }
-
-            Directory.Delete(temporaryDirectory, true);
+                VerifyKeysFile(keysSource);
+                File.Copy(keysSource, Path.Combine(installDirectory, info.Name), true);
+            } 
+            else
+                throw new InvalidFirmwarePackageException("Input file is not a valid key package");
         }
 
         private void FinishInstallation(string temporaryDirectory, string registeredDirectory)

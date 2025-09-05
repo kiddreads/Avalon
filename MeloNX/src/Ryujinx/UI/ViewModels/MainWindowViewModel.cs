@@ -562,7 +562,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public bool StartGamesWithoutUI
+        public bool StartGamesWithoutUi
         {
             get => ConfigurationState.Instance.UI.StartNoUI;
             set
@@ -974,9 +974,8 @@ namespace Ryujinx.Ava.UI.ViewModels
 
                 string dialogTitle = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogKeysInstallerKeysInstallTitle);
                 string dialogMessage = LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogKeysInstallerKeysInstallMessage);
-
-                bool alreadyKesyInstalled = ContentManager.AreKeysAlredyPresent(systemDirectory);
-                if (alreadyKesyInstalled)
+                
+                if (ContentManager.AreKeysAlredyPresent(systemDirectory))
                 {
                     dialogMessage += LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.DialogKeysInstallerKeysInstallSubMessage);
                 }
@@ -994,7 +993,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
                 if (result == UserResult.Yes)
                 {
-                    Logger.Info?.Print(LogClass.Application, $"Installing Keys");
+                    Logger.Info?.Print(LogClass.Application, $"Installing keys from {filename}");
 
                     Thread thread = new(() =>
                     {
@@ -1206,15 +1205,14 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         private async Task LoadContentFromFolder(LocaleKeys localeMessageAddedKey, LocaleKeys localeMessageRemovedKey, LoadContentFromFolderDelegate onDirsSelected, LocaleKeys dirSelectDialogTitle)
         {
-            IReadOnlyList<IStorageFolder> result = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            Optional<IReadOnlyList<IStorageFolder>> result = await StorageProvider.OpenMultiFolderPickerAsync(new FolderPickerOpenOptions
             {
-                Title = LocaleManager.Instance[dirSelectDialogTitle],
-                AllowMultiple = true,
+                Title = LocaleManager.Instance[dirSelectDialogTitle]
             });
 
-            if (result.Count > 0)
+            if (result.TryGet(out IReadOnlyList<IStorageFolder> foldersToLoad))
             {
-                List<string> dirs = result.Select(it => it.Path.LocalPath).ToList();
+                List<string> dirs = foldersToLoad.Select(it => it.Path.LocalPath).ToList();
                 int numAdded = onDirsSelected(dirs, out int numRemoved);
 
                 string msg = string.Join("\n",
@@ -1270,51 +1268,26 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public void TakeScreenshot()
-        {
-            AppHost.ScreenshotRequested = true;
-        }
+        public void TakeScreenshot() => AppHost.ScreenshotRequested = true;
 
-        public void HideUi()
-        {
-            ShowMenuAndStatusBar = false;
-        }
+        public void HideUi() => ShowMenuAndStatusBar = false;
 
-        public void ToggleStartGamesInFullscreen()
-        {
-            StartGamesInFullscreen = !StartGamesInFullscreen;
-        }
+        public void ToggleStartGamesInFullscreen() => StartGamesInFullscreen = !StartGamesInFullscreen;
 
-        public void ToggleStartGamesWithoutUI()
-        {
-            StartGamesWithoutUI = !StartGamesWithoutUI;
-        }
+        public void ToggleStartGamesWithoutUi() => StartGamesWithoutUi = !StartGamesWithoutUi;
 
-        public void ToggleShowConsole()
-        {
-            ShowConsole = !ShowConsole;
-        }
+        public void ToggleShowConsole() => ShowConsole = !ShowConsole;
 
-        public void SetListMode()
-        {
-            Glyph = Glyph.List;
-        }
+        public void SetListMode() => Glyph = Glyph.List;
 
-        public void SetGridMode()
-        {
-            Glyph = Glyph.Grid;
-        }
+        public void SetGridMode() => Glyph = Glyph.Grid;
 
-        public void SetAspectRatio(AspectRatio aspectRatio)
-        {
-            ConfigurationState.Instance.Graphics.AspectRatio.Value = aspectRatio;
-        }
+        public void SetAspectRatio(AspectRatio aspectRatio) => ConfigurationState.Instance.Graphics.AspectRatio.Value = aspectRatio;
 
         public async Task InstallFirmwareFromFile()
         {
-            IReadOnlyList<IStorageFile> result = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            Optional<IStorageFile> result = await StorageProvider.OpenSingleFilePickerAsync(new FilePickerOpenOptions
             {
-                AllowMultiple = false,
                 FileTypeFilter = new List<FilePickerFileType>
                 {
                     new(LocaleManager.Instance[LocaleKeys.FileDialogAllTypes])
@@ -1338,69 +1311,50 @@ namespace Ryujinx.Ava.UI.ViewModels
                 },
             });
 
-            if (result.Count > 0)
+            if (result.HasValue)
             {
-                await HandleFirmwareInstallation(result[0].Path.LocalPath);
+                await HandleFirmwareInstallation(result.Value.Path.LocalPath);
             }
         }
 
         public async Task InstallFirmwareFromFolder()
         {
-            IReadOnlyList<IStorageFolder> result = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                AllowMultiple = false,
-            });
+            Optional<IStorageFolder> result = await StorageProvider.OpenSingleFolderPickerAsync();
 
-            if (result.Count > 0)
+            if (result.HasValue)
             {
-                await HandleFirmwareInstallation(result[0].Path.LocalPath);
+                await HandleFirmwareInstallation(result.Value.Path.LocalPath);
             }
         }
 
         public async Task InstallKeysFromFile()
         {
-            IReadOnlyList<IStorageFile> result = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            Optional<IStorageFile> result = await StorageProvider.OpenSingleFilePickerAsync(new FilePickerOpenOptions
             {
-                AllowMultiple = false,
                 FileTypeFilter = new List<FilePickerFileType>
                 {
-                    new(LocaleManager.Instance[LocaleKeys.FileDialogAllTypes])
-                    {
-                        Patterns = ["*.keys", "*.zip"],
-                        AppleUniformTypeIdentifiers = ["com.ryujinx.xci", "public.zip-archive"],
-                        MimeTypes = ["application/keys", "application/zip"],
-                    },
                     new("KEYS")
                     {
                         Patterns = ["*.keys"],
                         AppleUniformTypeIdentifiers = ["com.ryujinx.xci"],
                         MimeTypes = ["application/keys"],
                     },
-                    new("ZIP")
-                    {
-                        Patterns = ["*.zip"],
-                        AppleUniformTypeIdentifiers = ["public.zip-archive"],
-                        MimeTypes = ["application/zip"],
-                    },
                 },
             });
 
-            if (result.Count > 0)
+            if (result.HasValue)
             {
-                await HandleKeysInstallation(result[0].Path.LocalPath);
+                await HandleKeysInstallation(result.Value.Path.LocalPath);
             }
         }
 
         public async Task InstallKeysFromFolder()
         {
-            IReadOnlyList<IStorageFolder> result = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                AllowMultiple = false,
-            });
+            Optional<IStorageFolder> result = await StorageProvider.OpenSingleFolderPickerAsync();
 
-            if (result.Count > 0)
+            if (result.HasValue)
             {
-                await HandleKeysInstallation(result[0].Path.LocalPath);
+                await HandleKeysInstallation(result.Value.Path.LocalPath);
             }
         }
 
@@ -1503,10 +1457,9 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public async Task OpenFile()
         {
-            IReadOnlyList<IStorageFile> result = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            Optional<IStorageFile> result = await StorageProvider.OpenSingleFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = LocaleManager.Instance[LocaleKeys.LoadApplicationFromFileDialogTitle],
-                AllowMultiple = false,
                 FileTypeFilter = new List<FilePickerFileType>
                 {
                     new(LocaleManager.Instance[LocaleKeys.AllSupportedFormats])
@@ -1562,9 +1515,9 @@ namespace Ryujinx.Ava.UI.ViewModels
                 },
             });
 
-            if (result.Count > 0)
+            if (result.HasValue)
             {
-                if (ApplicationLibrary.TryGetApplicationsFromFile(result[0].Path.LocalPath,
+                if (ApplicationLibrary.TryGetApplicationsFromFile(result.Value.Path.LocalPath,
                         out List<ApplicationData> applications))
                 {
                     await LoadApplication(applications[0]);
@@ -1596,18 +1549,17 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public async Task OpenFolder()
         {
-            IReadOnlyList<IStorageFolder> result = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            Optional<IStorageFolder> result = await StorageProvider.OpenSingleFolderPickerAsync(new FolderPickerOpenOptions
             {
-                Title = LocaleManager.Instance[LocaleKeys.LoadUnpackedGameFromFolderDialogTitle],
-                AllowMultiple = false,
+                Title = LocaleManager.Instance[LocaleKeys.LoadUnpackedGameFromFolderDialogTitle]
             });
 
-            if (result.Count > 0)
+            if (result.TryGet(out IStorageFolder value))
             {
                 ApplicationData applicationData = new()
                 {
-                    Name = Path.GetFileNameWithoutExtension(result[0].Path.LocalPath),
-                    Path = result[0].Path.LocalPath,
+                    Name = Path.GetFileNameWithoutExtension(value.Path.LocalPath),
+                    Path = value.Path.LocalPath,
                 };
 
                 await LoadApplication(applicationData);
@@ -1812,10 +1764,9 @@ namespace Ryujinx.Ava.UI.ViewModels
         {
             if (AppHost.Device.System.SearchingForAmiibo(out _) && IsGameRunning)
             {
-                IReadOnlyList<IStorageFile> result = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+                Optional<IStorageFile> result = await StorageProvider.OpenSingleFilePickerAsync(new FilePickerOpenOptions
                 {
                     Title = LocaleManager.Instance[LocaleKeys.OpenFileDialogTitle],
-                    AllowMultiple = false,
                     FileTypeFilter = new List<FilePickerFileType>
                     {
                         new(LocaleManager.Instance[LocaleKeys.AllSupportedFormats])
@@ -1824,9 +1775,10 @@ namespace Ryujinx.Ava.UI.ViewModels
                         }
                     }
                 });
-                if (result.Count > 0)
+                
+                if (result.HasValue)
                 {
-                    AppHost.Device.System.ScanAmiiboFromBin(result[0].Path.LocalPath);
+                    AppHost.Device.System.ScanAmiiboFromBin(result.Value.Path.LocalPath);
                 }
             }
         }

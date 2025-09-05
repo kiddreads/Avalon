@@ -1045,7 +1045,7 @@ namespace Ryujinx.Ava.Systems
                     _viewModel.Window.TitleBar.ExtendsContentIntoTitleBar = true;
                 }
 
-                if (_viewModel.WindowState is WindowState.FullScreen || _viewModel.StartGamesWithoutUI)
+                if (_viewModel.WindowState is WindowState.FullScreen || _viewModel.StartGamesWithoutUi)
                 {
                     _viewModel.ShowMenuAndStatusBar = false;
                 }

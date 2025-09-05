@@ -92,14 +92,14 @@
                 </MenuItem>
                 <MenuItem
                     Padding="0"
-                    Command="{Binding ToggleStartGamesWithoutUI}"
+                    Command="{Binding ToggleStartGamesWithoutUi}"
                     Header="{ext:Locale MenuBarOptionsStartGamesWithoutUI}"
                     Classes="withCheckbox">
                     <MenuItem.Icon>
                         <CheckBox
                             MinWidth="{DynamicResource CheckBoxSize}"
                             MinHeight="{DynamicResource CheckBoxSize}"
-                            IsChecked="{Binding StartGamesWithoutUI, Mode=TwoWay}"
+                            IsChecked="{Binding StartGamesWithoutUi, Mode=TwoWay}"
                             Padding="0" />
                     </MenuItem.Icon>
                 </MenuItem>
