@@ -663,3 +663,5 @@ Appuyez sur le bouton du contrôleur...";
 "FilesImporterErrorBadCue" = "Échec de l'importation de %@. Le fichier .cue est peut-être invalide ou pas encodé en UTF-8. Vérifiez le format.";
 "Leaderboard" = "Classement";
 "LeaderboardStart" = "Début classement: ";
+
+"TurnOffHardcoreAlert" = "Le passage au mode Softcore est permanent. Pour revenir au mode Hardcore, vous devez réinitialiser le jeu. Continuer ?";

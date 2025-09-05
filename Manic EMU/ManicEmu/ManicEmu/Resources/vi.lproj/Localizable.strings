@@ -655,3 +655,5 @@ Nhấn nút điều khiển...";
 "FilesImporterErrorBadCue" = "Nhập %@ thất bại. Tệp .cue may be invalid or not UTF-8 encoded. Vui lòng kiểm tra format.";
 "Leaderboard" = "Bảng xếp hạng";
 "LeaderboardStart" = "Bắt đầu bảng xếp hạng: ";
+
+"TurnOffHardcoreAlert" = "Chuyển sang chế độ Softcore là vĩnh viễn. Để quay lại chế độ Hardcore, bạn phải reset game. Tiếp tục?";

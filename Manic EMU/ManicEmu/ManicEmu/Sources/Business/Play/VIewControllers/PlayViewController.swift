@@ -1156,10 +1156,6 @@ extension PlayViewController {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
             }
-            guard !isHardcoreMode else {
-                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
-                return true
-            }
             //快速存档
             if !PurchaseManager.isMember && manicGame.gameSaveStates.filter({ $0.type == .manualSaveState }).count >= Constants.Numbers.NonMemberManualSaveGameCount {
                 //超限了
@@ -1220,10 +1216,6 @@ extension PlayViewController {
         case .fastForward:
             guard !isWFCConnect else {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
-                return true
-            }
-            guard !isHardcoreMode else {
-                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
                 return true
             }
             guard manicGame.gameType != ._3ds else { return true }

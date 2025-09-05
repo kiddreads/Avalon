@@ -659,3 +659,5 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "FilesImporterErrorBadCue" = "Uvoz %@ nije uspio. .cue datoteka može biti nevažeća ili nije UTF-8 kodirana. Provjeri format.";
 "Leaderboard" = "Ljestvica";
 "LeaderboardStart" = "Početak ljestvice: ";
+
+"TurnOffHardcoreAlert" = "Prebacivanje u Softcore način rada je trajno. Za povratak u Hardcore način rada, morate resetirati igru. Nastaviti?";

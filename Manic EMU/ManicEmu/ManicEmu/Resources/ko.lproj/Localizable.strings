@@ -665,3 +665,5 @@
 "FilesImporterErrorBadCue" = "%@ 가져오기 실패. .cue 파일이 잘못되었거나 UTF-8로 인코딩되지 않았을 수 있습니다. 형식을 확인하세요.";
 "Leaderboard" = "리더보드";
 "LeaderboardStart" = "리더보드 시작: ";
+
+"TurnOffHardcoreAlert" = "소프트코어 모드 전환은 영구적입니다. 하드코어 모드로 돌아가려면 게임을 재설정해야 합니다. 계속하시겠습니까?";

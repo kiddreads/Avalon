@@ -661,3 +661,5 @@ Nyomja meg a kontroller gombját...";
 "FilesImporterErrorBadCue" = "%@ importálása sikertelen. A .cue fájl érvénytelen vagy nem UTF-8 kódolású. Ellenőrizd a formátumot.";
 "Leaderboard" = "Ranglista";
 "LeaderboardStart" = "Ranglista kezdete: ";
+
+"TurnOffHardcoreAlert" = "A Softcore módba váltás végleges. A Hardcore módba való visszatéréshez a játékot alaphelyzetbe kell állítani. Folytatja?";

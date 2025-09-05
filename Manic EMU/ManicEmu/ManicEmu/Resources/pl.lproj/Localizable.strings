@@ -636,3 +636,5 @@ Naciśnij przycisk kontrolera...";
 "FilesImporterErrorBadCue" = "Import %@ nie powiódł się. Plik .cue may be invalid or not UTF-8 encoded. Sprawdź format.";
 "Leaderboard" = "Tablica wyników";
 "LeaderboardStart" = "Początek tablicy: ";
+
+"TurnOffHardcoreAlert" = "Przełączenie na tryb Softcore jest trwałe. Aby wrócić do trybu Hardcore, musisz zresetować grę. Kontynuować?";

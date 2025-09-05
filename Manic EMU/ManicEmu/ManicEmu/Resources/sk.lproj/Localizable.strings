@@ -661,3 +661,5 @@ Ak sa vyskytne nestabilita v 3DS, pozrite si «Časté otázky» alebo sa pripoj
 "FilesImporterErrorBadCue" = "Import %@ zlyhal. Súbor .cue môže byť neplatný alebo nie je kódovaný v UTF-8. Skontrolujte formát.";
 "Leaderboard" = "Rebríček";
 "LeaderboardStart" = "Štart rebríčka: ";
+
+"TurnOffHardcoreAlert" = "Prepnuteie do režimu Softcore je trvalé. Pre návrat do režimu Hardcore musíte hru obnoviť. Pokračovať?";

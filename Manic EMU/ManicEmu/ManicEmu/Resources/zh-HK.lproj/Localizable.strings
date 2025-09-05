@@ -666,3 +666,5 @@
 "FilesImporterErrorBadCue" = "導入「%@」失敗。.cue 檔案可能無效或非 UTF-8 編碼。請檢查格式。";
 "Leaderboard" = "排行榜";
 "LeaderboardStart" = "排行榜開始: ";
+
+"TurnOffHardcoreAlert" = "切換至休閒模式將無法還原。如需重返硬核模式，必須重置遊戲。是否繼續？";

@@ -662,3 +662,5 @@ Paina ohjaimen nappia...";
 "FilesImporterErrorBadCue" = "%@ tuonti epäonnistui. .cue-tiedosto voi olla virheellinen tai ei UTF-8-koodattu. Tarkista muoto.";
 "Leaderboard" = "Tulostaulukko";
 "LeaderboardStart" = "Tulostaulukon alku: ";
+
+"TurnOffHardcoreAlert" = "Vaihto Softcore-tilaan on pysyvä. Palataksesi Hardcore-tilaan, sinun on nollattava peli. Jatketaanko?";

@@ -668,3 +668,4 @@
 "FilesImporterErrorBadCue" = "导入失败：\"%@\"。该 .cue 文件可能格式错误或未使用 UTF-8 编码，请检查文件。";
 "Leaderboard" = "排行榜";
 "LeaderboardStart" = "排行榜开始：";
+"TurnOffHardcoreAlert" = "切换到休闲模式后，如需重新开启硬核模式必须重置游戏。是否继续？";

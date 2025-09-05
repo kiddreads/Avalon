@@ -661,3 +661,5 @@ Apasă butonul controlerului...";
 "FilesImporterErrorBadCue" = "Import %@ eșuat. Fișierul .cue poate fi invalid sau nu este codificat UTF-8. Verifică formatul.";
 "Leaderboard" = "Clasament";
 "LeaderboardStart" = "Început clasament: ";
+
+"TurnOffHardcoreAlert" = "Comutarea la modul Softcore este permanentă. Pentru a reveni la modul Hardcore, trebuie să resetezi jocul. Continuați?";

@@ -663,3 +663,5 @@
 "FilesImporterErrorBadCue" = "%@ आयात करने में विफल। .cue फ़ाइल invalid या UTF-8 encoded नहीं हो सकती। कृपया format जांचें।";
 "Leaderboard" = "लीडरबोर्ड";
 "LeaderboardStart" = "लीडरबोर्ड Start: ";
+
+"TurnOffHardcoreAlert" = "सॉफ्टकोर मोड में स्विच करना स्थायी है। हार्डकोर मोड में वापस जाने के लिए, आपको गेम रीसेट करना होगा। जारी रखें?";

@@ -661,3 +661,5 @@ Prem el botó del control...";
 "FilesImporterErrorBadCue" = "Error en importar %@. El fitxer .cue pot ser invàlid o no codificat en UTF-8. Comprova el format.";
 "Leaderboard" = "Taula de classificació";
 "LeaderboardStart" = "Inici taula classificació: ";
+
+"TurnOffHardcoreAlert" = "Canviar al mode Softcore és permanent. Per tornar al mode Hardcore, cal reiniciar el joc. Continuar?";

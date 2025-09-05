@@ -662,3 +662,5 @@ Druk op de controllerknop...";
 "FilesImporterErrorBadCue" = "Importeren van %@ mislukt. Het .cue-bestand is ongeldig of niet UTF-8. Controleer het format.";
 "Leaderboard" = "Scorebord";
 "LeaderboardStart" = "Scorebord start: ";
+
+"TurnOffHardcoreAlert" = "Overschakelen naar de softcore-modus is permanent. Om terug te keren naar de hardcore-modus, moet je het spel resetten. Doorgaan?";

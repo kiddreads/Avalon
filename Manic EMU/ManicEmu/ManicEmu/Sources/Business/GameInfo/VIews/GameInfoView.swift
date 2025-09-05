@@ -365,6 +365,12 @@ extension GameInfoView: UICollectionViewDataSource {
                             }
                         }
                     }
+                    
+                    if self.game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue) ?? false {
+                        UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                        return
+                    }
+                    
                     if state.isCompatible {
                         loadState()
                     } else {

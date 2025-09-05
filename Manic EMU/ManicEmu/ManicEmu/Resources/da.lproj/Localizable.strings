@@ -659,3 +659,5 @@ Tryk på controller-knappen...";
 "FilesImporterErrorBadCue" = "Import af %@ mislykkedes. .cue-filen may be invalid or not UTF-8 encoded. Tjek formatet.";
 "Leaderboard" = "Pointtavle";
 "LeaderboardStart" = "Pointtavle start: ";
+
+"TurnOffHardcoreAlert" = "Skift til Softcore-tilstand er permanent. For at vende tilbage til Hardcore-tilstand, skal du nulstille spillet. Fortsætte?";

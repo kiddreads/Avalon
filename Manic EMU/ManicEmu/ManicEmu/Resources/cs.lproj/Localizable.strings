@@ -657,3 +657,5 @@ Stiskněte tlačítko ovladače...";
 "FilesImporterErrorBadCue" = "Import %@ selhal. Soubor .cue may be invalid or not UTF-8 encoded. Zkontrolujte formát.";
 "Leaderboard" = "Žebříček";
 "LeaderboardStart" = "Začátek žebříčku: ";
+
+"TurnOffHardcoreAlert" = "Přepnutí do Softcore režimu je trvalé. Pro návrat do Hardcore režimu musíte hru resetovat. Pokračovat?";

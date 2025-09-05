@@ -661,3 +661,5 @@ Kontrolcü düğmesine basın...";
 "FilesImporterErrorBadCue" = "%@ içe aktarılamadı. .cue dosyası geçersiz veya UTF-8 kodlu değil. Lütfen formatı kontrol edin.";
 "Leaderboard" = "Liderlik Tablosu";
 "LeaderboardStart" = "Liderlik başlangıcı: ";
+
+"TurnOffHardcoreAlert" = "Yumuşak moda geçiş kalıcıdır. Hardcore moduna dönmek için oyunu sıfırlamanız gerekir. Devam edilsin mi?";

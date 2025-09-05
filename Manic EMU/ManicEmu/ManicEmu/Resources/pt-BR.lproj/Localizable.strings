@@ -662,3 +662,5 @@ Pressione o botão do controle...";
 "FilesImporterErrorBadCue" = "Falha ao importar %@. O arquivo .cue pode ser inválido ou não estar em UTF-8. Verifique o formato.";
 "Leaderboard" = "Ranking";
 "LeaderboardStart" = "Início do ranking: ";
+
+"TurnOffHardcoreAlert" = "A mudança para o modo Softcore é permanente. Para voltar ao modo Hardcore, você deve reiniciar o jogo. Continuar?";

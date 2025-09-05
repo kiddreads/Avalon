@@ -654,3 +654,5 @@ Tekan tombol kontroler...";
 "FilesImporterErrorBadCue" = "Gagal mengimpor %@. File .cue may be invalid or not UTF-8 encoded. Silakan periksa formatnya.";
 "Leaderboard" = "Papan peringkat";
 "LeaderboardStart" = "Mulai papan peringkat: ";
+
+"TurnOffHardcoreAlert" = "Beralih ke mode Softcore bersifat permanen. Untuk kembali ke mode Hardcore, Anda harus reset game. Lanjutkan?";

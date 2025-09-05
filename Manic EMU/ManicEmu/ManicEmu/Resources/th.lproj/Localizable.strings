@@ -651,3 +651,5 @@
 "FilesImporterErrorBadCue" = "นำเข้า %@ ล้มเหลว ไฟล์ .cue may be invalid or not UTF-8 encoded กรุณาตรวจสอบ format";
 "Leaderboard" = "กระดานคะแนน";
 "LeaderboardStart" = "เริ่มกระดานคะแนน: ";
+
+"TurnOffHardcoreAlert" = "การเปลี่ยนโหมดสมรรถนะต่ำเป็นการถาวร หากต้องการกลับไปโหมดสมรรถนะสูง ต้องรีเซ็ตเกมใหม่ ดำเนินการต่อหรือไม่?";

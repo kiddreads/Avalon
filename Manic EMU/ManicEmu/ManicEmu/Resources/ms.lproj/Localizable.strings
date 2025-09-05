@@ -635,3 +635,5 @@ Tekan butang pengawal...";
 "FilesImporterErrorBadCue" = "Gagal import %@. Fail .cue may be invalid or not UTF-8 encoded. Sila semak format.";
 "Leaderboard" = "Papan pemimpin";
 "LeaderboardStart" = "Mula papan pemimpin: ";
+
+"TurnOffHardcoreAlert" = "Penukaran ke mod Softcore adalah kekal. Untuk kembali ke mod Hardcore, anda mesti menetapkan semula permainan. Teruskan?";

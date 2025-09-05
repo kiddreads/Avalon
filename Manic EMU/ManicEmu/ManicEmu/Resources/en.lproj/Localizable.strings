@@ -672,3 +672,4 @@ Press the controller button to complete mapping...";
 "FilesImporterErrorBadCue" = "Failed to import \"%@\". The .cue file may be invalid or not UTF-8 encoded. Please check the format.";
 "Leaderboard" = "Leaderboard";
 "LeaderboardStart" = "Leaderboard Start: ";
+"TurnOffHardcoreAlert" = "Switching to Softcore is permanent. To return to Hardcore, you must reset the game. Continue?";

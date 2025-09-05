@@ -162,8 +162,14 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                     }
                 } else {
                     //关闭硬核
-                    self.game.updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: value)
-                    NotificationCenter.default.post(name: Constants.NotificationName.TurnOffHardcore, object: nil)
+                    UIView.makeAlert(detail: R.string.localizable.turnOffHardcoreAlert(),
+                                     confirmTitle: R.string.localizable.confirmTitle(),
+                                     enableForceHide: false, cancelAction: {
+                        self.collectionView.reloadData()
+                    } ,confirmAction: {
+                        self.game.updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: false)
+                        NotificationCenter.default.post(name: Constants.NotificationName.TurnOffHardcore, object: nil)
+                    })
                 }
             } else {
                 self.game.updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: value)

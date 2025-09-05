@@ -655,3 +655,5 @@ Tryck på kontrollknappen...";
 "FilesImporterErrorBadCue" = "Import av %@ misslyckades. .cue-filen may be invalid or not UTF-8 encoded. Kontrollera formatet.";
 "Leaderboard" = "Resultattavla";
 "LeaderboardStart" = "Resultattavla start: ";
+
+"TurnOffHardcoreAlert" = "Byte till Softcore-läge är permanent. För att återgå till Hardcore-läge måste spelet återställas. Fortsätta?";
