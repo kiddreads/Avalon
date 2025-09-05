@@ -978,7 +978,7 @@
 0100416004C00000,"DOOM",gpu;slow;nvdec;online-broken,ingame,2024-09-23 15:40:07
 010018900DD00000,"DOOM (1993)",nvdec;online-broken,menus,2022-09-06 13:32:19
 01008CB01E52E000,"DOOM + DOOM II",opengl;ldn-untested;LAN,playable,2024-09-12 07:06:01
-010029D00E740000,"DOOM 3",crash,menus,2024-08-03 05:25:47
+010029D00E740000,"DOOM 3",crash;slow,menus,2024-08-03 05:25:47
 01005D700E742000,"DOOM 64",nvdec;vulkan,playable,2020-10-13 23:47:28
 0100D4F00DD02000,"DOOM II (Classic)",nvdec;online,playable,2021-06-03 20:10:01
 0100B1A00D8CE000,"DOOM® Eternal",gpu;slow;nvdec;online-broken,ingame,2024-08-28 15:57:17
@@ -1097,7 +1097,7 @@
 0100F9600E746000,"ESP Ra.De. Psi",audio;slow,ingame,2024-03-07 15:05:08
 010073000FE18000,"Esports powerful pro yakyuu 2020",gpu;crash;Needs More Attention,ingame,2024-04-29 05:34:14
 01004F9012FD8000,"Estranged: The Departure",nvdec;UE4,playable,2022-10-24 10:37:58
-010018f01e0a0000,"Eternights",,playable,2025-07-30 12:10:24
+010018F01E0A0000,"Eternights",,playable,2025-07-30 12:10:24
 0100CB900B498000,"Eternum Ex",,playable,2021-01-13 20:28:32
 010092501EB2C000,"Europa (Demo)",gpu;crash;UE4,ingame,2024-04-23 10:47:12
 01007BE0160D6000,"EVE ghost enemies",gpu,ingame,2023-01-14 03:13:30
@@ -1243,7 +1243,7 @@
 010003F00BD48000,"Friday the 13th: Killer Puzzle",,playable,2021-01-28 01:33:38
 010092A00C4B6000,"Friday the 13th: The Game Ultimate Slasher Edition",nvdec;online-broken;UE4,playable,2022-09-06 17:33:27
 0100F200178F4000,"FRONT MISSION 1st: Remake",,playable,2023-06-09 07:44:24
-0100c4e018a24000,"FRONT MISSION 2: Remake",,playable,2025-07-30 12:11:23
+0100C4E018A24000,"FRONT MISSION 2: Remake",,playable,2025-07-30 12:11:23
 01007E6019872000,"FRONT MISSION 3: Remake",,playable,2025-07-30 12:12:02
 0100861012474000,"Frontline Zed",,playable,2020-10-03 12:55:59
 0100B5300B49A000,"Frost",,playable,2022-07-27 12:00:36
@@ -1889,7 +1889,7 @@
 010097800EA20000,"Monster Energy Supercross - The Official Videogame 3",UE4;audout;nvdec;online,playable,2021-06-14 12:37:54
 0100E9900ED74000,"Monster Farm",32-bit;nvdec,playable,2021-05-05 19:29:13
 0100770008DD8000,"Monster Hunter Generations Ultimate™",32-bit;online-broken;ldn-works,playable,2024-03-18 14:35:36
-0100B04011742000,"Monster Hunter Rise",gpu;slow;crash;nvdec;online-broken;Needs Update;ldn-works,ingame,2024-08-24 11:04:59
+0100B04011742000,"MONSTER HUNTER RISE",gpu;slow;crash;nvdec;online-broken;Needs Update;ldn-works,ingame,2024-08-24 11:04:59
 010093A01305C000,"Monster Hunter Rise Demo",online-broken;ldn-works;demo,playable,2022-10-18 23:04:17
 0100E21011446000,"Monster Hunter Stories 2: Wings of Ruin",services,ingame,2022-07-10 19:27:30
 010042501329E000,"MONSTER HUNTER STORIES 2: WINGS OF RUIN Trial Version",demo,playable,2022-11-13 22:20:26
@@ -2314,7 +2314,7 @@
 010077B00BDD8000,"Professional Farmer: Nintendo Switch™ Edition",slow,playable,2020-12-16 13:38:19
 010018300C83A000,"Professor Lupo and his Horrible Pets",,playable,2020-06-12 00:08:45
 0100D1F0132F6000,"Professor Lupo: Ocean",,playable,2021-04-14 16:33:33
-0100c3a017834000,"Prodeus",,playable,2025-07-30 12:07:52
+0100C3A017834000,"Prodeus",,playable,2025-07-30 12:07:52
 0100BBD00976C000,"Project Highrise: Architect's Edition",,playable,2022-08-10 17:19:12
 0100ACE00DAB6000,"Project Nimbus: Complete Edition",nvdec;UE4;vulkan-backend-bug,playable,2022-08-10 17:35:43
 01002980140F6000,"Project TRIANGLE STRATEGY™ Debut Demo",UE4;demo,playable,2022-10-24 21:40:27
@@ -2580,6 +2580,7 @@
 0100C610154CA000,"Shadowrun: Hong Kong - Extended Edition",gpu;Needs Update,ingame,2022-10-04 20:53:09
 010000000EEF0000,"Shadows 2: Perfidia",,playable,2020-08-07 12:43:46
 0100AD700CBBE000,"Shadows of Adam",,playable,2021-01-11 13:35:58
+010037A01F96C000,"Shadows of the Damned: Hella Remastered",,playable,2025-09-05 11:34:32
 01002A800C064000,"Shadowverse Champions Battle",,playable,2022-10-02 22:59:29
 01003B90136DA000,"Shadowverse: Champion's Battle",crash,nothing,2023-03-06 00:31:50
 0100820013612000,"Shady Part of Me",,playable,2022-10-20 11:31:55
@@ -2978,6 +2979,7 @@
 0100EBA01548E000,"The Cruel King and the Great Hero",gpu;services,ingame,2022-12-02 07:02:08
 010051800E922000,"The Dark Crystal: Age of Resistance Tactics",,playable,2020-08-11 13:43:41
 01003DE00918E000,"The Darkside Detective",,playable,2020-06-03 22:16:18
+010032B015D66000,"The DioField Chronicle",,playable,2025-09-05 11:35:50
 01000A10041EA000,"The Elder Scrolls V: Skyrim",gpu;crash,ingame,2024-07-14 03:21:31
 01004A9006B84000,"The End Is Nigh",,playable,2020-06-01 11:26:45
 0100CA100489C000,"The Escapists 2",nvdec,playable,2020-09-24 12:31:31
