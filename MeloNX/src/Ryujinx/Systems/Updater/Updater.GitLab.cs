@@ -7,6 +7,7 @@ using Ryujinx.Common.Logging;
 using Ryujinx.Systems.Update.Client;
 using Ryujinx.Systems.Update.Common;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Ryujinx.Ava.Systems
@@ -14,16 +15,38 @@ namespace Ryujinx.Ava.Systems
     internal static partial class Updater
     {
         private static VersionResponse _versionResponse;
+        private static UpdateClient _updateClient;
 
-        private static UpdateClient CreateUpdateClient()
-            => UpdateClient.Builder()
+        private static async Task<Return<VersionResponse>> QueryLatestVersionAsync()
+        {
+            _updateClient ??= UpdateClient.Builder()
                 .WithServerEndpoint("https://update.ryujinx.app") // This is the default, and doesn't need to be provided; it's here for transparency.
                 .WithLogger((format, args, caller) => 
                     Logger.Info?.Print(
                         LogClass.Application, 
                         args.Length is 0 ? format : format.Format(args), 
                         caller: caller)
-                    );
+                );
+
+            try
+            {
+                return await _updateClient.QueryLatestAsync(ReleaseInformation.IsCanaryBuild
+                    ? ReleaseChannel.Canary
+                    : ReleaseChannel.Stable);
+            }
+            catch (HttpRequestException hre)
+                when (hre.HttpRequestError is HttpRequestError.ConnectionError)
+            {
+                return Return<VersionResponse>.Failure(
+                    new MessageError("Connection error occurred. Is your internet down?"));
+            }
+            catch (HttpRequestException hre)
+                when (hre.HttpRequestError is HttpRequestError.NameResolutionError)
+            {
+                return Return<VersionResponse>.Failure(
+                    new MessageError("DNS resolution error occurred. Is your internet down?"));
+            }
+        }
 
         public static async Task<Optional<(Version Current, Version Incoming)>> CheckVersionAsync(bool showVersionUpToDate = false)
         {
@@ -41,22 +64,18 @@ namespace Ryujinx.Ava.Systems
                 return default;
             }
 
-            using UpdateClient updateClient = CreateUpdateClient();
-
             try
             {
-                _versionResponse = await updateClient.QueryLatestAsync(ReleaseInformation.IsCanaryBuild
-                    ? ReleaseChannel.Canary
-                    : ReleaseChannel.Stable);
+                _versionResponse = await QueryLatestVersionAsync().Then(x => x.Unwrap());
             }
             catch (Exception e)
             {
-                Logger.Error?.Print(LogClass.Application, $"An error occurred when requesting for updates ({e.GetType().AsFullNamePrettyString()}): {e.Message}");
+                Logger.Error?.Print(LogClass.Application, $"{e.GetType().AsPrettyString()} thrown when requesting updates: {e.Message}");
 
                 _running = false;
                 return default;
             }
-            
+
             if (_versionResponse == null)
             {
                 // logging is done via the UpdateClient library

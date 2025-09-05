@@ -117,7 +117,7 @@ namespace Ryujinx.Ava.Systems.AppLibrary
 
             using UniqueRef<IFile> npdmFile = new();
 
-            Result result = pfs.OpenFile(ref npdmFile.Ref, "/main.npdm".ToU8Span(), OpenMode.Read);
+            LibHac.Result result = pfs.OpenFile(ref npdmFile.Ref, "/main.npdm".ToU8Span(), OpenMode.Read);
 
             if (ResultFs.PathNotFound.Includes(result))
             {

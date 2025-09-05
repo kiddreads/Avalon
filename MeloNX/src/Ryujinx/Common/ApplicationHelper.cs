@@ -1,6 +1,5 @@
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using Gommon;
 using LibHac;
 using LibHac.Account;
 using LibHac.Common;
@@ -411,7 +410,7 @@ namespace Ryujinx.Ava.Common
 
         public static async Task ExtractAoc(IStorageProvider storageProvider, string updateFilePath, string updateName)
         {
-            Optional<IStorageFolder> result = await storageProvider.OpenSingleFolderPickerAsync(new FolderPickerOpenOptions
+            Gommon.Optional<IStorageFolder> result = await storageProvider.OpenSingleFolderPickerAsync(new FolderPickerOpenOptions
             {
                 Title = LocaleManager.Instance[LocaleKeys.FolderDialogExtractTitle]
             });
@@ -424,7 +423,7 @@ namespace Ryujinx.Ava.Common
 
         public static async Task ExtractSection(IStorageProvider storageProvider, NcaSectionType ncaSectionType, string titleFilePath, string titleName, int programIndex = 0)
         {
-            Optional<IStorageFolder> result = await storageProvider.OpenSingleFolderPickerAsync(new FolderPickerOpenOptions
+            Gommon.Optional<IStorageFolder> result = await storageProvider.OpenSingleFolderPickerAsync(new FolderPickerOpenOptions
             {
                 Title = LocaleManager.Instance[LocaleKeys.FolderDialogExtractTitle]
             });
