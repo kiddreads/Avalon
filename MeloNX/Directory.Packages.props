@@ -19,8 +19,8 @@
     <PackageVersion Include="CommandLineParser" Version="2.9.1" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
     <PackageVersion Include="Concentus" Version="2.2.2" />
-    <PackageVersion Include="DiscordRichPresence" Version="1.2.1.24" />
-    <PackageVersion Include="DynamicData" Version="9.0.4" />
+    <PackageVersion Include="DiscordRichPresence" Version="1.6.1.70" />
+    <PackageVersion Include="DynamicData" Version="9.4.1" />
     <PackageVersion Include="FluentAvaloniaUI" Version="2.0.5" />
     <PackageVersion Include="Humanizer" Version="2.14.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" />
@@ -42,11 +42,11 @@
     <PackageVersion Include="Ryujinx.Graphics.Vulkan.Dependencies.MoltenVK" Version="1.2.0" />
     <PackageVersion Include="Ryujinx.LibHac" Version="0.21.0-alpha.116" />
     <PackageVersion Include="Ryujinx.SDL2-CS" Version="2.30.0-build32" />
-    <PackageVersion Include="Ryujinx.UpdateClient" Version="1.0.29" />
-    <PackageVersion Include="Ryujinx.Systems.Update.Common" Version="1.0.29" />
+    <PackageVersion Include="Ryujinx.UpdateClient" Version="1.0.44" />
+    <PackageVersion Include="Ryujinx.Systems.Update.Common" Version="1.0.44" />
     <PackageVersion Include="Gommon" Version="2.7.1.1" />
     <PackageVersion Include="securifybv.ShellLink" Version="0.1.0" />
-    <PackageVersion Include="Sep" Version="0.6.0" />
+    <PackageVersion Include="Sep" Version="0.11.1" />
     <PackageVersion Include="shaderc.net" Version="0.1.0" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="Silk.NET.Vulkan" Version="2.22.0" />
