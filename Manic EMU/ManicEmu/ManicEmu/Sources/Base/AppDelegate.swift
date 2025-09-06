@@ -51,12 +51,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //注册模拟器核心
         System.allCores.forEach { ManicEmu.register($0) }
-
-#if !SIDE_LOAD
-        //友盟初始化
+        
+#if CRASH_COLLECT
+        //收集闪退日志
+        let apmConfig = UMAPMConfig.default()
+        apmConfig.crashAndBlockMonitorEnable = true
+        apmConfig.javaScriptBridgeEnable = false
+        apmConfig.launchMonitorEnable = false
+        apmConfig.logCollectEnable = false
+        apmConfig.memMonitorEnable = false
+        apmConfig.networkEnable = false
+        apmConfig.oomMonitorEnable = false
+        apmConfig.pageMonitorEnable = false
+        apmConfig.logCollectEnable = false
+        UMCrashConfigure.setAPMConfig(apmConfig)
+#endif
+        //友盟初始化 用于统计安装数量
         MobClick.setAutoPageEnabled(true)
         UMConfigure.initWithAppkey(Constants.Cipher.UMAppKey, channel: nil);
-#endif
+        
         //启动游戏手柄监听
         ExternalGameControllerUtils.shared.startDetecting()
         //启动游戏手柄点击监听

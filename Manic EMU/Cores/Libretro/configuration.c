@@ -5054,6 +5054,15 @@ bool get_enable_rumble(void) {
    return g_enable_rumble;
 }
 
+static bool g_is_libretro_going_to_stop = false;
+void set_libretro_is_going_to_stop(bool stop) {
+   g_is_libretro_going_to_stop = stop;
+}
+
+bool get_is_libretro_going_to_stop(void) {
+   return g_is_libretro_going_to_stop;
+}
+
 /**
  * input_config_save_keybinds_user:
  * @conf               : pointer to config file object

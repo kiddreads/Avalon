@@ -392,7 +392,7 @@ private extension SelectableCollection {
             
             
             
-            if offsetX < 0 {
+            if offsetX < 0 || scrollView.contentSize.width < scrollViewWidth {
                 offsetX = -insetLeft
             } else if offsetX + scrollView.bounds.width - insetRight > scrollView.contentSize.width {
                 offsetX = scrollView.contentSize.width - scrollView.bounds.width + insetRight

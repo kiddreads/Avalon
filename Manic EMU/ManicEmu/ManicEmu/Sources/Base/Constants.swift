@@ -241,7 +241,7 @@ struct Constants {
         static let OneDriveSecrectKey = ""
         static let AliYunAppId = ""
         static let AliYunSecrectKey = ""
-        static let UMAppKey = ""
+        static let UMAppKey = "6"._7.d.b._7.c._6.c._4._8.a.c._1.b._4.f._8._7.f._0._8.e._9.a
         static let CLoudflareAPIToken = ""
         static let UnzipKey = "123456"
         static let DeepSeek = ""

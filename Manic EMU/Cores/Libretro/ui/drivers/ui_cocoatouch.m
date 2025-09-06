@@ -988,6 +988,7 @@ static BOOL RespectSilentMode = false;
         return;
     }
     LibretroInitial = true;
+    set_libretro_is_going_to_stop(false);
     char arguments[]   = "retroarch";
     char       *argv[] = {arguments,   NULL};
     int argc           = 1;
@@ -1052,6 +1053,7 @@ static BOOL RespectSilentMode = false;
 - (void)stop {
     if (!LibretroInitial) { return; }
     LibretroInitial = false;
+    set_libretro_is_going_to_stop(true);
     command_event(CMD_EVENT_CLOSE_CONTENT, NULL);
     command_event(CMD_EVENT_UNLOAD_CORE, NULL);
     rarch_stop_draw_observer();

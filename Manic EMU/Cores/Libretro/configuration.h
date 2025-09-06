@@ -1371,6 +1371,10 @@ const char* get_custom_save_ext(void);
 void set_enable_rumble(bool enable);
 bool get_enable_rumble(void);
 
+//设置Libretro是否将要停止
+void set_libretro_is_going_to_stop(bool stop);
+bool get_is_libretro_going_to_stop(void);
+
 RETRO_END_DECLS
 
 #endif

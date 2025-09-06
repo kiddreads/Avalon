@@ -53,6 +53,9 @@
 @implementation CheevosLeaderboard
 @end
 
+@implementation CheevosProgress
+@end
+
 @implementation CheevosBridge
 
 #pragma mark - HTTP Server Call Implementation
@@ -193,6 +196,12 @@ static CheevosAchievement* buildAchievementObj(const rc_client_achievement_t* a)
     obj.rarity = (CGFloat)a->rarity;
     obj.rarityHardcore = (CGFloat)a->rarity_hardcore;
     obj.type = (NSInteger)a->type;
+    if (a->type & RC_CLIENT_ACHIEVEMENT_TYPE_MISSABLE) {
+        obj.isMissable = YES;
+    }
+    if (a->type & RC_CLIENT_ACHIEVEMENT_TYPE_PROGRESSION) {
+        obj.isProgression = YES;
+    }
     char url1[256];
     if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
         obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];

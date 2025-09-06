@@ -40,6 +40,8 @@
 @property (nonatomic, assign) NSInteger type;
 @property (nonatomic, copy) NSString *_Nullable unlockedBadgeUrl;
 @property (nonatomic, copy) NSString *_Nullable activeBadgeUrl;
+@property (nonatomic, assign) BOOL isMissable;
+@property (nonatomic, assign) BOOL isProgression;
 
 @end
 
@@ -87,6 +89,18 @@
 @interface CheevosLeaderboard : NSObject
 @property (nonatomic, copy) NSString *_Nullable title;
 @property (nonatomic, copy) NSString *_Nullable _description;
+@end
+
+@interface CheevosProgress : NSObject
+
+@property (nonatomic, assign) BOOL show;
+@property (nonatomic, assign) NSInteger points;
+@property (nonatomic, copy) NSString *_Nullable title;
+@property (nonatomic, copy) NSString *_Nullable measuredProgress;
+@property (nonatomic, assign) CGFloat measuredPercent;
+@property (nonatomic, assign) NSInteger _id;
+@property (nonatomic, copy) NSString *_Nullable unlockedBadgeUrl;
+
 @end
 
 ///登录结果

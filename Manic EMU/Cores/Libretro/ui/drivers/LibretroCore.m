@@ -274,6 +274,9 @@ static void cheevosDidTrigger(uint32_t type, void* object1, void* object2) {
             obj.rarity = (CGFloat)a->rarity;
             obj.rarityHardcore = (CGFloat)a->rarity_hardcore;
             obj.type = (NSInteger)a->type;
+            
+            
+            
             char url1[256];
             if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
                 obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];
@@ -385,6 +388,66 @@ static void cheevosDidTrigger(uint32_t type, void* object1, void* object2) {
             CheevosLeaderboard* obj = [CheevosLeaderboard new];
             obj.title = a->title ? [NSString stringWithUTF8String:a->title] : nil;
             obj._description = a->description ? [NSString stringWithUTF8String:a->description] : nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+    } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_PROGRESS_INDICATOR_SHOW) {
+        //进度展示
+        if (object1) {
+            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
+            if ([[NSString stringWithUTF8String:a->badge_name] isEqualToString:@"00000"]) {
+                return;
+            }
+            CheevosProgress* obj = [CheevosProgress new];
+            obj.show = YES;
+            obj.title = a->title ? [NSString stringWithUTF8String:a->title] : nil;
+            obj.points = (NSInteger)a->points;
+            obj.measuredProgress = [NSString stringWithUTF8String:a->measured_progress];
+            obj.measuredPercent = (CGFloat)a->measured_percent;
+            obj._id = (NSInteger)a->id;
+            char url1[256];
+            if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
+                obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+        
+    } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_PROGRESS_INDICATOR_HIDE) {
+        //进度隐藏
+        if (object1) {
+            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
+            if ([[NSString stringWithUTF8String:a->badge_name] isEqualToString:@"00000"]) {
+                return;
+            }
+            CheevosProgress* obj = [CheevosProgress new];
+            obj.show = NO;
+            obj._id = (NSInteger)a->id;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+            });
+        }
+        
+    } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_PROGRESS_INDICATOR_UPDATE) {
+        //进度更新
+        if (object1) {
+            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
+            if ([[NSString stringWithUTF8String:a->badge_name] isEqualToString:@"00000"]) {
+                return;
+            }
+            CheevosProgress* obj = [CheevosProgress new];
+            obj.show = YES;
+            obj.title = a->title ? [NSString stringWithUTF8String:a->title] : nil;
+            obj.points = (NSInteger)a->points;
+            obj.measuredProgress = [NSString stringWithUTF8String:a->measured_progress];
+            obj.measuredPercent = (CGFloat)a->measured_percent;
+            obj._id = (NSInteger)a->id;
+            char url1[256];
+            if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
+                obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
             });

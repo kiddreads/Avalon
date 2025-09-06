@@ -22,11 +22,39 @@ class RetroAchievementsListCell: UICollectionViewCell {
                 return view
             }()
             
+            private let missableImageView: SymbolButton = {
+                let view = SymbolButton(image: UIImage(symbol: .exclamationmarkCircle, font: Constants.Font.caption(size: .l), color: .white))
+                view.enableRoundCorner = true
+                view.backgroundColor = .black
+                view.isHidden = true
+                return view
+            }()
+            
+            private let progressionImageView: SymbolButton = {
+                let view = SymbolButton(image: UIImage(symbol: .clockBadgeCheckmark, font: Constants.Font.caption(size: .l), color: .white))
+                view.enableRoundCorner = true
+                view.backgroundColor = .black
+                view.isHidden = true
+                return view
+            }()
+            
             override init(frame: CGRect) {
                 super.init(frame: frame)
                 addSubview(imageView)
                 imageView.snp.makeConstraints { make in
                     make.edges.equalToSuperview()
+                }
+                
+                imageView.addSubview(missableImageView)
+                missableImageView.snp.makeConstraints { make in
+                    make.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                    make.size.equalTo(15)
+                }
+                
+                imageView.addSubview(progressionImageView)
+                progressionImageView.snp.makeConstraints { make in
+                    make.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                    make.size.equalTo(15)
                 }
             }
             
@@ -50,6 +78,27 @@ class RetroAchievementsListCell: UICollectionViewCell {
                     }
                 }
                 imageView.kf.setImage(with: URL(string: url), placeholder: UIImage.placeHolder(preferenceSize: .init(64)))
+                if achievement.isMissable && achievement.isProgression {
+                    missableImageView.snp.updateConstraints { make in
+                        make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny * 2 + 13)
+                    }
+                    missableImageView.isHidden = false
+                    progressionImageView.isHidden = false
+                } else {
+                    missableImageView.snp.updateConstraints { make in
+                        make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                    }
+                    if achievement.isMissable {
+                        missableImageView.isHidden = false
+                        progressionImageView.isHidden = true
+                    } else if achievement.isProgression {
+                        missableImageView.isHidden = true
+                        progressionImageView.isHidden = false
+                    } else {
+                        missableImageView.isHidden = true
+                        progressionImageView.isHidden = true
+                    }
+                }
             }
         }
 

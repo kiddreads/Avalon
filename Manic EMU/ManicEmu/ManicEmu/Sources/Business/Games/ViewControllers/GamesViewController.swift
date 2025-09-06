@@ -121,7 +121,11 @@ class GamesViewController: BaseViewController {
             if empty {
                 self.gamesToolView.stopSearch()
             }
-            self.gamesToolView.isHidden = empty
+            if UIDevice.isPhone && UIDevice.isLandscape {
+                self.gamesToolView.isHidden = true
+            } else {
+                self.gamesToolView.isHidden = empty
+            }
         }
         return view
     }()

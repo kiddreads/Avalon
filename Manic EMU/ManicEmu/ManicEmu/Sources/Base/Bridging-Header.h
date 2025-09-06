@@ -15,3 +15,7 @@
 #import <UMCommon/UMCommon.h>
 #import <UniversalDetector/UniversalDetector.h>
 #import <Libretro/LibretroCore.h>
+#if CRASH_COLLECT
+#import <UMAPM/UMAPMConfig.h>
+#import <UMAPM/UMCrashConfigure.h>
+#endif

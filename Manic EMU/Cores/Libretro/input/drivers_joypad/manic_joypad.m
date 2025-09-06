@@ -370,6 +370,10 @@ static bool manic_gamecontroller_joypad_set_rumble(unsigned pad,
         return false;
     }
     
+    if (get_is_libretro_going_to_stop()) {
+        return false;
+    }
+    
     if (@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)) {
       for (GCController *controller in [GCController controllers]) {
          if (!controller)

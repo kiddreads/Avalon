@@ -93,6 +93,8 @@ class PlayViewController: GameViewController {
     private var kvoContext = 0
     //排行榜控件
     private var leaderboardView: LeaderboardView? = nil
+    //进度控件
+    private var progressView: CheevosProgressView? = nil
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
@@ -173,6 +175,8 @@ class PlayViewController: GameViewController {
     private var isWFCConnect = false
     ///是否处于硬核模式
     private var isHardcoreMode = false
+    ///是否是首次设置GB的调色盘
+    private var isFirstTimeSetGBPalette = true;
     
     static func startGame(game: Game, saveState: GameSaveState? = nil) {
         if game.isRomExtsts || game.isNDSHomeMenuGame {
@@ -444,7 +448,16 @@ class PlayViewController: GameViewController {
                     self.showRetroAchievements(title: R.string.localizable.leaderboardStart() + title, message: description, hideIcon: true);
                 }
 
-            } else if let message = notification.object as? String {
+            } else if let cheevosProgress = notification.object as? CheevosProgress {
+                //排行榜追踪
+                if let progressView = self.progressView {
+                    if cheevosProgress.show {
+                        progressView.updateProgress(cheevosProgress)
+                    } else {
+                        progressView.removeProgress(id: cheevosProgress._id)
+                    }
+                }
+            }  else if let message = notification.object as? String {
                 UIView.makeToast(message: message)
             }
         })
@@ -1576,6 +1589,12 @@ extension PlayViewController {
                     LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PokeMini.name, key: "pokemini_palette", value: item.palette.paletteTitleForPM, reload: true)
                 } else if manicGame.gameType == .gb {
                     LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, configs: ["gambatte_gb_colorization": item.palette == .None ? "disabled" : "internal", "gambatte_gb_internal_palette": item.palette.option], reload: true)
+                    if isFirstTimeSetGBPalette {
+                        isFirstTimeSetGBPalette = false
+                        DispatchQueue.main.asyncAfter(delay: 1) {
+                            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, configs: ["gambatte_gb_colorization": item.palette == .None ? "disabled" : "internal", "gambatte_gb_internal_palette": item.palette.option], reload: true)
+                        }
+                    }
                 }
             }
         case .swapDisk:
@@ -1992,6 +2011,7 @@ extension PlayViewController {
                                                                      "cheevos_username": user.username])
                 if enableAchievements {
                     updateLeaderboard()
+                    updateProgress()
                 }
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
@@ -2662,6 +2682,19 @@ extension PlayViewController {
             }
             leaderboardView.isHidden = true
             self.leaderboardView = leaderboardView
+        }
+    }
+    
+    private func updateProgress() {
+        if progressView == nil {
+            let progressView = CheevosProgressView()
+            view.addSubview(progressView)
+            progressView.snp.makeConstraints { make in
+                make.leading.trailing.bottom.equalTo(self.gameView)
+                make.height.equalTo(32)
+            }
+            progressView.isHidden = true
+            self.progressView = progressView
         }
     }
     
