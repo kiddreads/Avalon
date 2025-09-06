@@ -97,7 +97,7 @@ namespace Ryujinx.Graphics.Device
                 uint alignedOffset = index * RegisterSize;
                 DebugWrite(alignedOffset, data);
 
-                GetRefIntAlignedUncheck(index) = data;
+                SetIntAlignedUncheck(index, data);
 
                 _writeCallbacks[index]?.Invoke(data);
             }
@@ -112,9 +112,7 @@ namespace Ryujinx.Graphics.Device
                 uint alignedOffset = index * RegisterSize;
                 DebugWrite(alignedOffset, data);
 
-                ref int storage = ref GetRefIntAlignedUncheck(index);
-                changed = storage != data;
-                storage = data;
+                changed = SetIntAlignedUncheckChanged(index, data);
 
                 _writeCallbacks[index]?.Invoke(data);
             }
@@ -153,6 +151,25 @@ namespace Ryujinx.Graphics.Device
         private ref int GetRefIntAlignedUncheck(ulong index)
         {
             return ref Unsafe.Add(ref Unsafe.As<TState, int>(ref State), (nint)index);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetIntAlignedUncheck(ulong index, int data)
+        {
+            Unsafe.Add(ref Unsafe.As<TState, int>(ref State), (nint)index) = data;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool SetIntAlignedUncheckChanged(ulong index, int data)
+        {
+            ref int val = ref Unsafe.Add(ref Unsafe.As<TState, int>(ref State), (nint)index);
+            if (val == data)
+            {
+                return false;
+            }
+            val = data;
+            
+            return true;
         }
     }
 }
