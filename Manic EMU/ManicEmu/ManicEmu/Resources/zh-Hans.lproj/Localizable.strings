@@ -669,3 +669,7 @@
 "Leaderboard" = "排行榜";
 "LeaderboardStart" = "排行榜开始：";
 "TurnOffHardcoreAlert" = "切换到休闲模式后，如需重新开启硬核模式必须重置游戏。是否继续？";
+
+"AchievementsMissableAlert" = "该成就在游戏流程中特定时点后将无法获取，若错过需重新开始游戏";
+"AchievementsProgressionAlert" = "该成就是通关的必要条件";
+"AchievementsWinAlert" = "该成就表示游戏已通关";

@@ -637,3 +637,6 @@ Tekan butang pengawal...";
 "LeaderboardStart" = "Mula papan pemimpin: ";
 
 "TurnOffHardcoreAlert" = "Penukaran ke mod Softcore adalah kekal. Untuk kembali ke mod Hardcore, anda mesti menetapkan semula permainan. Teruskan?";
+"AchievementsMissableAlert" = "Pencapaian ini tidak boleh diperoleh selepas titik tertentu dan memerlukan permainan semula jika terlepas";
+"AchievementsProgressionAlert" = "Pencapaian ini diperlukan untuk menamatkan permainan";
+"AchievementsWinAlert" = "Pencapaian ini menandakan permainan telah tamat";

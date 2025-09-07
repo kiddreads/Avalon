@@ -303,7 +303,7 @@ extension ImportServiceListView: UICollectionViewDataSource {
             if Locale.prefersCN {
                 UIApplication.shared.open(Constants.URLs.JoinQQ)
             } else {
-                UIApplication.shared.open(Constants.URLs.JoinTelegram)
+                UIApplication.shared.open(Constants.URLs.JoinDiscord)
             }
         }
         return footer

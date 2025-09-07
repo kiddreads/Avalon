@@ -655,3 +655,6 @@ Trykk på kontrollerknappen...";
 "LeaderboardStart" = "Ledertavle start: ";
 
 "TurnOffHardcoreAlert" = "Bytting til Softcore-modus er permanent. For å gå tilbake til Hardcore-modus, må du tilbakestille spillet. Fortsette?";
+"AchievementsMissableAlert" = "Prestasjonen kan ikke oppnås etter et visst punkt og krever nytt spill hvis misset";
+"AchievementsProgressionAlert" = "Prestasjonen er nødvendig for å fullføre spillet";
+"AchievementsWinAlert" = "Prestasjonen indikerer at spillet er fullført";

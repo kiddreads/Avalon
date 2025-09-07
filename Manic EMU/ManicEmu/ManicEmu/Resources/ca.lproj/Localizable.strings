@@ -663,3 +663,6 @@ Prem el botó del control...";
 "LeaderboardStart" = "Inici taula classificació: ";
 
 "TurnOffHardcoreAlert" = "Canviar al mode Softcore és permanent. Per tornar al mode Hardcore, cal reiniciar el joc. Continuar?";
+"AchievementsMissableAlert" = "El assoliment no podrà obtenir-se després d'un cert punt i requerirà una nova partida si es perd";
+"AchievementsProgressionAlert" = "L'assoliment és necessari per superar el joc";
+"AchievementsWinAlert" = "L'assoliment indica que el joc ha estat superat";

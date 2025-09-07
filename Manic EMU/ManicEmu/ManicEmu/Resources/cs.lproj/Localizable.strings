@@ -659,3 +659,6 @@ Stiskněte tlačítko ovladače...";
 "LeaderboardStart" = "Začátek žebříčku: ";
 
 "TurnOffHardcoreAlert" = "Přepnutí do Softcore režimu je trvalé. Pro návrat do Hardcore režimu musíte hru resetovat. Pokračovat?";
+"AchievementsMissableAlert" = "Tohoto úspěchu nelze po určitém bodě dosáhnout a vyžaduje při zmeškání nové hraní";
+"AchievementsProgressionAlert" = "Tento úspěch je vyžadován k dokončení hry";
+"AchievementsWinAlert" = "Tento úspěch indikuje, že hra byla dokončena";

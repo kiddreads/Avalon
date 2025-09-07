@@ -664,3 +664,6 @@ Paina ohjaimen nappia...";
 "LeaderboardStart" = "Tulostaulukon alku: ";
 
 "TurnOffHardcoreAlert" = "Vaihto Softcore-tilaan on pysyvä. Palataksesi Hardcore-tilaan, sinun on nollattava peli. Jatketaanko?";
+"AchievementsMissableAlert" = "Saavutusta ei voi ansaita tietyn kohdan jälkeen ja se vaatii uuden pelikerran jos menetetään";
+"AchievementsProgressionAlert" = "Saavutus vaaditaan pelin läpäisyyn";
+"AchievementsWinAlert" = "Saavutus ilmaisee että peli on läpäisty";

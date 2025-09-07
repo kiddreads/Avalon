@@ -668,3 +668,7 @@
 "LeaderboardStart" = "排行榜開始: ";
 
 "TurnOffHardcoreAlert" = "切換至休閒模式將永久生效。如需重返硬核模式，必須重置遊戲。是否繼續？";
+
+"AchievementsMissableAlert" = "此成就於遊戲流程中特定時點後將無法取得，若錯過需重新開始遊戲";
+"AchievementsProgressionAlert" = "此成就為通關必要條件";
+"AchievementsWinAlert" = "此成就表示遊戲已通關";

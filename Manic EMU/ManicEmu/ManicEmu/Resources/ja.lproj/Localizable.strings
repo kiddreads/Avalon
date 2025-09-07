@@ -660,3 +660,6 @@
 "LeaderboardStart" = "リーダーボード開始: ";
 
 "TurnOffHardcoreAlert" = "ソフトコアモードへの切り替えは永久的です。ハードコアモードに戻るにはゲームをリセットする必要があります。続行しますか？";
+"AchievementsMissableAlert" = "この実績はゲーム進行によっては獲得不能になり、見逃した場合は再プレイが必要です";
+"AchievementsProgressionAlert" = "この実績はゲームクリアに必須です";
+"AchievementsWinAlert" = "この実績はゲームクリアを意味します";

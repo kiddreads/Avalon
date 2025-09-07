@@ -667,3 +667,6 @@ Premi il pulsante del controller...";
 "LeaderboardStart" = "Inizio classifica: ";
 
 "TurnOffHardcoreAlert" = "Il passaggio alla modalità Softcore è permanente. Per tornare alla modalità Hardcore, è necessario resettare il gioco. Continuare?";
+"AchievementsMissableAlert" = "L'obiettivo non potrà essere ottenuto dopo un certo punto e richiederà un nuovo gioco se perso";
+"AchievementsProgressionAlert" = "L'obiettivo è necessario per completare il gioco";
+"AchievementsWinAlert" = "L'obiettivo indica che il gioco è stato completato";

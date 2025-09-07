@@ -673,3 +673,7 @@ Press the controller button to complete mapping...";
 "Leaderboard" = "Leaderboard";
 "LeaderboardStart" = "Leaderboard Start: ";
 "TurnOffHardcoreAlert" = "Switching to Softcore is permanent. To return to Hardcore, you must reset the game. Continue?";
+
+"AchievementsMissableAlert" = "The achievement cannot be earned after some point in the playthrough and would require another playthrough if missed";
+"AchievementsProgressionAlert" = "The achievement is required to beat the game";
+"AchievementsWinAlert" = "The achievement indicates the game has been beaten";

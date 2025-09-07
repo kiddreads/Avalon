@@ -667,3 +667,6 @@
 "LeaderboardStart" = "리더보드 시작: ";
 
 "TurnOffHardcoreAlert" = "소프트코어 모드 전환은 영구적입니다. 하드코어 모드로 돌아가려면 게임을 재설정해야 합니다. 계속하시겠습니까?";
+"AchievementsMissableAlert" = "이 도전 과제는 플레이 도중 특정 시점 이후에는 획득할 수 없으며, 놓칠 경우 다시 플레이해야 합니다";
+"AchievementsProgressionAlert" = "이 도전 과제는 게임 클리어에 필수적입니다";
+"AchievementsWinAlert" = "이 도전 과제는 게임 클리어를 의미합니다";

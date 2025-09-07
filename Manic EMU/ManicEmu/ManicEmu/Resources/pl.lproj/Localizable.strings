@@ -638,3 +638,6 @@ Naciśnij przycisk kontrolera...";
 "LeaderboardStart" = "Początek tablicy: ";
 
 "TurnOffHardcoreAlert" = "Przełączenie na tryb Softcore jest trwałe. Aby wrócić do trybu Hardcore, musisz zresetować grę. Kontynuować?";
+"AchievementsMissableAlert" = "Osiągnięcie nie będzie dostępne po określonym punkcie i wymagać będzie nowej rozgrywki jeśli przegapione";
+"AchievementsProgressionAlert" = "Osiągnięcie jest wymagane do ukończenia gry";
+"AchievementsWinAlert" = "Osiągnięcie wskazuje, że gra została ukończona";

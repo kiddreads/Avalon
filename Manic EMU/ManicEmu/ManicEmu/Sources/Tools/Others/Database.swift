@@ -242,7 +242,7 @@ struct Database {
                     if games.count > 0 {
                         try? realm.write({
                             for g in games {
-                                if g.gameSaveStates.count > 0 {
+                                if g.gameType == .gba, g.gameSaveStates.count > 0 {
                                     g.defaultCore = 1
                                 } else if g.gameType == .snes {
                                     //如果将snes游戏迁移至bsnes 则将存档文件从Snes9x迁移到bsnes
@@ -254,9 +254,9 @@ struct Database {
                             }
                         })
                         
-                        //将存档文件都进行核心标记
+                        //将GBA即时存档文件都进行核心标记
                         for g in games {
-                            if g.gameSaveStates.count > 0 {
+                            if g.gameType == .gba, g.gameSaveStates.count > 0 {
                                 for s in g.gameSaveStates {
                                     s.updateExtra(key: ExtraKey.saveStateCore.rawValue, value: 1)
                                 }

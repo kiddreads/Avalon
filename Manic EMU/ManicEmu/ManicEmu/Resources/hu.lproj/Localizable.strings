@@ -663,3 +663,6 @@ Nyomja meg a kontroller gombját...";
 "LeaderboardStart" = "Ranglista kezdete: ";
 
 "TurnOffHardcoreAlert" = "A Softcore módba váltás végleges. A Hardcore módba való visszatéréshez a játékot alaphelyzetbe kell állítani. Folytatja?";
+"AchievementsMissableAlert" = "A teljesítmény egy pont után nem szerezhető meg és új játékot igényel ha kimarad";
+"AchievementsProgressionAlert" = "A teljesítmény szükséges a játék befejezéséhez";
+"AchievementsWinAlert" = "A teljesítmény jelzi, hogy a játék befejeződött";

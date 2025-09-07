@@ -665,3 +665,6 @@ Pressione o botão do comando...";
 "LeaderboardStart" = "Início da tabela: ";
 
 "TurnOffHardcoreAlert" = "A mudança para o modo Softcore é permanente. Para regressar ao modo Hardcore, terá de reiniciar o jogo. Continuar?";
+"AchievementsMissableAlert" = "O troféu não poderá ser obtido após determinado ponto e exigirá outra jogada se perdido";
+"AchievementsProgressionAlert" = "O troféu é necessário para completar o jogo";
+"AchievementsWinAlert" = "O troféu indica que o jogo foi concluído";

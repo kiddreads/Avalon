@@ -665,3 +665,6 @@ Drücke die Controller-Taste...";
 "LeaderboardStart" = "Bestenliste Start: ";
 
 "TurnOffHardcoreAlert" = "Das Wechseln in den Softcore-Modus ist permanent. Zur Rückkehr zum Hardcore-Modus muss das Spiel zurückgesetzt werden. Fortfahren?";
+"AchievementsMissableAlert" = "Dieser Erfolg kann nach einem bestimmten Punkt nicht mehr erzielt werden und erfordert bei Verpassen einen neuen Spielzug";
+"AchievementsProgressionAlert" = "Dieser Erfolg ist zum Abschluss des Spiels erforderlich";
+"AchievementsWinAlert" = "Dieser Erfolg zeigt an, dass das Spiel abgeschlossen wurde";

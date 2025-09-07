@@ -501,9 +501,9 @@ struct Constants {
         static var JoinQQ: URL {
             URL(string: "https://pd.qq.com/s/7i1g6jf5k")!
         }
-        static var JoinTelegram: URL {
-            URL(string: "https://t.me/+R56rb3Sa9hM0YjEx")!
-        }
+//        static var JoinTelegram: URL {
+//            URL(string: "https://t.me/+R56rb3Sa9hM0YjEx")!
+//        }
         static var JoinDiscord: URL {
             URL(string: "https://discord.gg/qsaTHzknAZ")!
         }

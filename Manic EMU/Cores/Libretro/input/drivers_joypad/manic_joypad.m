@@ -40,11 +40,19 @@
 
 #ifdef HAVE_COREMOTION
 #import <CoreHaptics/CoreHaptics.h>
-static CHHapticEngine *hapticEngine;
-// 使用 id 类型来避免编译错误
-static id strongRumblePlayer;
-static id weakRumblePlayer;
-static bool hapticsSupported = false;
+// 触觉引擎状态管理
+typedef struct {
+    CHHapticEngine *hapticEngine;
+    id strongRumblePlayer;
+    id weakRumblePlayer;
+    bool hapticsSupported;
+    bool isEngineRunning;
+    bool isShuttingDown;
+    uint64_t lastRumbleTime[2]; // 记录每种震动类型的最后执行时间
+    uint16_t lastRumbleStrength[2]; // 记录每种震动类型的最后强度
+} manic_haptic_state_t;
+
+static manic_haptic_state_t hapticState = {0};
 #endif
 
 /* TODO/FIXME - static globals */
@@ -52,8 +60,61 @@ static uint32_t manic_buttons[MAX_USERS];
 static int16_t  manic_axes[MAX_USERS][MAX_MANIC_AXES];
 
 static bool manic_inited;
+#ifdef HAVE_COREMOTION
+// 清理触觉引擎资源
+void manic_cleanup_haptic_engine(void) {
+    if (@available(iOS 13.0, *)) {
+        hapticState.isShuttingDown = true;
+        
+        // 停止所有正在运行的震动
+        if (hapticState.strongRumblePlayer) {
+            if ([hapticState.strongRumblePlayer respondsToSelector:@selector(stopAtTime:error:)]) {
+                [hapticState.strongRumblePlayer performSelector:@selector(stopAtTime:error:)
+                                                     withObject:@0
+                                                     withObject:nil];
+            }
+            hapticState.strongRumblePlayer = nil;
+        }
+        
+        if (hapticState.weakRumblePlayer) {
+            if ([hapticState.weakRumblePlayer respondsToSelector:@selector(stopAtTime:error:)]) {
+                [hapticState.weakRumblePlayer performSelector:@selector(stopAtTime:error:)
+                                                     withObject:@0
+                                                     withObject:nil];
+            }
+            hapticState.weakRumblePlayer = nil;
+        }
+        
+        // 停止并清理引擎
+        if (hapticState.hapticEngine) {
+            [hapticState.hapticEngine stopWithCompletionHandler:^(NSError * _Nullable error) {
+                hapticState.hapticEngine = nil;
+            }];
+        }
+        
+        // 重置状态
+        // 手动重置结构体字段，而不是使用 memset
+        hapticState.hapticEngine = nil;
+        hapticState.strongRumblePlayer = nil;
+        hapticState.weakRumblePlayer = nil;
+        hapticState.hapticsSupported = false;
+        hapticState.isEngineRunning = false;
+        hapticState.isShuttingDown = false;
+        hapticState.lastRumbleTime[0] = 0;
+        hapticState.lastRumbleTime[1] = 0;
+        hapticState.lastRumbleStrength[0] = 0;
+        hapticState.lastRumbleStrength[1] = 0;
+    }
+}
+#endif
 
 void manic_input_set_deinit(void) {
+    if (manic_inited) {
+#ifdef HAVE_COREMOTION
+    // 清理触觉引擎资源
+    manic_cleanup_haptic_engine();
+#endif
+    }
     manic_inited = false;
 }
 
@@ -195,11 +256,62 @@ static void manic_gamecontroller_joypad_poll(void) { }
 
 #endif
 
-// 创建默认的触觉模式
 #ifdef HAVE_COREMOTION
+// 检查震动是否应该被忽略（防止重复调用）
+static bool manic_should_ignore_rumble(enum retro_rumble_effect type, uint16_t strength) {
+    if (@available(iOS 13.0, *)) {
+        uint64_t currentTime = mach_absolute_time();
+        uint64_t timeDiff = currentTime - hapticState.lastRumbleTime[type];
+        
+        // 如果强度相同且在50ms内重复调用，则忽略
+        if (hapticState.lastRumbleStrength[type] == strength &&
+            timeDiff < 50000000) { // 50ms in nanoseconds
+            return true;
+        }
+        
+        // 更新记录
+        hapticState.lastRumbleTime[type] = currentTime;
+        hapticState.lastRumbleStrength[type] = strength;
+    }
+    return false;
+}
+
+// 安全地启动震动模式
+static bool manic_safe_start_rumble(id player) {
+    if (@available(iOS 13.0, *)) {
+        if (!player || hapticState.isShuttingDown || !hapticState.isEngineRunning) {
+            return false;
+        }
+        
+        @try {
+            if ([player respondsToSelector:@selector(startAtTime:error:)]) {
+                NSError *error = nil;
+                BOOL success = [player startAtTime:0 error:&error];
+                if (error) {
+                    // 如果引擎已停止，尝试重新启动
+                    if (hapticState.hapticEngine) {
+                        [hapticState.hapticEngine startWithCompletionHandler:^(NSError * _Nullable startError) {
+                            if (!startError) {
+                                hapticState.isEngineRunning = YES;
+                            }
+                        }];
+                    }
+                    return false;
+                }
+                return success;
+            }
+        } @catch (NSException *exception) {
+            // 捕获异常，防止崩溃
+            return false;
+        }
+    }
+    return false;
+}
+
+// 创建默认的触觉模式
 static void manic_create_default_haptic_patterns(void) {
     if (@available(iOS 13.0, *)) {
-        if (!hapticEngine || !hapticsSupported) return;
+        if (!hapticState.hapticEngine || !hapticState.hapticsSupported) return;
         
         // 创建强震动模式 (RETRO_RUMBLE_STRONG)
         CHHapticEvent *strongEvent = [[CHHapticEvent alloc] initWithEventType:CHHapticEventTypeHapticTransient
@@ -211,7 +323,7 @@ static void manic_create_default_haptic_patterns(void) {
         
         CHHapticPattern *strongPattern = [[CHHapticPattern alloc] initWithEvents:@[strongEvent] parameters:@[] error:nil];
         if (strongPattern) {
-            strongRumblePlayer = [hapticEngine createPlayerWithPattern:strongPattern error:nil];
+            hapticState.strongRumblePlayer = [hapticState.hapticEngine createPlayerWithPattern:strongPattern error:nil];
         }
         
         // 创建弱震动模式 (RETRO_RUMBLE_WEAK)
@@ -224,7 +336,7 @@ static void manic_create_default_haptic_patterns(void) {
         
         CHHapticPattern *weakPattern = [[CHHapticPattern alloc] initWithEvents:@[weakEvent] parameters:@[] error:nil];
         if (weakPattern) {
-            weakRumblePlayer = [hapticEngine createPlayerWithPattern:weakPattern error:nil];
+            hapticState.weakRumblePlayer = [hapticState.hapticEngine createPlayerWithPattern:weakPattern error:nil];
         }
     }
 }
@@ -232,7 +344,9 @@ static void manic_create_default_haptic_patterns(void) {
 // 创建自定义震动模式
 static id manic_create_custom_rumble_pattern(float intensity, float sharpness, float duration) {
     if (@available(iOS 13.0, *)) {
-        if (!hapticEngine || !hapticsSupported) return nil;
+        if (!hapticState.hapticEngine || !hapticState.hapticsSupported || hapticState.isShuttingDown) {
+            return nil;
+        }
         
         // 创建多个震动事件来模拟持续的震动效果
         NSMutableArray *events = [[NSMutableArray alloc] init];
@@ -251,7 +365,7 @@ static id manic_create_custom_rumble_pattern(float intensity, float sharpness, f
         
         CHHapticPattern *pattern = [[CHHapticPattern alloc] initWithEvents:events parameters:@[] error:nil];
         if (pattern) {
-            return [hapticEngine createPlayerWithPattern:pattern error:nil];
+            return [hapticState.hapticEngine createPlayerWithPattern:pattern error:nil];
         }
     }
     return nil;
@@ -264,32 +378,44 @@ void *manic_gamecontroller_joypad_init(void *data) {
     
 #ifdef HAVE_COREMOTION
     // 初始化 Core Haptics
-    if (@available(iOS 13.0, *)) {
-        if (CHHapticEngine.capabilitiesForHardware.supportsHaptics) {
-            NSError *error = nil;
-            hapticEngine = [[CHHapticEngine alloc] initAndReturnError:&error];
-            if (hapticEngine && !error) {
-                hapticEngine.autoShutdownEnabled = YES;
-                
-                // 启动 haptic engine
-                [hapticEngine startWithCompletionHandler:^(NSError * _Nullable error) {
-                    if (error) {
-                        hapticsSupported = false;
-                    } else {
-                        hapticsSupported = true;
-                        // 创建默认的震动模式
-                        manic_create_default_haptic_patterns();
-                    }
-                }];
+        if (@available(iOS 13.0, *)) {
+            if (CHHapticEngine.capabilitiesForHardware.supportsHaptics) {
+                NSError *error = nil;
+                hapticState.hapticEngine = [[CHHapticEngine alloc] initAndReturnError:&error];
+                if (hapticState.hapticEngine && !error) {
+                    hapticState.hapticEngine.autoShutdownEnabled = YES;
+                    
+                    // 设置引擎停止回调
+                    hapticState.hapticEngine.stoppedHandler = ^(CHHapticEngineStoppedReason reason) {
+                        hapticState.isEngineRunning = NO;
+                        hapticState.strongRumblePlayer = nil;
+                        hapticState.weakRumblePlayer = nil;
+                    };
+                    
+                    // 启动 haptic engine
+                    [hapticState.hapticEngine startWithCompletionHandler:^(NSError * _Nullable error) {
+                        if (error) {
+                            hapticState.hapticsSupported = false;
+                            hapticState.isEngineRunning = false;
+                        } else {
+                            hapticState.hapticsSupported = true;
+                            hapticState.isEngineRunning = true;
+                            // 创建默认的震动模式
+                            manic_create_default_haptic_patterns();
+                        }
+                    }];
+                } else {
+                    hapticState.hapticsSupported = false;
+                    hapticState.isEngineRunning = false;
+                }
             } else {
-                hapticsSupported = false;
+                hapticState.hapticsSupported = false;
+                hapticState.isEngineRunning = false;
             }
         } else {
-            hapticsSupported = false;
+            hapticState.hapticsSupported = false;
+            hapticState.isEngineRunning = false;
         }
-    } else {
-        hapticsSupported = false;
-    }
 #endif
     
     manic_inited = true;
@@ -299,7 +425,9 @@ void *manic_gamecontroller_joypad_init(void *data) {
     return (void*)-1;
 }
 
-static void manic_gamecontroller_joypad_destroy(void) {}
+static void manic_gamecontroller_joypad_destroy(void) {
+    manic_input_set_deinit();
+}
 
 static int32_t manic_gamecontroller_joypad_button(unsigned port, uint16_t joykey) {
     if (port >= DEFAULT_MAX_PADS)
@@ -374,21 +502,27 @@ static bool manic_gamecontroller_joypad_set_rumble(unsigned pad,
         return false;
     }
     
-    if (@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)) {
-      for (GCController *controller in [GCController controllers]) {
-         if (!controller)
-            continue;
-         if (!controller.motion)
-             continue;
-         if (controller.motion.sensorsRequireManualActivation) {
-             controller.motion.sensorsActive = YES;
-         }
-      }
-   }
-    
 #ifdef HAVE_COREMOTION
     if (@available(iOS 13.0, *)) {
-        if (!hapticsSupported || !hapticEngine) {
+        // 检查是否应该忽略重复的震动调用
+        if (manic_should_ignore_rumble(type, strength)) {
+            return true; // 返回true表示"成功"，但实际不执行
+        }
+        
+        // 检查引擎状态
+        if (!hapticState.hapticsSupported || !hapticState.hapticEngine || hapticState.isShuttingDown) {
+            return false;
+        }
+        
+        // 如果引擎未运行，尝试重新启动
+        if (!hapticState.isEngineRunning) {
+            [hapticState.hapticEngine startWithCompletionHandler:^(NSError * _Nullable error) {
+                if (!error) {
+                    hapticState.isEngineRunning = YES;
+                    // 重新创建默认模式
+                    manic_create_default_haptic_patterns();
+                }
+            }];
             return false;
         }
         
@@ -405,11 +539,12 @@ static bool manic_gamecontroller_joypad_set_rumble(unsigned pad,
                 
                 id player = manic_create_custom_rumble_pattern(intensity, sharpness, duration);
                 if (player) {
-                    // 使用 performSelector 来避免类型问题
-                    if ([player respondsToSelector:@selector(startAtTime:error:)]) {
-                        [player performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
-                        return true;
-                    }
+                    return manic_safe_start_rumble(player);
+                }
+                
+                // 如果自定义模式创建失败，尝试使用默认模式
+                if (hapticState.strongRumblePlayer) {
+                    return manic_safe_start_rumble(hapticState.strongRumblePlayer);
                 }
                 break;
             }
@@ -422,29 +557,18 @@ static bool manic_gamecontroller_joypad_set_rumble(unsigned pad,
                 
                 id player = manic_create_custom_rumble_pattern(intensity, sharpness, duration);
                 if (player) {
-                    if ([player respondsToSelector:@selector(startAtTime:error:)]) {
-                        [player performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
-                        return true;
-                    }
+                    return manic_safe_start_rumble(player);
+                }
+                
+                // 如果自定义模式创建失败，尝试使用默认模式
+                if (hapticState.weakRumblePlayer) {
+                    return manic_safe_start_rumble(hapticState.weakRumblePlayer);
                 }
                 break;
             }
                 
             default:
                 return false;
-        }
-        
-        // 如果自定义模式创建失败，尝试使用默认模式
-        if (type == RETRO_RUMBLE_STRONG && strongRumblePlayer) {
-            if ([strongRumblePlayer respondsToSelector:@selector(startAtTime:error:)]) {
-                [strongRumblePlayer performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
-                return true;
-            }
-        } else if (type == RETRO_RUMBLE_WEAK && weakRumblePlayer) {
-            if ([weakRumblePlayer respondsToSelector:@selector(startAtTime:error:)]) {
-                [weakRumblePlayer performSelector:@selector(startAtTime:error:) withObject:@0 withObject:nil];
-                return true;
-            }
         }
     }
 #endif

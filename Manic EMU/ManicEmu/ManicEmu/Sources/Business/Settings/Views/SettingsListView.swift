@@ -128,7 +128,6 @@ class SettingsListView: BaseView {
                 datas[section] = [SettingItem(type: .FAQ),
                                   SettingItem(type: .feedback),
                                   SettingItem(type: .qq),
-                                  SettingItem(type: .telegram),
                                   SettingItem(type: .discord)]
             } else if section == .others {
                 datas[section] = [SettingItem(type: .about),
@@ -484,8 +483,6 @@ extension SettingsListView: UICollectionViewDelegate {
                 ShareManager.shareApp(senderForIpad: UIDevice.isPad ? (collectionView.cellForItem(at: indexPath) ?? collectionView) : nil)
             case .qq:
                 UIApplication.shared.open(Constants.URLs.JoinQQ)
-            case .telegram:
-                UIApplication.shared.open(Constants.URLs.JoinTelegram)
             case .discord:
                 UIApplication.shared.open(Constants.URLs.JoinDiscord)
             case .clearCache:

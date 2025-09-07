@@ -664,3 +664,6 @@ Pressione o botão do controle...";
 "LeaderboardStart" = "Início do ranking: ";
 
 "TurnOffHardcoreAlert" = "A mudança para o modo Softcore é permanente. Para voltar ao modo Hardcore, você deve reiniciar o jogo. Continuar?";
+"AchievementsMissableAlert" = "A conquista não poderá ser obtida após certo ponto do jogo e exigirá nova jogada se perdida";
+"AchievementsProgressionAlert" = "A conquista é necessária para finalizar o jogo";
+"AchievementsWinAlert" = "A conquista indica que o jogo foi finalizado";

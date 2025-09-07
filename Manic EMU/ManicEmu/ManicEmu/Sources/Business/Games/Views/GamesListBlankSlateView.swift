@@ -117,7 +117,7 @@ class GamesListBlankSlateView: BaseView {
             make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)
         }
         let channelLinkLabel = UILabel()
-        let channelName = Locale.prefersCN ? R.string.localizable.qqChannelName() : "Telegram"
+        let channelName = Locale.prefersCN ? R.string.localizable.qqChannelName() : "Discord"
         let matt = NSMutableAttributedString(string: R.string.localizable.importChannelTips(" \(channelName) "), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
         channelLinkLabel.attributedText = matt.applying(attributes: [.foregroundColor: Constants.Color.Main], toOccurrencesOf: channelName)
         channelLinkLabel.isUserInteractionEnabled = true
@@ -137,7 +137,7 @@ class GamesListBlankSlateView: BaseView {
             if Locale.prefersCN {
                 UIApplication.shared.open(Constants.URLs.JoinQQ)
             } else {
-                UIApplication.shared.open(Constants.URLs.JoinTelegram)
+                UIApplication.shared.open(Constants.URLs.JoinDiscord)
             }
         }
         

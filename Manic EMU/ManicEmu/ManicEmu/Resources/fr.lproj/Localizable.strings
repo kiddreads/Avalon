@@ -665,3 +665,6 @@ Appuyez sur le bouton du contrôleur...";
 "LeaderboardStart" = "Début classement: ";
 
 "TurnOffHardcoreAlert" = "Le passage en mode Softcore est définitif. Pour retrouver le mode Hardcore, vous devrez réinitialiser le jeu. Continuer ?";
+"AchievementsMissableAlert" = "Ce succès ne pourra plus être débloqué après un certain point et nécessitera une nouvelle partie si manqué";
+"AchievementsProgressionAlert" = "Ce succès est nécessaire pour finir le jeu";
+"AchievementsWinAlert" = "Ce succès indique que le jeu a été terminé";

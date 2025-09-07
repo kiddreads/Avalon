@@ -656,3 +656,6 @@ Tekan tombol kontroler...";
 "LeaderboardStart" = "Mulai papan peringkat: ";
 
 "TurnOffHardcoreAlert" = "Beralih ke mode Softcore bersifat permanen. Untuk kembali ke mode Hardcore, Anda harus reset game. Lanjutkan?";
+"AchievementsMissableAlert" = "Pencapaian ini tidak dapat diperoleh setelah titik tertentu dan memerlukan permainan ulang jika terlewat";
+"AchievementsProgressionAlert" = "Pencapaian ini diperlukan untuk menyelesaikan game";
+"AchievementsWinAlert" = "Pencapaian ini menandakan game telah diselesaikan";

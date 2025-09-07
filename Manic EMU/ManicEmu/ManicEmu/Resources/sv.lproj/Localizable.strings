@@ -657,3 +657,6 @@ Tryck på kontrollknappen...";
 "LeaderboardStart" = "Resultattavla start: ";
 
 "TurnOffHardcoreAlert" = "Byte till Softcore-läge är permanent. För att återgå till Hardcore-läge måste spelet återställas. Fortsätta?";
+"AchievementsMissableAlert" = "Prestationen kan inte erhållas efter en viss punkt och kräver en ny spelomgång om missad";
+"AchievementsProgressionAlert" = "Prestationen krävs för att klara spelet";
+"AchievementsWinAlert" = "Prestationen indikerar att spelet har klarats";

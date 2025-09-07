@@ -661,3 +661,6 @@ Tryk på controller-knappen...";
 "LeaderboardStart" = "Pointtavle start: ";
 
 "TurnOffHardcoreAlert" = "Skift til Softcore-tilstand er permanent. For at vende tilbage til Hardcore-tilstand, skal du nulstille spillet. Fortsætte?";
+"AchievementsMissableAlert" = "Præstationen kan ikke opnås efter et bestemt tidspunkt og kræver en ny gennemspilning hvis misset";
+"AchievementsProgressionAlert" = "Præstationen er påkrævet for at gennemføre spillet";
+"AchievementsWinAlert" = "Præstationen indikerer at spillet er gennemført";

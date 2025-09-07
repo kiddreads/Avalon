@@ -251,10 +251,6 @@ class PlayViewController: GameViewController {
                 }, hideAction: {
                     UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowSSPlayAlert)
                 });
-            } else if game.gameType == .snes, game.defaultCore != 0 {
-                UIView.makeAlert(detail: R.string.localizable.snes9xAlert(), cancelTitle: R.string.localizable.gotIt(), hideAction: {
-                    showPlayView()
-                })
             } else {
                 showPlayView()
             }
@@ -1898,12 +1894,7 @@ extension PlayViewController {
         } else if manicGame.gameType == .nes {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, key: "nestopia_aspect", value: "uncorrected", reload: false)
         } else if manicGame.gameType == .snes {
-            if manicGame.defaultCore == 0 {
-                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.bsnes.name, key: "bsnes_ppu_no_vram_blocking", value: "ON", reload: false)
-            } else {
-                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Snes9x.name, key: "snes9x_aspect", value: "uncorrected", reload: false)
-                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Snes9x.name, key: "snes9x_block_invalid_vram_access", value: "disabled", reload: false)
-            }
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.bsnes.name, key: "bsnes_ppu_no_vram_blocking", value: "ON", reload: false)
         } else if manicGame.isPicodriveCore {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PicoDrive.name, key: "picodrive_input1", value: "6 button pad", reload: false)
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PicoDrive.name, key: "picodrive_input2", value: "6 button pad", reload: false)

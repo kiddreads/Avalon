@@ -663,3 +663,6 @@ Presiona el botón del control para continuar...";
 "LeaderboardStart" = "Inicio tabla: ";
 
 "TurnOffHardcoreAlert" = "Cambiar a modo Softcore es permanente. Para regresar al modo Hardcore, debes reiniciar el juego. ¿Continuar?";
+"AchievementsMissableAlert" = "El logro no se podrá obtener después de cierto punto y requerirá otra partida si se pierde";
+"AchievementsProgressionAlert" = "El logro es necesario para terminar el juego";
+"AchievementsWinAlert" = "El logro indica que el juego ha sido completado";

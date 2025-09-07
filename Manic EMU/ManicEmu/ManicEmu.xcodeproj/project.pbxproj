@@ -650,7 +650,6 @@
 		57BFBE792DD336FC00AABF98 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BFBE782DD336F100AABF98 /* Application.swift */; };
 		57BFBE902DD435C900AABF98 /* PSP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BFBE8F2DD435C700AABF98 /* PSP.swift */; };
 		57C8A11A2DF2BA3E00593F82 /* SNES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8A1192DF2BA3500593F82 /* SNES.swift */; };
-		57C8A1232DF2BD2700593F82 /* snes9x.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57C8A1212DF2BD1A00593F82 /* snes9x.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57CC338E2DBC78AE00DF7418 /* FlexSkinSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC338D2DBC789E00DF7418 /* FlexSkinSettingViewController.swift */; };
 		57CC33BA2DBCD90700DF7418 /* AuxiliaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC33B92DBCD90700DF7418 /* AuxiliaryLineView.swift */; };
 		57CC33BE2DBCDF3400DF7418 /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC33BD2DBCDF2C00DF7418 /* CGRectExtensions.swift */; };
@@ -816,7 +815,6 @@
 				57DCE8542E0F978B0079E3AA /* yabause.libretro.framework in Embed Frameworks */,
 				57DCE7A12E0C434C0079E3AA /* mednafen.saturn.libretro.framework in Embed Frameworks */,
 				57655C222DF6B970003E4A6E /* picodrive.libretro.framework in Embed Frameworks */,
-				57C8A1232DF2BD2700593F82 /* snes9x.libretro.framework in Embed Frameworks */,
 				57F0D83E2DE2C5AE00760F57 /* nestopia.libretro.framework in Embed Frameworks */,
 				57BFBE732DD3361800AABF98 /* ppsspp.libretro.framework in Embed Frameworks */,
 				57BFBE1E2DD32F7700AABF98 /* Libretro.framework in Embed Frameworks */,
@@ -1655,7 +1653,6 @@
 		57BFBE782DD336F100AABF98 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		57BFBE8F2DD435C700AABF98 /* PSP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSP.swift; sourceTree = "<group>"; };
 		57C8A1192DF2BA3500593F82 /* SNES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNES.swift; sourceTree = "<group>"; };
-		57C8A1212DF2BD1A00593F82 /* snes9x.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = snes9x.libretro.framework; path = ../Cores/snes9x.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57CC338D2DBC789E00DF7418 /* FlexSkinSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexSkinSettingViewController.swift; sourceTree = "<group>"; };
 		57CC33B92DBCD90700DF7418 /* AuxiliaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuxiliaryLineView.swift; sourceTree = "<group>"; };
 		57CC33BD2DBCDF2C00DF7418 /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
@@ -3765,7 +3762,6 @@
 				57DCE8522E0F97780079E3AA /* yabause.libretro.framework */,
 				57DCE79D2E0C43310079E3AA /* mednafen.saturn.libretro.framework */,
 				57655C1E2DF6B94C003E4A6E /* picodrive.libretro.framework */,
-				57C8A1212DF2BD1A00593F82 /* snes9x.libretro.framework */,
 				57F0D83C2DE2C59900760F57 /* nestopia.libretro.framework */,
 				57BFBE712DD3360A00AABF98 /* ppsspp.libretro.framework */,
 			);

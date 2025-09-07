@@ -82,7 +82,7 @@ class ImportFooterCollectionReusableView: UICollectionReusableView {
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.centerY.equalToSuperview()
         }
-        let channelName = Locale.prefersCN ? R.string.localizable.qqChannelName() : "Telegram"
+        let channelName = Locale.prefersCN ? R.string.localizable.qqChannelName() : "Discord"
         let matt2 = NSMutableAttributedString(string: R.string.localizable.importChannelTips(" \(channelName) "), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
         channelLinkLabel.attributedText = matt2.applying(attributes: [.foregroundColor: Constants.Color.Main], toOccurrencesOf: channelName)
     }

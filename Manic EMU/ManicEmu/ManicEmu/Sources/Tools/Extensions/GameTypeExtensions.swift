@@ -266,8 +266,6 @@ extension GameType {
     var supportCores: [String] {
         if self == .ss {
             return [LibretroCore.Cores.BeetleSaturn.name, LibretroCore.Cores.Yabause.name]
-        } else if self == .snes {
-            return [LibretroCore.Cores.bsnes.name, LibretroCore.Cores.Snes9x.name]
         } else if self == .gba {
             return [LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
         }

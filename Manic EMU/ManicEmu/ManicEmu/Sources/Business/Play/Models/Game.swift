@@ -144,11 +144,7 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .nes {
             return URL(fileURLWithPath: Constants.Path.Nestopia.appendingPathComponent("\(name).srm"))
         } else if gameType == .snes {
-            if defaultCore == 0 {
-                return URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(name).srm"))
-            } else {
-                return URL(fileURLWithPath: Constants.Path.Snes9x.appendingPathComponent("\(name).srm"))
-            }
+            return URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(name).srm"))
         } else if isPicodriveCore {
             return URL(fileURLWithPath: Constants.Path.PicoDrive.appendingPathComponent("\(name).srm"))
         } else if gameType == .n64 {
@@ -299,11 +295,7 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .nes {
             return Bundle.main.path(forResource: "nestopia.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .snes {
-            if defaultCore == 0 {
-                return Bundle.main.path(forResource: "bsnes.libretro", ofType: "framework", inDirectory: "Frameworks")
-            } else {
-                return Bundle.main.path(forResource: "snes9x.libretro", ofType: "framework", inDirectory: "Frameworks")
-            }
+            return Bundle.main.path(forResource: "bsnes.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if isPicodriveCore {
             return Bundle.main.path(forResource: "picodrive.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .ss {

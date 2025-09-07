@@ -20,6 +20,35 @@ class RetroAchievementsDetailView: BaseView {
         }
         coverImageView.kf.setImage(with: URL(string: achievement.unlocked ? achievement.unlockedBadgeUrl : achievement.activeBadgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(160)))
         
+        var iconSymbol: SFSymbol? = nil
+        var iconAlert: String? = nil
+        if achievement.isMissable &&  achievement.isProgression {
+            iconSymbol = .starCircle
+            iconAlert = R.string.localizable.achievementsWinAlert()
+        } else if achievement.isMissable {
+            iconSymbol = .exclamationmarkCircle
+            iconAlert = R.string.localizable.achievementsMissableAlert()
+        } else if achievement.isProgression {
+            iconSymbol = .clockBadgeCheckmark
+            iconAlert = R.string.localizable.achievementsProgressionAlert()
+        }
+        if let iconSymbol {
+            let iconImageView = SymbolButton(image: UIImage(symbol: iconSymbol, color: .white))
+            iconImageView.enableRoundCorner = true
+            iconImageView.backgroundColor = UIColor.black
+            addSubview(iconImageView)
+            iconImageView.snp.makeConstraints { make in
+                make.top.trailing.equalTo(coverImageView).inset(Constants.Size.ContentSpaceTiny)
+                make.size.equalTo(20)
+            }
+            iconImageView.addTapGesture { gesture in
+                if let iconAlert {
+                    UIView.makeAlert(detail: iconAlert)
+                }
+            }
+        }
+        
+        
         let titleLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 0
@@ -39,12 +68,40 @@ class RetroAchievementsDetailView: BaseView {
             make.top.equalTo(coverImageView.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
         }
         
+        var enableProgressView: RetroAchievementsListCell.AchievementsProgressView? = nil
+        if let measuredProgress = achievement.measuredProgress, !measuredProgress.isEmpty {
+            let progressView = RetroAchievementsListCell.AchievementsProgressView()
+            enableProgressView = progressView
+            progressView.progress = achievement.measuredPercent
+            addSubview(progressView)
+            progressView.snp.makeConstraints { make in
+                make.leading.equalTo(titleLabel)
+                make.height.equalTo(2)
+                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+            }
+            
+            let progressLabel = UILabel()
+            progressLabel.font = Constants.Font.body()
+            progressLabel.textColor = Constants.Color.Yellow
+            progressLabel.text = measuredProgress
+            addSubview(progressLabel)
+            progressLabel.snp.makeConstraints { make in
+                make.leading.equalTo(progressView.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+                make.centerY.equalTo(progressView)
+                make.trailing.equalTo(titleLabel)
+            }
+        }
+        
         let seperator = SparkleSeperatorView(color: Constants.Color.BackgroundTertiary, lineColor: Constants.Color.BackgroundSecondary)
         addSubview(seperator)
         seperator.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(24)
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+            if let enableProgressView {
+                make.top.equalTo(enableProgressView.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+            } else {
+                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+            }
         }
         
         let infoLabel: UILabel = {
@@ -66,7 +123,7 @@ class RetroAchievementsDetailView: BaseView {
             make.centerX.equalToSuperview()
             make.leading.greaterThanOrEqualToSuperview()
             make.trailing.lessThanOrEqualToSuperview()
-            make.top.equalTo(seperator.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+            make.top.equalTo(seperator.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
         let roundContainer = RoundAndBorderView(roundCorner: .allCorners, borderColor: UIColor.white.withAlphaComponent(0.1), borderWidth: 2)
@@ -79,7 +136,12 @@ class RetroAchievementsDetailView: BaseView {
         roundContainer.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.ItemHeightMid)
             make.centerX.equalToSuperview()
-            make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightMax)
+            if let _ = enableProgressView {
+                make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightUltraTiny)
+            } else {
+                make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightMin)
+            }
+            
             make.bottom.equalToSuperview()
         }
         let okLabel = UILabel()

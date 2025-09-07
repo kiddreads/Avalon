@@ -663,3 +663,6 @@ Ak sa vyskytne nestabilita v 3DS, pozrite si «Časté otázky» alebo sa pripoj
 "LeaderboardStart" = "Štart rebríčka: ";
 
 "TurnOffHardcoreAlert" = "Prepnuteie do režimu Softcore je trvalé. Pre návrat do režimu Hardcore musíte hru obnoviť. Pokračovať?";
+"AchievementsMissableAlert" = "Tento úspech nie je možné po určitom bode získat a pri zmeškaní si vyžaduje nové prehratie";
+"AchievementsProgressionAlert" = "Tento úspech je potrebný na dokončenie hry";
+"AchievementsWinAlert" = "Tento úspech signalizuje, že hra bola dokončená";
