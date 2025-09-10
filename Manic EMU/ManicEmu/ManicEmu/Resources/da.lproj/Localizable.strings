@@ -664,3 +664,9 @@ Tryk på controller-knappen...";
 "AchievementsMissableAlert" = "Præstationen kan ikke opnås efter et bestemt tidspunkt og kræver en ny gennemspilning hvis misset";
 "AchievementsProgressionAlert" = "Præstationen er påkrævet for at gennemføre spillet";
 "AchievementsWinAlert" = "Præstationen indikerer at spillet er gennemført";
+
+"AchievementsChallenge" = "Start Udfordring";
+"AchievementsMastered" = "%@ Mesteret";
+"AlwaysShowProgress" = "Altid Vis Fremskridt";
+"AlwaysShowProgressDesc" = "Hold præstationsfremskridt synligt på skærmen.";
+"Progress" = "Fremskridt";

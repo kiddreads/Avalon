@@ -12,10 +12,10 @@
 @import SnapKit;
 @import FluentDarkModeKit;
 @import SFSafeSymbols;
-#import <UMCommon/UMCommon.h>
 #import <UniversalDetector/UniversalDetector.h>
 #import <Libretro/LibretroCore.h>
 #if CRASH_COLLECT
+#import <UMCommon/UMCommon.h>
 #import <UMAPM/UMAPMConfig.h>
 #import <UMAPM/UMCrashConfigure.h>
 #endif

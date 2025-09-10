@@ -667,3 +667,9 @@
 "AchievementsMissableAlert" = "Το επίτευγμα δεν μπορεί να κερδηθεί μετά από ένα σημείο και απαιτεί νέο παιχνίδι αν χαθεί";
 "AchievementsProgressionAlert" = "Το επίτευγμα απαιτείται για την ολοκλήρωση του παιχνιδιού";
 "AchievementsWinAlert" = "Το επίτευγμα δηλώνει ότι το παιχνίδι έχει ολοκληρωθεί";
+
+"AchievementsChallenge" = "Έναρξη Προκλήσης";
+"AchievementsMastered" = "%@ Τελειοποιημένο";
+"AlwaysShowProgress" = "Πάντα Εμφάνιση Προόδου";
+"AlwaysShowProgressDesc" = "Διατήρηση προόδου επιτευγμάτων ορατής στην οθόνη.";
+"Progress" = "Πρόοδος";

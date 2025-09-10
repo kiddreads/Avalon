@@ -662,3 +662,9 @@ Stiskněte tlačítko ovladače...";
 "AchievementsMissableAlert" = "Tohoto úspěchu nelze po určitém bodě dosáhnout a vyžaduje při zmeškání nové hraní";
 "AchievementsProgressionAlert" = "Tento úspěch je vyžadován k dokončení hry";
 "AchievementsWinAlert" = "Tento úspěch indikuje, že hra byla dokončena";
+
+"AchievementsChallenge" = "Začít Výzvu";
+"AchievementsMastered" = "%@ Zvládnuto";
+"AlwaysShowProgress" = "Vždy Zobrazit Pokrok";
+"AlwaysShowProgressDesc" = "Udržujte pokrok úspěchů viditelný na obrazovce.";
+"Progress" = "Pokrok";

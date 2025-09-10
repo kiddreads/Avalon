@@ -666,3 +666,9 @@ Kontrolcü düğmesine basın...";
 "AchievementsMissableAlert" = "Bu başarım oyun içinde belirli bir noktadan sonra kazanılamaz ve kaçırılırsa yeni bir oyun gerektirir";
 "AchievementsProgressionAlert" = "Bu başarım oyunu tamamlamak için gereklidir";
 "AchievementsWinAlert" = "Bu başarım oyunun tamamlandığını gösterir";
+
+"AchievementsChallenge" = "Mücadeleyi Başlat";
+"AchievementsMastered" = "%@ Uzmanlık";
+"AlwaysShowProgress" = "İlerlemeyi Her Zaman Göster";
+"AlwaysShowProgressDesc" = "Başarım ilerlemesini ekranda görünür tut.";
+"Progress" = "İlerleme";

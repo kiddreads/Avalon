@@ -47,6 +47,7 @@ class PlayViewController: GameViewController {
     private var achievementsNotification: Any? = nil
     private var quitGamingNotification: Any? = nil
     private var turnOffHardcoreNotification: Any? = nil
+    private var turnOffAlwaysShowProgressNotification: Any? = nil
     
     //每分钟执行一次
     private lazy var repeatTimer: Schedule.Task = {
@@ -94,7 +95,11 @@ class PlayViewController: GameViewController {
     //排行榜控件
     private var leaderboardView: LeaderboardView? = nil
     //进度控件
-    private var progressView: CheevosProgressView? = nil
+    private var cheevosProgressView: CheevosProgressView? = nil
+    //游戏过程中接收到的leaderboard
+    private var leaderboards: [CheevosLeaderboard] = []
+    //解锁进展中的成就
+    private var progressAchievements: [CheevosAchievement] = []
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
@@ -151,6 +156,9 @@ class PlayViewController: GameViewController {
         }
         if let turnOffHardcoreNotification {
             NotificationCenter.default.removeObserver(turnOffHardcoreNotification)
+        }
+        if let turnOffAlwaysShowProgressNotification {
+            NotificationCenter.default.removeObserver(turnOffAlwaysShowProgressNotification)
         }
         if SyncManager.shared.hasDownloadTask {
             UIView.makeLoadingToast(message: R.string.localizable.loadingTitle())
@@ -403,29 +411,72 @@ class PlayViewController: GameViewController {
             }
         }
         
-        //获取成就
+        //RetroAchievements通知
         achievementsNotification = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "RetroAchievementsNotification"), object: nil, queue: .main, using: { [weak self] notification in
             guard let self else { return }
             if let achievement = notification.object as? CheevosAchievement {
-                //获得成就
-                self.showRetroAchievements(badgeUrl: achievement.unlockedBadgeUrl,
-                                            title: R.string.localizable.achievementUnlocked(),
-                                            message: achievement.title) { [weak self] in
-                    guard let self else { return }
-                    topViewController(appController: true)?.present(RetroAchievementsDetailViewController(achievement: achievement), animated: true)
-                    self.pauseEmulation()
+                if achievement.isProgressAchievement {
+                    //成就进度更新
+                    if let progressView = self.cheevosProgressView {
+                        if achievement.show {
+                            progressView.updateProgress(achievement)
+                            if let measuredProgress = achievement.measuredProgress {
+                                //缓存进度
+                                let achievementProgress = AchievementProgress(id: achievement._id, measuredProgress: measuredProgress, measuredPercent: achievement.measuredPercent)
+                                self.manicGame.updateAchievementProgress(achievementProgress)
+                            }
+                            //自动隐藏进度
+                            DispatchQueue.main.asyncAfter(delay: 4) { [weak self] in
+                                self?.hideAchievementProgressIfNeed()
+                            }
+                            
+                            //临时存储进度 用于popup展示
+                            if let cacheAchievement = self.progressAchievements.first(where: { $0._id == achievement._id }) {
+                                cacheAchievement.measuredProgress = achievement.measuredProgress
+                                cacheAchievement.measuredPercent = achievement.measuredPercent
+                            } else {
+                                self.progressAchievements.append(achievement)
+                            }
+                        } else {
+                            progressView.removeProgress(id: achievement._id)
+                            self.progressAchievements.removeAll(where: { $0._id == achievement._id })
+                        }
+                    }
+                } else {
+                    //获得成就
+                    self.showRetroAchievements(badgeUrl: achievement.unlockedBadgeUrl,
+                                                title: R.string.localizable.achievementUnlocked(),
+                                                message: achievement.title) { [weak self] in
+                        guard let self else { return }
+                        //尝试读取缓存中的解锁进度
+                        if achievement.measuredProgress == nil,
+                           let achievementProgress = self.manicGame.getAchievementProgress(id: achievement._id) {
+                            achievement.measuredPercent = achievementProgress.measuredPercent
+                            achievement.measuredProgress = achievementProgress.measuredProgress
+                        }
+                        topViewController(appController: true)?.present(RetroAchievementsDetailViewController(achievement: achievement), animated: true)
+                        self.pauseEmulation()
+                    }
+                    UIDevice.generateAchievementHaptic()
+                    //删除缓存的解锁进度
+                    self.manicGame.removeAchievementProgress(id: achievement._id)
                 }
-                UIDevice.generateAchievementHaptic()
                 
             } else if let summary = notification.object as? CheevosSummary {
-                //启动成就
+                //启动RetroAchievements
                 self.showRetroAchievements(badgeUrl: summary.badgeUrl,
-                                           title: R.string.localizable.achievementsGo() + " (\(self.isHardcoreMode ? R.string.localizable.hardcore() : R.string.localizable.softcore()))",
-                                            message: R.string.localizable.achievementsSummary(summary.unlockedAchievementsNum, summary.coreAchievementsNum),
+                                           title: summary.title ?? R.string.localizable.achievementsGo() + " (\(self.isHardcoreMode ? R.string.localizable.hardcore() : R.string.localizable.softcore()))",
+                                           message: R.string.localizable.achievementsSummary(summary.unlockedAchievementsNum, summary.coreAchievementsNum),
                                             hideIcon: true);
             } else if let _ = notification.object as? CheevosCompletion {
                 //解锁完成
-                self.showRetroAchievements(title: R.string.localizable.achievementsCompleted());
+                var message: String = ""
+                if let user = AchievementsUser.getUser() {
+                    message = user.username + " | "
+                }
+                message = R.string.localizable.gameSortPlayTime() + Date.timeDuration(milliseconds: Int(self.manicGame.totalPlayDuration))
+                self.showRetroAchievements(title: self.isHardcoreMode ?  R.string.localizable.achievementsMastered(self.manicGame.aliasName ?? self.manicGame.name) : R.string.localizable.achievementsCompleted(),
+                                           message: message);
                 CheersView.makeNormalCheers()
                 UIDevice.generateAchievementHaptic()
                 
@@ -443,17 +494,21 @@ class PlayViewController: GameViewController {
                 if let title = leaderboard.title, let description = leaderboard._description {
                     self.showRetroAchievements(title: R.string.localizable.leaderboardStart() + title, message: description, hideIcon: true);
                 }
-
-            } else if let cheevosProgress = notification.object as? CheevosProgress {
-                //排行榜追踪
-                if let progressView = self.progressView {
-                    if cheevosProgress.show {
-                        progressView.updateProgress(cheevosProgress)
-                    } else {
-                        progressView.removeProgress(id: cheevosProgress._id)
-                    }
+                if let coverUrl = manicGame.onlineCoverUrl, manicGame.gameCover == nil {
+                    leaderboard.badgeUrl = coverUrl
+                } else if let data = manicGame.gameCover?.storedData() {
+                    leaderboard.image = UIImage.tryDataImageOrPlaceholder(tryData: data, preferenceSize: .init(40))
                 }
-            }  else if let message = notification.object as? String {
+                self.leaderboards.append(leaderboard)
+
+            } else if let cheevosChallenge = notification.object as? CheevosChallenge {
+                //挑战提示
+                self.showRetroAchievements(badgeUrl: cheevosChallenge.unlockedBadgeUrl,
+                                           title: R.string.localizable.achievementsChallenge(),
+                                           message: cheevosChallenge._description,
+                                           hideIcon: true)
+                
+            } else if let message = notification.object as? String {
                 UIView.makeToast(message: message)
             }
         })
@@ -471,6 +526,12 @@ class PlayViewController: GameViewController {
             self.isHardcoreMode = false
             LibretroCore.sharedInstance().updateLibretroConfig("cheevos_hardcore_mode_enable", value: "false")
             LibretroCore.sharedInstance().turnOffHardcode()
+        })
+        
+        //关闭进度常驻
+        turnOffAlwaysShowProgressNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.TurnOffAlwaysShowProgress, object: nil, queue: .main, using: { [weak self] notification in
+            guard let self else { return }
+            self.hideAchievementProgressIfNeed()
         })
         
         //更新最新游戏时间
@@ -2001,8 +2062,8 @@ extension PlayViewController {
                                                                      "cheevos_token": user.token,
                                                                      "cheevos_username": user.username])
                 if enableAchievements {
-                    updateLeaderboard()
-                    updateProgress()
+                    setupLeaderboardView()
+                    setupAchievementProgressView()
                 }
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
@@ -2616,7 +2677,7 @@ extension PlayViewController {
             }
             
             let label = UILabel()
-            label.numberOfLines = 2
+            label.numberOfLines = 0
             let matt = NSMutableAttributedString(string: title, attributes: [.font: Constants.Font.title(size: .s, weight: .regular), .foregroundColor: UIColor.white])
             if let message {
                 matt.append(NSAttributedString(string: "\n\(message)", attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.LabelSecondary]))
@@ -2662,30 +2723,47 @@ extension PlayViewController {
         }
     }
     
-    private func updateLeaderboard() {
+    private func setupLeaderboardView() {
         if leaderboardView == nil {
             let leaderboardView = LeaderboardView()
             view.addSubview(leaderboardView)
             leaderboardView.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.height.equalTo(32)
+                make.leading.top.equalTo(self.gameView).inset(5)
+                make.height.equalTo(24)
             }
             leaderboardView.isHidden = true
+            leaderboardView.addTapGesture { [weak self] gesture in
+                guard let self else { return }
+                self.pauseEmulation()
+                CheevosPopupView.show(leaderboards: leaderboards.reversed(),
+                                      gameViewRect: self.gameView.frame,
+                                      menuInsets: getMenuInset()) { [weak self] in
+                    self?.resumeEmulationAndHandleAudio()
+                }
+            }
             self.leaderboardView = leaderboardView
         }
     }
     
-    private func updateProgress() {
-        if progressView == nil {
+    private func setupAchievementProgressView() {
+        if cheevosProgressView == nil {
             let progressView = CheevosProgressView()
             view.addSubview(progressView)
             progressView.snp.makeConstraints { make in
-                make.leading.trailing.bottom.equalTo(self.gameView)
+                make.trailing.bottom.equalTo(self.gameView).inset(5)
                 make.height.equalTo(32)
             }
             progressView.isHidden = true
-            self.progressView = progressView
+            progressView.addTapGesture { [weak self] gesture in
+                guard let self else { return }
+                self.pauseEmulation()
+                CheevosPopupView.show(achievements: progressAchievements.reversed(),
+                                      gameViewRect: self.gameView.frame,
+                                      menuInsets: getMenuInset()) { [weak self] in
+                    self?.resumeEmulationAndHandleAudio()
+                }
+            }
+            self.cheevosProgressView = progressView
         }
     }
     
@@ -2706,6 +2784,14 @@ extension PlayViewController {
         }
         return menuInsets
     }
+    
+    private func hideAchievementProgressIfNeed() {
+        if let cheevosProgressView, !cheevosProgressView.isHidden, !(self.manicGame.getExtraBool(key: ExtraKey.alwaysShowProgress.rawValue) ?? false) {
+            UIView.springAnimate { [weak self] in
+                self?.cheevosProgressView?.isHidden = true
+            }
+        }
+    }
 }
 
 //MARK: GameViewControllerDelegate代理
@@ -2723,7 +2809,7 @@ extension PlayViewController: GameViewControllerDelegate {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {
             return false
         }
-        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow) ? false : true
+        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow) ? false : true
     }
     
 }

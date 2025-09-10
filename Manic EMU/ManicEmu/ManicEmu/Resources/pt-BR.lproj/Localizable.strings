@@ -667,3 +667,9 @@ Pressione o botão do controle...";
 "AchievementsMissableAlert" = "A conquista não poderá ser obtida após certo ponto do jogo e exigirá nova jogada se perdida";
 "AchievementsProgressionAlert" = "A conquista é necessária para finalizar o jogo";
 "AchievementsWinAlert" = "A conquista indica que o jogo foi finalizado";
+
+"AchievementsChallenge" = "Iniciar Desafio";
+"AchievementsMastered" = "%@ Dominado";
+"AlwaysShowProgress" = "Sempre Mostrar Progresso";
+"AlwaysShowProgressDesc" = "Manter o progresso de conquistas visível na tela.";
+"Progress" = "Progresso";

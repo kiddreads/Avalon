@@ -21,4 +21,6 @@ enum ExtraKey: String {
     case rumble
     case gameSortType
     case gameSortOrder
+    case achievementsProgress
+    case alwaysShowProgress
 }

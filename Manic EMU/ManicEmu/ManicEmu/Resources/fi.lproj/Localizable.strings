@@ -667,3 +667,9 @@ Paina ohjaimen nappia...";
 "AchievementsMissableAlert" = "Saavutusta ei voi ansaita tietyn kohdan jälkeen ja se vaatii uuden pelikerran jos menetetään";
 "AchievementsProgressionAlert" = "Saavutus vaaditaan pelin läpäisyyn";
 "AchievementsWinAlert" = "Saavutus ilmaisee että peli on läpäisty";
+
+"AchievementsChallenge" = "Aloita Haaste";
+"AchievementsMastered" = "%@ Hallitsematon";
+"AlwaysShowProgress" = "Näytä Aina Edistyminen";
+"AlwaysShowProgressDesc" = "Pidä saavutusten edistyminen näkyvillä näytöllä.";
+"Progress" = "Edistyminen";

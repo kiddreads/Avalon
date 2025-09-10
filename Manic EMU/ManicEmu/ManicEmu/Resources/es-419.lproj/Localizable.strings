@@ -666,3 +666,9 @@ Presiona el botón del control para continuar...";
 "AchievementsMissableAlert" = "El logro no se podrá obtener después de cierto punto y requerirá otra partida si se pierde";
 "AchievementsProgressionAlert" = "El logro es necesario para terminar el juego";
 "AchievementsWinAlert" = "El logro indica que el juego ha sido completado";
+
+"AchievementsChallenge" = "Comenzar Desafío";
+"AchievementsMastered" = "%@ Dominado";
+"AlwaysShowProgress" = "Mostrar Progreso Siempre";
+"AlwaysShowProgressDesc" = "Mantener el progreso de logros visible en pantalla.";
+"Progress" = "Progreso";

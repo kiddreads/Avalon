@@ -9,120 +9,133 @@
 
 import UIKit
 
-class LeaderboardView: UIScrollView {
+class LeaderboardDetailView: UIView {
+    private let titleLabel: UILabel = {
+        let view = UILabel()
+        view.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        view.textColor = .white
+        view.minimumScaleFactor = 0.5
+        return view
+    }()
     
-    private let stackView = UIStackView()
-    private var labelDict: [Int: UILabel] = [:]
-    
-    private var stackLeadingConstraint: Constraint?
-    private var stackTrailingConstraint: Constraint?
-    private var stackCenterXConstraint: Constraint?
+    let seperator: UIView = {
+        let view = UIView()
+        view.backgroundColor = Constants.Color.Border
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
+        
+        let icon = UIImageView(image: R.image.customFlagPatternCheckered()?.applySymbolConfig(font: Constants.Font.caption(size: .s, weight: .bold)))
+        addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.size.equalTo(12)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
+            make.centerY.equalToSuperview()
+        }
+        
+        addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(22)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-9)
+        }
+        
+        addSubview(seperator)
+        seperator.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+            make.size.equalTo(CGSize(width: 1, height: 12))
+            make.centerY.equalToSuperview()
+        }
+        
+    }
+    
+    func updateTitle(string: String?) {
+        titleLabel.text = string
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
+        fatalError("init(coder:) has not been implemented")
     }
+}
+
+class LeaderboardView: RoundAndBorderView {
+    private var itemsDict: [Int: LeaderboardDetailView] = [:]
+    private let containerView = UIView()
     
-    private func setupUI() {
-        showsHorizontalScrollIndicator = false
-        showsVerticalScrollIndicator = false
-        alwaysBounceVertical = false
-        alwaysBounceHorizontal = false
-        bounces = false
-        isScrollEnabled = true
+    init() {
+        super.init(roundCorner: .allCorners, radius: 12, borderColor: Constants.Color.Border, borderWidth: 1)
+        makeBlur(blurRadius: 2.5, blurColor: .white, blurAlpha: 0.4)
         
-        backgroundColor = Constants.Color.BackgroundPrimary.withAlphaComponent(0.4)
-        layerCornerRadius = Constants.Size.CornerRadiusMid
+        enableInteractive = true
         
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.spacing = Constants.Size.ContentSpaceMin
-        addSubview(stackView)
+        addSubview(containerView)
+        containerView.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-15)
+        }
         
-        stackView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.height.equalToSuperview() // 固定高度
-            stackLeadingConstraint = make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax).constraint
-            stackTrailingConstraint = make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax).constraint
+        let icon = UIImageView(image: .symbolImage(.playFill).applySymbolConfig(font: UIFont.systemFont(ofSize: 8, weight: .bold)))
+        icon.contentMode = .scaleAspectFit
+        addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.size.equalTo(10)
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceTiny)
+            make.centerY.equalToSuperview()
         }
     }
     
-    // MARK: - Public API
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func updateLeaderboard(id: Int, content: String) {
         if self.isHidden {
             self.isHidden = false
         }
-        let matt = NSMutableAttributedString(string: "\(R.string.localizable.leaderboard())-\(id)", attributes: [.font: Constants.Font.caption(size: .s), .foregroundColor: Constants.Color.LabelSecondary])
-        matt.append(NSAttributedString(string: "\n\(content)", attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelPrimary]))
-        if let label = labelDict[id] {
-            label.attributedText = matt
+        if let item = itemsDict[id] {
+            item.updateTitle(string: content)
         } else {
-            let label = UILabel()
-            label.numberOfLines = 2
-            label.attributedText = matt
-            label.setContentHuggingPriority(.required, for: .horizontal)
-            label.setContentCompressionResistancePriority(.required, for: .horizontal)
-            
-            stackView.addArrangedSubview(label)
-            labelDict[id] = label
+            let item = LeaderboardDetailView()
+            item.updateTitle(string: content)
+            containerView.addSubview(item)
+            updateLayout()
+            itemsDict[id] = item
         }
-        setNeedsLayout()
-        layoutIfNeeded()
-        updateLayout()
+    }
+    
+    private func updateLayout() {
+        for (index, subView) in containerView.subviews.enumerated() {
+            if let view = subView as? LeaderboardDetailView {
+                if index == containerView.subviews.count - 1 {
+                    view.seperator.isHidden = true
+                } else {
+                    view.seperator.isHidden = false
+                }
+            }
+            subView.snp.remakeConstraints { make in
+                make.top.bottom.equalToSuperview()
+                if index == 0 {
+                    make.leading.equalToSuperview()
+                } else {
+                    make.leading.equalTo(containerView.subviews[index-1].snp.trailing)
+                }
+                if index == containerView.subviews.count - 1 {
+                    make.trailing.equalToSuperview()
+                }
+            }
+        }
     }
     
     func removeLeaderboard(id: Int) {
-        if let label = labelDict[id] {
-            stackView.removeArrangedSubview(label)
-            label.removeFromSuperview()
-            labelDict.removeValue(forKey: id)
+        if let item = itemsDict[id] {
+            item.removeFromSuperview()
+            itemsDict.removeValue(forKey: id)
+            updateLayout()
         }
-        if labelDict.isEmpty {
+        if itemsDict.isEmpty {
             self.isHidden = true
         }
-        setNeedsLayout()
-        layoutIfNeeded()
-        updateLayout()
-    }
-    
-    // MARK: - Layout Update
-    
-    private func updateLayout() {
-        // 计算 stackView 的总宽度
-        let totalWidth = stackView.arrangedSubviews.reduce(0) { $0 + $1.intrinsicContentSize.width } + CGFloat(max(0, stackView.arrangedSubviews.count - 1)) * stackView.spacing
-        let scrollWidth = bounds.width - Constants.Size.ContentSpaceMax*2
-        
-        if totalWidth <= scrollWidth {
-            // 居中显示，不可滚动
-            isScrollEnabled = false
-            stackLeadingConstraint?.deactivate()
-            stackTrailingConstraint?.deactivate()
-            
-            if stackCenterXConstraint == nil {
-                stackView.snp.makeConstraints { make in
-                    stackCenterXConstraint = make.centerX.equalToSuperview().constraint
-                }
-            }
-            stackCenterXConstraint?.activate()
-            
-        } else {
-            // 左对齐，可滚动
-            isScrollEnabled = true
-            stackCenterXConstraint?.deactivate()
-            
-            stackLeadingConstraint?.activate()
-            stackTrailingConstraint?.activate()
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateLayout()
     }
 }

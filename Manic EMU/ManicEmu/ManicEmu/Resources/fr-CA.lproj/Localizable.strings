@@ -668,3 +668,9 @@ Appuyez sur le bouton du contrôleur...";
 "AchievementsMissableAlert" = "Ce succès ne pourra être obtenu après un certain point et nécessitera une nouvelle partie si manqué";
 "AchievementsProgressionAlert" = "Ce succès est requis pour terminer le jeu";
 "AchievementsWinAlert" = "Ce succès indique que le jeu est terminé";
+
+"AchievementsChallenge" = "Débuter le Défi";
+"AchievementsMastered" = "%@ Maîtrisé";
+"AlwaysShowProgress" = "Toujours Afficher Progression";
+"AlwaysShowProgressDesc" = "Garder la progression des succès visible à l'écran.";
+"Progress" = "Progression";

@@ -673,3 +673,9 @@
 "AchievementsMissableAlert" = "该成就在游戏流程中特定时点后将无法获取，若错过需重新开始游戏";
 "AchievementsProgressionAlert" = "该成就是通关的必要条件";
 "AchievementsWinAlert" = "该成就表示游戏已通关";
+
+"AchievementsChallenge" = "开始挑战";
+"AchievementsMastered" = "精通 %@";
+"AlwaysShowProgress" = "始终显示进度";
+"AlwaysShowProgressDesc" = "在屏幕上持续显示成就进度。";
+"Progress" = "进度";

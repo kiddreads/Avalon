@@ -659,3 +659,9 @@ Tekan tombol kontroler...";
 "AchievementsMissableAlert" = "Pencapaian ini tidak dapat diperoleh setelah titik tertentu dan memerlukan permainan ulang jika terlewat";
 "AchievementsProgressionAlert" = "Pencapaian ini diperlukan untuk menyelesaikan game";
 "AchievementsWinAlert" = "Pencapaian ini menandakan game telah diselesaikan";
+
+"AchievementsChallenge" = "Mulai Tantangan";
+"AchievementsMastered" = "%@ Dikuasai";
+"AlwaysShowProgress" = "Selalu Tampilkan Progress";
+"AlwaysShowProgressDesc" = "Pertahankan progres pencapaian tetap terlihat di layar.";
+"Progress" = "Progress";

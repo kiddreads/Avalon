@@ -97,7 +97,7 @@ class RetroAchievementListView: BaseView {
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                  heightDimension: .fractionalHeight(1)))
             //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(978)), subitems: [item])
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1058)), subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
             //section布局
             let section = NSCollectionLayoutSection(group: group)
@@ -178,6 +178,14 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                     self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: true)
                     self.collectionView.reloadData()
                 }
+            }
+        }
+        cell.alwaysShowProgressButton.onChange { [weak self] value in
+            guard let self else { return }
+            self.game.updateExtra(key: ExtraKey.alwaysShowProgress.rawValue, value: value)
+            if !value {
+                //关闭了进度常驻 则需要发送通知
+                NotificationCenter.default.post(name: Constants.NotificationName.TurnOffAlwaysShowProgress, object: nil)
             }
         }
         return cell

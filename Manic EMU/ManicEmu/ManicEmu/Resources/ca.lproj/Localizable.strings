@@ -666,3 +666,9 @@ Prem el botó del control...";
 "AchievementsMissableAlert" = "El assoliment no podrà obtenir-se després d'un cert punt i requerirà una nova partida si es perd";
 "AchievementsProgressionAlert" = "L'assoliment és necessari per superar el joc";
 "AchievementsWinAlert" = "L'assoliment indica que el joc ha estat superat";
+
+"AchievementsChallenge" = "Inicia Reptes";
+"AchievementsMastered" = "%@ Dominat";
+"AlwaysShowProgress" = "Mostra sempre el progrés";
+"AlwaysShowProgressDesc" = "Mantingues el progrés dels assoliments visible a la pantalla.";
+"Progress" = "Progrés";

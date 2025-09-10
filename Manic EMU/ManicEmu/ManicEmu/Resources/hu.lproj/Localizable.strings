@@ -666,3 +666,9 @@ Nyomja meg a kontroller gombját...";
 "AchievementsMissableAlert" = "A teljesítmény egy pont után nem szerezhető meg és új játékot igényel ha kimarad";
 "AchievementsProgressionAlert" = "A teljesítmény szükséges a játék befejezéséhez";
 "AchievementsWinAlert" = "A teljesítmény jelzi, hogy a játék befejeződött";
+
+"AchievementsChallenge" = "Kihívás Indítása";
+"AchievementsMastered" = "%@ Elsajátítva";
+"AlwaysShowProgress" = "Folyamatosan Mutasd az Előrehaladást";
+"AlwaysShowProgressDesc" = "Tartsd az achievementek előrehaladását láthatóvá a képernyőn.";
+"Progress" = "Előrehaladás";

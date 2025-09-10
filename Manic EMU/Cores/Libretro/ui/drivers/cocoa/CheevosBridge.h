@@ -6,6 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
 @interface CheevosUser : NSObject
@@ -42,6 +43,9 @@
 @property (nonatomic, copy) NSString *_Nullable activeBadgeUrl;
 @property (nonatomic, assign) BOOL isMissable;
 @property (nonatomic, assign) BOOL isProgression;
+
+@property (nonatomic, assign) BOOL isProgressAchievement;
+@property (nonatomic, assign) BOOL show;
 
 @end
 
@@ -87,20 +91,10 @@
 @end
 
 @interface CheevosLeaderboard : NSObject
+@property (nonatomic, copy) NSString *_Nullable badgeUrl;
+@property (nonatomic, strong) UIImage *_Nullable image;
 @property (nonatomic, copy) NSString *_Nullable title;
 @property (nonatomic, copy) NSString *_Nullable _description;
-@end
-
-@interface CheevosProgress : NSObject
-
-@property (nonatomic, assign) BOOL show;
-@property (nonatomic, assign) NSInteger points;
-@property (nonatomic, copy) NSString *_Nullable title;
-@property (nonatomic, copy) NSString *_Nullable measuredProgress;
-@property (nonatomic, assign) CGFloat measuredPercent;
-@property (nonatomic, assign) NSInteger _id;
-@property (nonatomic, copy) NSString *_Nullable unlockedBadgeUrl;
-
 @end
 
 ///登录结果

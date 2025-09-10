@@ -668,3 +668,9 @@ Drücke die Controller-Taste...";
 "AchievementsMissableAlert" = "Dieser Erfolg kann nach einem bestimmten Punkt nicht mehr erzielt werden und erfordert bei Verpassen einen neuen Spielzug";
 "AchievementsProgressionAlert" = "Dieser Erfolg ist zum Abschluss des Spiels erforderlich";
 "AchievementsWinAlert" = "Dieser Erfolg zeigt an, dass das Spiel abgeschlossen wurde";
+
+"AchievementsChallenge" = "Herausforderung Starten";
+"AchievementsMastered" = "%@ Gemeistert";
+"AlwaysShowProgress" = "Fortschritt Immer Anzeigen";
+"AlwaysShowProgressDesc" = "Halte den Errungenschaftsfortschritt auf dem Bildschirm sichtbar.";
+"Progress" = "Fortschritt";

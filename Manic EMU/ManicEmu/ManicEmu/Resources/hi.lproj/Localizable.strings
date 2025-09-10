@@ -668,3 +668,9 @@
 "AchievementsMissableAlert" = "यह उपलब्धि खेल के एक निश्चित बिंदु के बाद अर्जित नहीं की जा सकती और छूटने पर पुनः खेलने की आवश्यकता होगी";
 "AchievementsProgressionAlert" = "यह उपलब्धि खेल को पूरा करने के लिए आवश्यक है";
 "AchievementsWinAlert" = "यह उपलब्धि दर्शाती है कि खेल पूरा हो चुका है";
+
+"AchievementsChallenge" = "चुनौती शुरू करें";
+"AchievementsMastered" = "%@ में निपुण";
+"AlwaysShowProgress" = "हमेशा प्रगति दिखाएं";
+"AlwaysShowProgressDesc" = "स्क्रीन पर उपलब्धि प्रगति दिखाई रखें।";
+"Progress" = "प्रगति";

@@ -9,180 +9,109 @@
 
 import UIKit
 
-class CheevosProgressDetailView: UIView {
-    let coverImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.layerCornerRadius = 4
-        return view
-    }()
+class CheevosProgressView: RoundAndBorderView {
     
-    let titleLabel: UILabel = {
+    private var progressViewDict: [Int: (imageView: UIImageView, measuredString: String?)] = [:]
+    private let containerView = UIView()
+    
+    private let titleLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.caption(size: .l)
-        view.textColor = Constants.Color.LabelPrimary
+        view.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        view.textColor = .white
+        view.minimumScaleFactor = 0.5
         return view
     }()
     
-    private let progressLabel: UILabel = {
-        let view = UILabel()
-        view.font = Constants.Font.caption(size: .s)
-        view.textColor = Constants.Color.Yellow
-        return view
-    }()
-    
-    let progressView: RetroAchievementsListCell.AchievementsProgressView = {
-        let view = RetroAchievementsListCell.AchievementsProgressView()
-        return view
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(roundCorner: .allCorners, radius: 16, borderColor: Constants.Color.Border, borderWidth: 1)
+        makeBlur(blurRadius: 2.5, blurColor: .white, blurAlpha: 0.4)
         
-        alpha = 0.75
+        enableInteractive = true
         
-        addSubview(coverImageView)
-        coverImageView.snp.makeConstraints { make in
-            make.width.equalTo(28)
-            make.top.bottom.leading.equalToSuperview().inset(2)
+        addSubview(containerView)
+        containerView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            make.top.bottom.equalToSuperview()
+        }
+        
+        let icon = UIImageView(image: .symbolImage(.playFill).applySymbolConfig(font: UIFont.systemFont(ofSize: 10, weight: .bold)))
+        icon.contentMode = .scaleAspectFit
+        addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.size.equalTo(12)
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+            make.centerY.equalToSuperview()
         }
         
         addSubview(titleLabel)
-        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
-        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(coverImageView.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceUltraTiny)
-            make.trailing.lessThanOrEqualToSuperview()
-        }
-        
-        addSubview(progressView)
-        progressView.snp.makeConstraints { make in
-            make.leading.equalTo(coverImageView.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.height.equalTo(2)
-            make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceTiny)
-        }
-        
-        addSubview(progressLabel)
-        progressLabel.snp.makeConstraints { make in
-            make.leading.equalTo(progressView.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(progressView)
-            make.trailing.equalToSuperview()
-        }
-        
-        // 给最小宽度避免系统加 width == 0 的临时约束
-        self.snp.makeConstraints { make in
-            make.width.greaterThanOrEqualTo(60)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(containerView.snp.trailing).offset(4)
+            make.trailing.equalTo(icon.snp.leading).offset(-5)
         }
     }
     
-    func updateProgress(_ progress: CheevosProgress) {
-        coverImageView.kf.setImage(
-            with: URL(string: progress.unlockedBadgeUrl),
-            placeholder: UIImage.placeHolder(preferenceSize: .init(32))
-        )
-        titleLabel.text = (progress.title ?? "") + " (\(progress.points) points)"
-        progressView.progress = progress.measuredPercent
-        progressLabel.text = progress.measuredProgress ?? ""
-    }
-    
-    required init?(coder: NSCoder) {
+    @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-// MARK: - Scroll Container
-// MARK: - 容器
-class CheevosProgressView: UIView {
     
-    private let stackView = UIStackView()
-    private var progressViewDict: [Int: CheevosProgressDetailView] = [:]
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
-    }
-    
-    private func setupUI() {
-        backgroundColor = Constants.Color.BackgroundPrimary.withAlphaComponent(0.4)
-        
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually   // 平分宽度
-        stackView.spacing = Constants.Size.ContentSpaceMin
-        addSubview(stackView)
-        
-        stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    // MARK: - Public API
-    
-    func updateProgress(_ progress: CheevosProgress) {
+    func updateProgress(_ progress: CheevosAchievement) {
         if isHidden { isHidden = false }
         
-        if let view = progressViewDict[progress._id] {
-            view.updateProgress(progress)
+        titleLabel.text = progress.measuredProgress
+        
+        if let info = progressViewDict[progress._id] {
+            updateLayout(view: info.imageView, remakeConstraints: false)
         } else {
-            let view = CheevosProgressDetailView()
-            view.updateProgress(progress)
-            configureCompressionResistance(for: view)
-            stackView.addArrangedSubview(view)
-            progressViewDict[progress._id] = view
+            let view = UIImageView()
+            view.layerCornerRadius = 4
+            view.contentMode = .scaleAspectFill
+            view.kf.setImage(with: URL(string: progress.unlockedBadgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(32)))
+            containerView.addSubview(view)
+            updateLayout(view: view)
+            progressViewDict[progress._id] = (view, progress.measuredProgress)
         }
-        updateLayoutForSingleView()
+    }
+    
+    private func updateLayout(view: UIImageView?, remakeConstraints: Bool = true, updateMeasuredString: Bool = false) {
+        let hightLightView: UIImageView?
+        if let view {
+            hightLightView = view
+        } else {
+            let element = progressViewDict.randomElement()
+            hightLightView = element?.value.imageView
+            if updateMeasuredString {
+                titleLabel.text = element?.value.measuredString
+            }
+        }
+        
+        
+        for (index, subView) in containerView.subviews.enumerated() {
+            subView.alpha = (subView == hightLightView ? 1 : 0.5)
+            subView.snp.remakeConstraints { make in
+                make.top.bottom.equalToSuperview().inset(4)
+                make.size.equalTo(24)
+                if index == 0 {
+                    make.leading.equalToSuperview()
+                } else {
+                    make.leading.equalTo(containerView.subviews[index-1].snp.trailing).offset(4)
+                }
+                if index == containerView.subviews.count - 1 {
+                    make.trailing.equalToSuperview()
+                }
+            }
+        }
     }
     
     func removeProgress(id: Int) {
-        if let view = progressViewDict[id] {
-            stackView.removeArrangedSubview(view)
-            view.removeFromSuperview()
+        if let info = progressViewDict[id] {
+            info.imageView.removeFromSuperview()
             progressViewDict.removeValue(forKey: id)
+            updateLayout(view: nil, updateMeasuredString: info.imageView.alpha == 1 ? true : false)
         }
         if progressViewDict.isEmpty {
             isHidden = true
         }
-        updateLayoutForSingleView()
     }
     
-    // MARK: - Layout
-    
-    private func updateLayoutForSingleView() {
-        if stackView.arrangedSubviews.count == 1 {
-            stackView.distribution = .fill
-            stackView.alignment = .center
-            stackView.snp.remakeConstraints { make in
-                make.top.bottom.equalToSuperview()
-                make.centerX.equalToSuperview()
-                make.width.equalTo(285)
-            }
-        } else {
-            stackView.distribution = .fillEqually
-            stackView.alignment = .fill
-            stackView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        }
-    }
-    
-    private func configureCompressionResistance(for view: CheevosProgressDetailView) {
-        // coverImageView 保证最优先显示
-        view.coverImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.coverImageView.setContentHuggingPriority(.required, for: .horizontal)
-        
-        // titleLabel 允许压缩，字体可缩小
-        view.titleLabel.adjustsFontSizeToFitWidth = true
-        view.titleLabel.minimumScaleFactor = 0.6
-        view.titleLabel.lineBreakMode = .byTruncatingTail
-        view.titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        
-        // progressView 次要，可以被压缩
-        view.progressView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-    }
 }

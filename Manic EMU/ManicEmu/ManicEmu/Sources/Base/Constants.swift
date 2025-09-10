@@ -466,7 +466,8 @@ struct Constants {
         static let TurnOffHardcore = NSNotification.Name(rawValue: "TurnOffHardcore")
         ///游戏排序更新
         static let GameSortChange = NSNotification.Name(rawValue: "GameSortChange")
-        
+        ///成就解锁进度常驻关闭
+        static let TurnOffAlwaysShowProgress = NSNotification.Name(rawValue: "TurnOffAlwaysShowProgress")
     }
     
     struct URLs {

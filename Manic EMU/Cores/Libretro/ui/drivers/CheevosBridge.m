@@ -53,9 +53,6 @@
 @implementation CheevosLeaderboard
 @end
 
-@implementation CheevosProgress
-@end
-
 @implementation CheevosBridge
 
 #pragma mark - HTTP Server Call Implementation

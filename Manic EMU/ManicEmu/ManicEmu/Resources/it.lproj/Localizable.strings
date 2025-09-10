@@ -670,3 +670,9 @@ Premi il pulsante del controller...";
 "AchievementsMissableAlert" = "L'obiettivo non potrà essere ottenuto dopo un certo punto e richiederà un nuovo gioco se perso";
 "AchievementsProgressionAlert" = "L'obiettivo è necessario per completare il gioco";
 "AchievementsWinAlert" = "L'obiettivo indica che il gioco è stato completato";
+
+"AchievementsChallenge" = "Avvia Sfida";
+"AchievementsMastered" = "%@ Mastered";
+"AlwaysShowProgress" = "Mostra Sempre Progresso";
+"AlwaysShowProgressDesc" = "Mantieni visibile a schermo il progresso dei trofei.";
+"Progress" = "Progresso";

@@ -641,3 +641,9 @@ Presiona el botón del control para completar...";
 "AchievementsMissableAlert" = "El logro no podrá obtenerse después de cierto punto del juego y requerirá otra partida si se pierde";
 "AchievementsProgressionAlert" = "El logro es necesario para completar el juego";
 "AchievementsWinAlert" = "El logro indica que el juego ha sido completado";
+
+"AchievementsChallenge" = "Iniciar Desafío";
+"AchievementsMastered" = "%@ Dominado";
+"AlwaysShowProgress" = "Mostrar Siempre Progreso";
+"AlwaysShowProgressDesc" = "Mantener visible el progreso de logros en pantalla.";
+"Progress" = "Progreso";

@@ -10,6 +10,7 @@
 class RetroAchievementsDetailView: BaseView {
     init(achievement: CheevosAchievement, didTapClose: @escaping (()->Void)) {
         super.init(frame: .zero)
+        
         let coverImageView = UIImageView()
         coverImageView.contentMode = .scaleAspectFill
         addSubview(coverImageView)

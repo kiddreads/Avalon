@@ -666,3 +666,9 @@ Ak sa vyskytne nestabilita v 3DS, pozrite si «Časté otázky» alebo sa pripoj
 "AchievementsMissableAlert" = "Tento úspech nie je možné po určitom bode získat a pri zmeškaní si vyžaduje nové prehratie";
 "AchievementsProgressionAlert" = "Tento úspech je potrebný na dokončenie hry";
 "AchievementsWinAlert" = "Tento úspech signalizuje, že hra bola dokončená";
+
+"AchievementsChallenge" = "Začať Výzvu";
+"AchievementsMastered" = "%@ Zvládnuté";
+"AlwaysShowProgress" = "Vždy Zobraziť Pokrok";
+"AlwaysShowProgressDesc" = "Udržiavajte pokrok úspechov viditeľný na obrazovke.";
+"Progress" = "Pokrok";

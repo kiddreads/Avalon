@@ -666,3 +666,9 @@
 "AchievementsMissableAlert" = "Досягнення не можна отримати після певної точки проходження і вимагатиме повторної гри при пропуску";
 "AchievementsProgressionAlert" = "Досягнення необхідне для завершення гри";
 "AchievementsWinAlert" = "Досягнення вказує на завершення гри";
+
+"AchievementsChallenge" = "Почати Виклик";
+"AchievementsMastered" = "%@ Опановано";
+"AlwaysShowProgress" = "Завжди Показувати Прогрес";
+"AlwaysShowProgressDesc" = "Тримати прогрес досягнень видимим на екрані.";
+"Progress" = "Прогрес";

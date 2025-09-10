@@ -31,7 +31,7 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     if Settings.defalut.iCloudSyncEnable {
                         SyncManager.shared.startSync()
                     }
-                    self.showPrivacyRequestIfNeed()
+                    
                     if !isSuccess {
                         UIView.makeAlert(title: R.string.localizable.fatalErrorTitle(), detail: R.string.localizable.fatalErrorDesc(), cancelTitle: R.string.localizable.confirmTitle())
                     }
@@ -126,23 +126,6 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
-    
-    private func showPrivacyRequestIfNeed() {
-        DispatchQueue.main.asyncAfter(delay: 1) {
-            if Locale.prefersCN && !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowPrivacyAlert) {
-                UIView.makeAlert(title: "隐私政策", detail: """
-友盟SDK
-SDK服务商：友盟同欣（北京）科技有限公司
-使用目的：进行APP运营统计与分析
-收集个人信息：设备信息（IMEI/MAC/Android ID/IDFA/OAID/OpenUDID/GUID/SIM卡IMSI/ICCID）、位置信息、网络信息
-隐私权政策链接：https://www.umeng.com/page/policy
-""", cancelTitle: "拒绝", confirmTitle: "同意", enableForceHide: false, hideAction: {
-                    UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowPrivacyAlert)
-                })
-            }
-        }
-    }
-    
 }
 
 extension ApplicationSceneDelegate: UIDropInteractionDelegate {

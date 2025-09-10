@@ -640,3 +640,9 @@ Tekan butang pengawal...";
 "AchievementsMissableAlert" = "Pencapaian ini tidak boleh diperoleh selepas titik tertentu dan memerlukan permainan semula jika terlepas";
 "AchievementsProgressionAlert" = "Pencapaian ini diperlukan untuk menamatkan permainan";
 "AchievementsWinAlert" = "Pencapaian ini menandakan permainan telah tamat";
+
+"AchievementsChallenge" = "Mulai Cabaran";
+"AchievementsMastered" = "%@ Dikuasai";
+"AlwaysShowProgress" = "Sentiasa Tunjukkan Kemajuan";
+"AlwaysShowProgressDesc" = "Kekalkan kemajuan pencapaian kelihatan di skrin.";
+"Progress" = "Kemajuan";

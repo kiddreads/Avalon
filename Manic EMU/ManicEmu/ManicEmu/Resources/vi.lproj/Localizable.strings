@@ -660,3 +660,9 @@ Nhấn nút điều khiển...";
 "AchievementsMissableAlert" = "Thành tích này sẽ không thể đạt được sau một điểm nhất định và yêu cầu chơi lại nếu bỏ lỡ";
 "AchievementsProgressionAlert" = "Thành tích này cần thiết để hoàn thành trò chơi";
 "AchievementsWinAlert" = "Thành tích này cho biết trò chơi đã được hoàn thành";
+
+"AchievementsChallenge" = "Bắt Đầu Thử Thách";
+"AchievementsMastered" = "Thành Thạo %@";
+"AlwaysShowProgress" = "Luôn Hiển Thị Tiến Trình";
+"AlwaysShowProgressDesc" = "Giữ tiến trình thành tựu hiển thị trên màn hình.";
+"Progress" = "Tiến Trình";

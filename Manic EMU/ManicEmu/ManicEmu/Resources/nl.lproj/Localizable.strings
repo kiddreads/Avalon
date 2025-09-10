@@ -667,3 +667,9 @@ Druk op de controllerknop...";
 "AchievementsMissableAlert" = "De prestatie kan na een bepaald punt niet meer worden verdiend en vereist bij missen een nieuwe speelsessie";
 "AchievementsProgressionAlert" = "De prestatie is nodig om het spel uit te spelen";
 "AchievementsWinAlert" = "De prestatie geeft aan dat het spel is uitgespeeld";
+
+"AchievementsChallenge" = "Start Uitdaging";
+"AchievementsMastered" = "%@ Beheersd";
+"AlwaysShowProgress" = "Voortgang Altijd Tonen";
+"AlwaysShowProgressDesc" = "Houd prestatiewoortgang zichtbaar op scherm.";
+"Progress" = "Voortgang";

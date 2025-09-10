@@ -206,7 +206,7 @@ extension ShareManager: UIDocumentInteractionControllerDelegate {
         }
     }
     
-    static func shareFile(fileUrl: URL) {
+    static func shareFile(fileUrl: URL, uti: String = "public.data") {
         guard FileManager.default.fileExists(atPath: fileUrl.path) else {
             UIView.makeToast(message: R.string.localizable.shareFileFailedMissing())
             return
@@ -215,10 +215,25 @@ extension ShareManager: UIDocumentInteractionControllerDelegate {
         ShareManager.shared.documentInteractionController = documentInteractionController
         documentInteractionController.delegate = ShareManager.shared
         documentInteractionController.url = fileUrl
-        documentInteractionController.uti = "public.data"
+        documentInteractionController.uti = uti
         if let view = topViewController(appController: true)?.view {
             documentInteractionController.presentOptionsMenu(from: UIDevice.isPad ? .zero : view.frame, in: view, animated: true)
         }
+    }
+    
+    static func shareImage(image: UIImage) {
+        // 1. 保存图片到临时目录
+        guard let data = image.pngData() else { return }
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("shared.png")
+        if FileManager.default.fileExists(atPath: tempURL.path) {
+            try? FileManager.default.removeItem(at: tempURL)
+        }
+        do {
+            try data.write(to: tempURL)
+        } catch {
+            return
+        }
+        shareFile(fileUrl: tempURL, uti: "public.png")
     }
     
     private static func create3DSGameSave(urls: [String: URL]) -> URL? {

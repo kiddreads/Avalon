@@ -663,3 +663,9 @@
 "AchievementsMissableAlert" = "この実績はゲーム進行によっては獲得不能になり、見逃した場合は再プレイが必要です";
 "AchievementsProgressionAlert" = "この実績はゲームクリアに必須です";
 "AchievementsWinAlert" = "この実績はゲームクリアを意味します";
+
+"AchievementsChallenge" = "チャレンジ開始";
+"AchievementsMastered" = "%@ マスター";
+"AlwaysShowProgress" = "進捗を常に表示";
+"AlwaysShowProgressDesc" = "実績の進捗を画面上に常に表示します。";
+"Progress" = "進捗";

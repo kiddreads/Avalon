@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         System.allCores.forEach { ManicEmu.register($0) }
         
 #if CRASH_COLLECT
-        //收集闪退日志
+        //收集闪退日志 用于内测用户测试bug时使用
         let apmConfig = UMAPMConfig.default()
         apmConfig.crashAndBlockMonitorEnable = true
         apmConfig.javaScriptBridgeEnable = false
@@ -65,10 +65,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         apmConfig.pageMonitorEnable = false
         apmConfig.logCollectEnable = false
         UMCrashConfigure.setAPMConfig(apmConfig)
-#endif
-        //友盟初始化 用于统计安装数量
         MobClick.setAutoPageEnabled(true)
         UMConfigure.initWithAppkey(Constants.Cipher.UMAppKey, channel: nil);
+#endif
         
         //启动游戏手柄监听
         ExternalGameControllerUtils.shared.startDetecting()

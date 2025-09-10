@@ -641,3 +641,9 @@
 "AchievementsMissableAlert" = "لا يمكن الحصول على الإنجاز بعد مرحلة معينة في اللعبة ويتطلب لعبًا آخر إذا فاتك";
 "AchievementsProgressionAlert" = "الإنجاز مطلوب لإكمال اللعبة";
 "AchievementsWinAlert" = "الإنجاز يشير إلى إكمال اللعبة";
+
+"AchievementsChallenge" = "بدء التحدي";
+"AchievementsMastered" = "%@ تم إتقانه";
+"AlwaysShowProgress" = "إظهار التقدم دائمًا";
+"AlwaysShowProgressDesc" = "إبقاء تقدم الإنجازات مرئيًا على الشاشة.";
+"Progress" = "التقدم";

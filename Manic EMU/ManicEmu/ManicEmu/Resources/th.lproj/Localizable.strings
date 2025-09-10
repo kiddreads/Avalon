@@ -656,3 +656,9 @@
 "AchievementsMissableAlert" = "ความสำเร็จนี้ไม่สามารถได้รับหลังจากจุดหนึ่งในการเล่นและต้องเริ่มเล่นใหม่หากพลาด";
 "AchievementsProgressionAlert" = "ความสำเร็จนี้จำเป็นในการผ่านเกม";
 "AchievementsWinAlert" = "ความสำเร็จนี้แสดงว่าได้ผ่านเกมแล้ว";
+
+"AchievementsChallenge" = "เริ่มการท้าทาย";
+"AchievementsMastered" = "เชี่ยวชาญ %@";
+"AlwaysShowProgress" = "แสดงความคืบหน้าตลอด";
+"AlwaysShowProgressDesc" = "แสดงความคืบหน้าของความสำเร็จบนหน้าจออย่างต่อเนื่อง";
+"Progress" = "ความคืบหน้า";

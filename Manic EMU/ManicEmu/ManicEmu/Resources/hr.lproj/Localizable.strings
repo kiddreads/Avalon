@@ -664,3 +664,9 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "AchievementsMissableAlert" = "Postignuće se ne može zaraditi nakon određene točke i zahtijeva novu igru ako se propusti";
 "AchievementsProgressionAlert" = "Postignuće je potrebno za dovršetak igre";
 "AchievementsWinAlert" = "Postignuće označava da je igra dovršena";
+
+"AchievementsChallenge" = "Započni Izazov";
+"AchievementsMastered" = "%@ Savladano";
+"AlwaysShowProgress" = "Uvijek Prikaži Napredak";
+"AlwaysShowProgressDesc" = "Održavaj napredak postignuća vidljivim na zaslonu.";
+"Progress" = "Napredak";

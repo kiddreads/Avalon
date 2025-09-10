@@ -660,3 +660,9 @@ Tryck på kontrollknappen...";
 "AchievementsMissableAlert" = "Prestationen kan inte erhållas efter en viss punkt och kräver en ny spelomgång om missad";
 "AchievementsProgressionAlert" = "Prestationen krävs för att klara spelet";
 "AchievementsWinAlert" = "Prestationen indikerar att spelet har klarats";
+
+"AchievementsChallenge" = "Starta Utmaning";
+"AchievementsMastered" = "%@ Bemästrat";
+"AlwaysShowProgress" = "Alltid Visa Framsteg";
+"AlwaysShowProgressDesc" = "Håll prestationsframsteg synliga på skärmen.";
+"Progress" = "Framsteg";

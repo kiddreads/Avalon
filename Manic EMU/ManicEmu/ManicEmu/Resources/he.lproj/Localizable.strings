@@ -667,3 +667,9 @@
 "AchievementsMissableAlert" = "ההישג לא יוכל להתקבל לאחר נקודה מסוימת וידרוש משחק נוסף אם הוחמץ";
 "AchievementsProgressionAlert" = "ההישג נדרש כדי לסיים את המשחק";
 "AchievementsWinAlert" = "ההישג מעיד שהמשחק הושלם";
+
+"AchievementsChallenge" = "התחל אתגר";
+"AchievementsMastered" = "%@ רוּת";
+"AlwaysShowProgress" = "הצג תמיד התקדמות";
+"AlwaysShowProgressDesc" = "השאר את התקדмость ההישגים גלויה על המסך.";
+"Progress" = "התקדמות";

@@ -666,3 +666,9 @@ Apasă butonul controlerului...";
 "AchievementsMissableAlert" = "Achievement-ul nu mai poate fi obținut după un anumit punct și necesită un nou joc dacă este ratat";
 "AchievementsProgressionAlert" = "Achievement-ul este necesar pentru a termina jocul";
 "AchievementsWinAlert" = "Achievement-ul indică faptul că jocul a fost terminat";
+
+"AchievementsChallenge" = "Începe Provocarea";
+"AchievementsMastered" = "%@ Stăpânit";
+"AlwaysShowProgress" = "Afișează Mereu Progresul";
+"AlwaysShowProgressDesc" = "Păstrează progresul realizărilor vizibil pe ecran.";
+"Progress" = "Progres";

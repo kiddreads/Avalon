@@ -662,3 +662,9 @@
 "AchievementsMissableAlert" = "Достижение нельзя получить после определенного момента прохождения и потребуется повторная игра при пропуске";
 "AchievementsProgressionAlert" = "Достижение необходимо для завершения игры";
 "AchievementsWinAlert" = "Достижение указывает на завершение игры";
+
+"AchievementsChallenge" = "Начать Вызов";
+"AchievementsMastered" = "%@ Освоено";
+"AlwaysShowProgress" = "Всегда Показывать Прогресс";
+"AlwaysShowProgressDesc" = "Держать прогресс достижений видимым на экране.";
+"Progress" = "Прогресс";

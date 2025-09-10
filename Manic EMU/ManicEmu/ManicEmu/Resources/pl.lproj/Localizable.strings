@@ -641,3 +641,9 @@ Naciśnij przycisk kontrolera...";
 "AchievementsMissableAlert" = "Osiągnięcie nie będzie dostępne po określonym punkcie i wymagać będzie nowej rozgrywki jeśli przegapione";
 "AchievementsProgressionAlert" = "Osiągnięcie jest wymagane do ukończenia gry";
 "AchievementsWinAlert" = "Osiągnięcie wskazuje, że gra została ukończona";
+
+"AchievementsChallenge" = "Rozpocznij Wyzwanie";
+"AchievementsMastered" = "%@ Opanowane";
+"AlwaysShowProgress" = "Zawsze Pokaż Postęp";
+"AlwaysShowProgressDesc" = "Utzymuj postęp osiągnięć widoczny na ekranie.";
+"Progress" = "Postęp";

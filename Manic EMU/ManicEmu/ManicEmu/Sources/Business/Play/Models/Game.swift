@@ -13,6 +13,7 @@ import IceCream
 #if !targetEnvironment(simulator)
 import ThreeDS
 #endif
+import SmartCodable
 
 enum ThreeDSMode: Int, PersistableEnum {
     case compatibility, performance, quality
@@ -416,4 +417,54 @@ class Game: Object, ObjectUpdatable {
         }
         return false
     }
+    
+    func getAchievementProgress(id: Int) -> AchievementProgress? {
+        if let jsonString = getExtraString(key: ExtraKey.achievementsProgress.rawValue) {
+            if let progresses = [AchievementProgress].deserialize(from: jsonString) {
+                return progresses.first(where: { $0.id == id })
+            }
+        }
+        return nil
+    }
+    
+    func updateAchievementProgress(_ progress: AchievementProgress) {
+        if let jsonString = getExtraString(key: ExtraKey.achievementsProgress.rawValue) {
+            if var progresses = [AchievementProgress].deserialize(from: jsonString) {
+                progresses.removeAll(where: { $0.id == progress.id })
+                progresses.append(progress)
+                if let jsonString = progresses.toJSONString() {
+                    updateExtra(key: ExtraKey.achievementsProgress.rawValue, value: jsonString)
+                }
+            }
+        }
+    }
+    
+    func removeAchievementProgress(id: Int) {
+        if let jsonString = getExtraString(key: ExtraKey.achievementsProgress.rawValue) {
+            if var progresses = [AchievementProgress].deserialize(from: jsonString) {
+                var isRemoved = false
+                progresses.removeAll(where: {
+                    if $0.id == id {
+                        isRemoved = true
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                if isRemoved, let jsonString = progresses.toJSONString() {
+                    updateExtra(key: ExtraKey.achievementsProgress.rawValue, value: jsonString)
+                }
+            }
+        }
+    }
+}
+
+
+struct AchievementProgress: SmartCodable {
+    var id: Int = 0
+    var measuredProgress: String = ""
+    var measuredPercent: CGFloat = 0
+    
+    
+    
 }

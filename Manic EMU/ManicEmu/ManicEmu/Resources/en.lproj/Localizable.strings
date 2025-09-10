@@ -677,3 +677,10 @@ Press the controller button to complete mapping...";
 "AchievementsMissableAlert" = "The achievement cannot be earned after some point in the playthrough and would require another playthrough if missed";
 "AchievementsProgressionAlert" = "The achievement is required to beat the game";
 "AchievementsWinAlert" = "The achievement indicates the game has been beaten";
+
+"AchievementsChallenge" = "Start Challenge";
+"AchievementsMastered" = "Mastered %@";
+"AlwaysShowProgress" = "Always Show Progress";
+"AlwaysShowProgressDesc" = "Keep achievement progress visible on screen.";
+"Progress" = "Progress";
+

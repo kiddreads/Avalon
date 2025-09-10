@@ -122,6 +122,8 @@ class RetroAchievementsListCell: UICollectionViewCell {
         
         private var isHardcoreList = true
         
+        var didTapAchievement: ((CheevosAchievement)->Void)? = nil
+        
         private lazy var segmentView: BetterSegmentedControl = {
             let titles = [R.string.localizable.hardcore(), R.string.localizable.softcore()]
             let segments = LabelSegment.segments(withTitles: titles,
@@ -233,7 +235,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
         }
         
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            topViewController()?.present(RetroAchievementsDetailViewController(achievement: datas[indexPath.row]), animated: true)
+            didTapAchievement?(datas[indexPath.row])
         }
     }
     
@@ -333,6 +335,15 @@ class RetroAchievementsListCell: UICollectionViewCell {
         return view
     }()
     
+    let alwaysShowProgressButton: TKSimpleSwitch = {
+        let view = TKSimpleSwitch()
+        view.onColor = Constants.Color.Main
+        view.offColor = Constants.Color.BackgroundTertiary
+        view.lineColor = .clear
+        view.lineSize = 0
+        return view
+    }()
+    
     private let achievementsCountLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
@@ -345,8 +356,19 @@ class RetroAchievementsListCell: UICollectionViewCell {
         return view
     }()
     
-    private let listView: AchievementsListView = {
+    private lazy var listView: AchievementsListView = {
         let view = AchievementsListView()
+        view.didTapAchievement = { [weak self] achievement in
+            guard let self else { return }
+            //尝试读取缓存中的解锁进度
+            if achievement.measuredProgress == nil,
+               let game = self.game,
+               let achievementProgress = game.getAchievementProgress(id: achievement._id) {
+                achievement.measuredPercent = achievementProgress.measuredPercent
+                achievement.measuredProgress = achievementProgress.measuredProgress
+            }
+            topViewController()?.present(RetroAchievementsDetailViewController(achievement: achievement), animated: true)
+        }
         return view
     }()
     
@@ -365,6 +387,8 @@ class RetroAchievementsListCell: UICollectionViewCell {
     }()
     
     private var username: String? = nil
+    
+    private weak var game: Game? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -506,6 +530,46 @@ class RetroAchievementsListCell: UICollectionViewCell {
             make.size.equalTo(CGSize(width: 46, height: 28))
         }
         
+        let alwaysShowProgressContainer = UIView()
+        alwaysShowProgressContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
+        alwaysShowProgressContainer.backgroundColor = Constants.Color.BackgroundSecondary
+        addSubview(alwaysShowProgressContainer)
+        alwaysShowProgressContainer.snp.makeConstraints { make in
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(hardcoreContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        let alwaysShowProgressIcon = UIImageView(image: .symbolImage(.squareTextSquareFill).applySymbolConfig(size: 19, color: UIColor.white))
+        alwaysShowProgressIcon.contentMode = .center
+        alwaysShowProgressContainer.addSubview(alwaysShowProgressIcon)
+        alwaysShowProgressIcon.snp.makeConstraints { make in
+            make.size.equalTo(24)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.centerY.equalToSuperview()
+        }
+        let alwaysShowProgressLabel: UILabel = {
+            let view = UILabel()
+            view.numberOfLines = 2
+            let matt = NSMutableAttributedString(string: R.string.localizable.alwaysShowProgress(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.alwaysShowProgressDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
+            return view
+        }()
+        alwaysShowProgressContainer.addSubview(alwaysShowProgressLabel)
+        alwaysShowProgressLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(alwaysShowProgressIcon)
+            make.leading.equalTo(alwaysShowProgressIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+        }
+        alwaysShowProgressContainer.addSubview(alwaysShowProgressButton)
+        alwaysShowProgressButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.leading.equalTo(alwaysShowProgressLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.size.equalTo(CGSize(width: 46, height: 28))
+        }
+        
         
         let achievementInfoContainer = UIView()
         achievementInfoContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
@@ -514,7 +578,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
         achievementInfoContainer.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.ItemHeightMax*2)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(hardcoreContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(alwaysShowProgressContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         let achievementCountIcon = SymbolButton(image: R.image.customTrophyFill()?.applySymbolConfig())
         achievementInfoContainer.addSubview(achievementCountIcon)
@@ -583,6 +647,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
     
     func setDatas(game: Game, retroGame: CheevosGame?) {
         guard let retroGame else { return }
+        self.game = game
         coverImageView.kf.setImage(with: URL(string: retroGame.badgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(80)))
         
         var achievementCount = 0
@@ -672,5 +737,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             hardcoreSwitchButton.setOn(enableAchievements ? (game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue) ?? false) : false, animate: false)
             hardcoreSwitchButton.onDisableTap {}
         }
+        
+        alwaysShowProgressButton.setOn(game.getExtraBool(key: ExtraKey.alwaysShowProgress.rawValue) ?? false, animate: false)
     }
 }

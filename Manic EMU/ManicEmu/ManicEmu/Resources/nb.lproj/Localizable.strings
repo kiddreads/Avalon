@@ -658,3 +658,9 @@ Trykk på kontrollerknappen...";
 "AchievementsMissableAlert" = "Prestasjonen kan ikke oppnås etter et visst punkt og krever nytt spill hvis misset";
 "AchievementsProgressionAlert" = "Prestasjonen er nødvendig for å fullføre spillet";
 "AchievementsWinAlert" = "Prestasjonen indikerer at spillet er fullført";
+
+"AchievementsChallenge" = "Start Utfordring";
+"AchievementsMastered" = "%@ Mesteret";
+"AlwaysShowProgress" = "Alltid Vis Fremdrift";
+"AlwaysShowProgressDesc" = "Hold prestasjonsfremdrift synlig på skjermen.";
+"Progress" = "Fremdrift";
