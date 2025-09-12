@@ -45,6 +45,7 @@
 @property (nonatomic, assign) BOOL isProgression;
 
 @property (nonatomic, assign) BOOL isProgressAchievement;
+@property (nonatomic, assign) BOOL isChallengeAchievement;
 @property (nonatomic, assign) BOOL show;
 
 @end
@@ -76,12 +77,6 @@
 @end
 
 @interface CheevosCompletion : NSObject
-
-@end
-
-@interface CheevosChallenge : NSObject
-@property (nonatomic, copy) NSString *_Nullable _description;
-@property (nonatomic, copy) NSString *_Nullable unlockedBadgeUrl;
 @end
 
 @interface CheevosLeaderboardTracker : NSObject

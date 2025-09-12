@@ -680,3 +680,5 @@
 "Progress" = "進度";
 
 "DCGameNoSupportGameSave" = "Dreamcast 不支援存檔匯入/匯出。請使用 VMU Explorer 編輯 Manic EMU-Flycast-dc 資料夾中的記憶卡檔案。";
+
+"Challenge" = "挑戰";

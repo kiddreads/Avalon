@@ -674,3 +674,5 @@ Nyomja meg a kontroller gombját...";
 "Progress" = "Előrehaladás";
 
 "DCGameNoSupportGameSave" = "A Dreamcast nem támogatja a mentések importálását/exportálását. Használd a VMU Explorer-t a Manic EMU-Flycast-dc mappában található memóriafájlok szerkesztéséhez.";
+
+"Challenge" = "Kihívás";

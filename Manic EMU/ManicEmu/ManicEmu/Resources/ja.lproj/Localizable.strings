@@ -671,3 +671,5 @@
 "Progress" = "進捗";
 
 "DCGameNoSupportGameSave" = "ドリームキャストはセーブデータのインポート/エクスポートに対応していません。VMU Explorer を使用して、Manic EMU-Flycast-dc フォルダ内のメモリファイルを編集してください。";
+
+"Challenge" = "チャレンジ";

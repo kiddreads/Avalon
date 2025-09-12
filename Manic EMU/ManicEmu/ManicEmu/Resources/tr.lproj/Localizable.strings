@@ -674,3 +674,5 @@ Kontrolcü düğmesine basın...";
 "Progress" = "İlerleme";
 
 "DCGameNoSupportGameSave" = "Dreamcast kayıt içe/dışa aktarmayı desteklemez. Manic EMU-Flycast-dc klasöründeki bellek dosyalarını düzenlemek için VMU Explorer'ı kullanın.";
+
+"Challenge" = "Meydan Okuma";

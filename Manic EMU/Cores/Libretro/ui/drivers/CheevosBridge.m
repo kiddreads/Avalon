@@ -44,9 +44,6 @@
 @implementation CheevosCompletion
 @end
 
-@implementation CheevosChallenge
-@end
-
 @implementation CheevosLeaderboardTracker
 @end
 

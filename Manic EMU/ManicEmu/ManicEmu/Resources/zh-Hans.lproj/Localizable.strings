@@ -681,3 +681,5 @@
 "Progress" = "进度";
 
 "DCGameNoSupportGameSave" = "Dreamcast不支持游戏存档的导入导出功能，需要你使用VMU Explorer工具自行编辑存档记忆体，这些记忆体文件存在于Manic EMU-Flycast-dc目录中";
+
+"Challenge" = "挑战";

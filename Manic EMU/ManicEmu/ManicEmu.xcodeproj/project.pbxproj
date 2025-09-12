@@ -601,6 +601,7 @@
 		579C114D2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */; };
 		57A480CC2E733B83001D4598 /* flycast-jitless.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A480CB2E733B77001D4598 /* flycast-jitless.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A480CD2E733B83001D4598 /* flycast-jitless-wince.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A480C42E733236001D4598 /* flycast-jitless-wince.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57A480E72E74030E001D4598 /* CheevosChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A480E62E740301001D4598 /* CheevosChallengeView.swift */; };
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
 		57B6EBDB2D758819002E619C /* GameSaveMatchGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6EBDA2D7587FE002E619C /* GameSaveMatchGameView.swift */; };
@@ -1617,6 +1618,7 @@
 		579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		57A480C42E733236001D4598 /* flycast-jitless-wince.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "flycast-jitless-wince.libretro.framework"; path = "../Cores/flycast-jitless-wince.libretro.framework"; sourceTree = SOURCE_ROOT; };
 		57A480CB2E733B77001D4598 /* flycast-jitless.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "flycast-jitless.libretro.framework"; path = "../Cores/flycast-jitless.libretro.framework"; sourceTree = SOURCE_ROOT; };
+		57A480E62E740301001D4598 /* CheevosChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheevosChallengeView.swift; sourceTree = "<group>"; };
 		57AD35E92D7DEB900092FD03 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheerExtensions.swift; sourceTree = "<group>"; };
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -3700,6 +3702,7 @@
 			children = (
 				57DFBE8B2E71BC4C008C2161 /* CheevosPopupView.swift */,
 				57D029182E6C9C4000BF1F9D /* CheevosProgressView.swift */,
+				57A480E62E740301001D4598 /* CheevosChallengeView.swift */,
 				5771C2092E6569B60062EDE0 /* LeaderboardView.swift */,
 				5720CACB2DB5558B0090C0F6 /* ThreeDSKeyboardView.swift */,
 				579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */,
@@ -5065,6 +5068,7 @@
 				57E962FA2D6AB4790022914C /* PlayHistoryFavouriteCollectionCell.swift in Sources */,
 				576F0E152D88209000D2A1BA /* SettingsMembershipGiftView.swift in Sources */,
 				5706B0492DFBF83C0066122E /* 32X.swift in Sources */,
+				57A480E72E74030E001D4598 /* CheevosChallengeView.swift in Sources */,
 				5720E7AA2E541F2000EC0DA5 /* RadialGradientView.swift in Sources */,
 				57B6ECC22D796B97002E619C /* CheatCodeCollectionViewCell.swift in Sources */,
 				A52C1D89257F96C90029B15B /* UIViewControllerExtensions.swift in Sources */,

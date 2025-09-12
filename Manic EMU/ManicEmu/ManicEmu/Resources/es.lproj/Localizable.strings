@@ -649,3 +649,5 @@ Presiona el botón del control para completar...";
 "Progress" = "Progreso";
 
 "DCGameNoSupportGameSave" = "Dreamcast no admite importación/exportación de partidas. Use VMU Explorer para editar archivos de memoria en la carpeta Manic EMU-Flycast-dc.";
+
+"Challenge" = "Desafío";

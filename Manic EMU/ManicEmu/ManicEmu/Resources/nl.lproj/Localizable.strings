@@ -675,3 +675,5 @@ Druk op de controllerknop...";
 "Progress" = "Voortgang";
 
 "DCGameNoSupportGameSave" = "Dreamcast ondersteunt geen importeren/exporteren van saves. Gebruik VMU Explorer om geheugenbestanden in de map Manic EMU-Flycast-dc te bewerken.";
+
+"Challenge" = "Uitdaging";

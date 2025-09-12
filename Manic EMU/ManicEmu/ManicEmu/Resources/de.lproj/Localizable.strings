@@ -676,3 +676,5 @@ Drücke die Controller-Taste...";
 "Progress" = "Fortschritt";
 
 "DCGameNoSupportGameSave" = "Dreamcast unterstützt kein Importieren/Exportieren von Speicherständen. Verwenden Sie VMU Explorer, um Speicherdateien im Ordner Manic EMU-Flycast-dc zu bearbeiten.";
+
+"Challenge" = "Herausforderung";

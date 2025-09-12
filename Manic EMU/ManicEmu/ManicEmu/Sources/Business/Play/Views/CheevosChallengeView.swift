@@ -1,26 +1,17 @@
 //
-//  CheevosProgressView.swift
+//  CheevosChallengeView.swift
 //  ManicEmu
 //
-//  Created by Daiuno on 2025/9/7.
+//  Created by Daiuno on 2025/9/12.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
-// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
 
-class CheevosProgressView: RoundAndBorderView {
+class CheevosChallengeView: RoundAndBorderView {
     
-    private var progressViewDict: [Int: (imageView: UIImageView, measuredString: String?)] = [:]
+    private var challengeViewDict: [Int: UIImageView] = [:]
     private let containerView = UIView()
-    
-    private let titleLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-        view.textColor = Constants.Color.LabelPrimary
-        view.minimumScaleFactor = 0.5
-        return view
-    }()
     
     init() {
         super.init(roundCorner: .allCorners, radius: 16, borderColor: Constants.Color.Border, borderWidth: 1)
@@ -41,13 +32,7 @@ class CheevosProgressView: RoundAndBorderView {
             make.size.equalTo(12)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
             make.centerY.equalToSuperview()
-        }
-        
-        addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(containerView.snp.trailing).offset(4)
-            make.trailing.equalTo(icon.snp.leading).offset(-5)
+            make.leading.equalTo(containerView.snp.trailing).offset(5)
         }
     }
     
@@ -55,39 +40,24 @@ class CheevosProgressView: RoundAndBorderView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateProgress(_ progress: CheevosAchievement) {
+    func updateChallenge(_ challenge: CheevosAchievement) {
         if isHidden { isHidden = false }
         
-        titleLabel.text = progress.measuredProgress
-        
-        if let info = progressViewDict[progress._id] {
-            updateLayout(view: info.imageView, remakeConstraints: false)
+        if let imageView = challengeViewDict[challenge._id] {
+            updateLayout(view: imageView, remakeConstraints: false)
         } else {
             let view = UIImageView()
             view.layerCornerRadius = 4
             view.contentMode = .scaleAspectFill
-            view.kf.setImage(with: URL(string: progress.unlockedBadgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(32)))
+            view.kf.setImage(with: URL(string: challenge.unlockedBadgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(32)))
             containerView.addSubview(view)
             updateLayout(view: view)
-            progressViewDict[progress._id] = (view, progress.measuredProgress)
+            challengeViewDict[challenge._id] = view
         }
     }
     
-    private func updateLayout(view: UIImageView?, remakeConstraints: Bool = true, updateMeasuredString: Bool = false) {
-        let hightLightView: UIImageView?
-        if let view {
-            hightLightView = view
-        } else {
-            let element = progressViewDict.randomElement()
-            hightLightView = element?.value.imageView
-            if updateMeasuredString {
-                titleLabel.text = element?.value.measuredString
-            }
-        }
-        
-        
+    private func updateLayout(view: UIImageView?, remakeConstraints: Bool = true) {
         for (index, subView) in containerView.subviews.enumerated() {
-            subView.alpha = (subView == hightLightView ? 1 : 0.5)
             if remakeConstraints {
                 subView.snp.remakeConstraints { make in
                     make.top.bottom.equalToSuperview().inset(4)
@@ -105,13 +75,13 @@ class CheevosProgressView: RoundAndBorderView {
         }
     }
     
-    func removeProgress(id: Int) {
-        if let info = progressViewDict[id] {
-            info.imageView.removeFromSuperview()
-            progressViewDict.removeValue(forKey: id)
-            updateLayout(view: nil, updateMeasuredString: info.imageView.alpha == 1 ? true : false)
+    func removeChallenge(id: Int) {
+        if let imageView = challengeViewDict[id] {
+            imageView.removeFromSuperview()
+            challengeViewDict.removeValue(forKey: id)
+            updateLayout(view: nil)
         }
-        if progressViewDict.isEmpty {
+        if challengeViewDict.isEmpty {
             isHidden = true
         }
     }

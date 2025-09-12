@@ -670,3 +670,5 @@ Stiskněte tlačítko ovladače...";
 "Progress" = "Pokrok";
 
 "DCGameNoSupportGameSave" = "Dreamcast nepodporuje import/export uložených her. K úpravě paměťových souborů ve složce Manic EMU-Flycast-dc použijte VMU Explorer.";
+
+"Challenge" = "Výzva";

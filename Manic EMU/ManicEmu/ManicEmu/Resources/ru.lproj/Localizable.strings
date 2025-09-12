@@ -670,3 +670,5 @@
 "Progress" = "Прогресс";
 
 "DCGameNoSupportGameSave" = "Dreamcast не поддерживает импорт/экспорт сохранений. Используйте VMU Explorer для редактирования файлов памяти в папке Manic EMU-Flycast-dc.";
+
+"Challenge" = "Испытание";

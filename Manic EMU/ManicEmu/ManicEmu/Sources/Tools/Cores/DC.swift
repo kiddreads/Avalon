@@ -20,8 +20,8 @@ extension GameType
     case b
     case x
     case y
-    case l
-    case r
+    case l1
+    case r1
     case start
     case up
     case down
@@ -44,8 +44,8 @@ extension GameType
         else if stringValue == "b" { self = .b }
         else if stringValue == "x" { self = .x }
         else if stringValue == "y" { self = .y }
-        else if stringValue == "l" { self = .l }
-        else if stringValue == "r" { self = .r }
+        else if stringValue == "l1" { self = .l1 }
+        else if stringValue == "r1" { self = .r1 }
         else if stringValue == "start" { self = .start }
         else if stringValue == "menu" { self = .menu }
         else if stringValue == "up" { self = .up }
@@ -137,8 +137,8 @@ class DCEmulatorBridge : NSObject, EmulatorBase {
         else if gameInput == .b { return .A }
         else if gameInput == .x { return .Y }
         else if gameInput == .y { return .X }
-        else if gameInput == .l { return .L2 }
-        else if gameInput == .r { return .R2 }
+        else if gameInput == .l1 { return .L2 }
+        else if gameInput == .r1 { return .R2 }
         else if gameInput == .start { return .start }
         else if gameInput == .up { return .up }
         else if gameInput == .down { return .down }

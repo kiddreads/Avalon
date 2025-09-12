@@ -96,10 +96,14 @@ class PlayViewController: GameViewController {
     private var leaderboardView: LeaderboardView? = nil
     //进度控件
     private var cheevosProgressView: CheevosProgressView? = nil
+    //挑战控件
+    private var cheevosChallengeView: CheevosChallengeView? = nil
     //游戏过程中接收到的leaderboard
     private var leaderboards: [CheevosLeaderboard] = []
     //解锁进展中的成就
     private var progressAchievements: [CheevosAchievement] = []
+    //挑战中的成就
+    private var challengeAchievements: [CheevosAchievement] = []
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
@@ -437,8 +441,33 @@ class PlayViewController: GameViewController {
                             } else {
                                 self.progressAchievements.append(achievement)
                             }
+                            if let challenge = self.challengeAchievements.first(where: { $0._id == achievement._id }) {
+                                challenge.measuredProgress = achievement.measuredProgress
+                                challenge.measuredPercent = achievement.measuredPercent
+                            }
+                            
                         } else {
                             self.hideAchievementProgressIfNeed()
+                        }
+                    }
+                } else if achievement.isChallengeAchievement {
+                    //挑战相关
+                    if let challengeView = self.cheevosChallengeView {
+                        if achievement.show {
+                            challengeView.updateChallenge(achievement)
+                            //临时存储进度 用于popup展示
+                            if !self.challengeAchievements.contains(where: { $0._id == achievement._id }) {
+                                self.challengeAchievements.append(achievement)
+                            }
+                            
+                            self.showRetroAchievements(badgeUrl: achievement.unlockedBadgeUrl,
+                                                       title: R.string.localizable.achievementsChallenge(),
+                                                       message: achievement._description,
+                                                       hideIcon: true)
+                            
+                        } else {
+                            challengeView.removeChallenge(id: achievement._id)
+                            self.challengeAchievements.removeAll(where: { $0._id == achievement._id } )
                         }
                     }
                 } else {
@@ -503,13 +532,6 @@ class PlayViewController: GameViewController {
                 }
                 self.leaderboards.append(leaderboard)
 
-            } else if let cheevosChallenge = notification.object as? CheevosChallenge {
-                //挑战提示
-                self.showRetroAchievements(badgeUrl: cheevosChallenge.unlockedBadgeUrl,
-                                           title: R.string.localizable.achievementsChallenge(),
-                                           message: cheevosChallenge._description,
-                                           hideIcon: true)
-                
             } else if let message = notification.object as? String {
                 UIView.makeToast(message: message)
             }
@@ -2084,6 +2106,7 @@ extension PlayViewController {
                 if enableAchievements {
                     setupLeaderboardView()
                     setupAchievementProgressView()
+                    setupAchievementChallengeView()
                 }
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
@@ -2771,7 +2794,8 @@ extension PlayViewController {
             leaderboardView.addTapGesture { [weak self] gesture in
                 guard let self else { return }
                 self.pauseEmulation()
-                CheevosPopupView.show(leaderboards: leaderboards.reversed(),
+                CheevosPopupView.show(type: .leaderboard,
+                                      leaderboards: leaderboards.reversed(),
                                       gameViewRect: self.gameView.frame,
                                       menuInsets: getMenuInset()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
@@ -2793,13 +2817,38 @@ extension PlayViewController {
             progressView.addTapGesture { [weak self] gesture in
                 guard let self else { return }
                 self.pauseEmulation()
-                CheevosPopupView.show(achievements: progressAchievements.reversed(),
+                CheevosPopupView.show(type: .progress,
+                                      achievements: progressAchievements.reversed(),
                                       gameViewRect: self.gameView.frame,
                                       menuInsets: getMenuInset()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
             self.cheevosProgressView = progressView
+        }
+    }
+    
+    private func setupAchievementChallengeView() {
+        if cheevosChallengeView == nil {
+            let challengeView = CheevosChallengeView()
+            view.addSubview(challengeView)
+            challengeView.snp.makeConstraints { make in
+                make.leading.bottom.equalTo(self.gameView).inset(5)
+                make.height.equalTo(32)
+            }
+            challengeView.isHidden = true
+            challengeView.addTapGesture { [weak self] gesture in
+                guard let self else { return }
+                self.pauseEmulation()
+                
+                CheevosPopupView.show(type: .challenge,
+                                      achievements: self.challengeAchievements.reversed(),
+                                      gameViewRect: self.gameView.frame,
+                                      menuInsets: getMenuInset()) { [weak self] in
+                    self?.resumeEmulationAndHandleAudio()
+                }
+            }
+            self.cheevosChallengeView = challengeView
         }
     }
     

@@ -13,7 +13,7 @@ class LeaderboardDetailView: UIView {
     private let titleLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-        view.textColor = .white
+        view.textColor = Constants.Color.LabelPrimary
         view.minimumScaleFactor = 0.5
         return view
     }()
@@ -66,7 +66,7 @@ class LeaderboardView: RoundAndBorderView {
     
     init() {
         super.init(roundCorner: .allCorners, radius: 12, borderColor: Constants.Color.Border, borderWidth: 1)
-        makeBlur(blurRadius: 2.5, blurColor: .white, blurAlpha: 0.4)
+        makeBlur(blurRadius: 2.5, blurColor: Constants.Color.BackgroundPrimary, blurAlpha: 0.4)
         
         enableInteractive = true
         

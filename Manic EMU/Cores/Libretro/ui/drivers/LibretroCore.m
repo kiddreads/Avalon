@@ -337,17 +337,28 @@ static void cheevosDidTrigger(uint32_t type, void* object1, void* object2) {
         //挑战提示
         if (object1) {
             rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
-            if ([[NSString stringWithUTF8String:a->badge_name] isEqualToString:@"00000"]) {
+            CheevosAchievement *achievement = [LibretroCore convertAchievement:a];
+            if (!achievement) {
                 return;
             }
-            CheevosChallenge* obj = [CheevosChallenge new];
-            obj._description = a->description ? [NSString stringWithUTF8String:a->description] : nil;
-            char url1[256];
-            if (rc_client_achievement_get_image_url(a, RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED, url1, sizeof(url1)) == RC_OK) {
-                obj.unlockedBadgeUrl = [NSString stringWithCString:url1 encoding:NSUTF8StringEncoding];
-            }
+            achievement.isChallengeAchievement = YES;
+            achievement.show = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:obj];
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:achievement];
+            });
+        }
+    } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_CHALLENGE_INDICATOR_HIDE) {
+        //挑战隐藏
+        if (object1) {
+            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
+            CheevosAchievement *achievement = [LibretroCore convertAchievement:a];
+            if (!achievement) {
+                return;
+            }
+            achievement.isChallengeAchievement = YES;
+            achievement.show = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:achievement];
             });
         }
     } else if (type == RC_CLIENT_EVENT_LEADERBOARD_TRACKER_SHOW) {

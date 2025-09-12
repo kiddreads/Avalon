@@ -664,3 +664,5 @@
 "Progress" = "ความคืบหน้า";
 
 "DCGameNoSupportGameSave" = "Dreamcast ไม่รองรับการนำเข้า/ส่งออกเซฟ ใช้ VMU Explorer เพื่อแก้ไขไฟล์หน่วยความจำในโฟลเดอร์ Manic EMU-Flycast-dc";
+
+"Challenge" = "ความท้าทาย";

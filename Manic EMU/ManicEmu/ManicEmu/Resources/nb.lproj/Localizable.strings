@@ -666,3 +666,5 @@ Trykk på kontrollerknappen...";
 "Progress" = "Fremdrift";
 
 "DCGameNoSupportGameSave" = "Dreamcast støtter ikke import/eksport av lagringer. Bruk VMU Explorer for å redigere minnefiler i mappen Manic EMU-Flycast-dc.";
+
+"Challenge" = "Utfordring";

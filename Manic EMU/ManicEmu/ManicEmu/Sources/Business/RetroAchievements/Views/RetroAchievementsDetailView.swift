@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 class RetroAchievementsDetailView: BaseView {
-    init(achievement: CheevosAchievement, didTapClose: @escaping (()->Void)) {
+    init(achievement: CheevosAchievement, shaereMode: Bool = false, didTapClose: @escaping (()->Void)) {
         super.init(frame: .zero)
         
         let coverImageView = UIImageView()
@@ -127,33 +127,50 @@ class RetroAchievementsDetailView: BaseView {
             make.top.equalTo(seperator.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
-        let roundContainer = RoundAndBorderView(roundCorner: .allCorners, borderColor: UIColor.white.withAlphaComponent(0.1), borderWidth: 2)
-        roundContainer.addTapGesture { gesture in
-            didTapClose()
-        }
-        roundContainer.enableInteractive = true
-        roundContainer.delayInteractiveTouchEnd = true
-        addSubview(roundContainer)
-        roundContainer.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-            make.centerX.equalToSuperview()
-            if let _ = enableProgressView {
-                make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightUltraTiny)
-            } else {
-                make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightMin)
+        if shaereMode {
+            let brandImageView = UIImageView(image: R.image.app_title())
+            brandImageView.contentMode = .scaleAspectFit
+            addSubview(brandImageView)
+            brandImageView.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                if let _ = enableProgressView {
+                    make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightUltraTiny)
+                } else {
+                    make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightMin)
+                }
+                
+                make.bottom.equalToSuperview()
             }
-            
-            make.bottom.equalToSuperview()
+        } else {
+            let roundContainer = RoundAndBorderView(roundCorner: .allCorners, borderColor: UIColor.white.withAlphaComponent(0.1), borderWidth: 2)
+            roundContainer.addTapGesture { gesture in
+                didTapClose()
+            }
+            roundContainer.enableInteractive = true
+            roundContainer.delayInteractiveTouchEnd = true
+            addSubview(roundContainer)
+            roundContainer.snp.makeConstraints { make in
+                make.height.equalTo(Constants.Size.ItemHeightMid)
+                make.centerX.equalToSuperview()
+                if let _ = enableProgressView {
+                    make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightUltraTiny)
+                } else {
+                    make.top.equalTo(infoLabel.snp.bottom).offset(Constants.Size.ItemHeightMin)
+                }
+                
+                make.bottom.equalToSuperview()
+            }
+            let okLabel = UILabel()
+            okLabel.text = R.string.localizable.gotIt()
+            okLabel.font = Constants.Font.title(size: .s, weight: .semibold)
+            okLabel.textColor = .white
+            roundContainer.addSubview(okLabel)
+            okLabel.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+                make.leading.trailing.equalToSuperview().inset(40)
+            }
         }
-        let okLabel = UILabel()
-        okLabel.text = R.string.localizable.gotIt()
-        okLabel.font = Constants.Font.title(size: .s, weight: .semibold)
-        okLabel.textColor = .white
-        roundContainer.addSubview(okLabel)
-        okLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(40)
-        }
+        
     }
     
     required init?(coder: NSCoder) {

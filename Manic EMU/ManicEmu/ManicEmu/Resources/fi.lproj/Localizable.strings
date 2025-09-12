@@ -675,3 +675,5 @@ Paina ohjaimen nappia...";
 "Progress" = "Edistyminen";
 
 "DCGameNoSupportGameSave" = "Dreamcast ei tue tallennusten tuontia/vientiä. Muokkaa muistitiedostoja Manic EMU-Flycast-dc -kansiossa käyttämällä VMU Explorer -ohjelmaa.";
+
+"Challenge" = "Haaste";

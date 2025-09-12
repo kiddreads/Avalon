@@ -675,3 +675,5 @@
 "Progress" = "Πρόοδος";
 
 "DCGameNoSupportGameSave" = "Το Dreamcast δεν υποστηρίζει εισαγωγή/εξαγωγή αποθηκεύσεων. Χρησιμοποιήστε το VMU Explorer για επεξεργασία αρχείων μνήμης στον φάκελο Manic EMU-Flycast-dc.";
+
+"Challenge" = "Πρόκληση";

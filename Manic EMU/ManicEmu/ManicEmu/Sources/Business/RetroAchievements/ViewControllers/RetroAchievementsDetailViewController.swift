@@ -11,6 +11,8 @@ class RetroAchievementsDetailViewController: BaseViewController {
     
     private let containerView = UIView()
     
+    private var shareImageView: UIView? = nil
+    
     init(achievement: CheevosAchievement) {
         super.init(fullScreen: true)
         view.backgroundColor = .clear
@@ -34,7 +36,13 @@ class RetroAchievementsDetailViewController: BaseViewController {
         shareButton.enableRoundCorner = true
         shareButton.addTapGesture { [weak self] gesture in
             guard let self else { return }
-            ShareManager.shareImage(image: self.containerView.asImage())
+            UIView.makeLoading()
+            self.generateShareImage(achievement: achievement) { image in
+                ShareManager.shareImage(image: image)
+                UIView.hideLoading()
+                self.shareImageView?.removeFromSuperview()
+                self.shareImageView = nil
+            }
         }
         view.addSubview(shareButton)
         shareButton.snp.makeConstraints { make in
@@ -42,6 +50,43 @@ class RetroAchievementsDetailViewController: BaseViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constants.Size.ContentSpaceMin)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
         }
+    }
+    
+    func generateShareImage(achievement: CheevosAchievement, completion: ((UIImage)->Void)? = nil) {
+        let shareImageView = UIView()
+        view.insertSubview(shareImageView, belowSubview: containerView)
+        shareImageView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+            make.leading.equalTo(view.snp.trailing)
+        }
+
+        let backgroundImageView = UIImageView(image: R.image.launch_bg())
+        backgroundImageView.contentMode = .scaleAspectFill
+        shareImageView.addSubview(backgroundImageView)
+        backgroundImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                make.leading.trailing.equalToSuperview()
+            } else {
+                make.top.bottom.equalToSuperview()
+            }
+        }
+        
+        let detailView = RetroAchievementsDetailView(achievement: achievement, shaereMode: true) { }
+        shareImageView.addSubview(detailView)
+        detailView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(40)
+        }
+        
+        self.shareImageView = shareImageView
+        
+        DispatchQueue.main.asyncAfter(delay: 0.5) {
+            completion?(shareImageView.asImage())
+        }
+        
+        return
     }
     
     @MainActor required init?(coder: NSCoder) {

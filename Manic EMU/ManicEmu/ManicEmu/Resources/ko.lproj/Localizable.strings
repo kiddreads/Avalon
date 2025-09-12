@@ -678,3 +678,5 @@
 "Progress" = "진행률";
 
 "DCGameNoSupportGameSave" = "드림캐스트는 저장파일 가져오기/내보내기를 지원하지 않습니다. VMU Explorer를 사용하여 Manic EMU-Flycast-dc 폴더에 있는 메모리 파일을 편집하세요.";
+
+"Challenge" = "도전";
