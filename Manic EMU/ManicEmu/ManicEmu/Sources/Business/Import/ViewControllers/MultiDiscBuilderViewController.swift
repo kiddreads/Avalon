@@ -128,7 +128,7 @@ class MultiDiscBuilderViewController: BaseViewController {
                     }
                     let urls = urls.sorted(by: { $0.path < $1.path })
                     if isCue {
-                        let (_, errors, cueItems) = FilesImporter.handleCueFiles(urls: urls)
+                        let (_, errors, cueItems) = FilesImporter.handleMultiFiles(urls: urls)
                         if errors.count > 0 {
                             UIView.makeAlert(detail: errors.reduce("", { $0 + $1.localizedDescription + "\n"}))
                         }

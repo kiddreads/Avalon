@@ -14,7 +14,7 @@ import IceCream
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, mcd, ss, ds, ps1
+        case desc, mcd, ss, ds, ps1, dc
         var title: String {
             switch self {
             case .desc: ""
@@ -22,6 +22,7 @@ class BIOSSelectionView: BaseView {
             case .ss: GameType.ss.localizedName
             case .ds: GameType.ds.localizedName
             case .ps1: GameType.ps1.localizedName
+            case .dc: GameType.dc.localizedName
             }
         }
         
@@ -32,6 +33,7 @@ class BIOSSelectionView: BaseView {
             case .ss: return .ss
             case .ds: return .ds
             case .ps1: return .ps1
+            case .dc: return .dc
             }
         }
     }
@@ -84,8 +86,10 @@ class BIOSSelectionView: BaseView {
             self.datas = [.desc, .ds]
         } else if let gameType, gameType == .ps1 {
             self.datas = [.desc, .ps1]
+        } else if let gameType, gameType == .dc {
+            self.datas = [.desc, .dc]
         }  else {
-            self.datas = [.desc, .ps1, .mcd, .ss, .ds]
+            self.datas = [.desc, .dc, .ps1, .mcd, .ss, .ds]
         }
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")

@@ -297,6 +297,7 @@ struct Constants {
         static let BeetleVB = Document.appendingPathComponent(LibretroCore.Cores.BeetleVB.name)
         static let PokeMini = Document.appendingPathComponent(LibretroCore.Cores.PokeMini.name)
         static let BeetlePSXHW = Document.appendingPathComponent(LibretroCore.Cores.BeetlePSXHW.name)
+        static let Flycast = Document.appendingPathComponent(LibretroCore.Cores.Flycast.name)
         static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
@@ -385,6 +386,7 @@ struct Constants {
         static let ThreeDSConsoleLanguage = ["Automatic", "Japan", "USA" , "Europe", "Australia", "China", "Korea", "Taiwan"]
         static let SaturnConsoleLanguage = ["Auto Detect", "Japan", "North America", "Europe", "South Korea", "Asia (NTSC)", "Asia (PAL)", "Brazil", "Latin America"]
         static let DSConsoleLanguage = ["Automatic", "Japanese", "English", "French", "German", "Italian", "Spanish"]
+        static let DCConsoleLanguage = ["Default", "Japanese", "English", "German",  "French",  "Spanish", "Italian"]
         static let ManicScheme = "manicemu"
         static var PSXController = "PlayStation Controller"
         static var PSXDualShock = "DualShock"
@@ -578,6 +580,10 @@ struct Constants {
             BIOSItem(fileName: "scph5500.bin", imported: false, desc: "PS1 JP BIOS - Required for JP games", required: false),
             BIOSItem(fileName: "scph5501.bin", imported: false, desc: "PS1 US BIOS - Required for US games", required: false),
             BIOSItem(fileName: "scph5502.bin", imported: false, desc: "PS1 EU BIOS - Required for EU games", required: false)
+        ]
+        
+        static let DCBios = [
+            BIOSItem(fileName: "dc_boot.bin", imported: false, desc: "Required for Dreamcast", required: false)
         ]
 
     }

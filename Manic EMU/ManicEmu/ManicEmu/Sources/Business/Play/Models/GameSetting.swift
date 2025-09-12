@@ -463,6 +463,11 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             return true
+        case .dc:
+            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .cheatCode {
+                return false
+            }
+            return true
         default:
             return false
         }

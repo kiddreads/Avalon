@@ -26,8 +26,8 @@ target 'ManicEmu' do
   pod 'MarqueeLabel', :path => '../MarqueeLabel'
   
   pod 'RealmSwift', '= 10.54.2'
-#  pod 'UMCommon', '~> 7.5.2', :configurations => ['SideloadDebug']
-#  pod 'UMAPM', '~> 2.0.3', :configurations => ['SideloadDebug']
+  pod 'UMCommon', '~> 7.5.2', :configurations => ['SideloadDebug']
+  pod 'UMAPM', '~> 2.0.3', :configurations => ['SideloadDebug']
   pod 'Fireworks', :git => 'https://github.com/tomkowz/fireworks.git', :branch => 'master'
   pod 'SnapKit', '~> 5.0'
   pod 'SwifterSwift', '~> 7.0'

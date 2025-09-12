@@ -346,7 +346,7 @@ extension GameInfoView: UICollectionViewDataSource {
                         let supportCores = self.game.gameType.supportCores
                         let saveSateCore = state.getExtraInt(key: ExtraKey.saveStateCore.rawValue) ?? 0
                         if supportCores.count > 0,
-                            saveSateCore != self.game.defaultCore {
+                           saveSateCore != self.game.defaultCore {
                             //由不同核心创建的state 需要提示
                             UIView.makeAlert(title: R.string.localizable.gameSaveUnCompatibleTitle(),
                                              detail: R.string.localizable.saveStateCoreUnCompatible(supportCores[saveSateCore], supportCores[self.game.defaultCore]),

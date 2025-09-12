@@ -250,7 +250,7 @@ class ControllerMappingView: UIView {
         }
     }
     
-    init(gameType: GameType = .ps1, controller: GameController) {
+    init(gameType: GameType = .dc, controller: GameController) {
         self.gameType = gameType
         self.gameController = controller
         super.init(frame: .zero)

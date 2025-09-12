@@ -656,7 +656,7 @@ Tryk på controller-knappen...";
 "ThirdPartGameInfoTips" = "Spilinfo leveres af tredjeparter. Brug din dømmekraft. Hvis Manic EMU ikke finder et spil, brug manuel søgning.";
 "NotSupportHardcore" = "Hardcore-tilstand er deaktiveret for dette spil. Måske er Manic EMU ikke autoriseret af RetroAchievements, eller spillet understøtter det bare ikke.";
 "ChooseOne" = "Vælg en";
-"FilesImporterErrorBadCue" = "Import af %@ mislykkedes. .cue-filen may be invalid or not UTF-8 encoded. Tjek formatet.";
+"FilesImporterErrorBadCue" = "Import af %@ mislykkedes. filen may be invalid or not UTF-8 encoded. Tjek formatet.";
 "Leaderboard" = "Pointtavle";
 "LeaderboardStart" = "Pointtavle start: ";
 
@@ -670,3 +670,5 @@ Tryk på controller-knappen...";
 "AlwaysShowProgress" = "Altid Vis Fremskridt";
 "AlwaysShowProgressDesc" = "Hold præstationsfremskridt synligt på skærmen.";
 "Progress" = "Fremskridt";
+
+"DCGameNoSupportGameSave" = "Dreamcast understøtter ikke import/export af gemte spil. Brug VMU Explorer til at redigere hukommelsesfiler i mappen Manic EMU-Flycast-dc.";

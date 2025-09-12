@@ -660,7 +660,7 @@ Drücke die Controller-Taste...";
 "ThirdPartGameInfoTips" = "Spielinfos von Drittanbietern. Benutze dein Urteilsvermögen. Wenn Manic EMU ein Spiel nicht findet, suche manuell.";
 "NotSupportHardcore" = "Hardcore-Modus für dieses Spiel deaktiviert. Vielleicht ist Manic EMU nicht von RetroAchievements autorisiert oder das Spiel unterstützt ihn nicht.";
 "ChooseOne" = "Eines auswählen";
-"FilesImporterErrorBadCue" = "Import von %@ fehlgeschlagen. Die .cue-Datei ist ungültig oder nicht UTF-8 kodiert. Bitte Format prüfen.";
+"FilesImporterErrorBadCue" = "Import von %@ fehlgeschlagen. Die Datei ist ungültig oder nicht UTF-8 kodiert. Bitte Format prüfen.";
 "Leaderboard" = "Bestenliste";
 "LeaderboardStart" = "Bestenliste Start: ";
 
@@ -674,3 +674,5 @@ Drücke die Controller-Taste...";
 "AlwaysShowProgress" = "Fortschritt Immer Anzeigen";
 "AlwaysShowProgressDesc" = "Halte den Errungenschaftsfortschritt auf dem Bildschirm sichtbar.";
 "Progress" = "Fortschritt";
+
+"DCGameNoSupportGameSave" = "Dreamcast unterstützt kein Importieren/Exportieren von Speicherständen. Verwenden Sie VMU Explorer, um Speicherdateien im Ordner Manic EMU-Flycast-dc zu bearbeiten.";

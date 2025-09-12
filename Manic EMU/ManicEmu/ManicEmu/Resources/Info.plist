@@ -238,6 +238,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>DC Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.dc</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -927,6 +939,33 @@
 					<string>chd</string>
 					<string>ccd</string>
 					<string>ps1</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DC Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.dc</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cdi</string>
+					<string>gdi</string>
+					<string>chd</string>
+					<string>cue</string>
+					<string>bin</string>
+					<string>m3u</string>
+					<string>raw</string>
 				</array>
 			</dict>
 		</dict>

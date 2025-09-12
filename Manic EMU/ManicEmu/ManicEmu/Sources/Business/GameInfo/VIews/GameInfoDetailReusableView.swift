@@ -294,6 +294,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 languages = Constants.Strings.SaturnConsoleLanguage
             } else if game.gameType == .ds {
                 languages = Constants.Strings.DSConsoleLanguage
+            } else if game.gameType == .dc {
+                languages = Constants.Strings.DCConsoleLanguage
             }
         }
         for (index, language) in languages.enumerated() {
@@ -323,6 +325,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 languages = Constants.Strings.SaturnConsoleLanguage
             } else if game.gameType == .ds {
                 languages = Constants.Strings.DSConsoleLanguage
+            } else if game.gameType == .dc {
+                languages = Constants.Strings.DCConsoleLanguage
             }
             if game.region < languages.count {
                 title = languages[game.region]
@@ -756,6 +760,41 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var dcCoreContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: "JITLess Ver: Defalut") { [weak self] _ in
+            guard let self = self else { return }
+            self.dcCoreButton.titleLabel.text = "JITLess Ver: Defalut"
+            if let game {
+                Game.change { _ in
+                    game.defaultCore = 0
+                }
+            }
+        }))
+        actions.append((UIAction(title: "JITLess Ver: WinCE") { [weak self] _ in
+            guard let self = self else { return }
+            self.dcCoreButton.titleLabel.text = "JITLess Ver: WinCE"
+            if let game {
+                Game.change { _ in
+                    game.defaultCore = 1
+                }
+            }
+        }))
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+        return view
+    }()
+    
+    private lazy var dcCoreButton: SymbolButton = {
+        let ver = (game?.defaultCore ?? 0) == 0 ? "Defalut" : "WinCE"
+        let view = SymbolButton(symbol: .boltSlash, title: "JITLess Ver: \(ver)", horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.dcCoreContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
     var didSegmentChange: ((_ index: Int)->Void)?
     lazy var segmentView: BetterSegmentedControl = {
         let titles = [R.string.localizable.readySegmentManualSave(), R.string.localizable.readySegmentAutoSave()]
@@ -819,6 +858,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                     updateVBOrPMFunctionButton()
                 } else if game.gameType == .ps1 {
                     updatePS1FunctionButton()
+                } else if game.gameType == .dc {
+                    updateDCFunctionButton()
                 }
             }
         }
@@ -1208,6 +1249,49 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.edges.equalTo(psxRendererButton)
             }
             
+        }
+    }
+    
+    private func updateDCFunctionButton() {
+        cheatCodeButton.removeFromSuperview()
+        
+        if let lastView = functionButtonContainerView.subviews.last {
+            //jit
+            functionButtonContainerView.addSubview(jitContextMenuButton)
+            functionButtonContainerView.addSubview(jitButton)
+            jitButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            jitContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(jitButton)
+            }
+            
+            //jitless core ver
+            functionButtonContainerView.addSubview(dcCoreContextMenuButton)
+            functionButtonContainerView.addSubview(dcCoreButton)
+            dcCoreButton.snp.makeConstraints { make in
+                make.leading.equalTo(jitButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            dcCoreContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(dcCoreButton)
+            }
+            
+            //语言选择按钮
+            functionButtonContainerView.addSubview(languageContextMenuButton)
+            functionButtonContainerView.addSubview(languageButton)
+            languageButton.snp.makeConstraints { make in
+                make.leading.equalTo(dcCoreButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            languageContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(languageButton)
+            }
         }
     }
     

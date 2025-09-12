@@ -72,15 +72,15 @@ extension FilesImporter {
             var urls = urls.filter({ !FileType.zip.extensions.contains($0.pathExtension) }) + unzipUrls
             
             //先处理cue和m3u
-            let (cueResultUrls, cueResultError, cueResultItems) = handleCueFiles(urls: urls)
-            let (m3uResultUrls, m3uResultError, m3uResultM3uItems, m3uResultCueItems) = handleM3uFiles(urls: cueResultUrls, cueItems: cueResultItems)
+            let (multiFileResultUrls, multiFileResultError, multiFileResultItems) = handleMultiFiles(urls: urls)
+            let (m3uResultUrls, m3uResultError, m3uResultM3uItems, m3uResultMultiFileItems) = handleM3uFiles(urls: multiFileResultUrls, multiFileItems: multiFileResultItems)
             
             urls = m3uResultUrls
             let group = DispatchGroup()
             var errors: [ImportError] = []
             var gameErrors = [ImportError]()
             gameErrors.append(contentsOf: m3uResultError)
-            gameErrors.append(contentsOf: cueResultError)
+            gameErrors.append(contentsOf: multiFileResultError)
             var skinErrors: [ImportError] = []
             var gameSaveErrors: [ImportError] = []
             var importGames: [String] = []
@@ -92,9 +92,9 @@ extension FilesImporter {
                     switch fileType {
                     case .game:
                         group.enter()
-                        let isCue = url.pathExtension.lowercased() == "cue"
-                        let isMultiFiles = isCue || (url.pathExtension.lowercased() == "m3u")
-                        let multiFileRoms = (isCue ? m3uResultCueItems : m3uResultM3uItems)
+                        let isCueOrGdi = url.pathExtension.lowercased() == "cue" || (url.pathExtension.lowercased() == "gdi")
+                        let isMultiFiles = isCueOrGdi || (url.pathExtension.lowercased() == "m3u")
+                        let multiFileRoms = (isCueOrGdi ? m3uResultMultiFileItems : m3uResultM3uItems)
                         let items = multiFileRoms.first(where: { $0.url == url })?.files ?? []
                         importGame(url: url, items: isMultiFiles ? items : []) { gameName, error in
                             if let error = error {
@@ -437,7 +437,7 @@ extension FilesImporter {
                     } else {
                         do {
                             if items.count > 0 {
-                                //可能是m3u或者cue
+                                //可能是m3u或者cue或者gdi
                                 let romUrl = game.romUrl
                                 let romParentPath = romUrl.path.deletingLastPathComponent
                                 try FileManager.safeCopyItem(at: url, to: romUrl, shouldReplace: true)
@@ -481,7 +481,7 @@ extension FilesImporter {
                             if ciaTitleUrl == nil {
                                 //cia格式的3DS不需要拷贝了 因为已经安装进游戏目录了
                                 if items.count > 0 {
-                                    //可能是m3u或者cue
+                                    //可能是m3u或者cue或者gdi
                                     let romUrl = game.romUrl
                                     let romParentPath = romUrl.path.deletingLastPathComponent
                                     try FileManager.safeCopyItem(at: url, to: romUrl, shouldReplace: true)
@@ -882,13 +882,13 @@ extension FilesImporter {
         }
     }
     
-    static func handleM3uFiles(urls: [URL], cueItems: [MultiFileRom]) -> (result: [URL], errors: [ImportError], m3uItems: [MultiFileRom], cueItems: [MultiFileRom]) {
+    static func handleM3uFiles(urls: [URL], multiFileItems: [MultiFileRom]) -> (result: [URL], errors: [ImportError], m3uItems: [MultiFileRom], multiFileItems: [MultiFileRom]) {
         var resultUrls = [URL]()
         var resultM3uItems = [MultiFileRom]()
         var resultErrors = [ImportError]()
         
         var excludeUrls = [URL]()
-        var excludeCues = [MultiFileRom]()
+        var excludeMultiFiles = [MultiFileRom]()
         for url in urls {
             if url.pathExtension.lowercased() == "m3u" {
                 if let content = try? String(contentsOf: url) {
@@ -907,9 +907,9 @@ extension FilesImporter {
                             if let fileUrl = urls.first(where: { $0.lastPathComponent == fileName}) {
                                 if fileUrl.pathExtension.lowercased() == "cue" {
                                     //cue文件则从cueItems中进行判断
-                                    if let cue = cueItems.first(where: { $0.url.lastPathComponent == fileName }) {
+                                    if let cue = multiFileItems.first(where: { $0.url.lastPathComponent == fileName }) {
                                         //cue文件存在 则排除这个cue
-                                        excludeCues.append(cue)
+                                        excludeMultiFiles.append(cue)
                                         excludeUrls.append(cue.url)
                                         m3uFiles.append(cue.url)
                                         m3uFiles.append(contentsOf: cue.files)
@@ -937,7 +937,7 @@ extension FilesImporter {
                         excludeUrls.append(url)
                         for fileName in fileNames {
                             if fileName.pathExtension.lowercased() == "cue" {
-                                excludeCues.append(contentsOf: cueItems.filter({ $0.url.lastPathComponent == fileName }))
+                                excludeMultiFiles.append(contentsOf: multiFileItems.filter({ $0.url.lastPathComponent == fileName }))
                             } else {
                                 excludeUrls.append(contentsOf: urls.filter({ $0.lastPathComponent == fileName }))
                             }
@@ -960,8 +960,8 @@ extension FilesImporter {
         //排除m3u的files
         resultUrls.removeAll(where: { excludeUrls.contains([$0]) })
         
-        let resultCueItems = cueItems.filter { originCue in
-            if excludeCues.contains(where: { $0.url == originCue.url }) {
+        let resultCueItems = multiFileItems.filter { originCue in
+            if excludeMultiFiles.contains(where: { $0.url == originCue.url }) {
                 return false
             }
             return true
@@ -981,39 +981,57 @@ extension FilesImporter {
         }
     }
     
-    static func handleCueFiles(urls: [URL]) -> (results: [URL], errors: [ImportError], cueItems: [MultiFileRom]) {
+    fileprivate static func extractGdiFilenames(from content: String) -> [String] {
+        var filenames: [String] = []
+        
+        let lines = content.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }
+        
+        // 第一行是文件总数，跳过
+        for line in lines.dropFirst() {
+            let components = line.split(separator: " ")
+            if components.count >= 2 {
+                let filename = components[components.count - 2] // 倒数第二列才是文件名
+                filenames.append(String(filename))
+            }
+        }
+        
+        return filenames
+    }
+    
+    static func handleMultiFiles(urls: [URL]) -> (results: [URL], errors: [ImportError], cueItems: [MultiFileRom]) {
         var results = [URL]()
         var excludes = [URL]()
         var errors = [ImportError]()
         var cueItems = [MultiFileRom]()
         for url in urls {
-            if url.pathExtension.lowercased() == "cue" {
+            if url.pathExtension.lowercased() == "cue" || url.pathExtension.lowercased() == "gdi" {
                 if let content = try? String(contentsOf: url) {
-                    var isBadCue = false
+                    let isCue = url.pathExtension.lowercased() == "cue"
+                    var isBadFile = false
                     var missFileName = ""
-                    var cueFiles = [URL]()
-                    let fileNames = extractCueFilenames(from: content)
+                    var multiFiles = [URL]()
+                    let fileNames = isCue ? extractCueFilenames(from: content) : extractGdiFilenames(from: content)
                     guard fileNames.count > 0 else {
-                        errors.append(.badCue(fileName: url.lastPathComponent))
+                        errors.append(.badMultiFile(fileName: url.lastPathComponent))
                         continue
                     }
                     for fileName in fileNames {
-                        //读取cue的每一个文件
+                        //读取每一个文件
                         if !fileName.isEmpty {
                             //查询这个文件是否存在
                             if let fileUrl = urls.first(where: { $0.lastPathComponent == fileName}) {
                                 //文件存在 则将这个文件排除，不再需要导入
                                 excludes.append(fileUrl)
-                                cueFiles.append(fileUrl)
+                                multiFiles.append(fileUrl)
                             } else {
-                                //cue中的文件不存在 说明这个cue不合法，文件有缺失 则不导入这个cue文件，并且将cue中的其他文件也一并排除
-                                isBadCue = true
+                                //文件不存在 说明这个多文件格式不合法，文件有缺失 则不导入这个文件，并且将其他文件也一并排除
+                                isBadFile = true
                                 missFileName = fileName
                                 break
                             }
                         }
                     }
-                    if isBadCue {
+                    if isBadFile {
                         //排除错误文件
                         excludes.append(url)
                         for fileName in fileNames {
@@ -1023,18 +1041,18 @@ extension FilesImporter {
                     } else {
                         //cue文件合法
                         results.append(url)
-                        cueItems.append(MultiFileRom(url: url, files: cueFiles))
+                        cueItems.append(MultiFileRom(url: url, files: multiFiles))
                     }
                 } else {
                     //无法读取cue文件
-                    errors.append(.badCue(fileName: url.lastPathComponent))
+                    errors.append(.badMultiFile(fileName: url.lastPathComponent))
                 }
             } else {
                 results.append(url)
             }
         }
         
-        //排除cue的files
+        //排除files
         results.removeAll(where: { excludes.contains([$0]) })
         
         return (results, errors, cueItems)

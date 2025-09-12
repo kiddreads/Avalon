@@ -417,20 +417,13 @@ static void cheevosDidTrigger(uint32_t type, void* object1, void* object2) {
         
     } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_PROGRESS_INDICATOR_HIDE) {
         //进度隐藏
-        if (object1) {
-            rc_client_achievement_t *a = (rc_client_achievement_t *)object1;
-            CheevosAchievement *achievement = [LibretroCore convertAchievement:a];
-            if (!achievement) {
-                return;
-            }
-            
-            achievement.isProgressAchievement = YES;
-            achievement.show = NO;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:achievement];
-            });
-        }
+        CheevosAchievement *achievement = [CheevosAchievement new];
+        achievement.isProgressAchievement = YES;
+        achievement.show = NO;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:RetroAchievementsNotification object:achievement];
+        });
         
     } else if (type == RC_CLIENT_EVENT_ACHIEVEMENT_PROGRESS_INDICATOR_UPDATE) {
         //进度更新

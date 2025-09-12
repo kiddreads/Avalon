@@ -425,7 +425,7 @@ class PlayViewController: GameViewController {
                                 let achievementProgress = AchievementProgress(id: achievement._id, measuredProgress: measuredProgress, measuredPercent: achievement.measuredPercent)
                                 self.manicGame.updateAchievementProgress(achievementProgress)
                             }
-                            //自动隐藏进度
+                            //如果隐藏通知没有过来 则需自动隐藏进度
                             DispatchQueue.main.asyncAfter(delay: 4) { [weak self] in
                                 self?.hideAchievementProgressIfNeed()
                             }
@@ -438,8 +438,7 @@ class PlayViewController: GameViewController {
                                 self.progressAchievements.append(achievement)
                             }
                         } else {
-                            progressView.removeProgress(id: achievement._id)
-                            self.progressAchievements.removeAll(where: { $0._id == achievement._id })
+                            self.hideAchievementProgressIfNeed()
                         }
                     }
                 } else {
@@ -460,6 +459,9 @@ class PlayViewController: GameViewController {
                     UIDevice.generateAchievementHaptic()
                     //删除缓存的解锁进度
                     self.manicGame.removeAchievementProgress(id: achievement._id)
+                    //删除解锁进度
+                    self.cheevosProgressView?.removeProgress(id: achievement._id)
+                    self.progressAchievements.removeAll(where: { $0._id == achievement._id })
                 }
                 
             } else if let summary = notification.object as? CheevosSummary {
@@ -1163,7 +1165,7 @@ extension PlayViewController {
         if let state = state ?? manicGame.gameSaveStates.last(where: { $0.type == .manualSaveState }),
             let statePath = state.stateData?.filePath.path,
             LibretroCore.sharedInstance().loadState(statePath) {
-            if (state.getExtraInt(key: ExtraKey.saveStateCore.rawValue) ?? 0) != manicGame.defaultCore {
+            if manicGame.gameType != .dc, (state.getExtraInt(key: ExtraKey.saveStateCore.rawValue) ?? 0) != manicGame.defaultCore {
                 UIView.makeToast(message: R.string.localizable.latestSaveStateUnCompatible())
             } else {
                 resumeEmulationAndHandleAudio()
@@ -1550,7 +1552,7 @@ extension PlayViewController {
                 dismiss(animated: true)
             }
         case .resolution:
-            guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 else { return true }
+            guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return true }
             Log.debug("设置分辨率")
             if manicGame.resolution != item.resolution {
                 Game.change { realm in
@@ -1564,6 +1566,8 @@ extension PlayViewController {
                     updateN64Resolution(item.resolution, reload: true)
                 } else if manicGame.gameType == .ps1 {
                     LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetlePSXHW.name, key: "beetle_psx_hw_internal_resolution", value: item.resolution.resolutionTitleForPS1, reload: true)
+                } else if manicGame.gameType == .dc {
+                    updateDCResolution(item.resolution, reload: true)
                 }
             }
             let message: String
@@ -1655,7 +1659,7 @@ extension PlayViewController {
                 }
             }
         case .swapDisk:
-            guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 else { return false }
+            guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return false }
             if manicGame.supportSwapDisc {
                 LibretroCore.sharedInstance().setDiskIndex(UInt32(item.currentDiskIndex), delay: manicGame.gameType == .ps1 ? true : false)
                 UIView.makeToast(message: R.string.localizable.discInsert(Int(item.currentDiskIndex + 1)))
@@ -2023,6 +2027,12 @@ extension PlayViewController {
                                                         "beetle_psx_hw_renderer": isHardwareRenderer ? "hardware_vk" : "software",
                                                        ],
                                                        reload: false)
+        } else if manicGame.gameType == .dc {
+            updateDCResolution(manicGame.resolution, reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Flycast.name,
+                                                       configs: ["reicast_renderer": "Vulkan",
+                                                                 "reicast_language" : Constants.Strings.DCConsoleLanguage[manicGame.region]],
+                                                       reload: false)
         }
         
         //配置静音模式
@@ -2045,7 +2055,17 @@ extension PlayViewController {
         
         //Libretro配置
         if manicGame.gameType.isLibretroType {
-            LibretroCore.sharedInstance().updateLibretroConfig("fastforward_frameskip", value: manicGame.gameType == .ps1 ? "false" : "true")
+            var enableLibretroLog = "false"
+            var libretroLogLevel = "1"
+            #if DEBUG
+            enableLibretroLog = "true"
+            libretroLogLevel = "0"
+            #endif
+            LibretroCore.sharedInstance().updateLibretroConfigs([
+                "fastforward_frameskip": manicGame.gameType == .ps1 ? "false" : "true",
+                "log_verbosity": enableLibretroLog,
+                "libretro_log_level": libretroLogLevel
+            ])
             if manicGame.isN64ParaLLEl {
                 LibretroCore.sharedInstance().setReloadDelay(1)
             } else {
@@ -2082,6 +2102,13 @@ extension PlayViewController {
             
             //配置Rumble
             LibretroCore.sharedInstance().setEnableRumble(Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false)
+            
+            //配置System的位置
+            if manicGame.gameType == .dc {
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.Flycast)
+            } else {
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.System.libretroPath)
+            }
         }
     }
     
@@ -2619,6 +2646,15 @@ extension PlayViewController {
             }
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-43screensize", value: option, reload: reload)
         }
+    }
+    
+    private func updateDCResolution(_ resolution: GameSetting.Resolution, reload: Bool) {
+        let options = ["640x480", "1280x960", "1920x1440", "2560x1920", "3200x2400", "3840x2880", "4480x3360", "5120x3840", "5760x4320", "6400x4800"]
+        var option = "640x480"
+        if resolution != .undefine {
+            option = options[resolution.rawValue - 1]
+        }
+        LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Flycast.name, key: "reicast_internal_resolution", value: option, reload: reload)
     }
     
     private func updateAnalogMode(toastAllow: Bool, toggle: Bool) {

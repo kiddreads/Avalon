@@ -656,7 +656,7 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "ThirdPartGameInfoTips" = "Informacije o igri pružaju treće strane. Koristi vlastitu prosudbu i slijedi pravila platforme. Ako Manic EMU ne pronađe igru, upotrijebi pretraživanje za ručno pronalaženje.";
 "NotSupportHardcore" = "Hardcore način je onemogućen za ovu igru. Možda Manic EMU nije ovlašten od strane RetroAchievements, ili igra jednostavno ne podržava hardcore način.";
 "ChooseOne" = "Odaberi jedan";
-"FilesImporterErrorBadCue" = "Uvoz %@ nije uspio. .cue datoteka može biti nevažeća ili nije UTF-8 kodirana. Provjeri format.";
+"FilesImporterErrorBadCue" = "Uvoz %@ nije uspio. datoteka može biti nevažeća ili nije UTF-8 kodirana. Provjeri format.";
 "Leaderboard" = "Ljestvica";
 "LeaderboardStart" = "Početak ljestvice: ";
 
@@ -670,3 +670,5 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "AlwaysShowProgress" = "Uvijek Prikaži Napredak";
 "AlwaysShowProgressDesc" = "Održavaj napredak postignuća vidljivim na zaslonu.";
 "Progress" = "Napredak";
+
+"DCGameNoSupportGameSave" = "Dreamcast ne podržava uvoz/izvoz spremišta. Upotrijebite VMU Explorer za uređivanje memorijskih datoteka u mapi Manic EMU-Flycast-dc.";

@@ -669,7 +669,7 @@ Press the controller button to complete mapping...";
 "ThirdPartGameInfoTips" = "Game info is provided by third parties. Use your judgment and follow platform rules. If Manic EMU fails to match a game, use search to find it manually.";
 "NotSupportHardcore" = "Hardcore Mode is disabled for this game. Maybe Manic EMU isn't authorized by RetroAchievements, or the game just doesn't support hardcore mode.";
 "ChooseOne" = "Choose One";
-"FilesImporterErrorBadCue" = "Failed to import \"%@\". The .cue file may be invalid or not UTF-8 encoded. Please check the format.";
+"FilesImporterErrorBadCue" = "Failed to import \"%@\". The file may be invalid or not UTF-8 encoded. Please check the format.";
 "Leaderboard" = "Leaderboard";
 "LeaderboardStart" = "Leaderboard Start: ";
 "TurnOffHardcoreAlert" = "Switching to Softcore is permanent. To return to Hardcore, you must reset the game. Continue?";
@@ -684,3 +684,4 @@ Press the controller button to complete mapping...";
 "AlwaysShowProgressDesc" = "Keep achievement progress visible on screen.";
 "Progress" = "Progress";
 
+"DCGameNoSupportGameSave" = "Dreamcast doesn’t support save import/export. Use VMU Explorer to edit memory files located in the Manic EMU-Flycast-dc folder.";

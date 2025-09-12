@@ -20,15 +20,15 @@ extension GameType {
         guard multiPlatformFileExtensions.contains(ext) else { return [] }
         switch ext {
         case "chd":
-            return [.ps1, .psp, .mcd, .ss]
+            return [.ps1, .psp, .mcd, .ss, .dc]
         case "iso":
             return [.psp, .mcd, .ss]
         case "bin":
-            return [.md, .gg, .ms, ._32x]
+            return [.md, .gg, .ms, ._32x, .dc]
         case "cue":
-            return [.ps1, .mcd, .ss]
+            return [.ps1, .mcd, .ss, .dc]
         case "m3u":
-            return [ ps1, .mcd, .ss]
+            return [ ps1, .mcd, .ss, .dc]
         case "pbp":
             return [.ps1, .psp]
         case "ccd":
@@ -81,7 +81,9 @@ extension GameType {
             self = .pm
         } else if ["cue", "m3u", "pbp", "chd", "ccd", "ps1"].contains(ext) {
             self = .ps1
-        } else {
+        } else if ["cdi", "gdi", "chd", "cue", "bin", "m3u"].contains(ext) {
+            self = .dc
+        }  else {
             self = .notSupport
         }
     }
@@ -135,6 +137,8 @@ extension GameType {
             self = .pm
         } else if shortName.uppercased() == "PS1" {
             self = .ps1
+        } else if shortName.uppercased() == "DC" {
+            self = .dc
         }  else {
             return nil
         }
@@ -169,6 +173,7 @@ extension GameType {
         case .vb: return "Virtual Boy"
         case .pm: return "Pokémon Mini"
         case .ps1: return "PlayStation"
+        case .dc: return "Dreamcast"
         default: return ""
         }
     }
@@ -195,6 +200,7 @@ extension GameType {
         case .vb: return NSLocalizedString("VB", comment: "")
         case .pm: return NSLocalizedString("PM", comment: "")
         case .ps1: return NSLocalizedString("PS1", comment: "")
+        case .dc: return NSLocalizedString("DC", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -222,6 +228,7 @@ extension GameType {
         case .vb: return 1995
         case .pm: return 2001
         case .ps1: return 1995
+        case .dc: return 1998
         default: return 0
         }
     }
@@ -248,6 +255,7 @@ extension GameType {
         case .vb: return VB.core
         case .pm: return PM.core
         case .ps1: return PS1.core
+        case .dc: return DC.core
         default: return nil
         }
     }

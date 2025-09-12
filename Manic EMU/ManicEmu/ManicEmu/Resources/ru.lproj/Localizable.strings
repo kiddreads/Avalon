@@ -654,7 +654,7 @@
 "ThirdPartGameInfoTips" = "Информация об игре предоставлена third parties. Используйте свое judgment. Если Manic EMU не найдет игру, используйте manual search.";
 "NotSupportHardcore" = "Хардкорный режим отключен для этой игры. Возможно, Manic EMU не авторизован RetroAchievements или игра его не поддерживает.";
 "ChooseOne" = "Выберите один";
-"FilesImporterErrorBadCue" = "Ошибка импорта %@. Файл .cue может быть invalid или не в UTF-8. Проверьте format.";
+"FilesImporterErrorBadCue" = "Ошибка импорта %@. Файл может быть invalid или не в UTF-8. Проверьте format.";
 "Leaderboard" = "Таблица лидеров";
 "LeaderboardStart" = "Начало таблицы: ";
 
@@ -668,3 +668,5 @@
 "AlwaysShowProgress" = "Всегда Показывать Прогресс";
 "AlwaysShowProgressDesc" = "Держать прогресс достижений видимым на экране.";
 "Progress" = "Прогресс";
+
+"DCGameNoSupportGameSave" = "Dreamcast не поддерживает импорт/экспорт сохранений. Используйте VMU Explorer для редактирования файлов памяти в папке Manic EMU-Flycast-dc.";

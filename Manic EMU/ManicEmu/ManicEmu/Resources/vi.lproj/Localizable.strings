@@ -652,7 +652,7 @@ Nhấn nút điều khiển...";
 "ThirdPartGameInfoTips" = "Thông tin trò chơi provided by third parties. Sử dụng judgment của bạn. Nếu Manic EMU không khớp trò chơi, hãy sử dụng manual search.";
 "NotSupportHardcore" = "Chế độ Hardcore bị tắt cho trò chơi này. Có thể Manic EMU không được RetroAchievements ủy quyền, hoặc trò chơi không hỗ trợ chế độ hardcore.";
 "ChooseOne" = "Chọn một";
-"FilesImporterErrorBadCue" = "Nhập %@ thất bại. Tệp .cue may be invalid or not UTF-8 encoded. Vui lòng kiểm tra format.";
+"FilesImporterErrorBadCue" = "Nhập %@ thất bại. Tệp may be invalid or not UTF-8 encoded. Vui lòng kiểm tra format.";
 "Leaderboard" = "Bảng xếp hạng";
 "LeaderboardStart" = "Bắt đầu bảng xếp hạng: ";
 
@@ -666,3 +666,5 @@ Nhấn nút điều khiển...";
 "AlwaysShowProgress" = "Luôn Hiển Thị Tiến Trình";
 "AlwaysShowProgressDesc" = "Giữ tiến trình thành tựu hiển thị trên màn hình.";
 "Progress" = "Tiến Trình";
+
+"DCGameNoSupportGameSave" = "Dreamcast không hỗ trợ nhập/xuất tập tin lưu. Sử dụng VMU Explorer để chỉnh sửa tập tin bộ nhớ trong thư mục Manic EMU-Flycast-dc.";

@@ -648,7 +648,7 @@
 "ThirdPartGameInfoTips" = "ข้อมูลเกม provided by third parties ใช้ judgment ของคุณ หาก Manic EMU ไม่พบเกม ให้ใช้ manual search";
 "NotSupportHardcore" = "โหมดฮาร์ดคอร์ถูกปิดใช้งานสำหรับเกมนี้ อาจเป็นเพราะ Manic EMU ไม่ได้รับอนุญาตจาก RetroAchievements หรือเกมไม่รองรับโหมดฮาร์ดคอร์";
 "ChooseOne" = "เลือกหนึ่ง";
-"FilesImporterErrorBadCue" = "นำเข้า %@ ล้มเหลว ไฟล์ .cue may be invalid or not UTF-8 encoded กรุณาตรวจสอบ format";
+"FilesImporterErrorBadCue" = "นำเข้า %@ ล้มเหลว ไฟล์ may be invalid or not UTF-8 encoded กรุณาตรวจสอบ format";
 "Leaderboard" = "กระดานคะแนน";
 "LeaderboardStart" = "เริ่มกระดานคะแนน: ";
 
@@ -662,3 +662,5 @@
 "AlwaysShowProgress" = "แสดงความคืบหน้าตลอด";
 "AlwaysShowProgressDesc" = "แสดงความคืบหน้าของความสำเร็จบนหน้าจออย่างต่อเนื่อง";
 "Progress" = "ความคืบหน้า";
+
+"DCGameNoSupportGameSave" = "Dreamcast ไม่รองรับการนำเข้า/ส่งออกเซฟ ใช้ VMU Explorer เพื่อแก้ไขไฟล์หน่วยความจำในโฟลเดอร์ Manic EMU-Flycast-dc";

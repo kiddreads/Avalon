@@ -659,7 +659,7 @@
 "ThirdPartGameInfoTips" = "מידע על המשחק מסופק על ידי צדדים שלישיים. השתמש בשיקול דעתך ופעל לפי כללי הפלטפורמה. אם Manic EMU לא מתאים למשחק, השתמש בחיפוש כדי למצוא אותו ידנית.";
 "NotSupportHardcore" = "מצב Hardcore מנוטרל למשחק זה. אולי Manic EMU לא מאושר על ידי RetroAchievements, או שהמשחק פשוט לא תומך במצב hardcore.";
 "ChooseOne" = "בחר אחד";
-"FilesImporterErrorBadCue" = "ייבוא %@ נכשל. קובץ .cue עשוי להיות לא חוקי או לא מקודד ב-UTF-8. בדוק את הפורמט.";
+"FilesImporterErrorBadCue" = "ייבוא %@ נכשל. קובץ  עשוי להיות לא חוקי או לא מקודד ב-UTF-8. בדוק את הפורמט.";
 "Leaderboard" = "לוח תוצאות";
 "LeaderboardStart" = "תחילת לוח תוצאות: ";
 
@@ -673,3 +673,5 @@
 "AlwaysShowProgress" = "הצג תמיד התקדמות";
 "AlwaysShowProgressDesc" = "השאר את התקדмость ההישגים גלויה על המסך.";
 "Progress" = "התקדמות";
+
+"DCGameNoSupportGameSave" = "Dreamcast אינו תומך ביבוא/ייצוא שמירות. השתמש ב-VMU Explorer כדי לערוך קבצי זיכרון בתיקייה Manic EMU-Flycast-dc.";

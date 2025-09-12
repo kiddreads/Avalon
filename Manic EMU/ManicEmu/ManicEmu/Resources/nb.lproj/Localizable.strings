@@ -650,7 +650,7 @@ Trykk på kontrollerknappen...";
 "ThirdPartGameInfoTips" = "Spillinfo leveres av tredjeparter. Bruk din dømmekraft. Hvis Manic EMU ikke finner et spill, bruk manuelt søk.";
 "NotSupportHardcore" = "Hardcore-modus er deaktivert for dette spillet. Kanskje Manic EMU ikke er autorisert av RetroAchievements, eller spillet støtter det bare ikke.";
 "ChooseOne" = "Velg en";
-"FilesImporterErrorBadCue" = "Import av %@ mislyktes. .cue-filen may be invalid or not UTF-8 encoded. Sjekk formatet.";
+"FilesImporterErrorBadCue" = "Import av %@ mislyktes. filen may be invalid or not UTF-8 encoded. Sjekk formatet.";
 "Leaderboard" = "Ledertavle";
 "LeaderboardStart" = "Ledertavle start: ";
 
@@ -664,3 +664,5 @@ Trykk på kontrollerknappen...";
 "AlwaysShowProgress" = "Alltid Vis Fremdrift";
 "AlwaysShowProgressDesc" = "Hold prestasjonsfremdrift synlig på skjermen.";
 "Progress" = "Fremdrift";
+
+"DCGameNoSupportGameSave" = "Dreamcast støtter ikke import/eksport av lagringer. Bruk VMU Explorer for å redigere minnefiler i mappen Manic EMU-Flycast-dc.";

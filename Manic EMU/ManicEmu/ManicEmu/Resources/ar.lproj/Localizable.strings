@@ -633,7 +633,7 @@
 "ThirdPartGameInfoTips" = "معلومات اللعبة مقدمة من طرف طرف ثالث، استخدم حكمك. إذا فشلت Manic EMU في تطابق اللعبة، ابحث عنها يدويًا.";
 "NotSupportHardcore" = "الوضع المتقدم معطّل لهذه اللعبة. ربما لم تُرخص Manic EMU من قبل RetroAchievements، أو أن اللعبة لا تدعم الوضع الصعب.";
 "ChooseOne" = "اختر واحد";
-"FilesImporterErrorBadCue" = "فشل استيراد %@. ملف الملف .cue قد يحتوي على أخطاء أو لا يكون مُشفرًا بشكل صحيح. يرجى التحقق من التنسيق.";
+"FilesImporterErrorBadCue" = "فشل استيراد %@. ملف الملف قد يحتوي على أخطاء أو لا يكون مُشفرًا بشكل صحيح. يرجى التحقق من التنسيق.";
 "Leaderboard" = "لوحة المتصدرين";
 "LeaderboardStart" = "بداية اللوحة: ";
 
@@ -647,3 +647,5 @@
 "AlwaysShowProgress" = "إظهار التقدم دائمًا";
 "AlwaysShowProgressDesc" = "إبقاء تقدم الإنجازات مرئيًا على الشاشة.";
 "Progress" = "التقدم";
+
+"DCGameNoSupportGameSave" = "Dreamcast لا يدعم استيراد/تصدير الحفظ. استخدم VMU Explorer لتحرير ملفات الذاكرة الموجودة في مجلد Manic EMU-Flycast-dc.";

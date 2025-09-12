@@ -109,7 +109,7 @@ class CoreSelectionView: BaseView {
                 make.top.equalTo(detailLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
                 let count = Double(gameType.supportCores.count)
                 let estimatedHeight = count * Constants.Size.ItemHeightMid + ((count + 1) * Constants.Size.ContentSpaceMax)
-                let maxHeight = Constants.Size.WindowHeight/3
+                let maxHeight = Constants.Size.WindowHeight/2
                 make.height.equalTo(min(estimatedHeight, maxHeight))
                 if !cancelEnable {
                     make.bottom.equalToSuperview().offset(-Constants.Size.ContentInsetBottom)

@@ -585,6 +585,8 @@
 		577006A22D44CB9C00762E8F /* SkinSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006A12D44CB9B00762E8F /* SkinSettingsViewController.swift */; };
 		5771C1AA2E62077A0062EDE0 /* MobyGamesKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */; };
 		5771C20A2E6569BE0062EDE0 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C2092E6569B60062EDE0 /* LeaderboardView.swift */; };
+		5771C28B2E6986C00062EDE0 /* DC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C28A2E6986BE0062EDE0 /* DC.swift */; };
+		5771C2922E699C930062EDE0 /* flycast.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5771C2902E699C880062EDE0 /* flycast.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		579076E32D8A990700ED90FB /* FunctionButtonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */; };
 		579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
@@ -597,6 +599,8 @@
 		579213532D95314800E88819 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579213522D95313800E88819 /* BaseNavigationController.swift */; };
 		579C114B2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C114A2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift */; };
 		579C114D2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */; };
+		57A480CC2E733B83001D4598 /* flycast-jitless.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A480CB2E733B77001D4598 /* flycast-jitless.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57A480CD2E733B83001D4598 /* flycast-jitless-wince.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A480C42E733236001D4598 /* flycast-jitless-wince.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
 		57B6EBDB2D758819002E619C /* GameSaveMatchGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6EBDA2D7587FE002E619C /* GameSaveMatchGameView.swift */; };
@@ -805,6 +809,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57A480CC2E733B83001D4598 /* flycast-jitless.libretro.framework in Embed Frameworks */,
+				57A480CD2E733B83001D4598 /* flycast-jitless-wince.libretro.framework in Embed Frameworks */,
+				5771C2922E699C930062EDE0 /* flycast.libretro.framework in Embed Frameworks */,
 				574ABEC52E60A3C90045F76E /* mgba.libretro.framework in Embed Frameworks */,
 				574ABEC42E60A3C30045F76E /* vbam.libretro.framework in Embed Frameworks */,
 				574ABE9E2E6024800045F76E /* gambatte.libretro.framework in Embed Frameworks */,
@@ -1523,6 +1530,8 @@
 		577006A12D44CB9B00762E8F /* SkinSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSettingsViewController.swift; sourceTree = "<group>"; };
 		5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobyGamesKit.swift; sourceTree = "<group>"; };
 		5771C2092E6569B60062EDE0 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		5771C28A2E6986BE0062EDE0 /* DC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DC.swift; sourceTree = "<group>"; };
+		5771C2902E699C880062EDE0 /* flycast.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = flycast.libretro.framework; path = ../Cores/flycast.libretro.framework; sourceTree = SOURCE_ROOT; };
 		5780E7F42D9586FB005130D5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5780E7F52D9586FB005130D5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5780E7F72D958D6F005130D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1606,6 +1615,8 @@
 		579AB9D52E6C1118000868CB /* Config-SideloadDebug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-SideloadDebug.xcconfig"; sourceTree = "<group>"; };
 		579C114A2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationSceneDelegate.swift; sourceTree = "<group>"; };
 		579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
+		57A480C42E733236001D4598 /* flycast-jitless-wince.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "flycast-jitless-wince.libretro.framework"; path = "../Cores/flycast-jitless-wince.libretro.framework"; sourceTree = SOURCE_ROOT; };
+		57A480CB2E733B77001D4598 /* flycast-jitless.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "flycast-jitless.libretro.framework"; path = "../Cores/flycast-jitless.libretro.framework"; sourceTree = SOURCE_ROOT; };
 		57AD35E92D7DEB900092FD03 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheerExtensions.swift; sourceTree = "<group>"; };
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -3754,6 +3765,9 @@
 		57BFBE702DD335FD00AABF98 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				5771C2902E699C880062EDE0 /* flycast.libretro.framework */,
+				57A480CB2E733B77001D4598 /* flycast-jitless.libretro.framework */,
+				57A480C42E733236001D4598 /* flycast-jitless-wince.libretro.framework */,
 				574ABE932E6020880045F76E /* gambatte.libretro.framework */,
 				574ABE942E6020880045F76E /* mgba.libretro.framework */,
 				574ABE952E6020880045F76E /* vbam.libretro.framework */,
@@ -3929,6 +3943,7 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				5771C28A2E6986BE0062EDE0 /* DC.swift */,
 				574ABEBB2E609FE30045F76E /* GBA.swift */,
 				576A7DA72E3B4B1200008E35 /* PS1.swift */,
 				5744C7172E375BF00088081A /* PM.swift */,
@@ -5003,6 +5018,7 @@
 				575A39D02DCD2B3E00B28FC2 /* UIImageViewExtensions.swift in Sources */,
 				57F6328B2D6EB84A007270E8 /* DownloadManager.swift in Sources */,
 				57DF849C2D630E5800AA0AAB /* CGSizeExtenstions.swift in Sources */,
+				5771C28B2E6986C00062EDE0 /* DC.swift in Sources */,
 				57EC6AB02D80321B002920F0 /* CheatCodeBlankSlateView.swift in Sources */,
 				57F0D7F22DE1634E00760F57 /* LibretroPreViewFilter.swift in Sources */,
 				A58C3F4F248E44AF0099E068 /* UIDeviceExtensions.swift in Sources */,

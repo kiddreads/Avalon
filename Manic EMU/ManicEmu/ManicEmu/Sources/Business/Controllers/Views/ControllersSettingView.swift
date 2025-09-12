@@ -79,7 +79,7 @@ class ControllersSettingView: BaseView {
         }
     }
     
-    init(asSideMenu: Bool = true, gameType: GameType = ._3ds) {
+    init(asSideMenu: Bool = true, gameType: GameType = .dc) {
         self.asSideMenu = asSideMenu
         self.initGameType = gameType
         super.init(frame: .zero)

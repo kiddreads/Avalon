@@ -658,7 +658,7 @@ Apasă butonul controlerului...";
 "ThirdPartGameInfoTips" = "Informațiile despre joc sunt furnizate de terți. Folosește-ți judecata și respectă regulile platformei. Dacă Manic EMU nu găsește un joc, folosește căutarea pentru a-l găsi manual.";
 "NotSupportHardcore" = "Modul Hardcore este dezactivat pentru acest joc. Poate Manic EMU nu este autorizat de RetroAchievements, sau jocul pur și simplu nu suportă modul hardcore.";
 "ChooseOne" = "Alege unul";
-"FilesImporterErrorBadCue" = "Import %@ eșuat. Fișierul .cue poate fi invalid sau nu este codificat UTF-8. Verifică formatul.";
+"FilesImporterErrorBadCue" = "Import %@ eșuat. Fișierul poate fi invalid sau nu este codificat UTF-8. Verifică formatul.";
 "Leaderboard" = "Clasament";
 "LeaderboardStart" = "Început clasament: ";
 
@@ -672,3 +672,5 @@ Apasă butonul controlerului...";
 "AlwaysShowProgress" = "Afișează Mereu Progresul";
 "AlwaysShowProgressDesc" = "Păstrează progresul realizărilor vizibil pe ecran.";
 "Progress" = "Progres";
+
+"DCGameNoSupportGameSave" = "Dreamcast nu suportă importul/exportul salvărilor. Utilizați VMU Explorer pentru a edita fișierele de memorie din folderul Manic EMU-Flycast-dc.";

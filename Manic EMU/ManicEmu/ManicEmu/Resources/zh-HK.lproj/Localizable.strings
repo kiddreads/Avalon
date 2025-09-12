@@ -663,7 +663,7 @@
 "ThirdPartGameInfoTips" = "遊戲資訊由第三方提供。請自行判斷並遵循平台規則。如果 Manic EMU 無法匹配遊戲，請使用搜尋功能手動尋找。";
 "NotSupportHardcore" = "此遊戲已停用硬核模式。可能 Manic EMU 未獲 RetroAchievements 授權，或此遊戲不支援硬核模式。";
 "ChooseOne" = "選擇一項";
-"FilesImporterErrorBadCue" = "導入「%@」失敗。.cue 檔案可能無效或非 UTF-8 編碼。請檢查格式。";
+"FilesImporterErrorBadCue" = "導入「%@」失敗。檔案可能無效或非 UTF-8 編碼。請檢查格式。";
 "Leaderboard" = "排行榜";
 "LeaderboardStart" = "排行榜開始: ";
 
@@ -678,3 +678,5 @@
 "AlwaysShowProgress" = "常顯示進度";
 "AlwaysShowProgressDesc" = "持續於畫面上顯示成就進度。";
 "Progress" = "進度";
+
+"DCGameNoSupportGameSave" = "Dreamcast 不支援存檔導入/導出。請使用 VMU Explorer 編輯 Manic EMU-Flycast-dc 文件夾中的記憶卡檔案。";

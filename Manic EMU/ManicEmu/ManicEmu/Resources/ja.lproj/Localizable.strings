@@ -655,7 +655,7 @@
 "ThirdPartGameInfoTips" = "ゲーム情報はサードパーティにより提供されています。ご自身の判断で利用し、プラットフォームのルールに従ってください。Manic EMUがゲームを自動で認識しない場合は、検索して手動で見つけてください。";
 "NotSupportHardcore" = "このゲームではハードコアモードは無効です。Manic EMUがRetroAchievementsに承認されていないか、このゲームがハードコアモードに対応していない可能性があります。";
 "ChooseOne" = "選択してください";
-"FilesImporterErrorBadCue" = "「%@」のインポートに失敗しました。.cueファイルが無効であるか、UTF-8エンコードされていない可能性があります。形式を確認してください。";
+"FilesImporterErrorBadCue" = "「%@」のインポートに失敗しました。ファイルが無効であるか、UTF-8エンコードされていない可能性があります。形式を確認してください。";
 "Leaderboard" = "リーダーボード";
 "LeaderboardStart" = "リーダーボード開始: ";
 
@@ -669,3 +669,5 @@
 "AlwaysShowProgress" = "進捗を常に表示";
 "AlwaysShowProgressDesc" = "実績の進捗を画面上に常に表示します。";
 "Progress" = "進捗";
+
+"DCGameNoSupportGameSave" = "ドリームキャストはセーブデータのインポート/エクスポートに対応していません。VMU Explorer を使用して、Manic EMU-Flycast-dc フォルダ内のメモリファイルを編集してください。";

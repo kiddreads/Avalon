@@ -659,7 +659,7 @@ Paina ohjaimen nappia...";
 "ThirdPartGameInfoTips" = "Pelin tiedot tarjoaa kolmannet osapuolet. Käytä harkintaa ja noudata alustan sääntöjä. Jos Manic EMU ei löydä peliä, käytä hakua löytääksesi sen manuaalisesti.";
 "NotSupportHardcore" = "Hardcore-tila on poissa käytöstä tässä pelissä. Ehkä Manic EMU ei ole RetroAchievementsin valtuuttama, tai peli ei vain tue hardcore-tilaa.";
 "ChooseOne" = "Valitse yksi";
-"FilesImporterErrorBadCue" = "%@ tuonti epäonnistui. .cue-tiedosto voi olla virheellinen tai ei UTF-8-koodattu. Tarkista muoto.";
+"FilesImporterErrorBadCue" = "%@ tuonti epäonnistui. tiedosto voi olla virheellinen tai ei UTF-8-koodattu. Tarkista muoto.";
 "Leaderboard" = "Tulostaulukko";
 "LeaderboardStart" = "Tulostaulukon alku: ";
 
@@ -673,3 +673,5 @@ Paina ohjaimen nappia...";
 "AlwaysShowProgress" = "Näytä Aina Edistyminen";
 "AlwaysShowProgressDesc" = "Pidä saavutusten edistyminen näkyvillä näytöllä.";
 "Progress" = "Edistyminen";
+
+"DCGameNoSupportGameSave" = "Dreamcast ei tue tallennusten tuontia/vientiä. Muokkaa muistitiedostoja Manic EMU-Flycast-dc -kansiossa käyttämällä VMU Explorer -ohjelmaa.";

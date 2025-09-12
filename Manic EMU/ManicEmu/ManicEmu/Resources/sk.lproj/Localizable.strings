@@ -658,7 +658,7 @@ Ak sa vyskytne nestabilita v 3DS, pozrite si «Časté otázky» alebo sa pripoj
 "ThirdPartGameInfoTips" = "Informácie o hre poskytujú tretie strany. Používaj vlastný úsudok a dodržiava pravidlá platformy. Ak Manic EMU nenájde hru, použite vyhľadávanie na manuálne nájdenie.";
 "NotSupportHardcore" = "Hardcore režim je pre túto hru zakázaný. Možno Manic EMU nie je autorizované RetroAchievements, alebo hra jednoducho nepodporuje hardcore režim.";
 "ChooseOne" = "Vyberte jednu";
-"FilesImporterErrorBadCue" = "Import %@ zlyhal. Súbor .cue môže byť neplatný alebo nie je kódovaný v UTF-8. Skontrolujte formát.";
+"FilesImporterErrorBadCue" = "Import %@ zlyhal. Súbor môže byť neplatný alebo nie je kódovaný v UTF-8. Skontrolujte formát.";
 "Leaderboard" = "Rebríček";
 "LeaderboardStart" = "Štart rebríčka: ";
 
@@ -672,3 +672,5 @@ Ak sa vyskytne nestabilita v 3DS, pozrite si «Časté otázky» alebo sa pripoj
 "AlwaysShowProgress" = "Vždy Zobraziť Pokrok";
 "AlwaysShowProgressDesc" = "Udržiavajte pokrok úspechov viditeľný na obrazovke.";
 "Progress" = "Pokrok";
+
+"DCGameNoSupportGameSave" = "Dreamcast nepodporuje import/export uložených hier. Na úpravu pamäťových súborov v priečinku Manic EMU-Flycast-dc použite VMU Explorer.";

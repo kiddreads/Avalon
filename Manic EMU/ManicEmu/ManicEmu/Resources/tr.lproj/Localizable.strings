@@ -658,7 +658,7 @@ Kontrolcü düğmesine basın...";
 "ThirdPartGameInfoTips" = "Oyun bilgileri üçüncü taraflarca sağlanır. Kendi kararınızı kullanın. Manic EMU bir oyunu eşleştiremezse, manual search kullanın.";
 "NotSupportHardcore" = "Bu oyun için Hardcore Modu devre dışı. Manic EMU RetroAchievements tarafından yetkilendirilmemiş olabilir veya oyun desteklemiyor olabilir.";
 "ChooseOne" = "Birini seç";
-"FilesImporterErrorBadCue" = "%@ içe aktarılamadı. .cue dosyası geçersiz veya UTF-8 kodlu değil. Lütfen formatı kontrol edin.";
+"FilesImporterErrorBadCue" = "%@ içe aktarılamadı. dosyası geçersiz veya UTF-8 kodlu değil. Lütfen formatı kontrol edin.";
 "Leaderboard" = "Liderlik Tablosu";
 "LeaderboardStart" = "Liderlik başlangıcı: ";
 
@@ -672,3 +672,5 @@ Kontrolcü düğmesine basın...";
 "AlwaysShowProgress" = "İlerlemeyi Her Zaman Göster";
 "AlwaysShowProgressDesc" = "Başarım ilerlemesini ekranda görünür tut.";
 "Progress" = "İlerleme";
+
+"DCGameNoSupportGameSave" = "Dreamcast kayıt içe/dışa aktarmayı desteklemez. Manic EMU-Flycast-dc klasöründeki bellek dosyalarını düzenlemek için VMU Explorer'ı kullanın.";

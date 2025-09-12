@@ -210,6 +210,8 @@ class GameCoverView: UIView {
                 image = style == .style2 ? R.image.pm_cover_v() : R.image.pm_cover_h()
             } else if gameType == .ps1 {
                 image = style == .style2 ? R.image.ps1_cover_v() : R.image.ps1_cover_h()
+            } else if gameType == .dc {
+                image = style == .style2 ? R.image.dc_cover_v() : R.image.dc_cover_h()
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))

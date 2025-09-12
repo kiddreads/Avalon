@@ -665,7 +665,7 @@
 "ThirdPartGameInfoTips" = "游戏信息由第三方提供，请自行甄别并遵守平台规则。若 Manic EMU 匹配失败，可手动搜索游戏。";
 "NotSupportHardcore" = "本游戏已禁用硬核模式，可能是Manic EMU未获得RetroAchievements认证或游戏不支持。";
 "ChooseOne" = "任选其一";
-"FilesImporterErrorBadCue" = "导入失败：\"%@\"。该 .cue 文件可能格式错误或未使用 UTF-8 编码，请检查文件。";
+"FilesImporterErrorBadCue" = "导入失败：\"%@\"。该文件可能格式错误或未使用 UTF-8 编码，请检查文件。";
 "Leaderboard" = "排行榜";
 "LeaderboardStart" = "排行榜开始：";
 "TurnOffHardcoreAlert" = "切换到休闲模式后，如需重新开启硬核模式必须重置游戏。是否继续？";
@@ -679,3 +679,5 @@
 "AlwaysShowProgress" = "始终显示进度";
 "AlwaysShowProgressDesc" = "在屏幕上持续显示成就进度。";
 "Progress" = "进度";
+
+"DCGameNoSupportGameSave" = "Dreamcast不支持游戏存档的导入导出功能，需要你使用VMU Explorer工具自行编辑存档记忆体，这些记忆体文件存在于Manic EMU-Flycast-dc目录中";

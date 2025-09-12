@@ -164,6 +164,8 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.pm_group_brand()
             } else if gameType == .ps1 {
                 image = R.image.ps1_group_brand()
+            } else if gameType == .dc {
+                image = R.image.dc_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image

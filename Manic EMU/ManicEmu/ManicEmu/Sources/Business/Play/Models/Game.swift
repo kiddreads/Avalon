@@ -112,7 +112,7 @@ class Game: Object, ObjectUpdatable {
     
     //游戏文件路径
     var romUrl: URL {
-        if fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "cue" {
+        if isMultiFileGame {
             return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(fileName.deletingPathExtension).appendingPathComponent(fileName))
         }
         
@@ -260,7 +260,10 @@ class Game: Object, ObjectUpdatable {
         }
         let fileManager = FileManager.default
         for bios in requireBIOS {
-            let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+            var biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+            if gameType == .dc {
+                biosInLib = Constants.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
+            }
             let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
             if fileManager.fileExists(atPath: biosInLib) {
                 continue
@@ -320,6 +323,16 @@ class Game: Object, ObjectUpdatable {
                 return Bundle.main.path(forResource: "mgba.libretro", ofType: "framework", inDirectory: "Frameworks")
             } else {
                 return Bundle.main.path(forResource: "vbam.libretro", ofType: "framework", inDirectory: "Frameworks")
+            }
+        } else if gameType == .dc {
+            if jit {
+                return Bundle.main.path(forResource: "flycast.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else {
+                if defaultCore == 0 {
+                    return Bundle.main.path(forResource: "flycast-jitless.libretro", ofType: "framework", inDirectory: "Frameworks")
+                } else {
+                    return Bundle.main.path(forResource: "flycast-jitless-wince.libretro", ofType: "framework", inDirectory: "Frameworks")
+                }
             }
         }
         return nil
@@ -457,6 +470,11 @@ class Game: Object, ObjectUpdatable {
             }
         }
     }
+    
+    var isMultiFileGame: Bool {
+        return fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "cue" || fileExtension.lowercased() == "gdi" 
+    }
+    
 }
 
 

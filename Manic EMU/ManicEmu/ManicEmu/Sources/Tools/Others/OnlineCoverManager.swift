@@ -111,6 +111,8 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("Nintendo - Pokemon Mini/Named_Boxarts/")
             case .ps1:
                 boxArtUrl = host.appendingPathComponent("Sony - PlayStation/Named_Boxarts/")
+            case .dc:
+                boxArtUrl = host.appendingPathComponent("Sega - Dreamcast/Named_Boxarts/")
             default:
                 boxArtUrl = nil
             }

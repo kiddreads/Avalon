@@ -118,10 +118,15 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = Constants.BIOS.DSBios
             } else if gameType == .ps1 {
                 biosItems = Constants.BIOS.PS1Bios
+            } else if gameType == .dc {
+                biosItems = Constants.BIOS.DCBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
-                let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+                var biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+                if gameType == .dc {
+                    biosInLib = Constants.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
+                }
                 let isBiosExists = fileManager.fileExists(atPath: biosInLib)
                 if isBiosExists {
                     biosItems[index].imported = true
@@ -199,7 +204,11 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                 if matchs.count > 0 {
                                     for match in matchs {
                                         try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
-                                        try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.System.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                        var matchFilePath = Constants.Path.System.appendingPathComponent(match.fileName)
+                                        if gameType == .dc {
+                                            matchFilePath = Constants.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                        }
+                                        try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
                                     }
                                 }
                                 DispatchQueue.main.async {
@@ -231,6 +240,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = Constants.BIOS.DSBios.count
         } else if gameType == .ps1 {
             itemCount = Constants.BIOS.PS1Bios.count
+        } else if gameType == .dc {
+            itemCount = Constants.BIOS.DCBios.count
         }
         return (Double(itemCount) * Constants.Size.ItemHeightMax) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid)
     }

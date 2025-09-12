@@ -658,7 +658,7 @@ Presiona el botón del control para continuar...";
 "ThirdPartGameInfoTips" = "La info del juego es de terceros. Usa tu criterio. Si Manic EMU no encuentra un juego, búscalo manualmente.";
 "NotSupportHardcore" = "El Modo Hardcore está desactivado para este juego. Quizá Manic EMU no está autorizado o el juego no lo soporta.";
 "ChooseOne" = "Elige uno";
-"FilesImporterErrorBadCue" = "Error al importar %@. El archivo .cue puede ser inválido o no UTF-8. Verifica el formato.";
+"FilesImporterErrorBadCue" = "Error al importar %@. El archivo puede ser inválido o no UTF-8. Verifica el formato.";
 "Leaderboard" = "Tabla de posiciones";
 "LeaderboardStart" = "Inicio tabla: ";
 
@@ -672,3 +672,5 @@ Presiona el botón del control para continuar...";
 "AlwaysShowProgress" = "Mostrar Progreso Siempre";
 "AlwaysShowProgressDesc" = "Mantener el progreso de logros visible en pantalla.";
 "Progress" = "Progreso";
+
+"DCGameNoSupportGameSave" = "Dreamcast no soporta importar/exportar partidas. Usa VMU Explorer para editar archivos de memoria en la carpeta Manic EMU-Flycast-dc.";

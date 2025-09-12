@@ -658,7 +658,7 @@ Nyomja meg a kontroller gombját...";
 "ThirdPartGameInfoTips" = "A játék információkat harmadik felek szolgáltatják. Használd a saját ítélőképességed és kövessed a platform szabályait. Ha a Manic EMU nem találja a játékot, használj keresést a manuális megtaláláshoz.";
 "NotSupportHardcore" = "A Hardcore mód ki van kapcsolva ehhez a játékhoz. Lehet, hogy a Manic EMU nincs autorizálva a RetroAchievements által, vagy a játék egyszerűen nem támogatja a hardcore módot.";
 "ChooseOne" = "Válassz egyet";
-"FilesImporterErrorBadCue" = "%@ importálása sikertelen. A .cue fájl érvénytelen vagy nem UTF-8 kódolású. Ellenőrizd a formátumot.";
+"FilesImporterErrorBadCue" = "%@ importálása sikertelen. A fájl érvénytelen vagy nem UTF-8 kódolású. Ellenőrizd a formátumot.";
 "Leaderboard" = "Ranglista";
 "LeaderboardStart" = "Ranglista kezdete: ";
 
@@ -672,3 +672,5 @@ Nyomja meg a kontroller gombját...";
 "AlwaysShowProgress" = "Folyamatosan Mutasd az Előrehaladást";
 "AlwaysShowProgressDesc" = "Tartsd az achievementek előrehaladását láthatóvá a képernyőn.";
 "Progress" = "Előrehaladás";
+
+"DCGameNoSupportGameSave" = "A Dreamcast nem támogatja a mentések importálását/exportálását. Használd a VMU Explorer-t a Manic EMU-Flycast-dc mappában található memóriafájlok szerkesztéséhez.";

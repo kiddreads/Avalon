@@ -654,7 +654,7 @@ Stiskněte tlačítko ovladače...";
 "ThirdPartGameInfoTips" = "Informace o hře provided by third parties. Použijte vlastní úsudek. Pokud Manic EMU nenajde hru, použijte manuální vyhledávání.";
 "NotSupportHardcore" = "Hardcore režim je pro tuto hru zakázán. Možná Manic EMU není autorizován RetroAchievements, nebo hra tento režim nepodporuje.";
 "ChooseOne" = "Vyberte jednu";
-"FilesImporterErrorBadCue" = "Import %@ selhal. Soubor .cue may be invalid or not UTF-8 encoded. Zkontrolujte formát.";
+"FilesImporterErrorBadCue" = "Import %@ selhal. Soubor may be invalid or not UTF-8 encoded. Zkontrolujte formát.";
 "Leaderboard" = "Žebříček";
 "LeaderboardStart" = "Začátek žebříčku: ";
 
@@ -668,3 +668,5 @@ Stiskněte tlačítko ovladače...";
 "AlwaysShowProgress" = "Vždy Zobrazit Pokrok";
 "AlwaysShowProgressDesc" = "Udržujte pokrok úspěchů viditelný na obrazovce.";
 "Progress" = "Pokrok";
+
+"DCGameNoSupportGameSave" = "Dreamcast nepodporuje import/export uložených her. K úpravě paměťových souborů ve složce Manic EMU-Flycast-dc použijte VMU Explorer.";

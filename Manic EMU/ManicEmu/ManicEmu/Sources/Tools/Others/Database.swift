@@ -236,7 +236,7 @@ struct Database {
                     }
                 }
                 
-                if systemCoreVersionNumber < 161 {
+                if systemCoreVersionNumber < 170 {
                     //调整snes gba的默认核心
                     let games = realm.objects(Game.self).where({ $0.gameType == .snes || $0.gameType == .gba })
                     if games.count > 0 {

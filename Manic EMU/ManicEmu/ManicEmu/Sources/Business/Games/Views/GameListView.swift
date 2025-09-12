@@ -599,6 +599,10 @@ class GameListView: BaseView {
         case .shareRom:
             ShareManager.shareFiles(games: games, shareFileType: .rom)
         case .importSave:
+            if firstGame.gameType == .dc {
+                
+                return
+            }
             FilesImporter.shared.presentImportController(supportedTypes: UTType.gamesaveTypes, allowsMultipleSelection: false) { urls in
                 if let url = urls.first {
                     if firstGame.gameType == ._3ds || firstGame.gameType == .psp {
@@ -641,7 +645,7 @@ class GameListView: BaseView {
                                 let dlcPath = gamePath.replacingOccurrences(of: "/00040000/", with: "/0004008c/")
                                 try FileManager.safeRemoveItem(at: URL(fileURLWithPath: dlcPath))
                                 SyncManager.deletePath(localPath: dlcPath)
-                            } else if game.fileExtension.lowercased() == "cue" || game.fileExtension == "m3u" {
+                            } else if game.isMultiFileGame {
                                 let romParentPath = game.romUrl.path.deletingLastPathComponent
                                 try FileManager.safeRemoveItem(at: URL(fileURLWithPath: romParentPath))
                                 SyncManager.deletePath(localPath: romParentPath)

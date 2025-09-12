@@ -12,6 +12,7 @@ import MelonDSDeltaCore
 
 enum System: CaseIterable
 {
+    case dc
     case ps1
     case pm
     case vb
@@ -38,7 +39,7 @@ enum System: CaseIterable
     }
     
     static var allCores: [ManicEmuCoreProtocol] {
-        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, MelonDS.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core]
+        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, MelonDS.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core]
     }
 }
 
@@ -66,6 +67,7 @@ extension System {
         case .vb: return .vb
         case .pm: return .pm
         case .ps1: return .ps1
+        case .dc: return .dc
         }
     }
 }

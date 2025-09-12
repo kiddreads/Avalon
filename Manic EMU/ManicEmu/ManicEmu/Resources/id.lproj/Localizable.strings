@@ -651,7 +651,7 @@ Tekan tombol kontroler...";
 "ThirdPartGameInfoTips" = "Info game provided by third parties. Gunakan pertimbangan Anda. Jika Manic EMU tidak menemukan game, gunakan pencarian manual.";
 "NotSupportHardcore" = "Mode Hardcore dinonaktifkan untuk game ini. Mungkin Manic EMU tidak diizinkan oleh RetroAchievements, atau game tidak mendukung mode hardcore.";
 "ChooseOne" = "Pilih satu";
-"FilesImporterErrorBadCue" = "Gagal mengimpor %@. File .cue may be invalid or not UTF-8 encoded. Silakan periksa formatnya.";
+"FilesImporterErrorBadCue" = "Gagal mengimpor %@. File may be invalid or not UTF-8 encoded. Silakan periksa formatnya.";
 "Leaderboard" = "Papan peringkat";
 "LeaderboardStart" = "Mulai papan peringkat: ";
 
@@ -665,3 +665,5 @@ Tekan tombol kontroler...";
 "AlwaysShowProgress" = "Selalu Tampilkan Progress";
 "AlwaysShowProgressDesc" = "Pertahankan progres pencapaian tetap terlihat di layar.";
 "Progress" = "Progress";
+
+"DCGameNoSupportGameSave" = "Dreamcast tidak mendukung impor/ekspor simpanan. Gunakan VMU Explorer untuk mengedit file memori di folder Manic EMU-Flycast-dc.";

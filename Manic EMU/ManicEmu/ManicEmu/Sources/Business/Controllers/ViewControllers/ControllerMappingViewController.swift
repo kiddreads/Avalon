@@ -18,7 +18,7 @@ class ControllerMappingViewController: BaseViewController {
         fatalError("init() is unavailable")
     }
     
-    init(gameType: GameType = .ps1, controller: GameController) {
+    init(gameType: GameType = .dc, controller: GameController) {
         self.controllerMappingView = ControllerMappingView(gameType: gameType, controller: controller)
         super.init(fullScreen: true)
         self.controllerMappingView.didTapClose = { [weak self] in

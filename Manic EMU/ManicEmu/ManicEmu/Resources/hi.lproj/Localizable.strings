@@ -660,7 +660,7 @@
 "ThirdPartGameInfoTips" = "गेम जानकारी third parties द्वारा प्रदान की जाती है। अपने judgment का use करें। यदि Manic EMU कोई गेम match नहीं कर पाता, तो manual search का use करें।";
 "NotSupportHardcore" = "इस गेम के लिए हार्डकोर मोड अक्षम है। शायद Manic EMU, RetroAchievements द्वारा अधिकृत नहीं है, या गेम हार्डकोर मोड support नहीं करता।";
 "ChooseOne" = "एक चुनें";
-"FilesImporterErrorBadCue" = "%@ आयात करने में विफल। .cue फ़ाइल invalid या UTF-8 encoded नहीं हो सकती। कृपया format जांचें।";
+"FilesImporterErrorBadCue" = "%@ आयात करने में विफल। फ़ाइल invalid या UTF-8 encoded नहीं हो सकती। कृपया format जांचें।";
 "Leaderboard" = "लीडरबोर्ड";
 "LeaderboardStart" = "लीडरबोर्ड Start: ";
 
@@ -674,3 +674,5 @@
 "AlwaysShowProgress" = "हमेशा प्रगति दिखाएं";
 "AlwaysShowProgressDesc" = "स्क्रीन पर उपलब्धि प्रगति दिखाई रखें।";
 "Progress" = "प्रगति";
+
+"DCGameNoSupportGameSave" = "Dreamcast सेव आयात/निर्यात का समर्थन नहीं करता है। Manic EMU-Flycast-dc फ़ोल्डर में स्थित मेमोरी फ़ाइलों को संपादित करने के लिए VMU Explorer का उपयोग करें।";
