@@ -31,30 +31,30 @@ Your support keeps this app going
 ### [Supported Platforms]
 
 #### Nintendo
-- Nintendo 3DS(3DS)
-- Nintendo 64(N64)
-- Nintendo DS(NDS)
-- Game Boy Advance(GBA)
-- Game Boy Color(GBC)
-- Game Boy(GB)
-- Nintendo Entertainment System(NES)
-- Super Nintendo Entertainment System(SNES)
-- Virtual Boy(VB)
-- Pokémon Mini(PM)
+- Nintendo 3DS (3DS)
+- Nintendo 64 (N64)
+- Nintendo DS (NDS)
+- Game Boy Advance (GBA)
+- Game Boy Color (GBC)
+- Game Boy (GB)
+- Nintendo Entertainment System (NES)
+- Super Nintendo Entertainment System (SNES)
+- Virtual Boy (VB)
+- Pokémon Mini (PM)
 
 #### SONY
-- PlayStation(PS1)
-- PlayStation Portable(PSP)
+- PlayStation (PS1)
+- PlayStation Portable (PSP)
 
 #### SEGA
-- Sega Dreamcast(DC)
-- Sega Saturn(SS)
-- Sega Master System(MS)
-- Sega Game Gear(GG)
-- Sega SG-1000(SG)
-- Sega Genesis 32X/Super 32X(32X)
-- Sega CD/Mega-CD(MCD)
-- Sega Genesis/MegaDrive(MD)
+- Sega Dreamcast (DC)
+- Sega Saturn (SS)
+- Sega Master System (MS)
+- Sega Game Gear (GG)
+- Sega SG-1000 (SG)
+- Sega Genesis 32X/Super 32X (32X)
+- Sega CD/Mega-CD (MCD)
+- Sega Genesis/MegaDrive (MD)
 
 More platforms coming soon!
 
