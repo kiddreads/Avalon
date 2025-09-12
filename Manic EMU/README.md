@@ -47,6 +47,7 @@ Your support keeps this app going
 - PlayStation Portable(PSP)
 
 #### SEGA
+- Sega Dreamcast(DC)
 - Sega Saturn(SS)
 - Sega Master System(MS)
 - Sega Game Gear(GG)
