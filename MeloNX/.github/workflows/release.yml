@@ -129,7 +129,6 @@ jobs:
 
           pushd publish_appimage
           mv Ryujinx.AppImage ../release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage
-          mv Ryujinx.AppImage.zsync ../release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync
           popd
 
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/ryujinx --command=UploadGenericPackage "Ryubing|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-$BUILD_VERSION-$ARCH_NAME.AppImage"
