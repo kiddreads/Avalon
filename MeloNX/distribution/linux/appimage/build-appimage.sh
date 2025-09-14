@@ -6,7 +6,6 @@ cd "$ROOTDIR"
 
 BUILDDIR=${BUILDDIR:-publish}
 OUTDIR=${OUTDIR:-publish_appimage}
-UFLAG=${UFLAG:-"gh-releases-zsync|Ryubing|ryujinx|latest|*-x64.AppImage.zsync"}
 
 rm -rf AppDir
 mkdir -p AppDir/usr/bin
@@ -24,7 +23,6 @@ chmod +x AppDir/AppRun AppDir/usr/bin/Ryujinx*
 mkdir -p "$OUTDIR"
 
 appimagetool -n --comp zstd --mksquashfs-opt -Xcompression-level --mksquashfs-opt 21 \
-    -u "$UFLAG" \
     AppDir "$OUTDIR"/Ryujinx.AppImage
 
 # Move zsync file needed for delta updates

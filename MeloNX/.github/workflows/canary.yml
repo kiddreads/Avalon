@@ -134,16 +134,14 @@ jobs:
             exit 1
           fi
 
-          export UFLAG="gh-releases-zsync|${{ secrets.RC_OWNER }}${{ secrets.RC_CANARY_NAME }}|latest|*-$ARCH_NAME.AppImage.zsync"
           BUILDDIR=publish OUTDIR=publish_appimage distribution/linux/appimage/build-appimage.sh
 
           pushd publish_appimage
           mv Ryujinx.AppImage ../release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage
           mv Ryujinx.AppImage.zsync ../release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync
           popd
-          
+
           gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage"
-          gli --access-token=${{ secrets.GITLAB_TOKEN }} --project=ryubing/canary --command=UploadGenericPackage "Ryubing-Canary|${{ steps.version_info.outputs.build_version }}|release_output/ryujinx-canary-$BUILD_VERSION-$ARCH_NAME.AppImage.zsync"
         shell: bash
 
   macos_release:
