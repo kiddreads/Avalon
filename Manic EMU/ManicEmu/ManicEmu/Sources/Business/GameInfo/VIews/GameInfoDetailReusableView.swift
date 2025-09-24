@@ -762,9 +762,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     
     private lazy var dcCoreContextMenuButton: ContextMenuButton = {
         var actions: [UIMenuElement] = []
-        actions.append((UIAction(title: "JITLess Ver: Defalut") { [weak self] _ in
+        actions.append((UIAction(title: "JITLess Ver: Default") { [weak self] _ in
             guard let self = self else { return }
-            self.dcCoreButton.titleLabel.text = "JITLess Ver: Defalut"
+            self.dcCoreButton.titleLabel.text = "JITLess Ver: Default"
             if let game {
                 Game.change { _ in
                     game.defaultCore = 0
@@ -785,7 +785,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }()
     
     private lazy var dcCoreButton: SymbolButton = {
-        let ver = (game?.defaultCore ?? 0) == 0 ? "Defalut" : "WinCE"
+        let ver = (game?.defaultCore ?? 0) == 0 ? "Default" : "WinCE"
         let view = SymbolButton(symbol: .boltSlash, title: "JITLess Ver: \(ver)", horizontalContian: true)
         view.titleLabel.numberOfLines = 0
         view.addTapGesture { [weak self] gesture in
@@ -853,6 +853,45 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
             self.snesVRAMMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var pspRendererContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: "Automatic") { [weak self] _ in
+            guard let self = self else { return }
+            self.pspRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nAutomatic"
+            self.game?.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: 0)
+        })
+        actions.append(UIAction(title: "OpenGL") { [weak self] _ in
+            guard let self = self else { return }
+            self.pspRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nOpenGL"
+            self.game?.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: 1)
+        })
+        actions.append(UIAction(title: "Vulkan") { [weak self] _ in
+            guard let self = self else { return }
+            self.pspRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nVulkan"
+            self.game?.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: 2)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+        return view
+    }()
+    
+    private lazy var pspRendererButton: SymbolButton = {
+        let type = (self.game?.getExtraInt(key: ExtraKey.pspRenderer.rawValue) ?? 0)
+        var renderType = "Automatic"
+        if type == 1 {
+            renderType = "OpenGL"
+        } else if type == 2 {
+            renderType = "Vulkan"
+        }
+        let title = "\(R.string.localizable.rendererTitle())\n" + renderType
+        let view = SymbolButton(image: R.image.customLightspectrumHorizontal()?.applySymbolConfig(color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.pspRendererContextMenuButton.triggerTapGesture()
         }
         return view
     }()
@@ -1150,10 +1189,21 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             languageContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(languageButton)
+            }
+            
+            functionButtonContainerView.addSubview(pspRendererContextMenuButton)
+            functionButtonContainerView.addSubview(pspRendererButton)
+            pspRendererButton.snp.makeConstraints { make in
+                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            pspRendererContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(pspRendererButton)
             }
         }
     }

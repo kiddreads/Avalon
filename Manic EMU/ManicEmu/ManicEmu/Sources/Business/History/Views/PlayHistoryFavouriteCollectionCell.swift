@@ -175,7 +175,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         } else {
             subTitleLabel.text = ""
         }
-        if game.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false {
+        if game.enableAchievements {
             retroView.isHidden = false
             retroView.countLabel.text = ""
             retroView.removeGestureRecognizers()

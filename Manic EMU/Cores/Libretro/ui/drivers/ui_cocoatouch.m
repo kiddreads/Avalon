@@ -1113,9 +1113,6 @@ static BOOL RespectSilentMode = false;
 
     //核心选项 开启PSP内部作弊码支持
     if (strcmp(core_info->core_name, "PPSSPP") == 0 && completion) {
-        core_option_manager_t *coreopts = NULL;
-        retroarch_ctl(RARCH_CTL_CORE_OPTIONS_LIST_GET, &coreopts);
-        core_option_manager_set_val(coreopts, 8, 1, false); //开启ppsspp内部作弊码
         core_options_flush();//生成核心配置
         //获取PSP的游戏信息
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -1156,6 +1153,11 @@ static BOOL RespectSilentMode = false;
         }
     }
     return YES;
+}
+
+- (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath {
+    // 直接调用RetroArch的无内容核心加载函数
+    task_push_load_contentless_core_from_menu(corePath.UTF8String);
 }
 
 extern void manic_input_button_event(unsigned port, unsigned button_id, bool pressed);
@@ -1412,44 +1414,6 @@ static NSString *_Nullable needToLoadStatePath = nil;
     }
 }
 
-- (void)setPSPLanguage:(unsigned)language {
-    NSString *configFilePath = [self.workspace stringByAppendingPathComponent:@"config/PPSSPP/PPSSPP.opt"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:configFilePath]) {
-        core_options_flush();//生成配置
-    }
-    
-    NSError *error = nil;
-    NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
-    
-    if (error) {    
-        NSLog(@"读取文件失败: %@", error.localizedDescription);
-        return;
-    }
-
-    // 正则匹配并替换
-    NSString *pattern = @"ppsspp_language\\s*=\\s*\"[^\"]*\"";
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
-    
-    if (error) {
-        NSLog(@"正则表达式错误: %@", error.localizedDescription);
-        return;
-    }
-    NSArray<NSString *> *languages = @[@"Automatic", @"English", @"Japanese", @"French", @"Spanish", @"German", @"Italian", @"Dutch", @"Portuguese", @"Russian", @"Korean", @"Chinese Traditional", @"Chinese Simplified"];
-    if (language < languages.count) {
-        NSString *newValue = languages[language];
-        NSString *replacement = [NSString stringWithFormat:@"ppsspp_language = \"%@\"", newValue];
-        NSString *updatedContents = [regex stringByReplacingMatchesInString:fileContents
-                                                                    options:0
-                                                                      range:NSMakeRange(0, fileContents.length)
-                                                               withTemplate:replacement];
-
-        
-        
-        // 写回文件
-        [updatedContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    }
-}
-
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload {
     NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
     NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
@@ -1553,6 +1517,35 @@ static NSString *_Nullable needToLoadStatePath = nil;
             [self reloadByKeepState:YES];
         }
     }
+}
+
+- (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush {
+    // 获取 runloop 状态
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+
+    // 确保核心选项管理器存在
+    if (!runloop_st->core_options) {
+        return;
+    }
+    
+    [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+        // 方法1：通过键名设置配置
+        const char *option_key = [key cStringUsingEncoding:NSUTF8StringEncoding];
+        const char *option_value = [value cStringUsingEncoding:NSUTF8StringEncoding];
+        size_t option_idx, value_idx;
+
+        // 1. 根据键名获取选项索引
+        if (core_option_manager_get_idx(runloop_st->core_options, option_key, &option_idx)) {
+            // 2. 根据值字符串获取值索引
+            if (core_option_manager_get_val_idx(runloop_st->core_options, option_idx, option_value, &value_idx)) {
+                // 3. 设置配置值
+                core_option_manager_set_val(runloop_st->core_options, option_idx, value_idx, false);
+            }
+        }
+        if (flush) {
+            core_options_flush();
+        }
+    }];
 }
 
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs {
@@ -1868,6 +1861,34 @@ static NSString * _Nullable g_customSaveExtension = nil;
 
 - (BOOL)getSensorEnable:(int)playerIndex {
     return input_get_sensor_enable(playerIndex);
+}
+
+- (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y {
+#if !TARGET_OS_TV
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    float scale = cocoa_screen_get_native_scale();
+    
+    if (!apple) {
+        return;
+    }
+    
+    // 模拟触摸开始
+    apple->touch_count = 1;
+    apple->touches[0].screen_x = x * scale;
+    apple->touches[0].screen_y = y * scale;
+#endif
+}
+
+- (void)releaseTouchEvent {
+#if !TARGET_OS_TV
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    
+    if (!apple) {
+        return;
+    }
+    
+    apple->touch_count = 0;
+#endif
 }
 
 @end

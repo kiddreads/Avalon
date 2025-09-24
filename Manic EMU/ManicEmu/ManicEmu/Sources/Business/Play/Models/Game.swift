@@ -334,7 +334,13 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .ps1 {
             return Bundle.main.path(forResource: "mednafen.psx.hw.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .gb || gameType == .gbc {
-            return Bundle.main.path(forResource: "gambatte.libretro", ofType: "framework", inDirectory: "Frameworks")
+            if defaultCore == 0 {
+                return Bundle.main.path(forResource: "gambatte.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else if defaultCore == 1 {
+                return Bundle.main.path(forResource: "mgba.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else if defaultCore == 2 {
+                return Bundle.main.path(forResource: "vbam.libretro", ofType: "framework", inDirectory: "Frameworks")
+            }
         } else if gameType == .gba {
             if defaultCore == 0 {
                 return Bundle.main.path(forResource: "mgba.libretro", ofType: "framework", inDirectory: "Frameworks")
@@ -351,6 +357,8 @@ class Game: Object, ObjectUpdatable {
                     return Bundle.main.path(forResource: "flycast-jitless-wince.libretro", ofType: "framework", inDirectory: "Frameworks")
                 }
             }
+        } else if gameType == .ds {
+            return Bundle.main.path(forResource: "melondsds.libretro", ofType: "framework", inDirectory: "Frameworks")
         }
         return nil
     }
@@ -441,15 +449,11 @@ class Game: Object, ObjectUpdatable {
     }
     
     var is3DSHomeMenuGame: Bool {
-        if Constants.Strings.ThreeDSHomeMenuIdentifier == "\(identifierFor3DS)" ||
-            Constants.Strings.ThreeDSHomeMenuIdentifier2 == "\(identifierFor3DS)" {
-            return true
-        }
-        return false
+        return Constants.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == identifierFor3DS })
     }
     
     var supportRetroAchievements: Bool {
-        if gameType == ._3ds || gameType == .ds {
+        if gameType == ._3ds {
             return false
         }
         return true
@@ -506,6 +510,25 @@ class Game: Object, ObjectUpdatable {
         return fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "cue" || fileExtension.lowercased() == "gdi" 
     }
     
+    var enableAchievements: Bool {
+        get {
+            getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? Settings.defalut.getExtraBool(key: ExtraKey.globalAchievements.rawValue) ?? false
+        }
+        set {
+            updateExtra(key: ExtraKey.enableAchievements.rawValue, value: newValue)
+        }
+        
+    }
+    
+    var enableHarcore: Bool {
+        get {
+            enableAchievements ? (getExtraBool(key: ExtraKey.achievementsHardcore.rawValue) ?? Settings.defalut.getExtraBool(key: ExtraKey.globalHardcore.rawValue) ?? false) : false
+        }
+        set {
+            updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: newValue)
+        }
+    }
+    
 }
 
 
@@ -513,7 +536,4 @@ struct AchievementProgress: SmartCodable {
     var id: Int = 0
     var measuredProgress: String = ""
     var measuredPercent: CGFloat = 0
-    
-    
-    
 }

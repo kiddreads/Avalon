@@ -112,6 +112,7 @@ UINavigationControllerDelegate> {
 - (void)resume;
 - (void)stop;
 - (BOOL)loadGame:(NSString *_Nonnull)gamePath corePath:(NSString *_Nonnull)corePath completion:(void(^ _Nullable)(NSDictionary *_Nullable))completion;
+- (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath;
 - (void)pressButton:(unsigned)button playerIndex:(unsigned)playerIndex;
 - (void)releaseButton:(unsigned)button playerIndex:(unsigned)playerIndex;
 - (void)moveStick:(BOOL)isLeft x:(CGFloat)x y:(CGFloat)y playerIndex:(unsigned)playerIndex;
@@ -122,10 +123,9 @@ UINavigationControllerDelegate> {
 - (void)fastForward:(float)rate;
 - (void)reload;
 - (void)updatePSPCheat:(NSString *_Nonnull)cheatCode cheatFilePath:(NSString *_Nonnull)cheatFilePath reloadGame:(BOOL)reloadGame;
-- (void)setPSPResolution:(unsigned)resolution reload:(BOOL)reload;
-- (void)setPSPLanguage:(unsigned)language;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload;
+- (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush;
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value;
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs;
 - (void)setShader:(NSString *_Nullable)path;
@@ -144,6 +144,8 @@ UINavigationControllerDelegate> {
 - (void)setCustomSaveExtension:(NSString *_Nullable)customSaveExtension;
 - (void)setEnableRumble:(BOOL)enable;
 - (BOOL)getSensorEnable:(int)playerIndex;
+- (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y;
+- (void)releaseTouchEvent;
 @end
 
 #else

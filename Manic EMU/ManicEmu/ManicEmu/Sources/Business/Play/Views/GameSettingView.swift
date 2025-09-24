@@ -203,21 +203,35 @@ class GameSettingView: BaseView {
     private func updateSettings() {
         let settings = Settings.defalut
         displayGamesFunctionCount = settings.displayGamesFunctionCount
+        let volumeOn = game.volume
+        let fastForwardSpeed = game.speed
+        let resolution = game.resolution == .undefine ? .one : game.resolution
+        let hapticType = game.haptic
+        let controllerType = game.controllerType
+        let orientation = game.orientation
+        let isFullScreen = game.forceFullSkin
+        let palette = game.pallete
+        let currentDiskIndex = game.currentDiskIndex
+        let airPlayScaling = Settings.defalut.airPlayScaling
+        let airPlayLayout = Settings.defalut.airPlayLayout
+        
         gameSettings = settings.gameFunctionList.compactMap { itemTypeValue in
             if let itemType = GameSetting.ItemType(rawValue: itemTypeValue) {
                 if isMappingMode {
                     return GameSetting(type: itemType)
                 } else {
                     return GameSetting(type: itemType,
-                                       volumeOn: game.volume,
-                                       fastForwardSpeed: game.speed,
-                                       resolution: game.resolution == .undefine ? .one : game.resolution,
-                                       hapticType: game.haptic,
-                                       controllerType: game.controllerType,
-                                       orientation: game.orientation,
-                                       isFullScreen: game.forceFullSkin,
-                                       palette: game.pallete,
-                                       currentDiskIndex: game.currentDiskIndex)
+                                       volumeOn: volumeOn,
+                                       fastForwardSpeed: fastForwardSpeed,
+                                       resolution: resolution,
+                                       hapticType: hapticType,
+                                       controllerType: controllerType,
+                                       orientation: orientation,
+                                       isFullScreen: isFullScreen,
+                                       palette: palette,
+                                       currentDiskIndex: currentDiskIndex,
+                                       airPlayScaling: airPlayScaling,
+                                       airPlayLayout: airPlayLayout)
                 }
             }
             return nil
@@ -496,6 +510,14 @@ extension GameSettingView: UICollectionViewDelegate {
                     updateCellAndCallBack(item: item, indexPath: indexPath)
                     return
                 }
+            case .airPlayScaling:
+                item.airPlayScaling = item.airPlayScaling.next
+                updateCellAndCallBack(item: item, indexPath: indexPath, reload: false)
+                return
+            case .airPlayLayout:
+                item.airPlayLayout = item.airPlayLayout.next
+                updateCellAndCallBack(item: item, indexPath: indexPath, reload: false)
+                return
             default:
                 break
             }
@@ -636,6 +658,28 @@ extension GameSettingView: UICollectionViewDelegate {
                 }))
             }
             return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+        } else if item.type == .airPlayScaling {
+            //AirPlay缩放
+            let actions = GameSetting.AirPlayScaling.allCases.map { scaling in
+                UIAction(title: scaling.title,
+                         image: scaling == Settings.defalut.airPlayScaling ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
+                    guard let self = self else { return }
+                    item.airPlayScaling = scaling
+                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                }
+            }
+            return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+        } else if item.type == .airPlayLayout {
+            //AirPlay缩放
+            let actions = GameSetting.AirPlayLayout.allCases.map { layout in
+                UIAction(title: layout.title,
+                         image: layout == Settings.defalut.airPlayLayout ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
+                    guard let self = self else { return }
+                    item.airPlayLayout = layout
+                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                }
+            }
+            return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(title: R.string.localizable.airPlayLayoutTips(), children: actions) })
         }
         return nil
     }

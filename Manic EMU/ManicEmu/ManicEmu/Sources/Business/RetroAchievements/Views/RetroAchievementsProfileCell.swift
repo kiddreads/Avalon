@@ -8,6 +8,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Kingfisher
+import TKSwitcherCollection
+import RealmSwift
 
 class RetroAchievementsProfileCell: UICollectionViewCell {
     class AchievementsUnlockedView: UIView {
@@ -234,6 +236,77 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         return view
     }()
     
+    private lazy var enableSwitchButton: TKSimpleSwitch = {
+        let view = TKSimpleSwitch()
+        view.onColor = Constants.Color.Main
+        view.offColor = Constants.Color.BackgroundTertiary
+        view.lineColor = .clear
+        view.lineSize = 0
+        view.onChange { [weak self] value in
+            guard let self else { return }
+            let realm = Database.realm
+            let games = realm.objects(Game.self).where({ !$0.isDeleted })
+            Settings.defalut.updateExtra(key: ExtraKey.globalAchievements.rawValue, value: value)
+            if value {
+                //开启全局RetroAchievements
+                for game in games {
+                    if let enableAchievements = game.getExtraBool(key: ExtraKey.enableAchievements.rawValue), !enableAchievements {
+                        game.enableAchievements = true
+                    }
+                }
+                self.hardcoreSwitchButton.customEnable = true
+            } else {
+                //关闭全局RetroAchievements
+                for game in games {
+                    if let enableAchievements = game.getExtraBool(key: ExtraKey.enableAchievements.rawValue), enableAchievements {
+                        game.enableAchievements = false
+                    }
+                    if let achievementsHardcore = game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue), achievementsHardcore {
+                        game.enableHarcore = false
+                    }
+                }
+                //硬核模式也一并关闭
+                Settings.defalut.updateExtra(key: ExtraKey.globalHardcore.rawValue, value: false)
+                self.hardcoreSwitchButton.customEnable = false
+                self.hardcoreSwitchButton.setOn(false, animate: true)
+            }
+        }
+        view.onDisableTap {
+            UIView.makeToast(message: R.string.localizable.globalHardcoreAlert())
+        }
+        return view
+    }()
+    
+    private lazy var hardcoreSwitchButton: TKSimpleSwitch = {
+        let view = TKSimpleSwitch()
+        view.onColor = Constants.Color.Main
+        view.offColor = Constants.Color.BackgroundTertiary
+        view.lineColor = .clear
+        view.lineSize = 0
+        view.onChange { [weak self] value in
+            guard let self else { return }
+            let realm = Database.realm
+            let games = realm.objects(Game.self).where({ !$0.isDeleted })
+            Settings.defalut.updateExtra(key: ExtraKey.globalHardcore.rawValue, value: value)
+            if value {
+                //开启全局硬核
+                for game in games {
+                    if let achievementsHardcore = game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue), !achievementsHardcore {
+                        game.enableHarcore = true
+                    }
+                }
+            } else {
+                //关闭全局硬核
+                for game in games {
+                    if let achievementsHardcore = game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue), achievementsHardcore {
+                        game.enableHarcore = false
+                    }
+                }
+            }
+        }
+        return view
+    }()
+    
     private let unlockedView: AchievementsUnlockedView = {
         let view = AchievementsUnlockedView()
         return view
@@ -311,12 +384,91 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
             make.leading.equalTo(memberSinceIcon.snp.trailing).offset(6)
         }
         
+        let enableContainer = UIView()
+        enableContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
+        enableContainer.backgroundColor = Constants.Color.BackgroundSecondary
+        addSubview(enableContainer)
+        enableContainer.snp.makeConstraints { make in
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(memberSinceLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        let enableIcon = UIImageView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 19, color: UIColor.white))
+        enableIcon.contentMode = .center
+        enableContainer.addSubview(enableIcon)
+        enableIcon.snp.makeConstraints { make in
+            make.size.equalTo(24)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.centerY.equalToSuperview()
+        }
+        let enableLabel: UILabel = {
+            let view = UILabel()
+            view.numberOfLines = 2
+            let matt = NSMutableAttributedString(string: R.string.localizable.enableGlobalAchievements(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
+            return view
+        }()
+        enableContainer.addSubview(enableLabel)
+        enableLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(enableIcon)
+            make.leading.equalTo(enableIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+        }
+        enableContainer.addSubview(enableSwitchButton)
+        enableSwitchButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.leading.equalTo(enableLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.size.equalTo(CGSize(width: 46, height: 28))
+        }
+        
+        let hardcoreContainer = UIView()
+        hardcoreContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
+        hardcoreContainer.backgroundColor = Constants.Color.BackgroundSecondary
+        addSubview(hardcoreContainer)
+        hardcoreContainer.snp.makeConstraints { make in
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(enableContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: UIColor.white))
+        hardcoreIcon.contentMode = .center
+        hardcoreContainer.addSubview(hardcoreIcon)
+        hardcoreIcon.snp.makeConstraints { make in
+            make.size.equalTo(24)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.centerY.equalToSuperview()
+        }
+        let hardcoreScoreLabel: UILabel = {
+            let view = UILabel()
+            view.numberOfLines = 2
+            let matt = NSMutableAttributedString(string: R.string.localizable.globalHardcoreMode(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcoreDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
+            return view
+        }()
+        hardcoreContainer.addSubview(hardcoreScoreLabel)
+        hardcoreScoreLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(hardcoreIcon)
+            make.leading.equalTo(hardcoreIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+        }
+        hardcoreContainer.addSubview(hardcoreSwitchButton)
+        hardcoreSwitchButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.leading.equalTo(hardcoreScoreLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.size.equalTo(CGSize(width: 46, height: 28))
+        }
+        
         addSubview(unlockedView)
         unlockedView.snp.makeConstraints { make in
             make.leading.equalTo(avatarImageView)
             make.trailing.equalTo(logoutButton)
             make.height.equalTo(130)
-            make.top.equalTo(memberSinceIcon.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(hardcoreContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
         addSubview(scoreView)
@@ -357,5 +509,15 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         memberSinceLabel.text = R.string.localizable.memberSince(profile.memberSince)
         unlockedView.countLabel.text = "\(profile.achievementCount)"
         scoreView.updateDatas(hardcoreScore: profile.totalHardcorePoints, softcoreScore: profile.totalSoftcorePoints, rank: profile.totalRanked > 0 ? profile.totalRanked : nil)
+        let globalAchievements = Settings.defalut.getExtraBool(key: ExtraKey.globalAchievements.rawValue) ?? false
+        enableSwitchButton.setOn(globalAchievements, animate: false)
+        if globalAchievements {
+            hardcoreSwitchButton.setOn(Settings.defalut.getExtraBool(key: ExtraKey.globalHardcore.rawValue) ?? false, animate: false)
+            hardcoreSwitchButton.customEnable = true
+        } else {
+            hardcoreSwitchButton.setOn(false, animate: false)
+            hardcoreSwitchButton.customEnable = false
+        }
+        
     }
 }

@@ -18,7 +18,6 @@
 		570622EC2D7BD2FE004F09E7 /* FilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570622EB2D7BD2F6004F09E7 /* FilterManager.swift */; };
 		5706236A2D7BDCD9004F09E7 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570623692D7BDCD0004F09E7 /* FilterCollectionViewCell.swift */; };
 		5706236C2D7BDFE1004F09E7 /* CIFilterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706236B2D7BDFDC004F09E7 /* CIFilterExtensions.swift */; };
-		5706236E2D7BE2C9004F09E7 /* OriginFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706236D2D7BE2BB004F09E7 /* OriginFilter.swift */; };
 		5706AFBD2DF7D8AF0066122E /* BIOSSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */; };
 		5706AFC22DF7D94F0066122E /* BIOSSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */; };
 		5706AFC62DF7DABD0066122E /* BIOSCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */; };
@@ -605,6 +604,9 @@
 		57A4812D2E77F98D001D4598 /* gearsystem.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481292E77F482001D4598 /* gearsystem.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A4812E2E77F993001D4598 /* clownmdemu.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481282E77F482001D4598 /* clownmdemu.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A481542E7A8B84001D4598 /* bsnes-jg.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57A481682E7F05AB001D4598 /* melondsds.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481672E7F059D001D4598 /* melondsds.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57A4816A2E7F05D2001D4598 /* NDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A481692E7F05CD001D4598 /* NDS.swift */; };
+		57A482012E83E0D4001D4598 /* OriginFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A482002E83E0D4001D4598 /* OriginFilter.swift */; };
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
 		57B6EBDB2D758819002E619C /* GameSaveMatchGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6EBDA2D7587FE002E619C /* GameSaveMatchGameView.swift */; };
@@ -623,7 +625,6 @@
 		57B6ECCD2D798425002E619C /* CheatTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECCC2D798419002E619C /* CheatTypeExtensions.swift */; };
 		57B6ECEC2D79E19E002E619C /* BlankSlateTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECEB2D79E19B002E619C /* BlankSlateTableView.swift */; };
 		57B6ECF52D79F1EA002E619C /* SkinSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */; };
-		57B6ED1E2D7ADED5002E619C /* CRTFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ED1D2D7ADED5002E619C /* CRTFilter.swift */; };
 		57BA59B52E3F13D100110849 /* LibretroCoreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */; };
 		57BFBE1E2DD32F7700AABF98 /* Libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57BFBE172DD32F7700AABF98 /* Libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57BFBE262DD32F9800AABF98 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5720CF202DB775850090C0F6 /* UIKit.framework */; };
@@ -813,6 +814,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57A481682E7F05AB001D4598 /* melondsds.libretro.framework in Embed Frameworks */,
 				57A481542E7A8B84001D4598 /* bsnes-jg.libretro.framework in Embed Frameworks */,
 				57A4812E2E77F993001D4598 /* clownmdemu.libretro.framework in Embed Frameworks */,
 				57A4812D2E77F98D001D4598 /* gearsystem.libretro.framework in Embed Frameworks */,
@@ -864,7 +866,6 @@
 		570622EB2D7BD2F6004F09E7 /* FilterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterManager.swift; sourceTree = "<group>"; };
 		570623692D7BDCD0004F09E7 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		5706236B2D7BDFDC004F09E7 /* CIFilterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIFilterExtensions.swift; sourceTree = "<group>"; };
-		5706236D2D7BE2BB004F09E7 /* OriginFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginFilter.swift; sourceTree = "<group>"; };
 		5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSSelectionViewController.swift; sourceTree = "<group>"; };
 		5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSSelectionView.swift; sourceTree = "<group>"; };
 		5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1628,6 +1629,9 @@
 		57A481282E77F482001D4598 /* clownmdemu.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = clownmdemu.libretro.framework; path = ../Cores/clownmdemu.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57A481292E77F482001D4598 /* gearsystem.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gearsystem.libretro.framework; path = ../Cores/gearsystem.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "bsnes-jg.libretro.framework"; path = "../Cores/bsnes-jg.libretro.framework"; sourceTree = SOURCE_ROOT; };
+		57A481672E7F059D001D4598 /* melondsds.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = melondsds.libretro.framework; path = ../Cores/melondsds.libretro.framework; sourceTree = SOURCE_ROOT; };
+		57A481692E7F05CD001D4598 /* NDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDS.swift; sourceTree = "<group>"; };
+		57A482002E83E0D4001D4598 /* OriginFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginFilter.swift; sourceTree = "<group>"; };
 		57AD35E92D7DEB900092FD03 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheerExtensions.swift; sourceTree = "<group>"; };
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1648,7 +1652,6 @@
 		57B6ECCC2D798419002E619C /* CheatTypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatTypeExtensions.swift; sourceTree = "<group>"; };
 		57B6ECEB2D79E19B002E619C /* BlankSlateTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankSlateTableView.swift; sourceTree = "<group>"; };
 		57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSettingsView.swift; sourceTree = "<group>"; };
-		57B6ED1D2D7ADED5002E619C /* CRTFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRTFilter.swift; sourceTree = "<group>"; };
 		57BA45C12D1B235400BCA5E1 /* Config-Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Base.xcconfig"; sourceTree = "<group>"; };
 		57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibretroCoreExtensions.swift; sourceTree = "<group>"; };
 		57BFBE172DD32F7700AABF98 /* Libretro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Libretro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1975,8 +1978,7 @@
 			isa = PBXGroup;
 			children = (
 				57F0D7F12DE1634400760F57 /* LibretroPreViewFilter.swift */,
-				5706236D2D7BE2BB004F09E7 /* OriginFilter.swift */,
-				57B6ED1D2D7ADED5002E619C /* CRTFilter.swift */,
+				57A482002E83E0D4001D4598 /* OriginFilter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3777,6 +3779,7 @@
 		57BFBE702DD335FD00AABF98 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				57A481672E7F059D001D4598 /* melondsds.libretro.framework */,
 				57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */,
 				57A481282E77F482001D4598 /* clownmdemu.libretro.framework */,
 				57A481292E77F482001D4598 /* gearsystem.libretro.framework */,
@@ -3958,6 +3961,7 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				57A481692E7F05CD001D4598 /* NDS.swift */,
 				5771C28A2E6986BE0062EDE0 /* DC.swift */,
 				574ABEBB2E609FE30045F76E /* GBA.swift */,
 				576A7DA72E3B4B1200008E35 /* PS1.swift */,
@@ -4470,7 +4474,7 @@
 			);
 			mainGroup = A5A001E624555A5F006E0F0E;
 			packageReferences = (
-				576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */,
+				576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */,
 				57DF84BD2D637A1A00AA0AAB /* XCRemoteSwiftPackageReference "DominantColors" */,
 				57F632CC2D7050B9007270E8 /* XCRemoteSwiftPackageReference "SMBClient" */,
 				57F632E12D714E46007270E8 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */,
@@ -4481,12 +4485,12 @@
 				5717445C2DA264FF007CCE25 /* XCRemoteSwiftPackageReference "zstd" */,
 				5717445F2DA2652F007CCE25 /* XCRemoteSwiftPackageReference "OpenSSL" */,
 				571BB9382DA44D6B00830134 /* XCRemoteSwiftPackageReference "SwiftSDL2" */,
-				570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "ChromaColorPicker" */,
+				570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "../ChromaColorPicker" */,
 				575A39CA2DCCFA6B00B28FC2 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				570A27FE2DCF03CF001249C6 /* XCRemoteSwiftPackageReference "PLzmaSDK" */,
 				57F0D8492DE2E7A600760F57 /* XCRemoteSwiftPackageReference "SwiftCloudDrive" */,
 				5706B0BC2DFDE4570066122E /* XCRemoteSwiftPackageReference "BlurUIKit" */,
-				5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "KeyboardKit" */,
+				5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */,
 			);
 			productRefGroup = A5A001F024555A5F006E0F0E /* Products */;
 			projectDirPath = "";
@@ -4552,9 +4556,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManicEmu/Pods-ManicEmu-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManicEmu/Pods-ManicEmu-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4992,7 +5000,6 @@
 				57F1A9342D7D6D7D00D0CC93 /* ExternalSceneDelegate.swift in Sources */,
 				57DFBE8C2E71BC7A008C2161 /* CheevosPopupView.swift in Sources */,
 				5706236C2D7BDFE1004F09E7 /* CIFilterExtensions.swift in Sources */,
-				57B6ED1E2D7ADED5002E619C /* CRTFilter.swift in Sources */,
 				57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */,
 				579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */,
 				577006832D438E2A00762E8F /* GamesViewController.swift in Sources */,
@@ -5027,6 +5034,7 @@
 				57913B422D5ED722004D51AA /* GameInfoCoverView.swift in Sources */,
 				577005582D3CC30A00762E8F /* FileType.swift in Sources */,
 				575A39D02DCD2B3E00B28FC2 /* UIImageViewExtensions.swift in Sources */,
+				57A482012E83E0D4001D4598 /* OriginFilter.swift in Sources */,
 				57F6328B2D6EB84A007270E8 /* DownloadManager.swift in Sources */,
 				57DF849C2D630E5800AA0AAB /* CGSizeExtenstions.swift in Sources */,
 				5771C28B2E6986C00062EDE0 /* DC.swift in Sources */,
@@ -5037,6 +5045,7 @@
 				57DA89002D828C6A0074052A /* TKSwitchExtensions.swift in Sources */,
 				5720CACC2DB555990090C0F6 /* ThreeDSKeyboardView.swift in Sources */,
 				57047A162D8571D600C62FF6 /* PriceItemCollectionCell.swift in Sources */,
+				57A4816A2E7F05D2001D4598 /* NDS.swift in Sources */,
 				57F1A9182D7D25B900D0CC93 /* GameInfoView.swift in Sources */,
 				5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */,
 				5770069C2D44BDEA00762E8F /* GameCollectionViewCell.swift in Sources */,
@@ -5082,7 +5091,6 @@
 				A52C1D89257F96C90029B15B /* UIViewControllerExtensions.swift in Sources */,
 				57DE0FF82D5F456700CDD82A /* CheatCodeViewController.swift in Sources */,
 				5713300F2D90FF820043C28A /* BaseView.swift in Sources */,
-				5706236E2D7BE2C9004F09E7 /* OriginFilter.swift in Sources */,
 				57655C262DF6BCF3003E4A6E /* PlatformSelectionView.swift in Sources */,
 				577005552D3CC25700762E8F /* FilesImporter.swift in Sources */,
 				576A7DA82E3B4B1400008E35 /* PS1.swift in Sources */,
@@ -5267,7 +5275,7 @@
 /* Begin PBXTargetDependency section */
 		576DD4482E0FFAC900644424 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 576DD4472E0FFAC900644424 /* plugin:RswiftGenerateInternalResources */;
+			productRef = 576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */;
 		};
 		57BFBEB12DD489C700AABF98 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5638,7 +5646,6 @@
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore/ManicEmuCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel/MarqueeLabel.modulemap\"",
-					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore/MelonDSDeltaCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift/OAuthSwift.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Permission/Permission.modulemap\"",
@@ -5664,8 +5671,6 @@
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/Realm\"",
-					"-isystem",
-					"\"${PODS_ROOT}/Headers/Public/MelonDSDeltaCore\"",
 					"-iframework",
 					"\"${PODS_ROOT}/../../ManicSupport/Frameworks\"",
 					"-iframework",
@@ -5725,7 +5730,6 @@
 					"-l\"KeychainAccess\"",
 					"-l\"ManicEmuCore\"",
 					"-l\"MarqueeLabel\"",
-					"-l\"MelonDSDeltaCore\"",
 					"-l\"NVActivityIndicatorView\"",
 					"-l\"OAuthSwift\"",
 					"-l\"Permission\"",
@@ -5792,7 +5796,7 @@
 					"-weak_framework",
 					"\"UIKit\"",
 				);
-				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
+				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "${APP_BUNDLE_IDENTIFIER}";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "${APP_BUNDLE_IDENTIFIER}";
@@ -5998,7 +6002,6 @@
 					"-l\"KeychainAccess\"",
 					"-l\"ManicEmuCore\"",
 					"-l\"MarqueeLabel\"",
-					"-l\"MelonDSDeltaCore\"",
 					"-l\"NVActivityIndicatorView\"",
 					"-l\"OAuthSwift\"",
 					"-l\"Permission\"",
@@ -6538,7 +6541,6 @@
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/LookinServer/LookinServer.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore/ManicEmuCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel/MarqueeLabel.modulemap\"",
-					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore/MelonDSDeltaCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift/OAuthSwift.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Permission/Permission.modulemap\"",
@@ -6566,8 +6568,6 @@
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/Realm\"",
-					"-isystem",
-					"\"${PODS_ROOT}/Headers/Public/MelonDSDeltaCore\"",
 					"-iframework",
 					"\"${PODS_ROOT}/../../ManicSupport/Frameworks\"",
 					"-iframework",
@@ -6629,7 +6629,6 @@
 					"-l\"LookinServer\"",
 					"-l\"ManicEmuCore\"",
 					"-l\"MarqueeLabel\"",
-					"-l\"MelonDSDeltaCore\"",
 					"-l\"NVActivityIndicatorView\"",
 					"-l\"OAuthSwift\"",
 					"-l\"Permission\"",
@@ -6705,7 +6704,113 @@
 					"-weak_framework",
 					"\"UIKit\"",
 				);
-				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FLEX\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/LookinServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ShowTouches\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"BetterSegmentedControl\"",
+					"-l\"BlankSlate\"",
+					"-l\"Closures\"",
+					"-l\"CloudServiceKit\"",
+					"-l\"CollectionViewPagingLayout\"",
+					"-l\"DNSPageView\"",
+					"-l\"Device\"",
+					"-l\"FLEX\"",
+					"-l\"Fireworks\"",
+					"-l\"FluentDarkModeKit\"",
+					"-l\"GCDWebServer\"",
+					"-l\"HXPhotoPicker\"",
+					"-l\"Haptica\"",
+					"-l\"IQKeyboardCore\"",
+					"-l\"IQKeyboardManagerSwift\"",
+					"-l\"IQKeyboardNotification\"",
+					"-l\"IQKeyboardReturnManager\"",
+					"-l\"IQKeyboardToolbar\"",
+					"-l\"IQKeyboardToolbarManager\"",
+					"-l\"IQTextInputViewNotification\"",
+					"-l\"IQTextView\"",
+					"-l\"IceCream\"",
+					"-l\"JXBanner\"",
+					"-l\"JXPageControl\"",
+					"-l\"KeychainAccess\"",
+					"-l\"LookinServer\"",
+					"-l\"ManicEmuCore\"",
+					"-l\"MarqueeLabel\"",
+					"-l\"NVActivityIndicatorView\"",
+					"-l\"OAuthSwift\"",
+					"-l\"Permission\"",
+					"-l\"ProHUD\"",
+					"-l\"Realm\"",
+					"-l\"RealmSwift\"",
+					"-l\"SFSafeSymbols\"",
+					"-l\"SSZipArchive\"",
+					"-l\"Schedule\"",
+					"-l\"ShowTouches\"",
+					"-l\"SideMenu\"",
+					"-l\"SnapKit\"",
+					"-l\"SwifterSwift\"",
+					"-l\"SwipeCellKit\"",
+					"-l\"TKSwitcherCollection\"",
+					"-l\"Tiercel\"",
+					"-l\"VisualEffectView\"",
+					"-l\"ZIPFoundation\"",
+					"-l\"c++\"",
+					"-l\"compression\"",
+					"-l\"iCloudSync\"",
+					"-l\"iconv\"",
+					"-l\"realm-monorepo\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"swiftCoreGraphics\"",
+					"-l\"z\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"Combine\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreMotion\"",
+					"-framework",
+					"\"CoreServices\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"Photos\"",
+					"-framework",
+					"\"PhotosUI\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"SceneKit\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UniversalDetector\"",
+					"-framework",
+					"\"WebKit\"",
+					"-weak_framework",
+					"\"AuthenticationServices\"",
+					"-weak_framework",
+					"\"Combine\"",
+					"-weak_framework",
+					"\"Speech\"",
+					"-weak_framework",
+					"\"SwiftUI\"",
+					"-weak_framework",
+					"\"UIKit\"",
+				);
+				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FLEX\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/LookinServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ShowTouches\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "${APP_BUNDLE_IDENTIFIER}";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "${APP_BUNDLE_IDENTIFIER}";
@@ -6920,7 +7025,6 @@
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/LookinServer/LookinServer.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore/ManicEmuCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel/MarqueeLabel.modulemap\"",
-					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore/MelonDSDeltaCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift/OAuthSwift.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Permission/Permission.modulemap\"",
@@ -6948,8 +7052,6 @@
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/Realm\"",
-					"-isystem",
-					"\"${PODS_ROOT}/Headers/Public/MelonDSDeltaCore\"",
 					"-iframework",
 					"\"${PODS_ROOT}/../../ManicSupport/Frameworks\"",
 					"-iframework",
@@ -7011,7 +7113,6 @@
 					"-l\"LookinServer\"",
 					"-l\"ManicEmuCore\"",
 					"-l\"MarqueeLabel\"",
-					"-l\"MelonDSDeltaCore\"",
 					"-l\"NVActivityIndicatorView\"",
 					"-l\"OAuthSwift\"",
 					"-l\"Permission\"",
@@ -7088,7 +7189,7 @@
 					"-weak_framework",
 					"\"UIKit\"",
 				);
-				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FLEX\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/LookinServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ShowTouches\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
+				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FLEX\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/LookinServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ShowTouches\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "${APP_BUNDLE_IDENTIFIER}";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "${APP_BUNDLE_IDENTIFIER}";
@@ -7367,7 +7468,6 @@
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/LookinServer/LookinServer.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore/ManicEmuCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel/MarqueeLabel.modulemap\"",
-					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore/MelonDSDeltaCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift/OAuthSwift.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Permission/Permission.modulemap\"",
@@ -7395,8 +7495,6 @@
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/Realm\"",
-					"-isystem",
-					"\"${PODS_ROOT}/Headers/Public/MelonDSDeltaCore\"",
 					"-iframework",
 					"\"${PODS_ROOT}/../../ManicSupport/Frameworks\"",
 					"-iframework",
@@ -7458,7 +7556,6 @@
 					"-l\"LookinServer\"",
 					"-l\"ManicEmuCore\"",
 					"-l\"MarqueeLabel\"",
-					"-l\"MelonDSDeltaCore\"",
 					"-l\"NVActivityIndicatorView\"",
 					"-l\"OAuthSwift\"",
 					"-l\"Permission\"",
@@ -7535,7 +7632,7 @@
 					"-weak_framework",
 					"\"UIKit\"",
 				);
-				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FLEX\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/LookinServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ShowTouches\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
+				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FLEX\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/LookinServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ShowTouches\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "${APP_BUNDLE_IDENTIFIER}";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "${APP_BUNDLE_IDENTIFIER}";
@@ -7619,7 +7716,6 @@
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore/ManicEmuCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel/MarqueeLabel.modulemap\"",
-					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore/MelonDSDeltaCore.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift/OAuthSwift.modulemap\"",
 					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Permission/Permission.modulemap\"",
@@ -7645,8 +7741,6 @@
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/Realm\"",
-					"-isystem",
-					"\"${PODS_ROOT}/Headers/Public/MelonDSDeltaCore\"",
 					"-iframework",
 					"\"${PODS_ROOT}/../../ManicSupport/Frameworks\"",
 					"-iframework",
@@ -7706,7 +7800,6 @@
 					"-l\"KeychainAccess\"",
 					"-l\"ManicEmuCore\"",
 					"-l\"MarqueeLabel\"",
-					"-l\"MelonDSDeltaCore\"",
 					"-l\"NVActivityIndicatorView\"",
 					"-l\"OAuthSwift\"",
 					"-l\"Permission\"",
@@ -7773,7 +7866,7 @@
 					"-weak_framework",
 					"\"UIKit\"",
 				);
-				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MelonDSDeltaCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
+				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/BetterSegmentedControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/BlankSlate\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Closures\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CloudServiceKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/CollectionViewPagingLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/DNSPageView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Device\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fireworks\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/FluentDarkModeKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Fuse\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/GCDWebServer\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HXPhotoPicker\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Haptica\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardManagerSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardReturnManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbar\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQKeyboardToolbarManager\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextInputViewNotification\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IQTextView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/IceCream\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXBanner\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/JXPageControl\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicEmuCore\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ManicSupport\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MarqueeLabel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/OAuthSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Permission\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ProHUD\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Realm\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/RealmSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SFSafeSymbols\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLCipher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SQLite.swift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Schedule\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SideMenu\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SnapKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwifterSwift\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SwipeCellKit\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/TKSwitcherCollection\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Tiercel\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/VisualEffectView\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/ZIPFoundation\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/iCloudSync\"";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "${APP_BUNDLE_IDENTIFIER}";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "${APP_BUNDLE_IDENTIFIER}";
@@ -7848,11 +7941,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "ChromaColorPicker" */ = {
+		570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "../ChromaColorPicker" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../ChromaColorPicker;
 		};
-		5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "KeyboardKit" */ = {
+		5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../KeyboardKit;
 		};
@@ -7923,7 +8016,7 @@
 				minimumVersion = 2.8.7;
 			};
 		};
-		576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */ = {
+		576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift";
 			requirement = {
@@ -8049,12 +8142,12 @@
 		};
 		576060282D24E8BD00A98B0C /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
 			productName = RswiftLibrary;
 		};
-		576DD4472E0FFAC900644424 /* plugin:RswiftGenerateInternalResources */ = {
+		576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
 			productName = "plugin:RswiftGenerateInternalResources";
 		};
 		57DA89122D82B0C20074052A /* SmartCodable */ = {

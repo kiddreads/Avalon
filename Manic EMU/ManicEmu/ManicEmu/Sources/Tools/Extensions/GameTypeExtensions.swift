@@ -9,7 +9,6 @@
 
 import ManicEmuCore
 import RealmSwift
-import MelonDSDeltaCore
 
 ///通过文件名后缀生成GameType
 extension GameType {
@@ -145,7 +144,7 @@ extension GameType {
     }
     
     var isLibretroType: Bool {
-        if self == ._3ds || self == .ds {
+        if self == ._3ds {
             return false
         }
         return true
@@ -242,7 +241,7 @@ extension GameType {
         case .gbc: return GBC.core
         case .gb: return GB.core
         case .gba: return GBA.core
-        case .ds: return MelonDS.core
+        case .ds: return DS.core
         case .psp: return PSP.core
         case .md: return MD.core
         case .mcd: return MCD.core
@@ -280,6 +279,8 @@ extension GameType {
             return [LibretroCore.Cores.ClownMDEmu.name, LibretroCore.Cores.PicoDrive.name]
         } else if self == .ms || self == .gg || self == .sg1000 {
             return [LibretroCore.Cores.Gearsystem.name, LibretroCore.Cores.PicoDrive.name]
+        } else if self == .gb || self == .gbc {
+            return [LibretroCore.Cores.Gambatte.name, LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
         }
         return []
     }

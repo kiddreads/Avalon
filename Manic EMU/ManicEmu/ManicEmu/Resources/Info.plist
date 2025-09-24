@@ -1065,6 +1065,9 @@
 					<string>bin</string>
 					<string>ic1</string>
 					<string>sbi</string>
+					<string>rom</string>
+					<string>min</string>
+					<string>zip</string>
 				</array>
 			</dict>
 		</dict>

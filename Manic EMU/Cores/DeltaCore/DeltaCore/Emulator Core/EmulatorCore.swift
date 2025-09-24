@@ -448,7 +448,7 @@ extension EmulatorCore: ControllerReceiverProtocol {
             return mappedInput(for: newInput) == input
         }
         
-        let discreteThreshold = 0.33
+        let discreteThreshold = 0.0
         var adjustedValue: Double? = value
         
         if !input.isContinuous, value < discreteThreshold {

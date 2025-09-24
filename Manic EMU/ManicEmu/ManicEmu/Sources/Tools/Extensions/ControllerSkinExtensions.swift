@@ -11,9 +11,12 @@ import ManicEmuCore
 import AVFoundation
 
 extension ControllerSkin {
-    func getFrames(traits: ControllerSkin.Traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: Constants.Size.WindowSize)))) -> (skinFrame: CGRect, mainGameViewFrame: CGRect, touchGameViewFrame: CGRect?)? {
+    func getFrames(traits: ControllerSkin.Traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: Constants.Size.WindowSize))), scale: CGFloat = 1) -> (skinFrame: CGRect, mainGameViewFrame: CGRect, touchGameViewFrame: CGRect?)? {
         if let screens = self.screens(for: traits), let aspectRatio = self.aspectRatio(for: traits) {
-            let skinFrame = AVMakeRect(aspectRatio: aspectRatio, insideRect: UIScreen.main.bounds).rounded()
+            var skinFrame = AVMakeRect(aspectRatio: aspectRatio, insideRect: UIScreen.main.bounds).rounded()
+            if scale != 1 {
+                skinFrame = skinFrame.applying(CGAffineTransform(scaleX: scale, y: scale))
+            }
             var mainGameViewFrame: CGRect = .zero
             var touchGameViewFrame: CGRect? = nil
             for screen in screens {

@@ -54,9 +54,6 @@ public protocol EmulatorBase: NSObjectProtocol
     func resetCheats()
     func updateCheats()
     
-    ///添加额外数据
-    @objc optional func setExtraParameters(_ paramaters: [String: Any])
-    
 }
 
 public extension EmulatorBase {

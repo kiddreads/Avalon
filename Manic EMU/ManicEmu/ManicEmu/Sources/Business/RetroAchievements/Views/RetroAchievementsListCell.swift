@@ -723,8 +723,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             return matt.applying(attributes: [.paragraphStyle: style])
         }()
         
-        let enableAchievements = game.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false
-        enableSwitchButton.setOn(enableAchievements, animate: false)
+        enableSwitchButton.setOn(game.enableAchievements, animate: false)
         
         if retroGame.notSupportHardcore {
             hardcoreSwitchButton.customEnable = false
@@ -734,7 +733,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             }
         } else {
             hardcoreSwitchButton.customEnable = true
-            hardcoreSwitchButton.setOn(enableAchievements ? (game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue) ?? false) : false, animate: false)
+            hardcoreSwitchButton.setOn(game.enableHarcore, animate: false)
             hardcoreSwitchButton.onDisableTap {}
         }
         

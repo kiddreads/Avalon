@@ -82,7 +82,7 @@ class GameCoverView: UIView {
     }
     
     ///设置游戏封面
-    func setData(game: Game, coverSize: CGSize, style: CoverStyle) {
+    func setData(game: Game, coverSize: CGSize, style: CoverStyle, scalePlatform: Bool = true) {
         if height > 0 {
             autoCornerRadius = false
             layerCornerRadius = Constants.Size.GameCoverCornerRatio * style.maxCornerRadius(frameHeight: height)
@@ -90,7 +90,7 @@ class GameCoverView: UIView {
             autoCornerRadius = true
         }
         imageView.setGameCover(game: game, size: coverSize)
-        updateStyle(style, gameType: game.gameType)
+        updateStyle(style, gameType: game.gameType, scalePlatform: scalePlatform)
     }
     
     ///主题圆角配置时使用
