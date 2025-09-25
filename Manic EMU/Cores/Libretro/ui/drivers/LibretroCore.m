@@ -515,6 +515,16 @@ static void wfcStatusCallback(bool isConnect) {
     }
 }
 
+- (void)setNDSWFCDNS:(NSString *_Nullable)nds {
+    if (nds) {
+        set_melonds_wfc_dns([nds cStringUsingEncoding:NSUTF8StringEncoding]);
+        [self setCoreOptionNeedsUpdate];
+    } else {
+        set_melonds_wfc_dns(NULL);
+        [self setCoreOptionNeedsUpdate];
+    }
+}
+
 - (void)setCoreOptionNeedsUpdate {
     // 通知核心配置已更新
     runloop_state_t *runloop_st = runloop_state_get_ptr();

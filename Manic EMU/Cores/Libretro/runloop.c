@@ -344,6 +344,12 @@ void set_melonds_custom_layout(const char *layout) {
    g_melonds_custom_layout = strdup(layout);
 }
 
+//定义WFC NDS信息
+static const char *g_melonds_wfc_dns = NULL;
+void set_melonds_wfc_dns(const char *dns) {
+   g_melonds_wfc_dns = strdup(dns);
+}
+
 static runloop_state_t runloop_state      = {0};
 
 /* GLOBAL POINTER GETTERS */
@@ -1434,6 +1440,11 @@ bool runloop_environment_cb(unsigned cmd, void *data)
             //通过option的方式传递布局信息局限性太大了，只能这样破坏性的进行传递
             if (g_melonds_custom_layout && string_is_equal(var->key, "melonds_custom_layout_config")) {
                var->value = strdup(g_melonds_custom_layout);
+               break;
+            }
+            
+            if (g_melonds_wfc_dns && string_is_equal(var->key, "melonds_firmware_wfc_dns")) {
+               var->value = strdup(g_melonds_wfc_dns);
                break;
             }
 

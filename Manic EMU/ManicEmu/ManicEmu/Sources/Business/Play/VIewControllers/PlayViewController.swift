@@ -642,20 +642,6 @@ class PlayViewController: GameViewController {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard context == &kvoContext else { return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context) }
-        guard let rawValue = change?[.oldKey] as? Int, let previousState = EmulatorCore.State(rawValue: rawValue) else { return }
-        if let manicEmuCore {
-            if previousState != .stopped, manicEmuCore.state == .stopped {
-                DispatchQueue.main.async {
-                    if self.manicGame.isNDSHomeMenuGame {
-                        self.handleMenuGameSetting(GameSetting(type: .quit), nil)
-                    }
-                }
-            }
-        }
-    }
-    
     @MainActor required init() {
         fatalError("init() has not been implemented")
     }
@@ -726,12 +712,6 @@ class PlayViewController: GameViewController {
         super.viewDidDisappear(animated)
         repeatTimer.suspend()
         //清理AirPlay画面
-        if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let airPlayGameView = airPlayViewController.gameView, manicGame.gameType != ._3ds {
-            self.manicEmuCore?.remove(airPlayGameView)
-            airPlayGameView.removeFromSuperview()
-            airPlayViewController.gameView = nil
-        }
-        
         if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let airPlayGameView = airPlayViewController.libretroView, manicGame.gameType.isLibretroType {
             airPlayGameView.parentViewController?.removeFromParent()
             airPlayGameView.removeFromSuperview()
@@ -1478,9 +1458,6 @@ extension PlayViewController {
             } else if manicGame.gameType.isLibretroType {
                 LibretroCore.sharedInstance().reload()
                 updateFilter()
-            } else {
-                manicEmuCore?.stop()
-                manicEmuCore?.start()
             }
         case .quit:
             if manicGame.gameType == ._3ds {
@@ -1494,9 +1471,6 @@ extension PlayViewController {
                 DispatchQueue.main.asyncAfter(delay: 0.5) {
                     self.dismiss(animated: true)
                 }
-            } else {
-                manicEmuCore?.stop()
-                dismiss(animated: true)
             }
         case .resolution:
             guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return true }
@@ -1751,14 +1725,6 @@ extension PlayViewController {
             } else {
                 LibretroCore.sharedInstance().mute(manicGame.volume)
             }
-        } else {
-            if let manicEmuCore = manicEmuCore {
-                if manicGame.volume && !manicEmuCore.audioManager.isEnabled {
-                    manicEmuCore.audioManager.isEnabled = true
-                } else if manicEmuCore.audioManager.isEnabled && !manicGame.volume {
-                    manicEmuCore.audioManager.isEnabled = false
-                }
-            }
         }
     }
     
@@ -1816,32 +1782,6 @@ extension PlayViewController {
                 }
             }
             
-        } else {
-            if let manicEmuCore = manicEmuCore {
-                let lastState = manicEmuCore.state
-                pauseEmulation()
-                var success = [String]()
-                for cheatCode in manicGame.gameCheats {
-                    if cheatCode.activate {
-                        if manicEmuCore.cheatCodes[cheatCode.code] == nil {
-                            do {
-                                try manicEmuCore.activate(Cheat(code: cheatCode.code, type: CheatType(cheatCode.type)))
-                                success.append(cheatCode.name)
-                            } catch {
-                                UIView.makeToast(message: R.string.localizable.gameCheatActivateFailed(cheatCode.name))
-                            }
-                        }
-                    } else {
-                        manicEmuCore.deactivate(Cheat(code: cheatCode.code, type: CheatType(cheatCode.type)))
-                    }
-                }
-                if success.count > 0 {
-                    UIView.makeToast(message: R.string.localizable.gameCheatActivateSuccess(String.successMessage(from: success)))
-                }
-                if lastState == .running {
-                    resumeEmulationAndHandleAudio()
-                }
-            }
         }
     }
     
@@ -1935,17 +1875,15 @@ extension PlayViewController {
             }
             
             //wfc
-            let dns = WFC.currentDNS()
-
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.melonDSDS.name,
                                                        configs: ["melonds_firmware_language": dsLanguageOption,
                                                                  "melonds_console_mode": systemType,
-                                                                 "melonds_firmware_wfc_dns": dns,
                                                                  "melonds_mic_input_active": "always",
                                                                  "melonds_number_of_screen_layouts": "1",
                                                                  "melonds_screen_layout1": "custom",
                                                                  "melonds_show_cursor": "disabled"],
                                                        reload: false)
+            LibretroCore.sharedInstance().setNDSWFCDNS( WFC.currentDNS());
             
         } else if manicGame.gameType == .gba {
             if manicGame.defaultCore == 1 {

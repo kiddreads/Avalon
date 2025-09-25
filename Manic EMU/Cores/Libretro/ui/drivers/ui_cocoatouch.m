@@ -987,6 +987,10 @@ static BOOL RespectSilentMode = false;
     if (LibretroInitial) {
         return;
     }
+    
+    //防止音频驱动加载的时候中断别的应用的音频
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+    
     LibretroInitial = true;
     set_libretro_is_going_to_stop(false);
     char arguments[]   = "retroarch";
@@ -996,7 +1000,7 @@ static BOOL RespectSilentMode = false;
 
     [CocoaView get].view.frame = [[UIScreen mainScreen] bounds];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
           command_event(CMD_EVENT_AUDIO_START, NULL);
@@ -1012,35 +1016,7 @@ static BOOL RespectSilentMode = false;
     }
     
     rarch_main(argc, argv, NULL);
-
-//    uico_driver_state_t *uico_st     = uico_state_get_ptr();
-//    rarch_setting_t *appicon_setting = menu_setting_find_enum(MENU_ENUM_LABEL_APPICON_SETTINGS);
-//    struct string_list *icons;
-//    if (               appicon_setting
-//            && uico_st->drv
-//            && uico_st->drv->get_app_icons
-//            && (icons = uico_st->drv->get_app_icons())
-//            && icons->size > 1)
-//    {
-//       int i;
-//       size_t _len    = 0;
-//       char *options = NULL;
-//       const char *icon_name;
-//
-//       appicon_setting->default_value.string = icons->elems[0].data;
-//       icon_name = [@"appicon" cStringUsingEncoding:kCFStringEncodingUTF8]; /* need to ask uico_st for this */
-//       for (i = 0; i < (int)icons->size; i++)
-//       {
-//          _len += strlen(icons->elems[i].data) + 1;
-//          if (string_is_equal(icon_name, icons->elems[i].data))
-//             appicon_setting->value.target.string = icons->elems[i].data;
-//       }
-//       options = (char*)calloc(_len, sizeof(char));
-//       string_list_join_concat(options, _len, icons, "|");
-//       if (appicon_setting->values)
-//          free((void*)appicon_setting->values);
-//       appicon_setting->values = options;
-//    }
+    
     rarch_start_draw_observer();
  }
 
@@ -1060,17 +1036,13 @@ static BOOL RespectSilentMode = false;
     main_exit(NULL);
     self.gamePath = nil;
     self.corePath = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
 }
 
 - (void)resume {
     if (!LibretroInitial) { return; }
     rarch_start_draw_observer();
-    NSError *error;
-    settings_t *settings            = config_get_ptr();
-    if (settings->bools.audio_respect_silent_mode)
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
-    else
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    
     command_event(CMD_EVENT_RESUME, NULL);
     if (needToLoadStatePath) {
         [self loadGame:self.gamePath corePath:self.corePath completion:nil];
@@ -1096,6 +1068,16 @@ static BOOL RespectSilentMode = false;
     content_info.argv        = NULL;
     content_info.args        = NULL;
     content_info.environ_get = NULL;
+    
+    NSError *error;
+    AVAudioSessionCategoryOptions options = AVAudioSessionCategoryOptionMixWithOthers |
+                                            AVAudioSessionCategoryOptionAllowBluetoothA2DP |
+                                            AVAudioSessionCategoryOptionAllowAirPlay;
+    if (RespectSilentMode) {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient withOptions:options error:&error];
+    } else {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:options error:&error];
+    }
     
     task_push_load_content_with_new_core_from_menu(corePath.UTF8String,
                                                    gamePath.UTF8String,
@@ -1292,43 +1274,55 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
 }
 
 - (void)fastForward:(float)rate {
-    settings_t *settings = config_get_ptr();
-    if (!settings) {
-        return;
-    }
     runloop_state_t *runloop_st = runloop_state_get_ptr();
-    input_driver_state_t *input_st = input_state_get_ptr();
-    audio_driver_state_t *audio_st = audio_state_get_ptr();
-    if (rate <= 1) {
-        //恢复速度
-        settings->floats.fastforward_ratio = 1.0f;
-        // 1. 清除快进标志
-        runloop_st->flags &= ~RUNLOOP_FLAG_FASTMOTION;
-        // 2. 清除非阻塞输入
-        input_st->flags &= ~INP_FLAG_NONBLOCKING;
-        // 3. 更新帧率限制
-        command_event(CMD_EVENT_SET_FRAME_LIMIT, NULL);
-        // 4. 恢复音频缓冲区大小
-        audio_st->chunk_size = AUDIO_CHUNK_SIZE_BLOCKING;
-        // 5. 恢复音频阻塞模式
-        if (audio_st->current_audio && audio_st->context_audio_data)
-            audio_st->current_audio->set_nonblock_state(audio_st->context_audio_data, false);
+    if (!runloop_st) return;
+    if (rate <= 1.0f) {
+        // 清除快进覆盖
+        struct retro_fastforwarding_override override = {0};
+        override.ratio = -1.0f;
+        override.fastforward = false;
+        override.notification = false;
+        override.inhibit_toggle = false;
+        
+        runloop_st->fastmotion_override.next = override;
+        
+        // 标记为待应用，系统会在下一个runloop周期自动应用
+        runloop_st->fastmotion_override.pending = true;
     } else {
-        //快进
-        // 1. 设置快进比例
-        settings->floats.fastforward_ratio = rate;
-        // 2. 设置快进标志
-        runloop_st->flags |= RUNLOOP_FLAG_FASTMOTION;
-        // 3. 设置非阻塞输入
-        input_st->flags |= INP_FLAG_NONBLOCKING;
-        // 4. 更新帧率限制
-        command_event(CMD_EVENT_SET_FRAME_LIMIT, NULL);
-        // 5. 设置音频缓冲区大小
-        audio_st->chunk_size = AUDIO_CHUNK_SIZE_NONBLOCKING;
-        // 6. 设置音频非阻塞模式
-        if (audio_st->current_audio && audio_st->context_audio_data)
-            audio_st->current_audio->set_nonblock_state(audio_st->context_audio_data, true);
+        // 使用RetroArch的官方快进覆盖API
+        struct retro_fastforwarding_override override = {0};
+        override.ratio = rate;
+        override.fastforward = true;
+        override.notification = false;
+        override.inhibit_toggle = false;
+        
+        // 设置快进覆盖
+        runloop_st->fastmotion_override.next = override;
+        
+        // 标记为待应用，系统会在下一个runloop周期自动应用
+        runloop_st->fastmotion_override.pending = true;
     }
+}
+
+// 获取当前快进状态
+- (BOOL)isFastForwarding {
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st) return NO;
+    return runloop_st->fastmotion_override.current.fastforward;
+}
+
+// 获取当前快进比例
+- (float)getCurrentFastForwardRate {
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st) return 1.0f;
+    
+    if (runloop_st->fastmotion_override.current.fastforward && 
+        runloop_st->fastmotion_override.current.ratio >= 0.0f) {
+        return runloop_st->fastmotion_override.current.ratio;
+    }
+    
+    settings_t *settings = config_get_ptr();
+    return settings ? settings->floats.fastforward_ratio : 1.0f;
 }
 
 - (void)reload {

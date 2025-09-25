@@ -113,6 +113,10 @@ public final class EmulatorCore: NSObject {
         // Since they don't actually need to be lazy, we now explicitly initialize them in the initializer.
         self.audioManager = AudioUtils(audioFormat: deltaCore.audioFormat)
         self.videoManager = VideoUtils(videoFormat: videoFormat, options: options)
+        
+        //Manic修改
+        self.audioManager.isEnabled = false
+        self.videoManager.isEnabled = false
                 
         super.init()
         

@@ -82,6 +82,7 @@ extern NSString * const RetroAchievementsNotification;
 - (BOOL)getSensorEnable:(int)playerIndex;
 - (void)startWFCStatusMonitor;
 - (void)setNDSCustomLayout:(NSString *_Nullable)layout;
+- (void)setNDSWFCDNS:(NSString *_Nullable)nds;
 - (void)setCoreOptionNeedsUpdate;
 - (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y;
 - (void)releaseTouchEvent;

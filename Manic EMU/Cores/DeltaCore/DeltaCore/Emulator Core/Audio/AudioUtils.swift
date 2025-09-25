@@ -16,8 +16,9 @@ internal extension AVAudioFormat {
 
 private extension AVAudioSession {
     func setManicEmuCategory() throws {
-        try AVAudioSession.sharedInstance().setCategory(.playAndRecord,
-                                                        options: [.mixWithOthers, .allowBluetoothA2DP, .allowAirPlay])
+        //Manic修改
+//        try AVAudioSession.sharedInstance().setCategory(.playAndRecord,
+//                                                        options: [.mixWithOthers, .allowBluetoothA2DP, .allowAirPlay])
     }
 }
 
@@ -149,153 +150,154 @@ public class AudioUtils: NSObject, AudioRenderProtocol {
         
         super.init()
         
-        self.audioEngine.attach(self.sourceNode)
+        //Manic修改
+//        self.audioEngine.attach(self.sourceNode)
         
-        self.updateVolume()
+//        self.updateVolume()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(AudioUtils.resetAudioEngine), name: .AVAudioEngineConfigurationChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(AudioUtils.resetAudioEngine), name: AVAudioSession.routeChangeNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(AudioUtils.resetAudioEngine), name: .AVAudioEngineConfigurationChange, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(AudioUtils.resetAudioEngine), name: AVAudioSession.routeChangeNotification, object: nil)
     }
     
     func render(_ inputBuffer: AVAudioPCMBuffer, into outputBuffer: AVAudioPCMBuffer) {
-        guard let buffer = inputBuffer.int16ChannelData, let audioConverter = audioConverter else { return }
-        
-        // Ensure any buffers from previous audio route configurations are no longer processed.
-        guard inputBuffer.format == audioConverter.inputFormat && outputBuffer.format == audioConverter.outputFormat else { return }
-        
-        if audioConverterNeedCount == nil {
-            // Determine the minimum number of input frames needed to perform a conversion.
-            audioConverter.convert(to: outputBuffer, error: nil) { [weak self] (requiredPacketCount, outStatus) -> AVAudioBuffer? in
-                guard let self = self else { return nil }
-                // In Linear PCM, one packet = one frame.
-                self.audioConverterNeedCount = requiredPacketCount
-                
-                // Setting to ".noDataNow" sometimes results in crash, so we set to ".endOfStream" and reset audioConverter afterwards.
-                outStatus.pointee = .endOfStream
-                return nil
-            }
-            
-            audioConverter.reset()
-        }
-        
-        guard let audioConverterRequiredFrameCount = audioConverterNeedCount else { return }
-        
-        let availableFrameCount = AVAudioFrameCount(audioBuffer.enableBytesForReading / self.audioFormat.frameSize)
-        if self.audioEngine.isRunning && availableFrameCount >= audioConverterRequiredFrameCount {
-            var conversionError: NSError?
-            let status = audioConverter.convert(to: outputBuffer, error: &conversionError) { [weak self] (requiredPacketCount, outStatus) -> AVAudioBuffer? in
-                guard let self = self else { return nil }
-                
-                // Copy requiredPacketCount frames into inputBuffer's first channel (since audio is interleaved, no need to modify other channels).
-                let preferredSize = min(Int(requiredPacketCount) * self.audioFormat.frameSize, Int(inputBuffer.frameCapacity) * self.audioFormat.frameSize)
-                buffer[0].withMemoryRebound(to: UInt8.self, capacity: preferredSize) { (uint8Buffer) in
-                    let readBytes = self.audioBuffer.read(into: uint8Buffer, preferredSize: preferredSize)
-                    
-                    let frameLength = AVAudioFrameCount(readBytes / self.audioFormat.frameSize)
-                    inputBuffer.frameLength = frameLength
-                }
-                
-                if inputBuffer.frameLength == 0 {
-                    outStatus.pointee = .noDataNow
-                    return nil
-                } else {
-                    outStatus.pointee = .haveData
-                    return inputBuffer
-                }
-            }
-            
-            if status == .error {
-                if let error = conversionError {
-                    print(error, error.userInfo)
-                }
-            }
-        } else {
-            // If not running or not enough input frames, set frameLength to 0 to minimize time until we check again.
-            inputBuffer.frameLength = 0
-        }
-        
-        audioPlayerNode.scheduleBuffer(outputBuffer) { [weak self, weak node = audioPlayerNode] in
-            guard let self = self else { return }
-            
-            self.renderingQueue.async {
-                if node?.isPlaying == true
-                {
-                    self.render(inputBuffer, into: outputBuffer)
-                }
-            }
-        }
+//        guard let buffer = inputBuffer.int16ChannelData, let audioConverter = audioConverter else { return }
+//        
+//        // Ensure any buffers from previous audio route configurations are no longer processed.
+//        guard inputBuffer.format == audioConverter.inputFormat && outputBuffer.format == audioConverter.outputFormat else { return }
+//        
+//        if audioConverterNeedCount == nil {
+//            // Determine the minimum number of input frames needed to perform a conversion.
+//            audioConverter.convert(to: outputBuffer, error: nil) { [weak self] (requiredPacketCount, outStatus) -> AVAudioBuffer? in
+//                guard let self = self else { return nil }
+//                // In Linear PCM, one packet = one frame.
+//                self.audioConverterNeedCount = requiredPacketCount
+//                
+//                // Setting to ".noDataNow" sometimes results in crash, so we set to ".endOfStream" and reset audioConverter afterwards.
+//                outStatus.pointee = .endOfStream
+//                return nil
+//            }
+//            
+//            audioConverter.reset()
+//        }
+//        
+//        guard let audioConverterRequiredFrameCount = audioConverterNeedCount else { return }
+//        
+//        let availableFrameCount = AVAudioFrameCount(audioBuffer.enableBytesForReading / self.audioFormat.frameSize)
+//        if self.audioEngine.isRunning && availableFrameCount >= audioConverterRequiredFrameCount {
+//            var conversionError: NSError?
+//            let status = audioConverter.convert(to: outputBuffer, error: &conversionError) { [weak self] (requiredPacketCount, outStatus) -> AVAudioBuffer? in
+//                guard let self = self else { return nil }
+//                
+//                // Copy requiredPacketCount frames into inputBuffer's first channel (since audio is interleaved, no need to modify other channels).
+//                let preferredSize = min(Int(requiredPacketCount) * self.audioFormat.frameSize, Int(inputBuffer.frameCapacity) * self.audioFormat.frameSize)
+//                buffer[0].withMemoryRebound(to: UInt8.self, capacity: preferredSize) { (uint8Buffer) in
+//                    let readBytes = self.audioBuffer.read(into: uint8Buffer, preferredSize: preferredSize)
+//                    
+//                    let frameLength = AVAudioFrameCount(readBytes / self.audioFormat.frameSize)
+//                    inputBuffer.frameLength = frameLength
+//                }
+//                
+//                if inputBuffer.frameLength == 0 {
+//                    outStatus.pointee = .noDataNow
+//                    return nil
+//                } else {
+//                    outStatus.pointee = .haveData
+//                    return inputBuffer
+//                }
+//            }
+//            
+//            if status == .error {
+//                if let error = conversionError {
+//                    print(error, error.userInfo)
+//                }
+//            }
+//        } else {
+//            // If not running or not enough input frames, set frameLength to 0 to minimize time until we check again.
+//            inputBuffer.frameLength = 0
+//        }
+//        
+//        audioPlayerNode.scheduleBuffer(outputBuffer) { [weak self, weak node = audioPlayerNode] in
+//            guard let self = self else { return }
+//            
+//            self.renderingQueue.async {
+//                if node?.isPlaying == true
+//                {
+//                    self.render(inputBuffer, into: outputBuffer)
+//                }
+//            }
+//        }
     }
     
     @objc func resetAudioEngine() {
-        renderingQueue.sync { [weak self] in
-            guard let self = self else { return }
-            self.audioPlayerNode.reset()
-            
-            guard let outputAudioFormat = AVAudioFormat(standardFormatWithSampleRate: AVAudioSession.sharedInstance().sampleRate, channels: self.audioFormat.channelCount) else { return }
-            
-            let inputAudioBufferFrameCount = Int(self.audioFormat.sampleRate * self.frameDuration)
-            let outputAudioBufferFrameCount = Int(outputAudioFormat.sampleRate * self.frameDuration)
-            
-            // Allocate enough space to prevent us from overwriting data before we've used it.
-            let ringBufferAudioBufferCount = Int((self.audioFormat.sampleRate / outputAudioFormat.sampleRate).rounded(.up) + 10.0)
-            
-            let preferredBufferSize = inputAudioBufferFrameCount * self.audioFormat.frameSize * ringBufferAudioBufferCount
-            guard let ringBuffer = RingingBuffer(preferredBufferSize: preferredBufferSize) else {
-                fatalError("Cannot initialize RingBuffer with preferredBufferSize of \(preferredBufferSize)")
-            }
-            self.audioBuffer = ringBuffer
-            
-            let audioConverter = AVAudioConverter(from: self.audioFormat, to: outputAudioFormat)
-            self.audioConverter = audioConverter
-            
-            self.audioConverterNeedCount = nil
-            
-            self.audioEngine.disconnectNodeOutput(self.timePitchEffect)
-            self.audioEngine.connect(self.timePitchEffect, to: self.audioEngine.mainMixerNode, format: outputAudioFormat)
-
-            self.audioEngine.detach(self.sourceNode)
-            
-            self.sourceNode = self.makeSourceNode()
-            self.audioEngine.attach(self.sourceNode)
-            
-            self.audioEngine.connect(self.sourceNode, to: self.timePitchEffect, format: outputAudioFormat)
-            
-            do {
-                // Explicitly set output port since .defaultToSpeaker option pauses external audio.
-                if AVAudioSession.sharedInstance().currentRoute.isOutToReceiver {
-                    try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
-                }
-                
-                try self.audioEngine.start()
-                
-            } catch {
-                print(error)
-            }
-        }
+//        renderingQueue.sync { [weak self] in
+//            guard let self = self else { return }
+//            self.audioPlayerNode.reset()
+//            
+//            guard let outputAudioFormat = AVAudioFormat(standardFormatWithSampleRate: AVAudioSession.sharedInstance().sampleRate, channels: self.audioFormat.channelCount) else { return }
+//            
+//            let inputAudioBufferFrameCount = Int(self.audioFormat.sampleRate * self.frameDuration)
+//            let outputAudioBufferFrameCount = Int(outputAudioFormat.sampleRate * self.frameDuration)
+//            
+//            // Allocate enough space to prevent us from overwriting data before we've used it.
+//            let ringBufferAudioBufferCount = Int((self.audioFormat.sampleRate / outputAudioFormat.sampleRate).rounded(.up) + 10.0)
+//            
+//            let preferredBufferSize = inputAudioBufferFrameCount * self.audioFormat.frameSize * ringBufferAudioBufferCount
+//            guard let ringBuffer = RingingBuffer(preferredBufferSize: preferredBufferSize) else {
+//                fatalError("Cannot initialize RingBuffer with preferredBufferSize of \(preferredBufferSize)")
+//            }
+//            self.audioBuffer = ringBuffer
+//            
+//            let audioConverter = AVAudioConverter(from: self.audioFormat, to: outputAudioFormat)
+//            self.audioConverter = audioConverter
+//            
+//            self.audioConverterNeedCount = nil
+//            
+//            self.audioEngine.disconnectNodeOutput(self.timePitchEffect)
+//            self.audioEngine.connect(self.timePitchEffect, to: self.audioEngine.mainMixerNode, format: outputAudioFormat)
+//
+//            self.audioEngine.detach(self.sourceNode)
+//            
+//            self.sourceNode = self.makeSourceNode()
+//            self.audioEngine.attach(self.sourceNode)
+//            
+//            self.audioEngine.connect(self.sourceNode, to: self.timePitchEffect, format: outputAudioFormat)
+//            
+//            do {
+//                // Explicitly set output port since .defaultToSpeaker option pauses external audio.
+//                if AVAudioSession.sharedInstance().currentRoute.isOutToReceiver {
+//                    try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
+//                }
+//                
+//                try self.audioEngine.start()
+//                
+//            } catch {
+//                print(error)
+//            }
+//        }
     }
     
     @objc func updateVolume() {
-        if !isEnabled {
-            audioEngine.mainMixerNode.outputVolume = 0.0
-        } else {
-            let route = AVAudioSession.sharedInstance().currentRoute
-            
-            if AVAudioSession.sharedInstance().isOtherAudioPlaying {
-                // Always mute if another app is playing audio.
-                audioEngine.mainMixerNode.outputVolume = 0.0
-            } else if followSilentMode {
-                if isMuted && (route.isHeadset || !route.isOutToExternalDevice) {
-                    // Respect mute switch IFF playing through speaker or headphones.
-                    audioEngine.mainMixerNode.outputVolume = 0.0
-                } else {
-                    // Ignore mute switch for other audio routes (e.g. AirPlay).
-                    self.audioEngine.mainMixerNode.outputVolume = 1.0
-                }
-            } else {
-                // Ignore silent mode and always play game audio (unless another app is playing audio).
-                audioEngine.mainMixerNode.outputVolume = 1.0
-            }
-        }
+//        if !isEnabled {
+//            audioEngine.mainMixerNode.outputVolume = 0.0
+//        } else {
+//            let route = AVAudioSession.sharedInstance().currentRoute
+//            
+//            if AVAudioSession.sharedInstance().isOtherAudioPlaying {
+//                // Always mute if another app is playing audio.
+//                audioEngine.mainMixerNode.outputVolume = 0.0
+//            } else if followSilentMode {
+//                if isMuted && (route.isHeadset || !route.isOutToExternalDevice) {
+//                    // Respect mute switch IFF playing through speaker or headphones.
+//                    audioEngine.mainMixerNode.outputVolume = 0.0
+//                } else {
+//                    // Ignore mute switch for other audio routes (e.g. AirPlay).
+//                    self.audioEngine.mainMixerNode.outputVolume = 1.0
+//                }
+//            } else {
+//                // Ignore silent mode and always play game audio (unless another app is playing audio).
+//                audioEngine.mainMixerNode.outputVolume = 1.0
+//            }
+//        }
     }
     
     func makeSourceNode() -> AVAudioSourceNode {
@@ -343,35 +345,35 @@ public class AudioUtils: NSObject, AudioRenderProtocol {
     }
     
     public func start() {
-        muteMonitor.startMonitoring { [weak self] (isMuted) in
-            guard let self = self else { return }
-            self.isMuted = isMuted
-        }
-        
-        do {
-            try AVAudioSession.sharedInstance().setManicEmuCategory()
-            try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(0.005)
-            
-            try AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
-            
-            try AVAudioSession.sharedInstance().setActive(true)
-        }
-        catch {
-            print(error)
-        }
-        
-        resetAudioEngine()
+//        muteMonitor.startMonitoring { [weak self] (isMuted) in
+//            guard let self = self else { return }
+//            self.isMuted = isMuted
+//        }
+//        
+//        do {
+//            try AVAudioSession.sharedInstance().setManicEmuCategory()
+//            try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(0.005)
+//            
+//            try AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
+//            
+//            try AVAudioSession.sharedInstance().setActive(true)
+//        }
+//        catch {
+//            print(error)
+//        }
+//        
+//        resetAudioEngine()
     }
     
     public func stop() {
-        muteMonitor.stopMonitoring()
-        
-        renderingQueue.sync { [weak self] in
-            guard let self = self else { return }
-            self.audioPlayerNode.stop()
-            self.audioEngine.stop()
-        }
-        
-        audioBuffer.isEnabled = false
+//        muteMonitor.stopMonitoring()
+//        
+//        renderingQueue.sync { [weak self] in
+//            guard let self = self else { return }
+//            self.audioPlayerNode.stop()
+//            self.audioEngine.stop()
+//        }
+//        
+//        audioBuffer.isEnabled = false
     }
 }
