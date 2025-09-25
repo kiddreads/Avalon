@@ -430,6 +430,58 @@ struct GameSetting: SettingCellItem {
         }
     }
     
+    enum MappingOnlyType: Int, CaseIterable, SettingCellItem {
+        case holdX2FastForward, holdX3FastForward, holdX4FastForward, holdMaxFastForward
+        
+        var title: String {
+            switch self {
+            case .holdX2FastForward:
+                R.string.localizable.holdFastForward("2x")
+            case .holdX3FastForward:
+                R.string.localizable.holdFastForward("3x")
+            case .holdX4FastForward:
+                R.string.localizable.holdFastForward("4x")
+            case .holdMaxFastForward:
+                R.string.localizable.holdMaxFastForward()
+            }
+        }
+        
+        var image: UIImage {
+            switch self {
+            case .holdX2FastForward, .holdX3FastForward, .holdX4FastForward, .holdMaxFastForward:
+                UIImage(symbol: .forward)
+            }
+        }
+        
+        func enable(for gameType: GameType, defaultCore: Int) -> Bool {
+            if gameType == ._3ds,
+               (self == .holdX2FastForward || self == .holdX3FastForward || self == .holdX4FastForward || self == .holdMaxFastForward) {
+                return false
+            }
+            return true
+        }
+        
+        var enableLongPress: Bool {
+            switch self {
+            case .holdX2FastForward, .holdX3FastForward, .holdX4FastForward, .holdMaxFastForward:
+                return false
+            }
+        }
+        
+        var inputKey: String {
+            switch self {
+            case .holdX2FastForward:
+                "fastForward2x"
+            case .holdX3FastForward:
+                "fastForward3x"
+            case .holdX4FastForward:
+                "fastForward4x"
+            case .holdMaxFastForward:
+                "fastForward"
+            }
+        }
+    }
+    
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
         case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog
@@ -448,6 +500,7 @@ struct GameSetting: SettingCellItem {
     var currentDiskIndex: UInt = 0
     var airPlayScaling: AirPlayScaling = .coreProvided
     var airPlayLayout: AirPlayLayout = .sideBySide
+    var mappingOnlyType: MappingOnlyType? = nil
     
     var image: UIImage {
         switch type {
@@ -580,6 +633,10 @@ struct GameSetting: SettingCellItem {
     }
     
     func enable(for gameType: GameType, defaultCore: Int) -> Bool {
+        if let mappingOnlyType {
+            return mappingOnlyType.enable(for: gameType, defaultCore: defaultCore)
+        }
+        
         if type == .airPlayLayout {
             return gameType == .ds
         }
@@ -650,67 +707,76 @@ struct GameSetting: SettingCellItem {
     }
     
     var inputKey: String {
+        if let mappingOnlyType {
+            return mappingOnlyType.inputKey
+        }
+        
         switch self.type {
         case .saveState:
-            "quickSave"
+            return "quickSave"
         case .quickLoadState:
-            "quickLoad"
+            return "quickLoad"
         case .volume:
-            "volume"
+            return "volume"
         case .fastForward:
-            "toggleFastForward"
+            return "toggleFastForward"
         case .stateList:
-            "saveStates"
+            return "saveStates"
         case .cheatCode:
-            "cheatCodes"
+            return "cheatCodes"
         case .skins:
-            "skins"
+            return "skins"
         case .filter:
-            "filters"
+            return "filters"
         case .screenShot:
-            "screenshot"
+            return "screenshot"
         case .haptic:
-            "haptics"
+            return "haptics"
         case .airplay:
-            "airplay"
+            return "airplay"
         case .controllerSetting:
-            "controllers"
+            return "controllers"
         case .orientation:
-            "orientation"
+            return "orientation"
         case .functionSort:
-            "functionLayout"
+            return "functionLayout"
         case .reload:
-            "restart"
+            return "restart"
         case .quit:
-            "quit"
+            return "quit"
         case .swapScreen:
-            "reverseScreens"
+            return "reverseScreens"
         case .resolution:
-            "resolution"
+            return "resolution"
         case .consoleHome:
-            "homeMenu"
+            return "homeMenu"
         case .amiibo:
-            "amiibo"
+            return "amiibo"
         case .toggleFullscreen:
-            "toggleControlls"
+            return "toggleControlls"
         case .simBlowing:
-            "blowing"
+            return "blowing"
         case .palette:
-            "palette"
+            return "palette"
         case .swapDisk:
-            "swapDisk"
+            return "swapDisk"
         case .retro:
-            "retroAchievements"
+            return "retroAchievements"
         case .airPlayScaling:
-            "airPlayScaling"
+            return "airPlayScaling"
         case .airPlayLayout:
-            "airPlayLayout"
+            return "airPlayLayout"
         case .toggleAnalog:
-            "toggleAnalog"
+            return "toggleAnalog"
         }
     }
     
     static func isValidInputKey(_ inputKey: String) -> Bool {
-        return ["quickSave", "quickLoad", "volume", "toggleFastForward", "saveStates", "cheatCodes", "skins", "filters", "screenshot", "haptics", "airplay", "controllers", "orientation", "functionLayout", "restart", "quit", "reverseScreens", "resolution", "homeMenu", "amiibo", "toggleControlls", "blowing", "palette", "swapDisk", "retroAchievements", "airPlayScaling", "airPlayLayout", "toggleAnalog"].contains([inputKey])
+        if GameSetting.ItemType.allCases.contains(where: { GameSetting(type: $0).inputKey == inputKey }) {
+            return true
+        } else if MappingOnlyType.allCases.contains(where: { $0.inputKey == inputKey }) {
+            return true
+        }
+        return false
     }
 }

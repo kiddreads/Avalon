@@ -236,6 +236,13 @@ class GameSettingView: BaseView {
             }
             return nil
         }
+        
+        if isMappingMode {
+            gameSettings.append(contentsOf: GameSetting.MappingOnlyType.allCases.map({
+                return GameSetting(type: .quit, mappingOnlyType: $0)
+            }))
+        }
+        
         collectionView.reloadData()
     }
     
@@ -355,7 +362,12 @@ extension GameSettingView: UICollectionViewDataSource {
             }
         }
         
-        cell.setData(item: item, editable: isEditingMode, isPlus: indexPath.section != 0, enable: item.enable(for: game.gameType, defaultCore: game.defaultCore), mappingMode: isMappingMode, specialTitle: specialTitle)
+        if isMappingMode, let mappingItem = item.mappingOnlyType {
+            cell.setDataForMappingOnly(item: mappingItem)
+        } else {
+            cell.setData(item: item, editable: isEditingMode, isPlus: indexPath.section != 0, enable: item.enable(for: game.gameType, defaultCore: game.defaultCore), mappingMode: isMappingMode, specialTitle: specialTitle)
+        }
+        
         if isEditingMode {
             cell.editButton.addTapGesture { [weak self] gesture in
                 guard let self = self else { return }

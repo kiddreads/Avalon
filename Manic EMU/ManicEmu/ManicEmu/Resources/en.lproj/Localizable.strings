@@ -719,3 +719,5 @@ Press the controller button to complete mapping...";
 "GlobalHardcoreAlert" = "Please enable Global RetroAchievements first.";
 "ThreeDSNandImportToast" = "Please Dump the NAND from your 3DS device and compress it into an unencrypted nand.zip. This provides the missing system files required for 3DS emulation.";
 "ThreeDSNandImportFailed" = "Incorrect nand.zip imported!";
+"HoldFastForward" = "Hold %@ FF";
+"HoldMaxFastForward" = "Hold Max FF";

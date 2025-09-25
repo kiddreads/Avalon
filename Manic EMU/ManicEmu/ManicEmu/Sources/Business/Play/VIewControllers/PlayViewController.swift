@@ -889,12 +889,26 @@ class PlayViewController: GameViewController {
             handleMenuGameSetting(GameSetting(type: .saveState), nil)
         } else if input.stringValue == "quickLoad" {
             handleMenuGameSetting(GameSetting(type: .quickLoadState), nil)
-        } else if input.stringValue == "fastForward" {
-            if PurchaseManager.isMember {
+        } else if input.stringValue == "fastForward" ||
+                    input.stringValue == "fastForward2x" ||
+                    input.stringValue == "fastForward3x" ||
+                    input.stringValue == "fastForward4x" {
+            if !PurchaseManager.isMember {
                 manicEmuCore?.setRate(speed: .two)
             } else {
                 if manicGame.speed.rawValue < GameSetting.FastForwardSpeed.five.rawValue {
-                    manicEmuCore?.setRate(speed: .five)
+                    let speed: GameSetting.FastForwardSpeed
+                    if input.stringValue == "fastForward2x" {
+                        speed = .two
+                    } else if input.stringValue == "fastForward3x" {
+                        speed = .three
+                    } else if input.stringValue == "fastForward4x" {
+                        speed = .four
+                    } else {
+                        speed = .five
+                    }
+                    Log.debug("长按速度: \(speed.rawValue)x")
+                    manicEmuCore?.setRate(speed: speed)
                 }
             }
         } else if input.stringValue == "toggleFastForward" {
@@ -959,8 +973,12 @@ class PlayViewController: GameViewController {
     
     override func gameController(_ gameController: any GameController, didDeactivate input: any Input) {
         super.gameController(gameController, didDeactivate: input)
-        if input.stringValue == "fastForward" {
+        if input.stringValue == "fastForward" ||
+            input.stringValue == "fastForward2x" ||
+            input.stringValue == "fastForward3x" ||
+            input.stringValue == "fastForward4x" {
             manicEmuCore?.setRate(speed: manicGame.speed)
+            Log.debug("长按结束，恢复原速度")
         }
     }
     
