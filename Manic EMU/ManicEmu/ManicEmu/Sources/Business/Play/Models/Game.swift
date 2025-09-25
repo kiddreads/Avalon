@@ -119,7 +119,8 @@ class Game: Object, ObjectUpdatable {
         var localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(fileName))
 #if !targetEnvironment(simulator)
         if gameType == ._3ds,
-           fileExtension.lowercased() == "app", let ciaPath = ThreeDSCore.shared.getCIAContentPath(identifier: identifierFor3DS) {
+           fileExtension.lowercased() == "app",
+           let ciaPath = ThreeDSCore.shared.getCIAContentPath(identifier: identifierFor3DS) {
             localUrl = URL(fileURLWithPath: ciaPath)
         }
 #endif
@@ -130,7 +131,7 @@ class Game: Object, ObjectUpdatable {
 #if !targetEnvironment(simulator)
         if gameType == ._3ds {
             //存档 sdmc/Nintendo 3DS/000...0/000...0/title/[game-TID-high]/[game-TID-low]/data/00000001/
-            if let titlePath = ThreeDSCore.shared.getTitlePath(identifier: self.identifierFor3DS) {
+            if let titlePath = ThreeDSCore.shared.getTitlePath(identifier: identifierFor3DS) {
                 return URL(fileURLWithPath: titlePath.appendingPathComponent("data/00000001/"))
             }
         }
@@ -186,14 +187,8 @@ class Game: Object, ObjectUpdatable {
            let extraInfos = try? extras.jsonObject() as? [String: Any],
            let identifier = extraInfos["identifier"] as? UInt64 {
             return identifier
-        } else {
-#if !targetEnvironment(simulator)
-            if let info = ThreeDSCore.shared.information(for: romUrl) {
-                return info.identifier
-            }
-#endif
-            return 0
         }
+        return 0
     }
     
     var gameCodeForPSP: String? {
@@ -449,6 +444,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var is3DSHomeMenuGame: Bool {
+        guard gameType == ._3ds else { return false }
         return Constants.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == identifierFor3DS })
     }
     

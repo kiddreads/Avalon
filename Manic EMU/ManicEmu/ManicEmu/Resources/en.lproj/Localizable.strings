@@ -723,3 +723,5 @@ Press the controller button to complete mapping...";
 "HoldMaxFastForward" = "Hold Max FF";
 "Microphone" = "Microphone";
 "MicrophoneTips" = "Enabling the microphone will request access and keep it active during gameplay, which may stop music playback from other apps in the background.";
+"Texture" = "Texture";
+"TextureReplacement" = "Texture replacement";

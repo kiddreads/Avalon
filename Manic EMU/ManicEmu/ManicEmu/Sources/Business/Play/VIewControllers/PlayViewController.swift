@@ -1751,20 +1751,6 @@ extension PlayViewController {
         } else if manicGame.gameType.isLibretroType {
             LibretroCore.sharedInstance().resume()
             updateAudio()
-        } else {
-            resumeEmulation()
-            updateAudio()
-            if PurchaseManager.isMember, Settings.defalut.airPlay, ExternalSceneDelegate.isAirPlaying, let airPlayGameView = ExternalSceneDelegate.airPlayViewController?.gameView {
-                if !airPlayGameView.isEnabled {
-                    airPlayGameView.isEnabled = true
-                }
-            } else {
-                gameViews.forEach { gameView in
-                    if !gameView.isEnabled {
-                        gameView.isEnabled = true
-                    }
-                }
-            }
         }
     }
     
@@ -1891,7 +1877,8 @@ extension PlayViewController {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PPSSPP.name, configs: [
                 "ppsspp_cheats": "enabled",
                 "ppsspp_language": languages[manicGame.region],
-                "ppsspp_backend": backend
+                "ppsspp_backend": backend,
+                "ppsspp_texture_replacement": (manicGame.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "enabled" : "disabled"
             ], reload: false)
             updatePSPResolution(manicGame.resolution, reload: false)
         } else if manicGame.gameType == .nes {
@@ -2671,20 +2658,17 @@ extension PlayViewController {
     private func snapShotForNDS(topOnly: Bool = false, source: UIImage) -> [UIImage]? {
         guard let controllerSkin = controllerView.controllerSkin as? ControllerSkin else { return nil }
         guard let frames = controllerSkin.getFrames() else { return nil }
-        guard let touchGameViewFrame = frames.touchGameViewFrame else { return nil }
-        let skinFrame = frames.skinFrame
-        let mainGameViewFrame = frames.mainGameViewFrame
-        let topRect = CGRectMake(skinFrame.minX + mainGameViewFrame.minX, skinFrame.minY + mainGameViewFrame.minY, mainGameViewFrame.width, mainGameViewFrame.height)
-        let bottomRect = CGRectMake(skinFrame.minX + touchGameViewFrame.minX, skinFrame.minY + touchGameViewFrame.minY, touchGameViewFrame.width, touchGameViewFrame.height)
         var screenImage = source
         if screenImage.scale != UIScreen.main.scale, let imageData = screenImage.pngData(), let scaleImage = UIImage(data: imageData, scale: UIScreen.main.scale) {
             screenImage = scaleImage
         }
-        if topOnly {
-            return [screenImage.cropped(to: topRect)]
-        } else {
-            return [screenImage.cropped(to: topRect), screenImage.cropped(to: bottomRect)]
+        
+        let topImage = screenImage.cropped(to: frames.mainGameViewFrame)
+        if !topOnly, let bottomRect = frames.touchGameViewFrame {
+            let bottomImage = screenImage.cropped(to: bottomRect)
+            return [topImage, bottomImage]
         }
+        return [topImage]
     }
     
     private func hideSkinButtons() {

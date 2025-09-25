@@ -932,6 +932,33 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var pspTextureContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: R.string.localizable.on()) { [weak self] _ in
+            guard let self = self else { return }
+            self.pspTextureButton.titleLabel.text = "\(R.string.localizable.texture()) \(R.string.localizable.on())"
+            self.game?.updateExtra(key: ExtraKey.pspTexture.rawValue, value: true)
+        })
+        actions.append(UIAction(title: R.string.localizable.off()) { [weak self] _ in
+            guard let self = self else { return }
+            self.pspTextureButton.titleLabel.text = "\(R.string.localizable.texture()) \(R.string.localizable.off())"
+            self.game?.updateExtra(key: ExtraKey.pspTexture.rawValue, value: false)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.textureReplacement(), children: actions))
+        return view
+    }()
+    
+    private lazy var pspTextureButton: SymbolButton = {
+        let title = R.string.localizable.texture() + " " + ((self.game?.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "\(R.string.localizable.on())" : "\(R.string.localizable.off())")
+        let view = SymbolButton(symbol: .aqiMedium, title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.pspTextureContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
     var didSegmentChange: ((_ index: Int)->Void)?
     lazy var segmentView: BetterSegmentedControl = {
         let titles = [R.string.localizable.readySegmentManualSave(), R.string.localizable.readySegmentAutoSave()]
@@ -1236,10 +1263,21 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             pspRendererContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(pspRendererButton)
+            }
+            
+            functionButtonContainerView.addSubview(pspTextureContextMenuButton)
+            functionButtonContainerView.addSubview(pspTextureButton)
+            pspTextureButton.snp.makeConstraints { make in
+                make.leading.equalTo(pspRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            pspTextureContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(pspTextureButton)
             }
         }
     }

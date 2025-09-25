@@ -19,6 +19,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <boolean.h>
 
@@ -39,6 +40,8 @@
 #include "../../tasks/task_content.h"
 #include "../../verbosity.h"
 #include "../../cheevos/cheevos.h"
+#include "../../gfx/video_driver.h"
+#include "../../runloop.h"
 
 #ifdef HAVE_MENU
 #include "../../menu/menu_setting.h"
@@ -1175,79 +1178,223 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
     if (!completion) {
         return;
     }
-    settings_t *settings = config_get_ptr();
-    runloop_state_t *runloop_st = runloop_state_get_ptr();
-    const char *dir_screenshot      = settings->paths.directory_screenshot;
-    video_driver_state_t *video_st  = video_state_get_ptr();
-    const char *name_base = runloop_st->runtime_content_path_basename;
-    take_screenshot(dir_screenshot, name_base, false, video_st->frame_cache_data && (video_st->frame_cache_data == RETRO_HW_FRAME_BUFFER_VALID), false, false);
     
-    NSString *screenShotDir = [[NSString stringWithCString:dir_screenshot encoding:NSUTF8StringEncoding] stringByDeletingPathExtension];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        __block BOOL cancelledByCondition = NO;
-        // 等待截图完成
-        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-        // 设置定时器间隔（0.1秒）
-        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
-        // 设置定时器回调
-        dispatch_source_set_event_handler(timer, ^{
-            // 检查文件是否存在
-            NSArray *files = [fileManager contentsOfDirectoryAtPath:screenShotDir error:nil];
-            NSArray *sortedFiles = [[files filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString *fileName, NSDictionary *bindings) {
-                NSString *fullPath = [screenShotDir stringByAppendingPathComponent:fileName];
-                BOOL isDir = NO;
-                [fileManager fileExistsAtPath:fullPath isDirectory:&isDir];
-                return !isDir;
-            }]] sortedArrayUsingComparator:^NSComparisonResult(NSString *file1, NSString *file2) {
-                NSString *path1 = [screenShotDir stringByAppendingPathComponent:file1];
-                NSString *path2 = [screenShotDir stringByAppendingPathComponent:file2];
-                
-                NSDate *date1 = [[fileManager attributesOfItemAtPath:path1 error:nil] fileCreationDate];
-                NSDate *date2 = [[fileManager attributesOfItemAtPath:path2 error:nil] fileCreationDate];
-                
-                return [date2 compare:date1]; // 创建时间降序
-            }];
+    // 在主线程上执行截图操作，确保在游戏循环中正确执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        struct video_viewport vp;
+        video_driver_state_t *video_st = video_state_get_ptr();
+        runloop_state_t *runloop_st = runloop_state_get_ptr();
+        uint8_t *buffer = NULL;
+        
+        // 检查视频驱动是否可用
+        if (!video_st || !video_st->current_video || !video_st->current_video->read_viewport) {
+            completion(nil);
+            return;
+        }
+        
+        // 初始化视口
+        vp.x = 0;
+        vp.y = 0;
+        vp.width = 0;
+        vp.height = 0;
+        vp.full_width = 0;
+        vp.full_height = 0;
+        
+        // 获取视口信息
+        if (!video_driver_get_viewport_info(&vp) || !vp.width || !vp.height) {
+            completion(nil);
+            return;
+        }
+        
+        // 分配缓冲区 (RGB24格式，每像素3字节)
+        buffer = (uint8_t*)malloc(vp.width * vp.height * 3);
+        if (!buffer) {
+            completion(nil);
+            return;
+        }
+        
+        // 获取当前运行循环标志
+        uint32_t runloop_flags = runloop_get_flags();
+        bool is_idle = (runloop_flags & RUNLOOP_FLAG_IDLE) ? true : false;
+        bool is_fastforward = (runloop_flags & RUNLOOP_FLAG_FASTMOTION) ? true : false;
+        bool is_paused = (runloop_flags & RUNLOOP_FLAG_PAUSED) ? true : false;
+        
+        if (!is_paused) {
+            [self pause];
+        }
+        
+        // 为了确保能够读取到帧缓冲，我们需要多次尝试
+        bool read_success = false;
+        int retry_count = 0;
+        const int max_retries = is_fastforward ? 10 : 3;
+        
+        // 在快进状态下，我们需要先暂停快进，截图后再恢复
+        bool need_restore_fastforward = false;
+        if (is_fastforward && runloop_st) {
+            NSLog(@"[snapshot2] 检测到快进状态，临时暂停快进以确保截图成功");
+            // 临时禁用快进
+            runloop_st->flags &= ~RUNLOOP_FLAG_FASTMOTION;
+            need_restore_fastforward = true;
             
-            NSString *latestFile = sortedFiles.firstObject;
-            if (latestFile)  {
-                NSString *latestPath = [screenShotDir stringByAppendingPathComponent:latestFile];
-                NSDate *creationDate = [[fileManager attributesOfItemAtPath:latestPath error:nil] fileCreationDate];
-                if ([NSDate now].timeIntervalSince1970 - creationDate.timeIntervalSince1970 < 1.0) {
-                    NSString *imageFilePath = [screenShotDir stringByAppendingPathComponent:latestFile];
-                    UIImage *image = [UIImage imageWithContentsOfFile:imageFilePath];
-                    if (image) {
-                        dispatch_source_cancel(timer);
-                        cancelledByCondition = YES;
-                        // 在主线程回调
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (completion) {
-                                NSLog(@"保存图片成功!!");
-                                completion(image);
-                            }
-                            [fileManager removeItemAtPath:imageFilePath error:nil];
-                        });
-                    }
-                }
+            // 强制渲染一帧以确保有可用的后备缓冲区
+            if (runloop_st->flags & RUNLOOP_FLAG_CORE_RUNNING) {
+                video_driver_cached_frame();
             }
-        });
-        // 启动定时器
-        dispatch_resume(timer);
-        // 设置超时（2秒）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            if (cancelledByCondition) {
-                return;
+            
+            // 给渲染一些时间完成
+            usleep(5000); // 等待5ms
+        }
+        
+        while (!read_success && retry_count < max_retries) {
+            // 强制渲染当前帧
+            if (runloop_st && (runloop_st->flags & RUNLOOP_FLAG_CORE_RUNNING)) {
+                video_driver_cached_frame();
             }
-            dispatch_source_cancel(timer);
-            // 在主线程回调超时
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completion) {
-                    completion(nil);
-                }
-            });
-        });
+            
+            // 给渲染一些时间完成，特别是第一次尝试
+            if (retry_count == 0) {
+                usleep(2000); // 等待2ms
+            } else if (retry_count > 0) {
+                usleep(1000); // 等待1ms
+            }
+            
+            // 尝试读取视口数据
+            read_success = video_st->current_video->read_viewport(video_st->data, buffer, is_idle);
+            retry_count++;
+            
+            if (!read_success) {
+                NSLog(@"[snapshot2] 读取视口失败，重试次数: %d/%d, 快进: %s, 暂停: %s",
+                      retry_count, max_retries, is_fastforward ? "是" : "否", is_paused ? "是" : "否");
+            }
+        }
+        
+        // 恢复快进状态
+        if (need_restore_fastforward && runloop_st) {
+            NSLog(@"[snapshot2] 恢复快进状态");
+            runloop_st->flags |= RUNLOOP_FLAG_FASTMOTION;
+        }
+        if (!is_paused) {
+            [self resume];
+        }
+        
+        if (read_success) {
+            // 成功读取，转换为UIImage
+            UIImage *image = [self createUIImageFromBGRBuffer:buffer width:vp.width height:vp.height];
+            free(buffer);
+            
+            if (image) {
+                NSLog(@"[snapshot2] 截图成功，尺寸: %.0fx%.0f", image.size.width, image.size.height);
+                completion(image);
+            } else {
+                NSLog(@"[snapshot2] 图像转换失败");
+                completion(nil);
+            }
+        } else {
+            // 所有重试都失败了
+            NSLog(@"[snapshot2] 读取视口失败，已重试 %d 次", max_retries);
+            free(buffer);
+            completion(nil);
+        }
     });
+}
+
+- (UIImage *_Nullable)createUIImageFromBGRBuffer:(uint8_t *_Nullable)buffer width:(NSUInteger)width height:(NSUInteger)height {
+    if (!buffer || width == 0 || height == 0) {
+        NSLog(@"[createUIImageFromBGRBuffer] 无效参数: buffer=%p, width=%lu, height=%lu", buffer, (unsigned long)width, (unsigned long)height);
+        return nil;
+    }
     
+    NSLog(@"[createUIImageFromBGRBuffer] 开始创建图像，尺寸: %lux%lu", (unsigned long)width, (unsigned long)height);
+    
+    // 检查前几个字节的数据以确认有效性
+    NSLog(@"[createUIImageFromBGRBuffer] 前12字节数据(BGR): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
+          buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5],
+          buffer[6], buffer[7], buffer[8], buffer[9], buffer[10], buffer[11]);
+    
+    // Metal驱动返回的数据实际上是BGR格式，我们需要转换为RGBA
+    size_t totalPixels = width * height;
+    uint8_t *rgbaBuffer = malloc(totalPixels * 4); // RGBA需要4字节每像素
+    if (!rgbaBuffer) {
+        NSLog(@"[createUIImageFromBGRBuffer] 分配RGBA缓冲区失败");
+        return nil;
+    }
+    
+    // 将BGR转换为RGBA（添加Alpha通道），同时翻转图像使其正向显示
+    for (size_t y = 0; y < height; y++) {
+        for (size_t x = 0; x < width; x++) {
+            // 源数据是bottom-up，所以从底部开始读取
+            size_t srcRow = (height - 1 - y);
+            size_t srcIndex = (srcRow * width + x) * 3;
+            
+            // 目标数据是top-down，正常顺序写入
+            size_t dstIndex = (y * width + x) * 4;
+            
+            // Metal驱动输出的是BGR格式，我们需要交换R和B通道，并添加Alpha
+            rgbaBuffer[dstIndex + 0] = buffer[srcIndex + 2]; // R = 原来的B
+            rgbaBuffer[dstIndex + 1] = buffer[srcIndex + 1]; // G = 原来的G
+            rgbaBuffer[dstIndex + 2] = buffer[srcIndex + 0]; // B = 原来的R
+            rgbaBuffer[dstIndex + 3] = 255;                  // A = 完全不透明
+        }
+    }
+    
+    NSLog(@"[createUIImageFromBGRBuffer] 转换后前16字节数据(RGBA): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
+          rgbaBuffer[0], rgbaBuffer[1], rgbaBuffer[2], rgbaBuffer[3],
+          rgbaBuffer[4], rgbaBuffer[5], rgbaBuffer[6], rgbaBuffer[7],
+          rgbaBuffer[8], rgbaBuffer[9], rgbaBuffer[10], rgbaBuffer[11],
+          rgbaBuffer[12], rgbaBuffer[13], rgbaBuffer[14], rgbaBuffer[15]);
+    
+    // 创建CGColorSpace
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    if (!colorSpace) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建颜色空间失败");
+        free(rgbaBuffer);
+        return nil;
+    }
+    
+    size_t bytesPerRow = width * 4; // RGBA每行4字节每像素
+    
+    // 使用CGBitmapContext创建图像，使用RGBA格式
+    CGContextRef context = CGBitmapContextCreate(
+        rgbaBuffer,                    // 数据指针
+        width,                         // 宽度
+        height,                        // 高度
+        8,                            // 每个组件的位数
+        bytesPerRow,                  // 每行字节数
+        colorSpace,                   // 色彩空间
+        kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault  // RGBA格式
+    );
+    
+    CGColorSpaceRelease(colorSpace);
+    
+    if (!context) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建CGContext失败");
+        free(rgbaBuffer);
+        return nil;
+    }
+    
+    // 从context创建CGImage
+    CGImageRef cgImage = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    
+    // 现在可以安全地释放RGBA缓冲区
+    free(rgbaBuffer);
+    
+    if (!cgImage) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建CGImage失败");
+        return nil;
+    }
+    
+    // 由于我们在转换时已经处理了bottom-up到top-down的翻转，现在可以使用正常方向
+    UIImage *image = [UIImage imageWithCGImage:cgImage scale:1.0 orientation:UIImageOrientationUp];
+    CGImageRelease(cgImage);
+    
+    if (!image) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建UIImage失败");
+        return nil;
+    }
+    
+    NSLog(@"[createUIImageFromBGRBuffer] 成功创建图像，最终尺寸: %.0fx%.0f", image.size.width, image.size.height);
+    return image;
 }
 
 - (BOOL)saveState:(void(^ _Nullable)(NSString *_Nullable path))completion {
@@ -1274,55 +1421,43 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
 }
 
 - (void)fastForward:(float)rate {
-    runloop_state_t *runloop_st = runloop_state_get_ptr();
-    if (!runloop_st) return;
-    if (rate <= 1.0f) {
-        // 清除快进覆盖
-        struct retro_fastforwarding_override override = {0};
-        override.ratio = -1.0f;
-        override.fastforward = false;
-        override.notification = false;
-        override.inhibit_toggle = false;
-        
-        runloop_st->fastmotion_override.next = override;
-        
-        // 标记为待应用，系统会在下一个runloop周期自动应用
-        runloop_st->fastmotion_override.pending = true;
-    } else {
-        // 使用RetroArch的官方快进覆盖API
-        struct retro_fastforwarding_override override = {0};
-        override.ratio = rate;
-        override.fastforward = true;
-        override.notification = false;
-        override.inhibit_toggle = false;
-        
-        // 设置快进覆盖
-        runloop_st->fastmotion_override.next = override;
-        
-        // 标记为待应用，系统会在下一个runloop周期自动应用
-        runloop_st->fastmotion_override.pending = true;
-    }
-}
-
-// 获取当前快进状态
-- (BOOL)isFastForwarding {
-    runloop_state_t *runloop_st = runloop_state_get_ptr();
-    if (!runloop_st) return NO;
-    return runloop_st->fastmotion_override.current.fastforward;
-}
-
-// 获取当前快进比例
-- (float)getCurrentFastForwardRate {
-    runloop_state_t *runloop_st = runloop_state_get_ptr();
-    if (!runloop_st) return 1.0f;
-    
-    if (runloop_st->fastmotion_override.current.fastforward && 
-        runloop_st->fastmotion_override.current.ratio >= 0.0f) {
-        return runloop_st->fastmotion_override.current.ratio;
-    }
-    
     settings_t *settings = config_get_ptr();
-    return settings ? settings->floats.fastforward_ratio : 1.0f;
+    if (!settings) {
+        return;
+    }
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    input_driver_state_t *input_st = input_state_get_ptr();
+    audio_driver_state_t *audio_st = audio_state_get_ptr();
+    if (rate <= 1) {
+        //恢复速度
+        settings->floats.fastforward_ratio = 1.0f;
+        // 1. 清除快进标志
+        runloop_st->flags &= ~RUNLOOP_FLAG_FASTMOTION;
+        // 2. 清除非阻塞输入
+        input_st->flags &= ~INP_FLAG_NONBLOCKING;
+        // 3. 更新帧率限制
+        command_event(CMD_EVENT_SET_FRAME_LIMIT, NULL);
+        // 4. 恢复音频缓冲区大小
+        audio_st->chunk_size = AUDIO_CHUNK_SIZE_BLOCKING;
+        // 5. 恢复音频阻塞模式
+        if (audio_st->current_audio && audio_st->context_audio_data)
+            audio_st->current_audio->set_nonblock_state(audio_st->context_audio_data, false);
+    } else {
+        //快进
+        // 1. 设置快进比例
+        settings->floats.fastforward_ratio = rate;
+        // 2. 设置快进标志
+        runloop_st->flags |= RUNLOOP_FLAG_FASTMOTION;
+        // 3. 设置非阻塞输入
+        input_st->flags |= INP_FLAG_NONBLOCKING;
+        // 4. 更新帧率限制
+        command_event(CMD_EVENT_SET_FRAME_LIMIT, NULL);
+        // 5. 设置音频缓冲区大小
+        audio_st->chunk_size = AUDIO_CHUNK_SIZE_NONBLOCKING;
+        // 6. 设置音频非阻塞模式
+        if (audio_st->current_audio && audio_st->context_audio_data)
+            audio_st->current_audio->set_nonblock_state(audio_st->context_audio_data, true);
+    }
 }
 
 - (void)reload {
