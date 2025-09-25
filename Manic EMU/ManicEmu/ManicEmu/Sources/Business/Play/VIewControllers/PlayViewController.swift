@@ -745,10 +745,14 @@ class PlayViewController: GameViewController {
             muteSwitchMonitor.stopMonitoring()
         }
         
+        //通知游戏列表更新
         if let gameSortType = GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0),
             (gameSortType == .latestPlayed || gameSortType == .playTime) {
             NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
         }
+        
+        //取消Alert的MenuInset
+        UIView.alertBottomInset = nil
     }
     
     /// 进入默认显示的方向
@@ -812,7 +816,7 @@ class PlayViewController: GameViewController {
                 }
                 GameSettingView.show(game: manicGame,
                                      gameViewRect: gameView.frame,
-                                     menuInsets: getMenuInset(),
+                                     menuInsets: getMenuInsets(),
                                      didSelectItem: { [weak self] item, sheet in
                     //点击菜单选项
                     guard let self = self else { return true }
@@ -1155,6 +1159,7 @@ extension PlayViewController {
         }
         switch item.type {
         case .saveState:
+            //MARK: handleMenuGameSetting.saveState
             guard !isWFCConnect else {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
@@ -1186,6 +1191,7 @@ extension PlayViewController {
                 saveStateForLibretro(type: .manualSaveState)
             }
         case .quickLoadState:
+            //MARK: handleMenuGameSetting.quickLoadState
             guard !isWFCConnect else {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
@@ -1201,6 +1207,7 @@ extension PlayViewController {
                 quickLoadStateForLibretro(item.loadState)
             }
         case .volume:
+            //MARK: handleMenuGameSetting.volume
             //声音设置
             //恢复游戏的时候会直接使用新配置
             Game.change { realm in
@@ -1213,6 +1220,7 @@ extension PlayViewController {
             }
             UIView.makeToast(message: item.volumeOn ? R.string.localizable.volumeOn(): R.string.localizable.volumeOff(), identifier: "gameVolume")
         case .fastForward:
+            //MARK: handleMenuGameSetting.fastForward
             guard !isWFCConnect else {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
@@ -1259,6 +1267,7 @@ extension PlayViewController {
             }
             return false
         case .stateList:
+            //MARK: handleMenuGameSetting.stateList
             guard !isWFCConnect else {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
@@ -1270,7 +1279,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            GameInfoView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInset(), selection: { [weak self, weak menuSheet] saveState in
+            GameInfoView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), selection: { [weak self, weak menuSheet] saveState in
                 guard let self = self else { return }
                 func loadSave() {
                     if self.manicGame.gameType == ._3ds {
@@ -1301,6 +1310,7 @@ extension PlayViewController {
             })
             return false
         case .cheatCode:
+            //MARK: handleMenuGameSetting.cheatCode
             guard !isWFCConnect else {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
@@ -1315,7 +1325,7 @@ extension PlayViewController {
                 if menuSheet == nil {
                     pauseEmulation()
                 }
-                CheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
+                CheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
                     }
@@ -1323,22 +1333,24 @@ extension PlayViewController {
             }
             return false
         case .skins:
+            //MARK: handleMenuGameSetting.skins
             if menuSheet == nil {
                 pauseEmulation()
             }
-            SkinSettingsView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
+            SkinSettingsView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
             })
             return false
         case .filter:
+            //MARK: handleMenuGameSetting.filter
             guard manicGame.gameType != ._3ds else { return true }
             if menuSheet == nil {
                 pauseEmulation()
             }
             if manicGame.gameType.isLibretroType {
-                FilterSelectionView.show(game: self.manicGame, snapshot: nil, gameViewRect: self.gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
+                FilterSelectionView.show(game: self.manicGame, snapshot: nil, gameViewRect: self.gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
                     }
@@ -1346,6 +1358,7 @@ extension PlayViewController {
             }
             return false
         case .screenShot:
+            //MARK: handleMenuGameSetting.screenShot
             //截屏
             if manicGame.gameType == ._3ds {
                 if let images = self.snapShotFor3DS() {
@@ -1386,6 +1399,7 @@ extension PlayViewController {
                 return false
             }
         case .haptic:
+            //MARK: handleMenuGameSetting.haptic
             switch item.hapticType {
             case .off:
                 break
@@ -1408,10 +1422,11 @@ extension PlayViewController {
             UIView.makeToast(message: item.hapticType.title, identifier: "hapticType")
             return false
         case .airplay:
+            //MARK: handleMenuGameSetting.airplay
             if menuSheet == nil {
                 pauseEmulation()
             }
-            let vc = WebViewController(url: Constants.URLs.AirPlayUsageGuide, isShow: true, bottomInset: getMenuInset()?.bottom ?? nil)
+            let vc = WebViewController(url: Constants.URLs.AirPlayUsageGuide, isShow: true, bottomInset: getMenuInsets()?.bottom ?? nil)
             vc.didClose = { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
@@ -1420,16 +1435,18 @@ extension PlayViewController {
             topViewController()?.present(vc, animated: true)
             return false
         case .controllerSetting:
+            //MARK: handleMenuGameSetting.controllerSetting
             if menuSheet == nil {
                 pauseEmulation()
             }
-            ControllersSettingView.show(gameType: manicGame.gameType, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
+            ControllersSettingView.show(gameType: manicGame.gameType, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
             })
             return false
         case .orientation:
+            //MARK: handleMenuGameSetting.orientation
             if manicGame.orientation != item.orientation {
                 Game.change { realm in
                     manicGame.orientation = item.orientation
@@ -1443,16 +1460,18 @@ extension PlayViewController {
             }
             return true
         case .functionSort:
+            //MARK: handleMenuGameSetting.functionSort
             if menuSheet == nil {
                 pauseEmulation()
             }
-            GameSettingView.show(game: manicGame, gameViewRect: gameView.frame, isEditingMode: true, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
+            GameSettingView.show(game: manicGame, gameViewRect: gameView.frame, isEditingMode: true, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
             })
             return false
         case .reload:
+            //MARK: handleMenuGameSetting.reload
             if manicGame.gameType == ._3ds {
                 threeDSCore?.reload()
             } else if manicGame.gameType.isLibretroType {
@@ -1460,6 +1479,7 @@ extension PlayViewController {
                 updateFilter()
             }
         case .quit:
+            //MARK: handleMenuGameSetting.quit
             if manicGame.gameType == ._3ds {
                 threeDSCore?.stop()
                 DispatchQueue.main.asyncAfter(delay: 0.5) {
@@ -1473,6 +1493,7 @@ extension PlayViewController {
                 }
             }
         case .resolution:
+            //MARK: handleMenuGameSetting.resolution
             guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return true }
             Log.debug("设置分辨率")
             if manicGame.resolution != item.resolution {
@@ -1502,6 +1523,7 @@ extension PlayViewController {
             UIView.makeToast(message: message, identifier: "resolution")
             return manicGame.gameType == .psp //psp需要隐藏菜单(恢复游戏) 才能生效
         case .swapScreen:
+            //MARK: handleMenuGameSetting.swapScreen
             if enableSwapScreen() {
                 Game.change { realm in
                     manicGame.swapScreen = !manicGame.swapScreen
@@ -1509,6 +1531,7 @@ extension PlayViewController {
                 updateSkin()
             }
         case .consoleHome:
+            //MARK: handleMenuGameSetting.consoleHome
             //回到主页
             if manicGame.gameType == ._3ds, let threeDSCore {
                 if manicGame.is3DSHomeMenuGame {
@@ -1520,6 +1543,7 @@ extension PlayViewController {
                 }
             }
         case .amiibo:
+            //MARK: handleMenuGameSetting.amiibo
             //加载amiibo
             if manicGame.gameType == ._3ds, let threeDSCore {
                 if threeDSCore.isAmiiboSearching() {
@@ -1546,10 +1570,12 @@ extension PlayViewController {
                 }
             }
         case .toggleFullscreen:
+            //MARK: handleMenuGameSetting.toggleFullscreen
             manicGame.forceFullSkin = item.isFullScreen
             updateSkin()
             
         case .simBlowing:
+            //MARK: handleMenuGameSetting.simBlowing
             guard manicGame.gameType == ._3ds else { return false }
             threeDSCore?.setSimBlowing(start: true)
             DispatchQueue.main.asyncAfter(delay: 5) { [weak self] in
@@ -1557,6 +1583,7 @@ extension PlayViewController {
             }
             
         case .palette:
+            //MARK: handleMenuGameSetting.palette
             guard (manicGame.gameType == .gb || manicGame.gameType == .vb || manicGame.gameType == .pm) else { return false }
             if manicGame.pallete != item.palette {
                 Game.change { realm in
@@ -1586,6 +1613,7 @@ extension PlayViewController {
                 }
             }
         case .swapDisk:
+            //MARK: handleMenuGameSetting.swapDisk
             guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return false }
             if manicGame.supportSwapDisc {
                 LibretroCore.sharedInstance().setDiskIndex(UInt32(item.currentDiskIndex), delay: manicGame.gameType == .ps1 ? true : false)
@@ -1595,11 +1623,12 @@ extension PlayViewController {
             }
             return false
         case .retro:
+            //MARK: handleMenuGameSetting.retro
             if menuSheet == nil {
                 pauseEmulation()
             }
             func openRetroAchievementsList() {
-                let vc = RetroAchievementsListViewController(game: manicGame, bottomInset: getMenuInset()?.bottom ?? nil)
+                let vc = RetroAchievementsListViewController(game: manicGame, bottomInset: getMenuInsets()?.bottom ?? nil)
                 vc.didClose = { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
@@ -1622,6 +1651,7 @@ extension PlayViewController {
             return false
             
         case .airPlayScaling:
+            //MARK: handleMenuGameSetting.airPlayScaling
             if item.airPlayScaling != Settings.defalut.airPlayScaling {
                 Settings.defalut.updateExtra(key: ExtraKey.airPlayScaling.rawValue, value: item.airPlayScaling.rawValue)
                 //如果当前正处于AirPlay状态 则更新AirPlay的缩放模式
@@ -1630,6 +1660,7 @@ extension PlayViewController {
             UIView.makeToast(message: R.string.localizable.airPlayScaling() + ": " + item.airPlayScaling.title)
             
         case .airPlayLayout:
+            //MARK: handleMenuGameSetting.airPlayLayout
             if item.airPlayLayout != Settings.defalut.airPlayLayout {
                 Settings.defalut.updateExtra(key: ExtraKey.airPlayLayout.rawValue, value: item.airPlayLayout.rawValue)
                 //如果当前正处于AirPlay状态 则更新AirPlay的布局
@@ -1638,6 +1669,7 @@ extension PlayViewController {
             UIView.makeToast(message: R.string.localizable.airPlayLayout() + ": " + item.airPlayLayout.title)
             
         case .toggleAnalog:
+            //MARK: handleMenuGameSetting.toggleAnalog
             updateAnalogMode(toastAllow: true, toggle: true);
         }
         //默认关闭菜单
@@ -2088,7 +2120,7 @@ extension PlayViewController {
             let realm = Database.realm
             if let coreName = manicEmuCore?.manicCore.name,
                let skin = realm.objects(Skin.self).where({ $0.fileName == "\(coreName)_FLEX.manicskin" }).first,
-                let skinUrl = skin.skinData?.filePath,
+               let skinUrl = skin.skinData?.filePath,
                var controllerSkin = ControllerSkin(fileURL: skinUrl) {
                 if enableSwapScreen() {
                     controllerSkin.isSwapScreen = manicGame.swapScreen
@@ -2119,6 +2151,12 @@ extension PlayViewController {
         }
         //更新3DS画面视图
         update3DSViews()
+        //设置Alert的menuInsets
+        if let menuInsets = getMenuInsets() {
+            UIView.alertBottomInset = menuInsets.bottom
+        } else {
+            UIView.alertBottomInset = nil
+        }
     }
     
     /// 按照配置开始强制旋转屏幕
@@ -2820,7 +2858,7 @@ extension PlayViewController {
                 CheevosPopupView.show(type: .leaderboard,
                                       leaderboards: leaderboards.reversed(),
                                       gameViewRect: self.gameView.frame,
-                                      menuInsets: getMenuInset()) { [weak self] in
+                                      menuInsets: getMenuInsets()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
@@ -2843,7 +2881,7 @@ extension PlayViewController {
                 CheevosPopupView.show(type: .progress,
                                       achievements: progressAchievements.reversed(),
                                       gameViewRect: self.gameView.frame,
-                                      menuInsets: getMenuInset()) { [weak self] in
+                                      menuInsets: getMenuInsets()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
@@ -2867,7 +2905,7 @@ extension PlayViewController {
                 CheevosPopupView.show(type: .challenge,
                                       achievements: self.challengeAchievements.reversed(),
                                       gameViewRect: self.gameView.frame,
-                                      menuInsets: getMenuInset()) { [weak self] in
+                                      menuInsets: getMenuInsets()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
@@ -2875,7 +2913,7 @@ extension PlayViewController {
         }
     }
     
-    private func getMenuInset() -> UIEdgeInsets? {
+    private func getMenuInsets() -> UIEdgeInsets? {
         var menuInsets: UIEdgeInsets? = nil
         if let traits = controllerView.controllerSkinTraits, let insets = controllerView.controllerSkin?.menuInsets(for: traits) {
             func absoluteValue(for inset: Double, dimension: Double) -> Double {
