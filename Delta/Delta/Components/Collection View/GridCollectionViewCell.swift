@@ -13,6 +13,12 @@ class GridCollectionViewCell: UICollectionViewCell
     let imageView = RoundedImageView()
     let textLabel = UILabel()
     
+    @available(iOS 26.0, *)
+    var isImageViewGlassEnabled: Bool {
+        get { !self.glassView.isHidden }
+        set { self.glassView.isHidden = !newValue }
+    }
+    
     var isImageViewVibrancyEnabled = true {
         didSet {
             if self.isImageViewVibrancyEnabled
@@ -45,6 +51,7 @@ class GridCollectionViewCell: UICollectionViewCell
         }
     }
     
+    private var glassView = UIVisualEffectView(effect: nil)
     private let vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: UIBlurEffect(style: .dark)))
     private let labelVibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: UIBlurEffect(style: .dark)))
     
@@ -78,6 +85,11 @@ class GridCollectionViewCell: UICollectionViewCell
         self.clipsToBounds = false
         self.contentView.clipsToBounds = false
         
+        self.glassView.isHidden = true
+        self.glassView.translatesAutoresizingMaskIntoConstraints = false
+        self.glassView.contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.glassView)
+        
         self.vibrancyView.translatesAutoresizingMaskIntoConstraints = false
         self.vibrancyView.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.vibrancyView)
@@ -97,7 +109,24 @@ class GridCollectionViewCell: UICollectionViewCell
         self.textLabel.numberOfLines = 0
         self.contentView.addSubview(self.textLabel)
         
+        if #available(iOS 26, *)
+        {
+            self.glassView.effect = UIGlassEffect(style: .clear)
+            self.glassView.cornerConfiguration = .corners(radius: 5)
+        }
+        
         /* Auto Layout */
+        
+        // Glass View
+        self.glassView.contentView.topAnchor.constraint(equalTo: self.glassView.topAnchor).isActive = true
+        self.glassView.contentView.bottomAnchor.constraint(equalTo: self.glassView.bottomAnchor).isActive = true
+        self.glassView.contentView.leadingAnchor.constraint(equalTo: self.glassView.leadingAnchor).isActive = true
+        self.glassView.contentView.trailingAnchor.constraint(equalTo: self.glassView.trailingAnchor).isActive = true
+        
+        self.glassView.topAnchor.constraint(equalTo: self.imageView.topAnchor).isActive = true
+        self.glassView.bottomAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
+        self.glassView.leadingAnchor.constraint(equalTo: self.imageView.leadingAnchor).isActive = true
+        self.glassView.trailingAnchor.constraint(equalTo: self.imageView.trailingAnchor).isActive = true
         
         // Vibrancy View
         // Need to add explicit constraints for vibrancyView + vibrancyView.contentView or else Auto Layout won't calculate correct size 🙄

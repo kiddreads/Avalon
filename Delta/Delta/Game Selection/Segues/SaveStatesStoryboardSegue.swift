@@ -23,7 +23,7 @@ class SaveStatesStoryboardSegue: UIStoryboardSegue
         // Ensures saveStatesViewController doesn't later remove our Done button 
         saveStatesViewController.loadViewIfNeeded()
         
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SaveStatesStoryboardSegue.handleDoneButton))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(SaveStatesStoryboardSegue.handleDoneButton))
         saveStatesViewController.navigationItem.leftBarButtonItem = doneButton
         
         guard saveStatesViewController.theme == .translucent else { return }

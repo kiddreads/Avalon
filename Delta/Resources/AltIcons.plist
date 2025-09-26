@@ -8,7 +8,7 @@
 			<key>name</key>
 			<string>Delta</string>
 			<key>imageName</key>
-			<string>AppIcon</string>
+			<string>ModernIcon</string>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -21,6 +21,15 @@
 			<string>GBA4iOS</string>
 			<key>imageName</key>
 			<string>GBA4iOS</string>
+		</dict>
+	</array>
+	<key>glass</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>Default</string>
+			<key>imageName</key>
+			<string>AppIcon</string>
 		</dict>
 	</array>
 	<key>classic</key>

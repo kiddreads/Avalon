@@ -671,7 +671,7 @@ extension SettingsViewController
             
             return numberOfRows
             
-        case .multitasking: return MultitaskingRow.allCases.count
+        case .multitasking where !isSectionHidden(section): return MultitaskingRow.allCases.count
             
         case .syncing where !isSectionHidden(section): return SyncManager.shared.coordinator?.account == nil ? 1 : super.tableView(tableView, numberOfRowsInSection: sectionIndex)
         case .advanced where !isSectionHidden(section):

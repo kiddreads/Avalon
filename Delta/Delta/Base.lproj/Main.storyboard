@@ -39,7 +39,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Games" id="pFk-as-3k4">
-                        <barButtonItem key="leftBarButtonItem" image="SettingsButton" id="2gg-lC-FhX">
+                        <barButtonItem key="leftBarButtonItem" image="gearshape" catalog="system" id="2gg-lC-FhX">
                             <connections>
                                 <segue destination="xMK-Cs-fAS" kind="presentation" identifier="showSettings" id="uN5-PN-7FK"/>
                             </connections>
@@ -154,6 +154,7 @@
                         </connections>
                     </collectionView>
                     <connections>
+                        <outlet property="closeButton" destination="IfL-ce-xdc" id="qpK-RA-asL"/>
                         <outlet property="headerView" destination="9a8-fs-Zm2" id="WS5-XI-685"/>
                         <outlet property="headerViewBottomSpacingLayoutConstraint" destination="uAk-BI-JXb" id="Sf5-lL-YjI"/>
                         <outlet property="headerViewTopSpacingLayoutConstraint" destination="hGu-fL-Twp" id="R1d-kL-Bpg"/>
@@ -184,7 +185,7 @@
                             </subviews>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="close" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IfL-ce-xdc">
-                            <rect key="frame" x="186" y="28" width="30" height="30"/>
+                            <rect key="frame" x="24" y="28" width="22" height="21"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <connections>
                                 <action selector="dismissWhatsNew" destination="htE-Bn-kea" eventType="primaryActionTriggered" id="8qO-uI-fkf"/>
@@ -196,7 +197,7 @@
                         <constraint firstItem="bDV-fM-drz" firstAttribute="centerX" secondItem="9a8-fs-Zm2" secondAttribute="centerX" id="6ip-8C-MsI"/>
                         <constraint firstItem="bDV-fM-drz" firstAttribute="top" secondItem="9a8-fs-Zm2" secondAttribute="top" constant="44" id="hGu-fL-Twp"/>
                         <constraint firstItem="IfL-ce-xdc" firstAttribute="top" secondItem="9a8-fs-Zm2" secondAttribute="topMargin" constant="8" id="ozU-6E-dMa"/>
-                        <constraint firstAttribute="trailingMargin" secondItem="IfL-ce-xdc" secondAttribute="trailing" constant="8" id="s8A-Ln-Q9r"/>
+                        <constraint firstAttribute="leadingMargin" secondItem="IfL-ce-xdc" secondAttribute="leading" constant="-8" id="s8A-Ln-Q9r"/>
                         <constraint firstAttribute="bottom" secondItem="bDV-fM-drz" secondAttribute="bottom" constant="30" id="uAk-BI-JXb"/>
                     </constraints>
                 </view>
@@ -419,8 +420,8 @@
         <segue reference="Tey-6Z-UHp"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="SettingsButton" width="22" height="22"/>
         <image name="gamecontroller.fill" catalog="system" width="128" height="79"/>
+        <image name="gearshape" catalog="system" width="128" height="123"/>
         <namedColor name="Purple">
             <color red="0.54509803921568623" green="0.15686274509803921" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
