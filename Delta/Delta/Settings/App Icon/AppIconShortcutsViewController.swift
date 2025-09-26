@@ -240,7 +240,7 @@ extension AppIconShortcutsViewController
     {
         guard indexPath.section == 0 else { return super.tableView(tableView, heightForRowAt: indexPath) }
         
-        return 44
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
