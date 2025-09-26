@@ -1,5 +1,5 @@
 //
-//  GBCCoreSettings.swift
+//  GBCCoreSettingsView.swift
 //  Delta
 //
 //  Created by Caroline Moore on 8/1/25.
@@ -7,44 +7,31 @@
 //
 
 import SwiftUI
-import GBCDeltaCore
 
-struct GBCCoreSettingsView: View
+struct GBCCoreSettingsView: CoreSettingsView
 {
+    var system: System { .gbc }
+    @Environment(\.openURL) var openURL
+    
     @SwiftUI.State private var selectedColorPalette: GBCColorPalette?
-    private let localizedTitle = String(localized: "Game Boy Color")
         
-    var body: some View {
-        Form {
-            Section {
-                Picker("Color Palette", selection: $selectedColorPalette) {
-                    Text("Default").tag(Optional<GBCColorPalette>.none)
-                    ForEach(GBCColorPalette.allCases, id: \.self) { palette in
-                        Text(palette.localizedName).tag(palette)
-                    }
+    var additionalSections: some View {
+        Section {
+            Picker("Color Palette", selection: $selectedColorPalette) {
+                Text("Default").tag(Optional<GBCColorPalette>.none)
+                ForEach(GBCColorPalette.allCases, id: \.self) { palette in
+                    Text(palette.localizedName).tag(palette)
                 }
-                .onChange(of: selectedColorPalette) { newPalette in
-                    Settings.preferredGBColorPalette = newPalette
-                }
-            } header: {
-                Text("Colors")
             }
+            .onChange(of: selectedColorPalette) { newPalette in
+                Settings.preferredGBColorPalette = newPalette
+            }
+        } header: {
+            Text("Colors")
         }
-        .navigationTitle(localizedTitle)
         .onAppear() {
             selectedColorPalette = Settings.preferredGBColorPalette
         }
-    }
-    
-    static func makeViewController() -> UIHostingController<some View>
-    {
-        let settingsView = GBCCoreSettingsView()
-        
-        let hostingController = UIHostingController(rootView: settingsView)
-        hostingController.navigationItem.largeTitleDisplayMode = .never
-        hostingController.navigationItem.title = settingsView.localizedTitle
-        
-        return hostingController
     }
 }
 

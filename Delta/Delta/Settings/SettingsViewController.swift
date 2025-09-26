@@ -63,7 +63,12 @@ private extension SettingsViewController
     
     enum CoresRow: Int, CaseIterable
     {
+        case nes
+        case genesis
+        case snes
+        case n64
         case gbc
+        case gba
         case ds
     }
     
@@ -477,12 +482,6 @@ private extension SettingsViewController
         UIApplication.shared.open(safariURL, options: [:])
     }
     
-    func showGBCSettings()
-    {
-        let hostingController = GBCCoreSettingsView.makeViewController()
-        self.navigationController?.pushViewController(hostingController, animated: true)
-    }
-    
     @available(iOS 14, *)
     func showContributors()
     {
@@ -742,7 +741,7 @@ extension SettingsViewController
                 let preferredCore = Settings.preferredCore(for: .ds)
                 cell.detailTextLabel?.text = preferredCore?.metadata?.name.value ?? preferredCore?.name ?? NSLocalizedString("Unknown", comment: "")
                 
-            case .gbc: break
+            case .nes, .genesis, .snes, .n64, .gbc, .gba: break
             }
             
         case .patreon:
@@ -808,12 +807,23 @@ extension SettingsViewController
         case .display: self.performSegue(withIdentifier: Segue.altAppIcons.rawValue, sender: cell)
         case .patreon, .controllerOpacity, .gameAudio, .multitasking, .hapticFeedback, .gestures, .airPlay, .hapticTouch, .syncing: break
         case .cores:
+            let hostingController: UIViewController
+            
             let row = CoresRow(rawValue: indexPath.row)!
             switch row
             {
-            case .gbc: self.showGBCSettings()
-            case .ds: self.performSegue(withIdentifier: Segue.dsSettings.rawValue, sender: cell)
+            case .nes: hostingController = NESCoreSettingsView.makeViewController()
+            case .genesis: hostingController = GenesisCoreSettingsView.makeViewController()
+            case .snes: hostingController = SNESCoreSettingsView.makeViewController()
+            case .n64: hostingController = N64CoreSettingsView.makeViewController()
+            case .gbc: hostingController = GBCCoreSettingsView.makeViewController()
+            case .gba: hostingController = GBACoreSettingsView.makeViewController()
+            case .ds:
+                self.performSegue(withIdentifier: Segue.dsSettings.rawValue, sender: cell)
+                return
             }
+            
+            self.navigationController?.pushViewController(hostingController, animated: true)
         
         case .advanced:
             let row = AdvancedRow(rawValue: indexPath.row)!
