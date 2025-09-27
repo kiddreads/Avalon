@@ -143,13 +143,15 @@ internal extension AchievementsTracker
 
     func readBytes(at address: Int, into buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int
     {
-        guard let data = self.emulatorCore.deltaCore.emulatorBridge.readMemory?(at: address, size: size) else { return 0 }
-        
-        data.withUnsafeBytes { bytes in
-            _ = memcpy(buffer, bytes.baseAddress, data.count)
+        autoreleasepool {
+            guard let data = self.emulatorCore.deltaCore.emulatorBridge.readMemory?(at: address, size: size) else { return 0 }
+            
+            data.withUnsafeBytes { bytes in
+                _ = memcpy(buffer, bytes.baseAddress, data.count)
+            }
+            
+            return data.count
         }
-        
-        return data.count
     }
 }
 
