@@ -19,6 +19,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <boolean.h>
 
@@ -39,6 +40,8 @@
 #include "../../tasks/task_content.h"
 #include "../../verbosity.h"
 #include "../../cheevos/cheevos.h"
+#include "../../gfx/video_driver.h"
+#include "../../runloop.h"
 
 #ifdef HAVE_MENU
 #include "../../menu/menu_setting.h"
@@ -987,6 +990,10 @@ static BOOL RespectSilentMode = false;
     if (LibretroInitial) {
         return;
     }
+    
+    //防止音频驱动加载的时候中断别的应用的音频
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+    
     LibretroInitial = true;
     set_libretro_is_going_to_stop(false);
     char arguments[]   = "retroarch";
@@ -996,7 +1003,7 @@ static BOOL RespectSilentMode = false;
 
     [CocoaView get].view.frame = [[UIScreen mainScreen] bounds];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
           command_event(CMD_EVENT_AUDIO_START, NULL);
@@ -1012,35 +1019,7 @@ static BOOL RespectSilentMode = false;
     }
     
     rarch_main(argc, argv, NULL);
-
-//    uico_driver_state_t *uico_st     = uico_state_get_ptr();
-//    rarch_setting_t *appicon_setting = menu_setting_find_enum(MENU_ENUM_LABEL_APPICON_SETTINGS);
-//    struct string_list *icons;
-//    if (               appicon_setting
-//            && uico_st->drv
-//            && uico_st->drv->get_app_icons
-//            && (icons = uico_st->drv->get_app_icons())
-//            && icons->size > 1)
-//    {
-//       int i;
-//       size_t _len    = 0;
-//       char *options = NULL;
-//       const char *icon_name;
-//
-//       appicon_setting->default_value.string = icons->elems[0].data;
-//       icon_name = [@"appicon" cStringUsingEncoding:kCFStringEncodingUTF8]; /* need to ask uico_st for this */
-//       for (i = 0; i < (int)icons->size; i++)
-//       {
-//          _len += strlen(icons->elems[i].data) + 1;
-//          if (string_is_equal(icon_name, icons->elems[i].data))
-//             appicon_setting->value.target.string = icons->elems[i].data;
-//       }
-//       options = (char*)calloc(_len, sizeof(char));
-//       string_list_join_concat(options, _len, icons, "|");
-//       if (appicon_setting->values)
-//          free((void*)appicon_setting->values);
-//       appicon_setting->values = options;
-//    }
+    
     rarch_start_draw_observer();
  }
 
@@ -1060,17 +1039,13 @@ static BOOL RespectSilentMode = false;
     main_exit(NULL);
     self.gamePath = nil;
     self.corePath = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
 }
 
 - (void)resume {
     if (!LibretroInitial) { return; }
     rarch_start_draw_observer();
-    NSError *error;
-    settings_t *settings            = config_get_ptr();
-    if (settings->bools.audio_respect_silent_mode)
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
-    else
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    
     command_event(CMD_EVENT_RESUME, NULL);
     if (needToLoadStatePath) {
         [self loadGame:self.gamePath corePath:self.corePath completion:nil];
@@ -1097,6 +1072,16 @@ static BOOL RespectSilentMode = false;
     content_info.args        = NULL;
     content_info.environ_get = NULL;
     
+    NSError *error;
+    AVAudioSessionCategoryOptions options = AVAudioSessionCategoryOptionMixWithOthers |
+                                            AVAudioSessionCategoryOptionAllowBluetoothA2DP |
+                                            AVAudioSessionCategoryOptionAllowAirPlay;
+    if (RespectSilentMode) {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient withOptions:options error:&error];
+    } else {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:options error:&error];
+    }
+    
     task_push_load_content_with_new_core_from_menu(corePath.UTF8String,
                                                    gamePath.UTF8String,
                                                    &content_info,
@@ -1113,9 +1098,6 @@ static BOOL RespectSilentMode = false;
 
     //核心选项 开启PSP内部作弊码支持
     if (strcmp(core_info->core_name, "PPSSPP") == 0 && completion) {
-        core_option_manager_t *coreopts = NULL;
-        retroarch_ctl(RARCH_CTL_CORE_OPTIONS_LIST_GET, &coreopts);
-        core_option_manager_set_val(coreopts, 8, 1, false); //开启ppsspp内部作弊码
         core_options_flush();//生成核心配置
         //获取PSP的游戏信息
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -1158,6 +1140,11 @@ static BOOL RespectSilentMode = false;
     return YES;
 }
 
+- (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath {
+    // 直接调用RetroArch的无内容核心加载函数
+    task_push_load_contentless_core_from_menu(corePath.UTF8String);
+}
+
 extern void manic_input_button_event(unsigned port, unsigned button_id, bool pressed);
 extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_value, float y_value);
 - (void)pressButton:(unsigned)button playerIndex:(unsigned)playerIndex {
@@ -1191,79 +1178,223 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
     if (!completion) {
         return;
     }
-    settings_t *settings = config_get_ptr();
-    runloop_state_t *runloop_st = runloop_state_get_ptr();
-    const char *dir_screenshot      = settings->paths.directory_screenshot;
-    video_driver_state_t *video_st  = video_state_get_ptr();
-    const char *name_base = runloop_st->runtime_content_path_basename;
-    take_screenshot(dir_screenshot, name_base, false, video_st->frame_cache_data && (video_st->frame_cache_data == RETRO_HW_FRAME_BUFFER_VALID), false, false);
     
-    NSString *screenShotDir = [[NSString stringWithCString:dir_screenshot encoding:NSUTF8StringEncoding] stringByDeletingPathExtension];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        __block BOOL cancelledByCondition = NO;
-        // 等待截图完成
-        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-        // 设置定时器间隔（0.1秒）
-        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
-        // 设置定时器回调
-        dispatch_source_set_event_handler(timer, ^{
-            // 检查文件是否存在
-            NSArray *files = [fileManager contentsOfDirectoryAtPath:screenShotDir error:nil];
-            NSArray *sortedFiles = [[files filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString *fileName, NSDictionary *bindings) {
-                NSString *fullPath = [screenShotDir stringByAppendingPathComponent:fileName];
-                BOOL isDir = NO;
-                [fileManager fileExistsAtPath:fullPath isDirectory:&isDir];
-                return !isDir;
-            }]] sortedArrayUsingComparator:^NSComparisonResult(NSString *file1, NSString *file2) {
-                NSString *path1 = [screenShotDir stringByAppendingPathComponent:file1];
-                NSString *path2 = [screenShotDir stringByAppendingPathComponent:file2];
-                
-                NSDate *date1 = [[fileManager attributesOfItemAtPath:path1 error:nil] fileCreationDate];
-                NSDate *date2 = [[fileManager attributesOfItemAtPath:path2 error:nil] fileCreationDate];
-                
-                return [date2 compare:date1]; // 创建时间降序
-            }];
+    // 在主线程上执行截图操作，确保在游戏循环中正确执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        struct video_viewport vp;
+        video_driver_state_t *video_st = video_state_get_ptr();
+        runloop_state_t *runloop_st = runloop_state_get_ptr();
+        uint8_t *buffer = NULL;
+        
+        // 检查视频驱动是否可用
+        if (!video_st || !video_st->current_video || !video_st->current_video->read_viewport) {
+            completion(nil);
+            return;
+        }
+        
+        // 初始化视口
+        vp.x = 0;
+        vp.y = 0;
+        vp.width = 0;
+        vp.height = 0;
+        vp.full_width = 0;
+        vp.full_height = 0;
+        
+        // 获取视口信息
+        if (!video_driver_get_viewport_info(&vp) || !vp.width || !vp.height) {
+            completion(nil);
+            return;
+        }
+        
+        // 分配缓冲区 (RGB24格式，每像素3字节)
+        buffer = (uint8_t*)malloc(vp.width * vp.height * 3);
+        if (!buffer) {
+            completion(nil);
+            return;
+        }
+        
+        // 获取当前运行循环标志
+        uint32_t runloop_flags = runloop_get_flags();
+        bool is_idle = (runloop_flags & RUNLOOP_FLAG_IDLE) ? true : false;
+        bool is_fastforward = (runloop_flags & RUNLOOP_FLAG_FASTMOTION) ? true : false;
+        bool is_paused = (runloop_flags & RUNLOOP_FLAG_PAUSED) ? true : false;
+        
+        if (!is_paused) {
+            [self pause];
+        }
+        
+        // 为了确保能够读取到帧缓冲，我们需要多次尝试
+        bool read_success = false;
+        int retry_count = 0;
+        const int max_retries = is_fastforward ? 10 : 3;
+        
+        // 在快进状态下，我们需要先暂停快进，截图后再恢复
+        bool need_restore_fastforward = false;
+        if (is_fastforward && runloop_st) {
+            NSLog(@"[snapshot2] 检测到快进状态，临时暂停快进以确保截图成功");
+            // 临时禁用快进
+            runloop_st->flags &= ~RUNLOOP_FLAG_FASTMOTION;
+            need_restore_fastforward = true;
             
-            NSString *latestFile = sortedFiles.firstObject;
-            if (latestFile)  {
-                NSString *latestPath = [screenShotDir stringByAppendingPathComponent:latestFile];
-                NSDate *creationDate = [[fileManager attributesOfItemAtPath:latestPath error:nil] fileCreationDate];
-                if ([NSDate now].timeIntervalSince1970 - creationDate.timeIntervalSince1970 < 1.0) {
-                    NSString *imageFilePath = [screenShotDir stringByAppendingPathComponent:latestFile];
-                    UIImage *image = [UIImage imageWithContentsOfFile:imageFilePath];
-                    if (image) {
-                        dispatch_source_cancel(timer);
-                        cancelledByCondition = YES;
-                        // 在主线程回调
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (completion) {
-                                NSLog(@"保存图片成功!!");
-                                completion(image);
-                            }
-                            [fileManager removeItemAtPath:imageFilePath error:nil];
-                        });
-                    }
-                }
+            // 强制渲染一帧以确保有可用的后备缓冲区
+            if (runloop_st->flags & RUNLOOP_FLAG_CORE_RUNNING) {
+                video_driver_cached_frame();
             }
-        });
-        // 启动定时器
-        dispatch_resume(timer);
-        // 设置超时（2秒）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            if (cancelledByCondition) {
-                return;
+            
+            // 给渲染一些时间完成
+            usleep(5000); // 等待5ms
+        }
+        
+        while (!read_success && retry_count < max_retries) {
+            // 强制渲染当前帧
+            if (runloop_st && (runloop_st->flags & RUNLOOP_FLAG_CORE_RUNNING)) {
+                video_driver_cached_frame();
             }
-            dispatch_source_cancel(timer);
-            // 在主线程回调超时
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completion) {
-                    completion(nil);
-                }
-            });
-        });
+            
+            // 给渲染一些时间完成，特别是第一次尝试
+            if (retry_count == 0) {
+                usleep(2000); // 等待2ms
+            } else if (retry_count > 0) {
+                usleep(1000); // 等待1ms
+            }
+            
+            // 尝试读取视口数据
+            read_success = video_st->current_video->read_viewport(video_st->data, buffer, is_idle);
+            retry_count++;
+            
+            if (!read_success) {
+                NSLog(@"[snapshot2] 读取视口失败，重试次数: %d/%d, 快进: %s, 暂停: %s",
+                      retry_count, max_retries, is_fastforward ? "是" : "否", is_paused ? "是" : "否");
+            }
+        }
+        
+        // 恢复快进状态
+        if (need_restore_fastforward && runloop_st) {
+            NSLog(@"[snapshot2] 恢复快进状态");
+            runloop_st->flags |= RUNLOOP_FLAG_FASTMOTION;
+        }
+        if (!is_paused) {
+            [self resume];
+        }
+        
+        if (read_success) {
+            // 成功读取，转换为UIImage
+            UIImage *image = [self createUIImageFromBGRBuffer:buffer width:vp.width height:vp.height];
+            free(buffer);
+            
+            if (image) {
+                NSLog(@"[snapshot2] 截图成功，尺寸: %.0fx%.0f", image.size.width, image.size.height);
+                completion(image);
+            } else {
+                NSLog(@"[snapshot2] 图像转换失败");
+                completion(nil);
+            }
+        } else {
+            // 所有重试都失败了
+            NSLog(@"[snapshot2] 读取视口失败，已重试 %d 次", max_retries);
+            free(buffer);
+            completion(nil);
+        }
     });
+}
+
+- (UIImage *_Nullable)createUIImageFromBGRBuffer:(uint8_t *_Nullable)buffer width:(NSUInteger)width height:(NSUInteger)height {
+    if (!buffer || width == 0 || height == 0) {
+        NSLog(@"[createUIImageFromBGRBuffer] 无效参数: buffer=%p, width=%lu, height=%lu", buffer, (unsigned long)width, (unsigned long)height);
+        return nil;
+    }
     
+    NSLog(@"[createUIImageFromBGRBuffer] 开始创建图像，尺寸: %lux%lu", (unsigned long)width, (unsigned long)height);
+    
+    // 检查前几个字节的数据以确认有效性
+    NSLog(@"[createUIImageFromBGRBuffer] 前12字节数据(BGR): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
+          buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5],
+          buffer[6], buffer[7], buffer[8], buffer[9], buffer[10], buffer[11]);
+    
+    // Metal驱动返回的数据实际上是BGR格式，我们需要转换为RGBA
+    size_t totalPixels = width * height;
+    uint8_t *rgbaBuffer = malloc(totalPixels * 4); // RGBA需要4字节每像素
+    if (!rgbaBuffer) {
+        NSLog(@"[createUIImageFromBGRBuffer] 分配RGBA缓冲区失败");
+        return nil;
+    }
+    
+    // 将BGR转换为RGBA（添加Alpha通道），同时翻转图像使其正向显示
+    for (size_t y = 0; y < height; y++) {
+        for (size_t x = 0; x < width; x++) {
+            // 源数据是bottom-up，所以从底部开始读取
+            size_t srcRow = (height - 1 - y);
+            size_t srcIndex = (srcRow * width + x) * 3;
+            
+            // 目标数据是top-down，正常顺序写入
+            size_t dstIndex = (y * width + x) * 4;
+            
+            // Metal驱动输出的是BGR格式，我们需要交换R和B通道，并添加Alpha
+            rgbaBuffer[dstIndex + 0] = buffer[srcIndex + 2]; // R = 原来的B
+            rgbaBuffer[dstIndex + 1] = buffer[srcIndex + 1]; // G = 原来的G
+            rgbaBuffer[dstIndex + 2] = buffer[srcIndex + 0]; // B = 原来的R
+            rgbaBuffer[dstIndex + 3] = 255;                  // A = 完全不透明
+        }
+    }
+    
+    NSLog(@"[createUIImageFromBGRBuffer] 转换后前16字节数据(RGBA): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
+          rgbaBuffer[0], rgbaBuffer[1], rgbaBuffer[2], rgbaBuffer[3],
+          rgbaBuffer[4], rgbaBuffer[5], rgbaBuffer[6], rgbaBuffer[7],
+          rgbaBuffer[8], rgbaBuffer[9], rgbaBuffer[10], rgbaBuffer[11],
+          rgbaBuffer[12], rgbaBuffer[13], rgbaBuffer[14], rgbaBuffer[15]);
+    
+    // 创建CGColorSpace
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    if (!colorSpace) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建颜色空间失败");
+        free(rgbaBuffer);
+        return nil;
+    }
+    
+    size_t bytesPerRow = width * 4; // RGBA每行4字节每像素
+    
+    // 使用CGBitmapContext创建图像，使用RGBA格式
+    CGContextRef context = CGBitmapContextCreate(
+        rgbaBuffer,                    // 数据指针
+        width,                         // 宽度
+        height,                        // 高度
+        8,                            // 每个组件的位数
+        bytesPerRow,                  // 每行字节数
+        colorSpace,                   // 色彩空间
+        kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault  // RGBA格式
+    );
+    
+    CGColorSpaceRelease(colorSpace);
+    
+    if (!context) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建CGContext失败");
+        free(rgbaBuffer);
+        return nil;
+    }
+    
+    // 从context创建CGImage
+    CGImageRef cgImage = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    
+    // 现在可以安全地释放RGBA缓冲区
+    free(rgbaBuffer);
+    
+    if (!cgImage) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建CGImage失败");
+        return nil;
+    }
+    
+    // 由于我们在转换时已经处理了bottom-up到top-down的翻转，现在可以使用正常方向
+    UIImage *image = [UIImage imageWithCGImage:cgImage scale:1.0 orientation:UIImageOrientationUp];
+    CGImageRelease(cgImage);
+    
+    if (!image) {
+        NSLog(@"[createUIImageFromBGRBuffer] 创建UIImage失败");
+        return nil;
+    }
+    
+    NSLog(@"[createUIImageFromBGRBuffer] 成功创建图像，最终尺寸: %.0fx%.0f", image.size.width, image.size.height);
+    return image;
 }
 
 - (BOOL)saveState:(void(^ _Nullable)(NSString *_Nullable path))completion {
@@ -1412,44 +1543,6 @@ static NSString *_Nullable needToLoadStatePath = nil;
     }
 }
 
-- (void)setPSPLanguage:(unsigned)language {
-    NSString *configFilePath = [self.workspace stringByAppendingPathComponent:@"config/PPSSPP/PPSSPP.opt"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:configFilePath]) {
-        core_options_flush();//生成配置
-    }
-    
-    NSError *error = nil;
-    NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
-    
-    if (error) {    
-        NSLog(@"读取文件失败: %@", error.localizedDescription);
-        return;
-    }
-
-    // 正则匹配并替换
-    NSString *pattern = @"ppsspp_language\\s*=\\s*\"[^\"]*\"";
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
-    
-    if (error) {
-        NSLog(@"正则表达式错误: %@", error.localizedDescription);
-        return;
-    }
-    NSArray<NSString *> *languages = @[@"Automatic", @"English", @"Japanese", @"French", @"Spanish", @"German", @"Italian", @"Dutch", @"Portuguese", @"Russian", @"Korean", @"Chinese Traditional", @"Chinese Simplified"];
-    if (language < languages.count) {
-        NSString *newValue = languages[language];
-        NSString *replacement = [NSString stringWithFormat:@"ppsspp_language = \"%@\"", newValue];
-        NSString *updatedContents = [regex stringByReplacingMatchesInString:fileContents
-                                                                    options:0
-                                                                      range:NSMakeRange(0, fileContents.length)
-                                                               withTemplate:replacement];
-
-        
-        
-        // 写回文件
-        [updatedContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    }
-}
-
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload {
     NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
     NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
@@ -1553,6 +1646,35 @@ static NSString *_Nullable needToLoadStatePath = nil;
             [self reloadByKeepState:YES];
         }
     }
+}
+
+- (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush {
+    // 获取 runloop 状态
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+
+    // 确保核心选项管理器存在
+    if (!runloop_st->core_options) {
+        return;
+    }
+    
+    [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+        // 方法1：通过键名设置配置
+        const char *option_key = [key cStringUsingEncoding:NSUTF8StringEncoding];
+        const char *option_value = [value cStringUsingEncoding:NSUTF8StringEncoding];
+        size_t option_idx, value_idx;
+
+        // 1. 根据键名获取选项索引
+        if (core_option_manager_get_idx(runloop_st->core_options, option_key, &option_idx)) {
+            // 2. 根据值字符串获取值索引
+            if (core_option_manager_get_val_idx(runloop_st->core_options, option_idx, option_value, &value_idx)) {
+                // 3. 设置配置值
+                core_option_manager_set_val(runloop_st->core_options, option_idx, value_idx, false);
+            }
+        }
+        if (flush) {
+            core_options_flush();
+        }
+    }];
 }
 
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs {
@@ -1868,6 +1990,34 @@ static NSString * _Nullable g_customSaveExtension = nil;
 
 - (BOOL)getSensorEnable:(int)playerIndex {
     return input_get_sensor_enable(playerIndex);
+}
+
+- (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y {
+#if !TARGET_OS_TV
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    float scale = cocoa_screen_get_native_scale();
+    
+    if (!apple) {
+        return;
+    }
+    
+    // 模拟触摸开始
+    apple->touch_count = 1;
+    apple->touches[0].screen_x = x * scale;
+    apple->touches[0].screen_y = y * scale;
+#endif
+}
+
+- (void)releaseTouchEvent {
+#if !TARGET_OS_TV
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    
+    if (!apple) {
+        return;
+    }
+    
+    apple->touch_count = 0;
+#endif
 }
 
 @end

@@ -366,7 +366,7 @@ extension GameInfoView: UICollectionViewDataSource {
                         }
                     }
                     
-                    if self.game.getExtraBool(key: ExtraKey.achievementsHardcore.rawValue) ?? false {
+                    if self.game.enableHarcore {
                         UIView.makeToast(message: R.string.localizable.notAllowHardcore())
                         return
                     }

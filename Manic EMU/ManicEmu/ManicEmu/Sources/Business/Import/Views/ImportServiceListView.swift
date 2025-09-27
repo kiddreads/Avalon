@@ -36,6 +36,11 @@ class ImportServiceListView: BaseView {
             //多碟助手
             topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
         })
+        actions.append(UIAction(title: "RomPatcher", image: UIImage(symbol: .memorychip)) { [weak self] _ in
+            guard let self = self else { return }
+            //RomPatcher
+            topViewController()?.present(WebViewController(url: Constants.URLs.RomPatcher), animated: true)
+        })
         let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view
     }()

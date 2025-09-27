@@ -94,6 +94,14 @@ class Settings: Object, ObjectUpdatable {
             }
         }
     }
+    
+    var airPlayScaling: GameSetting.AirPlayScaling {
+        GameSetting.AirPlayScaling(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayScaling.rawValue) ?? 0) ?? .coreProvided
+    }
+    
+    var airPlayLayout: GameSetting.AirPlayLayout {
+        GameSetting.AirPlayLayout(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayLayout.rawValue) ?? 0) ?? .embeddedTopLeft
+    }
 }
 
 struct SkinConfig: SmartCodable {

@@ -171,4 +171,25 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
             longPressIcon.isHidden = true
         }
     }
+    
+    func setDataForMappingOnly(item: SettingCellItem, enable: Bool = true) {
+        if item.title == R.string.localizable.gameSettingQuit() {
+            iconView.image = item.image.applySymbolConfig(color: Constants.Color.Red)
+            titleLabel.textColor = Constants.Color.Red
+        } else {
+            iconView.image = item.image
+            titleLabel.textColor = Constants.Color.LabelSecondary
+        }
+        titleLabel.text = item.title
+
+        editButton.isHidden = true
+        enableInteractive = true
+        
+        editIcon.image = UIImage(symbol: .minus, font: Constants.Font.caption(size: .l, weight: .medium))
+        editButton.backgroundColor = Constants.Color.Red
+        
+        disableCover.isHidden = enable
+        
+        longPressIcon.isHidden = true
+    }
 }

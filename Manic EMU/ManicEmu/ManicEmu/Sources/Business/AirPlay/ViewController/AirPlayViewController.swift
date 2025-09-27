@@ -39,23 +39,27 @@ class AirPlayViewController: UIViewController {
         }
     }
     
-    func addGameView(_ gameView: GameView) {
-        gameContainerView.transform = .identity
-        gameContainerView.subviews.forEach { $0.removeFromSuperview() }
-        gameContainerView.snp.remakeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.width.equalTo(view.height*gameView.size.width/gameView.size.height)
+    func addLibretroView(_ gameView: UIView, dimensions: CGSize, scalingType: GameSetting.AirPlayScaling) -> CGSize {
+        var dimensions = dimensions
+        switch scalingType {
+        case .square, .standard, .widescreen:
+            if dimensions.width >= dimensions.height {
+                dimensions = CGSize(width: dimensions.maxDimension, height: dimensions.maxDimension*scalingType.ratio.height/scalingType.ratio.width)
+            } else {
+                dimensions = CGSize(width: dimensions.maxDimension*scalingType.ratio.width/scalingType.ratio.height, height: dimensions.maxDimension)
+            }
+        case .full:
+            if let externalWindow = ExternalSceneDelegate.externalWindow {
+                if dimensions.width >= dimensions.height {
+                    dimensions = CGSize(width: dimensions.maxDimension, height: dimensions.maxDimension*externalWindow.height/externalWindow.width)
+                } else {
+                    dimensions = CGSize(width: dimensions.maxDimension*externalWindow.width/externalWindow.height, height: dimensions.maxDimension)
+                }
+            }
+        default:
+            break
         }
         
-        self.gameView = gameView
-        gameContainerView.addSubview(gameView)
-        gameView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    func addLibretroView(_ gameView: UIView, dimensions: CGSize) {
         gameContainerView.transform = .identity
         gameContainerView.subviews.forEach { $0.removeFromSuperview() }
         let gameViewHeight = dimensions.height
@@ -71,9 +75,16 @@ class AirPlayViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        DispatchQueue.main.asyncAfter(delay: 1) {
-            let scale = self.view.frame.size.height/gameViewHeight
-            self.gameContainerView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        if let windowSize = ExternalSceneDelegate.externalWindow {
+            let scale = windowSize.height/gameViewHeight
+            gameContainerView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        } else {
+            DispatchQueue.main.asyncAfter(delay: 1) {
+                let scale = self.view.frame.size.height/gameViewHeight
+                self.gameContainerView.transform = CGAffineTransform(scaleX: scale, y: scale)
+            }
         }
+        
+        return dimensions
     }
 }

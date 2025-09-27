@@ -55,6 +55,9 @@
 #include "../../deps/rcheevos/include/rc_client.h"
 
 NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification";
+NSString * const LibretroDidShutdownNotification = @"LibretroDidShutdownNotification";
+NSString * const DidConnectToWFCNotification = @"DidConnectToWFCNotification";
+NSString * const DidDisconnectFromWFCNotification = @"DidDisconnectFromWFCNotification";
 
 @interface LibretroCore()
 
@@ -96,6 +99,7 @@ NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification
     self.isRunning = YES;
     [[self getRetroArch] startWithCustomSaveDir:customSaveDir];
     cheevos_event_register_callback(cheevosDidTrigger);
+    shutdown_register_callback(shutdownCallback);
     return [CocoaView get];
 }
 
@@ -108,8 +112,11 @@ NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification
 }
 
 - (void)stop {
-    [[self getRetroArch] stop];
+    self.isRunning = NO;
     cheevos_event_register_callback(NULL);
+    shutdown_register_callback(NULL);
+    wfc_status_register_callback(NULL);
+    [[self getRetroArch] stop];
 }
 
 - (void)mute:(BOOL)mute {
@@ -140,6 +147,10 @@ NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification
     return [[self getRetroArch] loadGame:gamePath corePath:corePath completion:completion];
 }
 
+- (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath {
+    [[self getRetroArch] loadCoreWithoutContent:corePath];
+}
+
 - (void)pressButton:(LibretroButton)button playerIndex:(unsigned)playerIndex {
     [[self getRetroArch] pressButton:(unsigned)button playerIndex:playerIndex];
 }
@@ -156,20 +167,16 @@ NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification
     [[self getRetroArch] updatePSPCheat:cheatCode cheatFilePath:cheatFilePath reloadGame:reloadGame];
 }
 
-- (void)setPSPResolution:(unsigned)resolution reload:(BOOL)reload {
-    [[self getRetroArch] setPSPResolution:resolution reload:reload];
-}
-
-- (void)setPSPLanguage:(unsigned)language {
-    [[self getRetroArch] setPSPLanguage:language];
-}
-
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload {
     [[self getRetroArch] updateCoreConfig:coreName key:key value:value reload:reload];
 }
 
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload {
     [[self getRetroArch] updateCoreConfig:coreName configs:configs reload:reload];
+}
+
+- (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush {
+    [[self getRetroArch] updateRunningCoreConfigs:configs flush:flush];
 }
 
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value {
@@ -474,6 +481,64 @@ static void cheevosDidTrigger(uint32_t type, void* object1, void* object2) {
 
 - (BOOL)getSensorEnable:(int)playerIndex {
     return [[self getRetroArch] getSensorEnable:playerIndex];
+}
+
+static void shutdownCallback(void) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:LibretroDidShutdownNotification object:nil];
+    });
+}
+
+- (void)startWFCStatusMonitor {
+    wfc_status_register_callback(wfcStatusCallback);
+}
+
+static void wfcStatusCallback(bool isConnect) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (isConnect) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:DidConnectToWFCNotification object:nil];
+        } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:DidDisconnectFromWFCNotification object:nil];
+        }
+    });
+}
+
+- (void)setNDSCustomLayout:(NSString *_Nullable)layout {
+    if (layout) {
+        if ([layout componentsSeparatedByString:@","].count == 10) {
+            set_melonds_custom_layout([layout cStringUsingEncoding:NSUTF8StringEncoding]);
+            [self setCoreOptionNeedsUpdate];
+        }
+    } else {
+        set_melonds_custom_layout(NULL);
+        [self setCoreOptionNeedsUpdate];
+    }
+}
+
+- (void)setNDSWFCDNS:(NSString *_Nullable)nds {
+    if (nds) {
+        set_melonds_wfc_dns([nds cStringUsingEncoding:NSUTF8StringEncoding]);
+        [self setCoreOptionNeedsUpdate];
+    } else {
+        set_melonds_wfc_dns(NULL);
+        [self setCoreOptionNeedsUpdate];
+    }
+}
+
+- (void)setCoreOptionNeedsUpdate {
+    // 通知核心配置已更新
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (runloop_st->core_options) {
+        runloop_st->core_options->updated = true;
+    }
+}
+
+- (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y {
+    [[self getRetroArch] sendTouchEventX:x y:y];
+}
+
+- (void)releaseTouchEvent {
+    [[self getRetroArch] releaseTouchEvent];
 }
 
 @end

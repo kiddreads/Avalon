@@ -307,6 +307,20 @@ typedef struct runloop runloop_state_t;
 
 RETRO_BEGIN_DECLS
 
+//定义WFC状态变更回调
+typedef void (*WFCCallback)(bool);
+void wfc_status_register_callback(WFCCallback callback);
+
+//定义Shutdown通知
+typedef void (*ShutdownCallback)(void);
+void shutdown_register_callback(ShutdownCallback callback);
+
+//定义melonDS的布局信息
+void set_melonds_custom_layout(const char *layout);
+
+//定义WFC NDS信息
+void set_melonds_wfc_dns(const char *dns);
+
 void runloop_path_fill_names(void);
 
 /**

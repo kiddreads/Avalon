@@ -14,7 +14,7 @@ import IceCream
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, mcd, ss, ds, ps1, dc
+        case desc, mcd, ss, ds, ps1, dc, gb, gbc, gba, nes, pm, _3ds
         var title: String {
             switch self {
             case .desc: ""
@@ -23,6 +23,12 @@ class BIOSSelectionView: BaseView {
             case .ds: GameType.ds.localizedName
             case .ps1: GameType.ps1.localizedName
             case .dc: GameType.dc.localizedName
+            case .gb: GameType.gb.localizedName
+            case .gbc: GameType.gbc.localizedName
+            case .gba: GameType.gba.localizedName
+            case .nes: GameType.nes.localizedName
+            case .pm: GameType.pm.localizedName
+            case ._3ds: GameType._3ds.localizedName
             }
         }
         
@@ -34,6 +40,12 @@ class BIOSSelectionView: BaseView {
             case .ds: return .ds
             case .ps1: return .ps1
             case .dc: return .dc
+            case .gb: return .gb
+            case .gbc: return .gbc
+            case .gba: return .gba
+            case .nes: return .nes
+            case .pm: return .pm
+            case ._3ds: return ._3ds
             }
         }
     }
@@ -88,12 +100,24 @@ class BIOSSelectionView: BaseView {
             self.datas = [.desc, .ps1]
         } else if let gameType, gameType == .dc {
             self.datas = [.desc, .dc]
-        } else {
+        } else if let gameType, gameType == .gb {
+           self.datas = [.desc, .gb]
+        } else if let gameType, gameType == .gbc {
+           self.datas = [.desc, .gbc]
+        } else if let gameType, gameType == .gba {
+           self.datas = [.desc, .gba]
+        } else if let gameType, gameType == .nes {
+           self.datas = [.desc, .nes]
+        } else if let gameType, gameType == .pm {
+            self.datas = [.desc, .pm]
+        } else if let gameType, gameType == ._3ds {
+            self.datas = [.desc, ._3ds]
+        }  else {
 #if SIDE_LOAD
-            self.datas = [.desc, .dc, .ps1, .mcd, .ss, .ds]
+            self.datas = [.desc, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .nes, .pm]
 #else
             //AppStore版本禁用MCD
-            self.datas = [.desc, .dc, .ps1, .ss, .ds]
+            self.datas = [.desc, ._3ds, .dc, .ps1, .ss, .ds, .gb, .gbc, .gba, .nes, .pm]
 #endif
         }
         super.init(frame: .zero)

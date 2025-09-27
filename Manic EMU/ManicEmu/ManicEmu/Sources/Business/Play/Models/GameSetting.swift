@@ -197,7 +197,7 @@ struct GameSetting: SettingCellItem {
             }
         }
         
-        var option: String {
+        var optionForGambatte: String {
             switch self {
             case .None:
                 ""
@@ -231,6 +231,80 @@ struct GameSetting: SettingCellItem {
                 "GBC - Red"
             case .Yellow:
                 "GBC - Yellow"
+            }
+        }
+        
+        var optionForMGBA: String {
+            switch self {
+            case .None:
+                "Grayscale"
+            case .DMG:
+                "DMG Green"
+            case .Light:
+                "GB Light"
+            case .Pocket:
+                "GB Pocket"
+            case .Blue:
+                "GBC Blue ←"
+            case .Brown:
+                "GBC Brown ↑"
+            case .DarkBlue:
+                "GBC Dark Blue ←A"
+            case .DarkBrown:
+                "GBC Dark Brown ↑B"
+            case .DarkGreen:
+                "GBC Dark Green →A"
+            case .Grayscale:
+                "GBC Gray ←B"
+            case .Green:
+                "GBC Green →"
+            case .Inverted:
+                "GBC Reverse →B"
+            case .Orange:
+                "GBC Orange ↓A"
+            case .PastelMix:
+                "GBC Pale Yellow ↓"
+            case .Red:
+                "GBC Red ↑A"
+            case .Yellow:
+                "GBC Yellow ↓B"
+            }
+        }
+        
+        var optionForVBAM: String {
+            switch self {
+            case .None:
+                "black and white"
+            case .DMG:
+                "gba sp"
+            case .Light:
+                "green forest"
+            case .Pocket:
+                "original gameboy"
+            case .Blue:
+                "blue sea"
+            case .Brown:
+                "hot desert"
+            case .DarkBlue:
+                "blue sea"
+            case .DarkBrown:
+                "wierd colors"
+            case .DarkGreen:
+                "green forest"
+            case .Grayscale:
+                "black and white"
+            case .Green:
+                "green forest"
+            case .Inverted:
+                "dark knight"
+            case .Orange:
+                "hot desert"
+            case .PastelMix:
+                "wierd colors"
+            case .Red:
+                "pink dreams"
+            case .Yellow:
+                "hot desert"
             }
         }
         
@@ -289,9 +363,128 @@ struct GameSetting: SettingCellItem {
         }
     }
     
+    enum AirPlayScaling: Int, CaseIterable {
+        case coreProvided, square, standard, widescreen, full
+        
+        var title: String {
+            switch self {
+            case .coreProvided:
+                R.string.localizable.scalingCoreProvided()
+            case .square:
+                R.string.localizable.scalingSquare()
+            case .standard:
+                R.string.localizable.scalingStandard()
+            case .widescreen:
+                R.string.localizable.scalingWidescreen()
+            case .full:
+                R.string.localizable.scalingFull()
+            }
+        }
+        
+        var ratio: CGSize {
+            switch self {
+            case .coreProvided, .full, .square:
+                    .init(1)
+            case .standard:
+                    .init(width: 4, height: 3)
+            case .widescreen:
+                    .init(width: 16, height: 9)
+            }
+        }
+        
+        var next: AirPlayScaling {
+            if let type = AirPlayScaling(rawValue: self.rawValue + 1) {
+                return type
+            } else {
+                return .coreProvided
+            }
+        }
+    }
+    
+    enum AirPlayLayout: Int, CaseIterable {
+        
+        case embeddedTopLeft, embeddedTopRight, embeddedBottomLeft, embeddedBottomRight, sideBySide, stacked, largeSmallTopLeft, largeSmallTopRight, largeSmallBottomLeft, largeSmallBottomRight, singleScreen
+        
+        var title: String {
+            switch self {
+            case .sideBySide: R.string.localizable.layoutSideBySide()
+            case .stacked: R.string.localizable.layoutStacked()
+            case .largeSmallTopLeft: R.string.localizable.layoutLargeSmallTopLeft()
+            case .largeSmallTopRight: R.string.localizable.layoutLargeTopRight()
+            case .largeSmallBottomLeft: R.string.localizable.layoutLargeBottomLeft()
+            case .largeSmallBottomRight: R.string.localizable.layoutLargeBottomRight()
+            case .embeddedTopLeft: R.string.localizable.layoutEmbeddedTopLeft()
+            case .embeddedTopRight: R.string.localizable.layoutEmbeddedTopRight()
+            case .embeddedBottomLeft: R.string.localizable.layoutEmbeddedBottomLeft()
+            case .embeddedBottomRight: R.string.localizable.layoutEmbeddedBottomRight()
+            case .singleScreen: R.string.localizable.layoutSingleScreen()
+            }
+        }
+        
+        var next: AirPlayLayout {
+            if let type = AirPlayLayout(rawValue: self.rawValue + 1) {
+                return type
+            } else {
+                return .sideBySide
+            }
+        }
+    }
+    
+    enum MappingOnlyType: Int, CaseIterable, SettingCellItem {
+        case holdX2FastForward, holdX3FastForward, holdX4FastForward, holdMaxFastForward
+        
+        var title: String {
+            switch self {
+            case .holdX2FastForward:
+                R.string.localizable.holdFastForward("2x")
+            case .holdX3FastForward:
+                R.string.localizable.holdFastForward("3x")
+            case .holdX4FastForward:
+                R.string.localizable.holdFastForward("4x")
+            case .holdMaxFastForward:
+                R.string.localizable.holdMaxFastForward()
+            }
+        }
+        
+        var image: UIImage {
+            switch self {
+            case .holdX2FastForward, .holdX3FastForward, .holdX4FastForward, .holdMaxFastForward:
+                UIImage(symbol: .forward)
+            }
+        }
+        
+        func enable(for gameType: GameType, defaultCore: Int) -> Bool {
+            if gameType == ._3ds,
+               (self == .holdX2FastForward || self == .holdX3FastForward || self == .holdX4FastForward || self == .holdMaxFastForward) {
+                return false
+            }
+            return true
+        }
+        
+        var enableLongPress: Bool {
+            switch self {
+            case .holdX2FastForward, .holdX3FastForward, .holdX4FastForward, .holdMaxFastForward:
+                return false
+            }
+        }
+        
+        var inputKey: String {
+            switch self {
+            case .holdX2FastForward:
+                "fastForward2x"
+            case .holdX3FastForward:
+                "fastForward3x"
+            case .holdX4FastForward:
+                "fastForward4x"
+            case .holdMaxFastForward:
+                "fastForward"
+            }
+        }
+    }
+    
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
-        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro
+        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog
     }
     
     var type: ItemType
@@ -305,6 +498,9 @@ struct GameSetting: SettingCellItem {
     var isFullScreen: Bool = false
     var palette: Palette = .None
     var currentDiskIndex: UInt = 0
+    var airPlayScaling: AirPlayScaling = .coreProvided
+    var airPlayLayout: AirPlayLayout = .sideBySide
+    var mappingOnlyType: MappingOnlyType? = nil
     
     var image: UIImage {
         switch type {
@@ -362,6 +558,12 @@ struct GameSetting: SettingCellItem {
             UIImage(symbol: .opticaldisc)
         case .retro:
             R.image.customTrophy()!.applySymbolConfig()
+        case .airPlayScaling:
+            UIImage(symbol: .tv)
+        case .airPlayLayout:
+            UIImage(symbol: .sliderHorizontalBelowSquareFilledAndSquare)
+        case .toggleAnalog:
+            UIImage(symbol: .gamecontroller)
         }
     }
     
@@ -421,18 +623,36 @@ struct GameSetting: SettingCellItem {
             R.string.localizable.swapDisk() + "\nDisc \(currentDiskIndex + 1)"
         case .retro:
             R.string.localizable.retroAchievements2()
+        case .airPlayScaling:
+            R.string.localizable.airPlayScaling()
+        case .airPlayLayout:
+            R.string.localizable.airPlayLayout()
+        case .toggleAnalog:
+            R.string.localizable.toggleAnolog()
         }
     }
     
     func enable(for gameType: GameType, defaultCore: Int) -> Bool {
+        if let mappingOnlyType {
+            return mappingOnlyType.enable(for: gameType, defaultCore: defaultCore)
+        }
+        
+        if type == .airPlayLayout {
+            return gameType == .ds
+        }
+        
+        if type == .toggleAnalog {
+            return gameType == .ps1
+        }
+        
         switch gameType {
         case ._3ds:
-            if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro {
+            if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling {
                 return false
             }
             return true
         case .ds:
-            if type == .resolution || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
+            if type == .resolution || type == .consoleHome || type == .amiibo || type == .palette || type == .swapDisk {
                 return false
             }
             return true
@@ -479,7 +699,7 @@ struct GameSetting: SettingCellItem {
     
     var enableLongPress: Bool {
         switch self.type {
-        case .quickLoadState, .fastForward, .haptic, .orientation, .resolution, .palette, .swapDisk:
+        case .quickLoadState, .fastForward, .haptic, .orientation, .resolution, .palette, .swapDisk, .airPlayScaling, .airPlayLayout:
             return true
         default:
             return false
@@ -487,61 +707,76 @@ struct GameSetting: SettingCellItem {
     }
     
     var inputKey: String {
+        if let mappingOnlyType {
+            return mappingOnlyType.inputKey
+        }
+        
         switch self.type {
         case .saveState:
-            "quickSave"
+            return "quickSave"
         case .quickLoadState:
-            "quickLoad"
+            return "quickLoad"
         case .volume:
-            "volume"
+            return "volume"
         case .fastForward:
-            "toggleFastForward"
+            return "toggleFastForward"
         case .stateList:
-            "saveStates"
+            return "saveStates"
         case .cheatCode:
-            "cheatCodes"
+            return "cheatCodes"
         case .skins:
-            "skins"
+            return "skins"
         case .filter:
-            "filters"
+            return "filters"
         case .screenShot:
-            "screenshot"
+            return "screenshot"
         case .haptic:
-            "haptics"
+            return "haptics"
         case .airplay:
-            "airplay"
+            return "airplay"
         case .controllerSetting:
-            "controllers"
+            return "controllers"
         case .orientation:
-            "orientation"
+            return "orientation"
         case .functionSort:
-            "functionLayout"
+            return "functionLayout"
         case .reload:
-            "restart"
+            return "restart"
         case .quit:
-            "quit"
+            return "quit"
         case .swapScreen:
-            "reverseScreens"
+            return "reverseScreens"
         case .resolution:
-            "resolution"
+            return "resolution"
         case .consoleHome:
-            "homeMenu"
+            return "homeMenu"
         case .amiibo:
-            "amiibo"
+            return "amiibo"
         case .toggleFullscreen:
-            "toggleControlls"
+            return "toggleControlls"
         case .simBlowing:
-            "blowing"
+            return "blowing"
         case .palette:
-            "palette"
+            return "palette"
         case .swapDisk:
-            "swapDisk"
+            return "swapDisk"
         case .retro:
-            "retroAchievements"
+            return "retroAchievements"
+        case .airPlayScaling:
+            return "airPlayScaling"
+        case .airPlayLayout:
+            return "airPlayLayout"
+        case .toggleAnalog:
+            return "toggleAnalog"
         }
     }
     
     static func isValidInputKey(_ inputKey: String) -> Bool {
-        return ["quickSave", "quickLoad", "volume", "toggleFastForward", "saveStates", "cheatCodes", "skins", "filters", "screenshot", "haptics", "airplay", "controllers", "orientation", "functionLayout", "restart", "quit", "reverseScreens", "resolution", "homeMenu", "amiibo", "toggleControlls", "blowing", "palette", "swapDisk", "retroAchievements"].contains([inputKey])
+        if GameSetting.ItemType.allCases.contains(where: { GameSetting(type: $0).inputKey == inputKey }) {
+            return true
+        } else if MappingOnlyType.allCases.contains(where: { $0.inputKey == inputKey }) {
+            return true
+        }
+        return false
     }
 }

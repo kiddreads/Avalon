@@ -104,23 +104,6 @@ class FilterSelectionView: BaseView {
                 }
             }
             
-        } else {
-            FilterManager.allFilters { [weak self] results in
-                if !game.gameType.isLibretroType {
-                    UIView.hideLoading()
-                }
-                guard let self = self else { return }
-                self.filters = results
-                if let filterName = self.game.filterName, let filter = self.filters.first(where: { $0.name == filterName }) {
-                    self.currentSelected = filter
-                }
-                for (index, filter) in self.filters.enumerated() {
-                    if filter.name == self.currentSelected.name {
-                        collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: [])
-                        break
-                    }
-                }
-            }
         }
         
         addSubview(collectionView)

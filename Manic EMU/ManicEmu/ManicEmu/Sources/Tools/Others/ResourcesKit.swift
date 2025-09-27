@@ -131,7 +131,7 @@ struct ResourcesKit {
                                     } else if content.hasSuffix(".gba.sav") {
                                         //将.gba.sav 改成 .sav
                                         newSaveUrl = URL(fileURLWithPath: Constants.Path.GBASavePath.appendingPathComponent("\(content.replacingOccurrences(of: ".gba.sav", with: ".sav"))"))
-                                    }else if content.hasSuffix(".gb.sav") {
+                                    } else if content.hasSuffix(".gb.sav") {
                                         //将.gb.sav 改成 .sav
                                         //GB和GBC 都使用了.gb.sav的后缀格式，在这里需要将他们区分开
                                         let gameFileName = content.deletingPathExtension

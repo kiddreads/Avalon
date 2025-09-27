@@ -701,6 +701,12 @@ public class ControllerView: UIView, GameController
         }
     }
     
+    public func handleKeyboardKey(for event: UIEvent) {
+        if #available(iOS 26.0, *) {
+            keyboardResponder.handleKeyboardKey(for: event)
+        }
+    }
+    
     func presentInputView()
     {
         guard !isControllerInputView else { return }

@@ -25,4 +25,11 @@ enum ExtraKey: String {
     case alwaysShowProgress
     case tvStandard
     case snesVRAM
+    case airPlayScaling
+    case airPlayLayout
+    case pspRenderer
+    case globalAchievements
+    case globalHardcore
+    case microphone
+    case pspTexture
 }

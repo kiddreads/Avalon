@@ -65,8 +65,8 @@ class RetroAchievementListView: BaseView {
                 }
                 
                 if let _ = AchievementsUser.getUser(),
-                    result != GetGameInfoResult.serverError,
-                   self.game.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false {
+                   result != GetGameInfoResult.serverError,
+                   self.game.enableAchievements {
                     //获取数据失败，但是当前游戏启用了RetroAchievements，对用户进行询问是否需要关闭
                     UIView.makeAlert(detail: R.string.localizable.achievementsDataLoadFail() + "\n" + R.string.localizable.disableAchievementsAlert(),
                                      confirmTitle: R.string.localizable.confirmTitle(),
@@ -75,11 +75,11 @@ class RetroAchievementListView: BaseView {
                             UIView.makeAlert(detail: R.string.localizable.toggleAchievementsAlert(),
                                              confirmTitle: R.string.localizable.confirmTitle(),
                                              confirmAction: {
-                                self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: false)
+                                self.game.enableAchievements = false
                                 NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
                             })
                         } else {
-                            self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: false)
+                            self.game.enableAchievements = false
                         }
                     })
                 }
@@ -125,28 +125,27 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                                  enableForceHide: false, cancelAction: {
                     self.collectionView.reloadData()
                 }, confirmAction: {
-                    self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: value)
+                    self.game.enableAchievements = value
                     NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
                 })
             } else {
-                self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: value)
+                self.game.enableAchievements = value
             }
         }
         cell.hardcoreSwitchButton.onChange { [weak self] value in
             guard let self else { return }
             if PlayViewController.isGaming {
                 //游戏中
-                let enableAchievements = self.game.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false
                 if value {
                     //开启硬核
-                    if enableAchievements {
+                    if self.game.enableAchievements {
                         //从软核切换到硬核 需要重置游戏
                         UIView.makeAlert(detail: R.string.localizable.toggleHardcoreAlert(),
                                          confirmTitle: R.string.localizable.confirmTitle(),
                                          enableForceHide: false, cancelAction: {
                             self.collectionView.reloadData()
                         }, confirmAction: {
-                            self.game.updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: value)
+                            self.game.enableHarcore = value
                             NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
                         })
                     } else {
@@ -156,7 +155,7 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                                          enableForceHide: false, cancelAction: {
                             self.collectionView.reloadData()
                         }, confirmAction: {
-                            self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: value)
+                            self.game.enableAchievements = value
                             NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
                         })
                     }
@@ -167,15 +166,14 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                                      enableForceHide: false, cancelAction: {
                         self.collectionView.reloadData()
                     } ,confirmAction: {
-                        self.game.updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: false)
+                        self.game.enableHarcore = false
                         NotificationCenter.default.post(name: Constants.NotificationName.TurnOffHardcore, object: nil)
                     })
                 }
             } else {
-                self.game.updateExtra(key: ExtraKey.achievementsHardcore.rawValue, value: value)
-                let enableAchievements = self.game.getExtraBool(key: ExtraKey.enableAchievements.rawValue) ?? false
-                if !enableAchievements, value {
-                    self.game.updateExtra(key: ExtraKey.enableAchievements.rawValue, value: true)
+                self.game.enableHarcore = value
+                if !self.game.enableAchievements, value {
+                    self.game.enableAchievements = true
                     self.collectionView.reloadData()
                 }
             }

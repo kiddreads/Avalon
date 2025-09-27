@@ -17,11 +17,13 @@ class ExternalSceneDelegate: UIResponder, UIWindowSceneDelegate {
     private var startPlayGameNotification: Any? = nil
     private var stopPlayGameNotification: Any? = nil
     static weak var airPlayViewController: AirPlayViewController?
+    static weak var externalWindow: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if let windowScene = scene as? UIWindowScene {
             ExternalSceneDelegate.isAirPlaying = true
             window = UIWindow(windowScene: windowScene)
+            ExternalSceneDelegate.externalWindow = window
             window?.tintColor = Constants.Color.Main
             let airPlayViewController = AirPlayViewController()
             window?.rootViewController = airPlayViewController

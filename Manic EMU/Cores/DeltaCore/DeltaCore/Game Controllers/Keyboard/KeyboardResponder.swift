@@ -66,8 +66,11 @@ public class KeyboardResponder: UIResponder
 extension KeyboardResponder
 {
     // Implementation based on Steve Troughton-Smith's gist: https://gist.github.com/steventroughtonsmith/7515380
-    internal override func _keyCommand(for event: UIEvent, target: UnsafeMutablePointer<UIResponder>) -> UIKeyCommand?
-    {
+    internal override func _keyCommand(for event: UIEvent, target: UnsafeMutablePointer<UIResponder>) -> UIKeyCommand? {
+        return handleKeyboardKey(for: event)
+    }
+    
+    internal func handleKeyboardKey(for event: UIEvent) -> UIKeyCommand? {
         // Retrieve information from event.
         guard
             let key = event.value(forKey: "_unmodifiedInput") as? String,

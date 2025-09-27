@@ -383,8 +383,6 @@ struct Constants {
         static let TimeFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         static let FileNameTimeFormat = "yyyy-MM-dd_HH-mm-ss-SSS"
         static let PlayPurchaseAlertIdentifier = "PlayPurchaseAlertIdentifier"
-        static let ThreeDSHomeMenuIdentifier = "1126106065309442"
-        static let ThreeDSHomeMenuIdentifier2 = "1126106065311746"
         static let PSPConsoleLanguage = ["Automatic", "English", "日本語", "Français", "Español", "Deutsch", "Italiano", "Nederlands", "Português", "Русский", "한국어", "繁體中文", "简体中文"]
         static let ThreeDSConsoleLanguage = ["Automatic", "Japan", "USA" , "Europe", "Australia", "China", "Korea", "Taiwan"]
         static let SaturnConsoleLanguage = ["Auto Detect", "Japan", "North America", "Europe", "South Korea", "Asia (NTSC)", "Asia (PAL)", "Brazil", "Latin America"]
@@ -393,6 +391,7 @@ struct Constants {
         static let ManicScheme = "manicemu"
         static var PSXController = "PlayStation Controller"
         static var PSXDualShock = "DualShock"
+        static var ThreeDSHomeMenuRegions = ["JPN", "USA", "EUR", "CHN", "KOR", "TWN"]
     }
     
     enum Config {
@@ -433,6 +432,8 @@ struct Constants {
         static let LongAnimationDuration = 1.0
         ///主题颜色最大数量
         static let ThemeColorMaxCount = 5
+        
+        static let ThreeDSHomeMenuIdentifiers: [UInt64] = [1126106065306114, 1126106065309442, 1126106065311746, 1126106065314050, 1126106065316098, 1126106065318146]
     }
     
     struct NotificationName {
@@ -515,26 +516,28 @@ struct Constants {
             URL(string: "https://discord.gg/qsaTHzknAZ")!
         }
         static func DeltaStyles(gameType: GameType) -> URL {
+            let deltastyles = "https://deltastyles.com"
             switch gameType {
-            case .nes: return URL(string: "https://deltastyles.com/systems/nes")!
-            case .snes: return URL(string: "https://deltastyles.com/systems/snes")!
-            case .gbc: return URL(string: "https://deltastyles.com/systems/gbc")!
-            case .gb: return URL(string: "https://deltastyles.com/systems/gbc")!
-            case .gba: return URL(string: "https://deltastyles.com/systems/gba")!
-            case .ds: return URL(string: "https://deltastyles.com/systems/nds")!
-            case ._3ds: return URL(string: "https://deltastyles.com/systems/3ds")!
-            case .n64: return URL(string: "https://deltastyles.com/systems/n64")!
-            case .psp: return URL(string: "https://deltastyles.com/systems/psp")!
-            case .md: return URL(string: "https://deltastyles.com/systems/genesis")!
-            case .mcd: return URL(string: "https://deltastyles.com/systems/cd")!
-            case ._32x: return URL(string: "https://deltastyles.com/systems/32x")!
-            case .sg1000: return URL(string: "https://deltastyles.com/systems/sg1000")!
-            case .gg: return URL(string: "https://deltastyles.com/systems/gamegear")!
-            case .ms: return URL(string: "https://deltastyles.com/systems/ms")!
-            case .ss: return URL(string: "https://deltastyles.com/systems/saturn")!
-            case .vb: return URL(string: "https://deltastyles.com/systems/virtualboy")!
-            case .ps1: return URL(string: "https://deltastyles.com/systems/ps1")!
-            default: return URL(string: "https://deltastyles.com")!
+            case .nes: return URL(string: "\(deltastyles)/systems/nes")!
+            case .snes: return URL(string: "\(deltastyles)/systems/snes")!
+            case .gbc: return URL(string: "\(deltastyles)/systems/gbc")!
+            case .gb: return URL(string: "\(deltastyles)/systems/gbc")!
+            case .gba: return URL(string: "\(deltastyles)/systems/gba")!
+            case .ds: return URL(string: "\(deltastyles)/systems/nds")!
+            case ._3ds: return URL(string: "\(deltastyles)/systems/3ds")!
+            case .n64: return URL(string: "\(deltastyles)/systems/n64")!
+            case .psp: return URL(string: "\(deltastyles)/systems/psp")!
+            case .md: return URL(string: "\(deltastyles)/systems/genesis")!
+            case .mcd: return URL(string: "\(deltastyles)/systems/cd")!
+            case ._32x: return URL(string: "\(deltastyles)/systems/32x")!
+            case .sg1000: return URL(string: "\(deltastyles)/systems/sg1000")!
+            case .gg: return URL(string: "\(deltastyles)/systems/gamegear")!
+            case .ms: return URL(string: "\(deltastyles)/systems/ms")!
+            case .ss: return URL(string: "\(deltastyles)/systems/saturn")!
+            case .vb: return URL(string: "\(deltastyles)/systems/virtualboy")!
+            case .ps1: return URL(string: "\(deltastyles)/systems/ps1")!
+            case .dc: return URL(string: "\(deltastyles)/systems/dreamcast")!
+            default: return URL(string: deltastyles)!
             }
         }
         static func History(gameType: GameType) -> URL {
@@ -551,6 +554,7 @@ struct Constants {
         }
         static let Retro = URL(string: "https://retroachievements.org")!
         static let MobyGames = URL(string: "https://www.mobygames.com")!
+        static let RomPatcher = URL(string: "https://www.marcrobledo.com/RomPatcher.js")!
     }
     
     struct BIOS {
@@ -588,6 +592,30 @@ struct Constants {
         
         static let DCBios = [
             BIOSItem(fileName: "dc_boot.bin", imported: false, desc: "Required for Dreamcast", required: false)
+        ]
+        
+        static let GBBios = [
+            BIOSItem(fileName: "gb_bios.bin", imported: false, desc: "Game Boy BIOS", required: false)
+        ]
+        
+        static let GBCBios = [
+            BIOSItem(fileName: "gbc_bios.bin", imported: false, desc: "Game Boy Color BIOS", required: false)
+        ]
+        
+        static let GBABios = [
+            BIOSItem(fileName: "gba_bios.bin", imported: false, desc: "Game Boy Advance BIOS", required: false)
+        ]
+            
+        static let NESBios = [
+            BIOSItem(fileName: "disksys.rom", imported: false, desc: "Family Computer Disk System BIOS", required: false)
+        ]
+        
+        static let PMBios = [
+            BIOSItem(fileName: "bios.min", imported: false, desc: "Pokémon Mini BIOS", required: false)
+        ]
+        
+        static let ThreeDSBios = [
+            BIOSItem(fileName: "nand.zip", imported: false, desc: "The internal storage of 3DS ", required: false)
         ]
 
     }

@@ -115,8 +115,6 @@ PODS:
     - ZIPFoundation
   - ManicSupport (1.0.2)
   - MarqueeLabel (4.5.0)
-  - MelonDSDeltaCore (0.1):
-    - ManicEmuCore
   - NVActivityIndicatorView (5.2.0):
     - NVActivityIndicatorView/Base (= 5.2.0)
   - NVActivityIndicatorView/Base (5.2.0)
@@ -215,7 +213,6 @@ DEPENDENCIES:
   - ManicEmuCore (from `../Cores/DeltaCore`)
   - ManicSupport (from `../ManicSupport`)
   - MarqueeLabel (from `../MarqueeLabel`)
-  - MelonDSDeltaCore (from `../Cores/MelonDSDeltaCore`)
   - NVActivityIndicatorView (~> 5.2)
   - Permission/Camera (~> 3.1.2)
   - Permission/Microphone (~> 3.1.2)
@@ -309,8 +306,6 @@ EXTERNAL SOURCES:
     :path: "../ManicSupport"
   MarqueeLabel:
     :path: "../MarqueeLabel"
-  MelonDSDeltaCore:
-    :path: "../Cores/MelonDSDeltaCore"
   ProHUD:
     :path: "../ProHUD"
   SSZipArchive:
@@ -363,7 +358,6 @@ SPEC CHECKSUMS:
   ManicEmuCore: 34894a1ba8092736be51d06ce9bec33d8c7df58d
   ManicSupport: 8ae21bae33d19eb2e34c82543edfb35481781453
   MarqueeLabel: 4b46d196abd253448e830cbd976f9eacc3af0849
-  MelonDSDeltaCore: 5eec77a14c0b1aad6c827117ac04fe3cff5cb9bf
   NVActivityIndicatorView: fe52a6a68664c2df8991d7d9e3d86d8d19453c53
   OAuthSwift: 75efbb5bd9a4b2b71a37bd7e986bf3f55ddd54c6
   Permission: 4821359fb4d4367fb59aa16df38fbba5722ac842
@@ -388,6 +382,6 @@ SPEC CHECKSUMS:
   VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 03b6ff0026ba52f37ef859aed65b00498916c922
+PODFILE CHECKSUM: 53b3345edb2065a572663467eb2b7b20c00fec17
 
 COCOAPODS: 1.16.2

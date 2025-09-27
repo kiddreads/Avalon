@@ -84,15 +84,61 @@ extension AppContext {
         })
     }
     
+    /// 获取所有外部显示的WindowScene（包括AirPlay）
+    static var externalWindowScenes: [UIWindowScene] {
+        return UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).filter({ scene in
+            if #available(iOS 16.0, *) {
+                return scene.activationState == .foregroundActive && scene.session.role == .windowExternalDisplayNonInteractive
+            } else {
+                return scene.activationState == .foregroundActive && scene.session.role == .windowExternalDisplay
+            }
+        })
+    }
+    
+    /// 外部窗口信息（由外部设置）
+    private static var externalWindowInfo: (window: UIWindow, isActive: Bool)?
+    
+    /// 设置外部窗口信息
+    /// - Parameters:
+    ///   - window: 外部窗口
+    ///   - isActive: 是否激活外部窗口显示
+    public static func setExternalWindow(_ window: UIWindow?, isActive: Bool) {
+        if let window = window, isActive {
+            externalWindowInfo = (window: window, isActive: true)
+        } else {
+            externalWindowInfo = nil
+        }
+    }
+    
+    /// 检查是否应该使用外部窗口显示ProHUD内容
+    static var shouldUseExternalWindow: Bool {
+        guard let info = externalWindowInfo else { return false }
+        return info.isActive && !info.window.isHidden
+    }
+    
+    /// 获取外部窗口的WindowScene
+    static var externalWindowScene: UIWindowScene? {
+        guard shouldUseExternalWindow else { return nil }
+        return externalWindowInfo?.window.windowScene
+    }
+    
     /// 如果设置了workspace，就是workspace所对应的windowScene，否则就是最后一个打开的应用程序窗口的windowScene
+    /// 当AirPlay投屏且外部窗口可见时，优先使用外部窗口场景
     static var windowScene: UIWindowScene? {
         set { storedAppWindowScene = newValue }
         get {
+            // 如果有明确设置的workspace，使用它
             if let ws = storedAppWindowScene {
                 return ws
-            } else {
-                return foregroundActiveWindowScenes.last
             }
+            
+            // 检查是否应该使用外部窗口
+            if let externalScene = externalWindowScene {
+                return externalScene
+            }
+            
+            // 默认使用最后一个前台活跃的窗口场景
+            return foregroundActiveWindowScenes.last
         }
     }
     
@@ -108,7 +154,13 @@ extension AppContext {
     
     /// App主程序窗口
     static var appWindow: UIWindow? {
-        visibleWindows.filter { window in
+        // 如果应该使用外部窗口，优先返回外部窗口
+        if shouldUseExternalWindow, let info = externalWindowInfo {
+            return info.window
+        }
+        
+        // 否则返回正常的主程序窗口
+        return visibleWindows.filter { window in
             return "\(type(of: window))" == "UIWindow" && window.windowLevel == .normal
         }.first
     }
@@ -119,7 +171,13 @@ extension AppContext {
     }
     
     /// App主程序窗口的安全边距
-    static var safeAreaInsets: UIEdgeInsets { appWindow?.safeAreaInsets ?? .zero }
+    static var safeAreaInsets: UIEdgeInsets { 
+        // 外部窗口通常没有安全边距，或者使用iPad的逻辑
+        if shouldUseExternalWindow {
+            return .zero // 外部显示器通常没有安全边距
+        }
+        return appWindow?.safeAreaInsets ?? .zero 
+    }
     
 }
 

@@ -683,6 +683,42 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var microphoneContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: R.string.localizable.on()) { [weak self] _ in
+            guard let self = self else { return }
+            self.microphoneButton.titleLabel.text = R.string.localizable.microphone() + " " + R.string.localizable.on()
+            if let game {
+                game.updateExtra(key: ExtraKey.microphone.rawValue, value: true)
+            }
+        }))
+        actions.append(UIAction(title: R.string.localizable.off()) { [weak self] _ in
+            guard let self = self else { return }
+            self.microphoneButton.titleLabel.text = R.string.localizable.microphone() + " " + R.string.localizable.off()
+            if let game {
+                game.updateExtra(key: ExtraKey.microphone.rawValue, value: false)
+            }
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.microphoneTips(), children: actions))
+        return view
+    }()
+    
+    private lazy var microphoneButton: SymbolButton = {
+        let title: String
+        if game?.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false {
+            title = R.string.localizable.microphone() + " " + R.string.localizable.on()
+        } else {
+            title = R.string.localizable.microphone() + " " + R.string.localizable.off()
+        }
+        let view = SymbolButton(image: R.image.customMicrophone()?.applySymbolConfig(color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.microphoneContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
     private lazy var psxModeContextMenuButton: ContextMenuButton = {
         var actions: [UIMenuElement] = []
         actions.append(UIAction(title: Constants.Strings.PSXController) { [weak self] _ in
@@ -762,9 +798,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     
     private lazy var dcCoreContextMenuButton: ContextMenuButton = {
         var actions: [UIMenuElement] = []
-        actions.append((UIAction(title: "JITLess Ver: Defalut") { [weak self] _ in
+        actions.append((UIAction(title: "JITLess Ver: Default") { [weak self] _ in
             guard let self = self else { return }
-            self.dcCoreButton.titleLabel.text = "JITLess Ver: Defalut"
+            self.dcCoreButton.titleLabel.text = "JITLess Ver: Default"
             if let game {
                 Game.change { _ in
                     game.defaultCore = 0
@@ -785,7 +821,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }()
     
     private lazy var dcCoreButton: SymbolButton = {
-        let ver = (game?.defaultCore ?? 0) == 0 ? "Defalut" : "WinCE"
+        let ver = (game?.defaultCore ?? 0) == 0 ? "Default" : "WinCE"
         let view = SymbolButton(symbol: .boltSlash, title: "JITLess Ver: \(ver)", horizontalContian: true)
         view.titleLabel.numberOfLines = 0
         view.addTapGesture { [weak self] gesture in
@@ -853,6 +889,72 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
             self.snesVRAMMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var pspRendererContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: "Automatic") { [weak self] _ in
+            guard let self = self else { return }
+            self.pspRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nAutomatic"
+            self.game?.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: 0)
+        })
+        actions.append(UIAction(title: "OpenGL") { [weak self] _ in
+            guard let self = self else { return }
+            self.pspRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nOpenGL"
+            self.game?.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: 1)
+        })
+        actions.append(UIAction(title: "Vulkan") { [weak self] _ in
+            guard let self = self else { return }
+            self.pspRendererButton.titleLabel.text = "\(R.string.localizable.rendererTitle())\nVulkan"
+            self.game?.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: 2)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+        return view
+    }()
+    
+    private lazy var pspRendererButton: SymbolButton = {
+        let type = (self.game?.getExtraInt(key: ExtraKey.pspRenderer.rawValue) ?? 0)
+        var renderType = "Automatic"
+        if type == 1 {
+            renderType = "OpenGL"
+        } else if type == 2 {
+            renderType = "Vulkan"
+        }
+        let title = "\(R.string.localizable.rendererTitle())\n" + renderType
+        let view = SymbolButton(image: R.image.customLightspectrumHorizontal()?.applySymbolConfig(color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.pspRendererContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var pspTextureContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: R.string.localizable.on()) { [weak self] _ in
+            guard let self = self else { return }
+            self.pspTextureButton.titleLabel.text = "\(R.string.localizable.texture()) \(R.string.localizable.on())"
+            self.game?.updateExtra(key: ExtraKey.pspTexture.rawValue, value: true)
+        })
+        actions.append(UIAction(title: R.string.localizable.off()) { [weak self] _ in
+            guard let self = self else { return }
+            self.pspTextureButton.titleLabel.text = "\(R.string.localizable.texture()) \(R.string.localizable.off())"
+            self.game?.updateExtra(key: ExtraKey.pspTexture.rawValue, value: false)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.textureReplacement(), children: actions))
+        return view
+    }()
+    
+    private lazy var pspTextureButton: SymbolButton = {
+        let title = R.string.localizable.texture() + " " + ((self.game?.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "\(R.string.localizable.on())" : "\(R.string.localizable.off())")
+        let view = SymbolButton(symbol: .aqiMedium, title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.pspTextureContextMenuButton.triggerTapGesture()
         }
         return view
     }()
@@ -1150,10 +1252,32 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             languageContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(languageButton)
+            }
+            
+            functionButtonContainerView.addSubview(pspRendererContextMenuButton)
+            functionButtonContainerView.addSubview(pspRendererButton)
+            pspRendererButton.snp.makeConstraints { make in
+                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            pspRendererContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(pspRendererButton)
+            }
+            
+            functionButtonContainerView.addSubview(pspTextureContextMenuButton)
+            functionButtonContainerView.addSubview(pspTextureButton)
+            pspTextureButton.snp.makeConstraints { make in
+                make.leading.equalTo(pspRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            pspTextureContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(pspTextureButton)
             }
         }
     }
@@ -1182,6 +1306,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     private func updateDSFunctionButton() {
         languageContextMenuButton.removeFromSuperview()
         languageButton.removeFromSuperview()
+        microphoneContextMenuButton.removeFromSuperview()
+        microphoneButton.removeFromSuperview()
         ndsSystemTypeContextMenuButton.removeFromSuperview()
         ndsSystemTypeButton.removeFromSuperview()
         gbaSlotContextMenuButton.removeFromSuperview()
@@ -1199,6 +1325,18 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.edges.equalTo(languageButton)
             }
             
+            //麦克风
+            functionButtonContainerView.addSubview(microphoneContextMenuButton)
+            functionButtonContainerView.addSubview(microphoneButton)
+            microphoneButton.snp.makeConstraints { make in
+                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            microphoneContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(microphoneButton)
+            }
+            
             var enableGBASlot = true
             if let game, let mode = game.getExtraString(key: ExtraKey.ndsSystemMode.rawValue), mode == "DSi" {
                 enableGBASlot = false
@@ -1208,7 +1346,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             functionButtonContainerView.addSubview(ndsSystemTypeContextMenuButton)
             functionButtonContainerView.addSubview(ndsSystemTypeButton)
             ndsSystemTypeButton.snp.makeConstraints { make in
-                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(microphoneButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
                 if !enableGBASlot {

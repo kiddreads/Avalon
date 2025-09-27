@@ -326,6 +326,30 @@
 #define PERF_LOG_FMT "[PERF]: Avg (%s): %llu ticks, %llu runs.\n"
 #endif
 
+//定义WFC状态变更回调
+static WFCCallback g_wfc_status_callback = NULL;
+void wfc_status_register_callback(WFCCallback callback) {
+   g_wfc_status_callback = callback;
+}
+
+//定义Shutdown通知
+static ShutdownCallback g_shutdown_callback = NULL;
+void shutdown_register_callback(ShutdownCallback callback) {
+   g_shutdown_callback = callback;
+}
+
+//定义NDS的布局信息
+static const char *g_melonds_custom_layout = NULL;
+void set_melonds_custom_layout(const char *layout) {
+   g_melonds_custom_layout = strdup(layout);
+}
+
+//定义WFC NDS信息
+static const char *g_melonds_wfc_dns = NULL;
+void set_melonds_wfc_dns(const char *dns) {
+   g_melonds_wfc_dns = strdup(dns);
+}
+
 static runloop_state_t runloop_state      = {0};
 
 /* GLOBAL POINTER GETTERS */
@@ -1412,6 +1436,17 @@ bool runloop_environment_cb(unsigned cmd, void *data)
                runloop_st->flags |= RUNLOOP_FLAG_HAS_VARIABLE_UPDATE;
 #endif
             runloop_st->core_options->updated = false;
+            
+            //通过option的方式传递布局信息局限性太大了，只能这样破坏性的进行传递
+            if (g_melonds_custom_layout && string_is_equal(var->key, "melonds_custom_layout_config")) {
+               var->value = strdup(g_melonds_custom_layout);
+               break;
+            }
+            
+            if (g_melonds_wfc_dns && string_is_equal(var->key, "melonds_firmware_wfc_dns")) {
+               var->value = strdup(g_melonds_wfc_dns);
+               break;
+            }
 
             if (core_option_manager_get_idx(runloop_st->core_options,
                   var->key, &opt_idx))
@@ -1449,6 +1484,20 @@ bool runloop_environment_cb(unsigned cmd, void *data)
                RARCH_ERR("[Environ]: SET_VARIABLE: %s - %s.\n",
                      var->key, "Not implemented");
                return false;
+            }
+            
+            if (g_wfc_status_callback && string_is_equal(var->key, "melonds_wfc_status")) {
+               //NDS的wfc状态发生变化了
+               int wfc_status = atoi(var->value);
+               
+               /**
+                case 0: statusText = "Disconnected"; break;
+                case 1: statusText = "Authenticated"; break;
+                case 2: statusText = "Associated"; break;
+                default: statusText = "Invalid"; break;
+                */
+               g_wfc_status_callback(wfc_status == 2);
+               break;
             }
 
             /* Check whether key is valid */
@@ -1896,6 +1945,10 @@ bool runloop_environment_cb(unsigned cmd, void *data)
          /* This case occurs when a core (internally)
           * requests a shutdown event */
          RARCH_LOG("[Environ]: SHUTDOWN.\n");
+         
+         if (g_shutdown_callback) {
+            g_shutdown_callback();
+         }
 
          runloop_st->flags |= RUNLOOP_FLAG_CORE_SHUTDOWN_INITIATED
                             | RUNLOOP_FLAG_SHUTDOWN_INITIATED;

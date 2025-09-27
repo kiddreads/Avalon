@@ -6,7 +6,6 @@ target 'ManicEmu' do
   
   pod 'ManicSupport', :path => '../ManicSupport'
   pod 'ManicEmuCore', :path => '../Cores/DeltaCore'
-  pod 'MelonDSDeltaCore', :path => '../Cores/MelonDSDeltaCore'
   
   pod 'DNSPageView', :path => '../DNSPageView'
   pod 'CollectionViewPagingLayout', :path => '../CollectionViewPagingLayout'

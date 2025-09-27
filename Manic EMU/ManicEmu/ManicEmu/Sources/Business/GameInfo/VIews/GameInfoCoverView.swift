@@ -104,7 +104,7 @@ class GameInfoCoverView: BaseView {
         coverImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        coverImageView.setData(game: game, coverSize: CoverImageSize, style: Constants.Size.GameCoverStyle)
+        coverImageView.setData(game: game, coverSize: CoverImageSize, style: Constants.Size.GameCoverStyle, scalePlatform: false)
         coverImageView.imageView.setGameCover(game: game, size: CoverImageSize) { [weak self] image in
             self?.backgroundGradientView.backgroundColor = image.dominantBackground
         }

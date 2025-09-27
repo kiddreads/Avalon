@@ -122,7 +122,7 @@ class FlexSkinSettingViewController: BaseViewController {
             for (index, screen) in screens.enumerated() {
                 if let outputFrame = screen.outputFrame {
                     let scaledFrame = outputFrame.applying(.init(scaleX: frames.skinFrame.width, y: frames.skinFrame.height))
-                    let view = createInteractiveView(frame: scaledFrame, image: index <= images.count ? images[index] : nil)
+                    let view = createInteractiveView(frame: scaledFrame, image: index < images.count ? images[index] : nil)
                     containerViews.append(view)
                     initFrames.append(scaledFrame)
                     initScreens.append(screen)

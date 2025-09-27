@@ -471,6 +471,14 @@ extension FilesImporter {
                         if !threeDSGameInfo.title.isEmpty {
                             game.aliasName = threeDSGameInfo.title
                         }
+                        
+                        for (index, identifier) in Constants.Numbers.ThreeDSHomeMenuIdentifiers.enumerated() {
+                            if identifier == threeDSGameInfo.identifier {
+                                //这是一个home menu app 进行自定义别名
+                                game.aliasName = "Home Menu (\(Constants.Strings.ThreeDSHomeMenuRegions[index]))"
+                                break
+                            }
+                        }
                     }
 #endif
                     let gameType = GameType(fileExtension: game.fileExtension)

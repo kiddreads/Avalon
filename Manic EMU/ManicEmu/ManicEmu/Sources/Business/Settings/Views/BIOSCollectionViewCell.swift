@@ -9,6 +9,7 @@
 
 import ManicEmuCore
 import UniformTypeIdentifiers
+import SSZipArchive
 
 class BIOSCollectionViewCell: UICollectionViewCell {
     
@@ -120,6 +121,18 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = Constants.BIOS.PS1Bios
             } else if gameType == .dc {
                 biosItems = Constants.BIOS.DCBios
+            }  else if gameType == .gb {
+                biosItems = Constants.BIOS.GBBios
+            }  else if gameType == .gbc {
+                biosItems = Constants.BIOS.GBCBios
+            }  else if gameType == .gba {
+                biosItems = Constants.BIOS.GBABios
+            }  else if gameType == .nes {
+                biosItems = Constants.BIOS.NESBios
+            }  else if gameType == .pm {
+                biosItems = Constants.BIOS.PMBios
+            } else if gameType == ._3ds {
+                biosItems = Constants.BIOS.ThreeDSBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
@@ -190,6 +203,9 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                     itemView.button.isSelected = b.imported
                     itemView.isHidden = false
                     itemView.button.onTap {
+                        if gameType == ._3ds {
+                            UIView.makeToast(message: R.string.localizable.threeDSNandImportToast())
+                        }
                         FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: true) {  urls in
                             UIView.makeLoading()
                             DispatchQueue.global().async {
@@ -201,14 +217,22 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                         }
                                     })
                                 }
+                                var import3DSNandSuccess = true
                                 if matchs.count > 0 {
                                     for match in matchs {
-                                        try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
-                                        var matchFilePath = Constants.Path.System.appendingPathComponent(match.fileName)
-                                        if gameType == .dc {
-                                            matchFilePath = Constants.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                        if match.fileName.lowercased() == "nand.zip" {
+                                            import3DSNandSuccess = self.import3DSNand(url: match.url)
+                                        } else {
+                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                            var matchFilePath = Constants.Path.System.appendingPathComponent(match.fileName)
+                                            if gameType == .dc {
+                                                matchFilePath = Constants.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                            }
+                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
                                         }
-                                        try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
+                                    }
+                                    if !import3DSNandSuccess {
+                                        matchs.removeAll(where: { $0.fileName.lowercased() == "nand.zip" })
                                     }
                                 }
                                 DispatchQueue.main.async {
@@ -218,6 +242,10 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                         importSuccess?()
                                     } else {
                                         UIView.makeToast(message: R.string.localizable.biosImportFailed())
+                                    }
+                                    
+                                    if !import3DSNandSuccess {
+                                        UIView.makeToast(message: R.string.localizable.threeDSNandImportFailed())
                                     }
                                 }
                             }
@@ -229,6 +257,85 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+    
+    private func import3DSNand(url: URL) -> Bool {
+        //先检查zip里面有没有支持的文件类型
+        if SSZipArchive.isFilePasswordProtected(atPath: url.path) {
+            return false
+        } else {
+            let unZipPath = Constants.Path.Cache.appendingPathComponent("nand")
+            if FileManager.default.fileExists(atPath: unZipPath) {
+                try? FileManager.default.removeItem(atPath: unZipPath)
+            }
+            let unzipSuccess = SSZipArchive.unzipFile(atPath: url.path, toDestination: unZipPath)
+            guard unzipSuccess else { return false }
+            
+            var tempNandPath = unZipPath
+            if FileManager.default.fileExists(atPath: unZipPath.appendingPathComponent("nand")) {
+                tempNandPath = unZipPath.appendingPathComponent("nand")
+            }
+            
+            let nandPath = Constants.Path.ThreeDS.appendingPathComponent("nand")
+            try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: tempNandPath), to: URL(fileURLWithPath: nandPath))
+            
+            try? FileManager.default.removeItem(atPath: unZipPath)
+            
+            import3DSHomeMenu(at: nandPath)
+   
+            return true
+        }
+    }
+    
+    private func import3DSHomeMenu(at path: String) {
+        let fileManager = FileManager.default
+        var isDirectory: ObjCBool = false
+        
+        guard fileManager.fileExists(atPath: path, isDirectory: &isDirectory) else { return }
+        
+        if path.pathExtension.lowercased() == "app", let tid = pathToTid(path) {
+            if Constants.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == tid }) {
+                //识别到了3dS的home menu
+                FilesImporter.importFiles(urls: [URL(fileURLWithPath: path)], silentMode: true)
+            }
+        }
+        
+        if isDirectory.boolValue {
+            do {
+                let contents = try fileManager.contentsOfDirectory(atPath: path)
+                for item in contents {
+                    let fullPath = (path as NSString).appendingPathComponent(item)
+                    import3DSHomeMenu(at: fullPath)
+                }
+            } catch {
+                print("无法读取目录: \(path), 错误: \(error)")
+            }
+        }
+    }
+    
+    // UInt64 -> String
+    private func tidToPath(_ tid: UInt64) -> String {
+        let high = UInt32(tid >> 32)
+        let low = UInt32(tid & 0xFFFFFFFF)
+        return String(format: "%08x/%08x", high, low)
+    }
+
+    // String -> UInt64
+    private func pathToTid(_ path: String) -> UInt64? {
+        guard let beginRange = path.range(of: "/title/") else { return nil }
+        guard let endRange = path.range(of: "/content/") else { return nil }
+        guard beginRange.upperBound < endRange.lowerBound else { return nil }
+        
+        let path = String(path[beginRange.upperBound..<endRange.lowerBound])
+        
+        let parts = path.split(separator: "/")
+        guard parts.count == 2,
+              let high = UInt32(parts[0], radix: 16),
+              let low = UInt32(parts[1], radix: 16) else {
+            return nil
+        }
+        return (UInt64(high) << 32) | UInt64(low)
+    }
+    
     
     static func CellHeight(gameType: GameType) -> Double {
         var itemCount = 0
@@ -242,6 +349,18 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = Constants.BIOS.PS1Bios.count
         } else if gameType == .dc {
             itemCount = Constants.BIOS.DCBios.count
+        }  else if gameType == .gb {
+            itemCount = Constants.BIOS.GBBios.count
+        }  else if gameType == .gbc {
+            itemCount = Constants.BIOS.GBCBios.count
+        }  else if gameType == .gba {
+            itemCount = Constants.BIOS.GBABios.count
+        }  else if gameType == .nes {
+            itemCount = Constants.BIOS.NESBios.count
+        }  else if gameType == .pm {
+            itemCount = Constants.BIOS.PMBios.count
+        } else if gameType == ._3ds {
+            itemCount = Constants.BIOS.ThreeDSBios.count
         }
         return (Double(itemCount) * Constants.Size.ItemHeightMax) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid)
     }

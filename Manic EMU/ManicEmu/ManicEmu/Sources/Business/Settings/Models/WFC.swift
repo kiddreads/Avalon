@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import SmartCodable
-import MelonDSDeltaCore
 
 fileprivate let DefaultWFCList = """
 [
@@ -134,8 +133,8 @@ struct WFC: SmartCodable {
     }
     
     static func resetWFC() {
-        UserDefaults.standard.removeObject(forKey: MelonDS.wfcIDUserDefaultsKey)
-        UserDefaults.standard.removeObject(forKey: MelonDS.wfcFlagsUserDefaultsKey)
+//        UserDefaults.standard.removeObject(forKey: MelonDS.wfcIDUserDefaultsKey)
+//        UserDefaults.standard.removeObject(forKey: MelonDS.wfcFlagsUserDefaultsKey)
     }
     
     static func currentDNS() -> String {

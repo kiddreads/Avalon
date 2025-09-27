@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ManicEmuCore
-import MelonDSDeltaCore
 
 enum System: CaseIterable
 {
@@ -39,7 +38,7 @@ enum System: CaseIterable
     }
     
     static var allCores: [ManicEmuCoreProtocol] {
-        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, MelonDS.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core]
+        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core, DS.core]
     }
 }
 

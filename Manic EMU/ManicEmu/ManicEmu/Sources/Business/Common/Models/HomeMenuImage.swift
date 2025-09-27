@@ -43,7 +43,7 @@ class HomeMenuImage: UIImage, @unchecked Sendable {
                     brand = R.image.home_menu_nds()?.scaled(toHeight: size.height * brandRatio)
                 }
             } else if gameType == ._3ds {
-                brand = R.image.home_menu_3ds()?.scaled(toWidth: size.width * brandRatio)
+                brand = R.image.home_menu_3ds()?.scaled(toHeight: size.height * brandRatio)
             }
             if let brand {
                 if Constants.Size.GameCoverStyle == .style1 {
