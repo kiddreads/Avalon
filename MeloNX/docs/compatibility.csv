@@ -1175,6 +1175,7 @@
 0100EB100AB42000,"FINAL FANTASY XII THE ZODIAC AGE",opengl;vulkan-backend-bug,playable,2024-08-11 07:01:54
 010068F00AA78000,"FINAL FANTASY XV POCKET EDITION HD",,playable,2021-01-05 17:52:08
 0100CE4010AAC000,"FINAL FANTASY® CRYSTAL CHRONICLES™ Remastered Edition",,playable,2023-04-02 23:39:12
+010038B015560000,FINAL FANTASY TACTICS - The Ivalice Chronicles,gpu,boots,2024-09-30 02:59:00
 01001BA00AE4E000,"Final Light, The Prison",,playable,2020-07-31 21:48:44
 0100FF100FB68000,"Finding Teddy 2 : Definitive Edition",gpu,ingame,2024-04-19 16:51:33
 0100F4E013AAE000,"Fire & Water",,playable,2020-12-15 15:43:20
@@ -2271,6 +2272,7 @@
 0100ABF008968000,"Pokémon Sword + Pokémon Sword Expansion Pass",deadlock;crash;online-broken;ldn-works;LAN,ingame,2024-08-26 15:40:37
 01009AD008C4C000,"Pokémon: Let's Go, Pikachu! demo",slow;demo,playable,2023-11-26 11:23:20
 0100000011D90000,"Pokémon™ Brilliant Diamond",gpu;ldn-works,ingame,2024-08-28 13:26:35
+010018E011D92000,"Pokémon™ Shining Pearl",gpu;ldn-works,ingame,2024-08-28 13:26:35
 010015F008C54000,"Pokémon™ HOME",Needs Update;crash;services,menus,2020-12-06 06:01:51
 01001F5010DFA000,"Pokémon™ Legends: Arceus",gpu;Needs Update;ldn-works,ingame,2024-09-19 10:02:02
 01005D100807A000,"Pokémon™ Quest",,playable,2022-02-22 16:12:32
@@ -2707,6 +2709,8 @@
 01008F701C074000,"SONIC SUPERSTARS",gpu;nvdec,ingame,2023-10-28 17:48:07
 010088801C150000,"Sonic Superstars Digital Art Book with Mini Digital Soundtrack",,playable,2024-08-20 13:26:56
 01005EA01C0FC000,"SONIC X SHADOW GENERATIONS",crash,ingame,2025-01-07 04:20:45
+010064B0242BE000,"Sonic Racing: CrossWorlds - Demo",gpu;vulkan-backend-bug;demo,ingame,2024-09-25 11:27:53
+01006E001823C000,"Sonic Racing: CrossWorlds",gpu;vulkan-backend-bug;ldn-broken,ingame,2024-09-30 17:23:00
 010064F00C212000,"Soul Axiom Rebooted",nvdec;slow,ingame,2020-09-04 12:41:01
 0100F2100F0B2000,"Soul Searching",,playable,2020-07-09 18:39:07
 01008F2005154000,"South Park™: The Fractured but Whole™ - Standard Edition",slow;online-broken;vulkan-backend-bug;gpu,ingame,2025-01-21 17:35:10
@@ -2864,11 +2868,13 @@
 0100BC0018138000,"Super Mario RPG™",gpu;audio;nvdec,ingame,2024-06-19 17:43:42
 ,"Super Mario World",homebrew,boots,2024-06-13 01:40:31
 010049900F546000,"Super Mario™ 3D All-Stars",services-horizon;slow;vulkan;amd-vendor-bug,ingame,2024-05-07 02:38:16
+010099C022B96000,"Super Mario Galaxy",slow;vulkan;amd-vendor-bug,ingame,2025-10-01 15:30:00
+0100FD8022DAA000,"Super Mario Galaxy 2",slow;vulkan;amd-vendor-bug,ingame,2025-10-01 15:30:00
 010028600EBDA000,"Super Mario™ 3D World + Bowser’s Fury",ldn-works,playable,2024-07-31 10:45:37
 01004F8006A78000,"Super Meat Boy",services,playable,2020-04-02 23:10:07
 01009C200D60E000,"Super Meat Boy Forever",gpu,boots,2021-04-26 14:25:39
 0100BDD00EC5C000,"Super Mega Space Blaster Special Turbo",online,playable,2020-08-06 12:13:25
-010031F019294000,"Super Monkey Ball Banana Rumble",,playable,2024-06-28 10:39:18
+010031F019294000,"Super Monkey Ball Banana Rumble",ldn-broken,playable,2025-10-01 18:03:00
 0100B2A00E1E0000,"Super Monkey Ball: Banana Blitz HD",online-broken,playable,2022-09-16 13:16:25
 01006D000D2A0000,"Super Mutant Alien Assault",,playable,2020-06-07 23:32:45
 01004D600AC14000,"Super Neptunia RPG",nvdec,playable,2022-08-17 16:38:52
@@ -2934,6 +2940,7 @@
 0100B76011DAA000,"Taxi Chaos",slow;online-broken;UE4,playable,2022-10-25 19:13:00
 0100F43011E5A000,"Tcheco in the Castle of Lucio",,playable,2020-06-27 13:35:43
 010092B0091D0000,"Team Sonic Racing",online-broken;ldn-works,playable,2024-02-05 15:05:27
+010084B00B36E000,"Team Sonic Racing",online-broken;ldn-works,playable,2024-02-05 15:05:27
 0100FE701475A000,"Teenage Mutant Ninja Turtles: Shredder's Revenge",deadlock;crash,boots,2024-09-28 09:31:39
 01005CF01E784000,"Teenage Mutant Ninja Turtles: Splintered Fate",,playable,2024-08-03 13:50:42
 0100FDB0154E4000,"Teenage Mutant Ninja Turtles: The Cowabunga Collection",,playable,2024-01-22 19:39:04
@@ -3220,6 +3227,7 @@
 010038400C2FE000,"TY the Tasmanian Tiger™ HD",32-bit;crash;nvdec,menus,2020-12-17 21:15:00
 010073A00C4B2000,"Tyd wag vir Niemand",,playable,2021-03-02 13:39:53
 0100D5B00D6DA000,"Type:Rider",,playable,2021-01-06 13:12:55
+01008AF01AD22000,"The Patrick Star Game",,playable,2025-10-01 17:55:30
 010040D01222C000,"UBERMOSH: SANTICIDE",,playable,2020-11-27 15:05:01
 0100992010BF8000,"Ubongo",,playable,2021-02-04 21:15:01
 010079000B56C000,"UglyDolls: An Imperfect Adventure",nvdec;UE4,playable,2022-08-25 14:42:16
@@ -3466,3 +3474,6 @@
 0100F4401940A000,"超探偵事件簿 レインコード  (Master Detective Archives: Rain Code)",crash,ingame,2024-02-12 20:58:31
 010064801A01C000,"超次元ゲイム ネプテューヌ GameMaker R:Evolution",crash,nothing,2023-10-30 22:37:40
 0100F3400332C000,"ゼノブレイド2",deadlock;amd-vendor-bug,ingame,2024-03-28 14:31:41
+010075000ECBE000,"超级马力欧 奥德赛",nvdec;intel-vendor-bug;mac-bug,playable,2024-08-25 01:32:34
+010075100E8EC000,"马力欧卡丁车8 豪华版",32-bit;ldn-works;LAN;amd-vendor-bug,playable,2024-09-19 11:55:17
+0100E8C00F506000,"新 超级马力欧兄弟U 豪华版",32-bit,playable,2023-10-08 02:06:37

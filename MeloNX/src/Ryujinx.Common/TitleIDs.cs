@@ -83,6 +83,8 @@ namespace Ryujinx.Common
             "010049900F546002", // Super Mario Sunshine
             "0100a3900c3e2000", // Paper Mario: The Origami King
             "0100ecd018ebe000", // Paper Mario: The Thousand-Year Door
+            "010099C022B96000", // Super Mario Galaxy
+            "0100FD8022DAA000", // Super Mario Galaxy 2
 
                           //Pikmin Franchise
             "0100aa80194b0000", // Pikmin 1
@@ -158,6 +160,8 @@ namespace Ryujinx.Common
             "01009aa000faa000", // Sonic Mania
             "01005ea01c0fc000", // SONIC X SHADOW GENERATIONS
             "01005ea01c0fc001", // ^
+            "01006e001823c000", // Sonic Racing: CrossWorlds
+            "010064b0242be000", // Sonic Racing: CrossWorlds - Demo
 
                           //Xenoblade Franchise
             "0100ff500e34a000", // Xenoblade Chronicles - Definitive Edition
