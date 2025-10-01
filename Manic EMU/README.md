@@ -71,8 +71,8 @@ More platforms coming soon!
 
 ### [RetroAchievements Integration • Challenge Yourself]
 - Hardcore Mode Verified by RetroAchievements
-- Track and Share your Achievments with ease
-- RetroAchievments Account required
+- Track and Share your Achievements with ease
+- RetroAchievements Account required
 
 
 ### [iCloud Sync • Your Gaming Universe]
