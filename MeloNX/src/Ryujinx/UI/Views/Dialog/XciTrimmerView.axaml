@@ -27,11 +27,6 @@
                 <StackPanel 
                     Grid.Column="0"
                     Orientation="Horizontal">
-                    <TextBlock
-                        Margin="10,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Text="{ext:Locale CommonSort}" />
                     <DropDownButton
                         Width="150"
                         HorizontalAlignment="Left"

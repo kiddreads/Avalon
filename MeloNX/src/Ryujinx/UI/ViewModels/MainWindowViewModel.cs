@@ -1897,7 +1897,7 @@ namespace Ryujinx.Ava.UI.ViewModels
                     secondaryText,
                     LocaleManager.Instance[LocaleKeys.Continue],
                     LocaleManager.Instance[LocaleKeys.Cancel],
-                    LocaleManager.Instance[LocaleKeys.TrimXCIFileDialogTitle]
+                    LocaleManager.Instance[LocaleKeys.GameListContextMenuTrimXCI]
                 );
 
                 if (result == UserResult.Yes)
@@ -2121,7 +2121,8 @@ namespace Ryujinx.Ava.UI.ViewModels
                 });
 
         public static AsyncRelayCommand<MainWindowViewModel> NukePtcCache { get; } =
-            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null,
+            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null &&
+                vm.HasPtcCacheFiles(),
                 async viewModel =>
                 {
                     UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
@@ -2170,8 +2171,22 @@ namespace Ryujinx.Ava.UI.ViewModels
                     }
                 });
 
+        private bool HasPtcCacheFiles()
+        {
+        if (this.SelectedApplication == null) return false;
+
+        DirectoryInfo mainDir = new DirectoryInfo(Path.Combine(AppDataManager.GamesDirPath,
+            this.SelectedApplication.IdString, "cache", "cpu", "0"));
+        DirectoryInfo backupDir = new DirectoryInfo(Path.Combine(AppDataManager.GamesDirPath,
+            this.SelectedApplication.IdString, "cache", "cpu", "1"));
+
+        return (mainDir.Exists && (mainDir.EnumerateFiles("*.cache").Any() || mainDir.EnumerateFiles("*.info").Any())) ||
+               (backupDir.Exists && (backupDir.EnumerateFiles("*.cache").Any() || backupDir.EnumerateFiles("*.info").Any()));
+        }
+
         public static AsyncRelayCommand<MainWindowViewModel> PurgeShaderCache { get; } =
-            Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null,
+            Commands.CreateConditional<MainWindowViewModel>(
+                vm => vm?.SelectedApplication != null && vm.HasShaderCacheFiles(),
                 async viewModel =>
                 {
                     UserResult result = await ContentDialogHelper.CreateLocalizedConfirmationDialog(
@@ -2227,6 +2242,20 @@ namespace Ryujinx.Ava.UI.ViewModels
                         }
                     }
                 });
+
+        private bool HasShaderCacheFiles()
+        {
+        if (this.SelectedApplication == null) return false;
+
+        DirectoryInfo shaderCacheDir = new(Path.Combine(AppDataManager.GamesDirPath,
+            this.SelectedApplication.IdString, "cache", "shader"));
+
+        if (!shaderCacheDir.Exists) return false;
+
+        return shaderCacheDir.EnumerateDirectories("*").Any() || 
+            shaderCacheDir.GetFiles("*.toc").Any() || 
+            shaderCacheDir.GetFiles("*.data").Any();
+        }
 
         public static RelayCommand<MainWindowViewModel> OpenPtcDirectory { get; } =
             Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null,

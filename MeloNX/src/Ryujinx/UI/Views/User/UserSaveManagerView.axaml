@@ -28,7 +28,6 @@
                 Orientation="Horizontal"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center">
-                <Label Content="{ext:Locale CommonSort}" VerticalAlignment="Center" />
                 <ComboBox SelectedIndex="{Binding SortIndex}" Width="100">
                     <ComboBoxItem>
                         <Label

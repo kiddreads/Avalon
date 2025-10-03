@@ -32,12 +32,6 @@
                      Watermark="{ext:Locale CompatibilityListSearchBoxWatermarkWithCount}" 
                      TextChanged="TextBox_OnTextChanged"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal"  Margin="10, 5, 0, 5">
-                <TextBlock
-                        Margin="10,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        DockPanel.Dock="Right"
-                        Text="{ext:Locale CommonSort}" />
                 <DropDownButton
                         Width="150"
                         HorizontalAlignment="Right"
@@ -102,12 +96,6 @@
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Name="NormalControls">
             <TextBox Name="SearchBoxNormal" Grid.Column="0" Margin="15, 5, 0, 5" HorizontalAlignment="Stretch" Watermark="{ext:Locale CompatibilityListSearchBoxWatermarkWithCount}" TextChanged="TextBox_OnTextChanged" />
             <StackPanel Grid.Column="1" Orientation="Horizontal"  Margin="10, 5, 5, 5">
-                <TextBlock
-                    Margin="10,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    DockPanel.Dock="Right"
-                    Text="{ext:Locale CommonSort}" />
                 <DropDownButton
                     Width="150"
                     HorizontalAlignment="Right"

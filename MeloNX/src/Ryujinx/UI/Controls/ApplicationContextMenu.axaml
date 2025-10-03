@@ -114,16 +114,20 @@
             Header="{ext:Locale GameListContextMenuCacheManagementPurgePptc}"
             Icon="{ext:Icon fa-solid fa-arrow-rotate-right}"
             ToolTip.Tip="{ext:Locale GameListContextMenuCacheManagementPurgePptcToolTip}" />
+        <Separator/>
         <MenuItem
             Command="{Binding NukePtcCache}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementNukePptc}"
-            Icon="{ext:Icon fa-solid fa-trash-can}" />
+            Icon="{ext:Icon fa-solid fa-trash-can}"
+            IsEnabled="{Binding HasPtcCacheFiles}" />
         <MenuItem
             Command="{Binding PurgeShaderCache}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementPurgeShaderCache}"
-            Icon="{ext:Icon fa-solid fa-trash-can}" />
+            Icon="{ext:Icon fa-solid fa-trash-can}"
+            IsEnabled="{Binding HasShaderCacheFiles}" />
+        <Separator/>
         <MenuItem
             Command="{Binding OpenPtcDirectory}"
             CommandParameter="{Binding}"

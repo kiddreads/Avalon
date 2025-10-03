@@ -236,11 +236,6 @@
                     Header="{ext:Locale MenuBarHelpAbout}"
                     Icon="{ext:Icon fa-solid fa-circle-info}" />
                 <MenuItem
-                    Name="UpdateMenuItem"
-                    IsEnabled="{Binding CanUpdate}"
-                    Header="{ext:Locale MenuBarHelpCheckForUpdates}"
-                    Icon="{ext:Icon fa-solid fa-rotate}" />
-                <MenuItem
                     Name="CompatibilityListMenuItem"
                     Header="{ext:Locale CompatibilityListOpen}"
                     Icon="{ext:Icon fa-solid fa-database}"/>
@@ -255,21 +250,24 @@
                         Name="SetupGuideMenuItem"
                         Header="{ext:Locale MenuBarHelpSetup}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="{x:Static common:SharedConstants.SetupGuideWikiUrl}"
-                        ToolTip.Tip="{ext:Locale MenuBarHelpSetupTooltip}" />
+                        CommandParameter="{x:Static common:SharedConstants.SetupGuideWikiUrl}" />
                     <MenuItem
                         Name="LdnGuideMenuItem"
                         Header="{ext:Locale MenuBarHelpMultiplayer}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="{x:Static common:SharedConstants.MultiplayerWikiUrl}"
-                        ToolTip.Tip="{ext:Locale MenuBarHelpMultiplayerTooltip}" />
+                        CommandParameter="{x:Static common:SharedConstants.MultiplayerWikiUrl}" />
                     <MenuItem
                         Name="FaqMenuItem"
                         Header="{ext:Locale MenuBarHelpFaq}"
                         Icon="{ext:Icon fa-brands fa-gitlab}"
-                        CommandParameter="{x:Static common:SharedConstants.FaqWikiUrl}"
-                        ToolTip.Tip="{ext:Locale MenuBarHelpFaqTooltip}" />
+                        CommandParameter="{x:Static common:SharedConstants.FaqWikiUrl}" />
                 </MenuItem>
+                <Separator />
+                <MenuItem
+                    Name="UpdateMenuItem"
+                    IsEnabled="{Binding CanUpdate}"
+                    Header="{ext:Locale MenuBarHelpCheckForUpdates}"
+                    Icon="{ext:Icon fa-solid fa-rotate}" />
             </MenuItem>
         </Menu>
     </DockPanel>

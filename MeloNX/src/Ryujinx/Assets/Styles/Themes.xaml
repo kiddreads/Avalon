@@ -19,6 +19,7 @@
             <Color x:Key="Unbounded">#FFFF4554</Color>
             <Color x:Key="Custom">#6483F5</Color>
             <Color x:Key="Warning">#800080</Color>
+            <Color x:Key="CustomConfig">#00B5B8</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="DataGridSelectionBackgroundBrush"
@@ -38,6 +39,7 @@
             <Color x:Key="Unbounded">#FFFF4554</Color>
             <Color x:Key="Custom">#6483F5</Color>
             <Color x:Key="Warning">#800080</Color>
+            <Color x:Key="CustomConfig">#00B5B8</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="DataGridSelectionBackgroundBrush"
@@ -57,6 +59,7 @@
             <Color x:Key="Unbounded">#FFFF4554</Color>
             <Color x:Key="Custom">#6483F5</Color>
             <Color x:Key="Warning">#FFA500</Color>
+            <Color x:Key="CustomConfig">#00B5B8</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

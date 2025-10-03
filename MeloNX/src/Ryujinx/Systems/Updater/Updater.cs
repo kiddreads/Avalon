@@ -101,8 +101,8 @@ namespace Ryujinx.Ava.Systems
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 string newVersionString = ReleaseInformation.IsCanaryBuild
-                    ? $"Canary {currentVersion} -> Canary {newVersion}"
-                    : $"{currentVersion} -> {newVersion}";
+                    ? $"Canary {currentVersion} → Canary {newVersion}"
+                    : $"{currentVersion} → {newVersion}";
 
                 Logger.Info?.Print(LogClass.Application, $"Version found: {newVersionString}");
 

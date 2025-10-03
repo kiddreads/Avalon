@@ -35,7 +35,7 @@
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Margin" Value="5" />
-                    <Setter Property="CornerRadius" Value="4" />
+                    <Setter Property="CornerRadius" Value="15" />
                 </Style>
                 <Style Selector="ListBoxItem:selected /template/ Rectangle#SelectionIndicator">
                     <Setter Property="MinHeight" Value="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).GridItemSelectorSize}" />
@@ -53,7 +53,7 @@
                             Classes.normal="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).IsGridMedium}"
                             Classes.small="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).IsGridSmall}"
                             ClipToBounds="True"
-                            CornerRadius="4">
+                            CornerRadius="12.5">
                             <Grid RowDefinitions="Auto,Auto">
                                 <Image
                                     Grid.Row="0"
@@ -72,42 +72,26 @@
                                             Text="{Binding Name}"
                                             TextAlignment="Center"
                                             TextWrapping="Wrap" />
-                                        <TextBlock
-                                            IsVisible="{Binding HasIndependentConfiguration}"
-                                            Text="{ext:Locale GameSpecificConfigurationHeader}"
-                                            TextAlignment="Center"
-                                            TextWrapping="Wrap"
-                                            Foreground="{DynamicResource Warning}" />
                                     </StackPanel>
                                 </Panel>
                             </Grid>
                         </Border>
                         <ui:SymbolIcon
-                            Margin="5,5,0,0"
+                            Margin="2.5,2.5,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            FontSize="18"
+                            FontSize="23"
                             Foreground="{DynamicResource FavoriteApplicationIconColor}"
                             IsVisible="{Binding Favorite}"
                             Symbol="StarFilled" />
-                        <Grid IsVisible="{Binding !$parent[UserControl].((viewModels:MainWindowViewModel)DataContext).ShowNames}">
-                            <Border
-                                Margin="15,35,5,15"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Bottom"
-                                Width="90"
-                                Height="20"
-                                CornerRadius="4"
-                                IsVisible="{Binding HasIndependentConfiguration}"
-                                Background="{DynamicResource ThemeContentBackgroundColor}">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Text="{ext:Locale GameSpecificConfigurationHeader}"
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
-                            </Border>
-                        </Grid>
+                        <ui:SymbolIcon
+                            Margin="0,2.5,2.5,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            FontSize="23"
+                            Foreground="{DynamicResource CustomConfig}"
+                            IsVisible="{Binding HasIndependentConfiguration}"
+                            Symbol="SettingsFilled" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -354,8 +354,8 @@ namespace Ryujinx.Ava.UI.Helpers
                 primary,
                 secondaryText,
                 LocaleManager.Instance[LocaleKeys.InputDialogYes],
-                LocaleManager.Instance[LocaleKeys.DialogUpdaterShowChangelogMessage],
                 LocaleManager.Instance[LocaleKeys.InputDialogNo],
+                LocaleManager.Instance[LocaleKeys.DialogUpdaterShowChangelogMessage],
                 (int)Symbol.Help,
                 UserResult.Yes);
 

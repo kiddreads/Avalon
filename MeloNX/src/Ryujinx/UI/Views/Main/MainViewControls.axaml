@@ -46,10 +46,6 @@
                 FontFamily="avares://FluentAvalonia/Fonts#Symbols"
                 Glyph="{helpers:GlyphValueConverter Grid}" />
         </Button>
-        <TextBlock
-            Margin="10,0,5,0"
-            VerticalAlignment="Center"
-            Text="{ext:Locale IconSize}" />
         <controls:SliderScroll
             Width="150"
             Height="35"
@@ -171,11 +167,5 @@
                 </Flyout>
             </DropDownButton.Flyout>
         </DropDownButton>
-        <TextBlock
-            Margin="10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            DockPanel.Dock="Right"
-            Text="{ext:Locale CommonSort}" />
     </DockPanel>
 </UserControl>

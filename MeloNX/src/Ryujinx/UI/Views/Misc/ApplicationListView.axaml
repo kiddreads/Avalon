@@ -34,6 +34,9 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="CornerRadius" Value="15" />
+                </Style>
                 <Style Selector="ListBoxItem:selected /template/ Rectangle#SelectionIndicator">
                     <Setter Property="MinHeight" Value="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).ListItemSelectorSize}" />
                 </Style>
@@ -46,9 +49,11 @@
                             Padding="10"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            ClipToBounds="True"
-                            CornerRadius="5">
+                            ClipToBounds="True">
                             <Grid ColumnDefinitions="Auto,10,*,150,100">
+                                <Border
+                                    ClipToBounds="True"
+                                    CornerRadius="7">
                                 <Image
                                     Grid.RowSpan="3"
                                     Grid.Column="0"
@@ -58,6 +63,8 @@
                                     Classes.normal="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).IsGridMedium}"
                                     Classes.small="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).IsGridSmall}"
                                     Source="{Binding Icon, Converter={x:Static helpers:BitmapArrayValueConverter.Instance}}" />
+                                </Border>
+
                                 <Border
                                     Grid.Column="2"
                                     Margin="0,0,5,0"
@@ -91,7 +98,7 @@
                                             IsVisible="{Binding HasPlayabilityInfo}"
                                             Background="{DynamicResource AppListBackgroundColor}"
                                             Margin="-1, 0, 0, 0"
-                                            Padding="0">
+                                            Padding="1.5">
                                             <ToolTip.Tip>
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock 
@@ -175,7 +182,7 @@
                                         Text="{ext:Locale GameSpecificConfigurationHeader}"
                                         TextAlignment="Start"
                                         TextWrapping="Wrap"
-                                        Foreground="{DynamicResource Warning}" />
+                                        Foreground="{DynamicResource CustomConfig}" />
                                 </StackPanel>
                                 <StackPanel
                                     Grid.Column="4"
@@ -203,13 +210,23 @@
                                 <ui:SymbolIcon
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Margin="-5,-5,0,0"
+                                    Margin="-7.5,-7.5,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    FontSize="16"
+                                    FontSize="18"
                                     Foreground="{DynamicResource FavoriteApplicationIconColor}"
                                     IsVisible="{Binding Favorite}"
                                     Symbol="StarFilled" />
+                                <ui:SymbolIcon
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="0,-7.5,-7.5,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    FontSize="18"
+                                    Foreground="{DynamicResource CustomConfig}"
+                                    IsVisible="{Binding HasIndependentConfiguration}"
+                                    Symbol="SettingsFilled" />
                             </Grid>
                         </Border>
                     </Grid>
