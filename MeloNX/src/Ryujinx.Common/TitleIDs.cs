@@ -83,8 +83,8 @@ namespace Ryujinx.Common
             "010049900F546002", // Super Mario Sunshine
             "0100a3900c3e2000", // Paper Mario: The Origami King
             "0100ecd018ebe000", // Paper Mario: The Thousand-Year Door
-            "010099C022B96000", // Super Mario Galaxy
-            "0100FD8022DAA000", // Super Mario Galaxy 2
+            "01009cC022b96000", // Super Mario Galaxy
+            "0100fd8022daa000", // Super Mario Galaxy 2
 
                           //Pikmin Franchise
             "0100aa80194b0000", // Pikmin 1

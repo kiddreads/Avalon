@@ -2868,8 +2868,8 @@
 0100BC0018138000,"Super Mario RPG™",gpu;audio;nvdec,ingame,2024-06-19 17:43:42
 ,"Super Mario World",homebrew,boots,2024-06-13 01:40:31
 010049900F546000,"Super Mario™ 3D All-Stars",services-horizon;slow;vulkan;amd-vendor-bug,ingame,2024-05-07 02:38:16
-010099C022B96000,"Super Mario Galaxy",slow;vulkan;amd-vendor-bug,ingame,2025-10-01 15:30:00
-0100FD8022DAA000,"Super Mario Galaxy 2",slow;vulkan;amd-vendor-bug,ingame,2025-10-01 15:30:00
+010099C022B96000,"Super Mario Galaxy",slow;vulkan;amd-vendor-bug;vulkan-vendor-bug,ingame,2025-10-01 15:30:00
+0100FD8022DAA000,"Super Mario Galaxy 2",slow;vulkan;amd-vendor-bug;vulkan-vendor-bug;deadlock,ingame,2025-10-04 18:50:00
 010028600EBDA000,"Super Mario™ 3D World + Bowser’s Fury",ldn-works,playable,2024-07-31 10:45:37
 01004F8006A78000,"Super Meat Boy",services,playable,2020-04-02 23:10:07
 01009C200D60E000,"Super Meat Boy Forever",gpu,boots,2021-04-26 14:25:39
