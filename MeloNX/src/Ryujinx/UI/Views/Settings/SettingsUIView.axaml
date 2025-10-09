@@ -27,13 +27,6 @@
                     Spacing="10">
                     <TextBlock Classes="h1" Text="{ext:Locale SettingsTabGeneralGeneral}" />
                     <StackPanel Margin="10,0,0,0" Orientation="Vertical">
-                        <CheckBox IsChecked="{Binding EnableDiscordIntegration}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center"
-                                           ToolTip.Tip="{ext:Locale ToggleDiscordTooltip}"
-                                           Text="{ext:Locale SettingsTabGeneralEnableDiscordRichPresence}" />
-                            </StackPanel>
-                        </CheckBox>
                         <CheckBox
                             IsEnabled="{Binding !IsGameTitleNotNull}"
                             Opacity="{Binding PanelOpacity}"
@@ -60,6 +53,13 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{ext:Locale SettingsTabGeneralShowOldUI}" />
                                 <TextBlock Classes="globalConfigMarker" IsVisible="{Binding IsGameTitleNotNull}" />
+                            </StackPanel>
+                        </CheckBox>
+                        <CheckBox IsChecked="{Binding EnableDiscordIntegration}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center"
+                                           ToolTip.Tip="{ext:Locale ToggleDiscordTooltip}"
+                                           Text="{ext:Locale SettingsTabGeneralEnableDiscordRichPresence}" />
                             </StackPanel>
                         </CheckBox>
                         <StackPanel
@@ -101,7 +101,7 @@
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
                                 <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralCheckUpdatesOnLaunchOff}" />
+                                    <TextBlock Text="{ext:Locale CommonOff}" />
                                 </ComboBoxItem>
                                 <ComboBoxItem>
                                     <TextBlock
@@ -123,7 +123,7 @@
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
                                 <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralHideCursorNever}" />
+                                    <TextBlock Text="{ext:Locale Never}" />
                                 </ComboBoxItem>
                                 <ComboBoxItem>
                                     <TextBlock Text="{ext:Locale SettingsTabGeneralHideCursorOnIdle}" />
@@ -146,7 +146,7 @@
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
                                 <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralThemeAuto}" />
+                                    <TextBlock Text="{ext:Locale CommonAuto}" />
                                 </ComboBoxItem>
                                 <ComboBoxItem>
                                     <TextBlock Text="{ext:Locale SettingsTabGeneralThemeLight}" />
@@ -198,14 +198,13 @@
                             <TextBox
                                 Name="GameDirPathBox"
                                 Margin="0"
-                                ToolTip.Tip="{ext:Locale AddGameDirBoxTooltip}"
+                                Watermark="{ext:Locale AddGameDirBoxTooltip}"
                                 VerticalAlignment="Stretch" />
                             <Button
                                 Name="AddGameDirButton"
                                 Grid.Column="1"
                                 MinWidth="90"
-                                Margin="10,0,0,0"
-                                ToolTip.Tip="{ext:Locale AddGameDirTooltip}">
+                                Margin="10,0,0,0">
                                 <TextBlock HorizontalAlignment="Center"
                                            Text="{ext:Locale SettingsTabGeneralAdd}" />
                             </Button>
@@ -213,8 +212,7 @@
                                 Name="RemoveGameDirButton"
                                 Grid.Column="2"
                                 MinWidth="90"
-                                Margin="10,0,0,0"
-                                ToolTip.Tip="{ext:Locale RemoveGameDirTooltip}"
+                                Margin="5,0,0,0"
                                 Click="RemoveGameDirButton_OnClick">
                                 <TextBlock HorizontalAlignment="Center"
                                            Text="{ext:Locale SettingsTabGeneralRemove}" />
@@ -252,14 +250,13 @@
                             <TextBox
                                 Name="AutoloadDirPathBox"
                                 Margin="0"
-                                ToolTip.Tip="{ext:Locale AddAutoloadDirBoxTooltip}"
+                                Watermark="{ext:Locale AddGameDirBoxTooltip}"
                                 VerticalAlignment="Stretch" />
                             <Button
                                 Name="AddAutoloadDirButton"
                                 Grid.Column="1"
                                 MinWidth="90"
-                                Margin="10,0,0,0"
-                                ToolTip.Tip="{ext:Locale AddAutoloadDirTooltip}">
+                                Margin="10,0,0,0">
                                 <TextBlock HorizontalAlignment="Center"
                                            Text="{ext:Locale SettingsTabGeneralAdd}" />
                             </Button>
@@ -267,8 +264,7 @@
                                 Name="RemoveAutoloadDirButton"
                                 Grid.Column="2"
                                 MinWidth="90"
-                                Margin="10,0,0,0"
-                                ToolTip.Tip="{ext:Locale RemoveAutoloadDirTooltip}"
+                                Margin="5,0,0,0"
                                 Click="RemoveAutoloadDirButton_OnClick">
                                 <TextBlock HorizontalAlignment="Center"
                                            Text="{ext:Locale SettingsTabGeneralRemove}" />

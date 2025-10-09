@@ -39,11 +39,11 @@
         <Grid Name="Pages" IsVisible="False" Grid.Row="3">
             <settings:SettingsUiView Name="UiPage" />
             <settings:SettingsInputView Name="InputPage" />
-            <settings:SettingsHotkeysView Name="HotkeysPage" />
             <settings:SettingsSystemView Name="SystemPage" />
             <settings:SettingsCPUView Name="CpuPage" />
             <settings:SettingsGraphicsView Name="GraphicsPage" />
             <settings:SettingsAudioView Name="AudioPage" />
+            <settings:SettingsHotkeysView Name="HotkeysPage" />
             <settings:SettingsNetworkView Name="NetworkPage" />
             <settings:SettingsLoggingView Name="LoggingPage" />
             <settings:SettingsDebugView Name="DebugPage" />
@@ -54,7 +54,7 @@
             IsSettingsVisible="False"
             Name="NavPanel"
             IsBackEnabled="False"
-            Margin="10,10,10,0"
+            Margin="10,0,10,0"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
             OpenPaneLength="200">
@@ -62,16 +62,17 @@
                 <ui:NavigationViewItem
                     IsSelected="True"
                     Content="{ext:Locale SettingsTabGeneral}"
-                    Tag="UiPage"
-                    IconSource="New" />
+                    Tag="UiPage">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:FontIconSource
+                            FontFamily="avares://Ryujinx/Assets/Fonts#Segoe Fluent Icons"
+                            Glyph="{helpers:GlyphValueConverter Device}" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
                 <ui:NavigationViewItem
                     Content="{ext:Locale SettingsTabInput}"
                     Tag="InputPage"
                     IconSource="Games" />
-                <ui:NavigationViewItem
-                    Content="{ext:Locale SettingsTabHotkeys}"
-                    Tag="HotkeysPage"
-                    IconSource="Keyboard" />
                 <ui:NavigationViewItem
                     Content="{ext:Locale SettingsTabSystem}"
                     Tag="SystemPage"
@@ -94,6 +95,10 @@
                     IconSource="Audio"
                     Tag="AudioPage" />
                 <ui:NavigationViewItem
+                    Content="{ext:Locale SettingsTabHotkeys}"
+                    Tag="HotkeysPage"
+                    IconSource="Keyboard" />
+                <ui:NavigationViewItem
                     Content="{ext:Locale SettingsTabNetwork}"
                     Tag="NetworkPage"
                     IconSource="Globe" />
@@ -103,8 +108,13 @@
                     IconSource="Document" />
                 <ui:NavigationViewItem
                     Content="{ext:Locale SettingsTabDebug}"
-                    Tag="DebugPage"
-                    IconSource="Star" />
+                    Tag="DebugPage">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:FontIconSource
+                            FontFamily="avares://Ryujinx/Assets/Fonts#Segoe Fluent Icons"
+                            Glyph="{helpers:GlyphValueConverter Bug}" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
                 <ui:NavigationViewItem
                     IsVisible="{Binding ShowDirtyHacks}"
                     Content="Dirty Hacks"
