@@ -61,7 +61,7 @@ namespace Ryujinx.Horizon.Sdk.Audio.Detail
         [CmifCommand(1)]
         public Result GetWorkBufferSize(out long workBufferSize, AudioRendererParameterInternal parameter)
         {
-            if (BehaviourContext.CheckValidRevision(parameter.Configuration.Revision))
+            if (BehaviourInfo.CheckValidRevision(parameter.Configuration.Revision))
             {
                 workBufferSize = (long)Ryujinx.Audio.Renderer.Server.AudioRendererManager.GetWorkBufferSize(ref parameter.Configuration);
 
@@ -73,7 +73,7 @@ namespace Ryujinx.Horizon.Sdk.Audio.Detail
             {
                 workBufferSize = 0;
 
-                Logger.Warning?.Print(LogClass.ServiceAudio, $"Library Revision REV{BehaviourContext.GetRevisionNumber(parameter.Configuration.Revision)} is not supported!");
+                Logger.Warning?.Print(LogClass.ServiceAudio, $"Library Revision REV{BehaviourInfo.GetRevisionNumber(parameter.Configuration.Revision)} is not supported!");
 
                 return AudioResult.UnsupportedRevision;
             }

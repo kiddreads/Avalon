@@ -226,7 +226,7 @@ namespace Ryujinx.Tests.Memory
 
             ref PartialUnmapState state = ref PartialUnmapState.GetRef();
 
-            // Create some state to be used for managing the native writing loop.
+            // Create some info to be used for managing the native writing loop.
             int stateSize = Unsafe.SizeOf<NativeWriteLoopState>();
             IntPtr statePtr = Marshal.AllocHGlobal(stateSize);
             Unsafe.InitBlockUnaligned((void*)statePtr, 0, (uint)stateSize);
