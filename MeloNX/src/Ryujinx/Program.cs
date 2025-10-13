@@ -351,7 +351,10 @@ namespace Ryujinx.Ava
 
 
             if (isTerminating)
+            {
+                Logger.Flush();
                 Exit();
+            }
         }
 
         internal static void Exit()
