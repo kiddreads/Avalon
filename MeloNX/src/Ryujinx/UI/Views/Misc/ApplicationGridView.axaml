@@ -35,7 +35,7 @@
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Margin" Value="5" />
-                    <Setter Property="CornerRadius" Value="15" />
+                    <Setter Property="CornerRadius" Value="4" />
                 </Style>
                 <Style Selector="ListBoxItem:selected /template/ Rectangle#SelectionIndicator">
                     <Setter Property="MinHeight" Value="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).GridItemSelectorSize}" />
@@ -53,7 +53,7 @@
                             Classes.normal="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).IsGridMedium}"
                             Classes.small="{Binding $parent[UserControl].((viewModels:MainWindowViewModel)DataContext).IsGridSmall}"
                             ClipToBounds="True"
-                            CornerRadius="12.5">
+                            CornerRadius="4">
                             <Grid RowDefinitions="Auto,Auto">
                                 <Image
                                     Grid.Row="0"
