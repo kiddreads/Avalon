@@ -22,7 +22,7 @@ struct MobyGamesKit {
         DispatchQueue.global().async {
             do {
                 let db = try Connection(Constants.Path.GamesDB)
-                try db.key(Constants.Cipher.UnzipKey)
+                try db.key(Constants.Cipher.ManicKey)
                 let table = Table(gameTypeName)
 //                let id = SQLite.Expression<Int>("id")
                 let url = SQLite.Expression<String>("url")

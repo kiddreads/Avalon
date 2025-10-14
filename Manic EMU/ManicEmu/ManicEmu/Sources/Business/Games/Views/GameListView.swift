@@ -20,7 +20,7 @@ import KeyboardKit
 class GameListView: BaseView {
     lazy var collectionView: BlankSlateCollectionView = {
         let view = BlankSlateCollectionView(frame: .zero, collectionViewLayout: createLayout())
-        view.backgroundColor = Constants.Color.Background
+        view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: GameCollectionViewCell.self)
         view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: GamesCollectionReusableView.self)
@@ -161,6 +161,15 @@ class GameListView: BaseView {
     private var stopPlayGameNotification: Any? = nil
     private var gameSortChangeNotification: Any? = nil
     
+    var hasReloadCollectionView = false
+    var enableBackground: Bool = false {
+        didSet {
+            if hasReloadCollectionView {
+                collectionView.reloadData()
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         Log.debug("\(String(describing: Self.self)) init")
@@ -239,19 +248,19 @@ class GameListView: BaseView {
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
-        if let gameCoverChangeNotification = gameCoverChangeNotification {
+        if let gameCoverChangeNotification {
             NotificationCenter.default.removeObserver(gameCoverChangeNotification)
         }
         
-        if let platformOrderChangeNotification = platformOrderChangeNotification {
+        if let platformOrderChangeNotification {
             NotificationCenter.default.removeObserver(platformOrderChangeNotification)
         }
         
-        if let platformSelectionNotification = platformSelectionNotification {
+        if let platformSelectionNotification {
             NotificationCenter.default.removeObserver(platformSelectionNotification)
         }
         
-        if let gameListStyleChangeNotification = gameListStyleChangeNotification {
+        if let gameListStyleChangeNotification {
             NotificationCenter.default.removeObserver(gameListStyleChangeNotification)
         }
         if let keyboardDidConnectNotification {
@@ -305,7 +314,9 @@ class GameListView: BaseView {
         updateDatas()
         if games.count > 0 {
             //更新视图
-            collectionView.reloadData()
+            collectionView.reloadData { [weak self] in
+                self?.hasReloadCollectionView = true
+            }
             //更新索引视图
             reloadIndexView()
         }
@@ -405,7 +416,7 @@ class GameListView: BaseView {
                 let itemEstimatedHeight = min(env.container.contentSize.height, env.container.contentSize.width) - Constants.Size.ItemHeightMid - Constants.Size.ItemHeightMin - 106
                 self.landscapePhonePagingHeight = Constants.Size.ItemHeightMid + Constants.Size.ContentSpaceUltraTiny + itemEstimatedHeight + Constants.Size.ContentSpaceHuge*2
                 let coverHeight = itemEstimatedHeight - Constants.Size.GamesListSelectionEdge - (self.isSearchMode || !Constants.Size.GamesHideTitle ? Constants.Size.ContentSpaceMin + Constants.Font.body().lineHeight : 0) - Constants.Size.GamesListSelectionEdge
-                let coverWidth = coverHeight
+                let coverWidth = coverHeight*Constants.Size.GameCoverRatio(gameType: gameType)
                 let itemEstimatedWidth = coverWidth + Constants.Size.GamesListSelectionEdge*2
                 let coverSize = CGSize(width: coverWidth, height: coverHeight)
                 if let size =  self.coverSizes[gameType] {
@@ -433,7 +444,7 @@ class GameListView: BaseView {
                 let totleSpacing = (Constants.Size.ContentSpaceHuge-Constants.Size.GamesListSelectionEdge)*2 + itemSpacing*(column-1)//横向间距总和
                 let itemEstimatedWidth = (env.container.contentSize.width - totleSpacing)/column //一个item的宽
                 let coverWidth = itemEstimatedWidth-Constants.Size.GamesListSelectionEdge*2
-                let coverHeight = coverWidth/Constants.Size.GameCoverRatio(gameType: gameType) //书籍封面的高度
+                let coverHeight = coverWidth/Constants.Size.GameCoverRatio(gameType: gameType) //封面的高度
                 //一个item的高度 = 间距 + 封面高度 + 间距 + title高度 + 间距
                 let itemEstimatedHeight = Constants.Size.GamesListSelectionEdge + coverHeight + (self.isSearchMode || !Constants.Size.GamesHideTitle ? Constants.Size.ContentSpaceMin + Constants.Font.body().lineHeight : 0) + Constants.Size.GamesListSelectionEdge
                 let coverSize = CGSize(width: coverWidth, height: coverHeight)
@@ -793,7 +804,7 @@ extension GameListView: UICollectionViewDataSource {
             //header
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: GamesCollectionReusableView.self, for: indexPath)
             let gameType = sortDatasKeys()[indexPath.section]
-            header.setData(gameType: gameType, highlightString: searchString, contentInsets: UIDevice.isPhone && UIDevice.isLandscape ? .init(top: 0, left: Constants.Size.SafeAera.left, bottom: 0, right: Constants.Size.SafeAera.right) : .zero)
+            header.setData(gameType: gameType, highlightString: searchString, contentInsets: UIDevice.isPhone && UIDevice.isLandscape ? .init(top: 0, left: Constants.Size.SafeAera.left, bottom: 0, right: Constants.Size.SafeAera.right) : .zero, forceHideBlur: enableBackground)
             if gameType == .unknown {
                 header.skinButton.isHidden = true
             } else {

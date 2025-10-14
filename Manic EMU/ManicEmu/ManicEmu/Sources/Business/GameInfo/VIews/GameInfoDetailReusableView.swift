@@ -131,6 +131,38 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var manualButton: SymbolButton = {
+        let view = SymbolButton(symbol: .textBookClosed, title: R.string.localizable.gameplayManuals())
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            if let game = self.game {
+                if game.isManualsExists {
+                    topViewController()?.present(GameplayManualsViewController(game: game), animated: true)
+                } else {
+                    UIView.makeAlert(title: R.string.localizable.gameplayManualsNoExists(),
+                                     detail: R.string.localizable.gameplayManualsDesc(),
+                                     confirmTitle: R.string.localizable.gameListBackgroundUpload(),
+                                     confirmAction: {
+                        FilesImporter.shared.presentImportController(supportedTypes: [UTType.pdf],
+                                                                     allowsMultipleSelection: false,
+                                                                     manualHandle: { [weak self] urls in
+                            guard let self else { return }
+                            if let pdfUrl = urls.first {
+                                do {
+                                    let pdfName = pdfUrl.lastPathComponent
+                                    try FileManager.safeCopyItem(at: pdfUrl, to: URL(fileURLWithPath: Constants.Path.GameplayManuals.appendingPathComponent(pdfName)), shouldReplace: true)
+                                    game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: pdfName)
+                                    topViewController()?.present(GameplayManualsViewController(game: game), animated: true)
+                                } catch {}
+                            }
+                        }, appControllerPresent: true)
+                    })
+                }
+            }
+        }
+        return view
+    }()
+    
     private lazy var threeDSAdvancedModeButton: SymbolButton = {
         let title = Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()
         let view = SymbolButton(symbol: .sliderHorizontal3, title: title, horizontalContian: true)
@@ -1029,6 +1061,39 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 } else if game.gameType == .snes {
                     updateSNESFunctionButton()
                 }
+                
+                //添加游戏手册按钮
+                manualButton.removeFromSuperview()
+                let subviews = functionButtonContainerView.subviews.filter({ $0 is SymbolButton })
+                functionButtonContainerView.addSubview(manualButton)
+                if subviews.count == 0 {
+                    manualButton.snp.makeConstraints { make in
+                        make.leading.centerY.equalToSuperview()
+                        make.size.equalTo(Constants.Size.IconSizeHuge)
+                    }
+                } else if subviews.count == 1 {
+                    manualButton.snp.makeConstraints { make in
+                        make.leading.equalTo(subviews[0].snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                        make.centerY.equalToSuperview()
+                        make.size.equalTo(Constants.Size.IconSizeHuge)
+                        make.trailing.equalToSuperview()
+                    }
+                } else {
+                    let lastTwoViews = subviews.suffix(2)
+                    let lastTwoView = Array(lastTwoViews)[0]
+                    let lastView = Array(lastTwoViews)[1]
+                    lastView.snp.remakeConstraints { make in
+                        make.leading.equalTo(lastTwoView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                        make.centerY.equalToSuperview()
+                        make.size.equalTo(Constants.Size.IconSizeHuge)
+                    }
+                    manualButton.snp.makeConstraints { make in
+                        make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                        make.centerY.equalToSuperview()
+                        make.size.equalTo(Constants.Size.IconSizeHuge)
+                        make.trailing.equalToSuperview()
+                    }
+                }
             }
         }
     }
@@ -1109,6 +1174,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         functionButtonContainerView.addSubview(skinButton)
         skinButton.snp.makeConstraints { make in
             make.leading.equalTo(retroButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.centerY.equalToSuperview()
             make.size.equalTo(Constants.Size.IconSizeHuge)
         }
         

@@ -720,3 +720,18 @@
 "MicrophoneTips" = "启用麦克风将请求权限并在游戏期间保持活动，可能会中断其他应用的背景音乐播放";
 "Texture" = "纹理";
 "TextureReplacement" = "纹理替换";
+
+"Appearance" = "外观";
+"AppearanceLight" = "浅色模式";
+"AppearanceDark" = "深色模式";
+"AppearanceAuto" = "跟随系统";
+"GameListBackground" = "背景图片";
+"GameListBackgroundUpload" = "上传";
+"GameplayManuals" = "游戏手册";
+"GameplayManualsNoExists" = "当前游戏暂无手册。";
+"GameplayManualsDesc" = "要添加游戏手册，请将PDF文件放入Manic EMU应用中。若需移除，请前往“文件”App > Manic EMU > Manuals目录删除对应文件。";
+"CleanUnsupportSkins" = "清理不受支持的皮肤";
+"NotFoundUnsupportSkins" = "未发现不受支持的皮肤。";
+"UnsupportSkinsDesc" = "检测到以下皮肤在当前设备上不受支持：\n%@注意：如果选择移除，这些皮肤也会从通过iCloud同步的其他设备中一并删除。";
+"UnsupportSkinsRemoveSuccess" = "不受支持的皮肤已成功移除";
+"ForbitPKSM" = "为确保RetroAchievements体验的公平性，在启用全局RetroAchievements时无法使用PKSM。";

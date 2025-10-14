@@ -116,8 +116,8 @@ extension Locale {
     
     ///是否更倾向于美国
     static var prefersUS: Bool {
-        // 1. 判断用户是否偏好中文
-        let prefersChinese: Bool = {
+        // 1. 判断用户是否偏好英文
+        let prefersEnglish: Bool = {
             Locale.preferredLanguages.contains { lang in
                 lang.lowercased().hasPrefix("en")
             }
@@ -127,7 +127,7 @@ extension Locale {
         let regionCode = Locale.current.regionCode?.uppercased() ?? ""
         
         // 3. 核心判断逻辑
-        if prefersChinese && regionCode == "US" {
+        if prefersEnglish && regionCode == "US" {
             return true
         } else {
             return false

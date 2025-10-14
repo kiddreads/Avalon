@@ -65,7 +65,7 @@ struct ResourcesKit {
             
             let resourceUrl = Bundle.main.url(forResource: "System", withExtension: "core")!
             Log.debug("开始解压资源:\(Date.now.timeIntervalSince1970ms)")
-            SSZipArchive.unzipFile(atPath: resourceUrl.path, toDestination: Constants.Path.Resource, overwrite: true, password: Constants.Cipher.UnzipKey, progressHandler: nil) { _, isSuccess, error in
+            SSZipArchive.unzipFile(atPath: resourceUrl.path, toDestination: Constants.Path.Resource, overwrite: true, password: nil, progressHandler: nil) { _, isSuccess, error in
                 
                 //处理复用皮肤
                 let reuseCores = System.allCores.filter({ $0.gameType.reuseGameType() != $0.gameType })

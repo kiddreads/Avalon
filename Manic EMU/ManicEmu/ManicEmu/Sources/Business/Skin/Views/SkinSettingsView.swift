@@ -98,6 +98,11 @@ class SkinSettingsView: BaseView {
             //重置当前平台皮肤
             self.resetSkin(gameType: self.gameType)
         })
+        actions.append(UIAction(title: R.string.localizable.cleanUnsupportSkins()) { [weak self] _ in
+            guard let self = self else { return }
+            //清理不可用皮肤
+            self.cleanUnsupportSkins()
+        })
         actions.append((UIAction(title: R.string.localizable.skinDebug()) { [weak self] _ in
             guard let self = self else { return }
             UIView.makeToast(message: "Coming Soon...")
@@ -448,6 +453,45 @@ class SkinSettingsView: BaseView {
                 self.collectionView.selectItem(at: IndexPath(row: landscapeInitialSelectedIndex, section: 0), animated: true, scrollPosition: .top)
             }
         }
+    }
+    
+    private func cleanUnsupportSkins() {
+        let realm = Database.realm
+        let skins = realm.objects(Skin.self).where({ $0.skinType == .import })
+        var unsupportSkins: [Skin] = []
+        var unsupportSkinNames: String = ""
+        for skin in skins {
+            if let controllerSkin = ControllerSkin(fileURL: skin.fileURL) {
+                if !controllerSkin.supports(landscapeTraits) &&
+                    !controllerSkin.supports(portraitTraits) {
+                    //获取不支持当前设备的皮肤
+                    unsupportSkins.append(skin)
+                    unsupportSkinNames.append(controllerSkin.name + "\n")
+                }
+            }
+        }
+        
+        if unsupportSkins.count == 0 {
+            UIView.makeToast(message: R.string.localizable.notFoundUnsupportSkins())
+            return
+        }
+        
+        UIView.makeAlert(title: R.string.localizable.skinDelete(),
+                         detail: R.string.localizable.unsupportSkinsDesc(unsupportSkinNames),
+                         confirmTitle: R.string.localizable.confirmDelte(),
+                         confirmAction: {
+            for skin in unsupportSkins {
+                Skin.change { realm in
+                    skin.skinData?.deleteAndClean(realm: realm)
+                    if Settings.defalut.iCloudSyncEnable {
+                        skin.isDeleted = true
+                    } else {
+                        realm.delete(skin)
+                    }
+                }
+            }
+            UIView.makeToast(message: R.string.localizable.unsupportSkinsRemoveSuccess())
+        })
     }
 }
 

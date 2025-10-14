@@ -32,6 +32,10 @@ class Window: UIWindow {
         makeKeyAndVisible()
         resignKey()
         backgroundColor = .clear
+        
+        //设置外观
+        overrideUserInterfaceStyle = AppContext.overrideUserInterfaceStyle
+        
         if usingBackground {
             insertSubview(backgroundView, at: 0)
             backgroundView.snp.remakeConstraints { make in

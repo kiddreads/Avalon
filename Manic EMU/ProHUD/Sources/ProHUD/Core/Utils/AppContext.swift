@@ -95,6 +95,9 @@ extension AppContext {
         })
     }
     
+    ///设置外观
+    public static var overrideUserInterfaceStyle: UIUserInterfaceStyle = .dark
+    
     /// 外部窗口信息（由外部设置）
     private static var externalWindowInfo: (window: UIWindow, isActive: Bool)?
     

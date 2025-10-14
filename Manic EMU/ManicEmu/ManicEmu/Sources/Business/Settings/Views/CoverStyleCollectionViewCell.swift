@@ -42,6 +42,8 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
     
     private var coverView: GameCoverView = {
         let view = GameCoverView()
+        view.imageView.backgroundColor = Constants.Color.Background
+        view.backgroundColor = Constants.Color.Background
         return view
     }()
     

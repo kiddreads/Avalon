@@ -27,7 +27,7 @@ class FilesImporter: NSObject {
     func presentImportController(supportedTypes: [UTType] = UTType.allTypes, allowsMultipleSelection: Bool = true, manualHandle: (([URL])->Void)? = nil, appControllerPresent: Bool = false) {
         let documentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes, asCopy: true)
         documentPickerViewController.delegate = self
-        documentPickerViewController.overrideUserInterfaceStyle = .dark
+        documentPickerViewController.overrideUserInterfaceStyle = UIDevice.isDarkMode ? .dark : .light
         documentPickerViewController.allowsMultipleSelection = allowsMultipleSelection
         documentPickerViewController.modalPresentationStyle = .formSheet
         documentPickerViewController.sheetPresentationController?.preferredCornerRadius = Constants.Size.CornerRadiusMax
@@ -992,14 +992,39 @@ extension FilesImporter {
     fileprivate static func extractGdiFilenames(from content: String) -> [String] {
         var filenames: [String] = []
         
-        let lines = content.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }
+        // 使用 .newlines 字符集来处理不同系统的换行符（\n, \r\n, \r）
+        let lines = content.components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
         
-        // 第一行是文件总数，跳过
+        // GDI 文件格式：
+        // 第一行：轨道总数
+        // 后续行：轨道编号 LBA 类型 扇区大小 文件名 偏移量
+        // 例如：1 0 4 2352 track01.bin 0
+        
+        guard lines.count > 1 else {
+            return filenames
+        }
+        
+        // 跳过第一行（文件总数）
         for line in lines.dropFirst() {
-            let components = line.split(separator: " ")
-            if components.count >= 2 {
-                let filename = components[components.count - 2] // 倒数第二列才是文件名
-                filenames.append(String(filename))
+            // 检查行是否为空或者是注释
+            if line.isEmpty || line.hasPrefix("#") {
+                continue
+            }
+            
+            let components = line.split(separator: " ", omittingEmptySubsequences: true)
+            
+            // GDI 标准格式应该有 6 个字段
+            // 如果少于 5 个字段，说明格式可能有问题
+            if components.count >= 5 {
+                // 文件名在倒数第二列（第5列，索引为4）
+                let filename = String(components[components.count - 2])
+                    .trimmingCharacters(in: CharacterSet(charactersIn: "\"")) // 移除可能的引号
+                
+                if !filename.isEmpty {
+                    filenames.append(filename)
+                }
             }
         }
         

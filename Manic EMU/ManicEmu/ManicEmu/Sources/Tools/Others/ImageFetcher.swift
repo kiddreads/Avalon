@@ -96,7 +96,7 @@ fileprivate class ImageFileFetcher: NSObject {
         self.completion = completion
         let documentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.image], asCopy: true)
         documentPickerViewController.delegate = self
-        documentPickerViewController.overrideUserInterfaceStyle = .dark
+        documentPickerViewController.overrideUserInterfaceStyle = UIDevice.isDarkMode ? .dark : .light
         documentPickerViewController.allowsMultipleSelection = false
         topViewController()?.present(documentPickerViewController, animated: true)
     }

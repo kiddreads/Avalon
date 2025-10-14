@@ -237,6 +237,12 @@ class PlayViewController: GameViewController {
                         UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowPS1PlayAlert)
                         launchGameByDismissOtherVC()
                     });
+                } else if game.gameType == ._3ds, game.identifierFor3DS == Constants.Numbers.PKSMIdentifier {
+                    if Settings.defalut.getExtraBool(key: ExtraKey.globalAchievements.rawValue) ?? false {
+                        UIView.makeAlert(title: R.string.localizable.retroAchievements(), detail: R.string.localizable.forbitPKSM(), cancelTitle: R.string.localizable.confirmTitle())
+                    } else {
+                        launchGameByDismissOtherVC()
+                    }
                 } else {
                     launchGameByDismissOtherVC()
                 }
@@ -968,6 +974,8 @@ class PlayViewController: GameViewController {
             handleMenuGameSetting(GameSetting(type: .retro, airPlayScaling: Settings.defalut.airPlayScaling.next), nil)
         } else if input.stringValue == "airPlayLayout" {
             handleMenuGameSetting(GameSetting(type: .retro, airPlayLayout: Settings.defalut.airPlayLayout.next), nil)
+        } else if input.stringValue == "gameplayManuals" {
+            handleMenuGameSetting(GameSetting(type: .gameplayManuals), nil)
         }
     }
     
@@ -1699,6 +1707,47 @@ extension PlayViewController {
         case .toggleAnalog:
             //MARK: handleMenuGameSetting.toggleAnalog
             updateAnalogMode(toastAllow: true, toggle: true);
+        case .gameplayManuals:
+            //MARK: handleMenuGameSetting.gameplayManuals
+            if menuSheet == nil {
+                pauseEmulation()
+            }
+            
+            func showManualsView() {
+                GameplayManualsView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+                    if menuSheet == nil {
+                        self?.resumeEmulationAndHandleAudio()
+                    }
+                })
+            }
+            
+            if manicGame.isManualsExists {
+                showManualsView()
+            } else {
+                UIView.makeAlert(title: R.string.localizable.gameplayManualsNoExists(),
+                                 detail: R.string.localizable.gameplayManualsDesc(),
+                                 confirmTitle: R.string.localizable.gameListBackgroundUpload(),
+                                 cancelAction: { [weak self] in
+                    if menuSheet == nil {
+                        self?.resumeEmulationAndHandleAudio()
+                    }
+                }, confirmAction: {
+                    DispatchQueue.main.asyncAfter(delay: 0.35) {
+                        FilesImporter.shared.presentImportController(supportedTypes: [UTType.pdf], allowsMultipleSelection: false) { [weak self] urls in
+                            guard let self else { return }
+                            if let pdfUrl = urls.first {
+                                do {
+                                    let pdfName = pdfUrl.lastPathComponent
+                                    try FileManager.safeCopyItem(at: pdfUrl, to: URL(fileURLWithPath: Constants.Path.GameplayManuals.appendingPathComponent(pdfName)), shouldReplace: true)
+                                    self.manicGame.updateExtra(key: ExtraKey.manualFileName.rawValue, value: pdfName)
+                                    showManualsView()
+                                } catch {}
+                            }
+                        }
+                    }
+                })
+            }
+            return false
         }
         //默认关闭菜单
         return true
@@ -2987,7 +3036,7 @@ extension PlayViewController: GameViewControllerDelegate {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {
             return false
         }
-        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow) ? false : true
+        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow) ? false : true
     }
     
 }

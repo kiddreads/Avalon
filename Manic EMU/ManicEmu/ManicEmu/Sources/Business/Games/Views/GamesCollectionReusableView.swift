@@ -75,7 +75,7 @@ class GamesCollectionReusableView: UICollectionReusableView {
         }
     }
     
-    func setData(gameType: GameType, highlightString: String? = nil, contentInsets: UIEdgeInsets = .zero) {
+    func setData(gameType: GameType, highlightString: String? = nil, contentInsets: UIEdgeInsets = .zero, forceHideBlur: Bool = false) {
         if Constants.Size.GamesGroupTitleStyle == .brand && gameType != .unknown {
             titleLabel.isHidden = true
             brandImageView.isHidden = false
@@ -95,14 +95,22 @@ class GamesCollectionReusableView: UICollectionReusableView {
         }
         skinButton.setTitleColor(Constants.Color.LabelSecondary, for: .normal)
         self.highlightString = highlightString
-        if UIDevice.isPhone, UIDevice.isLandscape {
+        if (UIDevice.isPhone && UIDevice.isLandscape) || forceHideBlur {
             //隐藏模糊
-            if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-                blurView.isHidden = true
+            if UIDevice.isPhone {
+                if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+                    blurView.isHidden = true
+                }
+            } else {
+                backgroundColor = .clear
             }
         } else {
-            if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-                blurView.isHidden = false
+            if UIDevice.isPhone {
+                if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+                    blurView.isHidden = false
+                }
+            } else {
+                backgroundColor = Constants.Color.Background.withAlphaComponent(0.965)
             }
         }
     }

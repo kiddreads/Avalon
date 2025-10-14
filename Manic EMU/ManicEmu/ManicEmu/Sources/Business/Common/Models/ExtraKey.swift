@@ -32,4 +32,6 @@ enum ExtraKey: String {
     case globalHardcore
     case microphone
     case pspTexture
+    case manualPage
+    case manualFileName
 }

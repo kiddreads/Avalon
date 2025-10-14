@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSSupportsGameMode</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -840,6 +842,7 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
+					<string>ss</string>
 					<string>ccd</string>
 					<string>iso</string>
 					<string>chd</string>

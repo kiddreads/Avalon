@@ -83,11 +83,12 @@ extension UIImage {
     /// - Parameter preferenceSize: 调整大小
     /// - Returns: 图片
     static func placeHolder(preferenceSize: CGSize? = nil) -> UIImage {
-        let image = R.image.place_holder()!
+        let lightImage = R.image.place_holder(compatibleWith: UITraitCollection(userInterfaceStyle: .light))!
+        let darkImage = R.image.place_holder(compatibleWith: UITraitCollection(userInterfaceStyle: .dark))!
         if let preferenceSize = preferenceSize {
-            return image.scaled(toSize: preferenceSize) ?? image
+            return UIImage(.dm, light: lightImage.scaled(toSize: preferenceSize) ?? lightImage, dark: darkImage.scaled(toSize: preferenceSize) ?? darkImage)
         }
-        return image
+        return R.image.place_holder()!
     }
     
     /// 根据尺寸缩放图片 如果传入的尺寸比例和原图不一致还会进行居中裁剪

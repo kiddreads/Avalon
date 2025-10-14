@@ -17,9 +17,7 @@ import Schedule
 extension UIView {
     @discardableResult
     func makeBlur(blurRadius: CGFloat = 12.5, blurColor: UIColor = Constants.Color.Background, blurAlpha: CGFloat = 0.9, cornerRadius: CGFloat? = nil) -> VisualEffectView {
-        if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-            blurView.removeFromSuperview()
-        }
+        removeBlur()
         backgroundColor = .clear
         let blur = VisualEffectView()
         insertSubview(blur, at: 0)
@@ -33,6 +31,18 @@ extension UIView {
             blur.layerCornerRadius = cornerRadius
         }
         return blur
+    }
+    
+    func removeBlur() {
+        if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+            blurView.removeFromSuperview()
+        }
+    }
+    
+    func setBlurVisble(_ visble: Bool) {
+        if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+            blurView.isHidden = !visble
+        }
     }
     
     func makeShadow(ofColor: UIColor = Constants.Color.Shadow, radius: CGFloat = 10) {
@@ -195,20 +205,20 @@ extension UIView {
             alert.config.cardMinWidth = size
             alert.config.cardMaxHeight = size
             alert.config.cardMinHeight = size
-            alert.contentView.layerBorderColor = Constants.Color.Border
+            alert.contentView.layerBorderColor = UIDevice.isDarkMode ? Constants.Color.Border.forceStyle(.dark) : Constants.Color.Border.forceStyle(.light)
             alert.contentView.layerBorderWidth = 1
             alert.config.cardCornerRadius = Constants.Size.CornerRadiusMid
             alert.config.contentViewMask { mask in }
             let blur = VisualEffectView()
             blur.blurRadius = 12.5
-            blur.colorTint = Constants.Color.BackgroundPrimary
+            blur.colorTint = UIDevice.isDarkMode ? Constants.Color.BackgroundPrimary.forceStyle(.dark) : Constants.Color.BackgroundPrimary.forceStyle(.light)
             blur.colorTintAlpha = 0.925
             alert.contentMaskView = blur
             alert.config.backgroundViewMask { mask in
                 mask.backgroundColor = .black.withAlphaComponent(0.2)
             }
             let pacman = UIView()
-            let activity = NVActivityIndicatorView(frame: .zero, type: .pacman, color: Constants.Color.LabelPrimary, padding: nil)
+            let activity = NVActivityIndicatorView(frame: .zero, type: .pacman, color: UIDevice.isDarkMode ? Constants.Color.LabelPrimary.forceStyle(.dark) : Constants.Color.LabelPrimary.forceStyle(.light), padding: nil)
             pacman.addSubview(activity)
             activity.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()

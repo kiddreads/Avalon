@@ -66,6 +66,6 @@ public class SheetConfiguration: CommonConfiguration {
         animateDurationForBuildOut ?? 0.24
     }
     
-    override var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 32 }
+    override var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 0 }
     
 }

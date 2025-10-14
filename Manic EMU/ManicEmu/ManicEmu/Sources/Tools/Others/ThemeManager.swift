@@ -9,6 +9,7 @@
 
 import RealmSwift
 import FluentDarkModeKit
+import ProHUD
 
 class ThemeManager {
     static let shared = ThemeManager()
@@ -89,9 +90,9 @@ class ThemeManager {
                 //刷新整个系统的外观 会驱使traitCollectionDidChange方法进行调用
                 if let userInterfaceStyle = ApplicationSceneDelegate.applicationWindow?.traitCollection.userInterfaceStyle {
                     if userInterfaceStyle == .dark {
-                        ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .light
+                        ThemeManager.updateUserInterfaceStyle(.light)
                     } else {
-                        ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .dark
+                        ThemeManager.updateUserInterfaceStyle(.dark)
                     }
                 }
                 self.updateAppearance()
@@ -134,11 +135,20 @@ class ThemeManager {
     func updateAppearance() {
         switch Settings.appearance {
         case .auto:
-            ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .unspecified
+            ThemeManager.updateUserInterfaceStyle(.unspecified)
         case .light:
-            ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .light
+            ThemeManager.updateUserInterfaceStyle(.light)
         case .dark:
-            ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .dark
+            ThemeManager.updateUserInterfaceStyle(.dark)
         }
+    }
+    
+    static func updateUserInterfaceStyle(_ style: UIUserInterfaceStyle) {
+        UIApplication.shared.connectedWindowScenes.forEach { windowScene in
+            windowScene.windows.forEach { window in
+                window.overrideUserInterfaceStyle = style
+            }
+        }
+        AppContext.overrideUserInterfaceStyle = style
     }
 }

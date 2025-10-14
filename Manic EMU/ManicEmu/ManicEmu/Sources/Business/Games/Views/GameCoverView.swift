@@ -16,7 +16,7 @@ class GameCoverView: UIView {
     var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = Constants.Color.Background
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         return view
     }()
     
@@ -41,7 +41,7 @@ class GameCoverView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = Constants.Color.Background
+        backgroundColor = Constants.Color.BackgroundPrimary
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -112,7 +112,7 @@ class GameCoverView: UIView {
             }
             platformView.isHidden = true
             barShadowView.isHidden = true
-            backgroundColor = Constants.Color.Background
+            backgroundColor = Constants.Color.BackgroundPrimary
         case .style2:
             imageView.snp.remakeConstraints { make in
                 make.top.trailing.bottom.equalToSuperview()
@@ -127,7 +127,7 @@ class GameCoverView: UIView {
             }
             platformView.isHidden = false
             barShadowView.isHidden = false
-            backgroundColor = Constants.Color.Background
+            backgroundColor = Constants.Color.BackgroundPrimary
         case .style3:
             imageView.snp.remakeConstraints { make in
                 make.leading.top.trailing.equalToSuperview().inset(6)

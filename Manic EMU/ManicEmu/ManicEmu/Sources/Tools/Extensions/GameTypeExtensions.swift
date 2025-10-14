@@ -70,7 +70,7 @@ extension GameType {
             self = .gg
         } else if ["ms", "sms", "bms", "bin"].contains(ext) {
             self = .ms
-        } else if ["iso", "chd", "ccd", "cue", "m3u"].contains(ext) {
+        } else if ["iso", "chd", "ccd", "cue", "m3u", "ss"].contains(ext) {
             self = .ss
         } else if ["n64", "v64", "z64"].contains(ext) {
             self = .n64
@@ -262,10 +262,8 @@ extension GameType {
     func reuseGameType() -> GameType {
         if self == .mcd || self == ._32x {
             return .md
-        } else if self == .sg1000 || self == .gg {
+        } else if self == .sg1000 {
             return .ms
-        } else if self == .gb {
-            return .gbc
         }
         return self
     }

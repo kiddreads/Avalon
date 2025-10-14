@@ -98,17 +98,20 @@ class GamesViewController: BaseViewController {
             }
         }
         view.didUpdateToolView = { [weak self] show, showCorner in
+            guard let self = self else { return }
             if show {
                 UIView.normalAnimate {
-                    self?.gamesToolView.alpha = 1
+                    self.gamesToolView.alpha = 1
                 }
             } else {
                 UIView.springAnimate {
-                    self?.gamesToolView.alpha = 0
+                    self.gamesToolView.alpha = 0
                 }
             }
             UIView.springAnimate {
-                self?.gamesToolView.backgroundGradientView.isHidden = !showCorner
+                if !self.enableBackground {
+                    self.gamesToolView.backgroundGradientView.isHidden = !showCorner
+                }
             }
             
         }
@@ -183,12 +186,31 @@ class GamesViewController: BaseViewController {
         return view
     }()
     
+    private var enableBackground: Bool = false
+    private var backgroundChangeNotification: Any? = nil
+    private lazy var backgroundImageView: UIImageView = {
+        let view = UIImageView()
+        if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground),
+            let image = UIImage(contentsOfFile: Constants.Path.GameListBackground) {
+            self.enableBackground = true
+            view.image = image
+        }
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
     var setHomeTabBar: ((_ show: Bool)->Void)?
     
     private weak var sideMenu: UIViewController?
     
     private let GameEditToolBarHeightMax = 205.0
     private let GameEditToolBarHeightMin = 116.0
+    
+    deinit {
+        if let backgroundChangeNotification {
+            NotificationCenter.default.removeObserver(backgroundChangeNotification)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -199,6 +221,26 @@ class GamesViewController: BaseViewController {
             let realm = Database.realm
             if let game = realm.object(ofType: Game.self, forPrimaryKey: launchGameID) {
                 PlayViewController.startGame(game: game)
+            }
+        }
+        
+        //背景变更
+        backgroundChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GameListBackgroundChange, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground),
+                let image = UIImage(contentsOfFile: Constants.Path.GameListBackground) {
+                self.backgroundImageView.image = image
+                self.enableBackground = true
+                self.topBlurView.setBlurVisble(false)
+                self.gamesListView.enableBackground = self.enableBackground
+                self.gamesToolView.enableBackground = self.enableBackground
+            } else {
+                //移除了背景
+                self.backgroundImageView.image = nil
+                self.enableBackground = false
+                self.topBlurView.setBlurVisble(true)
+                self.gamesListView.enableBackground = self.enableBackground
+                self.gamesToolView.enableBackground = self.enableBackground
             }
         }
     }
@@ -233,6 +275,8 @@ class GamesViewController: BaseViewController {
     }
     
     private func setupViews() {
+        view.addSubview(backgroundImageView)
+        
         if UIDevice.isPhone {
             //iPhone布局
             view.addSubview(gamesListView)
@@ -275,8 +319,6 @@ class GamesViewController: BaseViewController {
             
         } else {
             //iPad布局
-            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-            
             view.addSubview(gamesListView)
             gamesListView.snp.makeConstraints { make in
                 if UIDevice.isLandscape {
@@ -361,6 +403,19 @@ class GamesViewController: BaseViewController {
                 cornerMaskViewForiPad.isHidden = true
             }
         }
+        
+        backgroundImageView.snp.makeConstraints { make in
+            if UIDevice.isPad {
+                make.edges.equalTo(gamesListView)
+            } else {
+                make.top.bottom.equalTo(gamesListView)
+                make.leading.trailing.equalTo(gamesListView).inset(-59)
+            }
+            
+        }
+        topBlurView.setBlurVisble(!enableBackground)
+        gamesListView.enableBackground = enableBackground
+        gamesToolView.enableBackground = enableBackground
     }
     
     private func setEditToolBar(show: Bool, singleSelect: Bool = true) {

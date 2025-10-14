@@ -149,6 +149,102 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private lazy var backgroundImageView: UIImageView = {
+        let image: UIImage?
+        var contentMode: UIView.ContentMode = .center
+        if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground),
+            let i = UIImage(contentsOfFile: Constants.Path.GameListBackground) {
+            image = i
+            contentMode = .scaleAspectFill
+        } else {
+            image = R.image.brand_icon()
+        }
+        let view = UIImageView(image: image)
+        view.contentMode = contentMode
+        view.backgroundColor = Constants.Color.Background
+        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        return view
+    }()
+    
+    private lazy var addBackgroundImageMenuButton: ContextMenuButton = {
+        var titles = [R.string.localizable.readyEditCoverTakePhoto(),
+                      R.string.localizable.readyEditCoverAlbum(),
+                      R.string.localizable.readyEditCoverFile()]
+        
+        var symbols: [SFSymbol] = [.camera, .photoOnRectangleAngled, .folder]
+        
+        var actions: [UIMenuElement] = []
+        
+        func saveImage(_ image: UIImage?) {
+            if let image, let data = image.pngData() {
+                do {
+                    if !FileManager.default.fileExists(atPath: Constants.Path.Assets) {
+                        try FileManager.default.createDirectory(atPath: Constants.Path.Assets, withIntermediateDirectories: true)
+                    }
+                    try data.write(to: URL(fileURLWithPath: Constants.Path.GameListBackground))
+                    self.backgroundImageView.image = image
+                    self.backgroundImageView.contentMode = .scaleAspectFill
+                    NotificationCenter.default.post(name: Constants.NotificationName.GameListBackgroundChange, object: nil)
+                } catch {
+                    
+                }
+            }
+        }
+        
+        for (index, title) in titles.enumerated() {
+            actions.append((UIAction(title: title, image: .symbolImage(symbols[index])) { [weak self] _ in
+                guard let self = self else { return }
+                if index == 0 {
+                    //拍摄
+                    ImageFetcher.capture { image in
+                        saveImage(image)
+                    }
+                } else if index == 1 {
+                    //相册
+                    ImageFetcher.pick { image in
+                        saveImage(image)
+                    }
+                } else if index == 2 {
+                    //文件
+                    ImageFetcher.file{ image in
+                        saveImage(image)
+                    }
+                }
+            }))
+        }
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+        return view
+    }()
+    
+    private lazy var addBackgroundImageButton: SymbolButton = {
+        var title: String = R.string.localizable.gameListBackgroundUpload()
+        let view = SymbolButton(image: nil, title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
+        view.backgroundColor = Constants.Color.BackgroundPrimary
+        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.addBackgroundImageMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var removeBackgroundImageButton: SymbolButton = {
+        var title: String = R.string.localizable.removeTitle()
+        let view = SymbolButton(image: nil, title: title, titleFont: Constants.Font.body(), titleColor: Constants.Color.Red, horizontalContian: true, titlePosition: .left)
+        view.backgroundColor = Constants.Color.BackgroundPrimary
+        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground) {
+                try? FileManager.default.removeItem(atPath: Constants.Path.GameListBackground)
+                self.backgroundImageView.image = R.image.brand_icon()
+                self.backgroundImageView.contentMode = .center
+                NotificationCenter.default.post(name: Constants.NotificationName.GameListBackgroundChange, object: nil)
+            }
+        }
+        return view
+    }()
+    
     private var mainColorChangeNotification: Any? = nil
     
     deinit {
@@ -352,6 +448,48 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         }
         gameSortOrderMenuButton.snp.makeConstraints { make in
             make.edges.equalTo(gameSortOrderButton)
+        }
+        
+        //背景
+        let backgroundImageLabel = UILabel()
+        backgroundImageLabel.font = Constants.Font.body(size: .l)
+        backgroundImageLabel.textColor = Constants.Color.LabelPrimary
+        backgroundImageLabel.text = R.string.localizable.gameListBackground()
+        addSubview(backgroundImageLabel)
+        backgroundImageLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(gameSortContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        
+        addSubview(backgroundImageView)
+        backgroundImageView.snp.makeConstraints { make in
+            make.size.equalTo(154)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(backgroundImageLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        
+        let backgroundImageContainer = UIView()
+        backgroundImageContainer.backgroundColor = Constants.Color.Background
+        backgroundImageContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
+        addSubview(backgroundImageContainer)
+        backgroundImageContainer.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(backgroundImageView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+        }
+        
+        backgroundImageContainer.addSubviews([addBackgroundImageMenuButton, addBackgroundImageButton, removeBackgroundImageButton])
+        addBackgroundImageButton.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+        }
+        addBackgroundImageMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(addBackgroundImageButton)
+        }
+
+        removeBackgroundImageButton.snp.makeConstraints { make in
+            make.leading.equalTo(addBackgroundImageButton.snp.trailing).offset(Constants.Size.ContentSpaceMid)
+            make.top.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+            make.width.equalTo(addBackgroundImageButton)
         }
         
         mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in

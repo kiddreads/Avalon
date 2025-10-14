@@ -484,7 +484,7 @@ struct GameSetting: SettingCellItem {
     
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
-        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog
+        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals
     }
     
     var type: ItemType
@@ -564,6 +564,8 @@ struct GameSetting: SettingCellItem {
             UIImage(symbol: .sliderHorizontalBelowSquareFilledAndSquare)
         case .toggleAnalog:
             UIImage(symbol: .gamecontroller)
+        case .gameplayManuals:
+            UIImage(symbol: .textBookClosed)
         }
     }
     
@@ -629,6 +631,8 @@ struct GameSetting: SettingCellItem {
             R.string.localizable.airPlayLayout()
         case .toggleAnalog:
             R.string.localizable.toggleAnolog()
+        case .gameplayManuals:
+            R.string.localizable.gameplayManuals()
         }
     }
     
@@ -768,6 +772,8 @@ struct GameSetting: SettingCellItem {
             return "airPlayLayout"
         case .toggleAnalog:
             return "toggleAnalog"
+        case .gameplayManuals:
+            return "gameplayManuals"
         }
     }
     

@@ -124,7 +124,14 @@ NSString * const DidDisconnectFromWFCNotification = @"DidDisconnectFromWFCNotifi
 }
 
 - (void)snapshot:(void(^ _Nullable)(UIImage *_Nullable image))completion {
-    return [[self getRetroArch] snapshot:completion];
+#if !TARGET_IPHONE_SIMULATOR
+    [[self getRetroArch] snapshot:completion];
+#else
+    if (completion) {
+        completion(nil);
+    }
+#endif
+    
 }
 
 - (BOOL)saveState:(void(^ _Nullable)(NSString *_Nullable path))completion {

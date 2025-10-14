@@ -528,6 +528,20 @@ class Game: Object, ObjectUpdatable {
         }
     }
     
+    var manualsPath: String? {
+        if let fileName = getExtraString(key: ExtraKey.manualFileName.rawValue) {
+            return Constants.Path.GameplayManuals.appendingPathComponent(fileName)
+        }
+        return nil
+    }
+    
+    var isManualsExists: Bool {
+        if let manualsPath {
+            return FileManager.default.fileExists(atPath: manualsPath)
+        }
+        return false
+    }
+    
 }
 
 

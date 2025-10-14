@@ -93,6 +93,7 @@ struct Constants {
                 case .psp: return 0.57
                 case .ss: return 0.638
                 case .n64: return 1.369
+                case .mcd: return (Locale.prefersUS ? 0.5864 : 1.1)
                 default: return 1.0
                 }
             case .style2:
@@ -244,9 +245,8 @@ struct Constants {
         static let OneDriveSecrectKey = ""
         static let AliYunAppId = ""
         static let AliYunSecrectKey = ""
-        static let UMAppKey = "6"._7.d.b._7.c._6.c._4._8.a.c._1.b._4.f._8._7.f._0._8.e._9.a
-        static let CLoudflareAPIToken = ""
-        static let UnzipKey = "123456"
+        static let UMAppKey = ""
+        static let ManicKey = ""
         static let DeepSeek = ""
         static let RetroAPI = ""
     }
@@ -306,6 +306,17 @@ struct Constants {
         static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
+        static let Assets = Document.appendingPathComponent("Assets")
+        static var GameListBackground: String = {
+            var backgroundImageName = ""
+            if UIDevice.isPhone {
+                backgroundImageName = "iphone"
+            } else if UIDevice.isPad {
+                backgroundImageName = "ipad"
+            }
+            return Assets.appendingPathComponent(backgroundImageName + "_background.png")
+        }()
+        static let GameplayManuals = Document.appendingPathComponent("Manuals")
     }
     
     struct DefaultKey {
@@ -438,6 +449,8 @@ struct Constants {
         static let ThemeColorMaxCount = 5
         
         static let ThreeDSHomeMenuIdentifiers: [UInt64] = [1126106065306114, 1126106065309442, 1126106065311746, 1126106065314050, 1126106065316098, 1126106065318146]
+        
+        static let PKSMIdentifier: UInt64 = 1125900154372096
     }
     
     struct NotificationName {
@@ -479,6 +492,8 @@ struct Constants {
         static let GameSortChange = NSNotification.Name(rawValue: "GameSortChange")
         ///成就解锁进度常驻关闭
         static let TurnOffAlwaysShowProgress = NSNotification.Name(rawValue: "TurnOffAlwaysShowProgress")
+        //游戏库背景变更
+        static let GameListBackgroundChange = NSNotification.Name(rawValue: "GameListBackgroundChange")
     }
     
     struct URLs {

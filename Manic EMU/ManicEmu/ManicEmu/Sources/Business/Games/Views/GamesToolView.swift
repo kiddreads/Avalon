@@ -23,6 +23,16 @@ class GamesToolView: UIView {
     ///选则状态
     var isSelectAll = false
     
+    var enableBackground: Bool = false {
+        didSet {
+            if enableBackground {
+                backgroundGradientView.isHidden = true
+            } else {
+                backgroundGradientView.isHidden = false
+            }
+        }
+    }
+    
     var backgroundGradientView: UIView = {
         let view = GradientView()
         view.setupGradient(colors: [Constants.Color.BackgroundPrimary, Constants.Color.Background], locations: [0.0, 1.0], direction: .topToBottom)
@@ -256,7 +266,7 @@ class GamesToolIconView: UIView {
         super.init(frame: .zero)
         self.toolView = toolView
         self.selectedSymbol = selectedSymbol
-        backgroundColor = Constants.Color.Background
+        makeBlur()
         enableInteractive = true
         delayInteractiveTouchEnd = true
         

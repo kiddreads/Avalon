@@ -767,6 +767,8 @@
 		A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A392D5632E96682600F920E7 /* DisabledTapSwitch.swift */; };
 		A392D5B32E9796B900F920E7 /* ServiceIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A392D5B22E9796B800F920E7 /* ServiceIconView.swift */; };
 		A3A043802E9BF57A006442C2 /* UIScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */; };
+		A3A043BA2E9CF350006442C2 /* GameplayManualsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A043B82E9CF33B006442C2 /* GameplayManualsView.swift */; };
+		A3A043C42E9D3956006442C2 /* GameplayManualsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A043C32E9D3954006442C2 /* GameplayManualsViewController.swift */; };
 		A519A38A256FCA50008AD6CE /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A519A389256FCA50008AD6CE /* StringExtensions.swift */; };
 		A52C1D86257F91550029B15B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52C1D85257F91550029B15B /* BaseViewController.swift */; };
 		A52C1D89257F96C90029B15B /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52C1D88257F96C90029B15B /* UIViewControllerExtensions.swift */; };
@@ -1786,6 +1788,8 @@
 		A392D5632E96682600F920E7 /* DisabledTapSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledTapSwitch.swift; sourceTree = "<group>"; };
 		A392D5B22E9796B800F920E7 /* ServiceIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceIconView.swift; sourceTree = "<group>"; };
 		A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtensions.swift; sourceTree = "<group>"; };
+		A3A043B82E9CF33B006442C2 /* GameplayManualsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameplayManualsView.swift; sourceTree = "<group>"; };
+		A3A043C32E9D3954006442C2 /* GameplayManualsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameplayManualsViewController.swift; sourceTree = "<group>"; };
 		A519A389256FCA50008AD6CE /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		A52C1D85257F91550029B15B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		A52C1D88257F96C90029B15B /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -2115,6 +2119,7 @@
 		57605FF82D20F24700A98B0C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A3A043C32E9D3954006442C2 /* GameplayManualsViewController.swift */,
 				577006822D438E2A00762E8F /* GamesViewController.swift */,
 			);
 			path = ViewControllers;
@@ -2123,6 +2128,7 @@
 		57605FFF2D222CF600A98B0C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A3A043B82E9CF33B006442C2 /* GameplayManualsView.swift */,
 				570F591F2DC7AC9E007BFD92 /* GameCoverView.swift */,
 				57EC6AA52D801F4D002920F0 /* GamesListBlankSlateView.swift */,
 				5770069D2D44C01800762E8F /* GamesCollectionReusableView.swift */,
@@ -5259,6 +5265,8 @@
 				57EC6AC82D8119D9002920F0 /* SyncManager.swift in Sources */,
 				57655C1B2DF6AD04003E4A6E /* MD.swift in Sources */,
 				57E9632A2D6B01450022914C /* ImportFileCollectionViewCell.swift in Sources */,
+				A3A043BA2E9CF350006442C2 /* GameplayManualsView.swift in Sources */,
+				A3A043C42E9D3956006442C2 /* GameplayManualsViewController.swift in Sources */,
 				579213532D95314800E88819 /* BaseNavigationController.swift in Sources */,
 				57E0CC532D8EACC70027FB8C /* ResourcesKit.swift in Sources */,
 				5770069A2D44B9B500762E8F /* GamesNavigationView.swift in Sources */,
