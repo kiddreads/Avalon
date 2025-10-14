@@ -120,13 +120,13 @@
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementNukePptc}"
             Icon="{ext:Icon fa-solid fa-trash-can}"
-            IsEnabled="{Binding HasPtcCacheFiles}" />
+            IsEnabled="{Binding SelectedApplication.HasPtcCacheFiles, FallbackValue=False}" />
         <MenuItem
             Command="{Binding PurgeShaderCache}"
             CommandParameter="{Binding}"
             Header="{ext:Locale GameListContextMenuCacheManagementPurgeShaderCache}"
             Icon="{ext:Icon fa-solid fa-trash-can}"
-            IsEnabled="{Binding HasShaderCacheFiles}" />
+            IsEnabled="{Binding SelectedApplication.HasShaderCacheFiles, FallbackValue=False}" />
         <Separator/>
         <MenuItem
             Command="{Binding OpenPtcDirectory}"

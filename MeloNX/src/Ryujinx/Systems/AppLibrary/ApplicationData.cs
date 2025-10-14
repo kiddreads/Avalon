@@ -11,11 +11,13 @@ using LibHac.Tools.FsSystem.NcaUtils;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Systems.PlayReport;
 using Ryujinx.Ava.Utilities;
+using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.Loaders.Processes.Extensions;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Ryujinx.Ava.Systems.AppLibrary
@@ -83,6 +85,32 @@ namespace Ryujinx.Ava.Systems.AppLibrary
             => Compatibility.Convert(x => x.FormattedIssueLabels).OrElse(string.Empty);
 
         public LocaleKeys? PlayabilityStatus => Compatibility.Convert(x => x.Status).OrElse(null);
+
+        public bool HasPtcCacheFiles
+        {
+            get
+            {
+                DirectoryInfo mainDir = new(System.IO.Path.Combine(AppDataManager.GamesDirPath, IdString, "cache", "cpu", "0"));
+                DirectoryInfo backupDir = new(System.IO.Path.Combine(AppDataManager.GamesDirPath, IdString, "cache", "cpu", "1"));
+
+                return (mainDir.Exists && (mainDir.EnumerateFiles("*.cache").Any() || mainDir.EnumerateFiles("*.info").Any())) ||
+                       (backupDir.Exists && (backupDir.EnumerateFiles("*.cache").Any() || backupDir.EnumerateFiles("*.info").Any()));
+            }
+        }
+
+        public bool HasShaderCacheFiles
+        {
+            get
+            {
+                DirectoryInfo shaderCacheDir = new(System.IO.Path.Combine(AppDataManager.GamesDirPath, IdString, "cache", "shader"));
+
+                if (!shaderCacheDir.Exists) return false;
+
+                return shaderCacheDir.EnumerateDirectories("*").Any() || 
+                       shaderCacheDir.GetFiles("*.toc").Length != 0 || 
+                       shaderCacheDir.GetFiles("*.data").Length != 0;
+            }
+        }
 
         public string LocalizedStatusTooltip =>
             Compatibility.Convert(x =>
