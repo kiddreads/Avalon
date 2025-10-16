@@ -201,11 +201,7 @@ namespace ARMeilleure.Instructions
 
             ExecutionContext context = GetContext();
 
-            // If debugging, we'll handle interrupts outside
-            if (!Optimizations.EnableDebugging)
-            {
-                context.CheckInterrupt();
-            }
+            context.CheckInterrupt();
 
             Statistics.ResumeTimer();
 
