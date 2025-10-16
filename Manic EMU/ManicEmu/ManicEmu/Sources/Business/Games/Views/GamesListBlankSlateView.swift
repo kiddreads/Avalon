@@ -146,7 +146,7 @@ class GamesListBlankSlateView: BaseView {
         let warnningContainer = UIView()
         containerView.addSubview(warnningContainer)
         warnningContainer.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-(Constants.Size.ContentInsetBottom + Constants.Size.ItemHeightMax + ((Device.size().rawValue < Size.screen5_8Inch.rawValue || UIDevice.isPad) ? Constants.Size.ContentSpaceHuge : 0)))
+            make.bottom.equalToSuperview().offset(-(Constants.Size.ContentInsetBottom + Constants.Size.ItemHeightMax + ((Device.size().rawValue < Size.screen5_8Inch.rawValue || UIDevice.isPad) ? Constants.Size.ContentSpaceHuge : Constants.Size.ContentSpaceMin)))
             make.centerX.equalToSuperview()
             make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)

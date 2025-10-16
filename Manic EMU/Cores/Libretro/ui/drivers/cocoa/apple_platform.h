@@ -122,6 +122,7 @@ UINavigationControllerDelegate> {
 - (BOOL)loadState:(NSString *_Nonnull)path;
 - (void)fastForward:(float)rate;
 - (void)reload;
+- (void)reloadByKeepState:(BOOL)keepState;
 - (void)updatePSPCheat:(NSString *_Nonnull)cheatCode cheatFilePath:(NSString *_Nonnull)cheatFilePath reloadGame:(BOOL)reloadGame;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload;

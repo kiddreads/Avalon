@@ -150,6 +150,10 @@ NSString * const DidDisconnectFromWFCNotification = @"DidDisconnectFromWFCNotifi
     [[self getRetroArch] reload];
 }
 
+- (void)reloadByKeepState:(BOOL)keepState {
+    [[self getRetroArch] reloadByKeepState:keepState];
+}
+
 - (BOOL)loadGame:(NSString *_Nonnull)gamePath corePath:(NSString *_Nonnull)corePath completion:(void(^ _Nullable)(NSDictionary *_Nullable))completion {
     return [[self getRetroArch] loadGame:gamePath corePath:corePath completion:completion];
 }

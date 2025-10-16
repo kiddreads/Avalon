@@ -216,7 +216,7 @@ class SettingsListView: BaseView {
                                                             trailing: Constants.Size.ContentSpaceMid)
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? Constants.Size.ContentSpaceMin : 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? Constants.Size.ContentSpaceMin : 0, leading: 0, bottom: Constants.Size.ContentSpaceTiny, trailing: 0)
             
             if sectionIndex > 0 {
                 //header布局

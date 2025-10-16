@@ -10,7 +10,7 @@
 import ProHUD
 import ManicEmuCore
 import KeyboardKit
-
+import UniformTypeIdentifiers
 
 class GameSettingView: BaseView {
     
@@ -214,6 +214,13 @@ class GameSettingView: BaseView {
         let currentDiskIndex = game.currentDiskIndex
         let airPlayScaling = Settings.defalut.airPlayScaling
         let airPlayLayout = Settings.defalut.airPlayLayout
+        let nesPalettes: Game.NESPalette
+        if game.gameType == .nes {
+            nesPalettes = game.currentNesPalette
+        } else {
+            nesPalettes = Game.defaultNesPalette
+        }
+        
         
         gameSettings = settings.gameFunctionList.compactMap { itemTypeValue in
             if let itemType = GameSetting.ItemType(rawValue: itemTypeValue) {
@@ -231,7 +238,8 @@ class GameSettingView: BaseView {
                                        palette: palette,
                                        currentDiskIndex: currentDiskIndex,
                                        airPlayScaling: airPlayScaling,
-                                       airPlayLayout: airPlayLayout)
+                                       airPlayLayout: airPlayLayout,
+                                       nesPalette: nesPalettes)
                 }
             }
             return nil
@@ -353,6 +361,8 @@ extension GameSettingView: UICollectionViewDataSource {
                 specialTitle = item.palette.paletteTitleForVB
             } else if game.gameType == .pm {
                 specialTitle = item.palette.paletteTitleForPM
+            } else if game.gameType == .nes {
+                specialTitle = item.nesPalette.name
             }
         } else if item.type == .resolution {
             if game.gameType == .ps1 {
@@ -360,6 +370,8 @@ extension GameSettingView: UICollectionViewDataSource {
             } else if game.isN64ParaLLEl {
                 specialTitle = R.string.localizable.gameSettingResolution(item.resolution.resolutionTitleForN64ParaLLEl)
             }
+        } else if item.type == .swapDisk, game.gameType == .nes {
+            specialTitle = R.string.localizable.diskSideChange()
         }
         
         if isMappingMode, let mappingItem = item.mappingOnlyType {
@@ -507,6 +519,8 @@ extension GameSettingView: UICollectionViewDelegate {
                     item.palette = item.palette.nextForVB
                 } else if game.gameType == .pm {
                     item.palette = item.palette.nextForPM
+                } else if game.gameType == .nes {
+                    item.nesPalette = game.nextNesPalette
                 } else {
                     item.palette = item.palette.next
                 }
@@ -516,7 +530,12 @@ extension GameSettingView: UICollectionViewDelegate {
                 item.isFullScreen = !item.isFullScreen
                 updateCellAndCallBack(item: item, indexPath: indexPath)
             case .swapDisk:
-                if game.supportSwapDisc {
+                if game.gameType == .nes {
+                    item.currentDiskIndex = 0
+                    game.currentDiskIndex = 0
+                    updateCellAndCallBack(item: item, indexPath: indexPath)
+                    return
+                } else if game.supportSwapDisc {
                     item.currentDiskIndex = item.currentDiskIndex + 1 < game.totalDiskCount ? item.currentDiskIndex + 1 : 0
                     game.currentDiskIndex = item.currentDiskIndex
                     updateCellAndCallBack(item: item, indexPath: indexPath)
@@ -646,6 +665,35 @@ extension GameSettingView: UICollectionViewDelegate {
                     }
                 }
                 return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+            } else if game.gameType == .nes {
+                var actions = game.nesPalettes.map { palette in
+                    UIAction(title: palette.name,
+                             image: item.image) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.nesPalette = palette
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
+                }
+                actions.append(UIAction(title: R.string.localizable.gameListBackgroundUpload(),
+                                        image: .symbolImage(.folderBadgePlus)) { [weak self] _ in
+                    guard let self = self else { return }
+                    FilesImporter.shared.presentImportController(supportedTypes: [UTType(filenameExtension: "pal") ?? UTType.data], allowsMultipleSelection: false, manualHandle: { [weak self] urls in
+                        guard let self else { return }
+                        if let url = urls.first {
+                            let toPath = Constants.Path.CustomPalettes.appendingPathComponent(self.game.gameType.localizedShortName).appendingPathComponent(url.lastPathComponent)
+                            if FileManager.default.fileExists(atPath: toPath) {
+                                UIView.makeToast(message: R.string.localizable.filesImporterErrorFileExist(url.lastPathComponent))
+                                return
+                            }
+                            try? FileManager.safeCopyItem(at: url, to: URL(fileURLWithPath: toPath), shouldReplace: true)
+                            let palette = Game.NESPalette(name: url.lastPathComponent.deletingPathExtension, type: .custom)
+                            self.game.nesPalettes.append(palette)
+                            item.nesPalette = palette
+                            self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                        }
+                    })
+                })
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             } else {
                 let actions = GameSetting.Palette.allCases.map { palette in
                     UIAction(title: palette == .None ? "None" : palette.shortTitle,
@@ -658,18 +706,39 @@ extension GameSettingView: UICollectionViewDelegate {
                 return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             }
             
-        } else if item.type == .swapDisk, game.supportSwapDisc {
-            var actions = [UIAction]()
-            for index in 0..<game.totalDiskCount {
-                actions.append(UIAction(title: "Disc \(index + 1)",
-                                        image: index == game.currentDiskIndex ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                        handler: { [weak self] _ in
-                    guard let self = self else { return }
-                    item.currentDiskIndex = index
-                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
-                }))
+        } else if item.type == .swapDisk {
+            if game.gameType == .nes {
+                if game.fileExtension.lowercased() == "fds" {
+                    var actions = [UIAction]()
+                    actions.append(UIAction(title: R.string.localizable.diskSideChange(),
+                                            handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        item.currentDiskIndex = 0
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }))
+                    actions.append(UIAction(title: R.string.localizable.ejectDisk(),
+                                            handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        item.currentDiskIndex = 1
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }))
+                    return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
+                } else {
+                    UIView.makeToast(message: R.string.localizable.fdsAlert())
+                }
+            } else if game.supportSwapDisc {
+                var actions = [UIAction]()
+                for index in 0..<game.totalDiskCount {
+                    actions.append(UIAction(title: "Disc \(index + 1)",
+                                            image: index == game.currentDiskIndex ? UIImage(symbol: .checkmarkCircleFill) : nil,
+                                            handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        item.currentDiskIndex = index
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }))
+                }
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             }
-            return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
         } else if item.type == .airPlayScaling {
             //AirPlay缩放
             let actions = GameSetting.AirPlayScaling.allCases.map { scaling in

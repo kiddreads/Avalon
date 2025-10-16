@@ -960,12 +960,20 @@ class PlayViewController: GameViewController {
         } else if input.stringValue == "blowing" {
             handleMenuGameSetting(GameSetting(type: .simBlowing), nil)
         } else if input.stringValue == "palette" {
-            handleMenuGameSetting(GameSetting(type: .palette, palette: manicGame.pallete.next), nil)
+            if manicGame.gameType == .nes {
+                handleMenuGameSetting(GameSetting(type: .palette, nesPalette: manicGame.nextNesPalette), nil)
+            } else {
+                handleMenuGameSetting(GameSetting(type: .palette, palette: manicGame.pallete.next), nil)
+            }
         } else if input.stringValue == "swapDisk" {
-            let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
-            let totalCount = LibretroCore.sharedInstance().getDiskCount()
-            let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
-            handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: nextIndex), nil)
+            if manicGame.gameType == .nes {
+                handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: 0), nil)
+            } else {
+                let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
+                let totalCount = LibretroCore.sharedInstance().getDiskCount()
+                let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
+                handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: nextIndex), nil)
+            }
         } else if input.stringValue == "toggleAnalog" {
             handleMenuGameSetting(GameSetting(type: .toggleAnalog), nil)
         } else if input.stringValue == "retroAchievements" {
@@ -1616,10 +1624,22 @@ extension PlayViewController {
                     }
                     LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_mic_input": restoreInput], flush: false)
                 }
+            } else if manicGame.gameType == .nes {
+                DispatchQueue.main.asyncAfter(delay: 1) {
+                    LibretroCore.sharedInstance().press(.L3, playerIndex: 0)
+                    DispatchQueue.main.asyncAfter(delay: 0.1) {
+                        LibretroCore.sharedInstance().release(.L3, playerIndex: 0)
+                    }
+                }
             }
             
         case .palette:
             //MARK: handleMenuGameSetting.palette
+            if manicGame.gameType == .nes {
+                updateNESPalette(item.nesPalette)
+                return true
+            }
+            
             guard (manicGame.gameType == .gb || manicGame.gameType == .vb || manicGame.gameType == .pm) else { return false }
             if manicGame.pallete != item.palette {
                 Game.change { realm in
@@ -1650,6 +1670,33 @@ extension PlayViewController {
             }
         case .swapDisk:
             //MARK: handleMenuGameSetting.swapDisk
+            if manicGame.gameType == .nes {
+                if manicGame.fileExtension.lowercased() == "fds" {
+                    if item.currentDiskIndex == 0 {
+                        //(FDS) Disk Side Change
+                        UIView.makeToast(message: R.string.localizable.diskSideChange())
+                        DispatchQueue.main.asyncAfter(delay: 1) {
+                            LibretroCore.sharedInstance().press(.L1, playerIndex: 0)
+                            DispatchQueue.main.asyncAfter(delay: 0.1) {
+                                LibretroCore.sharedInstance().release(.L1, playerIndex: 0)
+                            }
+                        }
+                    } else {
+                        //(FDS) Eject Disk
+                        UIView.makeToast(message: R.string.localizable.ejectDisk())
+                        DispatchQueue.main.asyncAfter(delay: 1) {
+                            LibretroCore.sharedInstance().press(.R1, playerIndex: 0)
+                            DispatchQueue.main.asyncAfter(delay: 0.1) {
+                                LibretroCore.sharedInstance().release(.R1, playerIndex: 0)
+                            }
+                        }
+                    }
+                } else {
+                    UIView.makeToast(message: R.string.localizable.fdsAlert())
+                }
+                return true
+            }
+            
             guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return false }
             if manicGame.supportSwapDisc {
                 LibretroCore.sharedInstance().setDiskIndex(UInt32(item.currentDiskIndex), delay: manicGame.gameType == .ps1 ? true : false)
@@ -1931,6 +1978,7 @@ extension PlayViewController {
             ], reload: false)
             updatePSPResolution(manicGame.resolution, reload: false)
         } else if manicGame.gameType == .nes {
+            updateNESPalette(manicGame.currentNesPalette, firstInit: true)
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, key: "nestopia_aspect", value: "uncorrected", reload: false)
         } else if manicGame.gameType == .snes {
             if manicGame.getExtraBool(key: ExtraKey.snesVRAM.rawValue) ?? false {
@@ -2428,14 +2476,22 @@ extension PlayViewController {
                                 case .resolution:
                                     newGameSetting.resolution = self.manicGame.resolution.next
                                 case .palette:
-                                    newGameSetting.palette = self.manicGame.pallete.next
+                                    if self.manicGame.gameType == .nes {
+                                        newGameSetting.nesPalette = self.manicGame.nextNesPalette
+                                    } else {
+                                        newGameSetting.palette = self.manicGame.pallete.next
+                                    }
                                 case .toggleFullscreen:
                                     newGameSetting.isFullScreen = !self.manicGame.forceFullSkin
                                 case .swapDisk:
-                                    let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
-                                    let totalCount = LibretroCore.sharedInstance().getDiskCount()
-                                    let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
-                                    newGameSetting.currentDiskIndex = nextIndex
+                                    if self.manicGame.gameType == .nes {
+                                        newGameSetting.currentDiskIndex = 0
+                                    } else {
+                                        let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
+                                        let totalCount = LibretroCore.sharedInstance().getDiskCount()
+                                        let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
+                                        newGameSetting.currentDiskIndex = nextIndex
+                                    }
                                 case .airPlayScaling:
                                     newGameSetting.airPlayScaling = Settings.defalut.airPlayScaling.next
                                 case .airPlayLayout:
@@ -2712,9 +2768,9 @@ extension PlayViewController {
             screenImage = scaleImage
         }
         
-        let topImage = screenImage.cropped(to: frames.mainGameViewFrame)
+        let topImage = screenImage.cropped(to: frames.mainGameViewFrame.adjustSize(add: -1))
         if !topOnly, let bottomRect = frames.touchGameViewFrame {
-            let bottomImage = screenImage.cropped(to: bottomRect)
+            let bottomImage = screenImage.cropped(to: bottomRect.adjustSize(add: -1))
             return [topImage, bottomImage]
         }
         return [topImage]
@@ -3017,6 +3073,36 @@ extension PlayViewController {
             LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_show_cursor": "always"], flush: false)
         } else {
             LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_show_cursor": "disabled"], flush: false)
+        }
+    }
+    
+    private func updateNESPalette(_ nesPalette: Game.NESPalette, firstInit: Bool = false) {
+        Log.debug("更新NES调色板:\(nesPalette.name) type:\(nesPalette.type)")
+        manicGame.updateExtra(key: ExtraKey.nesPalette.rawValue, value: nesPalette.name)
+        if nesPalette.type == .nestopia {
+            if firstInit {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, key: "nestopia_palette", value: nesPalette.name, reload: false)
+            } else {
+                LibretroCore.sharedInstance().updateRunningCoreConfigs(["nestopia_palette": nesPalette.name], flush: false)
+            }
+        } else if nesPalette.type == .buildIn || nesPalette.type == .custom {
+            let fromPath: String
+            if nesPalette.type == .buildIn {
+                fromPath = Constants.Path.NESPalettes.appendingPathComponent(nesPalette.name + ".pal")
+            } else {
+                fromPath = Constants.Path.CustomPalettes.appendingPathComponent(manicGame.gameType.localizedShortName).appendingPathComponent(nesPalette.name + ".pal")
+            }
+            do {
+                try FileManager.safeCopyItem(at: URL(fileURLWithPath: fromPath), to: URL(fileURLWithPath: Constants.Path.System.appendingPathComponent("custom.pal")), shouldReplace: true)
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, key: "nestopia_palette", value: "custom", reload: false)
+                if !firstInit {
+                    DispatchQueue.main.asyncAfter(delay: 0.05) {
+                        LibretroCore.sharedInstance().reload(byKeepState: true)
+                    }
+                }
+            } catch {
+                Log.debug("更新NES调色板失败:\(error)")
+            }
         }
     }
 }

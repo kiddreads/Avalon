@@ -21,7 +21,7 @@ class ControllersCollectionViewCell: UICollectionViewCell {
     private var titleLabel: MarqueeLabel = {
         let view = MarqueeLabel()
         view.font = Constants.Font.body(size: .l, weight: .semibold)
-        view.textColor = Constants.Color.LabelPrimary
+        view.textColor = Constants.Color.LabelSecondary
         view.type = .leftRight
         return view
     }()
@@ -35,6 +35,7 @@ class ControllersCollectionViewCell: UICollectionViewCell {
         let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold)),
                                 title: R.string.localizable.controllersPlayerUnset(),
                                 titleFont: Constants.Font.body(),
+                                titleColor: Constants.Color.LabelSecondary,
                                 edgeInsets: .zero,
                                 titlePosition: .left,
                                 imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)

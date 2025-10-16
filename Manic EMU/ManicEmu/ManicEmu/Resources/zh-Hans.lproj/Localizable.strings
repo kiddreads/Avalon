@@ -735,3 +735,6 @@
 "UnsupportSkinsDesc" = "检测到以下皮肤在当前设备上不受支持：\n%@注意：如果选择移除，这些皮肤也会从通过iCloud同步的其他设备中一并删除。";
 "UnsupportSkinsRemoveSuccess" = "不受支持的皮肤已成功移除";
 "ForbitPKSM" = "为确保RetroAchievements体验的公平性，在启用全局RetroAchievements时无法使用PKSM。";
+"FDSAlert" = "此选项仅适用于FDS游戏。";
+"DiskSideChange" = "翻转软盘";
+"EjectDisk" = "弹出软盘";

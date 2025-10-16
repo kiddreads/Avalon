@@ -151,8 +151,8 @@ struct Constants {
         
         //分割线
         static let Border = UIColor(.dm,
-                                    light: .black.withAlphaComponent(0.1),
-                                    dark: .white.withAlphaComponent(0.1))
+                                    light: .black.withAlphaComponent(0.05),
+                                    dark: .white.withAlphaComponent(0.05))
         
         //背景
         static let Background = UIColor(.dm,
@@ -317,6 +317,8 @@ struct Constants {
             return Assets.appendingPathComponent(backgroundImageName + "_background.png")
         }()
         static let GameplayManuals = Document.appendingPathComponent("Manuals")
+        static let NESPalettes = Resource.appendingPathComponent("NESPalettes")
+        static let CustomPalettes = Document.appendingPathComponent("Palettes")
     }
     
     struct DefaultKey {

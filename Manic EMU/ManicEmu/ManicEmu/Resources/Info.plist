@@ -587,6 +587,9 @@
 				<array>
 					<string>nes</string>
 					<string>fc</string>
+					<string>fds</string>
+					<string>unf</string>
+					<string>unif</string>
 				</array>
 			</dict>
 		</dict>

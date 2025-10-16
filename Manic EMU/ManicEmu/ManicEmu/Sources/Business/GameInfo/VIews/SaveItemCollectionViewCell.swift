@@ -65,7 +65,7 @@ class SaveItemCollectionViewCell: SwipeCollectionViewCell {
         view.layer.shadowColor = Constants.Color.Shadow.cgColor
         view.layer.shadowOpacity = 0.5
         view.layer.shadowRadius = 2
-        view.image = UIImage(symbol: .circle, size: Constants.Size.IconSizeMin.height, color: Constants.Color.LabelSecondary)
+        view.image = UIImage(symbol: .circle, size: Constants.Size.IconSizeMin.height, color: Constants.Color.LabelTertiary)
         return view
     }()
     
@@ -86,7 +86,7 @@ class SaveItemCollectionViewCell: SwipeCollectionViewCell {
             } else {
                 self.selectImageView.image = UIImage(symbol: .circle,
                                                      size: Constants.Size.IconSizeMin.height,
-                                                     color: Constants.Color.LabelPrimary.forceStyle(.dark))
+                                                     color: Constants.Color.LabelTertiary)
             }
         }
     }

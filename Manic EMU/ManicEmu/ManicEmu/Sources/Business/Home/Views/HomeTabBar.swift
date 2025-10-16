@@ -189,7 +189,7 @@ class HomeTabBar: UIView {
         } else {
             self.layer.borderWidth = 1
             self.layer.borderColor = Constants.Color.Border.cgColor
-            self.makeBlur(cornerRadius: Constants.Size.HomeTabBarSize.height/2)
+            self.makeBlur(blurColor: Constants.Color.BackgroundPrimary, cornerRadius: Constants.Size.HomeTabBarSize.height/2)
         }
         
         addSubviews([indicatorView, gamesBar, importBar, settingsBar])

@@ -50,7 +50,7 @@ extension GameType {
             self = .gb
         }  else if ["ds", "nds"].contains(ext) {
             self = .ds
-        } else if ["nes", "fc"].contains(ext)  {
+        } else if ["nes", "fc", "fds", "unf", "unif"].contains(ext)  {
             self = .nes
         } else if ["smc", "sfc", "fig", "snes"].contains(ext) {
             self = .snes

@@ -317,7 +317,8 @@ extension UIView {
             }
             
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.Background
+            containerView.backgroundColor = .clear
+            containerView.makeBlur()
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
                 make.top.equalTo(grabber.snp.bottom)

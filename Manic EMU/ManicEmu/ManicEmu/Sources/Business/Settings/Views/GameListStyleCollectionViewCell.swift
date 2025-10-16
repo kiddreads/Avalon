@@ -32,7 +32,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     private var gamesPerRowLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Font.body(size: .l)
-        label.textColor = Constants.Color.LabelPrimary
+        label.textColor = Constants.Color.LabelSecondary
         label.text = R.string.localizable.gamesPerRowTitle()
         return label
     }()
@@ -60,7 +60,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     private var groupTitleStyleLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Font.body(size: .l)
-        label.textColor = Constants.Color.LabelPrimary
+        label.textColor = Constants.Color.LabelSecondary
         label.text = R.string.localizable.groupTitleStyelDesc()
         return label
     }()
@@ -414,7 +414,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         //排序
         let gameSortLabel = UILabel()
         gameSortLabel.font = Constants.Font.body(size: .l)
-        gameSortLabel.textColor = Constants.Color.LabelPrimary
+        gameSortLabel.textColor = Constants.Color.LabelSecondary
         gameSortLabel.text = R.string.localizable.gameSortDesc()
         addSubview(gameSortLabel)
         gameSortLabel.snp.makeConstraints { make in
@@ -453,7 +453,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         //背景
         let backgroundImageLabel = UILabel()
         backgroundImageLabel.font = Constants.Font.body(size: .l)
-        backgroundImageLabel.textColor = Constants.Color.LabelPrimary
+        backgroundImageLabel.textColor = Constants.Color.LabelSecondary
         backgroundImageLabel.text = R.string.localizable.gameListBackground()
         addSubview(backgroundImageLabel)
         backgroundImageLabel.snp.makeConstraints { make in

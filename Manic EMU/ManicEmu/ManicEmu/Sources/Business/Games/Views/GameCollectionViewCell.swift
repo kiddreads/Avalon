@@ -47,7 +47,7 @@ class GameCollectionViewCell: UICollectionViewCell {
     
     private var selectedBackground: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         view.layerCornerRadius = Constants.Size.CornerRadiusMax
         return view
     }()

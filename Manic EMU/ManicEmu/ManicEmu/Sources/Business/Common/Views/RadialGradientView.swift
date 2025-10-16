@@ -27,6 +27,7 @@ class RadialGradientView: UIView {
     init() {
         super.init(frame: .zero)
         addSubview(imageView)
+        imageView.alpha = 0.3
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

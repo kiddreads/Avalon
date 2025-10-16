@@ -14,4 +14,13 @@ extension CGRect {
                       width: self.size.width.rounded(numberOfDecimalPlaces: numberOfDecimalPlaces, rule: .towardZero),
                       height: self.size.height.rounded(numberOfDecimalPlaces: numberOfDecimalPlaces, rule: .towardZero))
     }
+    
+    func adjustSize(add: Double) -> CGRect {
+        let newWidth = size.width + add
+        let newHeight = size.height + add
+        return CGRect(x: self.origin.x,
+                      y: self.origin.y,
+                      width: newWidth < 0 ? size.width : newWidth,
+                      height: newHeight < 0 ? size.height : newHeight)
+    }
 }

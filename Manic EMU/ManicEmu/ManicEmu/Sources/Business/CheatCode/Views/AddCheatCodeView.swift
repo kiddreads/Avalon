@@ -305,7 +305,7 @@ class AddCheatCodeView: BaseView {
                 confirmButton.isUserInteractionEnabled = true
             } else {
                 confirmButton.label.font = Constants.Font.caption(size: .l, weight: .regular)
-                confirmButton.label.textColor = Constants.Color.LabelSecondary
+                confirmButton.label.textColor = Constants.Color.LabelTertiary
                 confirmButton.isUserInteractionEnabled = false
             }
         } else {
@@ -315,7 +315,7 @@ class AddCheatCodeView: BaseView {
                 confirmButton.isUserInteractionEnabled = true
             } else {
                 confirmButton.backgroundColor = Constants.Color.BackgroundPrimary
-                confirmButton.label.textColor = Constants.Color.LabelSecondary
+                confirmButton.label.textColor = Constants.Color.LabelTertiary
                 confirmButton.isUserInteractionEnabled = false
             }
         }

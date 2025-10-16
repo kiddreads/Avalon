@@ -501,6 +501,7 @@ struct GameSetting: SettingCellItem {
     var airPlayScaling: AirPlayScaling = .coreProvided
     var airPlayLayout: AirPlayLayout = .sideBySide
     var mappingOnlyType: MappingOnlyType? = nil
+    var nesPalette = Game.defaultNesPalette
     
     var image: UIImage {
         switch type {
@@ -661,16 +662,20 @@ struct GameSetting: SettingCellItem {
             }
             return true
         case .gba, .gbc, .gb, .nes, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm:
-            if (gameType == .gb || gameType == .vb || gameType == .pm) && type == .palette {
+            if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes) && type == .palette {
                 return true
             }
             
-            if (gameType == .mcd || gameType == .ss) && type == .swapDisk {
+            if (gameType == .mcd || gameType == .ss || gameType == .nes) && type == .swapDisk {
                 return true
             }
             
             if (gameType == .vb || gameType == .pm) && type == .cheatCode {
                 return false
+            }
+            
+            if gameType == .nes, type == .simBlowing {
+                return true
             }
             
             if gameType == .md , type == .cheatCode, defaultCore == 0 {

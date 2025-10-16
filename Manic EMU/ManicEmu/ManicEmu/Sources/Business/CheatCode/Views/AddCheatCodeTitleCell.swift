@@ -26,7 +26,7 @@ class AddCheatCodeTitleCell: UICollectionViewCell {
             guard let self = self else { return }
             self.shouldGoNext?()
         }
-        view.attributedPlaceholder = NSAttributedString(string: R.string.localizable.cheatCodeNamePlaceHolder(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
+        view.attributedPlaceholder = NSAttributedString(string: R.string.localizable.cheatCodeNamePlaceHolder(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelTertiary])
         view .returnKeyType = .next
         return view
     }()

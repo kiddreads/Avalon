@@ -34,4 +34,5 @@ enum ExtraKey: String {
     case pspTexture
     case manualPage
     case manualFileName
+    case nesPalette
 }

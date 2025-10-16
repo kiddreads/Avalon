@@ -137,9 +137,9 @@ class SkinSettingsView: BaseView {
                                              normalTextColor: Constants.Color.LabelSecondary,
                                             selectedTextColor: Constants.Color.LabelPrimary)
         let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.BackgroundPrimary),
+            .backgroundColor(Constants.Color.SegmentBackground),
             .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.Background),
+            .indicatorViewBackgroundColor(Constants.Color.SegmentHighlight),
             .cornerRadius(16)
         ]
         let view = BetterSegmentedControl(frame: .zero,

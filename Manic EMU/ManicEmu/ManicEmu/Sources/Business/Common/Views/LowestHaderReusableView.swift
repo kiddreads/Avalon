@@ -13,8 +13,8 @@ import VisualEffectView
 class LowestHaderReusableView: UICollectionReusableView {
     var titleLabel: UILabel = {
         let view = UILabel()
-        view.textColor = Constants.Color.LabelPrimary
-        view.font = Constants.Font.title(size: .s)
+        view.textColor = Constants.Color.LabelSecondary
+        view.font = Constants.Font.body(size: .s, weight: .semibold)
         return view
     }()
     
@@ -50,7 +50,7 @@ class BackgroundColorHaderReusableView: UICollectionReusableView {
         
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
         }
     }
     

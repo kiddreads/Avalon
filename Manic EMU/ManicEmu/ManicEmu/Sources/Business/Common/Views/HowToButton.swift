@@ -79,7 +79,7 @@ class HowToButton: UIView {
     
     private func setupTraditionalView() {
         enableInteractive = true
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         addSubview(label)
         label.snp.makeConstraints { make in

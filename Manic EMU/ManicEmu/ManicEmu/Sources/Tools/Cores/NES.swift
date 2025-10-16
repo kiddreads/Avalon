@@ -30,6 +30,15 @@ extension CheatType
     case down
     case left
     case right
+    
+    case x//Turbo A
+    case y//Turbo B
+    case l1//(FDS) Disk Side Change
+    case r1//(FDS) Eject Disk
+    case l2//(VSSystem) Coin 1
+    case r2//(VSSystem) Coin 2
+    case l3//(Famicom) Microphone
+    case r3
 
     case flex
     case menu
@@ -49,6 +58,14 @@ extension CheatType
         else if stringValue == "left" { self = .left }
         else if stringValue == "right" { self = .right }
         else if stringValue == "flex" { self = .flex }
+        else if stringValue == "x" { self = .x }
+        else if stringValue == "y" { self = .y }
+        else if stringValue == "l1" { self = .l1 }
+        else if stringValue == "r1" { self = .r1 }
+        else if stringValue == "l2" { self = .l2 }
+        else if stringValue == "r2" { self = .r2 }
+        else if stringValue == "l3" { self = .l3 }
+        else if stringValue == "r3" { self = .r3 }
         else { return nil }
     }
 }
@@ -123,6 +140,14 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         else if gameInput == .down { return .down }
         else if gameInput == .left { return .left }
         else if gameInput == .right { return .right }
+        else if gameInput == .x { return .X }
+        else if gameInput == .y { return .Y }
+        else if gameInput == .l1 { return .L1 }
+        else if gameInput == .r1 { return .R1 }
+        else if gameInput == .l2 { return .L2 }
+        else if gameInput == .r2 { return .R2 }
+        else if gameInput == .l3 { return .L3 }
+        else if gameInput == .r3 { return .R3 }
         return nil
     }
     

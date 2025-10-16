@@ -740,3 +740,6 @@ Press the controller button to complete mapping...";
 "UnsupportSkinsDesc" = "The following skins are not supported on this device:\n%@Note: Removing them will also delete these skins from other devices synced via iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Unsupported skins removed successfully";
 "ForbitPKSM" = "To ensure a fair RetroAchievements experience, PKSM cannot be used while Global RetroAchievements is enabled.";
+"FDSAlert" = "This option is only available for FDS games.";
+"DiskSideChange" = "Flip Disk";
+"EjectDisk" = "Eject Disk";

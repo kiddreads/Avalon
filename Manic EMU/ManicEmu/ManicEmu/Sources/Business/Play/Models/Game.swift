@@ -259,6 +259,8 @@ class Game: Object, ObjectUpdatable {
                 }
             }
             return isPS1BIOSMissing
+        } else if gameType == .nes, fileExtension.lowercased() == "fds" {
+            requireBIOS = Constants.BIOS.NESBios
         } else {
             return false
         }
@@ -542,6 +544,71 @@ class Game: Object, ObjectUpdatable {
         return false
     }
     
+    struct NESPalette {
+        enum NESPaletteType {
+            case nestopia, buildIn, custom
+        }
+        
+        var name: String
+        var type: NESPaletteType
+    }
+    
+    lazy var nesPalettes: [NESPalette] = {
+        guard gameType == .nes else { return [] }
+        
+        let nestopias = ["cxa2025as", "cxa2025as_jp", "royaltea", "consumer", "canonical", "alternative", "rgb", "pal", "composite-direct-fbx", "pvm-style-d93-fbx", "ntsc-hardware-fbx", "nes-classic-fbx-fs", "restored-wii-vc", "wii-vc", "raw"]
+        var results: [NESPalette] = []
+        results.append(contentsOf: nestopias.map({ NESPalette(name: $0, type: .nestopia) }))
+        
+        if let buildIns = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.NESPalettes) {
+            results.append(contentsOf: buildIns.sorted().compactMap({
+                if $0.pathExtension.lowercased() == "pal" {
+                    return NESPalette(name: $0.deletingPathExtension, type: .buildIn)
+                } else {
+                    return nil
+                }
+            }))
+        }
+        
+        if let customs = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.CustomPalettes.appendingPathComponent(gameType.localizedShortName)) {
+            results.append(contentsOf: customs.sorted().compactMap({
+                if $0.pathExtension.lowercased() == "pal" {
+                    return NESPalette(name: $0.deletingPathExtension, type: .custom)
+                } else {
+                    return nil
+                }
+            }))
+        }
+        
+        return results
+    }()
+    
+    static var defaultNesPalette: NESPalette {
+        NESPalette(name: "cxa2025as", type: .nestopia)
+    }
+    
+    var nextNesPalette: NESPalette {
+        guard gameType == .nes else { return Self.defaultNesPalette }
+        
+        if let nesPalette = getExtraString(key: ExtraKey.nesPalette.rawValue) {
+            if let index = nesPalettes.firstIndex(where: { $0.name == nesPalette }) {
+                if index < nesPalettes.count - 1 {
+                    return nesPalettes[index.advanced(by: 1)]
+                }
+            }
+        } else {
+            return nesPalettes[1]
+        }
+        return Self.defaultNesPalette
+    }
+    
+    var currentNesPalette: NESPalette {
+        guard gameType == .nes else { return Self.defaultNesPalette }
+        if let nesPalette = getExtraString(key: ExtraKey.nesPalette.rawValue) {
+            return nesPalettes.first(where: { $0.name == nesPalette }) ?? Self.defaultNesPalette
+        }
+        return Self.defaultNesPalette
+    }
 }
 
 

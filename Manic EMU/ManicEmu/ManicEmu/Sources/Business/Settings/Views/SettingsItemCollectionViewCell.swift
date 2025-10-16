@@ -161,6 +161,7 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
             chevronIconView.isHidden = true
             enableInteractive = false
             delayInteractiveTouchEnd = false
+            segmentView.isHidden = true
         case .appearance:
             switchButton.isHidden = true
             chevronIconView.isHidden = true

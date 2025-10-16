@@ -106,7 +106,7 @@ class AddCheatCodeContentCell: UICollectionViewCell {
         self.supportedCheatFormats = supportedCheatFormats
         self.currentCheatFormat = currentCheatFormat
         titleLabel.titleLabel.text = currentCheatFormat.name
-        textViewPlaceHolderLabel.attributedText = NSAttributedString(string: currentCheatFormat.format, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
+        textViewPlaceHolderLabel.attributedText = NSAttributedString(string: currentCheatFormat.format, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelTertiary])
         editTextView.text = cheatCode
         textViewPlaceHolderLabel.isHidden = !cheatCode.isEmpty
     }

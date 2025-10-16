@@ -50,6 +50,7 @@ extern NSString * const RetroAchievementsNotification;
 - (BOOL)loadState:(NSString *_Nonnull)path;
 - (void)fastForward:(float)rate;
 - (void)reload;
+- (void)reloadByKeepState:(BOOL)keepState;
 - (BOOL)loadGame:(NSString *_Nonnull)gamePath corePath:(NSString *_Nonnull)corePath completion:(void(^ _Nullable)(NSDictionary *_Nullable))completion;
 - (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath;
 - (void)sendEvent:(UIEvent * _Nonnull)event;

@@ -174,6 +174,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             }
             self.threeDSAdvancedModeButton.titleLabel.text = Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()
             self.update3DSFunctionButton()
+            self.addManualsButton()
         }
         return view
     }()
@@ -571,12 +572,14 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             self.ndsSystemTypeButton.titleLabel.text = R.string.localizable.ndsSystemTypeTitle() + "\nDS"
             self.game?.updateExtra(key: ExtraKey.ndsSystemMode.rawValue, value: "DS")
             self.updateDSFunctionButton()
+            self.addManualsButton()
         })
         actions.append(UIAction(title: "DSi") { [weak self] _ in
             guard let self = self else { return }
             self.ndsSystemTypeButton.titleLabel.text = R.string.localizable.ndsSystemTypeTitle() + "\nDSi"
             self.game?.updateExtra(key: ExtraKey.ndsSystemMode.rawValue, value: "DSi")
             self.updateDSFunctionButton()
+            self.addManualsButton()
         })
         let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.ndsSystemTypeDesc(), children: actions))
         return view
@@ -1029,7 +1032,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
-    
+    var hasSetupViews: Bool = false
     
     var game: Game? = nil {
         didSet {
@@ -1040,59 +1043,31 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 } else {
                     subtitleLabel.text = R.string.localizable.readyGameInfoNeverPlayed()
                 }
-                if game.gameType == ._3ds {
-                    update3DSFunctionButton()
-                } else if game.gameType == .psp {
-                    updatePSPFunctionButton()
-                } else if game.gameType == .ss {
-                    updateSaturnFunctionButton()
-                } else if game.gameType == .ds {
-                    updateDSFunctionButton()
-                } else if game.gameType == .n64 {
-                    updateN64FunctionButton()
-                } else if game.gameType == .vb || game.gameType == .pm {
-                    updateVBOrPMFunctionButton()
-                } else if game.gameType == .ps1 {
-                    updatePS1FunctionButton()
-                } else if game.gameType == .dc {
-                    updateDCFunctionButton()
-                } else if game.gameType == .md {
-                    updateMDFunctionButton()
-                } else if game.gameType == .snes {
-                    updateSNESFunctionButton()
-                }
                 
-                //添加游戏手册按钮
-                manualButton.removeFromSuperview()
-                let subviews = functionButtonContainerView.subviews.filter({ $0 is SymbolButton })
-                functionButtonContainerView.addSubview(manualButton)
-                if subviews.count == 0 {
-                    manualButton.snp.makeConstraints { make in
-                        make.leading.centerY.equalToSuperview()
-                        make.size.equalTo(Constants.Size.IconSizeHuge)
+                if !hasSetupViews {
+                    if game.gameType == ._3ds {
+                        update3DSFunctionButton()
+                    } else if game.gameType == .psp {
+                        updatePSPFunctionButton()
+                    } else if game.gameType == .ss {
+                        updateSaturnFunctionButton()
+                    } else if game.gameType == .ds {
+                        updateDSFunctionButton()
+                    } else if game.gameType == .n64 {
+                        updateN64FunctionButton()
+                    } else if game.gameType == .vb || game.gameType == .pm {
+                        updateVBOrPMFunctionButton()
+                    } else if game.gameType == .ps1 {
+                        updatePS1FunctionButton()
+                    } else if game.gameType == .dc {
+                        updateDCFunctionButton()
+                    } else if game.gameType == .md {
+                        updateMDFunctionButton()
+                    } else if game.gameType == .snes {
+                        updateSNESFunctionButton()
                     }
-                } else if subviews.count == 1 {
-                    manualButton.snp.makeConstraints { make in
-                        make.leading.equalTo(subviews[0].snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                        make.centerY.equalToSuperview()
-                        make.size.equalTo(Constants.Size.IconSizeHuge)
-                        make.trailing.equalToSuperview()
-                    }
-                } else {
-                    let lastTwoViews = subviews.suffix(2)
-                    let lastTwoView = Array(lastTwoViews)[0]
-                    let lastView = Array(lastTwoViews)[1]
-                    lastView.snp.remakeConstraints { make in
-                        make.leading.equalTo(lastTwoView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                        make.centerY.equalToSuperview()
-                        make.size.equalTo(Constants.Size.IconSizeHuge)
-                    }
-                    manualButton.snp.makeConstraints { make in
-                        make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                        make.centerY.equalToSuperview()
-                        make.size.equalTo(Constants.Size.IconSizeHuge)
-                        make.trailing.equalToSuperview()
-                    }
+                    addManualsButton()
+                    hasSetupViews = true
                 }
             }
         }
@@ -1215,6 +1190,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func update3DSFunctionButton() {
+        manualButton.removeFromSuperview()
         threeDSAdvancedModeButton.removeFromSuperview()
         jitContextMenuButton.removeFromSuperview()
         jitButton.removeFromSuperview()
@@ -1310,6 +1286,14 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updatePSPFunctionButton() {
+        manualButton.removeFromSuperview()
+        languageContextMenuButton.removeFromSuperview()
+        languageButton.removeFromSuperview()
+        pspRendererContextMenuButton.removeFromSuperview()
+        pspRendererButton.removeFromSuperview()
+        pspTextureContextMenuButton.removeFromSuperview()
+        pspTextureButton.removeFromSuperview()
+        
         if let lastView = functionButtonContainerView.subviews.last {
             //语言选择按钮
             functionButtonContainerView.addSubview(languageContextMenuButton)
@@ -1349,6 +1333,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateSaturnFunctionButton() {
+        manualButton.removeFromSuperview()
+        languageContextMenuButton.removeFromSuperview()
+        languageButton.removeFromSuperview()
         guard let game else { return }
         if game.defaultCore == 0 {
             cheatCodeButton.removeFromSuperview()
@@ -1370,6 +1357,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateDSFunctionButton() {
+        manualButton.removeFromSuperview()
         languageContextMenuButton.removeFromSuperview()
         languageButton.removeFromSuperview()
         microphoneContextMenuButton.removeFromSuperview()
@@ -1441,6 +1429,11 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateN64FunctionButton() {
+        manualButton.removeFromSuperview()
+        transferPakContextMenuButton.removeFromSuperview()
+        transferPakButton.removeFromSuperview()
+        rdpPluginContextMenuButton.removeFromSuperview()
+        rdpPluginButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
             //transferPak
             functionButtonContainerView.addSubview(transferPakContextMenuButton)
@@ -1485,6 +1478,13 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updatePS1FunctionButton() {
+        manualButton.removeFromSuperview()
+        psxImportSbiButton.removeFromSuperview()
+        psxModeContextMenuButton.removeFromSuperview()
+        psxModeButton.removeFromSuperview()
+        psxRendererContextMenuButton.removeFromSuperview()
+        psxRendererButton.removeFromSuperview()
+        
         if let lastView = functionButtonContainerView.subviews.last {
             //导入sbi文件
             functionButtonContainerView.addSubview(psxImportSbiButton)
@@ -1524,6 +1524,13 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     
     private func updateDCFunctionButton() {
         cheatCodeButton.removeFromSuperview()
+        manualButton.removeFromSuperview()
+        jitContextMenuButton.removeFromSuperview()
+        jitButton.removeFromSuperview()
+        dcCoreContextMenuButton.removeFromSuperview()
+        dcCoreButton.removeFromSuperview()
+        languageContextMenuButton.removeFromSuperview()
+        languageButton.removeFromSuperview()
         
         if let lastView = functionButtonContainerView.subviews.last {
             //jit
@@ -1566,6 +1573,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateMDFunctionButton() {
+        manualButton.removeFromSuperview()
+        tvStandardMenuButton.removeFromSuperview()
+        tVStandardButton.removeFromSuperview()
         if let game, game.defaultCore == 0 {
             cheatCodeButton.removeFromSuperview()
             if let lastView = functionButtonContainerView.subviews.last {
@@ -1585,6 +1595,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateSNESFunctionButton() {
+        manualButton.removeFromSuperview()
+        snesVRAMMenuButton.removeFromSuperview()
+        snesVRAMButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
             //VRAM
             functionButtonContainerView.addSubview(snesVRAMMenuButton)
@@ -1602,4 +1615,39 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
+    
+    private func addManualsButton() {
+        //添加游戏手册按钮
+        manualButton.removeFromSuperview()
+        let subviews = functionButtonContainerView.subviews.filter({ $0 is SymbolButton })
+        functionButtonContainerView.addSubview(manualButton)
+        if subviews.count == 0 {
+            manualButton.snp.makeConstraints { make in
+                make.leading.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+        } else if subviews.count == 1 {
+            manualButton.snp.makeConstraints { make in
+                make.leading.equalTo(subviews[0].snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+        } else {
+            let lastTwoViews = subviews.suffix(2)
+            let lastTwoView = Array(lastTwoViews)[0]
+            let lastView = Array(lastTwoViews)[1]
+            lastView.snp.remakeConstraints { make in
+                make.leading.equalTo(lastTwoView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            manualButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+        }
+    }
 }
