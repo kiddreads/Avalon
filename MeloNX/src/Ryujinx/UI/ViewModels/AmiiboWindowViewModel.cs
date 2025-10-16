@@ -6,6 +6,7 @@ using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Common.Models.Amiibo;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.Windows;
+using Ryujinx.Ava.Utilities;
 using Ryujinx.Common;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Logging;
@@ -250,6 +251,7 @@ namespace Ryujinx.Ava.UI.ViewModels
                 catch (Exception exception)
                 {
                     Logger.Warning?.Print(LogClass.Application, $"Unable to read data from '{_amiiboJsonPath}': {exception}");
+                    localIsValid = false;
                 }
 
                 if (!localIsValid || await NeedsUpdate(amiiboJson.LastUpdated))
@@ -280,11 +282,59 @@ namespace Ryujinx.Ava.UI.ViewModels
             return amiiboJson;
         }
 
+        private async Task<AmiiboJson?> ReadLocalJsonFileAsync()
+        {
+            bool isValid = false;
+            AmiiboJson amiiboJson = new();
+
+            try
+            {
+                try
+                {
+                    if (File.Exists(_amiiboJsonPath))
+                    {
+                        isValid = TryGetAmiiboJson(await File.ReadAllTextAsync(_amiiboJsonPath), out amiiboJson);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Logger.Warning?.Print(LogClass.Application, $"Unable to read data from '{_amiiboJsonPath}': {exception}");
+                    isValid = false;
+                }
+
+                if (!isValid)
+                {
+                    return null;
+                }
+            }
+            catch (Exception exception)
+            {
+                if (!isValid)
+                {
+                    Logger.Error?.Print(LogClass.Application, $"Couldn't get valid amiibo data: {exception}");
+
+                    // Neither local file is not valid JSON, close window.
+                    await ShowInfoDialog();
+                    Close();
+                }
+            }
+
+            return amiiboJson;
+        }
+
         private async Task LoadContentAsync()
         {
-            AmiiboJson amiiboJson = await GetMostRecentAmiiboListOrDefaultJson();
+            AmiiboJson? amiiboJson;
 
-            _amiiboList = amiiboJson.Amiibo.OrderBy(amiibo => amiibo.AmiiboSeries).ToList();
+            if (CommandLineState.OnlyLocalAmiibo)
+                amiiboJson = await ReadLocalJsonFileAsync();
+            else
+                amiiboJson = await GetMostRecentAmiiboListOrDefaultJson();
+
+            if (!amiiboJson.HasValue)
+                return;
+
+            _amiiboList = amiiboJson.Value.Amiibo.OrderBy(amiibo => amiibo.AmiiboSeries).ToList();
 
             ParseAmiiboData();
         }

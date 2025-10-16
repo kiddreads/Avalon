@@ -25,6 +25,7 @@ namespace Ryujinx.Ava.Utilities
         public static string LaunchApplicationId { get; private set; }
         public static bool StartFullscreenArg { get; private set; }
         public static bool HideAvailableUpdates { get; private set; }
+        public static bool OnlyLocalAmiibo { get; private set; }
 
         public static void ParseArguments(string[] args)
         {
@@ -129,6 +130,10 @@ namespace Ryujinx.Ava.Utilities
                         }
 
                         OverridePPTC = args[++i];
+                        break;
+                    case "-la":
+                    case "--local-only-amiibo":
+                        OnlyLocalAmiibo = true;
                         break;
                     case "-m":
                     case "--memory-manager-mode":
