@@ -106,6 +106,7 @@ namespace Ryujinx.Common
             "0100b3f000be2000", // Pokkén Tournament DX
             "0100187003a36000", // Pokémon: Let's Go Eevee!
             "010003f003a34000", // Pokémon: Let's Go Pikachu!
+            "0100f43008c44000", // Pokémon Legends: Z-A
 
                           //Splatoon Franchise
             "0100f8f0000a2000", // Splatoon 2 (EU)

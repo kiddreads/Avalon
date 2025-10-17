@@ -2280,6 +2280,7 @@
 01008F6008C5E000,"Pokémon™ Violet",gpu;nvdec;ldn-works;amd-vendor-bug;mac-bug,ingame,2024-07-30 02:51:48
 0100187003A36000,"Pokémon™: Let’s Go, Eevee!",crash;nvdec;online-broken;ldn-broken,ingame,2024-06-01 15:03:04
 010003F003A34000,"Pokémon™: Let’s Go, Pikachu!",crash;nvdec;online-broken;ldn-broken,ingame,2024-03-15 07:55:41
+0100F43008C44000,"Pokémon Legends: Z-A",gpu;crash;ldn-broken,ingame,2025-10-16 19:13:00
 0100B3F000BE2000,"Pokkén Tournament™ DX",nvdec;ldn-works;opengl-backend-bug;LAN;amd-vendor-bug;intel-vendor-bug,playable,2024-07-18 23:11:08
 010030D005AE6000,"Pokkén Tournament™ DX Demo",demo;opengl-backend-bug,playable,2022-08-10 12:03:19
 0100A3500B4EC000,"Polandball: Can Into Space",,playable,2020-06-25 15:13:26
