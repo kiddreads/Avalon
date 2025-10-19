@@ -1338,22 +1338,24 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 return true;
             }
 
-            public DebugState GetDebugState()
-            {
-                return (DebugState)_parent.debugState;
-            }
+            public DebugState DebugState => (DebugState)_parent.debugState;
 
             public bool IsThreadPaused(KThread target)
             {
                 return (target.SchedFlags & ThreadSchedState.ThreadPauseFlag) != 0;
             }
 
-            public ulong[] GetThreadUids()
+            public ulong[] ThreadUids
             {
-                lock (_parent._threadingLock)
+                get
                 {
-                    var threads = _parent._threads.Where(x => !x.TerminationRequested).ToArray();
-                    return threads.Select(x => x.ThreadUid).ToArray();
+                    lock (_parent._threadingLock)
+                    {
+                        return _parent._threads
+                            .Where(x => !x.TerminationRequested)
+                            .Select(x => x.ThreadUid)
+                            .ToArray();
+                    }
                 }
             }
 
@@ -1361,8 +1363,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             {
                 lock (_parent._threadingLock)
                 {
-                    var threads = _parent._threads.Where(x => !x.TerminationRequested).ToArray();
-                    return threads.FirstOrDefault(x => x.ThreadUid == threadUid);
+                    return _parent._threads.Where(x => !x.TerminationRequested)
+                        .FirstOrDefault(x => x.ThreadUid == threadUid);
                 }
             }
 
@@ -1379,7 +1381,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 _parent.InterruptHandler(ctx);
             }
 
-            public IVirtualMemoryManager CpuMemory { get { return _parent.CpuMemory; } }
+            public IVirtualMemoryManager CpuMemory => _parent.CpuMemory;
 
             public void InvalidateCacheRegion(ulong address, ulong size)
             {

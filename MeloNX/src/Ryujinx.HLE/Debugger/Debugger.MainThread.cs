@@ -64,10 +64,10 @@ namespace Ryujinx.HLE.Debugger
                                 Logger.Notice.Print(LogClass.GdbStub, "NACK received!");
                                 continue;
                             case '\x03':
-                                _messages.Add(new BreakInMessage());
+                                _messages.Add(StatelessMessage.BreakIn);
                                 break;
                             case '$':
-                                string cmd = "";
+                                string cmd = string.Empty;
                                 while (true)
                                 {
                                     int x = _readStream.ReadByte();
@@ -85,7 +85,7 @@ namespace Ryujinx.HLE.Debugger
                                 }
                                 else
                                 {
-                                    _messages.Add(new SendNackMessage());
+                                    _messages.Add(StatelessMessage.SendNack);
                                 }
 
                                 break;
