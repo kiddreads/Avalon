@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Ryujinx.HLE.HOS.Services.Time
 {
     public enum ResultCode
