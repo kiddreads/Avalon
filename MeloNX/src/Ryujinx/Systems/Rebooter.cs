@@ -54,7 +54,7 @@ namespace Ryujinx.Ava.Systems
                     WorkingDirectory = executableDirectory,
                 };
 
-                foreach (var arg in args)
+                foreach (string arg in args)
                 {
                     processStart.ArgumentList.Add(arg);
                 }

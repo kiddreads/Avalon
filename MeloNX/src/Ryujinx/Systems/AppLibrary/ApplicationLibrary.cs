@@ -848,7 +848,7 @@ namespace Ryujinx.Ava.Systems.AppLibrary
 
             TimeSpan temporary = TimeSpan.Zero;
 
-            foreach (var installedApplication in Applications.Items)
+            foreach (ApplicationData installedApplication in Applications.Items)
             {
                 temporary += LoadAndSaveMetaData(installedApplication.IdString).TimePlayed;
             }

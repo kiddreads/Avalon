@@ -447,9 +447,9 @@ namespace Ryujinx.Ava.UI.ViewModels
             _virtualFileSystem = virtualFileSystem;
             _contentManager = contentManager;
 
-            if (gameIconData != null && gameIconData.Length > 0)
+            if (gameIconData is { Length: > 0 })
             {
-                using var ms = new MemoryStream(gameIconData);
+                using MemoryStream ms = new(gameIconData);
                 _gameIcon = new Bitmap(ms);
             }
 

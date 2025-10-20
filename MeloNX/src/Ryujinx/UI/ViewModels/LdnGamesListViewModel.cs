@@ -35,7 +35,7 @@ namespace Ryujinx.Ava.UI.ViewModels
                 SortApply();
             }
 
-            var filtered = _visibleEntries;
+            IEnumerable<LdnGameModel> filtered = _visibleEntries;
 
             if (OnlyShowForOwnedGames)
                 filtered = filtered.Where(x => _ownedGameTitleIds.ContainsIgnoreCase(x.Title.Id));

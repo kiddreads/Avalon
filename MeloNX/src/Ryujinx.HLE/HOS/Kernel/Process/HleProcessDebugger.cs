@@ -267,7 +267,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
         {
             moduleName = string.Empty;
 
-            var rodataStart = image.BaseAddress + image.Size;
+            ulong rodataStart = image.BaseAddress + image.Size;
 
             KMemoryInfo roInfo = _owner.MemoryManager.QueryMemory(rodataStart);
             if (roInfo.Permission != KMemoryPermission.Read)
@@ -275,7 +275,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 return false;
             }
 
-            var rwdataStart = roInfo.Address + roInfo.Size;
+            ulong rwdataStart = roInfo.Address + roInfo.Size;
 
             try
             {
@@ -305,7 +305,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 }
 
                 pathLength = Math.Min(pathLength, rodataBuf.Length - 8);
-                var pathBuf = rodataBuf.Slice(8, pathLength);
+                Span<byte> pathBuf = rodataBuf.Slice(8, pathLength);
                 int lastSlash = pathBuf.LastIndexOfAny(new byte[] { (byte)'\\', (byte)'/' });
 
                 moduleName = Encoding.ASCII.GetString(pathBuf.Slice(lastSlash + 1).TrimEnd((byte)0));
@@ -483,12 +483,11 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
             lock (_images)
             {
-                var image = new Image(textOffset, textSize, symbols.OrderBy(x => x.Value).ToArray());
+                Image image = new(textOffset, textSize, symbols.OrderBy(x => x.Value).ToArray());
 
-                string moduleName;
-                if (!GetModuleName(out moduleName, image))
+                if (!GetModuleName(out string moduleName, image))
                 {
-                    var newIndex = _images.Count;
+                    int newIndex = _images.Count;
                     moduleName = $"(unknown{newIndex})";
                 }
                 image.Name = moduleName;

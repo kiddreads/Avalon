@@ -348,7 +348,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         {
             if (ts.HasValue)
             {
-                var formattedPlayTime = ValueFormatUtils.FormatTimeSpan(ts.Value);
+                string formattedPlayTime = ValueFormatUtils.FormatTimeSpan(ts.Value);
                 LocaleManager.Associate(LocaleKeys.GameListLabelTotalTimePlayed, formattedPlayTime);
                 ShowTotalTimePlayed = formattedPlayTime != string.Empty;
                 return;
@@ -827,10 +827,10 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         private void RefreshGrid()
         {
-            var appsList = Applications.ToObservableChangeSet()
+            IObservableList<ApplicationData> appsList = Applications.ToObservableChangeSet()
                 .Filter(Filter)
                 .Sort(GetComparer())
-                .Bind(out var apps)
+                .Bind(out ReadOnlyObservableCollection<ApplicationData> apps)
                 .AsObservableList();
 
             AppsObservableList = apps;

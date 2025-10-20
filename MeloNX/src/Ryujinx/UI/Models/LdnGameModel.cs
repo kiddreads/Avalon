@@ -107,7 +107,7 @@ namespace Ryujinx.Ava.UI.Models
 
         private static async Task<string> GetAllAsyncRequestImpl(HttpClient client = null)
         {
-            var ldnWebHost = ConfigurationState.Instance.Multiplayer.GetLdnWebServer();
+            string ldnWebHost = ConfigurationState.Instance.Multiplayer.GetLdnWebServer();
 
             LocaleManager.Associate(LocaleKeys.LdnGameListRefreshToolTip, ldnWebHost);
 

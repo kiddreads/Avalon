@@ -1,5 +1,6 @@
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Kernel.Process;
+using Ryujinx.HLE.HOS.Kernel.Threading;
 using System;
 using System.Text;
 
@@ -25,11 +26,11 @@ namespace Ryujinx.HLE.Debugger
 
         public string GetMinidump()
         {
-            var response = new StringBuilder();
+            StringBuilder response = new();
             response.AppendLine("=== Begin Minidump ===\n");
             response.AppendLine(GetProcessInfo());
 
-            foreach (var thread in GetThreads())
+            foreach (KThread thread in GetThreads())
             {
                 response.AppendLine($"=== Thread {thread.ThreadUid} ===");
                 try
@@ -66,7 +67,7 @@ namespace Ryujinx.HLE.Debugger
                 if (Process is not { } kProcess)
                     return "No application process found\n";
 
-                var sb = new StringBuilder();
+                StringBuilder sb = new();
 
                 sb.AppendLine($"Program Id:  0x{kProcess.TitleId:x16}");
                 sb.AppendLine($"Application: {(kProcess.IsApplication ? 1 : 0)}");
@@ -81,7 +82,7 @@ namespace Ryujinx.HLE.Debugger
                     $"  Stack: 0x{kProcess.MemoryManager.StackRegionStart:x10} - 0x{kProcess.MemoryManager.StackRegionEnd - 1:x10}");
 
                 sb.AppendLine("Modules:");
-                var debugger = kProcess.Debugger;
+                HleProcessDebugger debugger = kProcess.Debugger;
                 if (debugger != null)
                 {
                     foreach (HleProcessDebugger.Image image in debugger.GetLoadedImages())

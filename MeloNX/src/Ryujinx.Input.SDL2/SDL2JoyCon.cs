@@ -362,7 +362,7 @@ namespace Ryujinx.Input.SDL2
 
             if (HasConfiguration)
             {
-                var joyconStickConfig = GetLogicalJoyStickConfig(inputId);
+                JoyconConfigControllerStick<GamepadInputId, Common.Configuration.Hid.Controller.StickInputId> joyconStickConfig = GetLogicalJoyStickConfig(inputId);
 
                 if (joyconStickConfig != null)
                 {
@@ -398,7 +398,7 @@ namespace Ryujinx.Input.SDL2
 
         public bool IsPressed(GamepadButtonInputId inputId)
         {
-            if (!_buttonsDriverMapping.TryGetValue(inputId, out var button))
+            if (!_buttonsDriverMapping.TryGetValue(inputId, out SDL_GameControllerButton button))
             {
                 return false;
             }

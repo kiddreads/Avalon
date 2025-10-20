@@ -904,8 +904,8 @@ namespace Ryujinx.Graphics.Vulkan
 
             pattern.OffsetIndex.CopyTo(shaderParams[..pattern.OffsetIndex.Length]);
 
-            using var patternScoped = gd.BufferManager.ReserveOrCreate(gd, cbs, ParamsBufferSize);
-            var patternBuffer = patternScoped.Holder;
+            using ScopedTemporaryBuffer patternScoped = gd.BufferManager.ReserveOrCreate(gd, cbs, ParamsBufferSize);
+            BufferHolder patternBuffer = patternScoped.Holder;
 
             patternBuffer.SetDataUnchecked<int>(patternScoped.Offset, shaderParams);
 
