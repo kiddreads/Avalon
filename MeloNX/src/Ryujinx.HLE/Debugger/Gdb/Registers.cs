@@ -20,8 +20,8 @@ namespace Ryujinx.HLE.Debugger.Gdb
                 32 => Helpers.ToHex(BitConverter.GetBytes(state.DebugPc)),
                 33 => Helpers.ToHex(BitConverter.GetBytes(state.Pstate)),
                 >= 34 and <= 65 => Helpers.ToHex(state.GetV(registerId - 34).ToArray()),
-                66 => Helpers.ToHex(BitConverter.GetBytes((uint)state.Fpsr)),
-                67 => Helpers.ToHex(BitConverter.GetBytes((uint)state.Fpcr)),
+                66 => Helpers.ToHex(BitConverter.GetBytes(state.Fpsr)),
+                67 => Helpers.ToHex(BitConverter.GetBytes(state.Fpcr)),
                 _ => null
             };
 

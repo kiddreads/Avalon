@@ -1,13 +1,50 @@
+using Gommon;
+using JetBrains.Annotations;
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Kernel.Process;
 using Ryujinx.HLE.HOS.Kernel.Threading;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Ryujinx.HLE.Debugger
 {
     public partial class Debugger
     {
+        static Debugger()
+        {
+            _rcmdDelegates.Add(["help"], 
+                _ => _rcmdDelegates.Keys
+                    .Where(x => !x[0].Equals("help"))
+                    .Select(x => x.JoinToString('\n'))
+                    .JoinToString('\n') + '\n'
+                );
+            _rcmdDelegates.Add(["get info"], dbgr => dbgr.GetProcessInfo());
+            _rcmdDelegates.Add(["backtrace", "bt"], dbgr => dbgr.GetStackTrace());
+            _rcmdDelegates.Add(["registers", "reg"], dbgr => dbgr.GetRegisters());
+            _rcmdDelegates.Add(["minidump"], dbgr => dbgr.GetMinidump());
+        }
+
+        private static readonly Dictionary<string[], Func<Debugger, string>> _rcmdDelegates = new();
+
+        [CanBeNull]
+        public static Func<Debugger, string> FindRcmdDelegate(string command)
+        {
+            Func<Debugger, string> searchResult = null;
+
+            foreach ((string[] names, Func<Debugger, string> dlg) in _rcmdDelegates)
+            {
+                if (names.ContainsIgnoreCase(command.Trim()))
+                {
+                    searchResult = dlg;
+                    break;
+                }
+            }
+
+            return searchResult;
+        }
+
         public string GetStackTrace()
         {
             if (GThread == null)
