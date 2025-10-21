@@ -28,10 +28,9 @@ namespace Ryujinx.HLE.Debugger
 
         private static readonly Dictionary<string[], Func<Debugger, string>> _rcmdDelegates = new();
 
-        [CanBeNull]
         public static Func<Debugger, string> FindRcmdDelegate(string command)
         {
-            Func<Debugger, string> searchResult = null;
+            Func<Debugger, string> searchResult = _ => $"Unknown command: {command}\n";
 
             foreach ((string[] names, Func<Debugger, string> dlg) in _rcmdDelegates)
             {

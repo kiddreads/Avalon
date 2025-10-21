@@ -422,9 +422,9 @@ namespace Ryujinx.HLE.Debugger.Gdb
                 string command = Helpers.FromHex(hexCommand);
                 Logger.Debug?.Print(LogClass.GdbStub, $"Received Rcmd: {command}");
 
-                var rcmdDelegate = Debugger.FindRcmdDelegate(command);
+                Func<Debugger, string> rcmd = Debugger.FindRcmdDelegate(command);
 
-                Processor.ReplyHex(rcmdDelegate?.Invoke(Debugger) ?? $"Unknown command: {command}\n");
+                Processor.ReplyHex(rcmd(Debugger));
             }
             catch (Exception e)
             {
