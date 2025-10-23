@@ -320,7 +320,7 @@ namespace Ryujinx.Ava.Systems.AppLibrary
                 {
                     foreach (DirectoryEntryEx entry in controlFs.EnumerateEntries("/", "*"))
                     {
-                        if (entry.Name == "control.nacp")
+                        if (entry.Name == "control.nacp" || entry.Type == DirectoryEntryType.Directory)
                         {
                             continue;
                         }
