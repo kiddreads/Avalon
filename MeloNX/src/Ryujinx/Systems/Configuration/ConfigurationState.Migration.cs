@@ -56,6 +56,7 @@ namespace Ryujinx.Ava.Systems.Configuration
 
             Logger.EnableFileLog.Value = cff.EnableFileLog;
             Logger.EnableDebug.Value = cff.LoggingEnableDebug;
+            Logger.EnableAvaloniaLog.Value = cff.LoggingEnableAvalonia;
             Logger.EnableStub.Value = cff.LoggingEnableStub;
             Logger.EnableInfo.Value = cff.LoggingEnableInfo;
             Logger.EnableWarn.Value = cff.LoggingEnableWarn;

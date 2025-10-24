@@ -221,10 +221,7 @@ namespace Ryujinx.Ava
             }
 
             // When you first load the program, copy to remember the path for the global configuration
-            if (GlobalConfigurationPath == null)
-            {
-                GlobalConfigurationPath = ConfigurationPath;
-            }
+            GlobalConfigurationPath ??= ConfigurationPath;
 
             UseHardwareAcceleration = ConfigurationState.Instance.EnableHardwareAcceleration;
 
