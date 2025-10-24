@@ -176,7 +176,8 @@ namespace Ryujinx.Ava.UI.ViewModels
                 .Sort(GetComparer())
                 .OnItemAdded(_ => OnPropertyChanged(nameof(AppsObservableList)))
                 .OnItemRemoved(_ => OnPropertyChanged(nameof(AppsObservableList)))
-                .Bind(out _appsObservableList);
+                .Bind(out _appsObservableList)
+                .Subscribe();
 
             _rendererWaitEvent = new AutoResetEvent(false);
 
