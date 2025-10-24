@@ -46,18 +46,18 @@ namespace Ryujinx.HLE.Debugger
 
         public string GetStackTrace()
         {
-            if (GThread == null)
+            if (GThreadId == null)
                 return "No thread selected\n";
 
-            return Process?.Debugger?.GetGuestStackTrace(DebugProcess.GetThread(GThread.Value)) ?? "No application process found\n"; 
+            return Process?.Debugger?.GetGuestStackTrace(DebugProcess.GetThread(GThreadId.Value)) ?? "No application process found\n"; 
         }
 
         public string GetRegisters()
         {
-            if (GThread == null)
+            if (GThreadId == null)
                 return "No thread selected\n";
 
-            return Process?.Debugger?.GetCpuRegisterPrintout(DebugProcess.GetThread(GThread.Value)) ?? "No application process found\n";
+            return Process?.Debugger?.GetCpuRegisterPrintout(DebugProcess.GetThread(GThreadId.Value)) ?? "No application process found\n";
         }
 
         public string GetMinidump()
@@ -66,9 +66,9 @@ namespace Ryujinx.HLE.Debugger
                 return "No application process found\n";
 
             if (kProcess.Debugger is not { } debugger)
-                return $"Error getting minidump: debugger is null\n";
+                return "Error getting minidump: debugger is null\n";
 
-            var response = debugger.GetMinidump();
+            string response = debugger.GetMinidump();
 
             Logger.Info?.Print(LogClass.GdbStub, response);
             return response;
@@ -81,10 +81,8 @@ namespace Ryujinx.HLE.Debugger
                 if (Process is not { } kProcess)
                     return "No application process found\n";
 
-                if (kProcess.Debugger is not { } debugger)
-                    return $"Error getting process info: debugger is null\n";
-
-                return debugger.GetProcessInfoPrintout();
+                return kProcess.Debugger?.GetProcessInfoPrintout() 
+                       ?? "Error getting process info: debugger is null\n";
             }
             catch (Exception e)
             {
