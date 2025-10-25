@@ -42,27 +42,20 @@
                             SelectedIndex="{Binding Region}"
                             HorizontalContentAlignment="Left"
                             Width="350">
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionJapan}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionUSA}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionEurope}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionAustralia}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionChina}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionKorea}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemRegionTaiwan}" />
-                            </ComboBoxItem>
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionJapan}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionUSA}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionEurope}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionAustralia}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionChina}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionKorea}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemRegionTaiwan}" />
                         </ComboBox>
                     </StackPanel>
                     <StackPanel
@@ -76,60 +69,42 @@
                             SelectedIndex="{Binding Language}"
                             HorizontalContentAlignment="Left"
                             Width="350">
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageJapanese}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageAmericanEnglish}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageFrench}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageGerman}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageItalian}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageSpanish}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageChinese}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageKorean}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageDutch}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguagePortuguese}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageRussian}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageTaiwanese}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageBritishEnglish}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageCanadianFrench}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageLatinAmericanSpanish}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageSimplifiedChinese}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageTraditionalChinese}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemSystemLanguageBrazilianPortuguese}" />
-                            </ComboBoxItem>
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageJapanese}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageAmericanEnglish}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageFrench}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageGerman}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageItalian}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageSpanish}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageChinese}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageKorean}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageDutch}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguagePortuguese}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageRussian}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageTaiwanese}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageBritishEnglish}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageCanadianFrench}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageLatinAmericanSpanish}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageSimplifiedChinese}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageTraditionalChinese}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemSystemLanguageBrazilianPortuguese}" />
                         </ComboBox>
                     </StackPanel>
                     <StackPanel
@@ -208,15 +183,12 @@
                             ToolTip.Tip="{ext:Locale SettingsTabSystemVSyncModeTooltipCustom}"
                             HorizontalContentAlignment="Left"
                             Width="350">
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemVSyncModeSwitch}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemVSyncModeUnbounded}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemVSyncModeCustom}" />
-                            </ComboBoxItem>
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemVSyncModeSwitch}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemVSyncModeUnbounded}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemVSyncModeCustom}" />
                         </ComboBox>
                         <ComboBox
                             IsVisible="{Binding !EnableCustomVSyncInterval}"
@@ -224,12 +196,10 @@
                             ToolTip.Tip="{ext:Locale SettingsTabSystemVSyncModeTooltip}"
                             HorizontalContentAlignment="Left"
                             Width="350">
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemVSyncModeSwitch}" />
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="{ext:Locale SettingsTabSystemVSyncModeUnbounded}" />
-                            </ComboBoxItem>
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemVSyncModeSwitch}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabSystemVSyncModeUnbounded}" />
                         </ComboBox>
                     </StackPanel>
                     <StackPanel IsVisible="{Binding EnableCustomVSyncInterval}"
@@ -288,18 +258,14 @@
                         ToolTip.Tip="{ext:Locale DRamTooltip}"
                         HorizontalContentAlignment="Left"
                         Width="350">
-                        <ComboBoxItem>
-                            <TextBlock Text="{ext:Locale SettingsTabSystemDramSize4GiB}" />
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <TextBlock Text="{ext:Locale SettingsTabSystemDramSize6GiB}" />
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <TextBlock Text="{ext:Locale SettingsTabSystemDramSize8GiB}" />
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <TextBlock Text="{ext:Locale SettingsTabSystemDramSize12GiB}" />
-                        </ComboBoxItem>
+                        <ComboBoxItem
+                            Content="{ext:Locale SettingsTabSystemDramSize4GiB}" />
+                        <ComboBoxItem
+                            Content="{ext:Locale SettingsTabSystemDramSize6GiB}" />
+                        <ComboBoxItem
+                            Content="{ext:Locale SettingsTabSystemDramSize8GiB}" />
+                        <ComboBoxItem
+                            Content="{ext:Locale SettingsTabSystemDramSize12GiB}" />
                     </ComboBox>
                 </StackPanel>
                 <StackPanel

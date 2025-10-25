@@ -71,22 +71,16 @@
                             <ComboBox SelectedIndex="{Binding FocusLostActionType}"
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralFocusLossTypeDoNothing}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralFocusLossTypeBlockInput}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralFocusLossTypeMuteAudio}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock
-                                        Text="{ext:Locale SettingsTabGeneralFocusLossTypeBlockInputAndMuteAudio}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralFocusLossTypePauseEmulation}" />
-                                </ComboBoxItem>
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralFocusLossTypeDoNothing}" />
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralFocusLossTypeBlockInput}" />
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralFocusLossTypeMuteAudio}" />
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralFocusLossTypeBlockInputAndMuteAudio}" />
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralFocusLossTypePauseEmulation}" />
                             </ComboBox>
                         </StackPanel>
                         <StackPanel
@@ -100,16 +94,12 @@
                             <ComboBox SelectedIndex="{Binding UpdateCheckerType}"
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale CommonOff}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock
-                                        Text="{ext:Locale SettingsTabGeneralCheckUpdatesOnLaunchPromptAtStartup}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralCheckUpdatesOnLaunchBackground}" />
-                                </ComboBoxItem>
+                                <ComboBoxItem
+                                    Content="{ext:Locale CommonOff}" />
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralCheckUpdatesOnLaunchPromptAtStartup}" />
+                                <ComboBoxItem
+                                    Content="{ext:Locale SettingsTabGeneralCheckUpdatesOnLaunchBackground}" />
                             </ComboBox>
                             <TextBlock Classes="globalConfigMarker" IsVisible="{Binding IsGameTitleNotNull}" />
                         </StackPanel>
@@ -122,15 +112,12 @@
                             <ComboBox SelectedIndex="{Binding HideCursor}"
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale Never}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralHideCursorOnIdle}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralHideCursorAlways}" />
-                                </ComboBoxItem>
+                            <ComboBoxItem
+                                Content="{ext:Locale Never}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabGeneralHideCursorOnIdle}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabGeneralHideCursorAlways}" />
                             </ComboBox>
                         </StackPanel>
                         <StackPanel
@@ -145,15 +132,12 @@
                             <ComboBox SelectedIndex="{Binding BaseStyleIndex}"
                                       HorizontalContentAlignment="Left"
                                       MinWidth="100">
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale CommonAuto}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralThemeLight}" />
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    <TextBlock Text="{ext:Locale SettingsTabGeneralThemeDark}" />
-                                </ComboBoxItem>
+                                <ComboBoxItem
+                                Content="{ext:Locale CommonAuto}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabGeneralThemeLight}" />
+                            <ComboBoxItem
+                                Content="{ext:Locale SettingsTabGeneralThemeDark}" />
                             </ComboBox>
                             <TextBlock Classes="globalConfigMarker" IsVisible="{Binding IsGameTitleNotNull}" />
                         </StackPanel>

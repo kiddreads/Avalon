@@ -35,18 +35,17 @@
                               Width="350"
                               ToolTip.Tip="{ext:Locale AudioBackendTooltip}"
                               HorizontalContentAlignment="Left">
-                        <ComboBoxItem>
-                            <TextBlock Text="{ext:Locale SettingsTabSystemAudioBackendDummy}" />
-                        </ComboBoxItem>
-                        <ComboBoxItem IsEnabled="{Binding IsOpenAlEnabled}">
-                            <TextBlock Text="{ext:Locale SettingsTabSystemAudioBackendOpenAL}" />
-                        </ComboBoxItem>
-                        <ComboBoxItem IsEnabled="{Binding IsSoundIoEnabled}">
-                            <TextBlock Text="{ext:Locale SettingsTabSystemAudioBackendSoundIO}" />
-                        </ComboBoxItem>
-                        <ComboBoxItem IsEnabled="{Binding IsSDL2Enabled}">
-                            <TextBlock Text="{ext:Locale SettingsTabSystemAudioBackendSDL2}" />
-                        </ComboBoxItem>
+                        <ComboBoxItem
+                            Content="{ext:Locale SettingsTabSystemAudioBackendDummy}" />
+                        <ComboBoxItem
+                            IsEnabled="{Binding IsOpenAlEnabled}"
+                            Content="{ext:Locale SettingsTabSystemAudioBackendOpenAL}" />
+                        <ComboBoxItem
+                            IsEnabled="{Binding IsSoundIoEnabled}"
+                            Content="{ext:Locale SettingsTabSystemAudioBackendSoundIO}" />
+                        <ComboBoxItem
+                            IsEnabled="{Binding IsSDL2Enabled}"
+                            Content="{ext:Locale SettingsTabSystemAudioBackendSDL2}" />
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="10,0,0,0" Orientation="Horizontal">

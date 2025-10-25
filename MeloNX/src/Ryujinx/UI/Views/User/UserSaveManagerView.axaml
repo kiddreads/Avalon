@@ -22,44 +22,33 @@
     <Grid RowDefinitions="Auto,*,Auto">
         <Grid
             Grid.Row="0"
+            Margin="0,0,0,5"
             HorizontalAlignment="Stretch" ColumnDefinitions="Auto,*">
             <StackPanel
                 Spacing="10"
                 Orientation="Horizontal"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center">
-                <ComboBox SelectedIndex="{Binding SortIndex}" Width="100">
-                    <ComboBoxItem>
-                        <Label
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Left"
-                            Content="{ext:Locale Name}" />
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <Label
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Left"
-                            Content="{ext:Locale Size}" />
-                    </ComboBoxItem>
+                <ComboBox SelectedIndex="{Binding SortIndex}"
+                          HorizontalContentAlignment="Left"
+                          MinWidth="100">
+                    <ComboBoxItem
+                        Content="{ext:Locale Name}" />
+                    <ComboBoxItem
+                        Content="{ext:Locale Size}" />
                     <ComboBox.Styles>
                         <Style Selector="ContentControl#ContentPresenter">
                             <Setter Property="HorizontalAlignment" Value="Left" />
                         </Style>
                     </ComboBox.Styles>
                 </ComboBox>
-                <ComboBox SelectedIndex="{Binding OrderIndex}" Width="150">
-                    <ComboBoxItem>
-                        <Label
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Left"
-                            Content="{ext:Locale OrderAscending}" />
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <Label
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Left"
-                            Content="{ext:Locale OrderDescending}" />
-                    </ComboBoxItem>
+                <ComboBox SelectedIndex="{Binding OrderIndex}"
+                          HorizontalContentAlignment="Left"
+                          MinWidth="150">
+                    <ComboBoxItem
+                        Content="{ext:Locale OrderAscending}" />
+                    <ComboBoxItem
+                        Content="{ext:Locale OrderDescending}" />
                     <ComboBox.Styles>
                         <Style Selector="ContentControl#ContentPresenter">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -71,9 +60,9 @@
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 Margin="10,0, 0, 0" ColumnDefinitions="Auto,*">
-                <Label Content="{ext:Locale Search}" VerticalAlignment="Center" />
+                <TextBlock Text="{ext:Locale Search}" VerticalAlignment="Center" />
                 <TextBox
-                    Margin="5,0,0,0"
+                    Margin="10,0,0,0"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     Text="{Binding Search}" />
