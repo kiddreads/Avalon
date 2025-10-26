@@ -1622,6 +1622,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 #if RELEASE
             await PerformanceCheck();
 #endif
+            PreLaunchNotification();
 
             Logger.RestartTime();
 
@@ -1852,6 +1853,47 @@ namespace Ryujinx.Ava.UI.ViewModels
 
                     SaveConfig();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Show non-intrusive notifications for options that may cause side effects.
+        /// </summary>
+        public static void PreLaunchNotification()
+        {
+            if (ConfigurationState.Instance.Debug.DebuggerSuspendOnStart.Value)
+            {
+                NotificationHelper.ShowInformation(
+                    LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckSuspendOnStartTitle],
+                    LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckSuspendOnStartMessage]);
+            }
+
+            if (ConfigurationState.Instance.Debug.EnableGdbStub.Value)
+            {
+                NotificationHelper.ShowInformation(
+                    LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.NotificationLaunchCheckGdbStubTitle, ConfigurationState.Instance.Debug.GdbStubPort.Value),
+                    LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckGdbStubMessage]);
+            }
+
+            if (ConfigurationState.Instance.System.DramSize.Value != MemoryConfiguration.MemoryConfiguration4GiB)
+            {
+                var MemoryConfigurationLocaleKey = ConfigurationState.Instance.System.DramSize.Value switch
+                {
+                    MemoryConfiguration.MemoryConfiguration4GiB or
+                    MemoryConfiguration.MemoryConfiguration4GiBAppletDev or
+                    MemoryConfiguration.MemoryConfiguration4GiBSystemDev => LocaleKeys.SettingsTabSystemDramSize4GiB,
+                    MemoryConfiguration.MemoryConfiguration6GiB or
+                    MemoryConfiguration.MemoryConfiguration6GiBAppletDev => LocaleKeys.SettingsTabSystemDramSize6GiB,
+                    MemoryConfiguration.MemoryConfiguration8GiB => LocaleKeys.SettingsTabSystemDramSize8GiB,
+                    MemoryConfiguration.MemoryConfiguration12GiB => LocaleKeys.SettingsTabSystemDramSize12GiB,
+                    _ => LocaleKeys.SettingsTabSystemDramSize4GiB,
+                };
+
+                var MemoryConfigurationLocale = LocaleManager.Instance[MemoryConfigurationLocaleKey];
+
+                NotificationHelper.ShowWarning(
+                    LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.NotificationLaunchCheckDramSizeTitle, MemoryConfigurationLocale),
+                    LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckDramSizeMessage]);
             }
         }
 
