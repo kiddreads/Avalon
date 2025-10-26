@@ -10,7 +10,6 @@ using Ryujinx.Audio.Renderer.Server.Upsampler;
 using Ryujinx.Audio.Renderer.Server.Voice;
 using Ryujinx.Common;
 using System;
-using System.Runtime.CompilerServices;
 using CpuAddress = System.UInt64;
 
 namespace Ryujinx.Audio.Renderer.Server

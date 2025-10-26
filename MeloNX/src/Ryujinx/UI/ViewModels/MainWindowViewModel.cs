@@ -1861,14 +1861,14 @@ namespace Ryujinx.Ava.UI.ViewModels
         /// </summary>
         public static void PreLaunchNotification()
         {
-            if (ConfigurationState.Instance.Debug.DebuggerSuspendOnStart.Value)
+            if (ConfigurationState.Instance.Debug.DebuggerSuspendOnStart)
             {
                 NotificationHelper.ShowInformation(
                     LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckSuspendOnStartTitle],
                     LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckSuspendOnStartMessage]);
             }
 
-            if (ConfigurationState.Instance.Debug.EnableGdbStub.Value)
+            if (ConfigurationState.Instance.Debug.EnableGdbStub)
             {
                 NotificationHelper.ShowInformation(
                     LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.NotificationLaunchCheckGdbStubTitle, ConfigurationState.Instance.Debug.GdbStubPort.Value),
@@ -1877,7 +1877,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
             if (ConfigurationState.Instance.System.DramSize.Value != MemoryConfiguration.MemoryConfiguration4GiB)
             {
-                var MemoryConfigurationLocaleKey = ConfigurationState.Instance.System.DramSize.Value switch
+                var memoryConfigurationLocaleKey = ConfigurationState.Instance.System.DramSize.Value switch
                 {
                     MemoryConfiguration.MemoryConfiguration4GiB or
                     MemoryConfiguration.MemoryConfiguration4GiBAppletDev or
@@ -1889,10 +1889,11 @@ namespace Ryujinx.Ava.UI.ViewModels
                     _ => LocaleKeys.SettingsTabSystemDramSize4GiB,
                 };
 
-                var MemoryConfigurationLocale = LocaleManager.Instance[MemoryConfigurationLocaleKey];
-
                 NotificationHelper.ShowWarning(
-                    LocaleManager.Instance.UpdateAndGetDynamicValue(LocaleKeys.NotificationLaunchCheckDramSizeTitle, MemoryConfigurationLocale),
+                    LocaleManager.Instance.UpdateAndGetDynamicValue(
+                        LocaleKeys.NotificationLaunchCheckDramSizeTitle, 
+                        LocaleManager.Instance[memoryConfigurationLocaleKey]
+                        ),
                     LocaleManager.Instance[LocaleKeys.NotificationLaunchCheckDramSizeMessage]);
             }
         }
@@ -2348,24 +2349,23 @@ namespace Ryujinx.Ava.UI.ViewModels
             Commands.CreateConditional<MainWindowViewModel>(vm => vm?.SelectedApplication != null,
                 async viewModel =>
                 {
-                    IReadOnlyList<IStorageFolder> result = await viewModel.StorageProvider.OpenFolderPickerAsync(
+                    Optional<IStorageFolder> resOpt = await viewModel.StorageProvider.OpenSingleFolderPickerAsync(
                         new FolderPickerOpenOptions
                         {
-                            Title = LocaleManager.Instance[LocaleKeys.FolderDialogExtractTitle],
-                            AllowMultiple = false,
+                            Title = LocaleManager.Instance[LocaleKeys.FolderDialogExtractTitle]
                         });
 
-                    if (result.Count == 0)
+                    if (!resOpt.TryGet(out IStorageFolder result))
                         return;
 
                     ApplicationHelper.ExtractSection(
-                        result[0].Path.LocalPath,
+                        result.Path.LocalPath,
                         NcaSectionType.Logo,
                         viewModel.SelectedApplication.Path,
                         viewModel.SelectedApplication.Name);
 
                     IStorageFile iconFile =
-                        await result[0].CreateFileAsync($"{viewModel.SelectedApplication.IdString}.png");
+                        await result.CreateFileAsync($"{viewModel.SelectedApplication.IdString}.png");
                     await using Stream fileStream = await iconFile.OpenWriteAsync();
 
                     using SKBitmap bitmap = SKBitmap.Decode(viewModel.SelectedApplication.Icon)

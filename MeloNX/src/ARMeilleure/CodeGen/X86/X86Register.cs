@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace ARMeilleure.CodeGen.X86
 {
     enum X86Register

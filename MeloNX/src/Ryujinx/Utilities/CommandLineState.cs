@@ -19,7 +19,7 @@ namespace Ryujinx.Ava.Utilities
         public static string OverrideSystemLanguage { get; private set; }
         public static string OverrideHideCursor { get; private set; }
         public static string BaseDirPathArg { get; private set; }
-        public static FilePath FirmwareToInstallPathArg { get; set; }
+        public static Optional<FilePath> FirmwareToInstallPathArg { get; set; }
         public static string Profile { get; private set; }
         public static string LaunchPathArg { get; private set; }
         public static string LaunchApplicationId { get; private set; }

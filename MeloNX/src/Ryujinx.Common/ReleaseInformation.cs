@@ -1,10 +1,5 @@
-using Ryujinx.Common.Utilities;
 using System;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Reflection;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Ryujinx.Common
 {

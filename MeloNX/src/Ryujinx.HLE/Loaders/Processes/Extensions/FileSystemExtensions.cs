@@ -36,7 +36,7 @@ namespace Ryujinx.HLE.Loaders.Processes.Extensions
 
         public static ProcessResult Load(this IFileSystem exeFs, Switch device, BlitStruct<ApplicationControlProperty> nacpData, MetaLoader metaLoader, byte programIndex, bool isHomebrew = false)
         {
-            ulong programId = metaLoader.GetProgramId();
+            ulong programId = metaLoader.ProgramId;
 
             // Replace the whole ExeFs partition by the modded one.
             if (device.Configuration.VirtualFileSystem.ModLoader.ReplaceExefsPartition(programId, ref exeFs))
@@ -118,13 +118,13 @@ namespace Ryujinx.HLE.Loaders.Processes.Extensions
                 modLoadResult.Hash,
                 true,
                 programName,
-                metaLoader.GetProgramId(),
+                programId,
                 programIndex,
                 null,
                 nsoExecutables);
 
             // TODO: This should be stored using ProcessId instead.
-            device.System.LibHacHorizonManager.ArpIReader.ApplicationId = new LibHac.ApplicationId(metaLoader.GetProgramId());
+            device.System.LibHacHorizonManager.ArpIReader.ApplicationId = new LibHac.ApplicationId(programId);
 
             return processResult;
         }

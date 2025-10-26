@@ -49,7 +49,7 @@ namespace Ryujinx.HLE.FileSystem
                 string ncaId = Convert.ToHexStringLower(entry.NcaId).Replace("-", null);
                 Nca nca = _pfs.GetNca(keySet, $"/{ncaId}.nca");
 
-                if (nca.GetProgramIndex() == programIndex)
+                if (nca.ProgramIndex == programIndex)
                 {
                     return nca;
                 }

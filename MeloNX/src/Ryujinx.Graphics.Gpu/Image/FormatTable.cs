@@ -1,6 +1,5 @@
 using Ryujinx.Graphics.GAL;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Ryujinx.Graphics.Gpu.Image
 {

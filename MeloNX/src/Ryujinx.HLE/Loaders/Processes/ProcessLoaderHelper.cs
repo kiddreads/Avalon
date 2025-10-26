@@ -17,7 +17,6 @@ using Ryujinx.HLE.HOS.Kernel.Common;
 using Ryujinx.HLE.HOS.Kernel.Memory;
 using Ryujinx.HLE.HOS.Kernel.Process;
 using Ryujinx.HLE.Loaders.Executables;
-using Ryujinx.HLE.Loaders.Processes.Extensions;
 using Ryujinx.Horizon.Common;
 using Ryujinx.Horizon.Sdk.Arp;
 using System;
@@ -44,12 +43,12 @@ namespace Ryujinx.HLE.Loaders.Processes
             {
                 Nca nca = partitionFileSystem.GetNca(device.FileSystem.KeySet, fileEntry.FullPath);
 
-                if (!nca.IsProgram())
+                if (!nca.IsProgram)
                 {
                     continue;
                 }
 
-                ulong currentMainProgramId = nca.GetProgramIdBase();
+                ulong currentMainProgramId = nca.ProgramIdBase;
 
                 if (applicationId == 0 && currentMainProgramId != 0)
                 {
@@ -66,7 +65,7 @@ namespace Ryujinx.HLE.Loaders.Processes
                     break;
                 }
 
-                hasIndex[nca.GetProgramIndex()] = true;
+                hasIndex[nca.ProgramIndex] = true;
             }
 
             if (programCount == 0)
@@ -365,7 +364,7 @@ namespace Ryujinx.HLE.Loaders.Processes
 
             string displayVersion;
 
-            if (metaLoader.GetProgramId() > 0x0100000000007FFF)
+            if (metaLoader.ProgramId > 0x0100000000007FFF)
             {
                 displayVersion = applicationControlProperties.Value.DisplayVersionString.ToString();
             }

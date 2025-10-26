@@ -119,7 +119,6 @@ namespace Ryujinx.Ava
                 => ProcessUnhandledException(sender, e.Exception, false);
             AppDomain.CurrentDomain.ProcessExit += (_, _) => Exit();
 
-
             // Setup base data directory.
             AppDataManager.Initialize(CommandLineState.BaseDirPathArg);
 

@@ -13,7 +13,7 @@ namespace Ryujinx.HLE.Loaders.Processes
         {
             MetaLoader metaLoader = exeFs.GetNpdm();
             BlitStruct<ApplicationControlProperty> nacpData = new(1);
-            ulong programId = metaLoader.GetProgramId();
+            ulong programId = metaLoader.ProgramId;
 
             device.Configuration.VirtualFileSystem.ModLoader.CollectMods([programId]);
 
