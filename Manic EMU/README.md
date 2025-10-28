@@ -38,6 +38,7 @@ Your support keeps this app going
 - Game Boy Color (GBC)
 - Game Boy (GB)
 - Nintendo Entertainment System (NES)
+- Famicom Disk System (FDS)
 - Super Nintendo Entertainment System (SNES)
 - Virtual Boy (VB)
 - Pokémon Mini (PM)
