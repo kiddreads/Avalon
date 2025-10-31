@@ -157,7 +157,9 @@ $ git submodule update --init --recursive
 ## Licensing
 The Delta codebase is distributed under the **AGPLv3 license**.
 
-## Contact Me
+## Contact Us
 
-* Email: riley@rileytestut.com
-* Twitter: [@rileytestut](https://twitter.com/rileytestut)
+* Email: delta@altstore.io
+* Mastodon: [@mattaltgear@mstdn.social](https://mstdn.social/mattaltgear)
+* Threads: [@mattaltgear](https://www.threads.com/@mattaltgear)
+* Bluesky: [@mattaltgear.bsky.social](https://bsky.app/profile/mattaltgear.bsky.social)
