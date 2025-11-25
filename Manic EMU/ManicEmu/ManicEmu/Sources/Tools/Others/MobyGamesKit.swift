@@ -9,6 +9,7 @@
 
 import SQLite
 import Fuse
+import ManicEmuCore
 
 struct MobyGamesKit {
     struct Result {
@@ -17,21 +18,23 @@ struct MobyGamesKit {
     }
     
     static func getGameInfoUrl(game: Game, completion: ((URL)->Void)? = nil) {
-        let gameTypeName = game.gameType.localizedShortName
+        let gameTypeName = game.gameType == .fds ? GameType.nes.localizedShortName : game.gameType.localizedShortName
         let searchPattern = game.translatedName ?? game.aliasName ?? game.name
         DispatchQueue.global().async {
             do {
                 let db = try Connection(Constants.Path.GamesDB)
                 try db.key(Constants.Cipher.ManicKey)
                 let table = Table(gameTypeName)
-//                let id = SQLite.Expression<Int>("id")
+                let id = SQLite.Expression<Int>("id")
                 let url = SQLite.Expression<String>("url")
                 let name = SQLite.Expression<String>("name")
-//                let year = SQLite.Expression<Int>("year")
                 let allGameInfos = try db.prepare(table)
                 let fuse = Fuse()
                 let pattern = fuse.createPattern(from: searchPattern)
-                let matchList = allGameInfos.map({ Result(name: $0[name], url: $0[url]) })
+                let matchList = allGameInfos.map({
+                    let url = Constants.URLs.MobyGames.absoluteString.appendingPathComponent("game").appendingPathComponent("\($0[id])").appendingPathComponent($0[url])
+                    return Result(name: $0[name], url: url)
+                })
                 if let result = matchList.min(by: {
                     if let result0 = fuse.search(pattern, in: $0.name) {
                         if let result1 = fuse.search(pattern, in: $1.name) {

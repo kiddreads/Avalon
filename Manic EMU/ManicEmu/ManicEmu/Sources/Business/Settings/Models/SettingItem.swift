@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro
+        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit
     }
     
     var type: ItemType
@@ -25,13 +25,13 @@ struct SettingItem {
             return Constants.Color.Yellow
         case .autoSaveState, .onlinePlay, .feedback, .clearCache:
             return Constants.Color.Green
-        case .airPlay, .FAQ, .about, .rumble:
+        case .airPlay, .FAQ, .about, .rumble, .jit:
             return Constants.Color.Indigo
         case .iCloud, .userAgreement, .appearance:
             return Constants.Color.Blue
         case .fullScreenWhenConnectController, .shareApp, .triggerPro:
             return Constants.Color.Orange
-        case .bios, .language:
+        case .bios, .language, .skin:
             return Constants.Color.Pink
         case .qq, .telegram, .discord, .retro:
             return .clear
@@ -96,6 +96,10 @@ struct SettingItem {
             R.image.customMoonphaseFirstQuarter()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .triggerPro:
             R.image.customXmarkTriangleCircleSquare()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        case .skin:
+            UIImage(symbol: .tshirtFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        case .jit:
+            UIImage(symbol: .boltFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         }
     }
     
@@ -149,6 +153,10 @@ struct SettingItem {
             R.string.localizable.appearance()
         case .triggerPro:
             "TriggerPro"
+        case .skin:
+            R.string.localizable.gamesSpecifySkin()
+        case .jit:
+            "JIT"
         }
     }
     
@@ -157,8 +165,6 @@ struct SettingItem {
             return R.string.localizable.quickGameDetail()
         } else if type == .airPlay {
             return R.string.localizable.airPlayDetail()
-        } else if type == .iCloud {
-            return R.string.localizable.iCloudDetail()
         } else if type == .fullScreenWhenConnectController {
             return R.string.localizable.fullScreenWhenConnectControllerDetail()
         } else if type == .theme {

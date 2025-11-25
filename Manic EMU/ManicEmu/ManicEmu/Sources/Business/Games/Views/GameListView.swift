@@ -29,7 +29,7 @@ class GameListView: BaseView {
         view.dataSource = self
         view.delegate = self
         view.allowsMultipleSelection = true
-        let top = Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid + Constants.Size.ItemHeightHuge
+        let top = Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid + Constants.Size.GamesToolViewHeight
         let bottom = Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax
         view.contentInset = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
         view.blankSlateView = GamesListBlankSlateView()
@@ -144,7 +144,7 @@ class GameListView: BaseView {
         if UIDevice.isPhone, UIDevice.isLandscape {
             return gamesNavigationBottom
         } else {
-            return gamesNavigationBottom + Constants.Size.ItemHeightHuge
+            return gamesNavigationBottom + Constants.Size.GamesToolViewHeight
         }
     }
     private var landscapePhonePagingHeight = 0.0
@@ -169,6 +169,20 @@ class GameListView: BaseView {
             }
         }
     }
+    
+    //筛选厂商
+    var filteredManufacturer: Manufacturer? = nil {
+        didSet {
+            updateDatas()
+            collectionView.reloadData()
+            reloadIndexView()
+            if isSearchMode, let searchString {
+                searchDatas(string: searchString, forceSearch: true)
+            }
+        }
+    }
+    
+    private var foldedGameTypes: [GameType: Bool] = [:]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -324,7 +338,18 @@ class GameListView: BaseView {
     
     ///构造符合UI展示的数据源
     private func updateDatas() {
-        let groupGames = Dictionary(grouping: games, by: { $0.gameType })
+        let groupGames = Dictionary(grouping: games, by: {
+            $0.gameType
+        }).filter({
+            if let filteredManufacturer {
+                if filteredManufacturer.gameTypes.contains([$0.key]) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            return true
+        })
         // 数据结果 [GameType: [Game]]
         let sortType = GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0) ?? .title
         let sortOrder = GameSortOrder(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortOrder.rawValue) ?? 0) ?? .ascending
@@ -506,8 +531,8 @@ class GameListView: BaseView {
         return layout
     }
     
-    func searchDatas(string: String) {
-        guard searchString != string else { return }
+    func searchDatas(string: String, forceSearch: Bool = false) {
+        guard forceSearch || searchString != string else { return }
         //开始搜索前获取已经选中的games
         let games = collectionView.indexPathsForSelectedItems?.compactMap({ getGame(at: $0) })
         isSearchMode = false
@@ -720,6 +745,21 @@ class GameListView: BaseView {
             }
         }
     }
+    
+    func isGameExist(for manufacturer: Manufacturer) -> Bool {
+        for gameType in manufacturer.gameTypes {
+            if games.count(where: { $0.gameType == gameType }) > 0 {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func updateFilterChange() {
+        var contentInset = collectionView.contentInset
+        contentInset.top = Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid + Constants.Size.GamesToolViewHeight
+        collectionView.contentInset = contentInset
+    }
 }
 
 extension GameListView: UICollectionViewDataSource {
@@ -788,6 +828,12 @@ extension GameListView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if !(UIDevice.isPhone && UIDevice.isLandscape) {
+            let gameType = sortDatasKeys()[section]
+            if foldedGameTypes[gameType] ?? false {
+                return 0
+            }
+        }
         return getGames(at: section).count
     }
     
@@ -804,14 +850,29 @@ extension GameListView: UICollectionViewDataSource {
             //header
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: GamesCollectionReusableView.self, for: indexPath)
             let gameType = sortDatasKeys()[indexPath.section]
-            header.setData(gameType: gameType, highlightString: searchString, contentInsets: UIDevice.isPhone && UIDevice.isLandscape ? .init(top: 0, left: Constants.Size.SafeAera.left, bottom: 0, right: Constants.Size.SafeAera.right) : .zero, forceHideBlur: enableBackground)
-            if gameType == .unknown {
-                header.skinButton.isHidden = true
-            } else {
-                header.skinButton.isHidden = false
-                header.skinButton.onTap {
-                    topViewController()?.present(SkinSettingsViewController(gameType: gameType), animated: true)
+            header.setData(gameType: gameType,
+                           highlightString: searchString,
+                           contentInsets: UIDevice.isPhone && UIDevice.isLandscape ? .init(top: 0,
+                                                                                           left: Constants.Size.SafeAera.left,
+                                                                                           bottom: 0,
+                                                                                           right: Constants.Size.SafeAera.right) : .zero,
+                           forceHideBlur: enableBackground,
+                           gamesCount: getGames(at: indexPath.section).count,
+                           isFolded: foldedGameTypes[gameType] ?? false)
+            header.gamesCountButton.addTapGesture { [weak self] gesture in
+                guard let self else { return }
+                if UIDevice.isPhone, UIDevice.isLandscape {
+                    //横屏时禁用折叠
+                    return
                 }
+                if self.foldedGameTypes[gameType] ?? false {
+                    //展开
+                    self.foldedGameTypes[gameType] = false
+                } else {
+                    //折叠
+                    self.foldedGameTypes[gameType] = true
+                }
+                self.collectionView.reloadSections([indexPath.section])
             }
             header.didTapPlatform = {
                 if gameType != .unknown {
@@ -1092,6 +1153,14 @@ extension GameListView: UICollectionViewDelegate {
                         supportSwitchCore = false
                     }
                     #endif
+                    
+//                    if game.gameType == ._3ds {
+//                        if game.is3DSHomeMenuGame {
+//                            supportSwitchCore = false
+//                        } else if game.fileExtension.lowercased() != "3ds" {
+//                            supportSwitchCore = false
+//                        }
+//                    }
                     
                     if supportSwitchCore {
                         //添加切换核心的操作

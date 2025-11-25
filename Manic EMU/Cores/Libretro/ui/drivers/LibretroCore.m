@@ -11,6 +11,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include <boolean.h>
 
@@ -58,6 +59,7 @@ NSString * const RetroAchievementsNotification = @"RetroAchievementsNotification
 NSString * const LibretroDidShutdownNotification = @"LibretroDidShutdownNotification";
 NSString * const DidConnectToWFCNotification = @"DidConnectToWFCNotification";
 NSString * const DidDisconnectFromWFCNotification = @"DidDisconnectFromWFCNotification";
+NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotification";
 
 @interface LibretroCore()
 
@@ -100,6 +102,7 @@ NSString * const DidDisconnectFromWFCNotification = @"DidDisconnectFromWFCNotifi
     [[self getRetroArch] startWithCustomSaveDir:customSaveDir];
     cheevos_event_register_callback(cheevosDidTrigger);
     shutdown_register_callback(shutdownCallback);
+    log_register_callback(libretroLogCallback);
     return [CocoaView get];
 }
 
@@ -116,6 +119,7 @@ NSString * const DidDisconnectFromWFCNotification = @"DidDisconnectFromWFCNotifi
     cheevos_event_register_callback(NULL);
     shutdown_register_callback(NULL);
     wfc_status_register_callback(NULL);
+    log_register_callback(NULL);
     [[self getRetroArch] stop];
 }
 
@@ -514,6 +518,35 @@ static void wfcStatusCallback(bool isConnect) {
     });
 }
 
+static BOOL g_enableMonitorLibretroLog = NO;
+- (void)setLibretroLogMonitor:(BOOL)enable {
+    g_enableMonitorLibretroLog = enable;
+}
+
+static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_list args) {
+    if (!g_enableMonitorLibretroLog) {
+        return;
+    }
+    // 使用 va_list 格式化字符串
+    char buffer[4096];
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    
+    // 根据日志级别输出
+    NSString *logMessage = [NSString stringWithUTF8String:buffer];
+    
+    switch (level) {
+        case RETRO_LOG_ERROR:
+            if ([logMessage containsString:@"Required files are missing,"]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MAMEGameFileMissingNotification object:nil];
+                });
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 - (void)setNDSCustomLayout:(NSString *_Nullable)layout {
     if (layout) {
         if ([layout componentsSeparatedByString:@","].count == 10) {
@@ -522,6 +555,18 @@ static void wfcStatusCallback(bool isConnect) {
         }
     } else {
         set_melonds_custom_layout(NULL);
+        [self setCoreOptionNeedsUpdate];
+    }
+}
+
+- (void)set3DSCustomLayout:(NSString *_Nullable)layout {
+    if (layout) {
+        if ([layout componentsSeparatedByString:@","].count == 10) {
+            set_azahar_custom_layout([layout cStringUsingEncoding:NSUTF8StringEncoding]);
+            [self setCoreOptionNeedsUpdate];
+        }
+    } else {
+        set_azahar_custom_layout(NULL);
         [self setCoreOptionNeedsUpdate];
     }
 }
@@ -550,6 +595,18 @@ static void wfcStatusCallback(bool isConnect) {
 
 - (void)releaseTouchEvent {
     [[self getRetroArch] releaseTouchEvent];
+}
+
+- (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName {
+    return [[self getRetroArch] getCoreConfigs:coreName];
+}
+
+- (void)updateFBNeoCheatCode:(NSArray<NSString *> *_Nonnull)keys enable:(BOOL)enable {
+    [[self getRetroArch] updateFBNeoCheatCode:keys enable:enable];
+}
+
+- (void)setFastforwardFrameSkip:(BOOL)frameSkip {
+    [[self getRetroArch] setFastforwardFrameSkip:frameSkip];
 }
 
 @end

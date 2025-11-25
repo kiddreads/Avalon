@@ -38,4 +38,5 @@ enum ExtraKey: String {
     case triggerProID
     case forceFullSkin
     case recoverIcon
+    case enableManufacturerFilter
 }

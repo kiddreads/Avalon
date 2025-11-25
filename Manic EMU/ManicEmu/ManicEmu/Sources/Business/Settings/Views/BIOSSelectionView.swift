@@ -14,10 +14,11 @@ import IceCream
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
+        case desc, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .desc: ""
+            case .arcade: GameType.arcade.localizedName
             case .mcd: GameType.mcd.localizedName
             case .ss: GameType.ss.localizedName
             case .ds: GameType.ds.localizedName
@@ -35,6 +36,7 @@ class BIOSSelectionView: BaseView {
         var gameType: GameType {
             switch self {
             case .desc: return .notSupport
+            case .arcade: return .arcade
             case .mcd: return .mcd
             case .ss: return .ss
             case .ds: return .ds
@@ -112,12 +114,14 @@ class BIOSSelectionView: BaseView {
             self.datas = [.desc, .pm]
         } else if let gameType, gameType == ._3ds {
             self.datas = [.desc, ._3ds]
-        }  else {
+        } else if let gameType, gameType == .arcade {
+            self.datas = [.desc, .arcade]
+        } else {
 #if SIDE_LOAD
-            self.datas = [.desc, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
+            self.datas = [.desc, .arcade, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
 #else
             //AppStore版本禁用MCD
-            self.datas = [.desc, ._3ds, .dc, .ps1, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
+            self.datas = [.desc, .arcade, ._3ds, .dc, .ps1, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
 #endif
         }
         super.init(frame: .zero)
@@ -269,5 +273,10 @@ extension BIOSSelectionView: UICollectionViewDataSource {
 }
 
 extension BIOSSelectionView: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let section = datas[indexPath.section]
+        if section == .arcade {
+            topViewController()?.present(MAMEBiosViewController(), animated: true)
+        }
+    }
 }

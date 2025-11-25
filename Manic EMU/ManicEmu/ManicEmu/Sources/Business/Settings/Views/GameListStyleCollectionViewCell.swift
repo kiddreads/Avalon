@@ -31,7 +31,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     
     private var gamesPerRowLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.Font.body(size: .l)
+        label.font = Constants.Font.body(size: .s)
         label.textColor = Constants.Color.LabelSecondary
         label.text = R.string.localizable.gamesPerRowTitle()
         return label
@@ -59,15 +59,14 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     
     private var groupTitleStyleLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.Font.body(size: .l)
+        label.font = Constants.Font.body(size: .s)
         label.textColor = Constants.Color.LabelSecondary
         label.text = R.string.localizable.groupTitleStyelDesc()
         return label
     }()
     
-    private var hideScrollIndicatorIconView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .center
+    private var hideScrollIndicatorIconView: IconView = {
+        let view = IconView()
         view.layerCornerRadius = 6
         view.image = UIImage(symbol: .calendarDayTimelineTrailing, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
@@ -80,9 +79,8 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private var hideGroupTitleIconView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .center
+    private var hideGroupTitleIconView: IconView = {
+        let view = IconView()
         view.layerCornerRadius = 6
         view.image = UIImage(symbol: .listBullet, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
@@ -95,13 +93,20 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private var filterSwitchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
+        return view
+    }()
+    
     private lazy var gameSortTypeMenuButton: ContextMenuButton = {
         var actions: [UIMenuElement] = []
         var sortType = GameSortType.allCases.map { $0.title }
         for (index, type) in sortType.enumerated() {
             actions.append((UIAction(title: type) { [weak self] _ in
                 guard let self = self else { return }
-                self.gameSortTypeButton.titleLabel.text = type
+                self.gameSortTypeLabel.text = type
                 Theme.defalut.updateExtra(key: ExtraKey.gameSortType.rawValue, value: index)
                 NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
             }))
@@ -110,16 +115,12 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var gameSortTypeButton: SymbolButton = {
-        var title: String = (GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0) ?? .title).title
-        let view = SymbolButton(image: .symbolImage(.arrowUpArrowDown).applySymbolConfig(size: 13), title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMin
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.gameSortTypeMenuButton.triggerTapGesture()
-        }
-        return view
+    private lazy var gameSortTypeLabel: UILabel = {
+        let label = UILabel()
+        label.text = (GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0) ?? .title).title
+        label.textColor = Constants.Color.LabelSecondary
+        label.font = Constants.Font.caption(size: .l)
+        return label
     }()
     
     private lazy var gameSortOrderMenuButton: ContextMenuButton = {
@@ -128,7 +129,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         for (index, order) in sortOrder.enumerated() {
             actions.append((UIAction(title: order) { [weak self] _ in
                 guard let self = self else { return }
-                self.gameSortOrderButton.titleLabel.text = order
+                self.gameSortOrderLabel.text = order
                 Theme.defalut.updateExtra(key: ExtraKey.gameSortOrder.rawValue, value: index)
                 NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
             }))
@@ -137,16 +138,12 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var gameSortOrderButton: SymbolButton = {
-        var title: String = (GameSortOrder(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortOrder.rawValue) ?? 0) ?? .ascending).title
-        let view = SymbolButton(image: .symbolImage(.chevronUpChevronDown).applySymbolConfig(size: 13), title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMin
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.gameSortOrderMenuButton.triggerTapGesture()
-        }
-        return view
+    private lazy var gameSortOrderLabel: UILabel = {
+        let label = UILabel()
+        label.text = (GameSortOrder(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortOrder.rawValue) ?? 0) ?? .ascending).title
+        label.textColor = Constants.Color.LabelSecondary
+        label.font = Constants.Font.caption(size: .l)
+        return label
     }()
     
     private lazy var backgroundImageView: UIImageView = {
@@ -160,18 +157,20 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
             image = R.image.brand_icon()
         }
         let view = UIImageView(image: image)
+        view.isUserInteractionEnabled = true
         view.contentMode = contentMode
         view.backgroundColor = Constants.Color.Background
-        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.layerCornerRadius = Constants.Size.CornerRadiusMax
         return view
     }()
     
-    private lazy var addBackgroundImageMenuButton: ContextMenuButton = {
+    private lazy var backgroundImageMenuButton: ContextMenuButton = {
         var titles = [R.string.localizable.readyEditCoverTakePhoto(),
                       R.string.localizable.readyEditCoverAlbum(),
-                      R.string.localizable.readyEditCoverFile()]
+                      R.string.localizable.readyEditCoverFile(),
+                      R.string.localizable.removeTitle()]
         
-        var symbols: [SFSymbol] = [.camera, .photoOnRectangleAngled, .folder]
+        var symbols: [SFSymbol] = [.camera, .photoOnRectangleAngled, .folder, .trash]
         
         var actions: [UIMenuElement] = []
         
@@ -192,7 +191,8 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         }
         
         for (index, title) in titles.enumerated() {
-            actions.append((UIAction(title: title, image: .symbolImage(symbols[index])) { [weak self] _ in
+            let isLastOne = (index == titles.count - 1)
+            actions.append((UIAction(title: title, image: isLastOne ? UIImage(symbol: .trash, color: Constants.Color.Red) : .symbolImage(symbols[index]), attributes: isLastOne  ? .destructive : []) { [weak self] _ in
                 guard let self = self else { return }
                 if index == 0 {
                     //拍摄
@@ -209,6 +209,14 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
                     ImageFetcher.file{ image in
                         saveImage(image)
                     }
+                } else if index == 3 {
+                    //移除
+                    if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground) {
+                        try? FileManager.default.removeItem(atPath: Constants.Path.GameListBackground)
+                        self.backgroundImageView.image = R.image.brand_icon()
+                        self.backgroundImageView.contentMode = .center
+                        NotificationCenter.default.post(name: Constants.NotificationName.GameListBackgroundChange, object: nil)
+                    }
                 }
             }))
         }
@@ -216,31 +224,13 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var addBackgroundImageButton: SymbolButton = {
-        var title: String = R.string.localizable.gameListBackgroundUpload()
-        let view = SymbolButton(image: nil, title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
+    private lazy var backgroundImageButton: SymbolButton = {
+        let view = SymbolButton(symbol: .cameraFill, symbolFont: Constants.Font.body(size: .l), symbolColor: Constants.Color.Red)
         view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
-            self.addBackgroundImageMenuButton.triggerTapGesture()
-        }
-        return view
-    }()
-    
-    private lazy var removeBackgroundImageButton: SymbolButton = {
-        var title: String = R.string.localizable.removeTitle()
-        let view = SymbolButton(image: nil, title: title, titleFont: Constants.Font.body(), titleColor: Constants.Color.Red, horizontalContian: true, titlePosition: .left)
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMin
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground) {
-                try? FileManager.default.removeItem(atPath: Constants.Path.GameListBackground)
-                self.backgroundImageView.image = R.image.brand_icon()
-                self.backgroundImageView.contentMode = .center
-                NotificationCenter.default.post(name: Constants.NotificationName.GameListBackgroundChange, object: nil)
-            }
+            self.backgroundImageMenuButton.triggerTapGesture()
         }
         return view
     }()
@@ -262,14 +252,13 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         //游戏行数
         addSubview(gamesPerRowLabel)
         gamesPerRowLabel.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
         }
         
         gamesPerRowSegmentView.setIndex(theme.gamesPerRow-2)
         addSubview(gamesPerRowSegmentView)
         gamesPerRowSegmentView.snp.makeConstraints { make in
-            make.top.equalTo(gamesPerRowLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(gamesPerRowLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
@@ -295,8 +284,8 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         hideScrollIndicatorContainer.addSubview(hideScrollIndicatorIconView)
         hideScrollIndicatorIconView.backgroundColor = Constants.Color.Main
         hideScrollIndicatorIconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.size.equalTo(Constants.Size.IconSizeMin)
             make.centerY.equalToSuperview()
         }
         
@@ -337,14 +326,14 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         //分组标题样式
         addSubview(groupTitleStyleLabel)
         groupTitleStyleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(hideScrollIndicatorContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
         groupTitleStyleSegmentView.setIndex(theme.groupTitleStyle.rawValue)
         addSubview(groupTitleStyleSegmentView)
         groupTitleStyleSegmentView.snp.makeConstraints { make in
-            make.top.equalTo(groupTitleStyleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(groupTitleStyleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
@@ -372,8 +361,8 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         hideGroupTitleContainer.addSubview(hideGroupTitleIconView)
         hideGroupTitleIconView.backgroundColor = Constants.Color.Main
         hideGroupTitleIconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.size.equalTo(Constants.Size.IconSizeMin)
             make.centerY.equalToSuperview()
         }
         
@@ -413,12 +402,12 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         
         //排序
         let gameSortLabel = UILabel()
-        gameSortLabel.font = Constants.Font.body(size: .l)
+        gameSortLabel.font = Constants.Font.body(size: .s)
         gameSortLabel.textColor = Constants.Color.LabelSecondary
         gameSortLabel.text = R.string.localizable.gameSortDesc()
         addSubview(gameSortLabel)
         gameSortLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(hideGroupTitleContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
@@ -428,36 +417,93 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         addSubview(gameSortContainer)
         gameSortContainer.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(gameSortLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(gameSortLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.height.equalTo(Constants.Size.ItemHeightMax * 2)
+        }
+        
+        func genGameSortView(symbol: SFSymbol, title: String, detailLabel: UILabel) -> UIView {
+            let container = UIView()
+            container.enableInteractive = true
+            container.delayInteractiveTouchEnd = true
+            
+            let iconView = IconView()
+            iconView.layerCornerRadius = 6
+            iconView.image = UIImage(symbol: symbol, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            container.addSubview(iconView)
+            iconView.backgroundColor = Constants.Color.Main
+            iconView.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                make.size.equalTo(Constants.Size.IconSizeMin)
+                make.centerY.equalToSuperview()
+            }
+            
+            let titleLabel: UILabel = {
+                let view = UILabel()
+                view.font = Constants.Font.body(size: .l, weight: .semibold)
+                view.textColor = Constants.Color.LabelPrimary
+                view.text = title
+                return view
+            }()
+            container.addSubview(titleLabel)
+            titleLabel.snp.makeConstraints { make in
+                make.centerY.equalTo(iconView)
+                make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            }
+            
+            let chevronIconView = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
+            chevronIconView.contentMode = .center
+            container.addSubview(chevronIconView)
+            chevronIconView.snp.makeConstraints { make in
+                make.centerY.equalTo(iconView)
+                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            }
+            
+            container.addSubview(detailLabel)
+            detailLabel.snp.makeConstraints { make in
+                make.centerY.equalTo(iconView)
+                make.trailing.equalTo(chevronIconView.snp.leading).offset(-Constants.Size.ContentSpaceUltraTiny)
+            }
+            return container
+        }
+        
+        //排序方式
+        let gameSortTypeView = genGameSortView(symbol: .line3Horizontal, title: R.string.localizable.gameSortType(), detailLabel: gameSortTypeLabel)
+        gameSortTypeView.addSubview(gameSortTypeMenuButton)
+        gameSortTypeMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(gameSortTypeLabel)
+        }
+        gameSortContainer.addSubview(gameSortTypeView)
+        gameSortTypeView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
             make.height.equalTo(Constants.Size.ItemHeightMax)
         }
-        
-        gameSortContainer.addSubviews([gameSortTypeMenuButton, gameSortTypeButton])
-        gameSortTypeButton.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
-        }
-        gameSortTypeMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(gameSortTypeButton)
+        gameSortTypeView.addTapGesture { [weak self] gesture in
+            self?.gameSortTypeMenuButton.triggerTapGesture()
         }
         
-        gameSortContainer.addSubviews([gameSortOrderMenuButton, gameSortOrderButton])
-        gameSortOrderButton.snp.makeConstraints { make in
-            make.leading.equalTo(gameSortTypeButton.snp.trailing).offset(Constants.Size.ContentSpaceMid)
-            make.top.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
-            make.width.equalTo(gameSortTypeButton)
-        }
+        //排序顺序
+        let gameSortOrderView = genGameSortView(symbol: .arrowUpArrowDown, title: R.string.localizable.gameSortOrder(), detailLabel: gameSortOrderLabel)
+        gameSortOrderView.addSubview(gameSortOrderMenuButton)
         gameSortOrderMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(gameSortOrderButton)
+            make.edges.equalTo(gameSortOrderLabel)
+        }
+        gameSortContainer.addSubview(gameSortOrderView)
+        gameSortOrderView.snp.makeConstraints { make in
+            make.leading.bottom.trailing.equalToSuperview()
+            make.top.equalTo(gameSortTypeView.snp.bottom)
+        }
+        gameSortOrderView.addTapGesture { [weak self] gesture in
+            self?.gameSortOrderMenuButton.triggerTapGesture()
         }
         
         //背景
         let backgroundImageLabel = UILabel()
-        backgroundImageLabel.font = Constants.Font.body(size: .l)
+        backgroundImageLabel.font = Constants.Font.body(size: .s)
         backgroundImageLabel.textColor = Constants.Color.LabelSecondary
         backgroundImageLabel.text = R.string.localizable.gameListBackground()
         addSubview(backgroundImageLabel)
         backgroundImageLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(gameSortContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
@@ -465,31 +511,80 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         backgroundImageView.snp.makeConstraints { make in
             make.size.equalTo(154)
             make.centerX.equalToSuperview()
-            make.top.equalTo(backgroundImageLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(backgroundImageLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+        }
+        backgroundImageView.addSubview(backgroundImageMenuButton)
+        backgroundImageView.addSubview(backgroundImageButton)
+        backgroundImageButton.snp.makeConstraints { make in
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.trailing.bottom.equalToSuperview().inset(6)
+        }
+        backgroundImageMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(backgroundImageButton)
         }
         
-        let backgroundImageContainer = UIView()
-        backgroundImageContainer.backgroundColor = Constants.Color.Background
-        backgroundImageContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
-        addSubview(backgroundImageContainer)
-        backgroundImageContainer.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+        //使用厂商筛选
+        let filterlabel = UILabel()
+        filterlabel.font = Constants.Font.body(size: .s)
+        filterlabel.textColor = Constants.Color.LabelSecondary
+        filterlabel.text = R.string.localizable.filterTitle()
+        addSubview(filterlabel)
+        filterlabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(backgroundImageView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        
+        let filterContainer = UIView()
+        filterContainer.backgroundColor = Constants.Color.Background
+        filterContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
+        addSubview(filterContainer)
+        filterContainer.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(filterlabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
             make.height.equalTo(Constants.Size.ItemHeightMax)
         }
         
-        backgroundImageContainer.addSubviews([addBackgroundImageMenuButton, addBackgroundImageButton, removeBackgroundImageButton])
-        addBackgroundImageButton.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+        let filterIconView = IconView()
+        filterIconView.layerCornerRadius = 6
+        filterIconView.image = UIImage(symbol: .line3HorizontalDecrease, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        filterContainer.addSubview(filterIconView)
+        filterIconView.backgroundColor = Constants.Color.Main
+        filterIconView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.centerY.equalToSuperview()
         }
-        addBackgroundImageMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(addBackgroundImageButton)
+        
+        let filterTitleLabel: UILabel = {
+            let view = UILabel()
+            view.font = Constants.Font.body(size: .l, weight: .semibold)
+            view.textColor = Constants.Color.LabelPrimary
+            view.text = R.string.localizable.enableManufacturerFilter()
+            return view
+        }()
+        filterContainer.addSubview(filterTitleLabel)
+        filterTitleLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(filterIconView)
+            make.leading.equalTo(filterIconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
         }
-
-        removeBackgroundImageButton.snp.makeConstraints { make in
-            make.leading.equalTo(addBackgroundImageButton.snp.trailing).offset(Constants.Size.ContentSpaceMid)
-            make.top.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
-            make.width.equalTo(addBackgroundImageButton)
+        
+        filterContainer.addSubview(filterSwitchButton)
+        filterSwitchButton.setOn(theme.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false, animated: false)
+        filterSwitchButton.snp.makeConstraints { make in
+            make.centerY.equalTo(filterIconView)
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            filterSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        }
+        filterSwitchButton.onChange { value in
+            theme.updateExtra(key: ExtraKey.enableManufacturerFilter.rawValue, value: value)
+            NotificationCenter.default.post(name: Constants.NotificationName.ManufacturerFilterChange, object: value)
         }
         
         mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in

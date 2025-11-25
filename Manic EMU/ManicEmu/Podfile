@@ -16,7 +16,6 @@ target 'ManicEmu' do
   pod 'ProHUD', :path => '../ProHUD'
   pod 'BlankSlate', :path => '../BlankSlate'
   pod 'IceCream', :path => '../IceCream'
-  pod 'iCloudSync', :path => '../iCloudSync'
   pod 'JXBanner', :path => '../JXBanner'
   pod 'SwipeCellKit', :path => '../SwipeCellKit'
   pod 'SSZipArchive', :path => '../ZipArchive'
@@ -49,7 +48,8 @@ target 'ManicEmu' do
   pod 'Schedule', '~> 2.0'
   pod "Fuse", '~> 1.4.0'
   pod 'Kingfisher', '~> 8.0'
-  pod 'SQLite.swift/SQLCipher'
+  pod 'SQLite.swift/SQLCipher', '~> 0.15.4'
+  pod 'JXSegmentedView', '~> 1.4.1'
 end
 
 post_install do |installer|

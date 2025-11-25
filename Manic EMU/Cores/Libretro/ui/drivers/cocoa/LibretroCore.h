@@ -87,6 +87,11 @@ extern NSString * const RetroAchievementsNotification;
 - (void)setCoreOptionNeedsUpdate;
 - (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y;
 - (void)releaseTouchEvent;
+- (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName;
+- (void)updateFBNeoCheatCode:(NSArray<NSString *> *_Nonnull)keys enable:(BOOL)enable;
+- (void)setFastforwardFrameSkip:(BOOL)frameSkip;
+- (void)set3DSCustomLayout:(NSString *_Nullable)layout;
+- (void)setLibretroLogMonitor:(BOOL)enable;
 
 @end
 

@@ -92,7 +92,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         view.addTapGesture { [weak self] gesture in
             guard let self, let game else { return }
             if !game.supportRetroAchievements {
-                UIView.makeToast(message: R.string.localizable.achievementsNotSupport(game.gameType.localizedShortName))
+                let showName = game.gameType == .arcade ? LibretroCore.Cores.MAME.name : game.gameType.localizedShortName
+                UIView.makeToast(message: R.string.localizable.achievementsNotSupport(showName))
                 return
             }
             if let _ = AchievementsUser.getUser() {
@@ -137,6 +138,14 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
             if let game = self.game {
+                if game.gameType == .arcade {
+                    if game.defaultCore == 0 {
+                        UIView.makeAlert(detail: R.string.localizable.mameCheatCodeDesc(), cancelTitle: R.string.localizable.confirmTitle())
+                    } else if game.defaultCore == 1 {
+                        UIView.makeToast(message: R.string.localizable.fbNeoCheatCodeDesc())
+                    }
+                    return
+                }
                 topViewController()?.present(CheatCodeViewController(game: game), animated: true)
             }
         }
@@ -197,7 +206,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 Settings.defalut.threeDSAdvancedSettingMode.toggle()
             }
             self.threeDSAdvancedModeButton.titleLabel.text = Settings.defalut.threeDSAdvancedSettingMode ? R.string.localizable.threeDSBasicSettingMode() : R.string.localizable.threeDSAdvanceSettingMode()
-            self.update3DSFunctionButton()
+            self.updateCitra3DSFunctionButton()
             self.addManualsButton()
         }
         return view
@@ -461,8 +470,13 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     private lazy var threeDSAdvancedSettingButton: SymbolButton = {
         let view = SymbolButton(symbol: .gear, title: R.string.localizable.threeDSAdvanceSettingTitle(), horizontalContian: true)
         view.titleLabel.numberOfLines = 0
-        view.addTapGesture { gesture in
-            topViewController()?.present(ThreeDSAdvancedSettingViewController(), animated: true)
+        view.addTapGesture { [weak self] gesture in
+            guard let self, let game else { return }
+            if game.defaultCore == 0 {
+                topViewController()?.present(CitraAdvancedSettingViewController(), animated: true)
+            } else {
+                topViewController()?.present(AzaharAdvancedSettingViewController(), animated: true)
+            }
         }
         view.isAccessibilityElement = true
         view.accessibilityLabel = R.string.localizable.threeDSAdvanceSettingTitle()
@@ -925,12 +939,27 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 }
             }
         }))
+        actions.append((UIAction(title: "JITLess Ver: Fuse") { [weak self] _ in
+            guard let self = self else { return }
+            self.dcCoreButton.titleLabel.text = "JITLess Ver: Fuse"
+            if let game {
+                Game.change { _ in
+                    game.defaultCore = 2
+                }
+            }
+        }))
         let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.dcjitLessVer(), children: actions))
         return view
     }()
     
     private lazy var dcCoreButton: SymbolButton = {
-        let ver = (game?.defaultCore ?? 0) == 0 ? "Default" : "WinCE"
+        var ver = "Default"
+        let defaultCore = (game?.defaultCore ?? 0)
+        if defaultCore == 1 {
+            ver = "WinCE"
+        } else if defaultCore == 2 {
+            ver = "Fuse"
+        }
         let view = SymbolButton(symbol: .boltSlash, title: "JITLess Ver: \(ver)", horizontalContian: true)
         view.titleLabel.numberOfLines = 0
         view.addTapGesture { [weak self] gesture in
@@ -1140,7 +1169,11 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 
                 if !hasSetupViews {
                     if game.gameType == ._3ds {
-                        update3DSFunctionButton()
+                        if game.defaultCore == 0 {
+                            updateCitra3DSFunctionButton()
+                        } else {
+                            updateAzahar3DSFunctionButton()
+                        }
                     } else if game.gameType == .psp {
                         updatePSPFunctionButton()
                     } else if game.gameType == .ss {
@@ -1283,7 +1316,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func update3DSFunctionButton() {
+    private func updateCitra3DSFunctionButton() {
         manualButton.removeFromSuperview()
         threeDSAdvancedModeButton.removeFromSuperview()
         jitContextMenuButton.removeFromSuperview()
@@ -1375,6 +1408,18 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 rightEyeRenderMenuButton.snp.makeConstraints { make in
                     make.edges.equalTo(rightEyeRenderButton)
                 }
+            }
+        }
+    }
+    
+    private func updateAzahar3DSFunctionButton() {
+        if let lastView = functionButtonContainerView.subviews.last {
+            functionButtonContainerView.addSubview(threeDSAdvancedSettingButton)
+            threeDSAdvancedSettingButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
             }
         }
     }

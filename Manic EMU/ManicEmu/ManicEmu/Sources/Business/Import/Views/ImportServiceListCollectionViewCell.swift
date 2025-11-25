@@ -9,7 +9,7 @@
 
 import UIKit
 
-class ImportServiceListCollectionViewCell: UICollectionViewCell {
+class ImportServiceListCollectionViewCell: UICollectionViewCell, DynamicShadow {
     private var iconView: ServiceIconView = {
         let view = ServiceIconView(roundCorner: .allCorners)
         return view
@@ -43,6 +43,8 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell {
         delayInteractiveTouchEnd = true
         backgroundColor = Constants.Color.BackgroundPrimary
         layerCornerRadius = Constants.Size.CornerRadiusMax
+        
+        updateDynamicShadow()
 
         addSubviews([iconView, titleLabel, switchButton])
         
@@ -75,7 +77,13 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateDynamicShadow()
+        }
+    }
+    
     func setData(service: ImportService) {
         
         iconView.imageView.image = service.iconImage

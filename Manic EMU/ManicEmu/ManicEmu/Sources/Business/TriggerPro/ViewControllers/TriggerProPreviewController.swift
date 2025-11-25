@@ -364,25 +364,29 @@ class TriggerProPreviewController: BaseViewController {
     }
     
     private func getInputs() -> [String] {
-        if let items = defaultSkin.items(for: traits) {
-            var result: [String] = []
-            for item in items {
-                switch item.kind {
-                case .button:
-                    //不支持组合键
-                    if let input = item.inputs.allInputs.first {
-                        result.append(input.stringValue)
-                    }
-                case .dPad, .thumbstick:
-                    if case .directional(let up, let down, let left, let right) = item.inputs {
-                        result.append(contentsOf: [up.stringValue, down.stringValue, left.stringValue, right.stringValue])
-                    }
-                default: break
-                }
-            }
-            return result
+        if let inputs = defaultSkin.gameType.manicEmuCore?.allInputs {
+            return inputs.compactMap({ ($0.stringValue == "flex" || $0.stringValue.contains("touchScreen")) ? nil : $0.stringValue })
         }
         return []
+//        if let items = defaultSkin.items(for: traits) {
+//            var result: [String] = []
+//            for item in items {
+//                switch item.kind {
+//                case .button:
+//                    //不支持组合键
+//                    if let input = item.inputs.allInputs.first {
+//                        result.append(input.stringValue)
+//                    }
+//                case .dPad, .thumbstick:
+//                    if case .directional(let up, let down, let left, let right) = item.inputs {
+//                        result.append(contentsOf: [up.stringValue, down.stringValue, left.stringValue, right.stringValue])
+//                    }
+//                default: break
+//                }
+//            }
+//            return result
+//        }
+//        return []
     }
     
     private func storeTrigger() {

@@ -78,6 +78,22 @@ class GamesViewController: BaseViewController {
         view.didSearchTextResignFirstResponder = { [weak self] in
             self?.gamesListView.collectionView.becomeFirstResponder()
         }
+        view.manufacturerCategoryView.didManufacturerChange = { [weak self] manufacturer in
+            guard let self else { return false }
+            if let manufacturer, !self.gamesListView.isGameExist(for: manufacturer) {
+                UIView.makeToast(message: R.string.localizable.noGamesForManufacturer())
+                return false
+            }
+            self.gamesListView.filteredManufacturer = manufacturer
+            return (manufacturer == nil ? false : true)
+        }
+        view.didFilterVisibleChange = { [weak self] in
+            guard let self else { return }
+            self.gamesToolView.snp.updateConstraints { make in
+                make.height.equalTo(Constants.Size.GamesToolViewHeight)
+            }
+            self.gamesListView.updateFilterChange()
+        }
         return view
     }()
     ///游戏列表
@@ -266,6 +282,8 @@ class GamesViewController: BaseViewController {
         } else if UIDevice.isPhone {
             self.gamesToolView.stopSearch()
             self.gamesToolView.stopSelect()
+            self.gamesToolView.stopFilterManufacturer()
+            self.gamesListView.filteredManufacturer = nil
             coordinator.animate(alongsideTransition: nil) { [weak self] _ in
                 self?.hideSideMenu { [weak self] in
                     self?.updateViews()
@@ -297,7 +315,7 @@ class GamesViewController: BaseViewController {
             gamesToolView.snp.makeConstraints { make in
                 make.top.equalTo(gamesNavigationView.snp.bottom)
                 make.leading.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightHuge)
+                make.height.equalTo(Constants.Size.GamesToolViewHeight)
             }
             
             
@@ -350,7 +368,7 @@ class GamesViewController: BaseViewController {
             gamesToolView.snp.makeConstraints { make in
                 make.top.equalTo(gamesNavigationView.snp.bottom)
                 make.leading.trailing.equalTo(gamesListView)
-                make.height.equalTo(Constants.Size.ItemHeightHuge)
+                make.height.equalTo(Constants.Size.GamesToolViewHeight)
             }
             
             
@@ -469,7 +487,7 @@ class GamesViewController: BaseViewController {
     ///更新顶部的模糊视图 如果编辑模式 则toolView不会隐藏 所以需要将blurView加大 反之则需要减小
     private func updateTopBlurView() {
         topBlurView.snp.updateConstraints { make in
-            make.bottom.equalTo(self.gamesNavigationView).offset((gamesListView.isSelectionMode || gamesListView.isSearchMode) ? Constants.Size.ItemHeightHuge : 0)
+            make.bottom.equalTo(self.gamesNavigationView).offset((gamesListView.isSelectionMode || gamesListView.isSearchMode) ? Constants.Size.GamesToolViewHeight : 0)
         }
     }
     

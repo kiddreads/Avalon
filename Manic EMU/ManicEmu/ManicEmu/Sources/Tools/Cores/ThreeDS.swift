@@ -25,7 +25,7 @@ extension CheatType
     static let gateshark = CheatType("Gateshark")
 }
 
-@objc enum ThreeDSGameInput: Int, Input {
+@objc enum ThreeDSGameInput: Int, Input, CaseIterable {
     case a = 700
     case b = 701
     case x = 702
@@ -42,8 +42,6 @@ extension CheatType
     case right = 712
     case l1 = 773
     case r1 = 774
-    case Debug = 781
-    case GPIO14 = 78
     case CirclePad = 713
     case leftThumbstickUp = 714
     case leftThumbstickDown = 715
@@ -89,8 +87,6 @@ extension CheatType
         else if stringValue == "right" { self = .right }
         else if stringValue == "l1" { self = .l1 }
         else if stringValue == "r1" { self = .r1 }
-        else if stringValue == "Debug" { self = .Debug }
-        else if stringValue == "GPIO14" { self = .GPIO14 }
         else if stringValue == "CirclePad" { self = .CirclePad }
         else if stringValue == "leftThumbstickUp" { self = .leftThumbstickUp }
         else if stringValue == "leftThumbstickDown" { self = .leftThumbstickDown }
@@ -117,17 +113,26 @@ struct ThreeDS: ManicEmuCoreProtocol {
     
     var gameType: GameType { GameType._3ds }
     var gameInputType: Input.Type { ThreeDSGameInput.self }
+    var allInputs: [Input] { ThreeDSGameInput.allCases }
     var gameSaveExtension: String { "3ds.sav" }
     
     let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
-    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 400, height: 455))
+    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 400, height: 480))
     
     var supportCheatFormats: Set<CheatFormat> {
         let actionReplayFormat = CheatFormat(name: NSLocalizedString("Gateshark", comment: ""), format: "XXXXXXXX YYYYYYYY", type: .gateshark)
         return [actionReplayFormat]
     }
     
-    var emulatorConnector: EmulatorBase { ThreeDSEmulatorBridge.shared }
+    static var isAzaharCore: Bool = false
+    
+    var emulatorConnector: EmulatorBase {
+        if Self.isAzaharCore {
+            return AzaharEmulatorBridge.shared
+        } else {
+            return ThreeDSEmulatorBridge.shared
+        }
+    }
     
     private init()
     {
@@ -746,4 +751,152 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
 
 #endif
 
-
+class AzaharEmulatorBridge : NSObject, EmulatorBase {
+    
+    static let shared = AzaharEmulatorBridge()
+    
+    var gameURL: URL?
+    
+    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
+    
+    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
+    
+    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
+    
+    var saveUpdateHandler: (() -> Void)?
+    
+    private var thumbstickPosition: CGPoint = .zero
+    private var cstickPosition: CGPoint = .zero
+    private var touchPointX: CGFloat? = nil
+    private var touchPointY: CGFloat? = nil
+    var touchInputFrame: CGRect = .zero
+    
+    func start(withGameURL gameURL: URL) {}
+    
+    func stop() {}
+    
+    func pause() {}
+    
+    func resume() {}
+    
+    func runFrame(processVideo: Bool) { }
+    
+    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+        /**
+         摇杆坐标
+         0,1
+         
+   -1,0  0,0  1,0
+         
+         0,-1
+         */
+        if input == ThreeDSGameInput.leftThumbstickUp || input == ThreeDSGameInput.leftThumbstickDown {
+            
+            thumbstickPosition.y = input == ThreeDSGameInput.leftThumbstickUp ? value : -value
+            LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            
+            
+        } else if input == ThreeDSGameInput.leftThumbstickLeft || input == ThreeDSGameInput.leftThumbstickRight {
+            
+            thumbstickPosition.x = input == ThreeDSGameInput.leftThumbstickRight ? value : -value
+            LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            
+        } else if input == ThreeDSGameInput.rightThumbstickUp || input == ThreeDSGameInput.rightThumbstickDown {
+            
+            cstickPosition.y = input == ThreeDSGameInput.rightThumbstickUp ? value : -value
+            LibretroCore.sharedInstance().moveStick(false, x: cstickPosition.x, y: cstickPosition.y, playerIndex: UInt32(playerIndex))
+            
+        } else if input == ThreeDSGameInput.rightThumbstickLeft || input == ThreeDSGameInput.rightThumbstickRight {
+            
+            cstickPosition.x = input == ThreeDSGameInput.rightThumbstickRight ? value : -value
+            LibretroCore.sharedInstance().moveStick(false, x: cstickPosition.x, y: cstickPosition.y, playerIndex: UInt32(playerIndex))
+            
+        } else if input == ThreeDSGameInput.touchScreenX || input == ThreeDSGameInput.touchScreenY {
+            if input == ThreeDSGameInput.touchScreenX {
+                touchPointX = value
+            } else if input == ThreeDSGameInput.touchScreenY {
+                touchPointY = value
+            }
+            if let x = touchPointX, let y = touchPointY {
+                let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x, y: touchInputFrame.minY + touchInputFrame.height*y)
+                
+#if DEBUG
+                Log.debug("\(String(describing: Self.self)) 触摸屏幕:\(touchPoint)")
+#endif
+                LibretroCore.sharedInstance().sendTouchEventX(touchPoint.x, y: touchPoint.y)
+                touchPointX = nil
+                touchPointY = nil
+            }
+        } else if let gameInput = ThreeDSGameInput(rawValue: input),
+                  let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+#if DEBUG
+                Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+#endif
+                LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
+        }
+    }
+    
+    func gameInputToCoreInput(gameInput: ThreeDSGameInput) -> LibretroButton? {
+        if gameInput == .a { return .A }
+        else if gameInput == .b { return .B }
+        else if gameInput == .x { return .X }
+        else if gameInput == .y { return .Y }
+        else if gameInput == .start { return .start }
+        else if gameInput == .select { return .select }
+        else if gameInput == .l1 { return .L1 }
+        else if gameInput == .l2 { return .L2 }
+        else if gameInput == .r1 { return .R1 }
+        else if gameInput == .r2 { return .R2 }
+        else if gameInput == .up { return .up }
+        else if gameInput == .down { return .down }
+        else if gameInput == .left { return .left }
+        else if gameInput == .right { return .right }
+        else { return nil }
+    }
+    
+    func deactivateInput(_ input: Int, playerIndex: Int) {
+        if input == ThreeDSGameInput.leftThumbstickUp || input == ThreeDSGameInput.leftThumbstickDown {
+            thumbstickPosition.y = 0
+            LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+        } else if input == ThreeDSGameInput.leftThumbstickLeft || input == ThreeDSGameInput.leftThumbstickRight {
+            thumbstickPosition.x = 0
+            LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+        } else if input == ThreeDSGameInput.rightThumbstickUp || input == ThreeDSGameInput.rightThumbstickDown {
+            cstickPosition.y = 0
+            LibretroCore.sharedInstance().moveStick(false, x: cstickPosition.x, y: cstickPosition.y, playerIndex: UInt32(playerIndex))
+        } else if input == ThreeDSGameInput.rightThumbstickLeft || input == ThreeDSGameInput.rightThumbstickRight {
+            cstickPosition.x = 0
+            LibretroCore.sharedInstance().moveStick(false, x: cstickPosition.x, y: cstickPosition.y, playerIndex: UInt32(playerIndex))
+        } else if input == ThreeDSGameInput.touchScreenX || input == ThreeDSGameInput.touchScreenY {
+            if input == ThreeDSGameInput.touchScreenX {
+                touchPointX = nil
+            } else if input == ThreeDSGameInput.touchScreenY {
+                touchPointY = nil
+            }
+            if touchPointX == nil, touchPointY == nil {
+                LibretroCore.sharedInstance().releaseTouchEvent()
+            }
+        } else if let gameInput = ThreeDSGameInput(rawValue: input),
+                  let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+            LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
+        }
+    }
+    
+    func resetInputs() {}
+    
+    func saveSaveState(to url: URL) {}
+    
+    func loadSaveState(from url: URL) {}
+    
+    func saveGameSave(to url: URL) {}
+    
+    func loadGameSave(from url: URL) {}
+    
+    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
+        return false
+    }
+    
+    func resetCheats() {}
+    
+    func updateCheats() {}
+}

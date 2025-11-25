@@ -15,7 +15,7 @@ extension GameType
     static let n64 = GameType("public.aoshuang.game.n64")
 }
 
-@objc enum N64GameInput: Int, Input {
+@objc enum N64GameInput: Int, Input, CaseIterable {
     case a
     case b
     case z
@@ -76,6 +76,7 @@ struct N64: ManicEmuCoreProtocol {
     
     var gameType: GameType { GameType.n64 }
     var gameInputType: Input.Type { N64GameInput.self }
+    var allInputs: [Input] { N64GameInput.allCases }
     var gameSaveExtension: String { "srm" }
     
     let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!

@@ -45,8 +45,16 @@ extension UIView {
         }
     }
     
-    func makeShadow(ofColor: UIColor = Constants.Color.Shadow, radius: CGFloat = 10) {
-        self.addShadow(ofColor: ofColor, radius: radius)
+    func makeShadow(ofColor: UIColor = Constants.Color.Shadow, offset: CGSize = .zero, radius: CGFloat = 10, opacity: Float = 0.5) {
+        layer.shadowColor = ofColor.cgColor
+        layer.shadowOffset = offset
+        layer.shadowRadius = radius
+        layer.shadowOpacity = opacity
+        layer.masksToBounds = false
+    }
+    
+    func removeShadow() {
+        layer.shadowColor = UIColor.clear.cgColor
     }
     
     /// 为视图添加 iOS 26 的 Liquid Glass 效果
@@ -278,7 +286,8 @@ extension UIView {
                           enableForceHide: Bool = true,
                           cancelAction: (()->Void)? = nil,
                           confirmAction: (()->Void)? = nil,
-                          hideAction: (()->Void)? = nil) {
+                          hideAction: (()->Void)? = nil,
+                          tapBackgroundAction: (()->Void)? = nil) {
         func setupSheet(_ sheet: SheetTarget) {
             SheetIdentifiers.append(sheet.identifier)
             sheet.contentMaskView.alpha = 0
@@ -286,7 +295,10 @@ extension UIView {
             sheet.onTappedBackground { sheet in
                 if enableForceHide {
                     SheetIdentifiers.removeAll { $0 == sheet.identifier }
-                    sheet.pop(completon: hideAction)
+                    sheet.pop {
+                        tapBackgroundAction?()
+                        hideAction?()
+                    }
                 }
             }
             sheet.config.backgroundViewMask { mask in

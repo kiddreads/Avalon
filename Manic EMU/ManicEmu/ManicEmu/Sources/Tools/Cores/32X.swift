@@ -15,7 +15,7 @@ extension GameType
     static let _32x = GameType("public.aoshuang.game.32x")
 }
 
-@objc enum S2XGameInput: Int, Input {
+@objc enum S2XGameInput: Int, Input, CaseIterable {
     case a
     case b
     case c
@@ -67,6 +67,7 @@ struct S2X: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType._32x }
     public var gameInputType: Input.Type { S2XGameInput.self }
+    var allInputs: [Input] { S2XGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!

@@ -648,7 +648,7 @@ struct GameSetting: SettingCellItem {
         }
         
         if type == .airPlayLayout {
-            return gameType == .ds
+            return gameType == .ds || (gameType == ._3ds && defaultCore == 1)
         }
         
         if type == .toggleAnalog {
@@ -657,8 +657,14 @@ struct GameSetting: SettingCellItem {
         
         switch gameType {
         case ._3ds:
-            if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling {
-                return false
+            if defaultCore == 0 {
+                if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling || type == .retro {
+                    return false
+                }
+            } else {
+                if type == .palette || type == .swapDisk || type == .retro || type == .retro || type == .consoleHome || type == .amiibo {
+                    return false
+                }
             }
             return true
         case .ds:
@@ -666,7 +672,7 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             return true
-        case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm:
+        case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm, .arcade:
             if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes || gameType == .fds) && type == .palette {
                 return true
             }
@@ -684,6 +690,10 @@ struct GameSetting: SettingCellItem {
             }
             
             if gameType == .md , type == .cheatCode, defaultCore == 0 {
+                return false
+            }
+            
+            if gameType == .arcade, type == .retro, defaultCore == 0 {
                 return false
             }
             

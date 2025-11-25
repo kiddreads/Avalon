@@ -277,8 +277,8 @@ class SymbolButton: UIView {
         titleLabel.text = title
     }
     
-    convenience init(symbol: SFSymbol, symbolColor: UIColor = Constants.Color.LabelPrimary, enableGlass: Bool = false, cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
-        self.init(image: .symbolImage(symbol).applySymbolConfig(color: symbolColor), enableGlass: enableGlass, cornerStyle: cornerStyle)
+    convenience init(symbol: SFSymbol, symbolFont: UIFont? = nil, symbolColor: UIColor = Constants.Color.LabelPrimary, enableGlass: Bool = false, cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
+        self.init(image: .symbolImage(symbol).applySymbolConfig(font: symbolFont, color: symbolColor), enableGlass: enableGlass, cornerStyle: cornerStyle)
     }
     
     init(image: UIImage?, enableGlass: Bool = false, cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {

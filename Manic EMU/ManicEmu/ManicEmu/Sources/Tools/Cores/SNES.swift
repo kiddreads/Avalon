@@ -21,7 +21,7 @@ extension CheatType
     static let gameGenie = CheatType("GameGenie")
 }
 
-@objc enum SNESGameInput: Int, Input {
+@objc enum SNESGameInput: Int, Input, CaseIterable {
     case a
     case b
     case x
@@ -69,6 +69,7 @@ struct SNES: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.snes }
     public var gameInputType: Input.Type { SNESGameInput.self }
+    var allInputs: [Input] { SNESGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!

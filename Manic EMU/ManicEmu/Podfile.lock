@@ -34,7 +34,6 @@ PODS:
   - HXPhotoPicker/Resources (4.2.5)
   - IceCream (2.1.0):
     - RealmSwift (~> 10.42)
-  - iCloudSync (8.0.21)
   - IQKeyboardCore (1.0.5)
   - IQKeyboardManagerSwift (8.0.0):
     - IQKeyboardManagerSwift/Appearance (= 8.0.0)
@@ -106,6 +105,7 @@ PODS:
     - JXPageControl/Common
   - JXPageControl/Transform (0.1.5):
     - JXPageControl/Common
+  - JXSegmentedView (1.4.1)
   - KeychainAccess (4.2.2)
   - Kingfisher (8.3.1)
   - LookinServer/Core (1.2.8)
@@ -203,9 +203,9 @@ DEPENDENCIES:
   - Haptica (~> 3.0)
   - HXPhotoPicker/Lite (from `../HXPhotoPicker`)
   - IceCream (from `../IceCream`)
-  - iCloudSync (from `../iCloudSync`)
   - IQKeyboardManagerSwift (~> 8.0)
   - JXBanner (from `../JXBanner`)
+  - JXSegmentedView (~> 1.4.1)
   - KeychainAccess (~> 4.2)
   - Kingfisher (~> 8.0)
   - LookinServer/Swift
@@ -223,7 +223,7 @@ DEPENDENCIES:
   - ShowTouches
   - SideMenu (~> 6.5)
   - SnapKit (~> 5.0)
-  - SQLite.swift/SQLCipher
+  - SQLite.swift/SQLCipher (~> 0.15.4)
   - SSZipArchive (from `../ZipArchive`)
   - SwifterSwift (~> 7.0)
   - SwipeCellKit (from `../SwipeCellKit`)
@@ -249,6 +249,7 @@ SPEC REPOS:
     - IQTextInputViewNotification
     - IQTextView
     - JXPageControl
+    - JXSegmentedView
     - KeychainAccess
     - Kingfisher
     - LookinServer
@@ -294,8 +295,6 @@ EXTERNAL SOURCES:
     :path: "../HXPhotoPicker"
   IceCream:
     :path: "../IceCream"
-  iCloudSync:
-    :path: "../iCloudSync"
   JXBanner:
     :path: "../JXBanner"
   ManicEmuCore:
@@ -337,7 +336,6 @@ SPEC CHECKSUMS:
   Haptica: 23497230b2d7476621f7860263ae0667279a0a89
   HXPhotoPicker: c200bc265eab96411f22a7f2ff32447734c7dc2a
   IceCream: fa012f4b8e5bc321f2dfde126c85f88a5da88dbb
-  iCloudSync: 68ea8986be30ac6297cc037312348c3e60c89e86
   IQKeyboardCore: 28c8bf3bcd8ba5aa1570b318cbc4da94b861711e
   IQKeyboardManagerSwift: 0c6fbbaa2e60739e48d7cf59f25661471a7a3a65
   IQKeyboardNotification: d7382c4466c5a5adef92c7452ebf861b36050088
@@ -348,6 +346,7 @@ SPEC CHECKSUMS:
   IQTextView: ae13b4922f22e6f027f62c557d9f4f236b19d5c7
   JXBanner: b53efc5b4d2dbe074bdc5fe2efaea68b8805eaca
   JXPageControl: e9487b39e2e58fc17790833214f3b8e935bef98b
+  JXSegmentedView: cd73555ce2134d1656db2cb383ba9c2f36fb5078
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   Kingfisher: 3204d23de16b5ea53541c44ca5a8efb55741dec3
   LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
@@ -377,6 +376,6 @@ SPEC CHECKSUMS:
   VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 1da151c3805063ec159935f9ae72ecbd9c867818
+PODFILE CHECKSUM: 63d510ee083b754e40a0382fc4d0d289b0f67886
 
 COCOAPODS: 1.16.2

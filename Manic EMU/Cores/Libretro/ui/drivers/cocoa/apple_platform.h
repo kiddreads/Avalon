@@ -147,6 +147,9 @@ UINavigationControllerDelegate> {
 - (BOOL)getSensorEnable:(int)playerIndex;
 - (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y;
 - (void)releaseTouchEvent;
+- (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName;
+- (void)updateFBNeoCheatCode:(NSArray<NSString *> *_Nonnull)keys enable:(BOOL)enable;
+- (void)setFastforwardFrameSkip:(BOOL)frameSkip;
 @end
 
 #else

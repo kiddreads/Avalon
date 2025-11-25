@@ -47,7 +47,7 @@ class ControllersCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = Constants.Color.Background
+        backgroundColor = Constants.Color.SideList
         layerCornerRadius = Constants.Size.CornerRadiusMid
 
         addSubviews([iconView, titleLabel, selectButton])

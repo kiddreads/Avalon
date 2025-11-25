@@ -11,7 +11,7 @@ import UIKit
 import MarqueeLabel
 import ManicEmuCore
 
-class GameCollectionViewCell: UICollectionViewCell {
+class GameCollectionViewCell: UICollectionViewCell, DynamicShadow {
     
     private var gameType: GameType? = nil
     private var lastFrame: CGRect? = nil
@@ -42,6 +42,7 @@ class GameCollectionViewCell: UICollectionViewCell {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+            updateDynamicShadow()
         }
     }
     
@@ -94,6 +95,7 @@ class GameCollectionViewCell: UICollectionViewCell {
         backgroundColor = .clear
         enableInteractive = true
         delayInteractiveTouchEnd = true
+        updateDynamicShadow()
         
         contentView.addSubview(selectedBackground)
         selectedBackground.snp.makeConstraints { make in

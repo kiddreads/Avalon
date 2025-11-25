@@ -136,9 +136,9 @@ class ThemeSettingView: BaseView {
             } else if sectionIndex == SectionIndex.themeColor.rawValue {
                 itemHeight = 100
             } else if sectionIndex == SectionIndex.coverStyle.rawValue {
-                itemHeight = 370 + 76
+                itemHeight = 444
             }  else if sectionIndex == SectionIndex.gameList.rawValue {
-                itemHeight = 205 + 76 + 220 + 292
+                itemHeight = 845
             }  else if sectionIndex == SectionIndex.platformOrder.rawValue {
                 itemHeight = 50
             }

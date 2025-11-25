@@ -101,8 +101,8 @@ class HomeViewController: BaseViewController {
     private var homeTabBarBlurView: UIView = {
         let view = BlurUIKit.VariableBlurView()
         view.direction = .up
-        view.maximumBlurRadius = 15
-        view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.5, darkModeAlpha: 0.6)
+        view.maximumBlurRadius = 1
+        view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.05, darkModeAlpha: 0.05)
         view.dimmingTintColor = Constants.Color.Background
         return view
     }()
@@ -208,7 +208,7 @@ class HomeViewController: BaseViewController {
         view.addSubview(homeTabBar)
         homeTabBarBlurView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(homeTabBar.snp.centerY)
+            make.top.equalTo(homeTabBar).offset(-20)
         }
         
         homeTabBar.snp.makeConstraints { make in

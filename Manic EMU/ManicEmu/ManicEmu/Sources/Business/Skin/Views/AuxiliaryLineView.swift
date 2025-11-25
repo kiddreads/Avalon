@@ -14,12 +14,63 @@ class AuxiliaryLineView: UIView {
     
     var enableCrosshair: Bool
     var enableBorder: Bool
+    
+    // 边缘拖动手柄
+    let topHandle: UIView = {
+        let view = UIView()
+        let icon = IconView()
+        icon.imageView.contentMode = .scaleAspectFill
+        icon.image = UIImage(symbol: .chevronCompactUp, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        view.addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 40, height: 20))
+        }
+        return view
+    }()
+    let bottomHandle: UIView = {
+        let view = UIView()
+        let icon = IconView()
+        icon.imageView.contentMode = .scaleAspectFill
+        icon.image = UIImage(symbol: .chevronCompactDown, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        view.addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 40, height: 20))
+        }
+        return view
+    }()
+    let leftHandle: UIView = {
+        let view = UIView()
+        let icon = IconView()
+        icon.imageView.contentMode = .scaleAspectFill
+        icon.image = UIImage(symbol: .chevronCompactLeft, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        view.addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 20, height: 40))
+        }
+        return view
+    }()
+    let rightHandle: UIView = {
+        let view = UIView()
+        let icon = IconView()
+        icon.imageView.contentMode = .scaleAspectFill
+        icon.image = UIImage(symbol: .chevronCompactRight, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        view.addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 20, height: 40))
+        }
+        return view
+    }()
 
     override init(frame: CGRect) {
         self.enableCrosshair = false
         self.enableBorder = false
         super.init(frame: frame)
         setupLayers()
+        setupEdgeHandles()
     }
     
     init(frame: CGRect = .zero, enableCrosshair: Bool = false, enableBorder: Bool = false) {
@@ -27,6 +78,7 @@ class AuxiliaryLineView: UIView {
         self.enableBorder = enableBorder
         super.init(frame: frame)
         setupLayers()
+        setupEdgeHandles()
     }
 
     required init?(coder: NSCoder) {
@@ -34,6 +86,7 @@ class AuxiliaryLineView: UIView {
         self.enableBorder = false
         super.init(coder: coder)
         setupLayers()
+        setupEdgeHandles()
     }
 
     private func setupLayers() {
@@ -50,8 +103,36 @@ class AuxiliaryLineView: UIView {
             // 虚线边框样式
             dashedBorderLayer.strokeColor = UIColor.white.cgColor
             dashedBorderLayer.fillColor = nil
-            dashedBorderLayer.lineWidth = 2
+            dashedBorderLayer.lineWidth = 1
             layer.addSublayer(dashedBorderLayer)
+        }
+    }
+    
+    private func setupEdgeHandles() {
+        guard enableBorder else { return }
+        
+        addSubview(topHandle)
+        topHandle.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(20)
+        }
+        
+        addSubview(bottomHandle)
+        bottomHandle.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(20)
+        }
+        
+        addSubview(leftHandle)
+        leftHandle.snp.makeConstraints { make in
+            make.left.top.bottom.equalToSuperview()
+            make.width.equalTo(20)
+        }
+        
+        addSubview(rightHandle)
+        rightHandle.snp.makeConstraints { make in
+            make.right.top.bottom.equalToSuperview()
+            make.width.equalTo(20)
         }
     }
 

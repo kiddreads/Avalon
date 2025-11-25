@@ -485,6 +485,11 @@ extension FilesImporter {
                     if gameType != .notSupport {
                         game.gameType = gameType
                         game.importDate = Date()
+                        
+                        if gameType == .arcade, let mameInfo = MAMEKit.getMAMEInfo(fileName: game.name) {
+                            game.aliasName = mameInfo.name
+                        }
+                        
                         do {
                             if ciaTitleUrl == nil {
                                 //cia格式的3DS不需要拷贝了 因为已经安装进游戏目录了
@@ -683,6 +688,13 @@ extension FilesImporter {
                 if FileType.zip.extensions.contains(url.pathExtension) {
                     var innerResults = [URL]()
                     if url.pathExtension.lowercased() == "zip" {
+                        
+                        //街机ROM则不解压
+                        if MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+                            results.append(url)
+                            continue
+                        }
+                        
                         //先检查zip里面有没有支持的文件类型
                         if SSZipArchive.isFilePasswordProtected(atPath: url.path) {
                             //加密文件先不处理
@@ -723,6 +735,13 @@ extension FilesImporter {
                             }
                         }
                     } else if url.pathExtension.lowercased() == "7z"  {
+                        
+                        //街机ROM则不解压
+                        if MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+                            results.append(url)
+                            continue
+                        }
+                        
                         do {
                             Log.debug("开始解压7z")
                             let archivePath = try Path(url.path)

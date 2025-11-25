@@ -95,7 +95,7 @@ class FlexSkinSettingViewController: BaseViewController {
     }()
 
     private var screenBounds: CGRect {
-        return UIScreen.main.bounds
+        return containerView.frame
     }
     
     var didCompletion: (()->Void)? = nil
@@ -192,8 +192,10 @@ class FlexSkinSettingViewController: BaseViewController {
         imageView.backgroundColor = Constants.Color.BackgroundPrimary
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
-        imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        container.addSubview(imageView)
+        container.insertSubview(imageView, at: 0)
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(1)
+        }
 
         // 添加手势
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
@@ -201,8 +203,30 @@ class FlexSkinSettingViewController: BaseViewController {
 
         container.addGestureRecognizer(pan)
         container.addGestureRecognizer(pinch)
+        
+        // 为边缘手柄添加拖动手势
+        setupEdgeHandleGestures(for: container)
 
         return container
+    }
+    
+    // MARK: - 设置边缘手柄手势
+    private func setupEdgeHandleGestures(for container: AuxiliaryLineView) {
+        let topPan = UIPanGestureRecognizer(target: self, action: #selector(handleEdgePan(_:)))
+        container.topHandle.addGestureRecognizer(topPan)
+        container.topHandle.tag = 1 // top
+        
+        let bottomPan = UIPanGestureRecognizer(target: self, action: #selector(handleEdgePan(_:)))
+        container.bottomHandle.addGestureRecognizer(bottomPan)
+        container.bottomHandle.tag = 2 // bottom
+        
+        let leftPan = UIPanGestureRecognizer(target: self, action: #selector(handleEdgePan(_:)))
+        container.leftHandle.addGestureRecognizer(leftPan)
+        container.leftHandle.tag = 3 // left
+        
+        let rightPan = UIPanGestureRecognizer(target: self, action: #selector(handleEdgePan(_:)))
+        container.rightHandle.addGestureRecognizer(rightPan)
+        container.rightHandle.tag = 4 // right
     }
 
     private var lastHapticTime: TimeInterval = 0
@@ -308,31 +332,88 @@ class FlexSkinSettingViewController: BaseViewController {
             optimizeScale(for: view)
         }
     }
+    
+    // MARK: - 边缘拖动（非比例缩放）
+    private let minEdgeSize: CGFloat = 50 // 最小尺寸限制
+    
+    @objc private func handleEdgePan(_ gesture: UIPanGestureRecognizer) {
+        guard let handle = gesture.view,
+              let gameView = handle.superview else { return }
+        
+        let translation = gesture.translation(in: self.view)
+        var newFrame = gameView.frame
+        
+        // 根据手柄tag确定调整哪个边
+        switch handle.tag {
+        case 1: // top
+            let newHeight = newFrame.height - translation.y
+            let newY = newFrame.origin.y + translation.y
+            if newHeight >= minEdgeSize {
+                newFrame.origin.y = newY
+                newFrame.size.height = newHeight
+            }
+            
+        case 2: // bottom
+            let newHeight = newFrame.height + translation.y
+            if newHeight >= minEdgeSize {
+                newFrame.size.height = newHeight
+            }
+            
+        case 3: // left
+            let newWidth = newFrame.width - translation.x
+            let newX = newFrame.origin.x + translation.x
+            if newWidth >= minEdgeSize {
+                newFrame.origin.x = newX
+                newFrame.size.width = newWidth
+            }
+            
+        case 4: // right
+            let newWidth = newFrame.width + translation.x
+            if newWidth >= minEdgeSize {
+                newFrame.size.width = newWidth
+            }
+            
+        default:
+            break
+        }
+        
+        gameView.frame = newFrame
+        gesture.setTranslation(.zero, in: self.view)
+        
+        if gesture.state == .ended {
+            // 执行优化
+            optimizeScale(for: gameView)
+        }
+    }
 
-    // MARK: - 优化缩放（限制最大尺寸为填满最短边）
+    // MARK: - 优化缩放（限制最大尺寸不超出屏幕）
     private func optimizeScale(for view: UIView) {
-        let maxWidth = screenBounds.width
-        let maxHeight = screenBounds.height
-        let minSide = min(maxWidth, maxHeight)
-
         let currentFrame = view.frame
-        var targetSize = currentFrame.size
         
         func fixPosition() {
+            let maxWidth = screenBounds.width
+            let maxHeight = screenBounds.height
+            
+            let edgeMinX = UIScreen.main.bounds.minX - screenBounds.minX
+            let edgeMaxX = UIScreen.main.bounds.width - screenBounds.maxX
+            
+            let edgeMinY = UIScreen.main.bounds.minY - screenBounds.minY
+            let edgeMaxY = UIScreen.main.bounds.height - screenBounds.maxY
+            
             // 保证位置在屏幕范围内
             var newFrame = view.frame
             var newOrigin = newFrame.origin
-            
-            if newFrame.minX < 0 {
-                newOrigin.x = 0
-            } else if newFrame.maxX > maxWidth {
-                newOrigin.x = maxWidth - newFrame.width
+
+            if newFrame.minX < edgeMinX {
+                newOrigin.x = edgeMinX
+            } else if newFrame.maxX > maxWidth + edgeMaxX {
+                newOrigin.x = maxWidth - newFrame.width + edgeMaxX
             }
             
-            if newFrame.minY < 0 {
-                newOrigin.y = 0
-            } else if newFrame.maxY > maxHeight {
-                newOrigin.y = maxHeight - newFrame.height
+            if newFrame.minY < edgeMinY {
+                newOrigin.y = edgeMinY
+            } else if newFrame.maxY > maxHeight + edgeMaxY {
+                newOrigin.y = maxHeight - newFrame.height + edgeMaxY
             }
             
             newFrame.origin = newOrigin
@@ -342,33 +423,29 @@ class FlexSkinSettingViewController: BaseViewController {
             }
         }
         
-        let isLandscape = maxWidth > maxHeight
+        let maxWidth = UIScreen.main.bounds.width
+        let maxHeight = UIScreen.main.bounds.height
+        
+        // 如果视图超出屏幕边界，需要缩小
         if currentFrame.width > maxWidth || currentFrame.height > maxHeight {
-            let aspectRatio = currentFrame.width / currentFrame.height
-            if aspectRatio > 1 {
-                if isLandscape {
-                    targetSize = CGSize(width: minSide * aspectRatio, height: minSide)
-                } else {
-                    targetSize = CGSize(width: minSide, height: minSide / aspectRatio)
-                }
-            } else {
-                if isLandscape {
-                    targetSize = CGSize(width: minSide, height: minSide / aspectRatio)
-                } else {
-                    targetSize = CGSize(width: minSide * aspectRatio, height: minSide)
-                }
-            }
+            // 计算需要缩放到屏幕宽度和高度的比例
+            let widthScale = maxWidth / currentFrame.width
+            let heightScale = maxHeight / currentFrame.height
             
-            if targetSize.width > screenBounds.width {
-                targetSize = CGSize(width: screenBounds.width, height: screenBounds.width * targetSize.height/targetSize.width)
-            } else if targetSize.height > screenBounds.height {
-                targetSize = CGSize(width: screenBounds.height * targetSize.width/targetSize.height, height: screenBounds.height)
-            }
-
+            // 取较小的比例，确保视图不会超出任何一边
+            let scale = min(widthScale, heightScale)
+            
+            // 计算目标尺寸
+            let targetSize = CGSize(
+                width: currentFrame.width * scale,
+                height: currentFrame.height * scale
+            )
+            
+            // 计算相对于当前frame的缩放比例
             let scaleX = targetSize.width / currentFrame.width
             let scaleY = targetSize.height / currentFrame.height
 
-            UIView.animate(withDuration: 0.25,animations: {
+            UIView.animate(withDuration: 0.25, animations: {
                 view.transform = view.transform.scaledBy(x: scaleX, y: scaleY)
             }, completion: { _ in
                 fixPosition()
@@ -386,20 +463,26 @@ class FlexSkinSettingViewController: BaseViewController {
 
         var isFixScreenOutside = false
         
+        let edgeMinX = UIScreen.main.bounds.minX - screenBounds.minX
+        let edgeMaxX = UIScreen.main.bounds.width - screenBounds.maxX
+        
         // Step 1: 超出屏幕边缘 - 调整回可见区域（最高优先）
-        if frame.minX < 0 {
-            finalCenter.x += -frame.minX
+        if frame.minX < edgeMinX {
+            finalCenter.x += (-frame.minX + edgeMinX)
             isFixScreenOutside = true
-        } else if frame.maxX > screenBounds.width {
-            finalCenter.x -= (frame.maxX - screenBounds.width)
+        } else if frame.maxX > screenBounds.width + edgeMaxX {
+            finalCenter.x -= (frame.maxX - screenBounds.width - edgeMaxX)
             isFixScreenOutside = true
         }
+        
+        let edgeMinY = UIScreen.main.bounds.minY - screenBounds.minY
+        let edgeMaxY = UIScreen.main.bounds.height - screenBounds.maxY
 
-        if frame.minY < 0 {
-            finalCenter.y += -frame.minY
+        if frame.minY < edgeMinY {
+            finalCenter.y += (-frame.minY + edgeMinY)
             isFixScreenOutside = true
-        } else if frame.maxY > screenBounds.height {
-            finalCenter.y -= (frame.maxY - screenBounds.height)
+        } else if frame.maxY > screenBounds.height + edgeMaxY {
+            finalCenter.y -= (frame.maxY - screenBounds.height - edgeMaxY)
             isFixScreenOutside = true
         }
 
@@ -565,8 +648,10 @@ class FlexSkinSettingViewController: BaseViewController {
                                 initFrames.removeAll()
                                 initScreens.removeAll()
                                 for (index, screen) in screens.enumerated() {
-                                    if let outputFrame = screen.outputFrame {
-                                        let scaledFrame = outputFrame.applying(.init(scaleX: Constants.Size.WindowWidth, y: Constants.Size.WindowHeight))
+                                    if let outputFrame = screen.outputFrame,
+                                        let controllerSkin = controlView.controllerSkin as? ControllerSkin,
+                                       let frames = controllerSkin.getFrames()  {
+                                        let scaledFrame = outputFrame.applying(.init(scaleX: frames.skinFrame.width, y: frames.skinFrame.height))
                                         containerViews[index].frame = scaledFrame
                                         initFrames.append(scaledFrame)
                                         initScreens.append(screen)

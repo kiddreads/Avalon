@@ -15,7 +15,7 @@ extension GameType
     static let gg = GameType("public.aoshuang.game.gg")
 }
 
-@objc enum GGGameInput: Int, Input {
+@objc enum GGGameInput: Int, Input, CaseIterable {
     case a
     case b
     case start
@@ -55,6 +55,7 @@ struct GG: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.gg }
     public var gameInputType: Input.Type { GGGameInput.self }
+    var allInputs: [Input] { PSPGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!

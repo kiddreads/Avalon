@@ -212,7 +212,7 @@ class CoreSelectionView: BaseView {
         var backgroundView: UIView = {
             let view = UIView()
             view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.BackgroundSecondary
+            view.backgroundColor = Constants.Color.BackgroundPrimary
             return view
         }()
         

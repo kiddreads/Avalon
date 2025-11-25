@@ -84,7 +84,9 @@ extension GameType {
             self = .ps1
         } else if ["cdi", "gdi", "chd", "cue", "bin", "m3u"].contains(ext) {
             self = .dc
-        }  else {
+        } else if ["zip", "7z", "cmd"].contains(ext) {
+            self = .arcade
+        } else {
             self = .notSupport
         }
     }
@@ -142,16 +144,11 @@ extension GameType {
             self = .ps1
         } else if shortName.uppercased() == "DC" {
             self = .dc
-        }  else {
+        } else if shortName.uppercased() == "Arcade".uppercased() {
+            self = .arcade
+        } else {
             return nil
         }
-    }
-    
-    var isLibretroType: Bool {
-        if self == ._3ds {
-            return false
-        }
-        return true
     }
     
     var localizedName: String {
@@ -178,6 +175,7 @@ extension GameType {
         case .pm: return "Pokémon Mini"
         case .ps1: return "PlayStation"
         case .dc: return "Dreamcast"
+        case .arcade: return "Arcade"
         default: return ""
         }
     }
@@ -206,6 +204,7 @@ extension GameType {
         case .pm: return NSLocalizedString("PM", comment: "")
         case .ps1: return NSLocalizedString("PS1", comment: "")
         case .dc: return NSLocalizedString("DC", comment: "")
+        case .arcade: return NSLocalizedString("Arcade", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -235,6 +234,7 @@ extension GameType {
         case .pm: return 2001
         case .ps1: return 1995
         case .dc: return 1998
+        case .arcade: return 1971
         default: return 0
         }
     }
@@ -263,6 +263,7 @@ extension GameType {
         case .pm: return PM.core
         case .ps1: return PS1.core
         case .dc: return DC.core
+        case .arcade: return Arcade.core
         default: return nil
         }
     }
@@ -287,6 +288,12 @@ extension GameType {
             return [LibretroCore.Cores.Gearsystem.name, LibretroCore.Cores.PicoDrive.name]
         } else if self == .gb || self == .gbc {
             return [LibretroCore.Cores.Gambatte.name, LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
+        } else if self == .arcade {
+#if SIDE_LOAD
+            return [LibretroCore.Cores.MAME.name, LibretroCore.Cores.FinalBurnNeo.name]
+#endif
+        } else if self == ._3ds {
+            return [LibretroCore.Cores.Citra.name, LibretroCore.Cores.Azahar.name]
         }
         return []
     }
@@ -331,6 +338,28 @@ extension GameType {
         return (isComplete(biosItems: dsBiosItems), isComplete(biosItems: dsiBiosItems))
     }
     
+    var manufacturer: Manufacturer {
+        switch self {
+        case ._3ds, .ds, .gb, .gba, .gbc, .nes, .fds, .snes, .vb, .pm, .n64:
+            return .nintendo
+        case .ps1, .psp:
+            return .sony
+        case .md, .mcd, ._32x, .sg1000, .gg, .ms, .ss, .dc:
+            return .sega
+        case .arcade:
+            return .arcade
+        default:
+            return .nintendo
+        }
+    }
+    
+    var supportAnalogInput: Bool {
+        switch self {
+        case .psp, ._3ds, .arcade, .dc, .ps1, .n64:
+            return true
+        default: return false
+        }
+    }
 }
 
 ///让GameType支持realm的存储

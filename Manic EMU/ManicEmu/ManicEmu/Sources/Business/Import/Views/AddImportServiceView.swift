@@ -133,7 +133,7 @@ class AddImportServiceView: BaseView {
         var backgroundView: UIView = {
             let view = UIView()
             view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.Background
+            view.backgroundColor = Constants.Color.SideList
             return view
         }()
         

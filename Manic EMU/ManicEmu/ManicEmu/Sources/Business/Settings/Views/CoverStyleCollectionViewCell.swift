@@ -63,9 +63,8 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private var forceSquareIconView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .center
+    private var forceSquareIconView: IconView = {
+        let view = IconView()
         view.layerCornerRadius = 6
         view.image = UIImage(symbol: .square, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
@@ -78,8 +77,8 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private var hideGameTitleIconView: UIImageView = {
-        let view = UIImageView()
+    private var hideGameTitleIconView: IconView = {
+        let view = IconView()
         view.contentMode = .center
         view.layerCornerRadius = 6
         view.image = UIImage(symbol: .characterTextbox, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
@@ -114,7 +113,7 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         segmentView.setIndex(style.rawValue)
         addSubview(segmentView)
         segmentView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+            make.leading.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         segmentView.on(.valueChanged) { [weak self] sender, forEvent in
@@ -168,22 +167,29 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
             self.updateCornerRadiusRatio(ratio: self.sliderView.value)
         }
         
-        //开关
-        let forceSquareContainer = UIView()
-        forceSquareContainer.backgroundColor = Constants.Color.Background
-        forceSquareContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
-        addSubview(forceSquareContainer)
-        forceSquareContainer.snp.makeConstraints { make in
+        let cornerContainer = UIView()
+        cornerContainer.backgroundColor = Constants.Color.Background
+        cornerContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
+        addSubview(cornerContainer)
+        cornerContainer.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(sliderView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.height.equalTo(Constants.Size.ItemHeightMax * 2)
+        }
+        
+        //开关
+        let forceSquareContainer = UIView()
+        cornerContainer.addSubview(forceSquareContainer)
+        forceSquareContainer.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
             make.height.equalTo(Constants.Size.ItemHeightMax)
         }
         
         forceSquareContainer.addSubview(forceSquareIconView)
         forceSquareIconView.backgroundColor = Constants.Color.Main
         forceSquareIconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.size.equalTo(Constants.Size.IconSizeMin)
             make.centerY.equalToSuperview()
         }
         
@@ -228,20 +234,18 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         
         //隐藏游戏标题
         let hideGameTitleContainer = UIView()
-        hideGameTitleContainer.backgroundColor = Constants.Color.Background
-        hideGameTitleContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
-        addSubview(hideGameTitleContainer)
+        cornerContainer.addSubview(hideGameTitleContainer)
         hideGameTitleContainer.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(forceSquareContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(forceSquareContainer.snp.bottom)
             make.height.equalTo(Constants.Size.ItemHeightMax)
         }
         
         hideGameTitleContainer.addSubview(hideGameTitleIconView)
         hideGameTitleIconView.backgroundColor = Constants.Color.Main
         hideGameTitleIconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.size.equalTo(Constants.Size.IconSizeMin)
             make.centerY.equalToSuperview()
         }
         

@@ -22,6 +22,8 @@ public protocol ManicEmuCoreProtocol: CustomStringConvertible
     // Should be associated type, but Swift type system makes this difficult, so ¯\_(ツ)_/¯
     var gameInputType: Input.Type { get }
     
+    var allInputs: [Input] { get }
+    
     /* Rendering */
     var audioFormat: AVAudioFormat { get }
     var videoFormat: VideoFormat { get }

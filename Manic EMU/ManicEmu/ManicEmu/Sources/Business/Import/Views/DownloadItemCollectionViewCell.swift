@@ -127,7 +127,6 @@ class DownloadItemCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
     func setData(task: DownloadTask) {
         titleLabel.text = task.fileName
         

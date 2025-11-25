@@ -43,7 +43,7 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = Constants.Color.Background
+        backgroundColor = Constants.Color.SideList
         layerCornerRadius = Constants.Size.CornerRadiusMid
         enableInteractive = true
         delayInteractiveTouchEnd = true
@@ -91,7 +91,6 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
     func setData(game: Game, didTapRetro: (()->Void)? = nil) {
         let estimated = iconView.size == .zero ? .init(40) : iconView.size
         iconView.setGameCover(game: game, size: estimated)

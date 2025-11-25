@@ -55,6 +55,7 @@ class Settings: Object, ObjectUpdatable {
                 //关闭iCloud同步
                 SyncManager.shared.stopSync()
             }
+            NotificationCenter.default.post(name: Constants.NotificationName.iCloudEnableChange, object: nil)
         }
         get {
             UserDefaults.standard.bool(forKey: "iCloudSyncEnable")

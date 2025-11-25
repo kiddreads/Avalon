@@ -775,3 +775,26 @@
 "ActivateHold" = "启动长按：%@";
 "DeactivateHold" = "取消长按：%@";
 
+"NoGamesForManufacturer" = "该厂商下暂无可用游戏";
+"iCloudNotEnable" = "iCloud 未启用";
+"iCloudSyncing" = "iCloud 同步中";
+"iCloudSynced" = "iCloud 已同步";
+"JITNotAllow" = "JIT 不可用";
+"JITAllow" = "JIT 可用";
+"iCloudUsage" = "iCloud 用量";
+"Usage" = "用量";
+"iCloudDesc" = "启用 iCloud 同步与备份后，您的游戏、皮肤与存档将在多设备间保持一致。即使删除并重新安装应用，也会立即恢复当前数据。";
+"Device" = "设备";
+"InstallSource" = "安装来源";
+"System" = "系统";
+"Memory" = "内存";
+"InstallSideloadVersion" = "安装侧载版本";
+"JITDesc" = "JIT（即时编译）是一种动态编译技术，通过在程序运行过程中对代码进行编译，提高执行效率。与预先编译（AOT）不同，JIT 会将中间代码（如字节码）在运行时转换为本机机器码，并利用实时信息进行优化，从而提升性能。";
+"MAMEBiosDesc" = "MAME BIOS 由多个文件组成，点击查看详情";
+"MAMECheatCodeDesc" = "MAME 核心已集成金手指。在游戏中同时按下 COIN + Y 进入 MAME 菜单，然后选择 Cheat Options 进行设置。";
+"FBNeoNoCheats" = "当前游戏暂无金手指。";
+"FBNeoCheatCodeDesc" = "使用 FinalBurn Neo 核心时，金手指只能在游戏运行过程中激活。";
+"FilterTitle" = "筛选";
+"EnableManufacturerFilter" = "启用厂商筛选";
+"MAMEFileMissingTitle" = "游戏文件缺失";
+"MAMEFileMissingDesc" = "当前游戏可能属于 Split 类型的 ROM 集，需要依赖 Parent 或 BIOS 文件才能运行。请导入缺失文件，或使用 non-merged 类型的 ROM。";

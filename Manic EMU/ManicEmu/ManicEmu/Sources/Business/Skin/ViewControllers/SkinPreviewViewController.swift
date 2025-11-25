@@ -90,6 +90,10 @@ class SkinPreviewViewController: BaseViewController {
             AppDelegate.orientation = .landscapeRight
         default: break
         }
+        if #available(iOS 26.0, *) {
+            controlView.setNeedsLayout()
+            controlView.layoutIfNeeded()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

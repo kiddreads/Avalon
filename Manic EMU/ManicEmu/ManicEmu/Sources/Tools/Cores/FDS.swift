@@ -14,7 +14,7 @@ extension GameType {
     static let fds = GameType("public.aoshuang.game.fds")
 }
 
-@objc enum FDSGameInput: Int, Input {
+@objc enum FDSGameInput: Int, Input, CaseIterable {
     case a
     case b
     case start
@@ -71,6 +71,7 @@ struct FDS: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.fds }
     public var gameInputType: Input.Type { FDSGameInput.self }
+    var allInputs: [Input] { FDSGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 1, interleaved: true)!

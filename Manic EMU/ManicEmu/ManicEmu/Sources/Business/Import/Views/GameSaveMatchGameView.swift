@@ -428,7 +428,7 @@ extension GameSaveMatchGameView: UICollectionViewDataSource {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: GamesCollectionReusableView.self, for: indexPath)
         let gameType = sortDatasKeys()[indexPath.section]
         header.setData(gameType: gameType)
-        header.skinButton.isHidden = true
+        header.gamesCountButton.isHidden = true
         return header
     }
 }

@@ -20,7 +20,7 @@ extension CheatType
     static let cwCheat = CheatType("CWCheat")
 }
 
-@objc enum PSPGameInput: Int, Input {
+@objc enum PSPGameInput: Int, Input, CaseIterable {
     case a
     case b
     case x
@@ -77,6 +77,7 @@ struct PSP: ManicEmuCoreProtocol {
     
     var gameType: GameType { GameType.psp }
     var gameInputType: Input.Type { PSPGameInput.self }
+    var allInputs: [Input] { PSPGameInput.allCases }
     var gameSaveExtension: String { "psp.sav" }
     
     let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!

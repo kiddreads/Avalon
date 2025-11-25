@@ -21,7 +21,7 @@ extension CheatType
     static let codeBreaker = CheatType("codeBreaker")
 }
 
-@objc enum GBAGameInput: Int, Input {
+@objc enum GBAGameInput: Int, Input, CaseIterable {
     case a
     case b
     case l
@@ -65,6 +65,7 @@ struct GBA: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.gba }
     public var gameInputType: Input.Type { GBAGameInput.self }
+    var allInputs: [Input] { GBAGameInput.allCases }
     public var gameSaveExtension: String { "sav" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!

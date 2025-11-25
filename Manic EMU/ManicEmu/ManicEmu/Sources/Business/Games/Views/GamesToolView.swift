@@ -123,9 +123,23 @@ class GamesToolView: UIView {
         return view
     }()
     
+    lazy var manufacturerCategoryView: ManufacturerCategoryView = {
+        let view = ManufacturerCategoryView()
+        return view
+    }()
+    
     var didToolViewSelectionChange: ((SelectionChangeMode)->Void)?
     var didSearchChange: ((String?)->Void)?
     var didSearchTextResignFirstResponder: (()->Void)? = nil
+    var didFilterVisibleChange: (()->Void)? = nil
+    
+    private var manufacturerFilterChange: Any? = nil
+    
+    deinit {
+        if let manufacturerFilterChange {
+            NotificationCenter.default.removeObserver(manufacturerFilterChange)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -141,7 +155,7 @@ class GamesToolView: UIView {
         addSubviews(icons)
         for (index, icon) in icons.enumerated() {
             icon.snp.makeConstraints { make in
-                make.centerY.equalToSuperview()
+                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
                 if index == 0 {
                     make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
                 } else {
@@ -151,6 +165,22 @@ class GamesToolView: UIView {
                     make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)
                 }
             }
+        }
+        
+        addSubview(manufacturerCategoryView)
+        manufacturerCategoryView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+        }
+        manufacturerCategoryView.isHidden = !(Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false)
+        
+        
+        manufacturerFilterChange = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ManufacturerFilterChange, object: nil, queue: .main) { [weak self] notification in
+            let enableFilter = (notification.object as? Bool) ?? false
+            self?.manufacturerCategoryView.isHidden = !enableFilter
+            self?.didFilterVisibleChange?()
+            self?.stopFilterManufacturer()
         }
     }
     
@@ -191,6 +221,10 @@ class GamesToolView: UIView {
             selectIconLabel.text = R.string.localizable.selectAll()
             didToolViewSelectionChange?(.normalMode)
         }
+    }
+    
+    func stopFilterManufacturer() {
+        manufacturerCategoryView.deselectAll()
     }
     
     func foldKeyboard() {

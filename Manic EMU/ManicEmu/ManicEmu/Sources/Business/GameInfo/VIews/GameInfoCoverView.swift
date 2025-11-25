@@ -14,7 +14,7 @@ import Kingfisher
 class GameInfoCoverView: BaseView {
     var maskTopView: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        view.backgroundColor = Constants.Color.Background
         view.alpha = 0
         view.isUserInteractionEnabled = false
         return view
@@ -29,7 +29,7 @@ class GameInfoCoverView: BaseView {
     private var coverContainerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = Constants.Size.CornerRadiusMax
-        view.makeShadow(ofColor: Constants.Color.BackgroundPrimary, radius: 30)
+        view.makeShadow(ofColor: Constants.Color.Background.forceStyle(.dark), radius: 30)
         return view
     }()
     
@@ -74,7 +74,7 @@ class GameInfoCoverView: BaseView {
     init(game: Game) {
         self.game = game
         super.init(frame: .zero)
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         
         addSubview(backgroundGradientView)
         backgroundGradientView.snp.makeConstraints { make in

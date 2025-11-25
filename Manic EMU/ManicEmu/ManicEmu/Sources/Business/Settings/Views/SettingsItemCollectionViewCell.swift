@@ -9,9 +9,8 @@
 import BetterSegmentedControl
 
 class SettingsItemCollectionViewCell: UICollectionViewCell {
-    private var iconView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .center
+    private var iconView: IconView = {
+        let view = IconView()
         view.layerCornerRadius = 6
         return view
     }()
@@ -149,6 +148,37 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
             let style = NSMutableParagraphStyle()
             style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
             matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
+        } else if item.type == .iCloud {
+            //特殊处理detail
+            var detail = R.string.localizable.iCloudNotEnable()
+            var color = Constants.Color.LabelSecondary
+            if Settings.defalut.iCloudSyncEnable && PurchaseManager.isMember {
+                if SyncManager.shared.syncState == .idle {
+                    detail = R.string.localizable.iCloudSynced()
+                    color = Constants.Color.Green
+                } else if SyncManager.shared.syncState == .syncing {
+                    detail = R.string.localizable.iCloudSyncing()
+                    color = Constants.Color.Yellow
+                }
+            }
+            matt.append(NSAttributedString(string: "\n" + "●", attributes: [.font: Constants.Font.caption(size: .s), .foregroundColor: color, .baselineOffset: 1]))
+            matt.append(NSAttributedString(string: " " + detail, attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: color]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
+        } else if item.type == .jit {
+            //特殊处理detail
+            var detail = R.string.localizable.jitNotAllow()
+            var color = Constants.Color.Red
+            if LibretroCore.jitAvailable() {
+                detail = R.string.localizable.jitAllow()
+                color = Constants.Color.Green
+            }
+            matt.append(NSAttributedString(string: "\n" + "●", attributes: [.font: Constants.Font.caption(size: .s), .foregroundColor: color, .baselineOffset: 1]))
+            matt.append(NSAttributedString(string: " " + detail, attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: color]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
         }
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = .byTruncatingTail
@@ -156,7 +186,7 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
         titleLabel.attributedText = matt
         
         switch item.type {
-        case .quickGame, .airPlay, .iCloud, .fullScreenWhenConnectController, .autoSaveState, .respectSilentMode, .rumble:
+        case .quickGame, .airPlay, .fullScreenWhenConnectController, .autoSaveState, .respectSilentMode, .rumble:
             switchButton.isHidden = false
             chevronIconView.isHidden = true
             enableInteractive = false
@@ -177,7 +207,7 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
             segmentView.isHidden = true
         }
         if let isOn = item.isOn {
-            if !PurchaseManager.isMember && (item.type == .airPlay || item.type == .iCloud) {
+            if !PurchaseManager.isMember && (item.type == .airPlay) {
                 switchButton.isEnabled = false
                 switchButton.setOn(false, animated: false)
             } else {

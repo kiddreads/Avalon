@@ -115,13 +115,11 @@ class AddTriggerButtonView: BaseView {
             make.centerY.equalTo(icon)
         }
         
-        if UIDevice.isPhone {
-            topBlurView.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            }
+        topBlurView.addSubview(closeButton)
+        closeButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         }
     }
     

@@ -50,7 +50,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .center
         view.layerCornerRadius = Constants.Size.IconSizeMin.height/2
-        view.layer.shadowColor = Constants.Color.Shadow.cgColor
+        view.layer.shadowColor = Constants.Color.Shadow.forceStyle(.dark).cgColor
         view.layer.shadowOpacity = 0.5
         view.layer.shadowRadius = 2
         view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
@@ -116,7 +116,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+            
         }
     }
     

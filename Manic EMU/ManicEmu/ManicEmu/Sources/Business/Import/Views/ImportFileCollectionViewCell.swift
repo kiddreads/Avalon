@@ -9,7 +9,7 @@
 
 import UIKit
 
-class ImportFileCollectionViewCell: UICollectionViewCell {
+class ImportFileCollectionViewCell: UICollectionViewCell, DynamicShadow {
     private var iconView: ServiceIconView = {
         let view = ServiceIconView(roundCorner: .allCorners)
         return view
@@ -32,6 +32,7 @@ class ImportFileCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        updateDynamicShadow()
         
         let topHintView = UIView()
         addSubview(topHintView)
@@ -86,7 +87,13 @@ class ImportFileCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateDynamicShadow()
+        }
+    }
+    
     func setData(service: ImportService) {
         
         iconView.imageView.image = service.iconImage

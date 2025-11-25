@@ -157,7 +157,6 @@ class SaveItemCollectionViewCell: SwipeCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
     func setData(item: GameSaveState, index: Int) {
         iconView.image = .tryDataImageOrPlaceholder(tryData: item.stateCover?.storedData(), preferenceSize: iconView.size)
         titleLabel.text = R.string.localizable.gameSaveTitle(index)

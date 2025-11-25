@@ -555,27 +555,27 @@ enum
 
 - (void)setViewType:(apple_view_type_t)vt
 {
-   if (vt == _vt)
-      return;
-
-   _vt = vt;
-   if (_renderView != nil)
-   {
-      [_renderView removeFromSuperview];
-      _renderView = nil;
-   }
-
-   switch (vt)
-   {
+    if (vt == _vt)
+        return;
+    
+    _vt = vt;
+    if (_renderView != nil)
+    {
+        [_renderView removeFromSuperview];
+        _renderView = nil;
+    }
+    
+    switch (vt)
+    {
 #ifdef HAVE_COCOA_METAL
-       case APPLE_VIEW_TYPE_VULKAN:
-         _renderView = [MetalLayerView new];
+        case APPLE_VIEW_TYPE_VULKAN:
+            _renderView = [MetalLayerView new];
 #if TARGET_OS_IOS
-         _renderView.multipleTouchEnabled = YES;
+            _renderView.multipleTouchEnabled = YES;
 #endif
-         break;
-       case APPLE_VIEW_TYPE_METAL:
-         {
+            break;
+        case APPLE_VIEW_TYPE_METAL:
+        {
             MetalView *v = [MetalView new];
             v.paused                = YES;
             v.enableSetNeedsDisplay = NO;
@@ -583,33 +583,33 @@ enum
             v.multipleTouchEnabled  = YES;
 #endif
             _renderView = v;
-         }
-         break;
+        }
+            break;
 #endif
-       case APPLE_VIEW_TYPE_OPENGL_ES:
-         _renderView = (BRIDGE GLKView*)glkitview_init();
-         break;
-
-       case APPLE_VIEW_TYPE_NONE:
-       default:
-         return;
-   }
-
-   _renderView.translatesAutoresizingMaskIntoConstraints = NO;
-   UIView *rootView = [CocoaView get].view;
-   [rootView addSubview:_renderView];
+        case APPLE_VIEW_TYPE_OPENGL_ES:
+            _renderView = (BRIDGE GLKView*)glkitview_init();
+            break;
+            
+        case APPLE_VIEW_TYPE_NONE:
+        default:
+            return;
+    }
+    
+    _renderView.translatesAutoresizingMaskIntoConstraints = NO;
+    UIView *rootView = [CocoaView get].view;
+    [rootView addSubview:_renderView];
 #if TARGET_OS_IOS
-   if (@available(iOS 13.4, *))
-   {
-      [_renderView addInteraction:[[UIPointerInteraction alloc] initWithDelegate:self]];
-      _renderView.userInteractionEnabled = YES;
-   }
+    if (@available(iOS 13.4, *))
+    {
+        [_renderView addInteraction:[[UIPointerInteraction alloc] initWithDelegate:self]];
+        _renderView.userInteractionEnabled = YES;
+    }
 #endif
-   [[_renderView.topAnchor constraintEqualToAnchor:rootView.topAnchor] setActive:YES];
-   [[_renderView.bottomAnchor constraintEqualToAnchor:rootView.bottomAnchor] setActive:YES];
-   [[_renderView.leadingAnchor constraintEqualToAnchor:rootView.leadingAnchor] setActive:YES];
-   [[_renderView.trailingAnchor constraintEqualToAnchor:rootView.trailingAnchor] setActive:YES];
-   [_renderView layoutIfNeeded];
+    [[_renderView.topAnchor constraintEqualToAnchor:rootView.topAnchor] setActive:YES];
+    [[_renderView.bottomAnchor constraintEqualToAnchor:rootView.bottomAnchor] setActive:YES];
+    [[_renderView.leadingAnchor constraintEqualToAnchor:rootView.leadingAnchor] setActive:YES];
+    [[_renderView.trailingAnchor constraintEqualToAnchor:rootView.trailingAnchor] setActive:YES];
+    [_renderView layoutIfNeeded];
 }
 
 - (apple_view_type_t)viewType { return _vt; }
@@ -617,12 +617,12 @@ enum
 - (void)setVideoMode:(gfx_ctx_mode_t)mode
 {
 #ifdef HAVE_COCOA_METAL
-   MetalView *metalView = (MetalView*) _renderView;
-   CGFloat scale        = [[UIScreen mainScreen] scale];
-   [metalView setDrawableSize:CGSizeMake(
-         _renderView.bounds.size.width * scale,
-         _renderView.bounds.size.height * scale
-         )];
+    MetalView *metalView = (MetalView*) _renderView;
+    CGFloat scale        = [[UIScreen mainScreen] scale];
+    [metalView setDrawableSize:CGSizeMake(
+                                          _renderView.bounds.size.width * scale,
+                                          _renderView.bounds.size.height * scale
+                                          )];
 #endif
 }
 
@@ -630,10 +630,10 @@ enum
 - (bool)setDisableDisplaySleep:(bool)disable
 {
 #if TARGET_OS_TV
-   [[UIApplication sharedApplication] setIdleTimerDisabled:disable];
-   return YES;
+    [[UIApplication sharedApplication] setIdleTimerDisabled:disable];
+    return YES;
 #else
-   return NO;
+    return NO;
 #endif
 }
 + (RetroArch_iOS*)get {
@@ -642,299 +642,299 @@ enum
 
 -(NSString*)documentsDirectory
 {
-   if (_documentsDirectory == nil)
-   {
+    if (_documentsDirectory == nil)
+    {
 #if TARGET_OS_IOS
-      NSArray *paths      = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSArray *paths      = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 #elif TARGET_OS_TV
-      NSArray *paths      = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSArray *paths      = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 #endif
-      _documentsDirectory = paths.firstObject;
-   }
-   return _documentsDirectory;
+        _documentsDirectory = paths.firstObject;
+    }
+    return _documentsDirectory;
 }
 
 - (void)handleAudioSessionInterruption:(NSNotification *)notification
 {
-   NSNumber *type = notification.userInfo[AVAudioSessionInterruptionTypeKey];
-   if (![type isKindOfClass:[NSNumber class]])
-      return;
-
-   if ([type unsignedIntegerValue] == AVAudioSessionInterruptionTypeBegan)
-   {
-      RARCH_LOG("AudioSession Interruption Began\n");
-      audio_driver_stop();
-   }
-   else if ([type unsignedIntegerValue] == AVAudioSessionInterruptionTypeEnded)
-   {
-      RARCH_LOG("AudioSession Interruption Ended\n");
-      audio_driver_start(false);
-   }
+    NSNumber *type = notification.userInfo[AVAudioSessionInterruptionTypeKey];
+    if (![type isKindOfClass:[NSNumber class]])
+        return;
+    
+    if ([type unsignedIntegerValue] == AVAudioSessionInterruptionTypeBegan)
+    {
+        RARCH_LOG("AudioSession Interruption Began\n");
+        audio_driver_stop();
+    }
+    else if ([type unsignedIntegerValue] == AVAudioSessionInterruptionTypeEnded)
+    {
+        RARCH_LOG("AudioSession Interruption Ended\n");
+        audio_driver_start(false);
+    }
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
-   char arguments[]   = "retroarch";
-   char       *argv[] = {arguments,   NULL};
-   int argc           = 1;
-   apple_platform     = self;
-
-   if ([NSUserDefaults.standardUserDefaults boolForKey:@"restore_default_config"])
-   {
-      [NSUserDefaults.standardUserDefaults setBool:NO forKey:@"restore_default_config"];
-      [NSUserDefaults.standardUserDefaults setObject:@"" forKey:@FILE_PATH_MAIN_CONFIG];
-
-      // Get the Caches directory path
-      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-      NSString *cachesDirectory = [paths firstObject];
-
-      // Define the original and new file paths
-      NSString *originalPath = [cachesDirectory stringByAppendingPathComponent:@"RetroArch/config/retroarch.cfg"];
-      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-      [dateFormatter setDateFormat:@"HHmm-yyMMdd"];
-      NSString *timestamp = [dateFormatter stringFromDate:[NSDate date]];
-      NSString *newPath = [cachesDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"RetroArch/config/RetroArch-%@.cfg", timestamp]];
-
-      // File manager instance
-      NSFileManager *fileManager = [NSFileManager defaultManager];
-
-      // Check if the file exists and rename it
-      if ([fileManager fileExistsAtPath:originalPath])
-      {
-          NSError *error = nil;
-          if ([fileManager moveItemAtPath:originalPath toPath:newPath error:&error])
-              NSLog(@"File renamed to %@", newPath);
-          else
-              NSLog(@"Error renaming file: %@", error.localizedDescription);
-      }
-      else
-          NSLog(@"File does not exist at path %@", originalPath);
-   }
-
-   [self setDelegate:self];
-
-   /* Setup window */
-   self.window        = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-   [self.window makeKeyAndVisible];
-
-   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
-
-   [self showGameView];
-
-   rarch_main(argc, argv, NULL);
-
-   uico_driver_state_t *uico_st     = uico_state_get_ptr();
-   rarch_setting_t *appicon_setting = menu_setting_find_enum(MENU_ENUM_LABEL_APPICON_SETTINGS);
-   struct string_list *icons;
-   if (               appicon_setting
-		   && uico_st->drv
-		   && uico_st->drv->get_app_icons
-		   && (icons = uico_st->drv->get_app_icons())
-		   && icons->size > 1)
-   {
-      int i;
-      size_t _len    = 0;
-      char *options = NULL;
-      const char *icon_name;
-
-      appicon_setting->default_value.string = icons->elems[0].data;
-      icon_name = [[application alternateIconName] cStringUsingEncoding:kCFStringEncodingUTF8]; /* need to ask uico_st for this */
-      for (i = 0; i < (int)icons->size; i++)
-      {
-         _len += strlen(icons->elems[i].data) + 1;
-         if (string_is_equal(icon_name, icons->elems[i].data))
-            appicon_setting->value.target.string = icons->elems[i].data;
-      }
-      options = (char*)calloc(_len, sizeof(char));
-      string_list_join_concat(options, _len, icons, "|");
-      if (appicon_setting->values)
-         free((void*)appicon_setting->values);
-      appicon_setting->values = options;
-   }
-
-   rarch_start_draw_observer();
-
+    char arguments[]   = "retroarch";
+    char       *argv[] = {arguments,   NULL};
+    int argc           = 1;
+    apple_platform     = self;
+    
+    if ([NSUserDefaults.standardUserDefaults boolForKey:@"restore_default_config"])
+    {
+        [NSUserDefaults.standardUserDefaults setBool:NO forKey:@"restore_default_config"];
+        [NSUserDefaults.standardUserDefaults setObject:@"" forKey:@FILE_PATH_MAIN_CONFIG];
+        
+        // Get the Caches directory path
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *cachesDirectory = [paths firstObject];
+        
+        // Define the original and new file paths
+        NSString *originalPath = [cachesDirectory stringByAppendingPathComponent:@"RetroArch/config/retroarch.cfg"];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HHmm-yyMMdd"];
+        NSString *timestamp = [dateFormatter stringFromDate:[NSDate date]];
+        NSString *newPath = [cachesDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"RetroArch/config/RetroArch-%@.cfg", timestamp]];
+        
+        // File manager instance
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+        // Check if the file exists and rename it
+        if ([fileManager fileExistsAtPath:originalPath])
+        {
+            NSError *error = nil;
+            if ([fileManager moveItemAtPath:originalPath toPath:newPath error:&error])
+                NSLog(@"File renamed to %@", newPath);
+            else
+                NSLog(@"Error renaming file: %@", error.localizedDescription);
+        }
+        else
+            NSLog(@"File does not exist at path %@", originalPath);
+    }
+    
+    [self setDelegate:self];
+    
+    /* Setup window */
+    self.window        = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window makeKeyAndVisible];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+    
+    [self showGameView];
+    
+    rarch_main(argc, argv, NULL);
+    
+    uico_driver_state_t *uico_st     = uico_state_get_ptr();
+    rarch_setting_t *appicon_setting = menu_setting_find_enum(MENU_ENUM_LABEL_APPICON_SETTINGS);
+    struct string_list *icons;
+    if (               appicon_setting
+        && uico_st->drv
+        && uico_st->drv->get_app_icons
+        && (icons = uico_st->drv->get_app_icons())
+        && icons->size > 1)
+    {
+        int i;
+        size_t _len    = 0;
+        char *options = NULL;
+        const char *icon_name;
+        
+        appicon_setting->default_value.string = icons->elems[0].data;
+        icon_name = [[application alternateIconName] cStringUsingEncoding:kCFStringEncodingUTF8]; /* need to ask uico_st for this */
+        for (i = 0; i < (int)icons->size; i++)
+        {
+            _len += strlen(icons->elems[i].data) + 1;
+            if (string_is_equal(icon_name, icons->elems[i].data))
+                appicon_setting->value.target.string = icons->elems[i].data;
+        }
+        options = (char*)calloc(_len, sizeof(char));
+        string_list_join_concat(options, _len, icons, "|");
+        if (appicon_setting->values)
+            free((void*)appicon_setting->values);
+        appicon_setting->values = options;
+    }
+    
+    rarch_start_draw_observer();
+    
 #if TARGET_OS_TV
-   update_topshelf();
+    update_topshelf();
 #endif
-
+    
 #if TARGET_OS_IOS
-   if (@available(iOS 13.0, *))
-      [MXMetricManager.sharedManager addSubscriber:self];
+    if (@available(iOS 13.0, *))
+        [MXMetricManager.sharedManager addSubscriber:self];
 #endif
-
+    
 #ifdef HAVE_MFI
-   extern void *apple_gamecontroller_joypad_init(void *data);
-   apple_gamecontroller_joypad_init(NULL);
-   if (@available(macOS 11, iOS 14, tvOS 14, *))
-   {
-      [[NSNotificationCenter defaultCenter] addObserverForName:GCMouseDidConnectNotification
-                                                        object:nil
-                                                         queue:[NSOperationQueue mainQueue]
-                                                    usingBlock:^(NSNotification *note)
-       {
-         GCMouse *mouse = note.object;
-         mouse.mouseInput.mouseMovedHandler = ^(GCMouseInput * _Nonnull mouse, float delta_x, float delta_y)
+    extern void *apple_gamecontroller_joypad_init(void *data);
+    apple_gamecontroller_joypad_init(NULL);
+    if (@available(macOS 11, iOS 14, tvOS 14, *))
+    {
+        [[NSNotificationCenter defaultCenter] addObserverForName:GCMouseDidConnectNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note)
          {
-            cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
-            if (!apple)
-               return;
-            apple->window_pos_x      += (int16_t)delta_x;
-            apple->window_pos_y      -= (int16_t)delta_y;
-         };
-         mouse.mouseInput.leftButton.pressedChangedHandler = ^(GCControllerButtonInput * _Nonnull button, float value, BOOL pressed)
-         {
-            cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
-            if (!apple)
-               return;
-            if (pressed)
-                apple->mouse_buttons |= (1 << 0);
-            else
-                apple->mouse_buttons &= ~(1 << 0);
-         };
-         mouse.mouseInput.rightButton.pressedChangedHandler = ^(GCControllerButtonInput * _Nonnull button, float value, BOOL pressed)
-         {
-            cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
-            if (!apple)
-               return;
-            if (pressed)
-                apple->mouse_buttons |= (1 << 1);
-            else
-                apple->mouse_buttons &= ~(1 << 1);
-         };
-      }];
-   }
+            GCMouse *mouse = note.object;
+            mouse.mouseInput.mouseMovedHandler = ^(GCMouseInput * _Nonnull mouse, float delta_x, float delta_y)
+            {
+                cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+                if (!apple)
+                    return;
+                apple->window_pos_x      += (int16_t)delta_x;
+                apple->window_pos_y      -= (int16_t)delta_y;
+            };
+            mouse.mouseInput.leftButton.pressedChangedHandler = ^(GCControllerButtonInput * _Nonnull button, float value, BOOL pressed)
+            {
+                cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+                if (!apple)
+                    return;
+                if (pressed)
+                    apple->mouse_buttons |= (1 << 0);
+                else
+                    apple->mouse_buttons &= ~(1 << 0);
+            };
+            mouse.mouseInput.rightButton.pressedChangedHandler = ^(GCControllerButtonInput * _Nonnull button, float value, BOOL pressed)
+            {
+                cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+                if (!apple)
+                    return;
+                if (pressed)
+                    apple->mouse_buttons |= (1 << 1);
+                else
+                    apple->mouse_buttons &= ~(1 << 1);
+            };
+        }];
+    }
 #endif
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
 #if TARGET_OS_TV
-   update_topshelf();
+    update_topshelf();
 #endif
-   rarch_stop_draw_observer();
-   command_event(CMD_EVENT_SAVE_FILES, NULL);
+    rarch_stop_draw_observer();
+    command_event(CMD_EVENT_SAVE_FILES, NULL);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-   rarch_stop_draw_observer();
-   retroarch_main_quit();
+    rarch_stop_draw_observer();
+    retroarch_main_quit();
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-   self.bgDate = [NSDate date];
-   rarch_stop_draw_observer();
+    self.bgDate = [NSDate date];
+    rarch_stop_draw_observer();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-   rarch_start_draw_observer();
-   NSError *error;
-   settings_t *settings            = config_get_ptr();
-   bool ui_companion_start_on_boot = settings->bools.ui_companion_start_on_boot;
-
-   if (settings->bools.audio_respect_silent_mode)
-       [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
-   else
-       [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
-
-   if (!ui_companion_start_on_boot)
-      [self showGameView];
-
+    rarch_start_draw_observer();
+    NSError *error;
+    settings_t *settings            = config_get_ptr();
+    bool ui_companion_start_on_boot = settings->bools.ui_companion_start_on_boot;
+    
+    if (settings->bools.audio_respect_silent_mode)
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
+    else
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    
+    if (!ui_companion_start_on_boot)
+        [self showGameView];
+    
 #ifdef HAVE_CLOUDSYNC
-   if (self.bgDate)
-   {
-      if (   [[NSDate date] timeIntervalSinceDate:self.bgDate] > 60.0f
-          && (   !(runloop_get_flags() & RUNLOOP_FLAG_CORE_RUNNING)
-              || retroarch_ctl(RARCH_CTL_IS_DUMMY_CORE, NULL)))
-         task_push_cloud_sync();
-      self.bgDate = nil;
-   }
+    if (self.bgDate)
+    {
+        if (   [[NSDate date] timeIntervalSinceDate:self.bgDate] > 60.0f
+            && (   !(runloop_get_flags() & RUNLOOP_FLAG_CORE_RUNNING)
+                || retroarch_ctl(RARCH_CTL_IS_DUMMY_CORE, NULL)))
+            task_push_cloud_sync();
+        self.bgDate = nil;
+    }
 #endif
 }
 
 -(BOOL)openRetroArchURL:(NSURL *)url
 {
-   if ([url.host isEqualToString:@"topshelf"])
-   {
-      NSURLComponents *comp = [[NSURLComponents alloc] initWithURL:url resolvingAgainstBaseURL:NO];
-      NSString *ns_path, *ns_core_path;
-      char path[PATH_MAX_LENGTH];
-      char core_path[PATH_MAX_LENGTH];
-      content_ctx_info_t content_info = { 0 };
-      for (NSURLQueryItem *q in comp.queryItems)
-      {
-         if ([q.name isEqualToString:@"path"])
-            ns_path = q.value;
-         else if ([q.name isEqualToString:@"core_path"])
-            ns_core_path = q.value;
-      }
-      if (!ns_path || !ns_core_path)
-         return NO;
-      fill_pathname_expand_special(path, [ns_path UTF8String], sizeof(path));
-      fill_pathname_expand_special(core_path, [ns_core_path UTF8String], sizeof(core_path));
-      RARCH_LOG("TopShelf told us to open %s with %s\n", path, core_path);
-      return task_push_load_content_with_new_core_from_companion_ui(core_path, path,
-                                                                    NULL, NULL, NULL,
-                                                                    &content_info, NULL, NULL);
-   }
-   return NO;
+    if ([url.host isEqualToString:@"topshelf"])
+    {
+        NSURLComponents *comp = [[NSURLComponents alloc] initWithURL:url resolvingAgainstBaseURL:NO];
+        NSString *ns_path, *ns_core_path;
+        char path[PATH_MAX_LENGTH];
+        char core_path[PATH_MAX_LENGTH];
+        content_ctx_info_t content_info = { 0 };
+        for (NSURLQueryItem *q in comp.queryItems)
+        {
+            if ([q.name isEqualToString:@"path"])
+                ns_path = q.value;
+            else if ([q.name isEqualToString:@"core_path"])
+                ns_core_path = q.value;
+        }
+        if (!ns_path || !ns_core_path)
+            return NO;
+        fill_pathname_expand_special(path, [ns_path UTF8String], sizeof(path));
+        fill_pathname_expand_special(core_path, [ns_core_path UTF8String], sizeof(core_path));
+        RARCH_LOG("TopShelf told us to open %s with %s\n", path, core_path);
+        return task_push_load_content_with_new_core_from_companion_ui(core_path, path,
+                                                                      NULL, NULL, NULL,
+                                                                      &content_info, NULL, NULL);
+    }
+    return NO;
 }
 
 -(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
     if ([[url scheme] isEqualToString:@"retroarch"])
         return [self openRetroArchURL:url];
-
-   NSFileManager *manager = [NSFileManager defaultManager];
-   NSString     *filename = (NSString*)url.path.lastPathComponent;
-   NSError         *error = nil;
-   settings_t *settings   = config_get_ptr();
-   char fullpath[PATH_MAX_LENGTH] = {0};
-   fill_pathname_join_special(fullpath, settings->paths.directory_core_assets, [filename UTF8String], sizeof(fullpath));
-   NSString  *destination = [NSString stringWithUTF8String:fullpath];
-   /* Copy file to documents directory if it's not already
-    * inside Documents directory */
-   if ([url startAccessingSecurityScopedResource])
-   {
-      if (![[url path] containsString: self.documentsDirectory])
-         if (![manager fileExistsAtPath:destination])
-            [manager copyItemAtPath:[url path] toPath:destination error:&error];
-      [url stopAccessingSecurityScopedResource];
-   }
-   task_push_dbscan(
-      settings->paths.directory_playlist,
-      settings->paths.path_content_database,
-      fullpath,
-      false,
-      false,
-      NULL);
-   return true;
+    
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString     *filename = (NSString*)url.path.lastPathComponent;
+    NSError         *error = nil;
+    settings_t *settings   = config_get_ptr();
+    char fullpath[PATH_MAX_LENGTH] = {0};
+    fill_pathname_join_special(fullpath, settings->paths.directory_core_assets, [filename UTF8String], sizeof(fullpath));
+    NSString  *destination = [NSString stringWithUTF8String:fullpath];
+    /* Copy file to documents directory if it's not already
+     * inside Documents directory */
+    if ([url startAccessingSecurityScopedResource])
+    {
+        if (![[url path] containsString: self.documentsDirectory])
+            if (![manager fileExistsAtPath:destination])
+                [manager copyItemAtPath:[url path] toPath:destination error:&error];
+        [url stopAccessingSecurityScopedResource];
+    }
+    task_push_dbscan(
+                     settings->paths.directory_playlist,
+                     settings->paths.path_content_database,
+                     fullpath,
+                     false,
+                     false,
+                     NULL);
+    return true;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
 #if TARGET_OS_IOS
-   [self setToolbarHidden:![[viewController toolbarItems] count] animated:YES];
+    [self setToolbarHidden:![[viewController toolbarItems] count] animated:YES];
 #endif
 }
 
 - (void)showGameView
 {
-   [self popToRootViewControllerAnimated:NO];
-
+    [self popToRootViewControllerAnimated:NO];
+    
 #if TARGET_OS_IOS
-   [self setToolbarHidden:true animated:NO];
-   [[UIApplication sharedApplication] setStatusBarHidden:true withAnimation:UIStatusBarAnimationNone];
-   [[UIApplication sharedApplication] setIdleTimerDisabled:true];
+    [self setToolbarHidden:true animated:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:true withAnimation:UIStatusBarAnimationNone];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:true];
 #endif
-
-   [self.window setRootViewController:[CocoaView get]];
-
-   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-         command_event(CMD_EVENT_AUDIO_START, NULL);
-         });
+    
+    [self.window setRootViewController:[CocoaView get]];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        command_event(CMD_EVENT_AUDIO_START, NULL);
+    });
 }
 
 - (void)supportOtherAudioSessions { }
@@ -960,27 +960,27 @@ enum
 
 - (UIPointerStyle *)pointerInteraction:(UIPointerInteraction *)interaction styleForRegion:(UIPointerRegion *)region API_AVAILABLE(ios(13.4))
 {
-   cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
-   if (!apple)
-      return nil;
-   if (apple->mouse_grabbed)
-      return [UIPointerStyle hiddenPointerStyle];
-   return nil;
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    if (!apple)
+        return nil;
+    if (apple->mouse_grabbed)
+        return [UIPointerStyle hiddenPointerStyle];
+    return nil;
 }
 
 - (UIPointerRegion *)pointerInteraction:(UIPointerInteraction *)interaction
                        regionForRequest:(UIPointerRegionRequest *)request
                           defaultRegion:(UIPointerRegion *)defaultRegion API_AVAILABLE(ios(13.4))
 {
-   cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
-   if (!apple || apple->mouse_grabbed)
-      return nil;
-   CGPoint location = [apple_platform.renderView convertPoint:[request location] fromView:nil];
-   apple->touches[0].screen_x = (int16_t)(location.x * [[UIScreen mainScreen] scale]);
-   apple->touches[0].screen_y = (int16_t)(location.y * [[UIScreen mainScreen] scale]);
-   apple->window_pos_x = (int16_t)(location.x * [[UIScreen mainScreen] scale]);
-   apple->window_pos_y = (int16_t)(location.y * [[UIScreen mainScreen] scale]);
-   return [UIPointerRegion regionWithRect:[apple_platform.renderView bounds] identifier:@"game view"];
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    if (!apple || apple->mouse_grabbed)
+        return nil;
+    CGPoint location = [apple_platform.renderView convertPoint:[request location] fromView:nil];
+    apple->touches[0].screen_x = (int16_t)(location.x * [[UIScreen mainScreen] scale]);
+    apple->touches[0].screen_y = (int16_t)(location.y * [[UIScreen mainScreen] scale]);
+    apple->window_pos_x = (int16_t)(location.x * [[UIScreen mainScreen] scale]);
+    apple->window_pos_y = (int16_t)(location.y * [[UIScreen mainScreen] scale]);
+    return [UIPointerRegion regionWithRect:[apple_platform.renderView bounds] identifier:@"game view"];
 }
 #endif
 
@@ -1000,15 +1000,15 @@ static BOOL RespectSilentMode = false;
     char       *argv[] = {arguments,   NULL};
     int argc           = 1;
     apple_platform     = self;
-
+    
     [CocoaView get].view.frame = [[UIScreen mainScreen] bounds];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioSessionInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
-
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-          command_event(CMD_EVENT_AUDIO_START, NULL);
+        command_event(CMD_EVENT_AUDIO_START, NULL);
     });
-
+    
     extern void manic_input_set_deinit(void);
     manic_input_set_deinit();
     
@@ -1021,7 +1021,7 @@ static BOOL RespectSilentMode = false;
     rarch_main(argc, argv, NULL);
     
     rarch_start_draw_observer();
- }
+}
 
 - (void)pause {
     if (!LibretroInitial) { return; }
@@ -1092,8 +1092,8 @@ static BOOL RespectSilentMode = false;
     
     NSError *error;
     AVAudioSessionCategoryOptions options = AVAudioSessionCategoryOptionMixWithOthers |
-                                            AVAudioSessionCategoryOptionAllowBluetoothA2DP |
-                                            AVAudioSessionCategoryOptionAllowAirPlay;
+    AVAudioSessionCategoryOptionAllowBluetoothA2DP |
+    AVAudioSessionCategoryOptionAllowAirPlay;
     if (RespectSilentMode) {
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient withOptions:options error:&error];
     } else {
@@ -1113,7 +1113,7 @@ static BOOL RespectSilentMode = false;
     //核心信息
     core_info_t *core_info      = NULL;
     core_info_get_current_core(&core_info);
-
+    
     //核心选项 开启PSP内部作弊码支持
     if (strcmp(core_info->core_name, "PPSSPP") == 0 && completion) {
         core_options_flush();//生成核心配置
@@ -1178,13 +1178,13 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
 }
 
 - (void)sendEvent:(UIEvent * _Nonnull)event {
-   if (@available(iOS 13.4, tvOS 13.4, *))
-   {
-      if (event.type == UIEventTypeHover)
-         return;
-   }
-   if (event.allTouches.count)
-      handle_touch_event(event.allTouches.allObjects);
+    if (@available(iOS 13.4, tvOS 13.4, *))
+    {
+        if (event.type == UIEventTypeHover)
+            return;
+    }
+    if (event.allTouches.count)
+        handle_touch_event(event.allTouches.allObjects);
 }
 
 - (void)mute:(BOOL)mute {
@@ -1373,14 +1373,14 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
     
     // 使用CGBitmapContext创建图像，使用RGBA格式
     CGContextRef context = CGBitmapContextCreate(
-        rgbaBuffer,                    // 数据指针
-        width,                         // 宽度
-        height,                        // 高度
-        8,                            // 每个组件的位数
-        bytesPerRow,                  // 每行字节数
-        colorSpace,                   // 色彩空间
-        kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault  // RGBA格式
-    );
+                                                 rgbaBuffer,                    // 数据指针
+                                                 width,                         // 宽度
+                                                 height,                        // 高度
+                                                 8,                            // 每个组件的位数
+                                                 bytesPerRow,                  // 每行字节数
+                                                 colorSpace,                   // 色彩空间
+                                                 kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault  // RGBA格式
+                                                 );
     
     CGColorSpaceRelease(colorSpace);
     
@@ -1599,7 +1599,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
         NSLog(@"读取文件失败: %@", error.localizedDescription);
         return;
     }
-
+    
     // 正则匹配并替换
     NSString *pattern = @"ppsspp_internal_resolution\\s*=\\s*\"[^\"]*\"";
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
@@ -1615,7 +1615,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
                                                                 options:0
                                                                   range:NSMakeRange(0, fileContents.length)
                                                            withTemplate:replacement];
-
+    
     
     
     // 写回文件
@@ -1652,7 +1652,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
     if ([oldValue isEqualToString:value]) {
         return;
     }
-
+    
     // 正则匹配并替换
     NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key] ;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
@@ -1675,7 +1675,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
 
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload {
     if (configs.count == 0) return;
-
+    
     NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
     NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
     
@@ -1702,24 +1702,24 @@ static NSString *_Nullable needToLoadStatePath = nil;
         }
         return;
     }
-
+    
     NSMutableString *updatedContents = [fileContents mutableCopy];
     __block BOOL changed = NO;
-
+    
     [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
         NSString *oldValue = [self configValueForKey:key inFileContents:fileContents];
         if ([oldValue isEqualToString:value]) return;
-
+        
         NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key];
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
         NSString *replacement = [NSString stringWithFormat:@"%@ = \"%@\"", key, value];
-
+        
         if ([regex numberOfMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length)] > 0) {
             [regex replaceMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length) withTemplate:replacement];
         } else {
             [updatedContents appendFormat:@"\n%@", replacement];
         }
-
+        
         changed = YES;
     }];
     
@@ -1734,7 +1734,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
 - (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush {
     // 获取 runloop 状态
     runloop_state_t *runloop_st = runloop_state_get_ptr();
-
+    
     // 确保核心选项管理器存在
     if (!runloop_st->core_options) {
         return;
@@ -1745,7 +1745,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
         const char *option_key = [key cStringUsingEncoding:NSUTF8StringEncoding];
         const char *option_value = [value cStringUsingEncoding:NSUTF8StringEncoding];
         size_t option_idx, value_idx;
-
+        
         // 1. 根据键名获取选项索引
         if (core_option_manager_get_idx(runloop_st->core_options, option_key, &option_idx)) {
             // 2. 根据值字符串获取值索引
@@ -1762,12 +1762,12 @@ static NSString *_Nullable needToLoadStatePath = nil;
 
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs {
     if (configs.count == 0) return;
-
+    
     NSString *configFilePath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/Libretro/config/retroarch.cfg"];
-
+    
     NSError *error = nil;
     NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
-
+    
     if (error || !fileContents) {
         NSLog(@"读取文件失败: %@", error.localizedDescription);
         [NSFileManager.defaultManager createDirectoryAtPath:[configFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
@@ -1780,27 +1780,27 @@ static NSString *_Nullable needToLoadStatePath = nil;
         [newFileContent writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
         return;
     }
-
+    
     NSMutableString *updatedContents = [fileContents mutableCopy];
     __block BOOL changed = NO;
-
+    
     [configs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
         NSString *oldValue = [self configValueForKey:key inFileContents:fileContents];
         if ([oldValue isEqualToString:value]) return;
-
+        
         NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key];
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
         NSString *replacement = [NSString stringWithFormat:@"%@ = \"%@\"", key, value];
-
+        
         if ([regex numberOfMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length)] > 0) {
             [regex replaceMatchesInString:updatedContents options:0 range:NSMakeRange(0, updatedContents.length) withTemplate:replacement];
         } else {
             [updatedContents appendFormat:@"\n%@", replacement];
         }
-
+        
         changed = YES;
     }];
-
+    
     if (changed) {
         [updatedContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     }
@@ -1831,7 +1831,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
         [fileContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
         return;
     }
-
+    
     // 正则匹配并替换
     NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key] ;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
@@ -1858,6 +1858,11 @@ static NSString *_Nullable needToLoadStatePath = nil;
     
     NSError *error = nil;
     NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
+    
+    if (error || !fileContents) {
+        return nil;
+    }
+    
     return [self configValueForKey:key inFileContents:fileContents];
 }
 
@@ -1882,7 +1887,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
         NSLog(@"正则表达式错误: %@", error.localizedDescription);
         return nil;
     }
-
+    
     NSTextCheckingResult *match = [regex firstMatchInString:fileContents options:0 range:NSMakeRange(0, fileContents.length)];
     
     if (match && match.numberOfRanges > 1) {
@@ -1916,12 +1921,12 @@ void set_shader_preset(const char * _Nullable preset_path)
     
     if (!video_st || !video_st->current_video || !video_st->current_video->set_shader)
         return;
-        
+    
     // 获取 shader 类型
     enum rarch_shader_type type = video_shader_parse_type(preset_path);
     if (type == RARCH_SHADER_NONE)
         return;
-        
+    
     // 设置 shader
     if (video_st->current_video->set_shader(video_st->data, type, preset_path))
     {
@@ -1933,9 +1938,9 @@ void set_shader_preset(const char * _Nullable preset_path)
         {
             if (runloop_st->runtime_shader_preset_path != preset_path)
                 strlcpy(runloop_st->runtime_shader_preset_path,
-                       preset_path,
-                       sizeof(runloop_st->runtime_shader_preset_path));
-                       
+                        preset_path,
+                        sizeof(runloop_st->runtime_shader_preset_path));
+            
             // 更新 shader manager
             struct video_shader *shader = menu_shader_get();
             if (shader)
@@ -2101,6 +2106,51 @@ static NSString * _Nullable g_customSaveExtension = nil;
     
     apple->touch_count = 0;
 #endif
+}
+
+- (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName {
+    NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
+    NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:configFilePath]) {
+        core_options_flush();//生成配置
+    }
+    
+    NSError *error = nil;
+    NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
+    if (error || !fileContents) {
+        return nil;
+    }
+    
+    return fileContents;
+}
+
+- (void)updateFBNeoCheatCode:(NSArray<NSString *> *_Nonnull)keys enable:(BOOL)enable {
+    // 获取 runloop 状态
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    
+    // 确保核心选项管理器存在
+    if (!runloop_st->core_options) {
+        return;
+    }
+    
+    [keys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
+        const char *option_key = [key cStringUsingEncoding:NSUTF8StringEncoding];
+        size_t option_idx, value_idx = enable ? 1 : 0;
+        
+        if (core_option_manager_get_idx(runloop_st->core_options, option_key, &option_idx)) {
+            core_option_manager_set_val(runloop_st->core_options, option_idx, value_idx, false);
+        }
+    }];
+    
+    core_options_flush();
+}
+
+- (void)setFastforwardFrameSkip:(BOOL)frameSkip {
+    settings_t *settings = config_get_ptr();
+    if (!settings) {
+        return;
+    }
+    settings->bools.fastforward_frameskip = frameSkip;
 }
 
 @end

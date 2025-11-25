@@ -21,7 +21,7 @@ extension CheatType
     static let gameGenie8 = CheatType("GameGenie8")
 }
 
-@objc enum NESGameInput: Int, Input {
+@objc enum NESGameInput: Int, Input, CaseIterable {
     case a
     case b
     case start
@@ -78,6 +78,7 @@ struct NES: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.nes }
     public var gameInputType: Input.Type { NESGameInput.self }
+    var allInputs: [Input] { NESGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 1, interleaved: true)!
@@ -125,7 +126,7 @@ class NESEmulatorBridge : NSObject, EmulatorBase {
         if let gameInput = NESGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+//Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
 #endif
             LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
         }

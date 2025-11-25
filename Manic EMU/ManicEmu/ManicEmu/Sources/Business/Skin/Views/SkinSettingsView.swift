@@ -173,7 +173,12 @@ class SkinSettingsView: BaseView {
     ///游戏
     private var game: Game? = nil
     ///游戏类型
-    private var gameType: GameType = .gba
+    private var gameType: GameType = {
+        if let shortName = Constants.Config.PlatformOrder?.first, let type = GameType(shortName: shortName) {
+            return type
+        }
+        return System.allCases.first?.gameType ?? .gba
+    }()
     ///是否是单独为某一个游戏设置
     private var isSettingForGame: Bool { game != nil }
     ///数据库中存储的用户皮肤
@@ -210,7 +215,7 @@ class SkinSettingsView: BaseView {
     /// - Parameters:
     ///   - game: 游戏 如果传入一个确定的游戏 则只为这个游戏设置皮肤 不能切换或设置别的平台的skin
     ///   - gameType: 传入游戏类型 则有限展示次类型的skin 可以切换其他平台
-    init(game: Game? = nil, gameType: GameType? = nil) {
+    init(game: Game? = nil, gameType: GameType? = nil, showClose: Bool = true) {
         //查询数据库
         let realm = Database.realm
         allSkins = realm.objects(Skin.self).where({ !$0.isDeleted })
@@ -282,17 +287,24 @@ class SkinSettingsView: BaseView {
             segmentView.setIndex(1, animated: false, shouldSendValueChangedEvent: true)
         }
         
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.top.equalToSuperview().offset(10)
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        if showClose {
+            navigationBlurView.addSubview(closeButton)
+            closeButton.snp.makeConstraints { make in
+                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
+                make.top.equalToSuperview().offset(10)
+                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+            }
         }
         
         navigationBlurView.addSubview(moreContextMenuButton)
         moreContextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
-            make.centerY.equalTo(closeButton)
+            if showClose {
+                make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
+                make.centerY.equalTo(closeButton)
+            } else {
+                make.leading.equalTo(navigationSymbolTitle.snp.trailing).offset(Constants.Size.ContentSpaceMid)
+                make.centerY.equalTo(navigationSymbolTitle)
+            }
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         }
         

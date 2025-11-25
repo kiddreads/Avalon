@@ -21,7 +21,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
                                 imageAndTitlePadding: 4,
                                 enableGlass: true)
         view.enableRoundCorner = true
-        view.backgroundColor = Constants.Color.Background
+        view.backgroundColor = Constants.Color.SideList
         return view
     }()
     
@@ -38,7 +38,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
     private let iconViewContainerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = Constants.Size.CornerRadiusMin
-        view.makeShadow(ofColor: Constants.Color.BackgroundPrimary, radius: 15)
+        view.makeShadow(ofColor: Constants.Color.BackgroundPrimary.forceStyle(.dark), radius: 10)
         return view
     }()
     
@@ -65,7 +65,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             titleLabel.layer.shadowColor = Constants.Color.Background.cgColor
-            iconViewContainerView.makeShadow(ofColor: Constants.Color.BackgroundPrimary, radius: 15)
+            iconViewContainerView.makeShadow(ofColor: Constants.Color.BackgroundPrimary.forceStyle(.dark), radius: 10)
         }
     }
     
@@ -167,7 +167,6 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
     func setData(game: Game, didTapRetro: (()->Void)? = nil) {
         let estimated = iconView.size == .zero ? .init((UIDevice.isPad ? 85 : 106)) : iconView.size
         iconView.setGameCover(game: game, size: estimated) { [weak self] image in

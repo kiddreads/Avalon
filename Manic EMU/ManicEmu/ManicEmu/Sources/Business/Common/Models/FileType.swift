@@ -78,19 +78,24 @@ enum FileType {
         return results
     }
     
-    static func humanReadableFileSize(_ sizeInBytes: UInt64) -> String? {
+    static func humanReadableFileSize(_ sizeInBytes: UInt64, numeralSystem: Double = 1024, decimalPlaces: Int = 2) -> String? {
         let units = ["Bytes", "KB", "MB", "GB", "TB", "PB"]
         var size = Double(sizeInBytes)
         var unitIndex = 0
 
-        while size >= 1024 && unitIndex < units.count - 1 {
-            size /= 1024
+        while size >= numeralSystem && unitIndex < units.count - 1 {
+            size /= numeralSystem
             unitIndex += 1
         }
 
         if size == 0 {
             return nil
         }
-        return String(format: "%.2f %@", size, units[unitIndex])
+        if decimalPlaces == 0 {
+            return String(format: "%.0f %@", size, units[unitIndex])
+        } else {
+            return String(format: "%.\(decimalPlaces)f %@", size, units[unitIndex])
+        }
+        
     }
 }

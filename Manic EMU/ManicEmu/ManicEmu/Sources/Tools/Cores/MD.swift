@@ -20,7 +20,7 @@ extension CheatType
     static let actionReplay16 = CheatType("ActionReplay16")
 }
 
-@objc enum MDGameInput: Int, Input {
+@objc enum MDGameInput: Int, Input, CaseIterable {
     case a
     case b
     case c
@@ -72,6 +72,7 @@ struct MD: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.md }
     public var gameInputType: Input.Type { MDGameInput.self }
+    var allInputs: [Input] { MDGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!

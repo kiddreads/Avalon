@@ -39,9 +39,6 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                         self.scene(scene, openURLContexts: connectionOptions.urlContexts)
                     }
                     
-                    //设置控制器死区配置
-                    ExternalGameControllerUtils.shared.deadZone = Settings.defalut.getExtraFloat(key: ExtraKey.deadZone.rawValue) ?? 0
-                    
                     //设置RetroAchievement
                     CheevosBridge.setup(with: Constants.Config.AppVersion, requireCredentials: {
                         if let user = AchievementsUser.getUser() {

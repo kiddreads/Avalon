@@ -15,7 +15,7 @@ extension GameType
     static let pm = GameType("public.aoshuang.game.pm")
 }
 
-@objc enum PMGameInput: Int, Input {
+@objc enum PMGameInput: Int, Input, CaseIterable {
     case a
     case b
     case c
@@ -55,6 +55,7 @@ struct PM: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.pm }
     public var gameInputType: Input.Type { PMGameInput.self }
+    var allInputs: [Input] { PMGameInput.allCases }
     public var gameSaveExtension: String { "eep" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!

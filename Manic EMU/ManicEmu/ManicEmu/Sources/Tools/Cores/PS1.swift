@@ -15,7 +15,7 @@ extension GameType
     static let ps1 = GameType("public.aoshuang.game.ps1")
 }
 
-@objc enum PS1GameInput: Int, Input {
+@objc enum PS1GameInput: Int, Input, CaseIterable {
     case a
     case b
     case x
@@ -87,6 +87,7 @@ struct PS1: ManicEmuCoreProtocol {
     
     var gameType: GameType { GameType.ps1 }
     var gameInputType: Input.Type { PS1GameInput.self }
+    var allInputs: [Input] { PS1GameInput.allCases }
     var gameSaveExtension: String { "srm" }
     
     let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!

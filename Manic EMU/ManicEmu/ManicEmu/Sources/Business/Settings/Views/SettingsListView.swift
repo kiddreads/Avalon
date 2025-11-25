@@ -103,7 +103,8 @@ class SettingsListView: BaseView {
                 datas[section] = [SettingItem(type: .appearance),
                                   SettingItem(type: .theme),
                                   SettingItem(type: .quickGame, isOn: Settings.defalut.quickGame),
-                                  SettingItem(type: .autoSaveState, isOn: Settings.defalut.autoSaveState)]
+                                  SettingItem(type: .autoSaveState, isOn: Settings.defalut.autoSaveState),
+                                  SettingItem(type: .skin)]
             } else if section == .advance {
 #if SIDE_LOAD
                 datas[section] = [SettingItem(type: .airPlay, isOn: Settings.defalut.airPlay),
@@ -113,18 +114,20 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .onlinePlay),
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
                                   SettingItem(type: .retro),
-                                  SettingItem(type: .triggerPro)
+                                  SettingItem(type: .triggerPro),
+                                  SettingItem(type: .jit)
                 ]
 #else
                 datas[section] = [SettingItem(type: .airPlay, isOn: Settings.defalut.airPlay),
-                                  SettingItem(type: .iCloud, isOn: Settings.defalut.iCloudSyncEnable),
+                                  SettingItem(type: .iCloud),
                                   SettingItem(type: .fullScreenWhenConnectController, isOn: Settings.defalut.fullScreenWhenConnectController),
                                   SettingItem(type: .bios),
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
                                   SettingItem(type: .onlinePlay),
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
                                   SettingItem(type: .retro),
-                                  SettingItem(type: .triggerPro)
+                                  SettingItem(type: .triggerPro),
+                                  SettingItem(type: .jit)
                 ]
 #endif
             } else if section == .support {
@@ -147,18 +150,26 @@ class SettingsListView: BaseView {
     private let MembershipViewHeight = 120.0
     
     #if SIDE_LOAD
-    private static let FooterHeight = 538.0
-    #else
     private static let FooterHeight = 538 + Constants.Size.ContentSpaceHuge + Constants.Size.ItemHeightMax
+    #else
+    private static let FooterHeight = 538.0
     #endif
     
     private var membershipNotification: Any? = nil
+    private var iCloudDriveSyncChangeNotification: Any? = nil
+    private var iCloudEnableChangeNotification: Any? = nil
     
     var didTapDetail: ((UIViewController)->Void)? = nil
     
     deinit {
         if let membershipNotification = membershipNotification {
             NotificationCenter.default.removeObserver(membershipNotification)
+        }
+        if let iCloudDriveSyncChangeNotification {
+            NotificationCenter.default.removeObserver(iCloudDriveSyncChangeNotification)
+        }
+        if let iCloudEnableChangeNotification {
+            NotificationCenter.default.removeObserver(iCloudEnableChangeNotification)
         }
     }
     
@@ -193,6 +204,14 @@ class SettingsListView: BaseView {
         }
         
         membershipNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MembershipChange, object: nil, queue: .main) { [weak self] notification in
+            self?.collectionView.reloadData()
+        }
+        
+        iCloudDriveSyncChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.iCloudDriveSyncChange, object: nil, queue: .main) { [weak self] _ in
+            self?.collectionView.reloadData()
+        }
+        
+        iCloudEnableChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.iCloudEnableChange, object: nil, queue: .main) { [weak self] _ in
             self?.collectionView.reloadData()
         }
     }
@@ -250,7 +269,7 @@ class SettingsListView: BaseView {
         return layout
     }
     
-    class SettingsDecorationCollectionReusableView: UICollectionReusableView {
+    class SettingsDecorationCollectionReusableView: UICollectionReusableView, DynamicShadow {
         var backgroundView: UIView = {
             let view = UIView()
             view.layerCornerRadius = Constants.Size.CornerRadiusMax
@@ -260,6 +279,8 @@ class SettingsListView: BaseView {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
+            
+            updateDynamicShadow(offset: CGSize(width: 0, height: 0), radius: 2.5)
             
             addSubview(backgroundView)
             backgroundView.snp.makeConstraints { make in
@@ -272,9 +293,16 @@ class SettingsListView: BaseView {
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+        
+        override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                updateDynamicShadow(offset: CGSize(width: 0, height: 0), radius: 2.5)
+            }
+        }
     }
     
-    class SettingsBottomDecorationCollectionReusableView: UICollectionReusableView {
+    class SettingsBottomDecorationCollectionReusableView: UICollectionReusableView, DynamicShadow {
         var backgroundView: UIView = {
             let view = UIView()
             view.layerCornerRadius = Constants.Size.CornerRadiusMax
@@ -284,6 +312,8 @@ class SettingsListView: BaseView {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
+            
+            updateDynamicShadow(offset: CGSize(width: 0, height: 0), radius: 2.5)
             
             addSubview(backgroundView)
             backgroundView.snp.makeConstraints { make in
@@ -295,6 +325,13 @@ class SettingsListView: BaseView {
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                updateDynamicShadow(offset: CGSize(width: 0, height: 0), radius: 2.5)
+            }
         }
     }
     
@@ -354,28 +391,6 @@ extension SettingsListView: UICollectionViewDataSource {
                 }
                 cell.switchButton.onDisableTap {
                     topViewController()?.present(PurchaseViewController(featuresType: .airplay), animated: true)
-                }
-            } else if item.type == .iCloud {
-                cell.switchButton.onChange { [weak cell] value in
-                    //icloud设置
-                    if value {
-                        UIView.makeAlert(title: R.string.localizable.iCloudTipsTitle(),
-                                         detail: R.string.localizable.iCloudTipsDetail(),
-                                         confirmTitle: R.string.localizable.iCloudConfirm(), cancelAction: { [weak cell] in
-                            cell?.switchButton.setOn(false, animated: true)
-                        }, confirmAction: {
-                            Settings.defalut.iCloudSyncEnable = value
-                            if value, let iCloudServiceEnable = SyncManager.shared.iCloudServiceEnable, !iCloudServiceEnable {
-                                //尝试开启iCloud 但是目前iCloud服务不可用 弹出一个提示
-                                UIView.makeAlert(title: R.string.localizable.iCloudDisableTitle(), detail: R.string.localizable.iCloudDisableDetail(), cancelTitle: R.string.localizable.confirmTitle())
-                            }
-                        })
-                    } else {
-                        Settings.defalut.iCloudSyncEnable = value
-                    }
-                }
-                cell.switchButton.onDisableTap {
-                    topViewController()?.present(PurchaseViewController(featuresType: .iCloud), animated: true)
                 }
             } else if item.type == .fullScreenWhenConnectController {
                 cell.switchButton.onChange { value in
@@ -531,6 +546,27 @@ extension SettingsListView: UICollectionViewDelegate {
                 }
             case .triggerPro:
                 let vc = TriggerProListViewController(showClose: UIDevice.isPhone)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+            case .skin:
+                let vc = SkinSettingsViewController(showClose: UIDevice.isPad ? false : true)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+            case .iCloud:
+                let vc = ICloudSettingViewController(showClose: UIDevice.isPad ? false : true)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+            case .jit:
+                let vc = JITSettingViewController(showClose: UIDevice.isPad ? false : true)
                 if UIDevice.isPad {
                     didTapDetail?(vc)
                 } else {

@@ -264,6 +264,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>Arcade Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.arcade</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -402,7 +414,7 @@
 	<string>public.app-category.entertainment</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>comgooglemaps</string>
+		<string>sidestore</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -1009,6 +1021,29 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Arcade Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.arcade</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>zip</string>
+					<string>7z</string>
+					<string>cmd</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -1126,6 +1161,7 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>ini</string>
+					<string>opt</string>
 				</array>
 			</dict>
 		</dict>

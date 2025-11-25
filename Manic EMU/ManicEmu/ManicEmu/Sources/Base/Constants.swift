@@ -94,6 +94,7 @@ struct Constants {
                 case .ss: return 0.638
                 case .n64: return 1.369
                 case .mcd: return (Locale.prefersUS ? 0.5864 : 1.1)
+                case .arcade: return 0.731
                 default: return 1.0
                 }
             case .style2:
@@ -135,6 +136,10 @@ struct Constants {
         static var GamesHideTitle = false
         static var GamesHideGroupTitle = false
         static var GamesGroupTitleStyle: GroupTitleStyle = .abbr
+        static var GamesToolViewHeight: CGFloat {
+            let enableFilter = Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false
+            return Constants.Size.ItemHeightHuge + (enableFilter ? Constants.Size.ItemHeightUltraTiny + Constants.Size.ContentSpaceMid : 0)
+        }
     }
     
     struct Color {
@@ -153,6 +158,11 @@ struct Constants {
         static let Border = UIColor(.dm,
                                     light: .black.withAlphaComponent(0.05),
                                     dark: .white.withAlphaComponent(0.05))
+        
+        //侧边栏
+        static let SideList = UIColor(.dm,
+                                      light: UIColor(hexString: "#F7F8FC")!,
+                                      dark: UIColor(hexString: "#17171D")!)
         
         //背景
         static let Background = UIColor(.dm,
@@ -277,8 +287,10 @@ struct Constants {
         static let ThreeDS = Document.appendingPathComponent("3DS")
         static let ThreeDSSystemData = ThreeDS.appendingPathComponent("sysdata")
         static let ThreeDSStateLoad = ThreeDS.appendingPathComponent("states")
-        static let ThreeDSConfig = ThreeDS.appendingPathComponent("config/config.ini")
-        static let ThreeDSDefaultConfig = Resource.appendingPathComponent("3DS.ini")
+        static let CitraConfig = ThreeDS.appendingPathComponent("config/config.ini")
+        static let CitraDefaultConfig = Resource.appendingPathComponent("3DS.ini")
+        static let AzaharConfig = Libretro.appendingPathComponent("config/Azahar/Azahar.opt")
+        static let AzaharDefaultConfig = Resource.appendingPathComponent("Azahar.opt")
         static let BoxArtsCache = Cache.appendingPathComponent("BoxArtsCache")
         static let Libretro = Library.appendingPathComponent("Libretro")
         static func PSPCheat(gameCode: String) -> String { Document.appendingPathComponent("PPSSPP/PSP/Cheats/\(gameCode).ini") }
@@ -304,8 +316,10 @@ struct Constants {
         static let BeetlePSXHW = Document.appendingPathComponent(LibretroCore.Cores.BeetlePSXHW.name)
         static let Flycast = Document.appendingPathComponent(LibretroCore.Cores.Flycast.name)
         static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
+        static let MAME = Document.appendingPathComponent(LibretroCore.Cores.MAME.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
+        static let MAMEDB = Resource.appendingPathComponent("MAME.db")
         static let Assets = Document.appendingPathComponent("Assets")
         static var GameListBackground: String = {
             var backgroundImageName = ""
@@ -410,6 +424,7 @@ struct Constants {
         static var PSXController = "PlayStation Controller"
         static var PSXDualShock = "DualShock"
         static var ThreeDSHomeMenuRegions = ["JPN", "USA", "EUR", "CHN", "KOR", "TWN"]
+        static let MAMEBiosTitle = "MAME BIOS"
     }
     
     enum Config {
@@ -435,7 +450,7 @@ struct Constants {
         /// 游戏截图发大倍数
         static let GameSnapshotScaleRatio = 5.0
         /// 自动存档间隔 秒
-        static let AutoSaveGameDuration = 60
+        static let AutoSaveGameDuration = 120
         /// 自动存档最大个数
         static var AutoSaveGameCount: Int {
             PurchaseManager.isMember ? 50 : 3
@@ -447,7 +462,7 @@ struct Constants {
         ///非会员最大金手指数量
         static let NonMemberCheatCodeCount = 3
         ///非会员最大TriggerPro数量
-        static let NonMemberTriggerProCount = 3
+        static let NonMemberTriggerProCount = 10
         /// 动画执行时间
         static let LongAnimationDuration = 1.0
         ///主题颜色最大数量
@@ -499,6 +514,12 @@ struct Constants {
         static let TurnOffAlwaysShowProgress = NSNotification.Name(rawValue: "TurnOffAlwaysShowProgress")
         //游戏库背景变更
         static let GameListBackgroundChange = NSNotification.Name(rawValue: "GameListBackgroundChange")
+        //iCloud同步状态变更
+        static let iCloudDriveSyncChange = NSNotification.Name(rawValue: "iCloudDriveSyncChange")
+        //iCloud开关变更
+        static let iCloudEnableChange = NSNotification.Name(rawValue: "iCloudEnableChange")
+        //厂商分类变更通知
+        static let ManufacturerFilterChange = NSNotification.Name(rawValue: "ManufacturerFilterChange")
     }
     
     struct URLs {
@@ -529,6 +550,9 @@ struct Constants {
         }
         static var AirPlayUsageGuide: URL {
             Locale.prefersCN ? URL(string: ManicEMU + "AirPlay-Usage-Guide-CN")! : URL(string: ManicEMU + "AirPlay-Usage-Guide-EN")!
+        }
+        static func manufacturer(_ manufacturer: Manufacturer) -> URL {
+            return URL(string: ManicEMU + "Manufacturer-" + manufacturer.title + "-EN")!
         }
         static var JoinQQ: URL {
             URL(string: "https://pd.qq.com/s/7i1g6jf5k")!
@@ -579,6 +603,8 @@ struct Constants {
         static let Retro = URL(string: "https://retroachievements.org")!
         static let MobyGames = URL(string: "https://www.mobygames.com")!
         static let RomPatcher = URL(string: "https://www.marcrobledo.com/RomPatcher.js")!
+        static let InstallSideload = URL(string: "sidestore://source?url=apps.manicemu.site/altstore")!
+        static let SideStore = URL(string: "https://sidestore.io")!
     }
     
     struct BIOS {
@@ -641,6 +667,92 @@ struct Constants {
         static let ThreeDSBios = [
             BIOSItem(fileName: "nand.zip", imported: false, desc: "The internal storage of 3DS ", required: false)
         ]
-
+        
+        static let ArcadeDSBios = [
+            BIOSItem(fileName: Strings.MAMEBiosTitle, imported: false, desc: R.string.localizable.mameBiosDesc(), required: false)
+        ]
+        
+        static var MAMEBiosMap: [String: String] {
+            ["3dobios.zip" : "3DO BIOS",
+             "airlbios.zip" : "NAOMI Airline Pilots (deluxe) BIOS",
+             "aleck64.zip" : "Aleck64 PIF BIOS",
+             "alg3do.zip" : "ALG 3DO BIOS",
+             "alg_bios.zip" : "American Laser Games BIOS",
+             "allied.zip" : "Allied System",
+             "ar_bios.zip" : "Arcadia System BIOS",
+             "aristmk5.zip" : "MKV Set-Clear Chips (US)",
+             "aristmk6.zip" : "MK6 System Software-Setchips",
+             "aristmk7.zip" : "Aristocrat MK-7 BIOS",
+             "atarisy1.zip" : "Atari System 1 BIOS",
+             "awbios.zip" : "Atomiswave BIOS",
+             "bubsys.zip" : "Bubble System BIOS",
+             "cdibios.zip" : "CD-i (Mono-I) (PAL) BIOS",
+             "cedmag.zip" : "Magnet System",
+             "chihiro.zip" : "Chihiro BIOS",
+             "coh1000a.zip" : "Acclaim ZN-1",
+             "coh1000c.zip" : "Capcom ZN-1",
+             "coh1000t.zip" : "Taito FX-1",
+             "coh1000w.zip" : "Time Warner ZN-1",
+             "coh1001l.zip" : "Atlus ZN-1",
+             "coh1002e.zip" : "Eighting - Raizing ZN-1",
+             "coh1002m.zip" : "Tecmo TPS System",
+             "coh1002t.zip" : "Taito G NET (COH-1002T)",
+             "coh1002v.zip" : "Video System ZN-1",
+             "coh3002c.zip" : "Capcom ZN-2",
+             "coh3002t.zip" : "Taito G NET (COH-3002T)",
+             "crysbios.zip" : "Crystal System BIOS",
+             "cubo.zip" : "Cubo BIOS",
+             "decocass.zip" : "DECO Cassette System",
+             "f355bios.zip" : "NAOMI Ferrari F355 Challenge (twin-deluxe) BIOS",
+             "f355dlx.zip" : "NAOMI Ferrari F355 Challenge (deluxe) BIOS",
+             "galgbios.zip" : "Galaxy Games BIOS",
+             "genpin.zip" : "genpin",
+             "gp_110.zip" : "Model 110",
+             "gq863.zip" : "Twinkle System",
+             "gts1.zip" : "System 1",
+             "hikaru.zip" : "Hikaru BIOS",
+             "hng64.zip" : "Hyper NeoGeo 64 BIOS",
+             "hod2bios.zip" : "NAOMI The House of the Dead 2 BIOS",
+             "isgsm.zip" : "ISG Selection Master Type 2006 BIOS",
+             "iteagle.zip" : "Eagle BIOS",
+             "konamigv.zip" : "Baby Phoenix-GV System",
+             "konamigx.zip" : "System GX",
+             "konendev.zip" : "Konami Endeavour BIOS",
+             "kpython.zip" : "Konami Python BIOS",
+             "kpython2.zip" : "Konami Python 2 BIOS",
+             "kviper.zip" : "Konami Viper BIOS",
+             "lindbios.zip" : "Sega Lindbergh BIOS",
+             "mac2bios.zip" : "Multi Amenity Cassette System 2 BIOS",
+             "macsbios.zip" : "Multi Amenity Cassette System BIOS",
+             "maxaflex.zip" : "Max-A-Flex",
+             "megaplay.zip" : "Mega Play BIOS",
+             "megatech.zip" : "Mega-Tech",
+             "miuchiz.zip" : "Miuchiz Virtual Companions common BIOS",
+             "naomi.zip" : "NAOMI BIOS",
+             "naomi2.zip" : "NAOMI 2 BIOS",
+             "naomigd.zip" : "NAOMI GD-ROM BIOS",
+             "neogeo.zip" : "Neo-Geo MV-6F",
+             "nichidvd.zip" : "Nichibutsu High Rate DVD BIOS",
+             "nss.zip" : "Nintendo Super System BIOS",
+             "pgm.zip" : "PGM (Polygame Master) System BIOS",
+             "playch10.zip" : "PlayChoice-10 BIOS",
+             "pumpitup.zip" : "Pump It Up BIOS",
+             "recel.zip" : "Recel BIOS",
+             "sammymdl.zip" : "Sammy Medal Game System BIOS",
+             "segasp.zip" : "Sega System SP (Spider) BIOS",
+             "sfcbox.zip" : "Super Famicom Box BIOS",
+             "shtzone.zip" : "Shooting Zone System BIOS",
+             "skns.zip" : "Super Kaneko Nova System BIOS",
+             "stvbios.zip" : "ST-V BIOS",
+             "su2000.zip" : "SU2000",
+             "sys246.zip" : "System 246 BIOS",
+             "sys256.zip" : "System 256 BIOS",
+             "sys573.zip" : "System 573 BIOS",
+             "systemy2.zip" : "System Board Y2",
+             "taitotz.zip" : "Type Zero BIOS",
+             "tourvis.zip" : "TourVisión (PC Engine bootleg)",
+             "triforce.zip" : "Triforce BIOS",
+             "v4bios.zip" : "MPU4 Video Firmware"]
+        }
     }
 }

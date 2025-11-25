@@ -81,13 +81,13 @@ class FilterSelectionView: BaseView {
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
         
-        if !game.gameType.isLibretroType {
+        if !game.isLibretroType {
             UIView.makeLoading()
         }
         
-        if game.gameType.isLibretroType {
+        if game.isLibretroType {
             FilterManager.allLibretroPreviews(origin: self.snapshot, isGlsl: game.gameType == .n64 ? true : false) { [weak self] results in
-                if !game.gameType.isLibretroType {
+                if !game.isLibretroType {
                     UIView.hideLoading()
                 }
                 
@@ -152,7 +152,7 @@ class FilterSelectionView: BaseView {
             guard let self = self else { return nil }
             
             var group: NSCollectionLayoutGroup
-            if self.game.gameType.isLibretroType {
+            if self.game.isLibretroType {
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
                 group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), subitem: item, count: Int(1))
             } else {
@@ -218,7 +218,7 @@ extension FilterSelectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filter = filters[indexPath.row]
-        if game.gameType.isLibretroType {
+        if game.isLibretroType {
             let cell = collectionView.dequeueReusableCell(withClass: FilterNameOnlyCollectionCell.self, for: indexPath)
             cell.setData(title: filter.name)
             return cell
@@ -252,7 +252,7 @@ extension FilterSelectionView: UICollectionViewDelegate {
                 if currentSelected is OriginFilter {
                     self.game.filterName = nil
                 } else {
-                    if self.game.gameType.isLibretroType {
+                    if self.game.isLibretroType {
                         if let filter = currentSelected as? LibretroPreViewFilter {
                             if let shaderPath = filter.shaderPath, let range = shaderPath.range(of: "shaders/") {
                                 self.game.filterName = String(shaderPath[range.upperBound...])

@@ -133,6 +133,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = Constants.BIOS.PMBios
             } else if gameType == ._3ds {
                 biosItems = Constants.BIOS.ThreeDSBios
+            } else if gameType == .arcade {
+                biosItems = Constants.BIOS.ArcadeDSBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
@@ -210,13 +212,19 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                             UIView.makeLoading()
                             DispatchQueue.global().async {
                                 var matchs = [(url: URL, fileName: String)]()
+                                var mameMatchs = [(url: URL, fileName: String)]()
                                 for url in urls {
                                     biosItems.forEach({ bios in
                                         if url.lastPathComponent.lowercased() == bios.fileName.lowercased() {
                                             matchs.append((url, bios.fileName))
+                                        } else if bios.fileName == Constants.Strings.MAMEBiosTitle,
+                                                  let _ = Constants.BIOS.MAMEBiosMap[url.lastPathComponent.lowercased()] {
+                                            //MAME Bios特殊匹配
+                                            mameMatchs.append((url, url.lastPathComponent.lowercased()))
                                         }
                                     })
                                 }
+                                
                                 var import3DSNandSuccess = true
                                 if matchs.count > 0 {
                                     for match in matchs {
@@ -235,10 +243,16 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                         matchs.removeAll(where: { $0.fileName.lowercased() == "nand.zip" })
                                     }
                                 }
+                                
+                                if mameMatchs.count > 0 {
+                                    for match in mameMatchs {
+                                        try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                    }
+                                }
                                 DispatchQueue.main.async {
                                     UIView.hideLoading()
-                                    if matchs.count > 0 {
-                                        UIView.makeToast(message: R.string.localizable.biosImportSuccess(matchs.reduce("") { $0 + $1.fileName + "\n" }))
+                                    if matchs.count > 0 || mameMatchs.count > 0 {
+                                        UIView.makeToast(message: R.string.localizable.biosImportSuccess((matchs+mameMatchs).reduce("") { $0 + $1.fileName + "\n" }))
                                         importSuccess?()
                                     } else {
                                         UIView.makeToast(message: R.string.localizable.biosImportFailed())
@@ -361,6 +375,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = Constants.BIOS.PMBios.count
         } else if gameType == ._3ds {
             itemCount = Constants.BIOS.ThreeDSBios.count
+        } else if gameType == .arcade {
+            itemCount = Constants.BIOS.ArcadeDSBios.count
         }
         return (Double(itemCount) * Constants.Size.ItemHeightMax) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid)
     }

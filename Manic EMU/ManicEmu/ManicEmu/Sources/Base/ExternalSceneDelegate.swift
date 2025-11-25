@@ -76,7 +76,7 @@ class ExternalSceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func updateScene() {
-        if PurchaseManager.isMember, Settings.defalut.airPlay, PlayViewController.isGaming, PlayViewController.playingGameType != ._3ds {
+        if PurchaseManager.isMember, Settings.defalut.airPlay, PlayViewController.isGaming, PlayViewController.enableAirplay {
             //开启了airPlay的全屏模式
             window?.isHidden = false
         } else {

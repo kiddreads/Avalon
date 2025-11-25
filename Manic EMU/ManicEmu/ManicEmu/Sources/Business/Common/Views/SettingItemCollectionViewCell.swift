@@ -139,7 +139,6 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: 需要处理图片的尺寸
     func setData(item: SettingCellItem, editable: Bool = false, isPlus: Bool = false, enable: Bool = true, mappingMode: Bool = false, specialTitle: String? = nil) {
         if item.title == R.string.localizable.gameSettingQuit() {
             iconView.image = item.image.applySymbolConfig(color: Constants.Color.Red)

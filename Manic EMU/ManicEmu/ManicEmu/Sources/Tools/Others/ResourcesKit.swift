@@ -97,18 +97,13 @@ struct ResourcesKit {
                     }
                 }
                 
-                //每次更新资源都删除Libretro的配置
-                let libretroConfig = Constants.Path.Libretro.appendingPathComponent("config/retroarch.cfg")
-                if FileManager.default.fileExists(atPath: libretroConfig) {
-                    try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: libretroConfig))
-                }
-                
                 Log.debug("资源解压结束:\(Date.now.timeIntervalSince1970ms)")
                 completion?(isSuccess)
                 if isSuccess {
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("aes_keys.txt")), to: URL(fileURLWithPath: Constants.Path.ThreeDSSystemData.appendingPathComponent("aes_keys.txt")), shouldReplace: true)
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("seeddb.bin")), to: URL(fileURLWithPath: Constants.Path.ThreeDSSystemData.appendingPathComponent("seeddb.bin")), shouldReplace: true)
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("shared_font.bin")), to: URL(fileURLWithPath: Constants.Path.ThreeDSSystemData.appendingPathComponent("shared_font.bin")), shouldReplace: true)
+                    
                     //Libretro的资源复制到对应位置
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/info")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("info")), shouldReplace: true)
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/autoconfig")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("autoconfig")), shouldReplace: true)
@@ -116,7 +111,7 @@ struct ResourcesKit {
                     try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/system")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("system")))
                     try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/config")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("config")))
                     
-                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.ThreeDSDefaultConfig), to: URL(fileURLWithPath: Constants.Path.ThreeDSConfig), shouldReplace: true)
+                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.CitraDefaultConfig), to: URL(fileURLWithPath: Constants.Path.CitraConfig), shouldReplace: true)
                     
                     if let systemCoreVersion = UserDefaults.standard.string(forKey: Constants.DefaultKey.SystemCoreVersion) {
                         let systemCoreVersionNumber = UInt64(systemCoreVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!

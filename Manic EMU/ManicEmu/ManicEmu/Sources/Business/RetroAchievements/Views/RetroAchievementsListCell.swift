@@ -444,14 +444,21 @@ class RetroAchievementsListCell: UICollectionViewCell {
             make.trailing.equalTo(progressLabel)
         }
         
-        let enableContainer = UIView()
-        enableContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
-        enableContainer.backgroundColor = Constants.Color.BackgroundPrimary
-        addSubview(enableContainer)
-        enableContainer.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+        let container = UIView()
+        container.layerCornerRadius = Constants.Size.CornerRadiusMax
+        container.backgroundColor = Constants.Color.BackgroundPrimary
+        addSubview(container)
+        container.snp.makeConstraints { make in
+            make.height.equalTo(Constants.Size.ItemHeightMax * 3)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(lastActivityIcon.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+        }
+        
+        let enableContainer = UIView()
+        container.addSubview(enableContainer)
+        enableContainer.snp.makeConstraints { make in
+            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.top.trailing.equalToSuperview()
         }
         let enableIcon = UIImageView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
         enableIcon.contentMode = .center
@@ -491,13 +498,11 @@ class RetroAchievementsListCell: UICollectionViewCell {
         }
         
         let hardcoreContainer = UIView()
-        hardcoreContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
-        hardcoreContainer.backgroundColor = Constants.Color.BackgroundPrimary
-        addSubview(hardcoreContainer)
+        container.addSubview(hardcoreContainer)
         hardcoreContainer.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.ItemHeightMax)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(enableContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(enableContainer.snp.bottom)
         }
         let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
         hardcoreIcon.contentMode = .center
@@ -538,13 +543,11 @@ class RetroAchievementsListCell: UICollectionViewCell {
         }
         
         let alwaysShowProgressContainer = UIView()
-        alwaysShowProgressContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
-        alwaysShowProgressContainer.backgroundColor = Constants.Color.BackgroundPrimary
-        addSubview(alwaysShowProgressContainer)
+        container.addSubview(alwaysShowProgressContainer)
         alwaysShowProgressContainer.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.ItemHeightMax)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(hardcoreContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(hardcoreContainer.snp.bottom)
         }
         let alwaysShowProgressIcon = UIImageView(image: .symbolImage(.squareTextSquareFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
         alwaysShowProgressIcon.contentMode = .center

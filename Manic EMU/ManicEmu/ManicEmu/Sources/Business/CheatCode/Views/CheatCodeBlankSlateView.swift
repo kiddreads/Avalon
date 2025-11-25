@@ -79,3 +79,43 @@ class CheatCodeBlankSlateView: BaseView {
     }
         
 }
+
+
+class FBNeoBlankSlateView: BaseView {
+    deinit {
+        Log.debug("\(String(describing: Self.self)) deinit")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        Log.debug("\(String(describing: Self.self)) init")
+        let containerView = UIView()
+        addSubview(containerView)
+        containerView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
+        let iconImageView = UIImageView(image: R.image.cheatcode_empty_icon())
+        iconImageView.contentMode = .center
+        containerView.addSubview(iconImageView)
+        iconImageView.snp.makeConstraints { make in
+            make.top.centerX.equalToSuperview()
+            make.size.equalTo(100)
+        }
+        
+        let titleLabel = UILabel()
+        titleLabel.textColor = Constants.Color.LabelPrimary
+        titleLabel.font = Constants.Font.title(size: .s, weight: .semibold)
+        titleLabel.text = R.string.localizable.fbNeoNoCheats()
+        containerView.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.bottom.equalToSuperview()
+            make.top.equalTo(iconImageView.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+        
+}

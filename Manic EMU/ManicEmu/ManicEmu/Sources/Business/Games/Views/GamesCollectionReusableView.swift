@@ -12,40 +12,49 @@ import ManicEmuCore
 import VisualEffectView
 
 class GamesCollectionReusableView: UICollectionReusableView {
-    var titleLabel: UILabel = {
+    private var titleLabel: UILabel = {
         let view = UILabel()
         view.isHidden = true
         return view
     }()
     
-    var brandImageView: UIImageView = {
+    private var brandImageView: UIImageView = {
         let view = UIImageView()
         view.isHidden = true
         return view
     }()
     
-    var skinButton: UIButton = {
-        let view = UIButton(type: .custom)
-        view.titleLabel?.font = Constants.Font.body(weight: .medium)
-        view.setTitleColor(Constants.Color.LabelSecondary, for: .normal)
-        view.setTitle(R.string.localizable.gamesSpecifySkin(), for: .normal)
+    var gamesCountButton: SymbolButton = {
+        let view = SymbolButton(image: UIImage(symbol: .chevronUp,
+                                               font: Constants.Font.caption(size: .l, weight: .bold),
+                                               color: Constants.Color.LabelSecondary),
+                                title: "",
+                                titleFont: Constants.Font.body(size: .s, weight: .semibold),
+                                titleColor: Constants.Color.LabelSecondary,
+                                edgeInsets: .zero,
+                                titlePosition: .left,
+                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
+        view.layerCornerRadius = 0
+        view.backgroundColor = .clear
         return view
     }()
     
     var didTapPlatform: (()->Void)? = nil
+    
+    var didTapGameCount: (()->Void)? = nil
     
     private var highlightString: String? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         if UIDevice.isPad {
-            backgroundColor = Constants.Color.Background.withAlphaComponent(0.965)
+            backgroundColor = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light).withAlphaComponent(0.965)
         } else {
             makeBlur(blurColor: Constants.Color.Background)
         }
         
         
-        addSubviews([titleLabel, brandImageView, skinButton])
+        addSubviews([titleLabel, brandImageView, gamesCountButton])
         
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -57,9 +66,9 @@ class GamesCollectionReusableView: UICollectionReusableView {
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
         }
         
-        skinButton.snp.makeConstraints { make in
+        gamesCountButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax-Constants.Size.ContentSpaceTiny)
         }
         
         titleLabel.isUserInteractionEnabled = true
@@ -75,7 +84,7 @@ class GamesCollectionReusableView: UICollectionReusableView {
         }
     }
     
-    func setData(gameType: GameType, highlightString: String? = nil, contentInsets: UIEdgeInsets = .zero, forceHideBlur: Bool = false) {
+    func setData(gameType: GameType, highlightString: String? = nil, contentInsets: UIEdgeInsets = .zero, forceHideBlur: Bool = false, gamesCount: Int = 0, isFolded: Bool = false) {
         if Constants.Size.GamesGroupTitleStyle == .brand && gameType != .unknown {
             titleLabel.isHidden = true
             brandImageView.isHidden = false
@@ -93,7 +102,14 @@ class GamesCollectionReusableView: UICollectionReusableView {
             }
             titleLabel.attributedText = NSAttributedString(string: title, attributes: [.font: Constants.Font.title(), .foregroundColor: Constants.Color.LabelPrimary]).highlightString(highlightString)
         }
-        skinButton.setTitleColor(Constants.Color.LabelSecondary, for: .normal)
+        gamesCountButton.titleLabel.text = "\(gamesCount) \(R.string.localizable.tabbarTitleGames())"
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            gamesCountButton.imageView.image = nil
+        } else {
+            gamesCountButton.imageView.image = UIImage(symbol: isFolded ? .chevronDown : .chevronUp,
+                                                       font: Constants.Font.caption(size: .l, weight: .bold),
+                                                       color: Constants.Color.LabelSecondary)
+        }
         self.highlightString = highlightString
         if (UIDevice.isPhone && UIDevice.isLandscape) || forceHideBlur {
             //隐藏模糊
@@ -182,11 +198,28 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.ps1_group_brand(compatibleWith: traitCollection)
             } else if gameType == .dc {
                 image = R.image.dc_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .arcade {
+                image = R.image.arcade_group_brand(compatibleWith: traitCollection)
             }
             Self.brandImageCaches[key] = image
             return image
         }
     }
         
+    //完全搞不懂为什么UICollectionView的滚动会导致UIColor的dynamicColor错乱，只能这样处理了
+    //发现了仅仅在iOS26上会出现 当系统是darkmode 应用设置为lightmode的时候会发生
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.userInterfaceStyle.rawValue != previousTraitCollection?.userInterfaceStyle.rawValue {
+            if UIDevice.isPad {
+                backgroundColor = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light).withAlphaComponent(0.965)
+            } else {
+                if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+                    blurView.colorTint = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light)
+                    blurView.colorTintAlpha = 0.9
+                }
+            }
+        }
+    }
 }
 

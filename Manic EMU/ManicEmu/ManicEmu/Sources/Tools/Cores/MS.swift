@@ -15,7 +15,7 @@ extension GameType
     static let ms = GameType("public.aoshuang.game.ms")
 }
 
-@objc enum MSGameInput: Int, Input {
+@objc enum MSGameInput: Int, Input, CaseIterable {
     case a
     case b
     case start
@@ -55,6 +55,7 @@ struct MS: ManicEmuCoreProtocol {
     
     public var gameType: GameType { GameType.ms }
     public var gameInputType: Input.Type { MSGameInput.self }
+    var allInputs: [Input] { MSGameInput.allCases }
     public var gameSaveExtension: String { "srm" }
         
     public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!

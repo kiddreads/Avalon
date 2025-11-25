@@ -350,6 +350,18 @@ void set_melonds_wfc_dns(const char *dns) {
    g_melonds_wfc_dns = strdup(dns);
 }
 
+//定义3DS的布局信息
+static const char *g_azahar_custom_layout = NULL;
+void set_azahar_custom_layout(const char *layout) {
+   g_azahar_custom_layout = strdup(layout);
+}
+
+//定义Shutdown通知
+static LogCallback g_log_callback = NULL;
+void log_register_callback(LogCallback callback) {
+   g_log_callback = callback;
+}
+
 static runloop_state_t runloop_state      = {0};
 
 /* GLOBAL POINTER GETTERS */
@@ -911,6 +923,14 @@ static void libretro_log_cb(
       enum retro_log_level level,
       const char *fmt, ...)
 {
+   /* 先调用自定义回调 */
+   if (g_log_callback) {
+      va_list vp_copy;
+      va_start(vp_copy, fmt);
+      g_log_callback(level, fmt, vp_copy);
+      va_end(vp_copy);
+   }
+   
    va_list vp;
    unsigned libretro_log_level = config_get_ptr()->uints.libretro_log_level;
 
@@ -1445,6 +1465,11 @@ bool runloop_environment_cb(unsigned cmd, void *data)
             
             if (g_melonds_wfc_dns && string_is_equal(var->key, "melonds_firmware_wfc_dns")) {
                var->value = strdup(g_melonds_wfc_dns);
+               break;
+            }
+            
+            if (g_azahar_custom_layout && string_is_equal(var->key, "citra_custom_layout_config")) {
+               var->value = strdup(g_azahar_custom_layout);
                break;
             }
 

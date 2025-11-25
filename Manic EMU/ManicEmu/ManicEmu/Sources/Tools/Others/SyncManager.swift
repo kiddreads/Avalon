@@ -22,8 +22,6 @@ class SyncManager: NSObject {
     
     var iCloudServiceEnable: Bool? = nil
     
-    var iCloudStatus: CKAccountStatus? = nil
-    
     var hasDownloadTask: Bool {
         downloadingFiles.count > 0
     }
@@ -34,10 +32,35 @@ class SyncManager: NSObject {
     
     private var iCloudAccountChangedNotification: Any? = nil
     
+    enum SyncState: String {
+        case undefine
+        case idle
+        case syncing //上传文件到iCloud drive 或 从iCloud Drive下载文件 或 正在删除iCloud Drive的文件
+    }
+    
+    private(set) var syncState: SyncState = .undefine {
+        didSet {
+            if oldValue != syncState {
+                NotificationCenter.default.post(name: Constants.NotificationName.iCloudDriveSyncChange, object: syncState)
+                Log.debug("[iCloud Sync] 同步状态变化: \(oldValue.rawValue) -> \(syncState.rawValue)")
+            }
+        }
+    }
+    
+    // MARK: - iCloud 文件状态监控
+    private let metadataQuery = NSMetadataQuery()
+    private var metadataQueryNotificationTokens: [NSObjectProtocol] = []
+    private var isMonitoring = false
+    private var monitoredUploadingFiles = Set<URL>()
+    private var monitoredDownloadingFiles = Set<URL>()
+    private let monitoringQueue = DispatchQueue(label: "com.manicemu.syncmanager.monitoring")
+    
     deinit {
+        stopiCloudFileMonitoring()
         if let iCloudAccountChangedNotification = iCloudAccountChangedNotification {
             NotificationCenter.default.removeObserver(iCloudAccountChangedNotification)
         }
+        metadataQueryNotificationTokens.forEach { NotificationCenter.default.removeObserver($0) }
     }
     
     private override init() {
@@ -54,6 +77,8 @@ class SyncManager: NSObject {
         if realmSyncEngine == nil {
             setupRealmSync()
             setupDocumentSync()
+            // 启动 iCloud 文件监控
+            startiCloudFileMonitoring()
             stopGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StopPlayGame, object: nil, queue: .main) { notification in
                 SyncManager.syncDocument()
             }
@@ -63,6 +88,8 @@ class SyncManager: NSObject {
     //停止同步
     func stopSync() {
         realmSyncEngine = nil
+        // 停止 iCloud 文件监控
+        stopiCloudFileMonitoring()
         if let stopGameNotification = stopGameNotification {
             NotificationCenter.default.removeObserver(stopGameNotification)
         }
@@ -95,9 +122,9 @@ class SyncManager: NSObject {
         realmSyncEngine?.setupCompletion = { error in
             //同步设定完成之后 尝试将本地所有数据推到云端
             if let error = error {
-                Log.debug("数据库同步初始化结束 error:\(error)")
+                Log.debug("[iCloud Sync]数据库同步初始化结束 error:\(error)")
             } else {
-                Log.debug("数据库同步初始化结束")
+                Log.debug("[iCloud Sync]数据库同步初始化结束")
             }
         }
     }
@@ -106,11 +133,180 @@ class SyncManager: NSObject {
 #if !SIDE_LOAD
         CKContainer.default().accountStatus { [weak self] status, error in
             guard let self = self else { return }
-            Log.debug("iCloud状态发生变化 旧状态:\(self.iCloudStatus?.description ?? "未知") 新状态:\(status.description)")
             self.iCloudServiceEnable = status == .available
-            self.iCloudStatus = status
         }
 #endif
+    }
+    
+    // MARK: - iCloud 文件状态监控方法
+    private func startiCloudFileMonitoring() {
+        guard !isMonitoring else { return }
+        guard FileManager.default.ubiquityIdentityToken != nil else {
+            Log.debug("[iCloud Sync] 未检测到iCloud账户，无法开启文件状态监控")
+            return
+        }
+        
+        isMonitoring = true
+        DispatchQueue.main.async { [weak self] in
+            self?.configureMetadataQuery()
+            self?.metadataQuery.enableUpdates()
+            self?.metadataQuery.start()
+            Log.debug("[iCloud Sync] 开始监控iCloud文件状态")
+        }
+    }
+    
+    private func stopiCloudFileMonitoring() {
+        guard isMonitoring else { return }
+        isMonitoring = false
+        DispatchQueue.main.async { [weak self] in
+            self?.metadataQuery.stop()
+            self?.metadataQuery.disableUpdates()
+            self?.teardownMetadataQueryObservers()
+            Log.debug("[iCloud Sync] 停止监控iCloud文件状态")
+        }
+        monitoringQueue.async { [weak self] in
+            self?.resetTrackingState()
+        }
+    }
+    
+    private func configureMetadataQuery() {
+        guard metadataQueryNotificationTokens.isEmpty else { return }
+        metadataQuery.searchScopes = [NSMetadataQueryUbiquitousDocumentsScope]
+        metadataQuery.predicate = NSPredicate(value: true)
+        metadataQuery.notificationBatchingInterval = 0.5
+        
+        let center = NotificationCenter.default
+        let finishToken = center.addObserver(forName: .NSMetadataQueryDidFinishGathering, object: metadataQuery, queue: .main) { [weak self] _ in
+            self?.metadataQuery.disableUpdates()
+            self?.processMetadataQueryResults()
+            self?.metadataQuery.enableUpdates()
+        }
+        
+        let updateToken = center.addObserver(forName: .NSMetadataQueryDidUpdate, object: metadataQuery, queue: .main) { [weak self] _ in
+            self?.processMetadataQueryResults()
+        }
+        
+        metadataQueryNotificationTokens.append(contentsOf: [finishToken, updateToken])
+    }
+    
+    private func teardownMetadataQueryObservers() {
+        metadataQueryNotificationTokens.forEach { NotificationCenter.default.removeObserver($0) }
+        metadataQueryNotificationTokens.removeAll()
+    }
+    
+    private func processMetadataQueryResults() {
+        guard isMonitoring else { return }
+        let results = metadataQuery.results
+        monitoringQueue.async { [weak self] in
+            guard let self = self else { return }
+            for case let item as NSMetadataItem in results {
+                self.handleMetadataItem(item)
+            }
+            self.updateSyncState()
+        }
+    }
+    
+    private func handleMetadataItem(_ item: NSMetadataItem) {
+        guard let fileURL = item.value(forAttribute: NSMetadataItemURLKey) as? URL else { return }
+        
+        // 过滤掉目录，只处理文件
+        // 方法1: 检查 URL 路径是否以 / 结尾（目录通常以 / 结尾）
+        if fileURL.path.hasSuffix("/") {
+            return
+        }
+        
+        // 方法2: 使用 FileManager 检查（如果文件已存在）
+        var isDirectory: ObjCBool = false
+        if FileManager.default.fileExists(atPath: fileURL.path, isDirectory: &isDirectory),
+           isDirectory.boolValue {
+            return
+        }
+        
+        // 方法3: 检查内容类型（如果可用）
+        if let contentType = item.value(forAttribute: NSMetadataItemContentTypeKey) as? String,
+           contentType == "public.directory" || contentType == "public.folder" {
+            return
+        }
+        
+        let wasUploading = monitoredUploadingFiles.contains(fileURL)
+        let wasDownloading = monitoredDownloadingFiles.contains(fileURL)
+        
+        let uploading = isUploading(item)
+        let downloading = isDownloading(item, cloudFileUrl: fileURL)
+        
+        // 处理上传状态
+        if uploading {
+            if !wasUploading {
+                monitoredUploadingFiles.insert(fileURL)
+            }
+        } else {
+            if wasUploading {
+                monitoredUploadingFiles.remove(fileURL)
+            }
+        }
+        
+        // 处理下载状态
+        if downloading {
+            if !wasDownloading {
+                monitoredDownloadingFiles.insert(fileURL)
+            }
+        } else {
+            if wasDownloading {
+                monitoredDownloadingFiles.remove(fileURL)
+            }
+        }
+    }
+    
+    private func isUploading(_ item: NSMetadataItem) -> Bool {
+        if let uploading = item.value(forAttribute: NSMetadataUbiquitousItemIsUploadingKey) as? Bool, uploading {
+            return true
+        }
+        if let percent = item.value(forAttribute: NSMetadataUbiquitousItemPercentUploadedKey) as? Double, percent > 0.0 && percent < 100.0 {
+            return true
+        }
+        return false
+    }
+    
+    private func isDownloading(_ item: NSMetadataItem, cloudFileUrl: URL) -> Bool {
+        if let downloading = item.value(forAttribute: NSMetadataUbiquitousItemIsDownloadingKey) as? Bool, downloading {
+            return true
+        } else if let status = item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String {
+            if status == NSMetadataUbiquitousItemDownloadingStatusDownloaded || status == NSMetadataUbiquitousItemDownloadingStatusCurrent {
+                return false
+            } else if status == NSMetadataUbiquitousItemDownloadingStatusNotDownloaded {
+                //该item尚未进行下载 检查一下本地是否已经存在
+                if let localUrl = SyncManager.convertToLocalUrl(fromCloudUrl: cloudFileUrl) {
+                    //url合法
+                    if FileManager.default.fileExists(atPath: localUrl.path) {
+                        //本地文件已经存在
+                        return false
+                    } else {
+                        //本地文件不存在 则进行下载
+                        SyncManager.download(to: localUrl.path)
+                        return true
+                    }
+                } else {
+                    //url不合法
+                    return false
+                }
+            }
+        }
+        return false
+    }
+    
+    private func resetTrackingState() {
+        monitoredUploadingFiles.removeAll()
+        monitoredDownloadingFiles.removeAll()
+        updateSyncState()
+    }
+    
+    private func updateSyncState() {
+        let hasActiveTasks = !monitoredUploadingFiles.isEmpty || !monitoredDownloadingFiles.isEmpty
+        let newState: SyncState = hasActiveTasks ? .syncing : .idle
+        guard newState != syncState else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.syncState = newState
+        }
     }
     
     static func upload(localFilePath: String) {
@@ -119,20 +315,21 @@ class SyncManager: NSObject {
             let cloudFilePath = RootRelativePath(path: String(localFilePath[range.lowerBound...]))
             if let cloudDrive = SyncManager.shared.cloudDrive {
                 Task {
-                    Log.debug("开始上传文件到iCloud:\(localFilePath)")
+                    Log.debug("[iCloud Sync]开始上传文件到iCloud:\(localFilePath)")
                     let parentDirectory = RootRelativePath(path: String(localFilePath.deletingLastPathComponent[range.lowerBound...]))
                     let directoryExists = try await cloudDrive.directoryExists(at: parentDirectory)
                     if !directoryExists {
                         try await cloudDrive.createDirectory(at: parentDirectory)
                     }
                     try? await cloudDrive.upload(from: URL(fileURLWithPath: localFilePath), to: cloudFilePath)
-                    Log.debug("文件上传iCloud成功:\(cloudFilePath.path)")
+                    Log.debug("[iCloud Sync]文件已提交到iCloud上传队列:\(cloudFilePath.path)")
+                    // 注意：文件可能还在上传中，真实状态由 NSMetadataQuery 监控
                 }
             }
         }
     }
     
-    static func download(localFilePath: String, completion: ((Error?)->Void)? = nil) {
+    static func download(to localFilePath: String, completion: ((Error?)->Void)? = nil) {
         if SyncManager.shared.downloadingFiles.contains(localFilePath) {
             UIView.makeToast(message: R.string.localizable.filesDownloadErrorFileExist(localFilePath.deletingPathExtension.lastPathComponent))
             return
@@ -149,18 +346,20 @@ class SyncManager: NSObject {
                         cloudDrive = try await CloudDrive()
                         SyncManager.shared.cloudDrive = cloudDrive
                     }
-                    Log.debug("开始从iCloud下载文件:\(cloudFilePath.path)")
+                    Log.debug("[iCloud Sync]开始从iCloud下载文件:\(cloudFilePath.path)")
                     if !FileManager.default.fileExists(atPath: localFilePath.deletingLastPathComponent) {
                         try? FileManager.default.createDirectory(atPath: localFilePath.deletingLastPathComponent, withIntermediateDirectories: true)
                     }
                     SyncManager.shared.downloadingFiles.append(localFilePath)
                     try await cloudDrive.download(from: cloudFilePath, toURL: URL(fileURLWithPath: localFilePath))
-                    Log.debug("iCloud文件下载成功:\(localFilePath)")
+                    Log.debug("[iCloud Sync]文件已提交到iCloud下载队列:\(localFilePath)")
+                    // 注意：文件可能还在下载中，真实状态由 NSMetadataQuery 监控
                     SyncManager.shared.downloadingFiles.removeAll { $0 == localFilePath }
                     await MainActor.run {
                         completion?(nil)
                     }
                 } catch {
+                    SyncManager.shared.downloadingFiles.removeAll { $0 == localFilePath }
                     await MainActor.run {
                         completion?(error as? Error)
                     }
@@ -175,9 +374,9 @@ class SyncManager: NSObject {
             let cloudFilePath = RootRelativePath(path: String(localFilePath[range.lowerBound...]))
             if let cloudDrive = SyncManager.shared.cloudDrive {
                 Task {
-                    Log.debug("开始删除iCloud文件:\(localFilePath)")
+                    Log.debug("[iCloud Sync]开始删除iCloud文件:\(localFilePath)")
                     try? await cloudDrive.removeFile(at: cloudFilePath)
-                    Log.debug("删除iCloud文件成功:\(cloudFilePath.path)")
+                    Log.debug("[iCloud Sync]删除iCloud文件成功:\(cloudFilePath.path)")
                 }
             }
         }
@@ -189,9 +388,9 @@ class SyncManager: NSObject {
             let cloudFilePath = RootRelativePath(path: String(localPath[range.lowerBound...]))
             if let cloudDrive = SyncManager.shared.cloudDrive {
                 Task {
-                    Log.debug("开始删除iCloud目录:\(localPath)")
+                    Log.debug("[iCloud Sync]开始删除iCloud目录:\(localPath)")
                     try? await cloudDrive.removeDirectory(at: cloudFilePath)
-                    Log.debug("删除iCloud目录成功:\(cloudFilePath.path)")
+                    Log.debug("[iCloud Sync]删除iCloud目录成功:\(cloudFilePath.path)")
                 }
             }
         }
@@ -261,11 +460,11 @@ class SyncManager: NSObject {
                                             //文件没有更新，忽略
                                         }
                                     } else {
-                                        Log.debug("无法获取本地文件修改时间，记录冲突，让用户来决定")
+                                        Log.debug("[iCloud Sync]无法获取本地文件修改时间，记录冲突，让用户来决定")
                                         conflictFiles.append(cloudFileRelativePath)
                                     }
                                 } else {
-                                    Log.debug("本地文件不存在，下载到本地... \(cloudFileRelativePath)")
+                                    Log.debug("[iCloud Sync]本地文件不存在，下载到本地... \(cloudFileRelativePath)")
                                     do {
                                         if !FileManager.default.fileExists(atPath: localFilePath.deletingLastPathComponent) {
                                             try? FileManager.default.createDirectory(atPath: localFilePath.deletingLastPathComponent, withIntermediateDirectories: true)
@@ -277,10 +476,10 @@ class SyncManager: NSObject {
                                 }
                                 handledFiles.append(cloudFileRelativePath)
                             } else {
-                                Log.debug("无法获取云端文件的相对路径")
+                                Log.debug("[iCloud Sync]无法获取云端文件的相对路径")
                             }
                         } else {
-                            Log.debug("无法获取云端文件修改时间")
+                            Log.debug("[iCloud Sync]无法获取云端文件修改时间")
                         }
                     }
                 }
@@ -291,13 +490,13 @@ class SyncManager: NSObject {
                         let localFileRelativePath = String(localFileUrl.path[range.upperBound...])
                         if !handledFiles.contains(localFileRelativePath) {
                             do {
-                                Log.debug("本地存在的文件，但是云端还没有 进行上传... \(localFileRelativePath)")
+                                Log.debug("[iCloud Sync]本地存在的文件，但是云端还没有 进行上传... \(localFileRelativePath)")
                                 let directoryExists = try await cloudDrive.directoryExists(at: RootRelativePath(path: "Documents/\(localFileRelativePath.deletingLastPathComponent)"))
                                 if !directoryExists {
                                     try await cloudDrive.createDirectory(at: RootRelativePath(path: "Documents/\(localFileRelativePath.deletingLastPathComponent)"))
                                 }
                                 try await cloudDrive.upload(from: localFileUrl, to: RootRelativePath(path: "Documents/\(localFileRelativePath)"))
-                                Log.debug("文件上传成功 \(localFileRelativePath)")
+                                Log.debug("[iCloud Sync]文件上传成功 \(localFileRelativePath)")
                             } catch {
                                 Log.debug("\(localFileRelativePath)上传失败:\(error)")
                             }
@@ -308,7 +507,7 @@ class SyncManager: NSObject {
                 }
                 //处理冲突
                 for conflictFile in conflictFiles {
-                    Log.debug("处理冲突文件:\(conflictFile)")
+                    Log.debug("[iCloud Sync]处理冲突文件:\(conflictFile)")
                     Task { @MainActor in
                         let cloudFilePath = RootRelativePath(path: "Documents/\(conflictFile)")
                         let localFilePath = Constants.Path.Document.appendingPathComponent(conflictFile)
@@ -322,6 +521,7 @@ class SyncManager: NSObject {
                                 //保留云端 则删除本地的
                                 try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: localFilePath))
                                 try await cloudDrive.download(from: cloudFilePath, toURL: URL(fileURLWithPath: localFilePath))
+                                // 注意：文件可能还在下载中，真实状态由 NSMetadataQuery 监控
                             }
                         },
                                          confirmAction: {
@@ -329,6 +529,7 @@ class SyncManager: NSObject {
                             Task {
                                 try? await cloudDrive.removeFile(at: cloudFilePath)
                                 try await cloudDrive.upload(from: URL(fileURLWithPath: localFilePath), to: cloudFilePath)
+                                // 注意：文件可能还在上传中，真实状态由 NSMetadataQuery 监控
                             }
                         })
                     }
@@ -386,9 +587,24 @@ class SyncManager: NSObject {
                 }
             }
         } catch {
-            Log.debug("遍历云端文件失败:\(error)")
+            Log.debug("[iCloud Sync]遍历云端文件失败:\(error)")
             throw error
         }
         return result
+    }
+    
+    static func convertToLocalUrl(fromCloudUrl: URL) -> URL? {
+        if let range = fromCloudUrl.path.range(of: "/Documents/") {
+            let cloudFileRelativePath = String(fromCloudUrl.path[range.upperBound...])
+            return URL(fileURLWithPath: Constants.Path.Document.appendingPathComponent(cloudFileRelativePath))
+        }
+        return nil
+    }
+    
+    static func convertToCloudPath(url: URL) -> RootRelativePath? {
+        if let range = url.path.range(of: "/Documents/") {
+            return RootRelativePath(path: String(url.path[range.lowerBound...]))
+        }
+        return nil
     }
 }
