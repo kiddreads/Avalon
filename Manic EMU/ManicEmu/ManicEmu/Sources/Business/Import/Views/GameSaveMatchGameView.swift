@@ -385,7 +385,7 @@ class GameSaveMatchGameView: BaseView {
 
 extension GameSaveMatchGameView: UICollectionViewDataSource {
     private func sortDatasKeys() -> [GameType] {
-        let predefinedOrder: [GameType] = System.allCases.map { $0.gameType }
+        let predefinedOrder: [GameType] = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
         let sortedKeys: [GameType] = predefinedOrder.filter { normalDatas.keys.contains($0) }
         return sortedKeys
     }

@@ -655,7 +655,7 @@ extension FilesImporter {
                         skin.name = controllerSkin.name
                         skin.fileName = url.lastPathComponent
                         skin.gameType = controllerSkin.gameType
-                        skin.skinType = .import
+                        skin.skinType = url.pathExtension.lowercased() == "playcase" ? .playcase : .import
                         skin.skinData = CreamAsset.create(objectID: skin.id, propName: "skinData", url: url)
                         do {
                             try realm.write {

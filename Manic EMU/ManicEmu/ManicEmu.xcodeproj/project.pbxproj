@@ -13,11 +13,7 @@
 		57047A162D8571D600C62FF6 /* PriceItemCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57047A152D8571D500C62FF6 /* PriceItemCollectionCell.swift */; };
 		57047A1D2D85BB2200C62FF6 /* PurchaseButtonReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57047A1C2D85BB2000C62FF6 /* PurchaseButtonReusableView.swift */; };
 		57047A1F2D85C95900C62FF6 /* PurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57047A1E2D85C95500C62FF6 /* PurchaseViewController.swift */; };
-		570622E22D7B32F3004F09E7 /* FilterSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570622E12D7B32E6004F09E7 /* FilterSelectionViewController.swift */; };
-		570622E62D7B334E004F09E7 /* FilterSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570622E52D7B3345004F09E7 /* FilterSelectionView.swift */; };
-		570622EC2D7BD2FE004F09E7 /* FilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570622EB2D7BD2F6004F09E7 /* FilterManager.swift */; };
-		5706236A2D7BDCD9004F09E7 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570623692D7BDCD0004F09E7 /* FilterCollectionViewCell.swift */; };
-		5706236C2D7BDFE1004F09E7 /* CIFilterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706236B2D7BDFDC004F09E7 /* CIFilterExtensions.swift */; };
+		570622EC2D7BD2FE004F09E7 /* ShaderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570622EB2D7BD2F6004F09E7 /* ShaderManager.swift */; };
 		5706AFBD2DF7D8AF0066122E /* BIOSSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */; };
 		5706AFC22DF7D94F0066122E /* BIOSSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */; };
 		5706AFC62DF7DABD0066122E /* BIOSCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */; };
@@ -33,6 +29,9 @@
 		5706B0FD2DFFED170066122E /* menu_pipeline.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57BFBE4C2DD3326400AABF98 /* menu_pipeline.metal */; };
 		5708351C2D3216980079D410 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708351B2D3216930079D410 /* Log.swift */; };
 		570A28002DCF03CF001249C6 /* PLzmaSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 570A27FF2DCF03CF001249C6 /* PLzmaSDK */; };
+		570CF8352EEA58DE00696C1B /* AzaharKeyboardConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 570CF8332EEA58DE00696C1B /* AzaharKeyboardConfig.m */; };
+		570CF8872EEB0AD200696C1B /* ShadersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570CF8842EEB0AC500696C1B /* ShadersListViewController.swift */; };
+		570CF88C2EEB0AE000696C1B /* ShadersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570CF88A2EEB0ADB00696C1B /* ShadersListView.swift */; };
 		570F590C2DC5B838007BFD92 /* ThemeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570F590B2DC5B82F007BFD92 /* ThemeSettingView.swift */; };
 		570F590E2DC5BAEE007BFD92 /* DesktopIconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570F590D2DC5BAE1007BFD92 /* DesktopIconCollectionViewCell.swift */; };
 		570F59102DC5BB03007BFD92 /* ThemeColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570F590F2DC5BAF4007BFD92 /* ThemeColorCollectionViewCell.swift */; };
@@ -590,6 +589,18 @@
 		5771C20A2E6569BE0062EDE0 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C2092E6569B60062EDE0 /* LeaderboardView.swift */; };
 		5771C28B2E6986C00062EDE0 /* DC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C28A2E6986BE0062EDE0 /* DC.swift */; };
 		5771C2922E699C930062EDE0 /* flycast.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5771C2902E699C880062EDE0 /* flycast.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5781F4572EECF7CF00916D8B /* LibretroShaders.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4552EECF7CF00916D8B /* LibretroShaders.m */; };
+		5781F4612EED62E200916D8B /* ShadersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F45F2EED62DA00916D8B /* ShadersListCell.swift */; };
+		5781F4652EED639F00916D8B /* ShadersListBlankSlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4642EED639C00916D8B /* ShadersListBlankSlateView.swift */; };
+		5781F46F2EED6DC100916D8B /* Shader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F46D2EED6DBC00916D8B /* Shader.swift */; };
+		5781F47E2EEE572A00916D8B /* ShaderInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F47A2EEE572500916D8B /* ShaderInfoView.swift */; };
+		5781F4842EEE586000916D8B /* ShaderInfoInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4822EEE585400916D8B /* ShaderInfoInputCell.swift */; };
+		5781F4892EEE591500916D8B /* ShaderInfoAppendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4872EEE590800916D8B /* ShaderInfoAppendCell.swift */; };
+		5781F48E2EEE5C7A00916D8B /* ShaderInfoParameterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F48C2EEE5C6F00916D8B /* ShaderInfoParameterCell.swift */; };
+		5781F4992EEE71B500916D8B /* ShaderOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4972EEE71A800916D8B /* ShaderOrderView.swift */; };
+		5781F49E2EEE957200916D8B /* ShaderOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */; };
+		5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */; };
+		5781F5462EF1384500916D8B /* MelonNXKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* MelonNXKit.swift */; };
 		579076E32D8A990700ED90FB /* FunctionButtonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */; };
 		579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
@@ -610,7 +621,6 @@
 		57A481542E7A8B84001D4598 /* bsnes-jg.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A481682E7F05AB001D4598 /* melondsds.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481672E7F059D001D4598 /* melondsds.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A4816A2E7F05D2001D4598 /* NDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A481692E7F05CD001D4598 /* NDS.swift */; };
-		57A482012E83E0D4001D4598 /* OriginFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A482002E83E0D4001D4598 /* OriginFilter.swift */; };
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
 		57B5E3142ECC625E00DE17E9 /* Arcade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5E3122ECC625600DE17E9 /* Arcade.swift */; };
@@ -768,8 +778,6 @@
 		57EED0362EC8D9C4003971BD /* JITSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EED0342EC8D9BB003971BD /* JITSettingView.swift */; };
 		57EED0772ECB817C003971BD /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EED0752ECB8172003971BD /* IconView.swift */; };
 		57EED08A2ECB8AAE003971BD /* DynamicShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EED0882ECB8A9C003971BD /* DynamicShadow.swift */; };
-		57F0D7F22DE1634E00760F57 /* LibretroPreViewFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0D7F12DE1634400760F57 /* LibretroPreViewFilter.swift */; };
-		57F0D7F52DE1750A00760F57 /* FilterNameOnlyCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0D7F42DE174F800760F57 /* FilterNameOnlyCollectionCell.swift */; };
 		57F0D81A2DE1C2D700760F57 /* GameListStyleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0D8192DE1C2C200760F57 /* GameListStyleCollectionViewCell.swift */; };
 		57F0D83E2DE2C5AE00760F57 /* nestopia.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57F0D83C2DE2C59900760F57 /* nestopia.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57F0D8422DE2CD8D00760F57 /* NES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0D8412DE2CD8B00760F57 /* NES.swift */; };
@@ -903,11 +911,7 @@
 		57047A152D8571D500C62FF6 /* PriceItemCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceItemCollectionCell.swift; sourceTree = "<group>"; };
 		57047A1C2D85BB2000C62FF6 /* PurchaseButtonReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseButtonReusableView.swift; sourceTree = "<group>"; };
 		57047A1E2D85C95500C62FF6 /* PurchaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseViewController.swift; sourceTree = "<group>"; };
-		570622E12D7B32E6004F09E7 /* FilterSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSelectionViewController.swift; sourceTree = "<group>"; };
-		570622E52D7B3345004F09E7 /* FilterSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSelectionView.swift; sourceTree = "<group>"; };
-		570622EB2D7BD2F6004F09E7 /* FilterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterManager.swift; sourceTree = "<group>"; };
-		570623692D7BDCD0004F09E7 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
-		5706236B2D7BDFDC004F09E7 /* CIFilterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIFilterExtensions.swift; sourceTree = "<group>"; };
+		570622EB2D7BD2F6004F09E7 /* ShaderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderManager.swift; sourceTree = "<group>"; };
 		5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSSelectionViewController.swift; sourceTree = "<group>"; };
 		5706AFC12DF7D9460066122E /* BIOSSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSSelectionView.swift; sourceTree = "<group>"; };
 		5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOSCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -919,6 +923,10 @@
 		5706B0482DFBF8350066122E /* 32X.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 32X.swift; sourceTree = "<group>"; };
 		5706B0592DFC0F7A0066122E /* SS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SS.swift; sourceTree = "<group>"; };
 		5708351B2D3216930079D410 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		570CF8322EEA58DE00696C1B /* AzaharKeyboardConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AzaharKeyboardConfig.h; sourceTree = "<group>"; };
+		570CF8332EEA58DE00696C1B /* AzaharKeyboardConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AzaharKeyboardConfig.m; sourceTree = "<group>"; };
+		570CF8842EEB0AC500696C1B /* ShadersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadersListViewController.swift; sourceTree = "<group>"; };
+		570CF88A2EEB0ADB00696C1B /* ShadersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadersListView.swift; sourceTree = "<group>"; };
 		570F590B2DC5B82F007BFD92 /* ThemeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingView.swift; sourceTree = "<group>"; };
 		570F590D2DC5BAE1007BFD92 /* DesktopIconCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopIconCollectionViewCell.swift; sourceTree = "<group>"; };
 		570F590F2DC5BAF4007BFD92 /* ThemeColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColorCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1656,6 +1664,19 @@
 		5780E8382D95914C005130D5 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5780E83F2D959168005130D5 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5780E8402D959168005130D5 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5781F4542EECF7CF00916D8B /* LibretroShaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroShaders.h; sourceTree = "<group>"; };
+		5781F4552EECF7CF00916D8B /* LibretroShaders.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroShaders.m; sourceTree = "<group>"; };
+		5781F45F2EED62DA00916D8B /* ShadersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadersListCell.swift; sourceTree = "<group>"; };
+		5781F4642EED639C00916D8B /* ShadersListBlankSlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadersListBlankSlateView.swift; sourceTree = "<group>"; };
+		5781F46D2EED6DBC00916D8B /* Shader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shader.swift; sourceTree = "<group>"; };
+		5781F47A2EEE572500916D8B /* ShaderInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderInfoView.swift; sourceTree = "<group>"; };
+		5781F4822EEE585400916D8B /* ShaderInfoInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderInfoInputCell.swift; sourceTree = "<group>"; };
+		5781F4872EEE590800916D8B /* ShaderInfoAppendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderInfoAppendCell.swift; sourceTree = "<group>"; };
+		5781F48C2EEE5C6F00916D8B /* ShaderInfoParameterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderInfoParameterCell.swift; sourceTree = "<group>"; };
+		5781F4972EEE71A800916D8B /* ShaderOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderOrderView.swift; sourceTree = "<group>"; };
+		5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderOrderCell.swift; sourceTree = "<group>"; };
+		5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersExtensions.swift; sourceTree = "<group>"; };
+		5781F5442EF1383F00916D8B /* MelonNXKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MelonNXKit.swift; sourceTree = "<group>"; };
 		579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionButtonContainerView.swift; sourceTree = "<group>"; };
 		579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentHoleView.swift; sourceTree = "<group>"; };
 		57913AF42D5D89CC004D51AA /* TouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchController.swift; sourceTree = "<group>"; };
@@ -1677,7 +1698,6 @@
 		57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "bsnes-jg.libretro.framework"; path = "../Cores/bsnes-jg.libretro.framework"; sourceTree = SOURCE_ROOT; };
 		57A481672E7F059D001D4598 /* melondsds.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = melondsds.libretro.framework; path = ../Cores/melondsds.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57A481692E7F05CD001D4598 /* NDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDS.swift; sourceTree = "<group>"; };
-		57A482002E83E0D4001D4598 /* OriginFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginFilter.swift; sourceTree = "<group>"; };
 		57AD35E92D7DEB900092FD03 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheerExtensions.swift; sourceTree = "<group>"; };
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1829,8 +1849,6 @@
 		57EED0342EC8D9BB003971BD /* JITSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JITSettingView.swift; sourceTree = "<group>"; };
 		57EED0752ECB8172003971BD /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		57EED0882ECB8A9C003971BD /* DynamicShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicShadow.swift; sourceTree = "<group>"; };
-		57F0D7F12DE1634400760F57 /* LibretroPreViewFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibretroPreViewFilter.swift; sourceTree = "<group>"; };
-		57F0D7F42DE174F800760F57 /* FilterNameOnlyCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterNameOnlyCollectionCell.swift; sourceTree = "<group>"; };
 		57F0D8192DE1C2C200760F57 /* GameListStyleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListStyleCollectionViewCell.swift; sourceTree = "<group>"; };
 		57F0D83C2DE2C59900760F57 /* nestopia.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nestopia.libretro.framework; path = ../Cores/nestopia.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57F0D8412DE2CD8B00760F57 /* NES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NES.swift; sourceTree = "<group>"; };
@@ -2037,43 +2055,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		570622DF2D7B32C5004F09E7 /* Filter */ = {
-			isa = PBXGroup;
-			children = (
-				570622E42D7B333F004F09E7 /* Views */,
-				570622E32D7B32F9004F09E7 /* Models */,
-				570622E02D7B32D9004F09E7 /* ViewControllers */,
-			);
-			path = Filter;
-			sourceTree = "<group>";
-		};
-		570622E02D7B32D9004F09E7 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				570622E12D7B32E6004F09E7 /* FilterSelectionViewController.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		570622E32D7B32F9004F09E7 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				57F0D7F12DE1634400760F57 /* LibretroPreViewFilter.swift */,
-				57A482002E83E0D4001D4598 /* OriginFilter.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		570622E42D7B333F004F09E7 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				57F0D7F42DE174F800760F57 /* FilterNameOnlyCollectionCell.swift */,
-				570623692D7BDCD0004F09E7 /* FilterCollectionViewCell.swift */,
-				570622E52D7B3345004F09E7 /* FilterSelectionView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		570834312D2E23A80079D410 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
@@ -2081,6 +2062,40 @@
 				574789B82D4F8760006F0D99 /* SectionIndexView */,
 			);
 			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		570CF87D2EEB092B00696C1B /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				5781F46B2EED6DB600916D8B /* Models */,
+				570CF8832EEB0AB800696C1B /* Views */,
+				570CF8812EEB0AB000696C1B /* ViewControllers */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		570CF8812EEB0AB000696C1B /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				570CF8842EEB0AC500696C1B /* ShadersListViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		570CF8832EEB0AB800696C1B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */,
+				5781F4972EEE71A800916D8B /* ShaderOrderView.swift */,
+				5781F48C2EEE5C6F00916D8B /* ShaderInfoParameterCell.swift */,
+				5781F4872EEE590800916D8B /* ShaderInfoAppendCell.swift */,
+				5781F4822EEE585400916D8B /* ShaderInfoInputCell.swift */,
+				5781F47A2EEE572500916D8B /* ShaderInfoView.swift */,
+				5781F4642EED639C00916D8B /* ShadersListBlankSlateView.swift */,
+				5781F45F2EED62DA00916D8B /* ShadersListCell.swift */,
+				570CF88A2EEB0ADB00696C1B /* ShadersListView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		5720E7702E54103100EC0DA5 /* RetroAchievements */ = {
@@ -3720,6 +3735,14 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
+		5781F46B2EED6DB600916D8B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5781F46D2EED6DBC00916D8B /* Shader.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		57913AF62D5D8D70004D51AA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3844,6 +3867,10 @@
 				57BFBE5E2DD332DA00AABF98 /* LibretroCore.m */,
 				5720E7A12E541BE900EC0DA5 /* CheevosBridge.h */,
 				5720E7A22E541BF500EC0DA5 /* CheevosBridge.m */,
+				570CF8322EEA58DE00696C1B /* AzaharKeyboardConfig.h */,
+				570CF8332EEA58DE00696C1B /* AzaharKeyboardConfig.m */,
+				5781F4542EECF7CF00916D8B /* LibretroShaders.h */,
+				5781F4552EECF7CF00916D8B /* LibretroShaders.m */,
 				57BFBE642DD3330900AABF98 /* keyboard_event_apple.h */,
 				57BFBE622DD332FF00AABF98 /* input_keymaps.h */,
 				575F03A62DD59AED00950399 /* manic_joypad.m */,
@@ -4247,7 +4274,6 @@
 				57913AF62D5D8D70004D51AA /* Controllers */,
 				57E962ED2D69F4830022914C /* History */,
 				57DE0FF52D5F44D100CDD82A /* CheatCode */,
-				570622DF2D7B32C5004F09E7 /* Filter */,
 				577005422D3C918900762E8F /* Play */,
 				5770069F2D44CB6900762E8F /* Skin */,
 				57605FF32D20F1C300A98B0C /* Import */,
@@ -4256,6 +4282,7 @@
 				57047A062D85215400C62FF6 /* Purchase */,
 				5720E7702E54103100EC0DA5 /* RetroAchievements */,
 				57D7CF292EA5DB7B00F41540 /* TriggerPro */,
+				570CF87D2EEB092B00696C1B /* Shaders */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -4340,6 +4367,7 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				5781F5442EF1383F00916D8B /* MelonNXKit.swift */,
 				57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */,
 				5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */,
 				5744C6CE2E360AD50088081A /* UIControllerKit.swift */,
@@ -4352,7 +4380,7 @@
 				57E38E9A2D8C74F9001616D3 /* PermissionKit.swift */,
 				57EC6AC72D8119D8002920F0 /* SyncManager.swift */,
 				570F59DB2DC9D528007BFD92 /* ThemeManager.swift */,
-				570622EB2D7BD2F6004F09E7 /* FilterManager.swift */,
+				570622EB2D7BD2F6004F09E7 /* ShaderManager.swift */,
 				5726FED72D71B63A00041AD5 /* CacheManager.swift */,
 				57F6328A2D6EB837007270E8 /* DownloadManager.swift */,
 				57CCB3CC2D6774F50036476B /* Database.swift */,
@@ -4403,6 +4431,7 @@
 		A5DE1F73256BDE140099425B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */,
 				A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */,
 				5720E7C92E5446F700EC0DA5 /* ArrayExtensions.swift */,
 				57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */,
@@ -4416,7 +4445,6 @@
 				57DA89312D8328420074052A /* CKAccountStatusExtensions.swift */,
 				57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */,
 				57F1A9242D7D36CD00D0CC93 /* GameViewExtensions.swift */,
-				5706236B2D7BDFDC004F09E7 /* CIFilterExtensions.swift */,
 				57B6ECCC2D798419002E619C /* CheatTypeExtensions.swift */,
 				57B6EBF22D769905002E619C /* ProHUDExtentions.swift */,
 				57F633032D718C45007270E8 /* LocaleExtensions.swift */,
@@ -5117,12 +5145,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				57BFBE6B2DD3331A00AABF98 /* griffin_glslang.cpp in Sources */,
+				5781F4572EECF7CF00916D8B /* LibretroShaders.m in Sources */,
 				57BFBE6C2DD3331A00AABF98 /* griffin_cpp.cpp in Sources */,
 				57BFBE6E2DD3331A00AABF98 /* griffin_objc.m in Sources */,
 				57BFBE5F2DD332DA00AABF98 /* LibretroCore.m in Sources */,
 				57BFBE6D2DD3331A00AABF98 /* griffin.c in Sources */,
 				5720E7A32E541BF500EC0DA5 /* CheevosBridge.m in Sources */,
 				57BFBE522DD3328500AABF98 /* JITSupport.m in Sources */,
+				570CF8352EEA58DE00696C1B /* AzaharKeyboardConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5149,10 +5179,11 @@
 				57F633042D718C4E007270E8 /* LocaleExtensions.swift in Sources */,
 				5706B03B2DFBEC240066122E /* GG.swift in Sources */,
 				57EC6A6D2D7FC1E4002920F0 /* GameSettingSortCollectionReusableView.swift in Sources */,
+				5781F48E2EEE5C7A00916D8B /* ShaderInfoParameterCell.swift in Sources */,
 				5770068B2D438F7400762E8F /* PlayHistoryView.swift in Sources */,
 				57F1A9342D7D6D7D00D0CC93 /* ExternalSceneDelegate.swift in Sources */,
+				5781F4652EED639F00916D8B /* ShadersListBlankSlateView.swift in Sources */,
 				57DFBE8C2E71BC7A008C2161 /* CheevosPopupView.swift in Sources */,
-				5706236C2D7BDFE1004F09E7 /* CIFilterExtensions.swift in Sources */,
 				57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */,
 				579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */,
 				577006832D438E2A00762E8F /* GamesViewController.swift in Sources */,
@@ -5173,6 +5204,7 @@
 				57605FFE2D20F29000A98B0C /* SettingsViewController.swift in Sources */,
 				573BECBD2D1D3F6B008AD18D /* HomeTabBar.swift in Sources */,
 				57EED0772ECB817C003971BD /* IconView.swift in Sources */,
+				5781F46F2EED6DC100916D8B /* Shader.swift in Sources */,
 				5720E8462E5C4AA900EC0DA5 /* AchievementsUser.swift in Sources */,
 				5720E7882E5410D000EC0DA5 /* RetroAchievementsDetailView.swift in Sources */,
 				A52C1D86257F91550029B15B /* BaseViewController.swift in Sources */,
@@ -5195,12 +5227,10 @@
 				57913B422D5ED722004D51AA /* GameInfoCoverView.swift in Sources */,
 				577005582D3CC30A00762E8F /* FileType.swift in Sources */,
 				575A39D02DCD2B3E00B28FC2 /* UIImageViewExtensions.swift in Sources */,
-				57A482012E83E0D4001D4598 /* OriginFilter.swift in Sources */,
 				57F6328B2D6EB84A007270E8 /* DownloadManager.swift in Sources */,
 				57DF849C2D630E5800AA0AAB /* CGSizeExtenstions.swift in Sources */,
 				5771C28B2E6986C00062EDE0 /* DC.swift in Sources */,
 				57EC6AB02D80321B002920F0 /* CheatCodeBlankSlateView.swift in Sources */,
-				57F0D7F22DE1634E00760F57 /* LibretroPreViewFilter.swift in Sources */,
 				A58C3F4F248E44AF0099E068 /* UIDeviceExtensions.swift in Sources */,
 				5720E7E72E5461CA00EC0DA5 /* RetroAchievementsProfileCell.swift in Sources */,
 				5720CACC2DB555990090C0F6 /* ThreeDSKeyboardView.swift in Sources */,
@@ -5208,6 +5238,7 @@
 				57A4816A2E7F05D2001D4598 /* NDS.swift in Sources */,
 				57F1A9182D7D25B900D0CC93 /* GameInfoView.swift in Sources */,
 				5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */,
+				5781F4612EED62E200916D8B /* ShadersListCell.swift in Sources */,
 				5770069C2D44BDEA00762E8F /* GameCollectionViewCell.swift in Sources */,
 				577005782D3D60B700762E8F /* GameCheat.swift in Sources */,
 				574ABEBC2E609FE60045F76E /* GBA.swift in Sources */,
@@ -5244,7 +5275,6 @@
 				574789BE2D4F8769006F0D99 /* SectionIndexViewItem.swift in Sources */,
 				57F1A9392D7D704300D0CC93 /* AirPlayViewController.swift in Sources */,
 				57D0BC0A2E1AD2BE008C3049 /* N64.swift in Sources */,
-				570622E22D7B32F3004F09E7 /* FilterSelectionViewController.swift in Sources */,
 				57B6EC672D77F9A1002E619C /* SettingCellItem.swift in Sources */,
 				57E962FA2D6AB4790022914C /* PlayHistoryFavouriteCollectionCell.swift in Sources */,
 				576F0E152D88209000D2A1BA /* SettingsMembershipGiftView.swift in Sources */,
@@ -5270,6 +5300,7 @@
 				5726FF812D74AC9D00041AD5 /* RoundAndBorderView.swift in Sources */,
 				574789912D4CD185006F0D99 /* GameEditToolBar.swift in Sources */,
 				57CCB35D2D65DB200036476B /* GameSaveEmptyCollectionViewCell.swift in Sources */,
+				5781F4992EEE71B500916D8B /* ShaderOrderView.swift in Sources */,
 				577005612D3CD3AC00762E8F /* UTTypeExtensions.swift in Sources */,
 				57D7CF952EA8E7EE00F41540 /* TriggerProView.swift in Sources */,
 				5706B0372DFBEC1E0066122E /* SG1000.swift in Sources */,
@@ -5287,7 +5318,6 @@
 				57F632AB2D6FEC0F007270E8 /* SMBServiceProvider.swift in Sources */,
 				576F0E172D8820AB00D2A1BA /* MembershipInfoView.swift in Sources */,
 				57DCE8562E0FC9BC0079E3AA /* CoreSelectionView.swift in Sources */,
-				57F0D7F52DE1750A00760F57 /* FilterNameOnlyCollectionCell.swift in Sources */,
 				57E9632C2D6B06320022914C /* ImportFooterCollectionReusableView.swift in Sources */,
 				57B6ECCB2D797CB8002E619C /* AddCheatCodeContentCell.swift in Sources */,
 				57B6EC632D77F234002E619C /* GameSettingView.swift in Sources */,
@@ -5325,6 +5355,7 @@
 				57DCE80F2E0D9F300079E3AA /* TapActionCell.swift in Sources */,
 				57F0D81A2DE1C2D700760F57 /* GameListStyleCollectionViewCell.swift in Sources */,
 				5706AFBD2DF7D8AF0066122E /* BIOSSelectionViewController.swift in Sources */,
+				570CF8872EEB0AD200696C1B /* ShadersListViewController.swift in Sources */,
 				5770064F2D40E45F00762E8F /* CloudDriveBrowserViewController.swift in Sources */,
 				5739D1BE2DA79D2A0090409D /* DataExtension.swift in Sources */,
 				57BFBE792DD336FC00AABF98 /* Application.swift in Sources */,
@@ -5346,7 +5377,7 @@
 				57478A712D52037F006F0D99 /* RandomGameCollectionReusableView.swift in Sources */,
 				5720E8112E559EE600EC0DA5 /* RetroAchievementCountView.swift in Sources */,
 				577005B92D3E71BC00762E8F /* ImportService.swift in Sources */,
-				570622EC2D7BD2FE004F09E7 /* FilterManager.swift in Sources */,
+				570622EC2D7BD2FE004F09E7 /* ShaderManager.swift in Sources */,
 				57D7CF622EA792FB00F41540 /* AddTriggerButtonView.swift in Sources */,
 				57B5E3362ECDF75F00DE17E9 /* MAMEBiosView.swift in Sources */,
 				57B6EC652D77F832002E619C /* SettingItemCollectionViewCell.swift in Sources */,
@@ -5357,6 +5388,7 @@
 				57E0CC8F2D8F0E1F0027FB8C /* EntryExtensions.swift in Sources */,
 				577005D62D3F398100762E8F /* PasteImporter.swift in Sources */,
 				574ABE992E6021550045F76E /* GBC.swift in Sources */,
+				5781F49E2EEE957200916D8B /* ShaderOrderCell.swift in Sources */,
 				576F0E0C2D880DE600D2A1BA /* GradientImageView.swift in Sources */,
 				571BB8072DA4357D00830134 /* ThreeDS.swift in Sources */,
 				576060222D24E07500A98B0C /* AnimatedGradientView.swift in Sources */,
@@ -5366,7 +5398,6 @@
 				5744C7182E375BF40088081A /* PM.swift in Sources */,
 				57F0D8422DE2CD8D00760F57 /* NES.swift in Sources */,
 				579C114B2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift in Sources */,
-				570622E62D7B334E004F09E7 /* FilterSelectionView.swift in Sources */,
 				57D7CF3F2EA7355900F41540 /* TriggerProListViewController.swift in Sources */,
 				576F0E072D8806B500D2A1BA /* GameSavePurchaseGuideReusableView.swift in Sources */,
 				B2C97B502A09F3DE00053A4C /* UIimageExtensions.swift in Sources */,
@@ -5375,6 +5406,7 @@
 				57B5E3242ECCCD0800DE17E9 /* MAMEKit.swift in Sources */,
 				57DA89322D8328510074052A /* CKAccountStatusExtensions.swift in Sources */,
 				5720E7652E540F7200EC0DA5 /* RetroAchievementsLoginView.swift in Sources */,
+				5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */,
 				B2383F512A2733DF000563E6 /* UIFontExtensions.swift in Sources */,
 				57E0C1A72D56580F00962555 /* UITextFieldExtensions.swift in Sources */,
 				5744C72B2E377C800088081A /* ControllableSideMenu.swift in Sources */,
@@ -5395,15 +5427,16 @@
 				A392D5B32E9796B900F920E7 /* ServiceIconView.swift in Sources */,
 				5706AFCF2DF7FC730066122E /* SettingDescriptionCollectionViewCell.swift in Sources */,
 				575FF91D2D350F210043B2F3 /* PlayViewController.swift in Sources */,
+				5781F4842EEE586000916D8B /* ShaderInfoInputCell.swift in Sources */,
 				5706B0452DFBF7DF0066122E /* MCD.swift in Sources */,
 				57B6EBF32D769910002E619C /* ProHUDExtentions.swift in Sources */,
 				57BA59B52E3F13D100110849 /* LibretroCoreExtensions.swift in Sources */,
 				577006892D438F1100762E8F /* GameListView.swift in Sources */,
 				57D7CF862EA88AC100F41540 /* TriggerButton.swift in Sources */,
+				5781F47E2EEE572A00916D8B /* ShaderInfoView.swift in Sources */,
 				57F632FE2D718236007270E8 /* SettingsListView.swift in Sources */,
 				5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */,
 				57CC35802DC0684500DF7418 /* DownloadManageView.swift in Sources */,
-				5706236A2D7BDCD9004F09E7 /* FilterCollectionViewCell.swift in Sources */,
 				57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */,
 				57CC33BE2DBCDF3400DF7418 /* CGRectExtensions.swift in Sources */,
 				57B5E33B2ECDFDF500DE17E9 /* MAMEBiosViewController.swift in Sources */,
@@ -5412,6 +5445,7 @@
 				A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */,
 				57F632852D6EB485007270E8 /* UIScreenExtensions.swift in Sources */,
 				57B6ECC92D797CA3002E619C /* AddCheatCodeTitleCell.swift in Sources */,
+				5781F5462EF1384500916D8B /* MelonNXKit.swift in Sources */,
 				5706B0402DFBEC300066122E /* MS.swift in Sources */,
 				A5A001F324555A5F006E0F0E /* AppDelegate.swift in Sources */,
 				575A39CE2DCD011500B28FC2 /* OnlineCoverManager.swift in Sources */,
@@ -5439,6 +5473,7 @@
 				57526B7E2EADEED0003F91BD /* FDS.swift in Sources */,
 				579213532D95314800E88819 /* BaseNavigationController.swift in Sources */,
 				57E0CC532D8EACC70027FB8C /* ResourcesKit.swift in Sources */,
+				570CF88C2EEB0AE000696C1B /* ShadersListView.swift in Sources */,
 				571F837B2ECFFE4900D52663 /* AzaharAdvancedSettingViewController.swift in Sources */,
 				5770069A2D44B9B500762E8F /* GamesNavigationView.swift in Sources */,
 				577006A22D44CB9C00762E8F /* SkinSettingsViewController.swift in Sources */,
@@ -5450,6 +5485,7 @@
 				577005452D3C91F300762E8F /* AddImportServiceViewController.swift in Sources */,
 				570F59C02DC91FF5007BFD92 /* ColorPickerView.swift in Sources */,
 				57B6ECBD2D7953EC002E619C /* CheatCodeListView.swift in Sources */,
+				5781F4892EEE591500916D8B /* ShaderInfoAppendCell.swift in Sources */,
 				5726FEE72D71D7FA00041AD5 /* SettingsListFooterCollectionReusableView.swift in Sources */,
 				57F632B72D700A06007270E8 /* LanServiceEditCollectionViewCell.swift in Sources */,
 				5754D8C82E27A864001EA5ED /* VB.swift in Sources */,
@@ -5769,7 +5805,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 575A3A422DCEE9F300B28FC2 /* Config-SideloadRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -6127,7 +6163,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 579AB9D52E6C1118000868CB /* Config-SideloadDebug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -6657,7 +6693,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57E0363F2DBBE17100B222E1 /* Config-DebugSimulator.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7135,7 +7171,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57F456CF2DA98BB8007203AF /* Config-DevRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7574,7 +7610,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B562A0A420E00053A4C /* Config-Debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7819,7 +7855,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B572A0A423B00053A4C /* Config-Release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

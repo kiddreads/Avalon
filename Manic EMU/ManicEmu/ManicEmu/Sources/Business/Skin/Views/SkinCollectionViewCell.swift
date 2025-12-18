@@ -64,6 +64,14 @@ class SkinCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    var playcaseButton: UIImageView = {
+        let view = UIImageView(image: R.image.playcase_footnote())
+        view.enableInteractive = true
+        view.isHidden = true
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+    
     var previewButton: SymbolButton = {
         let view = SymbolButton(image: R.image.customArrowDownLeftAndArrowUpRight()?.applySymbolConfig(),
                                 title: R.string.localizable.skinPreviewTitle(),
@@ -111,6 +119,11 @@ class SkinCollectionViewCell: UICollectionViewCell {
         previewButton.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
+        
+        addSubview(playcaseButton)
+        playcaseButton.snp.makeConstraints { make in
+            make.leading.bottom.equalToSuperview()
+        }
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -148,5 +161,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         } else {
             subscriptView.isHidden = true
         }
+        
+        playcaseButton.isHidden = !controllerSkin.isPlayCase
     }
 }

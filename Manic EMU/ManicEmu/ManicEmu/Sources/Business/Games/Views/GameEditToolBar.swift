@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
+import ManicEmuCore
 
 enum GameEditToolItem: SettingCellItem, CaseIterable {
     case rename, cover, skin, shareRom, checkSave, importSave, shareSave, delete
@@ -62,6 +63,18 @@ enum GameEditToolItem: SettingCellItem, CaseIterable {
     }
     
     var enableLongPress: Bool { false }
+    
+    func support(for gameType: GameType) -> Bool {
+        if gameType == .ns {
+            switch self {
+            case .rename, .cover, .delete:
+                return true
+            default:
+                return false
+            }
+        }
+        return true
+    }
 }
 
 class GameEditToolBar: RoundAndBorderView {

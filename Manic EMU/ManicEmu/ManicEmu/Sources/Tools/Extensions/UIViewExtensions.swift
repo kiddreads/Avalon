@@ -274,7 +274,6 @@ extension UIView {
         startLoadingTime = nil
     }
     
-    static var alertBottomInset: CGFloat? = nil
     private static var SheetIdentifiers = [String]()
     static func makeAlert(identifier: String? = nil,
                           title: String? = nil,
@@ -461,7 +460,7 @@ extension UIView {
             }
             
             sheet.set(customView: view).snp.makeConstraints { make in
-                if let bottomInset = UIView.alertBottomInset, bottomInset > 0, PlayViewController.isGaming {
+                if let bottomInset = PlayViewController.menuInsets?.bottom, bottomInset > 0, PlayViewController.isGaming {
                     make.leading.top.trailing.equalToSuperview()
                     make.bottom.equalToSuperview().inset(bottomInset)
                 } else {

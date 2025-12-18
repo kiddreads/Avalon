@@ -129,7 +129,12 @@ UINavigationControllerDelegate> {
 - (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush;
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value;
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs;
-- (void)setShader:(NSString *_Nullable)path;
+- (BOOL)setShaderWith:(NSString *_Nullable)path;
+- (void)appendShader:(NSString *_Nonnull)path prepend:(BOOL)prepend;
+- (id _Nullable)loadParameters;
+- (void)updateParameterWith:(NSString *_Nonnull)identifier
+                      value:(float)value
+               changingPath:(NSString *_Nonnull)changingPath;
 - (void)addCheatCode:(NSString *_Nonnull)code index:(unsigned)index enable:(BOOL)enable;
 - (void)resetCheatCode;
 - (void)setRespectSilentMode:(BOOL)respect;
@@ -150,6 +155,8 @@ UINavigationControllerDelegate> {
 - (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName;
 - (void)updateFBNeoCheatCode:(NSArray<NSString *> *_Nonnull)keys enable:(BOOL)enable;
 - (void)setFastforwardFrameSkip:(BOOL)frameSkip;
+- (void)loadAmiibo:(NSString *_Nonnull)path;
+- (BOOL)isSearchingAmiibo;
 @end
 
 #else

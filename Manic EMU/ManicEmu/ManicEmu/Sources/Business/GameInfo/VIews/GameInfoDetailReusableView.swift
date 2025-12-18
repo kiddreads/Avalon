@@ -1192,6 +1192,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                         updateMDFunctionButton()
                     } else if game.gameType == .snes {
                         updateSNESFunctionButton()
+                    } else if game.gameType == .ns {
+                        updateNSFunctionButton()
                     }
                     addManualsButton()
                     hasSetupViews = true
@@ -1752,6 +1754,10 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             }
             
         }
+    }
+    
+    private func updateNSFunctionButton() {
+        functionButtonContainerView.subviews.forEach({ $0.removeFromSuperview() })
     }
     
     

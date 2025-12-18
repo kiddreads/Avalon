@@ -853,14 +853,12 @@ extension GameSettingView {
     }
     
     static func show(game: Game,
-                     gameViewRect: CGRect,
                      isEditingMode: Bool = false,
-                     menuInsets: UIEdgeInsets? = nil,
                      didSelectItem:((_ item: GameSetting, _ sheet: SheetTarget?)->Bool)? = nil,
                      hideCompletion: (()->Void)? = nil) {
         
         let initializer: ((SheetTarget)->Void) = { sheet in
-            sheet.configGamePlayingStyle(isForGameMenu: isEditingMode ? false : true, gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(isForGameMenu: isEditingMode ? false : true, hideCompletion: hideCompletion)
             
             let view = UIView()
             let grabber = UIImageView(image: R.image.grabber_icon())
@@ -891,7 +889,7 @@ extension GameSettingView {
             }
             
             
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.Background
             if !isEditingMode {
                 containerView.makeBlur()

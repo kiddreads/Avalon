@@ -73,6 +73,7 @@ public struct ControllerSkin: ControllerSkinBase
     private let imageCache = NSCache<NSString, UIImage>()
     
     public var isSwapScreen: Bool = false
+    public var isPlayCase: Bool = false
     
     let archive: Archive
     

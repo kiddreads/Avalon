@@ -793,3 +793,44 @@
 "EnableManufacturerFilter"="啟用廠商篩選";
 "MAMEFileMissingTitle"="遊戲檔案缺失";
 "MAMEFileMissingDesc"="當前遊戲可能屬於 Split 類型的 ROM 集，需要依賴 Parent 或 BIOS 檔案才能運行。請匯入缺失檔案，或使用 non-merged 類型的 ROM。";
+"InputForget" = "忘記了";
+"ExactlyTextSizeAllowDesc" = "請輸入恰好 %@ 個字符";
+"EmptyInputNotAllowed" = "輸入內容不能為空";
+"BlankInputNotAllowed" = "輸入內容不能僅包含空格";
+"ExactlyTextSize" = "文本長度必須為 %@ 個字符";
+"AtSymbolNotAllowed" = "不允許使用 @ 符號";
+"PercentSymbolNotAllowed" = "不允許使用 %% 符號";
+"BackslashSymbolNotAllowed" = "不允許使用 \\ 符號";
+"DigitsMaximumAllowed" = "最多允許 %@ 位數字";
+"Default" = "預設";
+"Imported" = "已匯入";
+"DownloadRetroArchSahders" = "從 RetroArch 下載畫面着色器";
+"ImportShaders" = "匯入畫面着色器";
+"Shaders" = "畫面着色器";
+"DownloadRetroArchShaders" = "是否從 RetroArch 下載畫面着色器？下載完成後，RetroArch 的着色器分類將自動更新。你可以隨時在「下載管理員」中取消此操作。";
+"RetroArchShaderUnzipFailed" = "無法解壓縮 %@。檔案在下載過程中可能已損壞，請重新下載後再試。";
+"ImportShader" = "請將畫面着色器檔案放入「Manic EMU-Shaders」資料夾，然後重新開啟此頁面以重新整理並載入着色器。";
+"CustomShaderDesc" = "透過編輯現有畫面着色器來創建自訂着色器。";
+"AppendShadersTitle" = "追加畫面着色器";
+"AppendShadersDetail" = "可在當前着色器序列前或後追加着色器";
+"ShaderName" = "着色器名稱";
+"Parameters" = "參數";
+"ShaderEditAlert" = "編輯着色器時，系統會自動創建一個新副本。你可以在着色器列表的「自訂」分類中找到它。";
+"ShadersOrder" = "着色器順序";
+"Base" = "基礎";
+"NoShaders" = "暫無可用的着色器";
+"ShaderLoadFailed" = "着色器載入失敗";
+"ShaderOrderDesc" = "長按並拖動以調整着色器疊加順序";
+"CustomShaderExists" = "已存在同名的自訂着色器，是否替換？";
+"CustomShaderSaveFailed" = "着色器生成失敗，請檢查修改內容後重試。";
+"CustomShaderSaveSuccess" = "%@ 儲存成功";
+"CustomShaderTitleWrong" = "此着色器名稱不可用";
+"PlayCasePromo" = "此主題由 PlayCase 設計。與 PlayCase 手機殼搭配使用時，可帶來更順滑、更自然的操控體驗。
+
+PlayCase 專注於製造高品質 iPhone 手機殼，設計時已充分考慮配件與主題的相容性。
+如果你想進一步提升整體體驗，PlayCase 是此主題的理想搭檔。";
+"LearnPlayCase" = "了解更多 PlayCase";
+"DontshowAgain" = "不再顯示";
+"NotInstallMeloNX" = "尚未安裝 MeloNX";
+"FetchGamesFromMeloNX" = "從 MeloNX 匯入遊戲";
+"ChangeAlert" = "內容已變更，關閉視窗將遺失所有變更。是否繼續關閉？";

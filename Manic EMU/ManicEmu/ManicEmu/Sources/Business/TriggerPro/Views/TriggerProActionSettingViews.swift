@@ -362,7 +362,14 @@ class TriggerActionComboView: UIView {
 
 
 class TriggerProTimePickerView: UIView {
-    static func show(title: String, values: [Double], defaultValue: Double, unitString: String, didSelectValue: ((Double)->Void)? = nil) {
+    static func show(title: String,
+                     values: [Double],
+                     defaultValue: Double,
+                     unitString: String,
+                     scale: Int = 1,
+                     minFraction: Int = 1,
+                     maxFraction: Int = 1,
+                     didSelectValue: ((Double, String)->Void)? = nil) {
         Sheet { sheet in
             sheet.contentMaskView.alpha = 0
             sheet.config.windowEdgeInset = 0
@@ -430,9 +437,16 @@ class TriggerProTimePickerView: UIView {
             }
             
             
+            
+            //数据清洗
+            let decimalValues = values.map({ $0.roundedDecimal(scale: scale) })
+            let values = decimalValues.map({ $0.doubleValue })
+            let componentValues = decimalValues.map({ "\($0.stringValue(minFraction: minFraction, maxFraction: maxFraction))\(unitString)" })
+            let defaultValue = defaultValue.roundedDecimal(scale: scale).doubleValue
+            
             let selectionView = UIPickerView()
-            selectionView.addComponents([values.map({ "\($0.rounded(numberOfDecimalPlaces: 1, rule: .toNearestOrEven))\(unitString)"})]) { element, component, row in
-                didSelectValue?(values[row])
+            selectionView.addComponents([componentValues]) { element, component, row in
+                didSelectValue?(values[row], componentValues[row])
             }
             if let defaultRow = values.firstIndex(of: defaultValue) {
                 DispatchQueue.main.asyncAfter(delay: 0.35, execute: {

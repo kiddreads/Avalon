@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Tiercel
+import SSZipArchive
 
 class DownloadManager {
     static let shared = DownloadManager()
@@ -61,10 +62,39 @@ class DownloadManager {
             Log.debug("下载完成")
             //全部下载完才统一导入
             UIView.makeToast(message: R.string.localizable.downloadCompletion())
-            let succeededTasks = manager.succeededTasks
-            FilesImporter.importFiles(urls: succeededTasks.map({ URL(fileURLWithPath: $0.filePath) })) {
-                succeededTasks.forEach { manager.remove($0.url) }
+            var succeededTasks = manager.succeededTasks
+            
+            let shaders = succeededTasks.filter({
+                $0.filePath.lastPathComponent == Constants.Strings.SlangShader || $0.filePath.lastPathComponent == Constants.Strings.GLSLShader
+            })
+            if shaders.count > 0 {
+                //处理RetroArch的shaders
+                
+                DispatchQueue.global().async {
+                    for shader in shaders {
+                        let desPath = shader.filePath.lastPathComponent == Constants.Strings.SlangShader ? Constants.Path.ShaderRetroArchSlang : Constants.Path.ShaderRetroArchGLSL
+                        SSZipArchive.unzipFile(atPath: shader.filePath, toDestination: desPath, overwrite: true, password: nil, progressHandler: nil) { _, isSuccess, error in
+                            DispatchQueue.main.async {
+                                if isSuccess {
+                                    NotificationCenter.default.post(name: Constants.NotificationName.RetroArchShadersDownloadSuccess, object: nil)
+                                } else {
+                                    UIView.makeToast(message: R.string.localizable.retroArchShaderUnzipFailed(shader.filePath.lastPathComponent))
+                                }
+                            }
+                        }
+                    }
+                }
+                succeededTasks = succeededTasks.filter({
+                    $0.filePath.lastPathComponent != Constants.Strings.SlangShader && $0.filePath.lastPathComponent != Constants.Strings.GLSLShader
+                })
             }
+            
+            if succeededTasks.count > 0 {
+                FilesImporter.importFiles(urls: succeededTasks.map({ URL(fileURLWithPath: $0.filePath) })) {
+                    succeededTasks.forEach { manager.remove($0.url) }
+                }
+            }
+            
             NotificationCenter.default.post(name: Constants.NotificationName.StopDownload, object: nil)
         }
         return manager

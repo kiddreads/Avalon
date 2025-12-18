@@ -2613,6 +2613,13 @@ bool runloop_environment_cb(unsigned cmd, void *data)
          break;
       }
 
+      case RETRO_ENVIRONMENT_SET_CAMERA_DEVICE:
+      {
+         bool *use_front = (bool*)data;
+         RARCH_LOG("[Environ]: SET_CAMERA_DEVICE (front: %d).\n", *use_front);
+         return driver_camera_switch(*use_front);
+      }
+
       case RETRO_ENVIRONMENT_GET_LOCATION_INTERFACE:
       {
          struct retro_location_callback *cb =

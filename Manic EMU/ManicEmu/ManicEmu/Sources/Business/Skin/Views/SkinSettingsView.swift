@@ -43,8 +43,8 @@ class SkinSettingsView: BaseView {
         } else {
             view.addTapGesture { [weak self] gesture in
                 guard let self = self else { return }
-                let allGameTypes = System.allCases.map { $0.gameType }
-                let itemTitles = System.allCases.map { $0.gameType.localizedShortName }
+                let allGameTypes = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
+                let itemTitles = System.allCases.filter({ $0 != .ns }).map { $0.gameType.localizedShortName }
                 var items: [UIAction] = []
                 let currentGameTypeName = self.gameType.localizedShortName
                 for (index, title) in itemTitles.enumerated() {
@@ -174,7 +174,14 @@ class SkinSettingsView: BaseView {
     private var game: Game? = nil
     ///游戏类型
     private var gameType: GameType = {
-        if let shortName = Constants.Config.PlatformOrder?.first, let type = GameType(shortName: shortName) {
+        if let platformOrder = Constants.Config.PlatformOrder, let shortName = platformOrder.first, let type = GameType(shortName: shortName) {
+            if type == .ns {
+                if platformOrder.count > 1, let type = GameType(shortName: platformOrder[1]) {
+                    return type
+                } else {
+                    return ._3ds
+                }
+            }
             return type
         }
         return System.allCases.first?.gameType ?? .gba
@@ -380,7 +387,7 @@ class SkinSettingsView: BaseView {
                 return false
             }
             if reuseSkinGameType.contains([$0.gameType]) {
-                if $0.gameType != self.gameType && ($0.skinType == .default || $0.skinType == .buildIn) {
+                if $0.gameType != self.gameType && ($0.skinType == .default || $0.skinType == .buildIn || $0.skinType == .playcase) {
                     //皮肤的游戏类型与当前选中的游戏类型不一致 则需要排除掉default和manic的皮肤
                     return false
                 } else {
@@ -397,12 +404,19 @@ class SkinSettingsView: BaseView {
                 return true
             } else if $1.skinType == .buildIn {
                 return false
+            } else if $0.skinType == .playcase {
+                return true
+            } else if $1.skinType == .playcase {
+                return false
             }
             return true
         }
         
         for skin in skins {
-            if let controllerSkin = ControllerSkin(fileURL: skin.fileURL) {
+            if var controllerSkin = ControllerSkin(fileURL: skin.fileURL) {
+                if skin.skinType == .playcase {
+                    controllerSkin.isPlayCase = true
+                }
                 if controllerSkin.supports(portraitTraits) {
                     portraitSkins.append(controllerSkin)
                 }
@@ -505,6 +519,128 @@ class SkinSettingsView: BaseView {
             UIView.makeToast(message: R.string.localizable.unsupportSkinsRemoveSuccess())
         })
     }
+    
+    private func showPlayCasePromo(showDontShow: Bool = true, hideCompletion: (()->Void)? = nil) {
+        Sheet { sheet in
+            sheet.contentMaskView.alpha = 0
+            sheet.config.windowEdgeInset = 0
+            sheet.onTappedBackground { sheet in
+                sheet.pop()
+            }
+            sheet.onViewDidDisappear { _ in
+                hideCompletion?()
+            }
+            sheet.config.backgroundViewMask { mask in
+                mask.backgroundColor = .black.withAlphaComponent(0.2)
+            }
+            
+            let view = UIView()
+            let grabber = UIImageView(image: R.image.grabber_icon())
+            grabber.isUserInteractionEnabled = true
+            grabber.contentMode = .center
+            view.addPanGesture { [weak view, weak sheet] gesture in
+                guard let view = view, let sheet = sheet else { return }
+                let point = gesture.translation(in: gesture.view)
+                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
+                if gesture.state == .recognized {
+                    let v = gesture.velocity(in: gesture.view)
+                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
+                        sheet.pop()
+                    }
+                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
+                        view.transform = .identity
+                    })
+                }
+            }
+            view.addSubview(grabber)
+            grabber.snp.makeConstraints { make in
+                make.leading.top.trailing.equalToSuperview()
+                make.height.equalTo(Constants.Size.ContentSpaceTiny*3)
+            }
+            
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
+            containerView.backgroundColor = .clear
+            containerView.makeBlur()
+            view.addSubview(containerView)
+            containerView.snp.makeConstraints { make in
+                make.top.equalTo(grabber.snp.bottom)
+                make.leading.bottom.trailing.equalToSuperview()
+            }
+            
+            let logoView = IconView()
+            logoView.image = R.image.playcase_logo()
+            containerView.addSubview(logoView)
+            logoView.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalToSuperview().offset(30)
+            }
+            
+            let detailLabel = UILabel()
+            detailLabel.numberOfLines = 0
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny
+            style.alignment = .left
+            detailLabel.attributedText = NSAttributedString(string: R.string.localizable.playCasePromo(), attributes: [.font: Constants.Font.body(size: .m), .foregroundColor: Constants.Color.LabelPrimary, .paragraphStyle: style])
+            containerView.addSubview(detailLabel)
+            detailLabel.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+                make.top.equalTo(logoView.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            }
+            
+            let button: SymbolButton = {
+                let view = SymbolButton(image: nil, title: R.string.localizable.learnPlayCase(), titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
+                view.enableRoundCorner = true
+                view.backgroundColor = Constants.Color.Red
+                view.addTapGesture { [weak sheet] gesture in
+                    guard let sheet else { return }
+                    sheet.pop()
+                    UIApplication.shared.open(Constants.URLs.PlayCasePromo)
+                }
+                return view
+            }()
+            
+            containerView.addSubview(button)
+            button.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+                make.height.equalTo(Constants.Size.ItemHeightMid)
+                make.top.equalTo(detailLabel.snp.bottom).offset(Constants.Size.ItemHeightMin)
+                if !showDontShow {
+                    make.bottom.equalToSuperview().inset(Constants.Size.ContentInsetBottom + Constants.Size.ContentSpaceMin)
+                }
+            }
+            
+            if showDontShow {
+                let dontshowAgain: UIButton = {
+                    let view = UIButton(type: .custom)
+                    let att = NSAttributedString(string: R.string.localizable.dontshowAgain(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
+                    view.onTap { [weak sheet] in
+                        guard let sheet else { return }
+                        UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowPlayCasePromo)
+                        sheet.pop()
+                    }
+                    view.setAttributedTitle(att.underlined, for: .normal)
+                    return view
+                }()
+                
+                containerView.addSubview(dontshowAgain)
+                dontshowAgain.snp.makeConstraints { make in
+                    make.centerX.equalTo(button)
+                    make.top.equalTo(button.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+                    make.bottom.equalToSuperview().inset(Constants.Size.ContentInsetBottom + Constants.Size.ContentSpaceMin)
+                }
+            }
+            
+            
+            sheet.set(customView: view).snp.makeConstraints { make in
+                if let bottomInset = PlayViewController.menuInsets?.bottom, bottomInset > 0, PlayViewController.isGaming {
+                    make.leading.top.trailing.equalToSuperview()
+                    make.bottom.equalToSuperview().inset(bottomInset)
+                } else {
+                    make.edges.equalToSuperview()
+                }
+            }
+        }
+    }
 }
 
 extension SkinSettingsView: UICollectionViewDataSource {
@@ -524,6 +660,10 @@ extension SkinSettingsView: UICollectionViewDataSource {
             cell.setData(controllerSkin: skin, traits: traits, subscriptTitle: skin.gameType == gameType ? nil : skin.gameType.localizedShortName)
             cell.previewButton.addTapGesture { gesture in
                 topViewController()?.present(SkinPreviewViewController(skin: skin, traits: traits), animated: true)
+            }
+            cell.playcaseButton.addTapGesture { [weak self] gesture in
+                guard let self else { return }
+                self.showPlayCasePromo(showDontShow: false)
             }
             return cell
         }
@@ -582,6 +722,14 @@ extension SkinSettingsView: UICollectionViewDelegate {
             }
         }
         
+#if !SIDE_LOAD
+        let controllerSkin = isPortraitSkinPage ? portraitSkins[indexPath.row] : landscapeSkins[indexPath.row]
+        if !PlayViewController.isGaming,
+            controllerSkin.isPlayCase,
+           !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowPlayCasePromo) {
+            self.showPlayCasePromo()
+        }
+#endif
         return true
     }
     
@@ -667,12 +815,12 @@ extension SkinSettingsView {
         Sheet.find(identifier: String(describing: SkinSettingsView.self)).count > 0 ? true : false
     }
     
-    static func show(game: Game, gameViewRect: CGRect, menuInsets: UIEdgeInsets? = nil, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
+    static func show(game: Game, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
         Sheet.lazyPush(identifier: String(describing: SkinSettingsView.self)) { sheet in
-            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
             
             let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

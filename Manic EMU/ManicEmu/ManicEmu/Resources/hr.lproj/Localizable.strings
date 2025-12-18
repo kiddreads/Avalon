@@ -785,3 +785,44 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "EnableManufacturerFilter"="Omogući filtar proizvođača";
 "MAMEFileMissingTitle"="Nedostaju datoteke igre";
 "MAMEFileMissingDesc"="Ova igra može pripadati podijeljenom ROM setu, koji zahtijeva svoje roditeljske ili BIOS datoteke za pokretanje. Molimo importajte nedostajuće datoteke ili umjesto toga koristite ne-spojeni ROM.";
+"InputForget" = "Zaboravio sam";
+"ExactlyTextSizeAllowDesc" = "Unesite točno %@ znakova";
+"EmptyInputNotAllowed" = "Polje ne smije biti prazno";
+"BlankInputNotAllowed" = "Polje ne smije sadržavati samo razmake";
+"ExactlyTextSize" = "Tekst mora biti točno %@ znakova dugačak";
+"AtSymbolNotAllowed" = "Simbol @ nije dopušten";
+"PercentSymbolNotAllowed" = "Simbol %% nije dopušten";
+"BackslashSymbolNotAllowed" = "Simbol \\ nije dopušten";
+"DigitsMaximumAllowed" = "Dopušteno najviše %@ znamenki";
+"Default" = "Zadano";
+"Imported" = "Uvezeno";
+"DownloadRetroArchSahders" = "Preuzmi shadere s RetroArcha";
+"ImportShaders" = "Uvezi shadere";
+"Shaders" = "Shaderi";
+"DownloadRetroArchShaders" = "Želite li preuzeti shadere s RetroArcha? Po završetku, RetroArchova kategorija shadera će se automatski osvježiti. Ovaj proces možete prekinuti u bilo kojem trenutku u upravitelju preuzimanja.";
+"RetroArchShaderUnzipFailed" = "Nije moguće raspakirati %@. Datoteka je možda oštećena tijekom preuzimanja. Pokušajte je ponovno preuzeti.";
+"ImportShader" = "Stavite datoteke shadera u mapu ‘Manic EMU-Shaders’, zatim ponovno otvorite ovu stranicu da biste osvježili i učitali shadere.";
+"CustomShaderDesc" = "Kreirajte prilagođene shadere uređivanjem postojećih.";
+"AppendShadersTitle" = "Dodaj shadere";
+"AppendShadersDetail" = "Dodajte shadere na početak ili kraj trenutnog sloga";
+"ShaderName" = "Naziv shadera";
+"Parameters" = "Parametri";
+"ShaderEditAlert" = "Kada uredite shader, automatski se kreira nova kopija. Možete je pronaći u kategoriji ‘Prilagođeno’ na popisu shadera.";
+"ShadersOrder" = "Redoslijed shadera";
+"Base" = "Osnovni";
+"NoShaders" = "Nema dostupnih shadera";
+"ShaderLoadFailed" = "Učitavanje shadera nije uspjelo";
+"ShaderOrderDesc" = "Pritisnite i držite, pa povucite za promjenu redoslijeda slojeva shadera";
+"CustomShaderExists" = "Prilagođeni shader s istim imenom već postoji. Želite li ga zamijeniti?";
+"CustomShaderSaveFailed" = "Generiranje shadera nije uspjelo. Pregledajte svoje izmjene i pokušajte ponovno.";
+"CustomShaderSaveSuccess" = "%@ je uspješno spremljen";
+"CustomShaderTitleWrong" = "Ovaj naziv shadera nije dostupan";
+"PlayCasePromo" = "Ovaj skin dizajnirao je PlayCase. U kombinaciji s PlayCaseom pruža glatkije i prirodnije iskustvo upravljanja.
+
+PlayCase se usredotočuje na visokokvalitetna kućišta za iPhone, dizajnirana uz kompatibilnost s priborom i skinovima na umu.
+Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.";
+"LearnPlayCase" = "Saznajte više o PlayCaseu";
+"DontshowAgain" = "Ne prikazuj više";
+"NotInstallMeloNX" = "MeloNX nije instaliran";
+"FetchGamesFromMeloNX" = "Uvezi igre iz MeloNXa";
+"ChangeAlert" = "Sadržaj je promijenjen. Zatvaranje sada će uzrokovati gubitak svih promjena. Nastaviti zatvaranje?";

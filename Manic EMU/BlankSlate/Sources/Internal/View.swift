@@ -268,17 +268,17 @@ extension BlankSlate {
             NSLayoutConstraint.activate(constraints)
         }
 
-        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-            guard let hitView = super.hitTest(point, with: event) else { return nil }
-            if hitView is UIControl {
-                return hitView // Return any UIControl instance such as buttons, segmented controls, switches, etc.
-            }
-
-            if hitView.isEqual(contentView) || hitView.isEqual(elements[.custom]?.view) {
-                return hitView // Return either the contentView or customView
-            }
-            return nil // Touch allowed to pass through
-        }
+//        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//            guard let hitView = super.hitTest(point, with: event) else { return nil }
+//            if hitView is UIControl {
+//                return hitView // Return any UIControl instance such as buttons, segmented controls, switches, etc.
+//            }
+//
+//            if hitView.isEqual(contentView) || hitView.isEqual(elements[.custom]?.view) {
+//                return hitView // Return either the contentView or customView
+//            }
+//            return nil // Touch allowed to pass through
+//        }
 
         // MARK: - UIGestureRecognizerDelegate
         override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

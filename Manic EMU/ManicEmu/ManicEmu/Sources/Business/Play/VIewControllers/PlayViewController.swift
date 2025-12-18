@@ -192,6 +192,11 @@ class PlayViewController: GameViewController {
     private var isFirstTimeSetGBPalette = true;
     
     static func startGame(game: Game, saveState: GameSaveState? = nil) {
+        if game.gameType == .ns {
+            MelonNXKit.startGame(id: game.id)
+            return
+        }
+        
 #if !SIDE_LOAD
         //AppStore版本禁用MCD和32X
         if game.gameType == .mcd || game.gameType == ._32x {
@@ -254,7 +259,7 @@ class PlayViewController: GameViewController {
                     launchGameByDismissOtherVC()
                 }
             }
-            if game.gameType == ._3ds, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShow3DSPlayAlert) {
+            if game.isCitra3DS, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShow3DSPlayAlert) {
                 UIView.makeAlert(title: R.string.localizable.threeDSBetaAlertTitle(),
                                  detail: R.string.localizable.threeDSBetaAlertDetail(),
                                  detailAlignment: .left,
@@ -761,13 +766,7 @@ class PlayViewController: GameViewController {
             (gameSortType == .latestPlayed || gameSortType == .playTime) {
             NotificationCenter.default.post(name: Constants.NotificationName.GameSortChange, object: nil)
         }
-        
-        //取消Alert的MenuInset
-        UIView.alertBottomInset = nil
-        
-        if manicGame.gameType == .arcade, manicGame.defaultCore == 0 {
-            LibretroCore.sharedInstance().setLibretroLogMonitor(false)
-        }
+        //Libretro已经停止，不要在这里进行注销事项，应该在stop()函数中完成
     }
     
     /// 进入默认显示的方向
@@ -830,8 +829,6 @@ class PlayViewController: GameViewController {
                     manicGame.currentDiskIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
                 }
                 GameSettingView.show(game: manicGame,
-                                     gameViewRect: gameView.frame,
-                                     menuInsets: getMenuInsets(),
                                      didSelectItem: { [weak self] item, sheet in
                     //点击菜单选项
                     guard let self = self else { return true }
@@ -1330,7 +1327,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            GameInfoView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), selection: { [weak self, weak menuSheet] saveState in
+            GameInfoView.show(game: manicGame, selection: { [weak self, weak menuSheet] saveState in
                 guard let self = self else { return }
                 func loadSave() {
                     if self.manicGame.isCitra3DS {
@@ -1379,13 +1376,13 @@ extension PlayViewController {
                     pauseEmulation()
                 }
                 if manicGame.gameType == .arcade, manicGame.defaultCore == 1 {
-                    FBNeoCheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+                    FBNeoCheatCodeListView.show(game: manicGame, hideCompletion: { [weak self] in
                         if menuSheet == nil {
                             self?.resumeEmulationAndHandleAudio()
                         }
                     })
                 } else {
-                    CheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+                    CheatCodeListView.show(game: manicGame, hideCompletion: { [weak self] in
                         if menuSheet == nil {
                             self?.resumeEmulationAndHandleAudio()
                         }
@@ -1398,7 +1395,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            SkinSettingsView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+            SkinSettingsView.show(game: manicGame, hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
@@ -1411,9 +1408,18 @@ extension PlayViewController {
                 pauseEmulation()
             }
             if manicGame.isLibretroType {
-                FilterSelectionView.show(game: self.manicGame, snapshot: nil, gameViewRect: self.gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+                ShadersListView.show(game: self.manicGame, hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
+                    }
+                }, didSelectShader: { shader in
+                    Game.change { [weak self] realm in
+                        guard let self = self else { return }
+                        if shader.isOriginal {
+                            self.manicGame.filterName = nil
+                        } else {
+                            self.manicGame.filterName = shader.relativePath
+                        }
                     }
                 })
             }
@@ -1500,7 +1506,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            ControllersSettingView.show(gameType: manicGame.gameType, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+            ControllersSettingView.show(gameType: manicGame.gameType, hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
@@ -1525,7 +1531,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            GameSettingView.show(game: manicGame, gameViewRect: gameView.frame, isEditingMode: true, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+            GameSettingView.show(game: manicGame, isEditingMode: true, hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
@@ -1615,32 +1621,33 @@ extension PlayViewController {
         case .amiibo:
             //MARK: handleMenuGameSetting.amiibo
             //加载amiibo
-            if manicGame.gameType == ._3ds, let threeDSCore {
-                if manicGame.isCitra3DS {
-                    if threeDSCore.isAmiiboSearching() {
-                        if menuSheet == nil {
-                            pauseEmulation()
-                        }
-                        Log.debug("amiibo正在搜索中")
-                        FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: false) { [weak self] urls in
+            if manicGame.gameType == ._3ds {
+                let isSearchingAmiibo = (manicGame.isCitra3DS && (threeDSCore?.isAmiiboSearching() ?? false)) || (manicGame.isAzahar3DS && LibretroCore.sharedInstance().isSearchingAmiibo())
+                if isSearchingAmiibo {
+                    if menuSheet == nil {
+                        pauseEmulation()
+                    }
+                    Log.debug("amiibo正在搜索中")
+                    FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: false) { [weak self] urls in
+                        guard let self = self else { return }
+                        self.resumeEmulationAndHandleAudio()
+                        UIView.hideAllAlert { [weak self] in
                             guard let self = self else { return }
-                            self.resumeEmulationAndHandleAudio()
-                            UIView.hideAllAlert { [weak self] in
-                                guard let self = self else { return }
-                                if let url = urls.first {
-                                    DispatchQueue.main.asyncAfter(delay: 1) {
+                            if let url = urls.first {
+                                DispatchQueue.main.asyncAfter(delay: 1) {
+                                    if self.manicGame.isCitra3DS {
                                         self.threeDSCore?.loadAmiibo(path: url.path)
+                                    } else {
+                                        LibretroCore.sharedInstance().loadAmiibo(url.path)
                                     }
                                 }
                             }
                         }
-                        return false
-                    } else {
-                        Log.debug("amiibo没有搜索")
-                        UIView.makeToast(message: R.string.localizable.amiiboNotSearching())
                     }
+                    return false
                 } else {
-                    //TODO: azahar amiibo
+                    Log.debug("amiibo没有搜索")
+                    UIView.makeToast(message: R.string.localizable.amiiboNotSearching())
                 }
             }
         case .toggleFullscreen:
@@ -1805,7 +1812,7 @@ extension PlayViewController {
             }
             
             func showManualsView() {
-                GameplayManualsView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInsets(), hideCompletion: { [weak self] in
+                GameplayManualsView.show(game: manicGame, hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
                     }
@@ -2261,7 +2268,8 @@ extension PlayViewController {
                 "fastforward_frameskip": "false",
                 "log_verbosity": enableLibretroLog,
                 "libretro_log_level": libretroLogLevel,
-                "camera_driver": ((manicGame.gameType == .gb || manicGame.gameType == .gbc) && manicGame.defaultCore == 1) ? "null" : "avfoundation",
+                "camera_allow": "true",
+                "camera_driver": "avfoundation",
                 "microphone_enable": enableMircophone ? "true" : "false",
                 "microphone_driver": "coreaudio",
                 "audio_latency": "200"
@@ -2409,12 +2417,6 @@ extension PlayViewController {
         }
         //更新3DS画面视图
         updateCitra3DSViews()
-        //设置Alert的menuInsets
-        if let menuInsets = getMenuInsets() {
-            UIView.alertBottomInset = menuInsets.bottom
-        } else {
-            UIView.alertBottomInset = nil
-        }
     }
     
     /// 按照配置开始强制旋转屏幕
@@ -2713,7 +2715,7 @@ extension PlayViewController {
                                language: manicGame.region-1,
                                renderRightEye: manicGame.renderRightEye)
             threeDSCore?.openKeyboardAction { hintText, keyboardType, maxTextSize in
-                ThreeDSKeyboardView.show(hintText: hintText, keyboardType: keyboardType, maxTextSize: maxTextSize)
+                ThreeDSKeyboardView.showForCitra(hintText: hintText, keyboardType: keyboardType, maxTextSize: maxTextSize)
             }
         }
     }
@@ -2776,12 +2778,21 @@ extension PlayViewController {
                                 self.manicGame.setExtras(gameInfo)
                             }
                         }
+                    } else if manicGame.isAzahar3DS {
+                        //注册azahar的键盘
+                        compltion = { _ in
+                            LibretroCore.sharedInstance().registerAzaharKeyboard { config in
+                                ThreeDSKeyboardView.showForAzahar(config: config,
+                                                                  tapAction: { buttonType, text in
+                                    LibretroCore.sharedInstance().inputAzaharKeyboard(text, buttonType: buttonType)
+                                })
+                            }
+                        }
                     }
                     self.updateDualScreenViews()
                     LibretroCore.sharedInstance().setCustomSaveExtension(customSaveExtension)
                     if self.manicGame.isNDSHomeMenuGame || self.manicGame.isDSiHomeMenuGame {
                         LibretroCore.sharedInstance().loadWithoutContent(corePath)
-                        //TODO: Azahar的home menu加载
                     } else {
                         LibretroCore.sharedInstance().loadGame(manicGame.romUrl.path, corePath: corePath, completion: compltion)
                     }
@@ -3151,9 +3162,7 @@ extension PlayViewController {
                 guard let self else { return }
                 self.pauseEmulation()
                 CheevosPopupView.show(type: .leaderboard,
-                                      leaderboards: leaderboards.reversed(),
-                                      gameViewRect: self.gameView.frame,
-                                      menuInsets: getMenuInsets()) { [weak self] in
+                                      leaderboards: leaderboards.reversed()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
@@ -3174,9 +3183,7 @@ extension PlayViewController {
                 guard let self else { return }
                 self.pauseEmulation()
                 CheevosPopupView.show(type: .progress,
-                                      achievements: progressAchievements.reversed(),
-                                      gameViewRect: self.gameView.frame,
-                                      menuInsets: getMenuInsets()) { [weak self] in
+                                      achievements: progressAchievements.reversed()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
@@ -3198,9 +3205,7 @@ extension PlayViewController {
                 self.pauseEmulation()
                 
                 CheevosPopupView.show(type: .challenge,
-                                      achievements: self.challengeAchievements.reversed(),
-                                      gameViewRect: self.gameView.frame,
-                                      menuInsets: getMenuInsets()) { [weak self] in
+                                      achievements: self.challengeAchievements.reversed()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
                 }
             }
@@ -3372,7 +3377,7 @@ extension PlayViewController: GameViewControllerDelegate {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {
             return false
         }
-        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || FilterSelectionView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow || FBNeoCheatCodeListView.isShow) ? false : true
+        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || ShadersListView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow || FBNeoCheatCodeListView.isShow) ? false : true
     }
     
 }
@@ -3404,5 +3409,12 @@ extension PlayViewController {
             return currentPlayViewController.manicGame.forceFullSkin
         }
         return false
+    }
+    
+    static var menuInsets: UIEdgeInsets? {
+        if let currentPlayViewController {
+            return currentPlayViewController.getMenuInsets()
+        }
+        return nil
     }
 }

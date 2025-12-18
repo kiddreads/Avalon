@@ -115,7 +115,8 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
                                   SettingItem(type: .retro),
                                   SettingItem(type: .triggerPro),
-                                  SettingItem(type: .jit)
+                                  SettingItem(type: .jit),
+                                  SettingItem(type: .shaders),
                 ]
 #else
                 datas[section] = [SettingItem(type: .airPlay, isOn: Settings.defalut.airPlay),
@@ -127,7 +128,8 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
                                   SettingItem(type: .retro),
                                   SettingItem(type: .triggerPro),
-                                  SettingItem(type: .jit)
+                                  SettingItem(type: .jit),
+                                  SettingItem(type: .shaders),
                 ]
 #endif
             } else if section == .support {
@@ -567,6 +569,13 @@ extension SettingsListView: UICollectionViewDelegate {
                 }
             case .jit:
                 let vc = JITSettingViewController(showClose: UIDevice.isPad ? false : true)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+            case .shaders:
+                let vc = ShadersListViewController(showClose: UIDevice.isPad ? false : true, initType: .normal)
                 if UIDevice.isPad {
                     didTapDetail?(vc)
                 } else {

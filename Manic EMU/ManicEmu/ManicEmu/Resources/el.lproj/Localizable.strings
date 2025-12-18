@@ -788,3 +788,44 @@
 "EnableManufacturerFilter"="Ενεργοποίηση φίλτρου κατασκευαστή";
 "MAMEFileMissingTitle"="Λείπουν αρχεία παιχνιδιού";
 "MAMEFileMissingDesc"="Αυτό το παιχνίδι μπορεί να ανήκει σε ένα διαχωρισμένο σύνολο ROM, που απαιτεί τα γονικά ή αρχεία BIOS για να εκτελεστεί. Παρακαλώ εισαγάγετε τα αρχεία που λείπουν ή χρησιμοποιήστε ένα μη συγχωνευμένο ROM αντ' αυτού.";
+"InputForget" = "Ξέχασα";
+"ExactlyTextSizeAllowDesc" = "Εισάγετε ακριβώς %@ χαρακτήρες";
+"EmptyInputNotAllowed" = "Το πεδίο δεν μπορεί να είναι κενό";
+"BlankInputNotAllowed" = "Το πεδίο δεν μπορεί να περιέχει μόνο κενά";
+"ExactlyTextSize" = "Το κείμενο πρέπει να είναι ακριβώς %@ χαρακτήρες";
+"AtSymbolNotAllowed" = "Το σύμβολο @ δεν επιτρέπεται";
+"PercentSymbolNotAllowed" = "Το σύμβολο %% δεν επιτρέπεται";
+"BackslashSymbolNotAllowed" = "Το σύμβολο \\ δεν επιτρέπεται";
+"DigitsMaximumAllowed" = "Επιτρέπονται έως %@ ψηφία";
+"Default" = "Προεπιλογή";
+"Imported" = "Εισαγμένο";
+"DownloadRetroArchSahders" = "Λήψη shaders από το RetroArch";
+"ImportShaders" = "Εισαγωγή shaders";
+"Shaders" = "Shaders";
+"DownloadRetroArchShaders" = "Θέλετε να κατεβάσετε shaders από το RetroArch; Μόλις ολοκληρωθεί, η κατηγορία shader του RetroArch θα ανανεωθεί αυτόματα. Μπορείτε να ακυρώσετε αυτή τη διαδικασία ανά πάσα στιγμή από τον διαχειριστή λήψεων.";
+"RetroArchShaderUnzipFailed" = "Δεν ήταν δυνατή η εξαγωγή του %@. Το αρχείο ίσως καταστράφηκε κατά τη λήψη. Παρακαλώ δοκιμάστε ξανά.";
+"ImportShader" = "Τοποθετήστε τα αρχεία shader στο φάκελο ‘Manic EMU-Shaders’ και ανοίξτε ξανά αυτή τη σελίδα για ανανέωση και φόρτωση των shaders.";
+"CustomShaderDesc" = "Δημιουργήστε προσαρμοσμένα shaders επεξεργαζόμενα υπάρχοντα.";
+"AppendShadersTitle" = "Προσθήκη shaders";
+"AppendShadersDetail" = "Προσθήκη shaders στην αρχή ή στο τέλος της τρέχουσας στοίβας";
+"ShaderName" = "Όνομα shader";
+"Parameters" = "Παράμετροι";
+"ShaderEditAlert" = "Όταν επεξεργάζεστε ένα shader, δημιουργείται αυτόματα ένα νέο αντίγραφο. Μπορείτε να το βρείτε στην κατηγορία ‘Προσαρμοσμένο’ της λίστας shaders.";
+"ShadersOrder" = "Σειρά shaders";
+"Base" = "Βασικό";
+"NoShaders" = "Δεν υπάρχουν διαθέσιμα shaders";
+"ShaderLoadFailed" = "Αποτυχία φόρτωσης shader";
+"ShaderOrderDesc" = "Πατήστε και κρατήστε, μετά σύρετε για να αλλάξετε τη σειρά των επικαλύψεων shader";
+"CustomShaderExists" = "Υπάρχει ήδη ένα προσαρμοσμένο shader με το ίδιο όνομα. Θέλετε να το αντικαταστήσετε;";
+"CustomShaderSaveFailed" = "Αποτυχία δημιουργίας shader. Παρακαλώ ελέγξτε τις αλλαγές σας και δοκιμάστε ξανά.";
+"CustomShaderSaveSuccess" = "Το %@ αποθηκεύτηκε επιτυχώς";
+"CustomShaderTitleWrong" = "Αυτό το όνομα shader δεν είναι διαθέσιμο";
+"PlayCasePromo" = "Αυτό το skin σχεδιάστηκε από την PlayCase. Όταν χρησιμοποιείται με ένα PlayCase, προσφέρει μια πιο ομαλή και φυσική εμπειρία ελέγχου.
+
+Η PlayCase εστιάζει σε υψηλής ποιότητας θήκες iPhone, σχεδιασμένες με βάση τη συμβατότητα αξεσουάρ και skin.
+Αν θέλετε να αναβαθμίσετε τη ρύθμισή σας, η PlayCase είναι το ιδανικό ταίρι για αυτό το skin.";
+"LearnPlayCase" = "Μάθετε περισσότερα για την PlayCase";
+"DontshowAgain" = "Να μην εμφανιστεί ξανά";
+"NotInstallMeloNX" = "Το MeloNX δεν είναι εγκατεστημένο";
+"FetchGamesFromMeloNX" = "Εισαγωγή παιχνιδιών από το MeloNX";
+"ChangeAlert" = "Το περιεχόμενο έχει αλλάξει. Αν κλείσετε τώρα, θα χαθούν όλες οι αλλαγές. Συνέχεια κλεισίματος;";

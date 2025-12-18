@@ -787,3 +787,44 @@ Ak sa vyskytne nestabilita v 3DS, pozrite si «Časté otázky» alebo sa pripoj
 "EnableManufacturerFilter"="Povoliť filter výrobcu";
 "MAMEFileMissingTitle"="Chýbajúce herné súbory";
 "MAMEFileMissingDesc"="Táto hra môže patriť do rozdeleného setu ROM, ktorý na spustenie vyžaduje svoje nadradené alebo BIOS súbory. Importujte chýbajúce súbory alebo namiesto toho použite nespojené ROM.";
+"InputForget" = "Zabudol som";
+"ExactlyTextSizeAllowDesc" = "Zadajte presne %@ znakov";
+"EmptyInputNotAllowed" = "Pole nesmie byť prázdne";
+"BlankInputNotAllowed" = "Pole nesmie obsahovať iba medzery";
+"ExactlyTextSize" = "Text musí mať presne %@ znakov";
+"AtSymbolNotAllowed" = "Symbol @ nie je povolený";
+"PercentSymbolNotAllowed" = "Symbol %% nie je povolený";
+"BackslashSymbolNotAllowed" = "Symbol \\ nie je povolený";
+"DigitsMaximumAllowed" = "Povolených maximálne %@ číslic";
+"Default" = "Predvolené";
+"Imported" = "Importované";
+"DownloadRetroArchSahders" = "Stiahnuť shadery z RetroArch";
+"ImportShaders" = "Importovať shadery";
+"Shaders" = "Shadery";
+"DownloadRetroArchShaders" = "Chcete stiahnuť shadery z RetroArch? Po dokončení sa kategória shaderov RetroArch automaticky obnoví. Tento proces môžete kedykoľvek zrušiť v správcovi sťahovania.";
+"RetroArchShaderUnzipFailed" = "Nepodarilo sa rozbaliť %@. Súbor mohol byť poškodený počas sťahovania. Skúste ho stiahnuť znova.";
+"ImportShader" = "Umiestnite súbory shaderov do priečinka ‘Manic EMU-Shaders’ a potom znovu otvorte túto stránku, aby ste obnovili a načítali shadery.";
+"CustomShaderDesc" = "Vytvárajte vlastné shadery úpravou existujúcich.";
+"AppendShadersTitle" = "Pridať shadery";
+"AppendShadersDetail" = "Pridať shadery na začiatok alebo koniec aktuálneho zásobníka";
+"ShaderName" = "Názov shadera";
+"Parameters" = "Parametre";
+"ShaderEditAlert" = "Pri úprave shadera sa automaticky vytvorí nová kópia. Nájdete ju v kategórii ‘Vlastné’ v zozname shaderov.";
+"ShadersOrder" = "Poradie shaderov";
+"Base" = "Základný";
+"NoShaders" = "Žiadne shadery nie sú k dispozícii";
+"ShaderLoadFailed" = "Nepodarilo sa načítať shader";
+"ShaderOrderDesc" = "Podržte a potiahnite pre zmenu poradia vrstiev shaderov";
+"CustomShaderExists" = "Vlastný shader s rovnakým názvom už existuje. Chcete ho nahradiť?";
+"CustomShaderSaveFailed" = "Nepodarilo sa vygenerovať shader. Skontrolujte úpravy a skúste znova.";
+"CustomShaderSaveSuccess" = "%@ bol úspešne uložený";
+"CustomShaderTitleWrong" = "Tento názov shadera nie je dostupný";
+"PlayCasePromo" = "Tento skin navrhol PlayCase. Pri použití s PlayCase poskytuje plynulejšie a prirodzenejšie ovládanie.
+
+PlayCase sa zameriava na vysokokvalitné obaly pre iPhone, navrhnuté s ohľadom na kompatibilitu s príslušenstvom a skinmi.
+Ak chcete vylepšiť svoje nastavenie, PlayCase je perfektným doplnkom tohto skinu.";
+"LearnPlayCase" = "Dozvedieť sa viac o PlayCase";
+"DontshowAgain" = "Znovu nezobrazovať";
+"NotInstallMeloNX" = "MeloNX nie je nainštalovaný";
+"FetchGamesFromMeloNX" = "Importovať hry z MeloNX";
+"ChangeAlert" = "Obsah bol zmenený. Zatvorením teraz stratíte všetky zmeny. Pokračovať v zatváraní?";

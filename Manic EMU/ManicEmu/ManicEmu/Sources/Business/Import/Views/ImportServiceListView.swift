@@ -31,6 +31,10 @@ class ImportServiceListView: BaseView {
             //how to import
             topViewController()?.present(WebViewController(url: Constants.URLs.GameImportGuide), animated: true)
         }))
+        actions.append((UIAction(title: R.string.localizable.fetchGamesFromMeloNX(), image: UIImage(symbol: .gamecontroller)) { [weak self] _ in
+            guard let self = self else { return }
+            MelonNXKit.fetchGames()
+        }))
         let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view
     }()

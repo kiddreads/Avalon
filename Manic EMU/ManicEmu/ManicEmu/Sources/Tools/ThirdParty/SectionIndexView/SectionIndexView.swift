@@ -82,6 +82,8 @@ public class SectionIndexView: UIView {
     @objc public private(set) var selectedItem: SectionIndexViewItem?
     @objc public private(set) var isTouching = false
     
+    @objc public var hideSearch = false
+    
     var containerView = UIView()
     var leftPadding = 14.0
     var rightPadding = 3.0
@@ -175,6 +177,7 @@ public class SectionIndexView: UIView {
                                    color: Constants.Color.LabelTertiary)
         searchItem.selectedColor = .clear
         items.insert(searchItem, at: 0)
+        searchItem.isHidden = hideSearch
         
         setItemsLayoutConstraint()
     }

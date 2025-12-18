@@ -41,10 +41,19 @@
 #include "../../verbosity.h"
 #include "../../cheevos/cheevos.h"
 #include "../../gfx/video_driver.h"
+#include "../../gfx/video_shader_parse.h"
 #include "../../runloop.h"
 
 #ifdef HAVE_MENU
 #include "../../menu/menu_setting.h"
+#endif
+
+#ifdef HAVE_COCOA_METAL
+#import <Metal/Metal.h>
+#import <simd/simd.h>
+#include "../../gfx/video_shader_parse.h"
+#include "../../gfx/drivers_shader/slang_process.h"
+#include <formats/image.h>
 #endif
 
 #import <AVFoundation/AVFoundation.h>
@@ -1898,34 +1907,35 @@ static NSString *_Nullable needToLoadStatePath = nil;
     return nil;
 }
 
-- (void)setShader:(NSString *_Nullable)path {
+- (BOOL)setShaderWith:(NSString *_Nullable)path {
     settings_t *settings = config_get_ptr();
     if (!settings) {
-        return;
+        return NO;
     }
     if (path && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
         settings->bools.video_shader_enable = true;
         video_shader_toggle(settings, true);
-        set_shader_preset(path.UTF8String);
+        return set_shader_preset(path.UTF8String);
     } else {
         settings->bools.video_shader_enable = false;
         video_shader_toggle(settings, true);
+        return NO;
     }
 }
 
-void set_shader_preset(const char * _Nullable preset_path)
+bool set_shader_preset(const char * _Nullable preset_path)
 {
     settings_t *settings = config_get_ptr();
     video_driver_state_t *video_st = video_state_get_ptr();
     runloop_state_t *runloop_st = runloop_state_get_ptr();
     
     if (!video_st || !video_st->current_video || !video_st->current_video->set_shader)
-        return;
+        return false;
     
     // 获取 shader 类型
     enum rarch_shader_type type = video_shader_parse_type(preset_path);
     if (type == RARCH_SHADER_NONE)
-        return;
+        return false;
     
     // 设置 shader
     if (video_st->current_video->set_shader(video_st->data, type, preset_path))
@@ -1953,8 +1963,112 @@ void set_shader_preset(const char * _Nullable preset_path)
         {
             runloop_st->runtime_shader_preset_path[0] = '\0';
         }
+        return true;
+    } else {
+        return false;
     }
 }
+
+- (void)appendShader:(NSString *_Nonnull)path prepend:(BOOL)prepend {
+    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        RARCH_ERR("[Shader] Append shader failed: file does not exist");
+        return;
+    }
+
+    settings_t *settings = config_get_ptr();
+    if (!settings) return;
+
+    // 获取当前shader
+    struct video_shader *current_shader = menu_shader_get();
+    if (!current_shader) {
+        RARCH_ERR("[Shader] No current shader to append to");
+        return;
+    }
+
+    menu_shader_manager_append_preset(current_shader, path.UTF8String, prepend);
+}
+
+- (NSArray<ShaderParameter *> *_Nullable)loadParameters {
+    // 获取当前shader
+    struct video_shader *shader = menu_shader_get();
+    if (!shader || shader->num_parameters == 0) {
+        RARCH_LOG("[Shader] No shader parameters found");
+        return @[];
+    }
+
+    NSMutableArray<ShaderParameter *> *parameters = [NSMutableArray arrayWithCapacity:shader->num_parameters];
+
+    // 遍历所有参数
+    for (unsigned i = 0; i < shader->num_parameters; i++) {
+        struct video_shader_parameter *param = &shader->parameters[i];
+
+        ShaderParameter *shaderParam = [[ShaderParameter alloc] init];
+        shaderParam.identifier = [NSString stringWithUTF8String:param->id];
+        shaderParam.desc = [NSString stringWithUTF8String:param->desc];
+        shaderParam.current = param->current;
+        shaderParam.minimum = param->minimum;
+        shaderParam.maximum = param->maximum;
+        shaderParam.step = param->step;
+        shaderParam.pass = param->pass;
+
+        [parameters addObject:shaderParam];
+
+        RARCH_LOG("[Shader] Loaded parameter: %s (%.3f) - %s",
+                  param->id, param->current, param->desc);
+    }
+
+    RARCH_LOG("[Shader] Loaded %lu shader parameters", (unsigned long)parameters.count);
+    return parameters;
+}
+
+- (void)updateParameterWith:(NSString *_Nonnull)identifier
+                      value:(float)value
+               changingPath:(NSString *_Nonnull)changingPath {
+    if (!identifier || identifier.length == 0) {
+        RARCH_ERR("[Shader] Update parameter failed: invalid identifier");
+        return;
+    }
+
+    // 获取当前shader
+    struct video_shader *shader = menu_shader_get();
+    if (!shader || shader->num_parameters == 0) {
+        RARCH_ERR("[Shader] No shader parameters found to update");
+        return;
+    }
+
+    // 查找匹配的参数
+    struct video_shader_parameter *target_param = NULL;
+    for (unsigned i = 0; i < shader->num_parameters; i++) {
+        if (strcmp(shader->parameters[i].id, identifier.UTF8String) == 0) {
+            target_param = &shader->parameters[i];
+            break;
+        }
+    }
+
+    if (!target_param) {
+        RARCH_ERR("[Shader] Parameter not found: %s", identifier.UTF8String);
+        return;
+    }
+
+    // 验证并修正值范围
+    float clamped_value = value;
+    if (clamped_value < target_param->minimum) {
+        clamped_value = target_param->minimum;
+        RARCH_LOG("[Shader] Parameter value clamped to minimum: %.3f", clamped_value);
+    } else if (clamped_value > target_param->maximum) {
+        clamped_value = target_param->maximum;
+        RARCH_LOG("[Shader] Parameter value clamped to maximum: %.3f", clamped_value);
+    }
+
+    // 更新参数值
+    target_param->current = clamped_value;
+
+    // 标记shader为已修改
+    shader->flags |= SHDR_FLAG_MODIFIED;
+    
+    video_shader_write_preset(changingPath.UTF8String, shader, true);
+}
+
 
 - (void)addCheatCode:(NSString *_Nonnull)code index:(unsigned)index enable:(BOOL)enable {
     runloop_state_t *runloop_st = runloop_state_get_ptr();
@@ -2151,6 +2265,37 @@ static NSString * _Nullable g_customSaveExtension = nil;
         return;
     }
     settings->bools.fastforward_frameskip = frameSkip;
+}
+
+- (void)loadAmiibo:(NSString *_Nonnull)path {
+#ifdef HAVE_DYNAMIC
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st || !runloop_st->lib_handle) {
+        return;
+    }
+    
+    typedef bool (*retro_load_amiibo_t)(const char*);
+    retro_load_amiibo_t load_amiibo = (retro_load_amiibo_t)dylib_proc(runloop_st->lib_handle, "retro_load_amiibo");
+    if (load_amiibo) {
+        load_amiibo([path UTF8String]);
+    }
+#endif
+}
+
+- (BOOL)isSearchingAmiibo {
+#ifdef HAVE_DYNAMIC
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st || !runloop_st->lib_handle) {
+        return NO;
+    }
+    
+    typedef bool (*retro_is_searching_amiibo_t)(void);
+    retro_is_searching_amiibo_t is_searching = (retro_is_searching_amiibo_t)dylib_proc(runloop_st->lib_handle, "retro_is_searching_amiibo");
+    if (is_searching) {
+        return is_searching() ? YES : NO;
+    }
+#endif
+    return NO;
 }
 
 @end

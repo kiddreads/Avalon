@@ -791,3 +791,44 @@
 "EnableManufacturerFilter"="제조사 필터 활성화";
 "MAMEFileMissingTitle"="게임 파일 누락";
 "MAMEFileMissingDesc"="이 게임은 분할 ROM 세트에 속할 수 있으며, 실행하려면 부모 또는 BIOS 파일이 필요합니다. 누락된 파일을 가져오거나 non-merged ROM을 사용하세요.";
+"InputForget" = "잊어버림";
+"ExactlyTextSizeAllowDesc" = "정확히 %@자를 입력하세요";
+"EmptyInputNotAllowed" = "입력란을 비울 수 없습니다";
+"BlankInputNotAllowed" = "공백만 입력할 수 없습니다";
+"ExactlyTextSize" = "텍스트는 정확히 %@자여야 합니다";
+"AtSymbolNotAllowed" = "@ 기호는 사용할 수 없습니다";
+"PercentSymbolNotAllowed" = "%% 기호는 사용할 수 없습니다";
+"BackslashSymbolNotAllowed" = "\\ 기호는 사용할 수 없습니다";
+"DigitsMaximumAllowed" = "최대 %@자리 숫자까지 허용";
+"Default" = "기본";
+"Imported" = "가져옴";
+"DownloadRetroArchSahders" = "RetroArch에서 셰이더 다운로드";
+"ImportShaders" = "셰이더 가져오기";
+"Shaders" = "셰이더";
+"DownloadRetroArchShaders" = "RetroArch에서 셰이더를 다운로드하시겠습니까? 완료되면 RetroArch 셰이더 카테고리가 자동으로 새로고침됩니다. 다운로드 관리자에서 언제든지 이 작업을 취소할 수 있습니다.";
+"RetroArchShaderUnzipFailed" = "%@의 압축을 풀 수 없습니다. 다운로드 중 파일이 손상되었을 수 있습니다. 다시 다운로드해 보세요.";
+"ImportShader" = "셰이더 파일을 ‘Manic EMU-Shaders’ 폴더에 넣고, 이 페이지를 다시 열어 셰이더를 새로고침하고 로드하세요.";
+"CustomShaderDesc" = "기존 셰이더를 편집하여 사용자 지정 셰이더를 만듭니다.";
+"AppendShadersTitle" = "셰이더 추가";
+"AppendShadersDetail" = "현재 셰이더 스택의 앞이나 뒤에 셰이더를 추가할 수 있습니다";
+"ShaderName" = "셰이더 이름";
+"Parameters" = "매개변수";
+"ShaderEditAlert" = "셰이더를 편집하면 자동으로 새 사본이 생성됩니다. 셰이더 목록의 ‘사용자 지정’ 카테고리에서 찾을 수 있습니다.";
+"ShadersOrder" = "셰이더 순서";
+"Base" = "기본";
+"NoShaders" = "사용 가능한 셰이더 없음";
+"ShaderLoadFailed" = "셰이더를 불러오지 못했습니다";
+"ShaderOrderDesc" = "길게 누른 후 드래그하여 셰이더 오버레이 순서를 변경합니다";
+"CustomShaderExists" = "같은 이름의 사용자 지정 셰이더가 이미 있습니다. 교체하시겠습니까?";
+"CustomShaderSaveFailed" = "셰이더 생성에 실패했습니다. 수정 사항을 확인한 후 다시 시도하세요.";
+"CustomShaderSaveSuccess" = "%@ 저장 성공";
+"CustomShaderTitleWrong" = "이 셰이더 이름을 사용할 수 없습니다";
+"PlayCasePromo" = "이 스킨은 PlayCase가 디자인했습니다. PlayCase와 함께 사용하면 더 부드럽고 자연스러운 조작 경험을 제공합니다.
+
+PlayCase는 액세서리 및 스킨 호환성을 고려하여 제작된 고품질 iPhone 케이스에 중점을 둡니다.
+설정을 업그레이드하고 싶다면, PlayCase는 이 스킨의 완벽한 파트너입니다.";
+"LearnPlayCase" = "PlayCase에 대해 알아보기";
+"DontshowAgain" = "다시 보지 않기";
+"NotInstallMeloNX" = "MeloNX가 설치되지 않았습니다";
+"FetchGamesFromMeloNX" = "MeloNX에서 게임 가져오기";
+"ChangeAlert" = "내용이 변경되었습니다. 닫으면 모든 변경 사항이 손실됩니다. 계속 닫으시겠습니까?";

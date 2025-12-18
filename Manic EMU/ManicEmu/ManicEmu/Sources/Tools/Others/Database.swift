@@ -48,7 +48,7 @@ struct Database {
                 //设置已经存在，检查一下皮肤数量是否和模拟器数量一致，不一致的话 需要更新默认皮肤
                 let defaultSkins = realm.objects(Skin.self).where { $0.skinType == .default }
                 let defaultSkinsCount = defaultSkins.count
-                if defaultSkinsCount != System.allCases.count {
+                if defaultSkinsCount != System.allCases.filter({ $0 != .ns }).count {
                     Log.debug("更新设置 新增皮肤")
                     //默认皮肤数量不正确 可能新增了核心 需要重置皮肤
                     try? realm.write {
@@ -387,6 +387,7 @@ struct Database {
             let realm = Database.realm
             let fileManager = FileManager.default
             let resourcePath = Constants.Path.Resource
+            //处理内置Manic皮肤
             if let contents = try? fileManager.contentsOfDirectory(atPath: resourcePath) {
                 let skinNames = contents.filter { $0.hasSuffix(".manicskin") }
                 var embedSkins = [Skin]()
@@ -436,6 +437,49 @@ struct Database {
                     })
                 }
             }
+            
+            //PlayCase皮肤
+#if !SIDE_LOAD
+            if !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasImportedPlayCaseSkin) {
+                if let contents = try? fileManager.contentsOfDirectory(atPath: resourcePath.appendingPathComponent("PlayCase")) {
+                    let skinNames = contents.filter { $0.hasSuffix(".playcase") }
+                    var embedSkins = [Skin]()
+                    for skinName in skinNames {
+                        if let controllerSkin = ControllerSkin(fileURL: URL(fileURLWithPath: resourcePath.appendingPathComponent("PlayCase").appendingPathComponent(skinName))),
+                           let hash = FileHashUtil.truncatedHash(url: controllerSkin.fileURL) {
+                            let skins = realm.objects(Skin.self)
+                            
+                            if let skin = skins.first(where: { $0.identifier == controllerSkin.identifier }) {
+                                Log.debug("PlayCase皮肤:\(skin.name)已存在")
+                                if skin.skinType != .playcase {
+                                    Log.debug("用户自行导入过PlayCase皮肤，现在对其进行更新")
+                                    _ = try? realm.write({
+                                        skin.skinType == .playcase
+                                    })
+                                }
+                            } else {
+                                let skin = Skin()
+                                skin.id = hash
+                                skin.identifier = controllerSkin.identifier
+                                skin.name = controllerSkin.name
+                                skin.fileName = controllerSkin.fileURL.lastPathComponent
+                                skin.gameType = controllerSkin.gameType
+                                skin.skinType = .playcase
+                                skin.skinData = CreamAsset.create(objectID: skin.id, propName: "skinData", url: controllerSkin.fileURL)
+                                embedSkins.append(skin)
+                                Log.debug("开始集成PlayCase皮肤:\(skin.name)")
+                            }
+                        }
+                    }
+                    if embedSkins.count > 0 {
+                        try? realm.write({
+                            realm.add(embedSkins)
+                        })
+                    }
+                }
+                UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasImportedPlayCaseSkin)
+            }
+#endif
         }
     }
 }

@@ -15,7 +15,7 @@ extension Skin: CKRecordConvertible & CKRecordRecoverable { }
 
 enum SkinType: Int, PersistableEnum {
 //    case `default`, manic, delta
-    case `default`, buildIn, `import`
+    case `default`, buildIn, `import`, playcase
 }
 
 ///只存储用户皮肤 自带的默认皮肤不会进行存储

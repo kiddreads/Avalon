@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CheevosBridge.h"
+#import "AzaharKeyboardConfig.h"
+#import "LibretroShaders.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -64,7 +66,12 @@ extern NSString * const RetroAchievementsNotification;
 - (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush;
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value;
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs;
-- (void)setShader:(NSString *_Nullable)path;
+- (BOOL)setShader:(NSString *_Nullable)path;
+- (NSArray<ShaderParameter *> *_Nullable)loadParameters;
+- (void)updateParameterWith:(NSString *_Nonnull)identifier
+                      value:(float)value
+               changingPath:(NSString *_Nonnull)changingPath;
+- (void)appendShader:(NSString *_Nonnull)path prepend:(BOOL)prepend;
 - (void)addCheatCode:(NSString *_Nonnull)code index:(unsigned)index enable:(BOOL)enable;
 - (void)resetCheatCode;
 + (BOOL)JITAvailable;
@@ -92,6 +99,10 @@ extern NSString * const RetroAchievementsNotification;
 - (void)setFastforwardFrameSkip:(BOOL)frameSkip;
 - (void)set3DSCustomLayout:(NSString *_Nullable)layout;
 - (void)setLibretroLogMonitor:(BOOL)enable;
+- (void)loadAmiibo:(NSString *_Nonnull)path;
+- (BOOL)isSearchingAmiibo;
+- (void)registerAzaharKeyboard:(void(^ _Nullable)(AzaharKeyboardConfig *_Nonnull config))callback;
+- (void)inputAzaharKeyboard:(NSString *_Nullable)text buttonType:(AzaharButtonType)buttonType;
 
 @end
 

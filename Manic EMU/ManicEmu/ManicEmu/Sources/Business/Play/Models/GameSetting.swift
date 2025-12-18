@@ -525,7 +525,7 @@ struct GameSetting: SettingCellItem {
         case .skins:
             UIImage(symbol: .tshirt)
         case .filter:
-            UIImage(symbol: .cameraFilters)
+            R.image.customAppBackgroundDotted()!.applySymbolConfig(size: 20)
         case .screenShot:
             UIImage(symbol: .cameraViewfinder)
         case .haptic:
@@ -590,7 +590,7 @@ struct GameSetting: SettingCellItem {
         case .skins:
             R.string.localizable.gameSettingSkins()
         case .filter:
-            R.string.localizable.gameSettingFilter()
+            R.string.localizable.shaders()
         case .screenShot:
             R.string.localizable.gameSettingScreenShot()
         case .haptic:
@@ -658,11 +658,11 @@ struct GameSetting: SettingCellItem {
         switch gameType {
         case ._3ds:
             if defaultCore == 0 {
-                if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling || type == .retro {
+                if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling {
                     return false
                 }
             } else {
-                if type == .palette || type == .swapDisk || type == .retro || type == .retro || type == .consoleHome || type == .amiibo {
+                if type == .palette || type == .swapDisk || type == .retro || type == .consoleHome {
                     return false
                 }
             }

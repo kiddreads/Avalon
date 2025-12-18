@@ -91,12 +91,12 @@ extension GameplayManualsView {
         Sheet.find(identifier: String(describing: GameplayManualsView.self)).count > 0 ? true : false
     }
     
-    static func show(game: Game, gameViewRect: CGRect, menuInsets: UIEdgeInsets? = nil, hideCompletion: (()->Void)? = nil) {
+    static func show(game: Game, hideCompletion: (()->Void)? = nil) {
         Sheet { sheet in
-            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
             
             let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

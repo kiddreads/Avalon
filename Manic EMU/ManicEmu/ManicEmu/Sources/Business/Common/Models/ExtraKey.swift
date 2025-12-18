@@ -37,6 +37,5 @@ enum ExtraKey: String {
     case nesPalette
     case triggerProID
     case forceFullSkin
-    case recoverIcon
     case enableManufacturerFilter
 }

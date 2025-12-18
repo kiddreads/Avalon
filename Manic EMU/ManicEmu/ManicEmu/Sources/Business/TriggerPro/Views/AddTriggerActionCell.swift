@@ -127,7 +127,7 @@ class AddTriggerActionCell: UICollectionViewCell {
         simpleActionView.repeatSwitchButton.onChange { value in
             triggerItem.simpleActionRepeat = value
         }
-        simpleActionView.intervalValueButton.titleLabel.text = "\(triggerItem.simpleActionRepeatInterval)s"
+        simpleActionView.intervalValueButton.titleLabel.text = "\(triggerItem.simpleActionRepeatInterval.roundedString())s"
         simpleActionView.intervalValueButton.addTapGesture { [weak self] gesture in
             guard let self else { return }
             //0.1-0.9s //1-60s
@@ -136,9 +136,9 @@ class AddTriggerActionCell: UICollectionViewCell {
                                           values: values,
                                           defaultValue: triggerItem.simpleActionRepeatInterval,
                                           unitString: "s",
-                                          didSelectValue: { value in
+                                          didSelectValue: { value, string in
                 triggerItem.simpleActionRepeatInterval = value
-                self.simpleActionView.intervalValueButton.titleLabel.text = "\(value)s"
+                self.simpleActionView.intervalValueButton.titleLabel.text = string
             })
         }
         
@@ -146,7 +146,7 @@ class AddTriggerActionCell: UICollectionViewCell {
         holdActionView.autoStopSwitchButton.onChange { value in
             triggerItem.holdActionAutoStop = value
         }
-        holdActionView.durationValueButton.titleLabel.text = "\(triggerItem.holdActionDuration)s"
+        holdActionView.durationValueButton.titleLabel.text = "\(triggerItem.holdActionDuration.roundedString())s"
         holdActionView.durationValueButton.addTapGesture { [weak self] gesture in
             guard let self else { return }
             //0.1-0.9s 1-59s 60-3600s
@@ -155,13 +155,13 @@ class AddTriggerActionCell: UICollectionViewCell {
                                           values: values,
                                           defaultValue: triggerItem.holdActionDuration,
                                           unitString: "s",
-                                          didSelectValue: { value in
+                                          didSelectValue: { value, string in
                 triggerItem.holdActionDuration = value
-                self.holdActionView.durationValueButton.titleLabel.text = "\(value)s"
+                self.holdActionView.durationValueButton.titleLabel.text = string
             })
         }
         
-        comboActionView.durationPerKeyValueButton.titleLabel.text = "\(triggerItem.comboActionPressDurationPerKey)ms"
+        comboActionView.durationPerKeyValueButton.titleLabel.text = "\(triggerItem.comboActionPressDurationPerKey.roundedString())ms"
         comboActionView.durationPerKeyValueButton.addTapGesture { [weak self] gesture in
             guard let self else { return }
             //16.7ms 50.0-1000ms
@@ -170,12 +170,12 @@ class AddTriggerActionCell: UICollectionViewCell {
                                           values: values,
                                           defaultValue: triggerItem.comboActionPressDurationPerKey,
                                           unitString: "ms",
-                                          didSelectValue: { value in
+                                          didSelectValue: { value, string in
                 triggerItem.comboActionPressDurationPerKey = value
-                self.comboActionView.durationPerKeyValueButton.titleLabel.text = "\(value)ms"
+                self.comboActionView.durationPerKeyValueButton.titleLabel.text = string
             })
         }
-        comboActionView.intervalPerKeyValueButton.titleLabel.text = "\(triggerItem.comboActionIntervalPerKey)ms"
+        comboActionView.intervalPerKeyValueButton.titleLabel.text = "\(triggerItem.comboActionIntervalPerKey.roundedString())ms"
         comboActionView.intervalPerKeyValueButton.addTapGesture { [weak self] gesture in
             guard let self else { return }
             //16.7ms 50.0-1000ms
@@ -184,9 +184,9 @@ class AddTriggerActionCell: UICollectionViewCell {
                                           values: values,
                                           defaultValue: triggerItem.comboActionIntervalPerKey,
                                           unitString: "ms",
-                                          didSelectValue: { value in
+                                          didSelectValue: { value, string in
                 triggerItem.comboActionIntervalPerKey = value
-                self.comboActionView.intervalPerKeyValueButton.titleLabel.text = "\(value)ms"
+                self.comboActionView.intervalPerKeyValueButton.titleLabel.text = string
             })
         }
     }

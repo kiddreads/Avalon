@@ -200,6 +200,8 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.dc_group_brand(compatibleWith: traitCollection)
             } else if gameType == .arcade {
                 image = R.image.arcade_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .ns {
+                image = R.image.ns_group_brand(compatibleWith: traitCollection)
             }
             Self.brandImageCaches[key] = image
             return image

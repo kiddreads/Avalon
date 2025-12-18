@@ -165,19 +165,6 @@ extension UIImage {
         return screenshotData
     }
     
-    func applyFilter(filter: CIFilter) -> UIImage? {
-        if filter is OriginFilter {
-            return self
-        }
-        guard let ciImage = CIImage(image: self) else { return nil }
-        filter.setValue(ciImage, forKey: kCIInputImageKey)
-        guard let outputCIImage = filter.outputImage else { return nil }
-        let context = CIContext(options: nil)
-        guard let cgImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else { return nil }
-        let filteredImage = UIImage(cgImage: cgImage)
-        return filteredImage
-    }
-    
     static func radialGradientImage(size: CGSize,
                                     colors: [UIColor],
                                     completion: ((UIImage?)->Void)? = nil) {

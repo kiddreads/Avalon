@@ -788,3 +788,44 @@
 "EnableManufacturerFilter"="הפעל מסנן יצרן";
 "MAMEFileMissingTitle"="קבצי משחק חסרים";
 "MAMEFileMissingDesc"="משחק זה עשוי להיות שייך למערך ROM מפוצל, הדורש את קבצי ההורה או BIOS שלו כדי לפעול. אנא ייבא את הקבצים החסרים או השתמש ב-ROM לא ממוזג במקום.";
+"InputForget" = "שכחתי";
+"ExactlyTextSizeAllowDesc" = "הזן בדיוק %@ תווים";
+"EmptyInputNotAllowed" = "השדה לא יכול להיות ריק";
+"BlankInputNotAllowed" = "השדה לא יכול להכיל רק רווחים";
+"ExactlyTextSize" = "הטקסט חייב להיות באורך בדיוק %@ תווים";
+"AtSymbolNotAllowed" = "הסמל @ אסור לשימוש";
+"PercentSymbolNotAllowed" = "הסמל %% אסור לשימוש";
+"BackslashSymbolNotAllowed" = "הסמל \\ אסור לשימוש";
+"DigitsMaximumAllowed" = "מותר עד %@ ספרות";
+"Default" = "ברירת מחדל";
+"Imported" = "יובא";
+"DownloadRetroArchSahders" = "הורד שיידרים מ־RetroArch";
+"ImportShaders" = "ייבא שיידרים";
+"Shaders" = "שיידרים";
+"DownloadRetroArchShaders" = "האם להוריד שיידרים מ־RetroArch? עם השלמה, קטגוריית השיידרים של RetroArch תתרענן אוטומטית. ניתן לבטל את התהליך בכל עת במנהל ההורדות.";
+"RetroArchShaderUnzipFailed" = "לא ניתן לחלץ את %@. יתכן שהקובץ ניזוק במהלך ההורדה. אנא נסה להוריד שוב.";
+"ImportShader" = "הכנס את קבצי השיידר לתיקייה ‘Manic EMU-Shaders’, ולאחר מכן פתח מחדש דף זה כדי לרענן ולטעון את השיידרים.";
+"CustomShaderDesc" = "צור שיידרים מותאמים אישית על ידי עריכת שיידרים קיימים.";
+"AppendShadersTitle" = "הוסף שיידרים";
+"AppendShadersDetail" = "הוסף שיידרים בתחילת או בסוף המחסנית הנוכחית";
+"ShaderName" = "שם שיידר";
+"Parameters" = "פרמטרים";
+"ShaderEditAlert" = "כשעורכים שיידר, עותק חדש נוצר אוטומטית. ניתן למצוא אותו בקטגוריית ‘מותאם אישית’ ברשימת השיידרים.";
+"ShadersOrder" = "סדר שיידרים";
+"Base" = "בסיסי";
+"NoShaders" = "אין שיידרים זמינים";
+"ShaderLoadFailed" = "נכשל בטעינת השיידר";
+"ShaderOrderDesc" = "החזק וגרור כדי לשנות את סדר שכבות השיידר";
+"CustomShaderExists" = "קיים כבר שיידר מותאם אישית עם אותו שם. להחליף?";
+"CustomShaderSaveFailed" = "יצירת השיידר נכשלה. בדוק את העריכות ונסה שוב.";
+"CustomShaderSaveSuccess" = "%@ נשמר בהצלחה";
+"CustomShaderTitleWrong" = "שם שיידר זה לא זמין";
+"PlayCasePromo" = "עיצוב זה נוצר על ידי PlayCase. בשימוש עם PlayCase, הוא מספק חוויית שליטה חלקה וטבעית יותר.
+
+PlayCase מתמקדת במעטפות iPhone איכותיות, המיוצרות עם מחשבה על תאימות לאביזרים ולעיצובים.
+אם ברצונך לשדרג את המערכת שלך, PlayCase היא ההתאמה המושלמת לעיצוב זה.";
+"LearnPlayCase" = "מידע נוסף על PlayCase";
+"DontshowAgain" = "לא להציג שוב";
+"NotInstallMeloNX" = "MeloNX לא מותקן";
+"FetchGamesFromMeloNX" = "ייבא משחקים מ־MeloNX";
+"ChangeAlert" = "התוכן השתנה. סגירה כעת תגרום לאובדן כל השינויים. להמשיך בסגירה?";

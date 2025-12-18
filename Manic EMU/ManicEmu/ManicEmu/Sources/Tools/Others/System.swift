@@ -11,6 +11,7 @@ import ManicEmuCore
 
 enum System: CaseIterable
 {
+    case ns
     case arcade
     case dc
     case ps1
@@ -71,6 +72,7 @@ extension System {
         case .dc: return .dc
         case .fds: return .fds
         case .arcade: return .arcade
+        case .ns: return .ns
         }
     }
 }

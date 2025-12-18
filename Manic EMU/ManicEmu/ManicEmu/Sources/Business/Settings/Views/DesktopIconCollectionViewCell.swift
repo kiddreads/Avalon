@@ -93,12 +93,7 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(100)
         }
         
-        var icons = ["AppIcon", "AppIcon_Dark", "AppIcon_Retro", "AppIcon_Color"]
-        let showUpDate = Date(timeIntervalSince1970: 1761840000)
-        if Date.now.secondsSince(showUpDate) > 0 {
-            //2025/10/31之后才添加万圣节图标
-            icons.append("AppIcon_Halloween")
-        }
+        let icons = ["AppIcon", "AppIcon_Xmas", "AppIcon_Pixel32", "AppIcon_Halloween", "AppIcon_Dark", "AppIcon_Retro", "AppIcon_Color"]
         let theme = Theme.defalut
         for (index, icon) in icons.enumerated() {
             let iconView = IconView()
@@ -139,7 +134,6 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
                             Theme.change { realm in
                                 Theme.defalut.icon = icons[index]
                             }
-                            Theme.defalut.updateExtra(key: ExtraKey.recoverIcon.rawValue, value: "")
                         } else {
                             view.selectImageView.isHidden = true
                         }

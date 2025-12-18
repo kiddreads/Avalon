@@ -341,11 +341,9 @@ extension CheevosPopupView {
     static func show(type: CheevosPopupViewType,
                      leaderboards: [CheevosLeaderboard]? = nil,
                      achievements: [CheevosAchievement]? = nil,
-                     gameViewRect: CGRect,
-                     menuInsets: UIEdgeInsets?,
                      hideCompletion: (()->Void)? = nil) {
         Sheet.lazyPush(identifier: String(describing: CheevosPopupView.self)) { sheet in
-            sheet.configGamePlayingStyle(isForGameMenu: true, gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(isForGameMenu: true, hideCompletion: hideCompletion)
             
             let view = UIView()
             
@@ -359,7 +357,7 @@ extension CheevosPopupView {
                 make.height.equalTo(grabberHeight)
             }
             
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.makeBlur()
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

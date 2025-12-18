@@ -65,6 +65,7 @@ struct ResourcesKit {
             
             let resourceUrl = Bundle.main.url(forResource: "System", withExtension: "core")!
             Log.debug("开始解压资源:\(Date.now.timeIntervalSince1970ms)")
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.Resource))
             SSZipArchive.unzipFile(atPath: resourceUrl.path, toDestination: Constants.Path.Resource, overwrite: true, password: nil, progressHandler: nil) { _, isSuccess, error in
                 
                 //处理复用皮肤
@@ -107,9 +108,12 @@ struct ResourcesKit {
                     //Libretro的资源复制到对应位置
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/info")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("info")), shouldReplace: true)
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/autoconfig")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("autoconfig")), shouldReplace: true)
-                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/shaders")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("shaders")), shouldReplace: true)
-                    try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/system")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("system")))
+                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/shaders/default")), to: URL(fileURLWithPath: Constants.Path.ShaderDefault), shouldReplace: true)
+                    try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/system")), to: URL(fileURLWithPath: Constants.Path.System))
                     try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent("Libretro/config")), to: URL(fileURLWithPath: Constants.Path.Libretro.appendingPathComponent("config")))
+                    if !FileManager.default.fileExists(atPath: Constants.Path.AzaharConfig) {
+                        try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.AzaharDefaultConfig), to: URL(fileURLWithPath: Constants.Path.AzaharConfig))
+                    }
                     
                     try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.CitraDefaultConfig), to: URL(fileURLWithPath: Constants.Path.CitraConfig), shouldReplace: true)
                     
@@ -142,6 +146,15 @@ struct ResourcesKit {
                                     }
                                     if let newSaveUrl {
                                         try? FileManager.safeMoveItem(at: URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(content)), to: newSaveUrl, shouldReplace: true)
+                                    }
+                                }
+                            }
+                        }
+                        if systemCoreVersionNumber < 181 {
+                            if let contents = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.Shaders) {
+                                for content in contents {
+                                    if content != "default" {
+                                        try? FileManager.default.removeItem(atPath: Constants.Path.Shaders.appendingPathComponent(content))
                                     }
                                 }
                             }

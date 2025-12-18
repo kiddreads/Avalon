@@ -610,9 +610,17 @@ class GameListView: BaseView {
     func editGame(item: GameEditToolItem, indexPath: IndexPath? = nil) {
         var games: [Game] = []
         if let indexPath = indexPath, let game = self.getGame(at: indexPath) {
+            if !item.support(for: game.gameType) {
+                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(GameType.ns.localizedShortName))
+                return
+            }
             games.append(game)
         } else if let tempIndexPaths = collectionView.indexPathsForSelectedItems {
             games.append(contentsOf: tempIndexPaths.compactMap({ getGame(at: $0) }))
+            if games.count == 1, !item.support(for: games.first!.gameType) {
+                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(GameType.ns.localizedShortName))
+                return
+            }
         } else {
             return
         }
@@ -1094,17 +1102,29 @@ extension GameListView: UICollectionViewDelegate {
                     guard let self = self else { return }
                     self.editGame(item: editItems[index], indexPath: indexPath)
                 }
-                if index < 4 {
-                    //0-3为一组
-                    firstGroup.append(action)
-                } else if index < 7 {
-                    //4-6为一组
-                    secondGroup.append(action)
+                if game.gameType == .ns {
+                    if editItem == .rename {
+                        firstGroup.append(action)
+                    } else if editItem == .cover {
+                        secondGroup.append(action)
+                    } else if editItem == .delete {
+                        thirdGroup.append(action)
+                    }
                 } else {
-                    //删除按钮为单独一组
-                    thirdGroup.append(action)
+                    if index < 4 {
+                        //0-3为一组
+                        firstGroup.append(action)
+                    } else if index < 7 {
+                        //4-6为一组
+                        secondGroup.append(action)
+                    } else {
+                        //删除按钮为单独一组
+                        thirdGroup.append(action)
+                    }
                 }
             }
+            
+            
             
             if game.isNDSHomeMenuGame {
                 //NDS Home Menu只保留删除操作
@@ -1154,14 +1174,6 @@ extension GameListView: UICollectionViewDelegate {
                     }
                     #endif
                     
-//                    if game.gameType == ._3ds {
-//                        if game.is3DSHomeMenuGame {
-//                            supportSwitchCore = false
-//                        } else if game.fileExtension.lowercased() != "3ds" {
-//                            supportSwitchCore = false
-//                        }
-//                    }
-                    
                     if supportSwitchCore {
                         //添加切换核心的操作
                         let action = UIAction(title: R.string.localizable.switchEmulationCore(), image: .symbolImage(.memorychip)) { _ in
@@ -1180,7 +1192,7 @@ extension GameListView: UICollectionViewDelegate {
             
             //添加"复制启动链接"
             let action = UIAction(title: R.string.localizable.copyLaunchLinkTitle(), image: .symbolImage(.link)) { _ in
-                UIPasteboard.general.string = "manicemu://launch/\(game.id)"
+                UIPasteboard.general.string = (game.gameType == .ns ? Constants.URLs.MeloNXGameLaunch(gameId: game.id).absoluteString : "manicemu://launch/\(game.id)")
                 if game.gameCover != nil || game.onlineCoverUrl != nil {
                     //弹出提示询问用户是否需要进行封面的保存
                     UIView.makeAlert(detail: R.string.localizable.askIfNeedToSaveCover(), confirmTitle: R.string.localizable.saveTitle(), confirmAction: {

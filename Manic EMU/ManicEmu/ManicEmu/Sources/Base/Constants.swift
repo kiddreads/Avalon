@@ -95,6 +95,7 @@ struct Constants {
                 case .n64: return 1.369
                 case .mcd: return (Locale.prefersUS ? 0.5864 : 1.1)
                 case .arcade: return 0.731
+                case .ns: return 0.611
                 default: return 1.0
                 }
             case .style2:
@@ -333,6 +334,12 @@ struct Constants {
         static let GameplayManuals = Document.appendingPathComponent("Manuals")
         static let NESPalettes = Resource.appendingPathComponent("NESPalettes")
         static let CustomPalettes = Document.appendingPathComponent("Palettes")
+        static let ShaderDefault = Shaders.appendingPathComponent("default")
+        static let ShaderRetroArch = Shaders.appendingPathComponent("retroarch")
+        static let ShaderRetroArchGLSL = ShaderRetroArch.appendingPathComponent("glsl")
+        static let ShaderRetroArchSlang = ShaderRetroArch.appendingPathComponent("slang")
+        static let ShaderImported = Shaders.appendingPathComponent("imported")
+        static let ShaderImportedInDocument = Document.appendingPathComponent("Shaders")
     }
     
     struct DefaultKey {
@@ -351,7 +358,8 @@ struct Constants {
         static let HasShowPS1PlayAlert = "HasShowPS1PlayAlert"
         static let HasShowJumpGameInfoAlert = "HasShowJumpGameInfoAlert"
         static let Appearance = "Appearance"
-        static let HalloweenIconShowUpDate = "HalloweenIconShowUpDate"
+        static let HasShowPlayCasePromo = "HasShowPlayCasePromo"
+        static let HasImportedPlayCaseSkin = "HasImportedPlayCaseSkin"
     }
     
     struct Font {
@@ -425,6 +433,11 @@ struct Constants {
         static var PSXDualShock = "DualShock"
         static var ThreeDSHomeMenuRegions = ["JPN", "USA", "EUR", "CHN", "KOR", "TWN"]
         static let MAMEBiosTitle = "MAME BIOS"
+        static let GLSLShader = "shaders_glsl.zip"
+        static let SlangShader = "shaders_slang.zip"
+        static let AppendedShaders = "MANIC_EMU_PRESET_LIST"
+        static let ShaderForceBase = "MANIC_EMU_FORCE_BASE"
+        static let MeloNXScheme = "atariemulator"
     }
     
     enum Config {
@@ -520,6 +533,8 @@ struct Constants {
         static let iCloudEnableChange = NSNotification.Name(rawValue: "iCloudEnableChange")
         //厂商分类变更通知
         static let ManufacturerFilterChange = NSNotification.Name(rawValue: "ManufacturerFilterChange")
+        //RetroArch的着色器下载成功
+        static let RetroArchShadersDownloadSuccess = NSNotification.Name(rawValue: "RetroArchShadersDownloadSuccess")
     }
     
     struct URLs {
@@ -605,6 +620,11 @@ struct Constants {
         static let RomPatcher = URL(string: "https://www.marcrobledo.com/RomPatcher.js")!
         static let InstallSideload = URL(string: "sidestore://source?url=apps.manicemu.site/altstore")!
         static let SideStore = URL(string: "https://sidestore.io")!
+        static let GLSLShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip")!
+        static let SlangShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_slang.zip")!
+        static let PlayCasePromo = URL(string: "https://playcase.gg/playmanic")!
+        static let FetchMeloNXGames = URL(string: "\(Constants.Strings.MeloNXScheme)://gameInfo?scheme=manicemu")!
+        static func MeloNXGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.MeloNXScheme)://game?id=\(gameId)")! }
     }
     
     struct BIOS {

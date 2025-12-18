@@ -120,6 +120,8 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
     shutdown_register_callback(NULL);
     wfc_status_register_callback(NULL);
     log_register_callback(NULL);
+    g_enableMonitorLibretroLog = NO;
+    [self registerAzaharKeyboard:nil];
     [[self getRetroArch] stop];
 }
 
@@ -202,8 +204,22 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
     [[self getRetroArch] updateLibretroConfigs:configs];
 }
 
-- (void)setShader:(NSString *_Nullable)path {
-    [[self getRetroArch] setShader:path];
+- (BOOL)setShader:(NSString *_Nullable)path {
+    return [[self getRetroArch] setShaderWith:path];
+}
+
+- (NSArray<ShaderParameter *> *_Nullable)loadParameters {
+    return [[self getRetroArch] loadParameters];
+}
+
+- (void)updateParameterWith:(NSString *_Nonnull)identifier
+                      value:(float)value
+               changingPath:(NSString *_Nonnull)changingPath {
+    [[self getRetroArch] updateParameterWith:identifier value:value changingPath:changingPath];
+}
+
+- (void)appendShader:(NSString *_Nonnull)path prepend:(BOOL)prepend {
+    [[self getRetroArch] appendShader:path prepend:prepend];
 }
 
 - (void)addCheatCode:(NSString *_Nonnull)code index:(unsigned)index enable:(BOOL)enable {
@@ -607,6 +623,139 @@ static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_
 
 - (void)setFastforwardFrameSkip:(BOOL)frameSkip {
     [[self getRetroArch] setFastforwardFrameSkip:frameSkip];
+}
+
+- (void)loadAmiibo:(NSString *_Nonnull)path {
+    [[self getRetroArch] loadAmiibo:path];
+}
+
+- (BOOL)isSearchingAmiibo {
+    return [[self getRetroArch] isSearchingAmiibo];
+}
+
+#pragma mark - Azahar Keyboard Support
+
+// Structure matching retro_keyboard_config from libretro.h
+struct retro_keyboard_config_local {
+    int button_config;
+    int accept_mode;
+    bool multiline_mode;
+    int max_text_length;
+    int max_digits;
+    const char* _Nullable hint_text;
+    const char*_Nonnull* _Nullable button_text;
+    int button_text_count;
+    bool prevent_digit;
+    bool prevent_at;
+    bool prevent_percent;
+    bool prevent_backslash;
+    bool prevent_profanity;
+    bool enable_callback;
+};
+
+// Static storage for the keyboard callback
+static void (^_Nullable s_azahar_keyboard_callback)(AzaharKeyboardConfig * _Nullable config) = nil;
+
+// C callback that will be called by the Azahar core
+static void azahar_keyboard_request_callback(const struct retro_keyboard_config_local* _Nullable config) {
+    if (!s_azahar_keyboard_callback || !config) {
+        return;
+    }
+    
+    AzaharKeyboardConfig *objcConfig = [[AzaharKeyboardConfig alloc] init];
+    objcConfig.buttonConfig = (AzaharButtonConfig)config->button_config;
+    objcConfig.acceptedInput = (AzaharAcceptedInput)config->accept_mode;
+    objcConfig.multilineMode = config->multiline_mode;
+    objcConfig.maxTextLength = config->max_text_length;
+    objcConfig.maxDigits = config->max_digits;
+    objcConfig.hintText = config->hint_text ? [NSString stringWithUTF8String:config->hint_text] : nil;
+    
+    // Convert button text array
+    if (config->button_text && config->button_text_count > 0) {
+        NSMutableArray<NSString *> *buttonTexts = [NSMutableArray arrayWithCapacity:config->button_text_count];
+        for (int i = 0; i < config->button_text_count; i++) {
+            if (config->button_text[i]) {
+                [buttonTexts addObject:[NSString stringWithUTF8String:config->button_text[i]]];
+            } else {
+                [buttonTexts addObject:@""];
+            }
+        }
+        objcConfig.buttonText = buttonTexts;
+    }
+    
+    // Set filters
+    objcConfig.preventDigit = config->prevent_digit;
+    objcConfig.preventAt = config->prevent_at;
+    objcConfig.preventPercent = config->prevent_percent;
+    objcConfig.preventBackslash = config->prevent_backslash;
+    objcConfig.preventProfanity = config->prevent_profanity;
+    objcConfig.enableCallback = config->enable_callback;
+    
+    s_azahar_keyboard_callback(objcConfig);
+}
+
+- (void)registerAzaharKeyboard:(void(^ _Nullable)(AzaharKeyboardConfig *_Nonnull config))callback {
+#ifdef HAVE_DYNAMIC
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st || !runloop_st->lib_handle) {
+        return;
+    }
+    
+    // Store the callback
+    s_azahar_keyboard_callback = [callback copy];
+    
+    // Get the retro_set_keyboard_callback function from the core
+    typedef void (*retro_set_keyboard_callback_t)(void (*)(const struct retro_keyboard_config_local*));
+    retro_set_keyboard_callback_t set_callback = (retro_set_keyboard_callback_t)dylib_proc(runloop_st->lib_handle, "retro_set_keyboard_callback");
+    
+    if (set_callback) {
+        if (callback) {
+            set_callback(azahar_keyboard_request_callback);
+        } else {
+            set_callback(NULL);
+        }
+    }
+#endif
+}
+
+- (void)inputAzaharKeyboard:(NSString *_Nullable)text buttonType:(AzaharButtonType)buttonType {
+#ifdef HAVE_DYNAMIC
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st || !runloop_st->lib_handle) {
+        return;
+    }
+    
+    // Get the retro_keyboard_input function from the core
+    typedef void (*retro_keyboard_input_t)(const char*, int);
+    retro_keyboard_input_t keyboard_input = (retro_keyboard_input_t)dylib_proc(runloop_st->lib_handle, "retro_keyboard_input");
+    
+    if (keyboard_input) {
+        const char* text_cstr = text ? [text UTF8String] : NULL;
+        int button = 0;
+        
+        // Map AzaharButtonType to button index
+        // For Single: 0=Ok
+        // For Dual: 0=Cancel, 1=Ok
+        // For Triple: 0=Cancel, 1=Forgot, 2=Ok
+        switch (buttonType) {
+            case AzaharButtonTypeOk:
+                button = 2; // Ok is always the highest index for Triple, adjusted in core
+                break;
+            case AzaharButtonTypeCancel:
+                button = 0;
+                break;
+            case AzaharButtonTypeForgot:
+                button = 1;
+                break;
+            case AzaharButtonTypeNoButton:
+            default:
+                button = 0;
+                break;
+        }
+        
+        keyboard_input(text_cstr, button);
+    }
+#endif
 }
 
 @end

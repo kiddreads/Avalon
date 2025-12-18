@@ -146,7 +146,9 @@ extension GameType {
             self = .dc
         } else if shortName.uppercased() == "Arcade".uppercased() {
             self = .arcade
-        } else {
+        } else if shortName.uppercased() == "NS" {
+            self = .ns
+        }  else {
             return nil
         }
     }
@@ -176,6 +178,7 @@ extension GameType {
         case .ps1: return "PlayStation"
         case .dc: return "Dreamcast"
         case .arcade: return "Arcade"
+        case .ns: return "Nintendo Switch"
         default: return ""
         }
     }
@@ -205,6 +208,7 @@ extension GameType {
         case .ps1: return NSLocalizedString("PS1", comment: "")
         case .dc: return NSLocalizedString("DC", comment: "")
         case .arcade: return NSLocalizedString("Arcade", comment: "")
+        case .ns: return  NSLocalizedString("NS", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -235,6 +239,7 @@ extension GameType {
         case .ps1: return 1995
         case .dc: return 1998
         case .arcade: return 1971
+        case .ns: return 2017
         default: return 0
         }
     }
@@ -340,7 +345,7 @@ extension GameType {
     
     var manufacturer: Manufacturer {
         switch self {
-        case ._3ds, .ds, .gb, .gba, .gbc, .nes, .fds, .snes, .vb, .pm, .n64:
+        case ._3ds, .ds, .gb, .gba, .gbc, .nes, .fds, .snes, .vb, .pm, .n64, .ns:
             return .nintendo
         case .ps1, .psp:
             return .sony

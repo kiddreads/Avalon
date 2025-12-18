@@ -39,5 +39,7 @@ extension BlankSlateTableView: BlankSlate.DataSource {
 }
 
 extension BlankSlateTableView: BlankSlate.Delegate {
-    
+    func blankSlateShouldAllowTouch(_ view: UIView) -> Bool {
+        return true
+    }
 }

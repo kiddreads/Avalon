@@ -20,7 +20,7 @@ class TriggerProListView: BaseView {
     }()
     
     private lazy var addButton: ContextMenuButton = {
-        let allGameTypes = System.allCases.map { $0.gameType }
+        let allGameTypes = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
         var actions: [UIMenuElement] = []
         for gameType in allGameTypes {
             actions.append(UIAction(title: gameType.localizedShortName) { [weak self] gesture in
@@ -228,7 +228,7 @@ extension TriggerProListView: UITableViewDataSource, UITableViewDelegate {
         if let customPlatformOrder = Constants.Config.PlatformOrder {
             predefinedOrder = customPlatformOrder.compactMap { GameType(shortName: $0) }
         } else {
-            predefinedOrder = System.allCases.map { $0.gameType }
+            predefinedOrder = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
         }
         let sortedKeys: [GameType] = predefinedOrder.filter { datas.keys.contains($0) }
         return sortedKeys
@@ -295,7 +295,7 @@ class TriggerProHeaderView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.SafeAera.left + Constants.Size.ContentSpaceMid)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.SafeAera.left + Constants.Size.ContentSpaceHuge)
             make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceUltraTiny)
         }
     }
@@ -303,7 +303,7 @@ class TriggerProHeaderView: UITableViewHeaderFooterView {
     override func layoutSubviews() {
         super.layoutSubviews()
         titleLabel.snp.updateConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.SafeAera.left + Constants.Size.ContentSpaceMid)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.SafeAera.left + Constants.Size.ContentSpaceHuge)
         }
     }
     
@@ -317,12 +317,12 @@ extension TriggerProListView {
         Sheet.find(identifier: String(describing: TriggerProListView.self)).count > 0 ? true : false
     }
     
-    static func show(game: Game, gameViewRect: CGRect, menuInsets: UIEdgeInsets? = nil, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
+    static func show(game: Game, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
         Sheet.lazyPush(identifier: String(describing: TriggerProListView.self)) { sheet in
-            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
             
             let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
