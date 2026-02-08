@@ -1,8 +1,8 @@
 # DolphiniOS
 
-DolphiniOS is a port of the Dolphin Emulator to iOS and iPadOS. For installation instructions and downloads, check [our website](https://dolphinios.oatmealdome.me).
+Fin is a GameCube & Wii emulator for iOS and iPadOS, built on the open-source Dolphin emulator engine.
 
-This is the repository for the new DolphiniOS codebase.
+Source code: https://github.com/9ine10D0/Fin
 
 ## Building
 
@@ -26,7 +26,14 @@ To change the organization identifier, go to `Project` -> `Config` -> `BundleIde
 
 To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
 
-Once finished, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj` and build DolphiniOS.
+Once finished, you can open the Xcode project at `Source/iOS/App/Fin.xcodeproj` and build Fin.
+
+## What’s different in Fin
+
+- Fin removes all JIT and jailbreak-related code. It runs in interpreted mode within the App Store sandbox.
+- Modern SwiftUI UI, including a landscape-friendly games layout and a split-view settings layout in landscape.
+- Settings descriptions moved into inline info (i) buttons instead of long footer text.
+- Improved import flow (Files tab, Share → Open in Fin) and quality-of-life updates around handling game files.
 
 # Dolphin - A GameCube and Wii Emulator
 
