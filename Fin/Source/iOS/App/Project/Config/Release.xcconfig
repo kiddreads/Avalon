@@ -1,0 +1,29 @@
+// Copyright 2022 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+DOL_CORE_BUILD_TARGET = Release
+// Firebase (analytics/crashlytics) only runs when DOL_BUILD_SOURCE = official. Keep unofficial for release so it stays off. When you want it, set to official and add your GoogleService-Info.plist.
+DOL_BUILD_SOURCE = unofficial
+
+// Core build: set to 1 to build the emulation core with -ffast-math (faster, may change float behavior in some games).
+// Or use the "Release (Fast Math)" scheme to enable.
+DOL_CORE_FAST_MATH = 0
+
+// Performance: optimize Swift and strip release builds (inherited by targets using this config)
+SWIFT_OPTIMIZATION_LEVEL = -O
+DEAD_CODE_STRIPPING = YES
+STRIP_INSTALLED_PRODUCT = YES
+COPY_PHASE_STRIP = YES
+
+// Link-time optimization (better runtime performance; longer link time)
+LLVM_LTO = YES
+
+// C/C++/ObjC optimization: -O3 = aggressive speed (use "fast" for -Ofast; faster but relaxes IEEE float)
+GCC_OPTIMIZATION_LEVEL = 3
+// Optional -Ofast (max speed, may change float behavior): GCC_OPTIMIZATION_LEVEL = fast
+// Optional Swift -Ofast equivalent: SWIFT_OPTIMIZATION_LEVEL = -Ounchecked
+
+// CPU tuning: optional flags for ARM64 (uncomment to favor newer cores; may slightly hurt older devices)
+// OTHER_CFLAGS = $(inherited) -march=armv8.5-a
+// OTHER_CPLUSPLUSFLAGS = $(inherited) -march=armv8.5-a
+// Aggressive float math (only if you accept non-strict IEEE): OTHER_CFLAGS = $(inherited) -ffast-math

@@ -1,0 +1,8 @@
+// Copyright 2022 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+// Enable -ffast-math for the core build (PowerPC interp/JIT). Include this after a Release preset to override.
+DOL_CORE_FAST_MATH = 1
+
+// So the app can show "Fast math: On" in Settings
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) FAST_MATH_CORE_BUILD
