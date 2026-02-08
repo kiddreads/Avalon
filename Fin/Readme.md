@@ -1,25 +1,44 @@
 # Fin
 
-**Fin** is a GameCube and Wii emulator for iOS and iPadOS, built on top of the open-source **Dolphin Emulator** core.
+**Fin** is a GameCube and Wii emulator for iOS and iPadOS.  
+It is a fork of **DolphiniOS**, which itself is based on the open-source **Dolphin Emulator**.
 
-Original Dolphin source code:
-https://github.com/dolphin-emu/dolphin
+- Original DolphiniOS (OatmealDome) source:  
+  https://github.com/OatmealDome/dolphiniOS
 
-## What's different
+- Upstream Dolphin Emulator source:  
+  https://github.com/dolphin-emu/dolphin
 
-- No JIT / no jailbreak code (removed)
-- Modern SwiftUI UI with cleaner navigation
-- Landscape-optimized layouts (games + settings)
-- Improved importing (Files app + Share → Open in Fin)
-- Settings descriptions moved into inline info buttons
+---
+
+## What’s Different in Fin
+
+Compared to the original DolphiniOS project, Fin focuses on cleaner design, better iOS behavior, and App Store compliance:
+
+- **No JIT / no jailbreak code**  
+  All JIT and jailbreak-related code has been removed. Fin runs entirely in interpreted mode within the standard iOS sandbox.
+
+- **Modern SwiftUI interface**  
+  Cleaner navigation, updated settings screens, and a more consistent iOS look and feel.
+
+- **Landscape-optimized layouts**  
+  Horizontal game browsing and split-view settings layouts designed for landscape use.
+
+- **Improved importing**  
+  Better integration with the Files app and support for Share → Open in Fin.
+
+- **Clearer settings descriptions**  
+  Long footer text replaced with inline ⓘ info buttons using simpler, more natural explanations.
+
+---
 
 ## Building
 
-You will need the following:
+### Requirements
 
-* A Mac capable of running macOS Big Sur 11.3 or later
-* Xcode 13 or later
-* Homebrew (or your favourite package manager)
+- A Mac capable of running macOS Big Sur 11.3 or later
+- Xcode 13 or later
+- Homebrew (or another package manager)
 
 First, install the necessary tools using Homebrew:
 
