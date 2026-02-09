@@ -75,6 +75,9 @@
 	<GameConfig Executable="SLUS_216.09;1" Title="Dance Dance Revolution: Disney Channel Edition">
 		<IdleLoopBlock Address="0x001B48D8" />
 	</GameConfig>
+	<GameConfig Executable="SLUS_216.15;1" Title="Wild Arms 5">
+		<IdleLoopBlock Address="0x001324D8" />
+	</GameConfig>
 	<GameConfig Executable="SLUS_216.91;1" Title="Swashbucklers: Blue vs. Grey">
 		<IdleLoopBlock Address="0x0022FC70" />
 	</GameConfig>
