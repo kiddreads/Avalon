@@ -843,3 +843,22 @@ Jika Anda ingin meningkatkan setup Anda, PlayCase adalah pasangan sempurna untuk
 "RemoveShaderForGlobal" = "Hapus Shader Global";
 "FeaturedItems" = "Item Unggulan";
 "ReUpload" = "Unggah Ulang";
+
+"Service" = "Layanan";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Jaringan PSP";
+"Networking" = "Jaringan";
+"NetworkingConfiguration" = "Konfigurasi Jaringan";
+"EnableNetworking" = "Aktifkan Jaringan";
+"LANNetworking" = "Jaringan Lokal";
+"WANNetworking" = "Jaringan Daring";
+"SetAsHost" = "Atur Perangkat ini sebagai Host";
+"IPAddress" = "Alamat IP";
+"ServerAddress" = "Alamat Server";
+"PortOffset" = "Port";
+"HostAddress" = "Alamat Host";
+"ServiceFound" = "Host Tersedia";
+"Connect" = "Hubungkan";
+"Connected" = "Terhubung";
+"LocalNetworkingDesc" = "Multiplayer lokal membutuhkan setidaknya satu perangkat sebagai host. Host menyiarkan layanannya di jaringan lokal, dan perangkat lain akan secara otomatis mencari host yang tersedia. Jika tidak ada host yang ditemukan, Anda dapat memasukkan alamat IP host secara manual. Setelah terhubung, permainan multiplayer dapat dimulai.";
+"OnlineNetworkingDesc" = "Multiplayer daring membutuhkan alamat server daring yang valid.";

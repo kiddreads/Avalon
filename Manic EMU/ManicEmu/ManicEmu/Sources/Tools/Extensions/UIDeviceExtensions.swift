@@ -171,6 +171,8 @@ extension UIDevice {
         return false
     }
     
+    static var isMac: Bool { ProcessInfo.processInfo.isiOSAppOnMac }
+    
     static var deviceInfo: String {
         return "Device:\(Device.version())\nVersion:\(UIDevice.current.systemVersion)"
     }

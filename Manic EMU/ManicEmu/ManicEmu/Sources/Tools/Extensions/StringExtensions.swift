@@ -226,6 +226,23 @@ extension String {
         }
         try write(to: url, atomically: true, encoding: .utf8)
     }
+    
+    func parseIPv4() -> (ips: [Int], port: Int)? {
+        let parts = self.split(separator: ":")
+        guard parts.count == 2,
+              let port = Int(parts[1]) else {
+            return nil
+        }
+        
+        let ipDigits: [Int] = parts[0]
+            .split(separator: ".")
+            .flatMap { segment -> [Int] in
+                let padded = String(format: "%03d", Int(segment)!)
+                return padded.map { Int(String($0))! }
+            }
+        
+        return (ipDigits, port)
+    }
 }
 
 // 扩展用于识别 emoji 的字符集

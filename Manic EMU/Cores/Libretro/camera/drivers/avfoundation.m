@@ -735,34 +735,7 @@ static void *avfoundation_init(const char *device, uint64_t caps,
     avf->manager.width = width;
     avf->manager.height = height;
 
-    // Check if we're on the main thread
-    if ([NSThread isMainThread]) {
-        RARCH_LOG("[Camera]: Initializing on main thread\n");
-        // Direct initialization on main thread
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-            if (status != AVAuthorizationStatusAuthorized) {
-                RARCH_ERR("[Camera]: Camera access not authorized (status: %d)\n", (int)status);
-                free(avf);
-                return;
-            }
-        }];
-    } else {
-        RARCH_LOG("[Camera]: Initializing on background thread\n");
-        // Use dispatch_sync to run authorization check on main thread
-        __block AVAuthorizationStatus status;
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-        });
-
-        if (status != AVAuthorizationStatusAuthorized) {
-            RARCH_ERR("[Camera]: Camera access not authorized (status: %d)\n", (int)status);
-            free(avf);
-            return NULL;
-        }
-    }
-
-    // Allocate frame buffer
+    // Allocate frame buffer first - always needed for black screen fallback
     avf->manager.frameBuffer = (uint32_t*)calloc(width * height, sizeof(uint32_t));
     if (!avf->manager.frameBuffer) {
         RARCH_ERR("[Camera]: Failed to allocate frame buffer\n");
@@ -770,18 +743,38 @@ static void *avfoundation_init(const char *device, uint64_t caps,
         return NULL;
     }
 
-    // Initialize capture session - setup can be done on any thread
-    __block bool setupSuccess = false;
+    // Check authorization status without blocking
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    
+    if (status == AVAuthorizationStatusAuthorized) {
+        // Already authorized, setup camera session
+        RARCH_LOG("[Camera]: Camera access authorized, setting up session\n");
+        
+        __block bool setupSuccess = false;
+        @autoreleasepool {
+            setupSuccess = [avf->manager setupCameraSession];
+        }
 
-    @autoreleasepool {
-        setupSuccess = [avf->manager setupCameraSession];
-    }
-
-    if (!setupSuccess) {
-        RARCH_ERR("[Camera]: Failed to setup camera\n");
-        free(avf->manager.frameBuffer);
-        free(avf);
-        return NULL;
+        if (!setupSuccess) {
+            RARCH_WARN("[Camera]: Failed to setup camera, will return black frames\n");
+            // Don't fail - continue with black frame fallback
+        }
+    } else if (status == AVAuthorizationStatusNotDetermined) {
+        // Request permission asynchronously - don't block main thread
+        RARCH_LOG("[Camera]: Requesting camera authorization asynchronously\n");
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted) {
+                RARCH_LOG("[Camera]: Camera access granted, setting up session\n");
+                @autoreleasepool {
+                    [avf->manager setupCameraSession];
+                }
+            } else {
+                RARCH_WARN("[Camera]: Camera access denied, will return black frames\n");
+            }
+        }];
+    } else {
+        // Denied or Restricted - log warning but continue with black frames
+        RARCH_WARN("[Camera]: Camera access not authorized (status: %d), will return black frames\n", (int)status);
     }
 
     // Don't start camera session here - wait for avfoundation_start() to be called
@@ -800,16 +793,18 @@ static void avfoundation_free(void *data)
 
     RARCH_LOG("[Camera]: Freeing AVFoundation camera\n");
 
-    if (avf->manager.session) {
-        // Stop session on background queue
-        [avf->manager stopSession];
-        // Wait a bit for session to stop
-        usleep(50000); // 50ms
-    }
+    if (avf->manager) {
+        if (avf->manager.session) {
+            // Stop session on background queue
+            [avf->manager stopSession];
+            // Wait a bit for session to stop
+            usleep(50000); // 50ms
+        }
 
-    if (avf->manager.frameBuffer) {
-        free(avf->manager.frameBuffer);
-        avf->manager.frameBuffer = NULL;
+        if (avf->manager.frameBuffer) {
+            free(avf->manager.frameBuffer);
+            avf->manager.frameBuffer = NULL;
+        }
     }
 
     free(avf);
@@ -819,9 +814,16 @@ static void avfoundation_free(void *data)
 static bool avfoundation_start(void *data)
 {
     avfoundation_t *avf = (avfoundation_t*)data;
-    if (!avf || !avf->manager.session) {
+    if (!avf) {
         RARCH_ERR("[Camera]: Cannot start - invalid data\n");
         return false;
+    }
+
+    // If session is not available (permission denied), still return true
+    // to allow the game to continue with black frames
+    if (!avf->manager.session) {
+        RARCH_WARN("[Camera]: No camera session available, will return black frames\n");
+        return true;
     }
 
     RARCH_LOG("[Camera]: Starting AVFoundation camera\n");
@@ -834,13 +836,13 @@ static bool avfoundation_start(void *data)
 
     bool isRunning = avf->manager.session.isRunning;
     RARCH_LOG("[Camera]: Camera session running: %s\n", isRunning ? "YES" : "NO");
-    return isRunning;
+    return true; // Always return true to allow game to continue
 }
 
 static void avfoundation_stop(void *data)
 {
     avfoundation_t *avf = (avfoundation_t*)data;
-    if (!avf || !avf->manager.session)
+    if (!avf || !avf->manager || !avf->manager.session)
         return;
 
     RARCH_LOG("[Camera]: Stopping AVFoundation camera\n");
@@ -860,9 +862,12 @@ static bool avfoundation_poll(void *data,
 
     // Always provide the frame buffer - it will contain:
     // - Actual camera data if session is running
-    // - Black/empty frame if session hasn't started yet
+    // - Black/empty frame if session hasn't started yet or permission denied
     // This avoids log spam and unnecessary allocations
-    frame_raw_cb(avf->manager.frameBuffer, avf->width, avf->height, avf->width * 4);
+    if (avf->manager && avf->manager.frameBuffer) {
+        frame_raw_cb(avf->manager.frameBuffer, avf->width, avf->height, avf->width * 4);
+    }
+    
     return true;
 }
 

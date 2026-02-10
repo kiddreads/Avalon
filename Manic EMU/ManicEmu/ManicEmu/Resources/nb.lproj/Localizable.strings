@@ -842,3 +842,22 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "RemoveShaderForGlobal" = "Fjern Global Shader";
 "FeaturedItems" = "Utvalgte Gjenstander";
 "ReUpload" = "Last Opp På Nytt";
+
+"Service" = "Tjenester";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "PSP-nettverk";
+"Networking" = "Nettverk";
+"NetworkingConfiguration" = "Nettverkskonfigurasjon";
+"EnableNetworking" = "Aktiver nettverk";
+"LANNetworking" = "Lokalt nettverk";
+"WANNetworking" = "Onlinenettverk";
+"SetAsHost" = "Sett som vert";
+"IPAddress" = "IP-adresse";
+"ServerAddress" = "Serveradresse";
+"PortOffset" = "Port";
+"HostAddress" = "Vertadresse";
+"ServiceFound" = "Tilgjengelige verter";
+"Connect" = "Koble til";
+"Connected" = "Tilkoblet";
+"LocalNetworkingDesc" = "Lokalt flerspillermodus krever minst én enhet som vert. Verten kringkaster tjenesten på det lokale nettverket, og andre enheter søker automatisk etter tilgjengelige verter. Hvis ingen vert blir funnet, kan du angi vertens IP-adresse manuelt. Når tilkoblingen er etablert, kan flerspiller-spillet begynne.";
+"OnlineNetworkingDesc" = "Online flerspillermodus krever at du angir en gyldig onlineserveradresse.";

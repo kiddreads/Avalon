@@ -94,6 +94,8 @@ extern NSString * const RetroAchievementsNotification;
 - (void)startWFCStatusMonitor;
 - (void)setNDSCustomLayout:(NSString *_Nullable)layout;
 - (void)setNDSWFCDNS:(NSString *_Nullable)nds;
+- (void)setPSPCustomServerAddress:(NSString *_Nullable)address;
+- (void)setPSPCustomServerPort:(NSString *_Nullable)port;
 - (void)setCoreOptionNeedsUpdate;
 - (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y;
 - (void)releaseTouchEvent;

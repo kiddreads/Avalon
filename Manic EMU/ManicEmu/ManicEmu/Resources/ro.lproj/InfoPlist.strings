@@ -13,3 +13,5 @@
 "NSMicrophoneUsageDescription" = "Acordați permisiunea de utilizare a microfonului pentru Manic EMU, altfel unele funcții ale jocurilor DS pot fi limitate!";
 "NSCameraUsageDescription" = "Acordați permisiunea de acces la album pentru Manic EMU pentru a putea fotografia coperta jocului!";
 
+
+"NSLocalNetworkUsageDescription" = "Manic EMU are nevoie de acces la rețeaua locală pentru a găsi și se conecta la alte dispozitive pentru jocuri online.";

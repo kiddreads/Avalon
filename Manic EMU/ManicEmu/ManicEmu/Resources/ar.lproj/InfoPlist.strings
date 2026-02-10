@@ -12,3 +12,5 @@
 "NSPhotoLibraryUsageDescription" = "السماح بالوصول سيُمكّنك من حفظ لقطات الشاشة في الألبوم أو اختيار صور منه كغلاف للعبة";
 "NSMicrophoneUsageDescription" = "يجب منح Manic EMU صلاحية استخدام الميكروفون، وإلا قد تتأثر بعض وظائف ألعاب DS!";
 "NSCameraUsageDescription" = "يجب منح Manic EMU صلاحية الوصول إلى الكاميرا لالتقاط صور كأغلفة للألعاب!";
+
+"NSLocalNetworkUsageDescription" = "تحتاج Manic EMU إلى الوصول إلى شبكتك المحلية للعثور على الأجهزة الأخرى والتواصل معها من أجل الألعاب عبر الإنترنت.";

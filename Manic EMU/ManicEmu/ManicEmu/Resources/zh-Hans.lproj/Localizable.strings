@@ -859,3 +859,22 @@
 "RemoveShaderForGlobal" = "移除全局着色器";
 "FeaturedItems" = "精选周边";
 "ReUpload" = "重新上传";
+
+"Service" = "服务";
+"NintendoWFC" = "任天堂 WFC";
+"PSPNetworking" = "PSP 网络";
+"Networking" = "网络";
+"NetworkingConfiguration" = "网络配置";
+"EnableNetworking" = "启用网络";
+"LANNetworking" = "本地网络";
+"WANNetworking" = "互联网";
+"SetAsHost" = "将本设备设为主机";
+"IPAddress" = "IP 地址";
+"ServerAddress" = "服务器地址";
+"PortOffset" = "端口";
+"HostAddress" = "主机地址";
+"ServiceFound" = "可用主机";
+"Connect" = "连接";
+"Connected" = "已连接";
+"LocalNetworkingDesc" = "本地网络联机需要至少一台设备作为主机。主机会在局域网内广播服务，其它设备将自动搜索可用主机。如未能搜索到主机，可手动输入主机的 IP 地址。连接成功后即可开始联机游戏。";
+"OnlineNetworkingDesc" = "互联网联机需要填写可用的在线服务器地址。";

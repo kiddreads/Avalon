@@ -824,3 +824,22 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "RemoveShaderForGlobal" = "Buang Shader Global";
 "FeaturedItems" = "Item Terpilih";
 "ReUpload" = "Muat Naik Semula";
+
+"Service" = "Perkhidmatan";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Rangkaian PSP";
+"Networking" = "Rangkaian";
+"NetworkingConfiguration" = "Konfigurasi Rangkaian";
+"EnableNetworking" = "Dayakan Rangkaian";
+"LANNetworking" = "Rangkaian Setempat";
+"WANNetworking" = "Rangkaian Dalam Talian";
+"SetAsHost" = "Tetapkan Peranti Ini sebagai Hos";
+"IPAddress" = "Alamat IP";
+"ServerAddress" = "Alamat Pelayan";
+"PortOffset" = "Port";
+"HostAddress" = "Alamat Hos";
+"ServiceFound" = "Hos Tersedia";
+"Connect" = "Sambung";
+"Connected" = "Disambungkan";
+"LocalNetworkingDesc" = "Permainan berbilang pemain setempat memerlukan sekurang-kurangnya satu peranti sebagai hos. Hos menyiarkan perkhidmatannya dalam rangkaian setempat, dan peranti lain akan mencari hos yang tersedia secara automatik. Jika tiada hos ditemui, anda boleh memasukkan alamat IP hos secara manual. Setelah disambung, permainan berbilang pemain boleh dimulakan.";
+"OnlineNetworkingDesc" = "Permainan berbilang pemain dalam talian memerlukan alamat pelayan dalam talian yang sah.";

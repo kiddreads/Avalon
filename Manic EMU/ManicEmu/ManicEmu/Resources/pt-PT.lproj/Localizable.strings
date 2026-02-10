@@ -852,3 +852,22 @@ Se pretende melhorar a sua configuração, a PlayCase é o complemento perfeito 
 "RemoveShaderForGlobal" = "Remover Shader Global";
 "FeaturedItems" = "Itens em Destaque";
 "ReUpload" = "Carregar Novamente";
+
+"Service" = "Serviços";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Rede PSP";
+"Networking" = "Rede";
+"NetworkingConfiguration" = "Configuração de rede";
+"EnableNetworking" = "Ativar rede";
+"LANNetworking" = "Rede local";
+"WANNetworking" = "Rede online";
+"SetAsHost" = "Definir como anfitrião";
+"IPAddress" = "Endereço IP";
+"ServerAddress" = "Endereço do servidor";
+"PortOffset" = "Porto";
+"HostAddress" = "Endereço do anfitrião";
+"ServiceFound" = "Anfitriões disponíveis";
+"Connect" = "Ligar";
+"Connected" = "Ligado";
+"LocalNetworkingDesc" = "O multijogador local requer pelo menos um dispositivo como anfitrião. O anfitrião transmite o seu serviço na rede local e os outros dispositivos procurarão automaticamente por anfitriões disponíveis. Se não for encontrado nenhum anfitrião, pode introduzir manualmente o endereço IP do mesmo. Após a ligação, o jogo multijogador pode começar.";
+"OnlineNetworkingDesc" = "O multijogador online requer a introdução de um endereço de servidor online válido.";

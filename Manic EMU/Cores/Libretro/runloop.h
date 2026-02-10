@@ -328,6 +328,12 @@ void set_azahar_custom_layout(const char *layout);
 //定义DeSmuME的布局信息
 void set_desmume_custom_layout(const char *layout);
 
+//定义PSP的自定义服务地址
+void set_psp_custom_server_address(const char *address);
+
+//定义PSP的自定义服务端口
+void set_psp_custom_server_port(const char *port);
+
 //定义日志回调
 typedef void (*LogCallback)(enum retro_log_level level, const char *fmt, va_list args);
 void log_register_callback(LogCallback callback);

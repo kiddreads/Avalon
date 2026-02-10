@@ -852,3 +852,22 @@ Wenn Sie Ihr Setup verbessern möchten, ist PlayCase die perfekte Ergänzung zu 
 "RemoveShaderForGlobal" = "Globalen Shader entfernen";
 "FeaturedItems" = "Ausgewählte Artikel";
 "ReUpload" = "Erneut hochladen";
+
+"Service" = "Dienste";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "PSP-Netzwerk";
+"Networking" = "Netzwerk";
+"NetworkingConfiguration" = "Netzwerkkonfiguration";
+"EnableNetworking" = "Netzwerk aktivieren";
+"LANNetworking" = "Lokales Netzwerk";
+"WANNetworking" = "Online-Netzwerk";
+"SetAsHost" = "Als Host festlegen";
+"IPAddress" = "IP-Adresse";
+"ServerAddress" = "Serveradresse";
+"PortOffset" = "Port";
+"HostAddress" = "Host-Adresse";
+"ServiceFound" = "Verfügbare Hosts";
+"Connect" = "Verbinden";
+"Connected" = "Verbunden";
+"LocalNetworkingDesc" = "Lokaler Mehrspielermodus erfordert mindestens ein Gerät als Host. Der Host überträgt seinen Dienst im lokalen Netzwerk, andere Geräte suchen automatisch nach verfügbaren Hosts. Wird kein Host gefunden, kann die IP-Adresse des Hosts manuell eingegeben werden. Nach erfolgreicher Verbindung kann der Mehrspielermodus beginnen.";
+"OnlineNetworkingDesc" = "Online-Mehrspielermodus erfordert die Eingabe einer gültigen Online-Serveradresse.";

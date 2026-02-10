@@ -844,3 +844,22 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "RemoveShaderForGlobal" = "Xóa Shader Toàn Cục";
 "FeaturedItems" = "Mục Nổi Bật";
 "ReUpload" = "Tải Lên Lại";
+
+"Service" = "Dịch vụ";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Mạng PSP";
+"Networking" = "Mạng";
+"NetworkingConfiguration" = "Cấu hình mạng";
+"EnableNetworking" = "Bật mạng";
+"LANNetworking" = "Mạng cục bộ";
+"WANNetworking" = "Mạng trực tuyến";
+"SetAsHost" = "Đặt thiết bị này làm máy chủ";
+"IPAddress" = "Địa chỉ IP";
+"ServerAddress" = "Địa chỉ máy chủ";
+"PortOffset" = "Cổng";
+"HostAddress" = "Địa chỉ máy chủ lưu trữ";
+"ServiceFound" = "Máy chủ có sẵn";
+"Connect" = "Kết nối";
+"Connected" = "Đã kết nối";
+"LocalNetworkingDesc" = "Chơi mạng cục bộ yêu cầu ít nhất một thiết bị đóng vai trò máy chủ. Máy chủ phát dịch vụ trong mạng cục bộ và các thiết bị khác sẽ tự động tìm kiếm máy chủ có sẵn. Nếu không tìm thấy máy chủ, bạn có thể nhập thủ công địa chỉ IP của máy chủ. Sau khi kết nối, có thể bắt đầu chơi game nhiều người.";
+"OnlineNetworkingDesc" = "Chơi trực tuyến nhiều người yêu cầu nhập địa chỉ máy chủ trực tuyến hợp lệ.";

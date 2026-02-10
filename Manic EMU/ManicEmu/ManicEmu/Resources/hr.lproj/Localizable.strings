@@ -848,3 +848,22 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "RemoveShaderForGlobal" = "Ukloni Globalni Shader";
 "FeaturedItems" = "Istaknute Stavke";
 "ReUpload" = "Ponovno Učitaj";
+
+"Service" = "Usluge";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "PSP mreža";
+"Networking" = "Mreža";
+"NetworkingConfiguration" = "Konfiguracija mreže";
+"EnableNetworking" = "Omogući mrežu";
+"LANNetworking" = "Lokalna mreža";
+"WANNetworking" = "Online mreža";
+"SetAsHost" = "Postavi kao host";
+"IPAddress" = "IP adresa";
+"ServerAddress" = "Adresa poslužitelja";
+"PortOffset" = "Port";
+"HostAddress" = "Adresa hosta";
+"ServiceFound" = "Dostupni hostovi";
+"Connect" = "Poveži";
+"Connected" = "Povezano";
+"LocalNetworkingDesc" = "Lokalni multiplayer zahtijeva barem jedan uređaj kao host. Host emitira svoju uslugu na lokalnoj mreži, a drugi uređaji će automatski tražiti dostupne hostove. Ako se ne pronađe host, možete ručno unijeti IP adresu hosta. Nakon povezivanja, može započeti multiplayer igra.";
+"OnlineNetworkingDesc" = "Online multiplayer zahtijeva unos valjane adrese online poslužitelja.";

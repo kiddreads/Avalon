@@ -341,25 +341,43 @@ void shutdown_register_callback(ShutdownCallback callback) {
 //定义NDS的布局信息
 static const char *g_melonds_custom_layout = NULL;
 void set_melonds_custom_layout(const char *layout) {
-   g_melonds_custom_layout = strdup(layout);
+   free((void *)g_melonds_custom_layout);
+   g_melonds_custom_layout = layout ? strdup(layout) : layout;
 }
 
 //定义WFC NDS信息
 static const char *g_melonds_wfc_dns = NULL;
 void set_melonds_wfc_dns(const char *dns) {
-   g_melonds_wfc_dns = strdup(dns);
+   free((void *)g_melonds_wfc_dns);
+   g_melonds_wfc_dns = dns ? strdup(dns) : NULL;
 }
 
 //定义3DS的布局信息
 static const char *g_azahar_custom_layout = NULL;
 void set_azahar_custom_layout(const char *layout) {
-   g_azahar_custom_layout = strdup(layout);
+   free((void *)g_azahar_custom_layout);
+   g_azahar_custom_layout = layout ? strdup(layout) : NULL;
 }
 
 //定义DeSmuME的布局信息
 static const char *g_desmume_custom_layout = NULL;
 void set_desmume_custom_layout(const char *layout) {
-   g_desmume_custom_layout = strdup(layout);
+   free((void *)g_desmume_custom_layout);
+   g_desmume_custom_layout = layout ? strdup(layout) : NULL;
+}
+
+//定义PSP的自定义服务地址
+static const char *g_psp_custom_server_address = NULL;
+void set_psp_custom_server_address(const char *address) {
+   free((void *)g_psp_custom_server_address);
+   g_psp_custom_server_address = address ? strdup(address) : NULL;
+}
+
+//定义PSP的自定义服务端口
+static const char *g_psp_custom_server_port = NULL;
+void set_psp_custom_server_port(const char *port) {
+   free((void *)g_psp_custom_server_port);
+   g_psp_custom_server_port = port ? strdup(port) : NULL;
 }
 
 //定义Shutdown通知
@@ -1481,6 +1499,16 @@ bool runloop_environment_cb(unsigned cmd, void *data)
             
             if (g_desmume_custom_layout && string_is_equal(var->key, "desmume_custom_layout_config")) {
                var->value = strdup(g_desmume_custom_layout);
+               break;
+            }
+            
+            if (g_psp_custom_server_address && string_is_equal(var->key, "ppsspp_change_pro_ad_hoc_server_address")) {
+               var->value = strdup(g_psp_custom_server_address);
+               break;
+            }
+            
+            if (g_psp_custom_server_port && string_is_equal(var->key, "ppsspp_port_offset")) {
+               var->value = strdup(g_psp_custom_server_port);
                break;
             }
 

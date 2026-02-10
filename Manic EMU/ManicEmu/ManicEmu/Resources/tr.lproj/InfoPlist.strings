@@ -13,3 +13,5 @@
 "NSPhotoLibraryUsageDescription" = "Oyun ekran görüntülerini fotoğraf albümüne kaydetmek ve albümden oyun kapağı seçmek için fotoğraf albümü erişim izni gereklidir";
 "NSMicrophoneUsageDescription" = "Bazı DS oyunlarının özelliklerini kullanabilmek için mikrofon iznini Manic EMU'ya vermelisiniz!";
 "NSCameraUsageDescription" = "Oyun kapağı çekmek için kamera erişim iznini Manic EMU'ya vermelisiniz!";
+
+"NSLocalNetworkUsageDescription" = "Manic EMU'nun çevrimiçi oyun için diğer cihazları bulup bağlanabilmesi için yerel ağınıza erişmesi gerekiyor.";

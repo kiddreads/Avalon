@@ -48,4 +48,5 @@ enum ExtraKey: String {
     case leftDifficulty
     case rightDifficulty
     case ignoreShaderConfig
+    case pspConfig
 }

@@ -628,6 +628,22 @@ static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_
     }
 }
 
+- (void)setPSPCustomServerAddress:(NSString *_Nullable)address {
+    if (address) {
+        set_psp_custom_server_address([address cStringUsingEncoding:NSUTF8StringEncoding]);
+    } else {
+        set_psp_custom_server_address(NULL);
+    }
+}
+
+- (void)setPSPCustomServerPort:(NSString *_Nullable)port {
+    if (port) {
+        set_psp_custom_server_port([port cStringUsingEncoding:NSUTF8StringEncoding]);
+    } else {
+        set_psp_custom_server_port(NULL);
+    }
+}
+
 - (void)setCoreOptionNeedsUpdate {
     // 通知核心配置已更新
     runloop_state_t *runloop_st = runloop_state_get_ptr();

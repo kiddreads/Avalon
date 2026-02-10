@@ -10,8 +10,8 @@
 import ManicEmuCore
 
 class OnlinePlaySettingViewController: BaseViewController {
-    private lazy var biosSelectionView: OnlinePlaySettingView = {
-        let view = OnlinePlaySettingView(gameType: self.gameType, showClose: self.showClose)
+    private lazy var onlinePlayView: OnlinePlaySettingView = {
+        let view = OnlinePlaySettingView(showClose: self.showClose)
         view.didTapClose = {[weak self] in
             self?.dismiss(animated: true)
         }
@@ -34,8 +34,8 @@ class OnlinePlaySettingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(biosSelectionView)
-        biosSelectionView.snp.makeConstraints { make in
+        view.addSubview(onlinePlayView)
+        onlinePlayView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

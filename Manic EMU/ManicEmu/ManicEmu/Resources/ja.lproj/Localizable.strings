@@ -847,3 +847,22 @@ PlayCaseは、アクセサリーやスキンとの互換性を考慮して作ら
 "RemoveShaderForGlobal" = "グローバルシェーダーを削除";
 "FeaturedItems" = "おすすめアイテム";
 "ReUpload" = "再アップロード";
+
+"Service" = "サービス";
+"NintendoWFC" = "ニンテンドーWFC";
+"PSPNetworking" = "PSPネットワーク";
+"Networking" = "ネットワーク";
+"NetworkingConfiguration" = "ネットワーク設定";
+"EnableNetworking" = "ネットワークを有効にする";
+"LANNetworking" = "ローカルネットワーク";
+"WANNetworking" = "オンラインネットワーク";
+"SetAsHost" = "この端末をホストに設定";
+"IPAddress" = "IPアドレス";
+"ServerAddress" = "サーバーアドレス";
+"PortOffset" = "ポート";
+"HostAddress" = "ホストアドレス";
+"ServiceFound" = "利用可能なホスト";
+"Connect" = "接続";
+"Connected" = "接続済み";
+"LocalNetworkingDesc" = "ローカル通信では、少なくとも1台のデバイスがホストとして動作する必要があります。ホストはローカルネットワーク上でサービスをブロードキャストし、他のデバイスは利用可能なホストを自動的に検索します。ホストが見つからない場合は、ホストのIPアドレスを手動で入力できます。接続が確立されると、マルチプレイヤーゲームを開始できます。";
+"OnlineNetworkingDesc" = "オンライン通信では、有効なオンラインサーバーアドレスを入力する必要があります。";

@@ -856,3 +856,22 @@ PlayCase 專注於製造高品質 iPhone 手機殼，設計時已充分考慮配
 "RemoveShaderForGlobal" = "移除全局着色器";
 "FeaturedItems" = "精選周邊";
 "ReUpload" = "重新上傳";
+
+"Service" = "服務";
+"NintendoWFC" = "任天堂 WFC";
+"PSPNetworking" = "PSP 網絡";
+"Networking" = "網絡";
+"NetworkingConfiguration" = "網絡設定";
+"EnableNetworking" = "啟用網絡";
+"LANNetworking" = "本地網絡";
+"WANNetworking" = "線上網絡";
+"SetAsHost" = "將此裝置設為主機";
+"IPAddress" = "IP 地址";
+"ServerAddress" = "伺服器地址";
+"PortOffset" = "端口";
+"HostAddress" = "主機地址";
+"ServiceFound" = "可用主機";
+"Connect" = "連接";
+"Connected" = "已連接";
+"LocalNetworkingDesc" = "本地網絡連線需要至少一部裝置作為主機。主機會在區域網絡內廣播服務，其他裝置將自動搜尋可用主機。如未能搜尋到主機，可手動輸入主機的 IP 地址。連線成功後即可開始對戰遊戲。";
+"OnlineNetworkingDesc" = "線上連線需要填寫可用的線上伺服器地址。";

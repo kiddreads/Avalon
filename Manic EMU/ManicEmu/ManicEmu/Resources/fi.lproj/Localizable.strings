@@ -851,3 +851,22 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "RemoveShaderForGlobal" = "Poista Globaali Shader";
 "FeaturedItems" = "Suositellut Tuotteet";
 "ReUpload" = "Lataa Uudelleen";
+
+"Service" = "Palvelut";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "PSP-verkko";
+"Networking" = "Verkko";
+"NetworkingConfiguration" = "Verkon asetukset";
+"EnableNetworking" = "Ota verkko käyttöön";
+"LANNetworking" = "Paikallinen verkko";
+"WANNetworking" = "Verkkoverkko";
+"SetAsHost" = "Aseta isäntälaitteeksi";
+"IPAddress" = "IP-osoite";
+"ServerAddress" = "Palvelimen osoite";
+"PortOffset" = "Portti";
+"HostAddress" = "Isännän osoite";
+"ServiceFound" = "Käytettävissä olevat isännät";
+"Connect" = "Yhdistä";
+"Connected" = "Yhdistetty";
+"LocalNetworkingDesc" = "Paikallinen moninpeli vaatii vähintään yhden laitteen isännäksi. Isäntä lähettää palvelunsa paikallisessa verkossa, ja muut laitteet etsivät automaattisesti käytettävissä olevia isäntiä. Jos isäntää ei löydy, voit syöttää sen IP-osoitteen manuaalisesti. Yhdistämisen jälkeen moninpeli voi alkaa.";
+"OnlineNetworkingDesc" = "Verkkomoninpeli vaatii kelvollisen verkkopalvelimen osoitteen.";

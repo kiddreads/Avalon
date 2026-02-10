@@ -825,3 +825,22 @@ Jeśli chcesz ulepszyć swoją konfigurację, PlayCase jest idealnym uzupełnien
 "RemoveShaderForGlobal" = "Usuń Globalny Shader";
 "FeaturedItems" = "Wyróżnione Elementy";
 "ReUpload" = "Prześlij Ponownie";
+
+"Service" = "Usługi";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Sieć PSP";
+"Networking" = "Sieć";
+"NetworkingConfiguration" = "Konfiguracja sieci";
+"EnableNetworking" = "Włącz sieć";
+"LANNetworking" = "Sieć lokalna";
+"WANNetworking" = "Sieć online";
+"SetAsHost" = "Ustaw jako host";
+"IPAddress" = "Adres IP";
+"ServerAddress" = "Adres serwera";
+"PortOffset" = "Port";
+"HostAddress" = "Adres hosta";
+"ServiceFound" = "Dostępni hosty";
+"Connect" = "Połącz";
+"Connected" = "Połączono";
+"LocalNetworkingDesc" = "Gra wieloosobowa w sieci lokalnej wymaga co najmniej jednego urządzenia jako hosta. Host emituje swoją usługę w sieci lokalnej, a inne urządzenia automatycznie wyszukują dostępnych hostów. Jeśli nie znaleziono hosta, można ręcznie wprowadzić jego adres IP. Po połączeniu można rozpocząć rozgrywkę wieloosobową.";
+"OnlineNetworkingDesc" = "Gra wieloosobowa online wymaga podania prawidłowego adresu serwera online.";

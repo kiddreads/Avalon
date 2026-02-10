@@ -117,6 +117,10 @@ class PlayViewController: GameViewController {
     private var backgroundImageView: UIImageView? = nil
     private var background: FlexBackground? = nil
     private var backgroundType: FlexBackground.BackgroundType? = nil
+    ///flex皮肤的menu和flex按钮
+    private weak var flexMenuButton: UIView? = nil
+    private weak var flexButton: UIView? = nil
+    
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
@@ -717,6 +721,11 @@ class PlayViewController: GameViewController {
         updateSkin()
         //更新TriggerPro
         updateTriggerPro()
+        //全屏模式的时候点击屏幕临时展示menu和flex按钮
+        view.addTapGesture(handler: { [weak self] _ in
+            guard let self, self.isFullScreen else { return }
+            self.showFlexButtonsTemporarily()
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -2292,12 +2301,56 @@ extension PlayViewController {
             } else if backendType == 2 {
                 backend = "opengl"
             }
+            let networkingConfig = PSPNetworkingConfig.getConfig()
+            var networkingConfigs = [String: String]()
+            LibretroCore.sharedInstance().setPSPCustomServerAddress(nil)
+            LibretroCore.sharedInstance().setPSPCustomServerPort(nil)
+            if networkingConfig.enable, networkingConfig.type == .local, networkingConfig.asHost {
+                //本地网络 作为主机
+                networkingConfigs += ["ppsspp_enable_wlan": "enabled",
+                                      "ppsspp_enable_builtin_pro_ad_hoc_server": "enabled",
+                                      "ppsspp_change_pro_ad_hoc_server_address": "IP address"]
+                if let ipAddress = BonjourKit.shared.currentIPAddress, let hostResult = (ipAddress+":\(networkingConfig.asHostPort)").parseIPv4() {
+                    for (index, ip) in hostResult.ips.enumerated() {
+                        networkingConfigs["ppsspp_pro_ad_hoc_server_address" + (index < 9 ? "0\(index+1)" : "\(index+1)")] = "\(ip)"
+                    }
+                    networkingConfigs["ppsspp_port_offset"] = "\(hostResult.port)"
+                    LibretroCore.sharedInstance().setPSPCustomServerPort("\(hostResult.port)")
+                }
+                LibretroCore.sharedInstance().setPSPCustomServerPort("\(networkingConfig.asHostPort)")
+            } else if networkingConfig.enable, networkingConfig.type == .local, !networkingConfig.asHost, let ip = networkingConfig.connectedLocalIP {
+                //本地网络 作为从机
+                networkingConfigs += ["ppsspp_enable_wlan": "enabled",
+                                      "ppsspp_enable_builtin_pro_ad_hoc_server": "disabled",
+                                      "ppsspp_change_pro_ad_hoc_server_address": "IP address"]
+                if let hostResult = ip.parseIPv4() {
+                    for (index, ip) in hostResult.ips.enumerated() {
+                        networkingConfigs["ppsspp_pro_ad_hoc_server_address" + (index < 9 ? "0\(index+1)" : "\(index+1)")] = "\(ip)"
+                    }
+                    networkingConfigs["ppsspp_port_offset"] = "\(hostResult.port)"
+                    LibretroCore.sharedInstance().setPSPCustomServerPort("\(hostResult.port)")
+                } else {
+                    networkingConfigs["ppsspp_change_pro_ad_hoc_server_address"] = ip
+                    LibretroCore.sharedInstance().setPSPCustomServerAddress(ip)
+                }
+            } else if networkingConfig.enable, networkingConfig.type == .online {
+                //互联网络
+                networkingConfigs += ["ppsspp_enable_wlan": "enabled",
+                                      "ppsspp_enable_builtin_pro_ad_hoc_server": "disabled",
+                                      "ppsspp_change_pro_ad_hoc_server_address": networkingConfig.connectedHost]
+                if !["socom.cc", "psp.gameplayer.club", "myneighborsushicat.com"].contains(where: { $0 == networkingConfig.connectedHost }) {
+                    LibretroCore.sharedInstance().setPSPCustomServerAddress(networkingConfig.connectedHost)
+                }
+            } else {
+                //禁用网络
+                networkingConfigs += ["ppsspp_enable_wlan": "disabled"]
+            }
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PPSSPP.name, configs: [
                 "ppsspp_cheats": "enabled",
                 "ppsspp_language": languages[manicGame.region],
                 "ppsspp_backend": backend,
                 "ppsspp_texture_replacement": (manicGame.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "enabled" : "disabled"
-            ], reload: false)
+            ] + networkingConfigs, reload: false)
             updatePSPResolution(manicGame.resolution, reload: false)
         } else if manicGame.gameType == .nes || manicGame.gameType == .fds {
             updateNESPalette(manicGame.currentNesPalette, firstInit: true)
@@ -3343,11 +3396,13 @@ extension PlayViewController {
                 for dynamicEffectView in  buttonsDynamicEffectView.itemViews {
                     let item = dynamicEffectView.item
                     if item.kind == .button, let input = item.inputs.allInputs.first, (input.stringValue == "menu" || input.stringValue == "flex") {
-                        //不隐藏
-                        dynamicEffectView.alpha = 0.3
-                    } else {
-                        dynamicEffectView.isHidden = true
+                        if input.stringValue == "menu" {
+                            flexMenuButton = dynamicEffectView
+                        } else if input.stringValue == "flex" {
+                            flexButton = dynamicEffectView
+                        }
                     }
+                    dynamicEffectView.isHidden = true
                 }
             } else if String(describing: type(of: view)) == "TouchInputView" {
                 //触摸视图不隐藏
@@ -3372,6 +3427,32 @@ extension PlayViewController {
                 view.isHidden = false
             }
         }
+    }
+    
+    private func showFlexButtonsTemporarily() {
+        guard let flexMenuButton, let flexButton, isFullScreen else { return }
+        if flexMenuButton.isHidden {
+            flexMenuButton.alpha = 0
+            flexMenuButton.isHidden = false
+            
+        }
+        if flexButton.isHidden {
+            flexButton.alpha = 0
+            flexButton.isHidden = false
+        }
+        UIView.springAnimate(animations: {
+            flexMenuButton.alpha = 1
+            flexButton.alpha = 1
+        })
+        DispatchQueue.main.asyncAfter(delay: 5, execute: {
+            UIView.springAnimate(animations: {
+                flexMenuButton.alpha = 0
+                flexButton.alpha = 0
+            }, completion: { _ in
+                flexMenuButton.isHidden = true
+                flexButton.isHidden = true
+            })
+        })
     }
     
     private func enableSwapScreen() -> Bool {

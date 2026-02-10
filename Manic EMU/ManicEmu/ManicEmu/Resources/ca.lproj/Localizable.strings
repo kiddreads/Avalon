@@ -850,3 +850,22 @@ Si voleu millorar la vostra configuració, PlayCase és el complement perfecte p
 "RemoveShaderForGlobal" = "Eliminar Shader Global";
 "FeaturedItems" = "Articles Destacats";
 "ReUpload" = "Pujar de Nou";
+
+"Service" = "Serveis";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Xarxa PSP";
+"Networking" = "Xarxa";
+"NetworkingConfiguration" = "Configuració de xarxa";
+"EnableNetworking" = "Activar xarxa";
+"LANNetworking" = "Xarxa local";
+"WANNetworking" = "Xarxa en línia";
+"SetAsHost" = "Establir com a amfitrió";
+"IPAddress" = "Adreça IP";
+"ServerAddress" = "Adreça del servidor";
+"PortOffset" = "Port";
+"HostAddress" = "Adreça de l'amfitrió";
+"ServiceFound" = "Amfitrions disponibles";
+"Connect" = "Connecta";
+"Connected" = "Connectat";
+"LocalNetworkingDesc" = "El multijugador local requereix almenys un dispositiu com a amfitrió. L'amfitrió transmet el seu servei a la xarxa local i els altres dispositius buscaran automàticament amfitrions disponibles. Si no se'n troba cap, pots introduir manualment l'adreça IP de l'amfitrió. Un cop connectats, es pot iniciar la partida multijugador.";
+"OnlineNetworkingDesc" = "El multijugador en línia requereix introduir una adreça de servidor en línia vàlida.";

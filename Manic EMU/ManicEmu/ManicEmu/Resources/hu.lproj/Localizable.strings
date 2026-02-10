@@ -850,3 +850,22 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "RemoveShaderForGlobal" = "Globális Shader Eltávolítása";
 "FeaturedItems" = "Kiemelt Tételek";
 "ReUpload" = "Újrafeltöltés";
+
+"Service" = "Szolgáltatások";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "PSP hálózat";
+"Networking" = "Hálózat";
+"NetworkingConfiguration" = "Hálózati beállítás";
+"EnableNetworking" = "Hálózat bekapcsolása";
+"LANNetworking" = "Helyi hálózat";
+"WANNetworking" = "Online hálózat";
+"SetAsHost" = "Beállítás kiszolgálónak";
+"IPAddress" = "IP-cím";
+"ServerAddress" = "Szerver címe";
+"PortOffset" = "Port";
+"HostAddress" = "Kiszolgáló címe";
+"ServiceFound" = "Elérhető kiszolgálók";
+"Connect" = "Csatlakozás";
+"Connected" = "Csatlakoztatva";
+"LocalNetworkingDesc" = "A helyi többjátékos módhoz legalább egy eszköznek kiszolgálóként kell működnie. A kiszolgáló hirdeti a szolgáltatását a helyi hálózaton, és a többi eszköz automatikusan keresni fogja az elérhető kiszolgálókat. Ha nem található kiszolgáló, manuálisan is megadhatja annak IP-címét. A csatlakozás után megkezdhető a többjátékos játék.";
+"OnlineNetworkingDesc" = "Az online többjátékos módhoz érvényes online szervercím megadása szükséges.";

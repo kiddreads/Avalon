@@ -850,3 +850,22 @@ Ak chcete vylepšiť svoje nastavenie, PlayCase je perfektným doplnkom tohto sk
 "RemoveShaderForGlobal" = "Odstrániť Globálny Shader";
 "FeaturedItems" = "Odporúčané Položky";
 "ReUpload" = "Znova Nahrať";
+
+"Service" = "Služby";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Sieť PSP";
+"Networking" = "Sieť";
+"NetworkingConfiguration" = "Konfigurácia siete";
+"EnableNetworking" = "Povoliť sieť";
+"LANNetworking" = "Lokálna sieť";
+"WANNetworking" = "Online sieť";
+"SetAsHost" = "Nastaviť ako hostiteľa";
+"IPAddress" = "IP adresa";
+"ServerAddress" = "Adresa servera";
+"PortOffset" = "Port";
+"HostAddress" = "Adresa hostiteľa";
+"ServiceFound" = "Dostupní hostitelia";
+"Connect" = "Pripojiť";
+"Connected" = "Pripojené";
+"LocalNetworkingDesc" = "Lokálny multiplayer vyžaduje aspoň jedno zariadenie ako hostiteľa. Hostiteľ vysiela svoju službu v lokálnej sieti a ostatné zariadenia automaticky vyhľadajú dostupných hostiteľov. Ak sa nenájde žiadny hostiteľ, môžete ručne zadať jeho IP adresu. Po pripojení sa môže začať hra pre viacerých hráčov.";
+"OnlineNetworkingDesc" = "Online multiplayer vyžaduje zadanie platnej adresy online servera.";

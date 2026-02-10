@@ -590,7 +590,7 @@
 		577005D42D3F2F8E00762E8F /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D32D3F2F8200762E8F /* WebServer.swift */; };
 		577005D62D3F398100762E8F /* PasteImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D52D3F396C00762E8F /* PasteImporter.swift */; };
 		577005DA2D3F404F00762E8F /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D92D3F404D00762E8F /* ImportError.swift */; };
-		577006092D3F980400762E8F /* LowestHaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006082D3F980400762E8F /* LowestHaderReusableView.swift */; };
+		577006092D3F980400762E8F /* CollectionHaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006082D3F980400762E8F /* CollectionHaderReusableView.swift */; };
 		5770061B2D4089ED00762E8F /* CloudDriveConnetor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770061A2D4089DD00762E8F /* CloudDriveConnetor.swift */; };
 		5770064F2D40E45F00762E8F /* CloudDriveBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770064E2D40E45F00762E8F /* CloudDriveBrowserViewController.swift */; };
 		577006572D410D7F00762E8F /* BrowserItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */; };
@@ -621,6 +621,18 @@
 		5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */; };
 		5781F5462EF1384500916D8B /* MeloNXKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* MeloNXKit.swift */; };
 		5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5AB2EF45C6900916D8B /* JGenesisView.swift */; };
+		578F287E2F37805000D2D998 /* WFCSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F287C2F37804600D2D998 /* WFCSettingViewController.swift */; };
+		578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28812F3780B700D2D998 /* WFCSettingView.swift */; };
+		578F288E2F37838300D2D998 /* OnlinePlayCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */; };
+		578F28922F37855A00D2D998 /* PSPNetworkingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28912F37855900D2D998 /* PSPNetworkingViewController.swift */; };
+		578F28972F37856B00D2D998 /* PSPNetworkingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28952F37856700D2D998 /* PSPNetworkingView.swift */; };
+		578F28A62F3786D100D2D998 /* PSPNetworkingSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28A42F3786B500D2D998 /* PSPNetworkingSwitchCell.swift */; };
+		578F28AD2F37871100D2D998 /* PSPNetworkingConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28AB2F37870700D2D998 /* PSPNetworkingConfigCell.swift */; };
+		578F28B72F37881C00D2D998 /* PSPNetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28B52F37881400D2D998 /* PSPNetworkingConfig.swift */; };
+		578F28C12F39A9CD00D2D998 /* BonjourKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28C02F39A9CA00D2D998 /* BonjourKit.swift */; };
+		578F28D52F39E0A200D2D998 /* PSPNetworkingConfigLocalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28D42F39E0A100D2D998 /* PSPNetworkingConfigLocalView.swift */; };
+		578F28DB2F39FBC200D2D998 /* PSPNetworkingConfigOnlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28DA2F39FBC100D2D998 /* PSPNetworkingConfigOnlineView.swift */; };
+		578F28EC2F3A056600D2D998 /* CollectionFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28E92F3A055F00D2D998 /* CollectionFooterReusableView.swift */; };
 		579076E32D8A990700ED90FB /* FunctionButtonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */; };
 		579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
@@ -1622,7 +1634,7 @@
 		577005D32D3F2F8200762E8F /* WebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
 		577005D52D3F396C00762E8F /* PasteImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteImporter.swift; sourceTree = "<group>"; };
 		577005D92D3F404D00762E8F /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
-		577006082D3F980400762E8F /* LowestHaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowestHaderReusableView.swift; sourceTree = "<group>"; };
+		577006082D3F980400762E8F /* CollectionHaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHaderReusableView.swift; sourceTree = "<group>"; };
 		5770061A2D4089DD00762E8F /* CloudDriveConnetor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDriveConnetor.swift; sourceTree = "<group>"; };
 		5770064E2D40E45F00762E8F /* CloudDriveBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDriveBrowserViewController.swift; sourceTree = "<group>"; };
 		577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserItemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1724,6 +1736,18 @@
 		5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersExtensions.swift; sourceTree = "<group>"; };
 		5781F5442EF1383F00916D8B /* MeloNXKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeloNXKit.swift; sourceTree = "<group>"; };
 		5781F5AB2EF45C6900916D8B /* JGenesisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGenesisView.swift; sourceTree = "<group>"; };
+		578F287C2F37804600D2D998 /* WFCSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingViewController.swift; sourceTree = "<group>"; };
+		578F28812F3780B700D2D998 /* WFCSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingView.swift; sourceTree = "<group>"; };
+		578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlayCollectionCell.swift; sourceTree = "<group>"; };
+		578F28912F37855900D2D998 /* PSPNetworkingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingViewController.swift; sourceTree = "<group>"; };
+		578F28952F37856700D2D998 /* PSPNetworkingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingView.swift; sourceTree = "<group>"; };
+		578F28A42F3786B500D2D998 /* PSPNetworkingSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingSwitchCell.swift; sourceTree = "<group>"; };
+		578F28AB2F37870700D2D998 /* PSPNetworkingConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingConfigCell.swift; sourceTree = "<group>"; };
+		578F28B52F37881400D2D998 /* PSPNetworkingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingConfig.swift; sourceTree = "<group>"; };
+		578F28C02F39A9CA00D2D998 /* BonjourKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourKit.swift; sourceTree = "<group>"; };
+		578F28D42F39E0A100D2D998 /* PSPNetworkingConfigLocalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingConfigLocalView.swift; sourceTree = "<group>"; };
+		578F28DA2F39FBC100D2D998 /* PSPNetworkingConfigOnlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPNetworkingConfigOnlineView.swift; sourceTree = "<group>"; };
+		578F28E92F3A055F00D2D998 /* CollectionFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFooterReusableView.swift; sourceTree = "<group>"; };
 		579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionButtonContainerView.swift; sourceTree = "<group>"; };
 		579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentHoleView.swift; sourceTree = "<group>"; };
 		57913AF42D5D89CC004D51AA /* TouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchController.swift; sourceTree = "<group>"; };
@@ -2240,7 +2264,6 @@
 			children = (
 				57EED02F2EC8D99D003971BD /* JITSettingViewController.swift */,
 				57EED0252EC8D783003971BD /* iCloudSettingViewController.swift */,
-				5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */,
 				5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */,
 				57B5E3392ECDFDE800DE17E9 /* MAMEBiosViewController.swift */,
 				570F592D2DC885E3007BFD92 /* ThemeViewController.swift */,
@@ -3802,6 +3825,50 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		578F28712F377FBB00D2D998 /* OnlinePlay */ = {
+			isa = PBXGroup;
+			children = (
+				578F28B22F37880000D2D998 /* Models */,
+				578F28762F377FEC00D2D998 /* Views */,
+				578F28732F377FCD00D2D998 /* ViewControllers */,
+			);
+			path = OnlinePlay;
+			sourceTree = "<group>";
+		};
+		578F28732F377FCD00D2D998 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */,
+				578F287C2F37804600D2D998 /* WFCSettingViewController.swift */,
+				578F28912F37855900D2D998 /* PSPNetworkingViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		578F28762F377FEC00D2D998 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */,
+				5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */,
+				5754D88E2E274B1A001EA5ED /* DSOnlinePlaySettingCell.swift */,
+				578F28812F3780B700D2D998 /* WFCSettingView.swift */,
+				578F28A42F3786B500D2D998 /* PSPNetworkingSwitchCell.swift */,
+				578F28AB2F37870700D2D998 /* PSPNetworkingConfigCell.swift */,
+				578F28D42F39E0A100D2D998 /* PSPNetworkingConfigLocalView.swift */,
+				578F28DA2F39FBC100D2D998 /* PSPNetworkingConfigOnlineView.swift */,
+				578F28952F37856700D2D998 /* PSPNetworkingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		578F28B22F37880000D2D998 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				578F28B52F37881400D2D998 /* PSPNetworkingConfig.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		57913AF62D5D8D70004D51AA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -4248,8 +4315,6 @@
 			children = (
 				57EED0342EC8D9BB003971BD /* JITSettingView.swift */,
 				57EED02A2EC8D7C1003971BD /* iCloudSettingView.swift */,
-				5754D88E2E274B1A001EA5ED /* DSOnlinePlaySettingCell.swift */,
-				5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */,
 				5706AFCE2DF7FC510066122E /* SettingDescriptionCollectionViewCell.swift */,
 				57B5E3342ECDF75800DE17E9 /* MAMEBiosView.swift */,
 				5706AFC52DF7DAA20066122E /* BIOSCollectionViewCell.swift */,
@@ -4329,7 +4394,8 @@
 				5760601B2D2393EB00A98B0C /* SymbolView.swift */,
 				57DE10462D606C4700CDD82A /* SymbolButton.swift */,
 				57CCB3FE2D69B3FE0036476B /* ContextMenuButton.swift */,
-				577006082D3F980400762E8F /* LowestHaderReusableView.swift */,
+				577006082D3F980400762E8F /* CollectionHaderReusableView.swift */,
+				578F28E92F3A055F00D2D998 /* CollectionFooterReusableView.swift */,
 				57DF840B2D61B3D500AA0AAB /* BlankSlateCollectionView.swift */,
 				57B6ECEB2D79E19B002E619C /* BlankSlateTableView.swift */,
 				57DE104D2D6088BE00CDD82A /* BlankPlaceholderView.swift */,
@@ -4358,6 +4424,7 @@
 				5720E7702E54103100EC0DA5 /* RetroAchievements */,
 				57D7CF292EA5DB7B00F41540 /* TriggerPro */,
 				570CF87D2EEB092B00696C1B /* Shaders */,
+				578F28712F377FBB00D2D998 /* OnlinePlay */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -4443,6 +4510,7 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				578F28C02F39A9CA00D2D998 /* BonjourKit.swift */,
 				573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */,
 				5781F5442EF1383F00916D8B /* MeloNXKit.swift */,
 				57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */,
@@ -5263,6 +5331,7 @@
 				57F1A9342D7D6D7D00D0CC93 /* ExternalSceneDelegate.swift in Sources */,
 				5781F4652EED639F00916D8B /* ShadersListBlankSlateView.swift in Sources */,
 				57DFBE8C2E71BC7A008C2161 /* CheevosPopupView.swift in Sources */,
+				578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */,
 				57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */,
 				579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */,
 				577006832D438E2A00762E8F /* GamesViewController.swift in Sources */,
@@ -5401,6 +5470,7 @@
 				577005DA2D3F404F00762E8F /* ImportError.swift in Sources */,
 				57F632AB2D6FEC0F007270E8 /* SMBServiceProvider.swift in Sources */,
 				576F0E172D8820AB00D2A1BA /* MembershipInfoView.swift in Sources */,
+				578F28B72F37881C00D2D998 /* PSPNetworkingConfig.swift in Sources */,
 				57DCE8562E0FC9BC0079E3AA /* CoreSelectionView.swift in Sources */,
 				57E9632C2D6B06320022914C /* ImportFooterCollectionReusableView.swift in Sources */,
 				57B6ECCB2D797CB8002E619C /* AddCheatCodeContentCell.swift in Sources */,
@@ -5425,6 +5495,7 @@
 				57DCE8042E0D9F300079E3AA /* Deprecated.swift in Sources */,
 				57E8B1022E2366DC00F93E60 /* BIOSItem.swift in Sources */,
 				5754D88F2E274B27001EA5ED /* DSOnlinePlaySettingCell.swift in Sources */,
+				578F28AD2F37871100D2D998 /* PSPNetworkingConfigCell.swift in Sources */,
 				57D7CF5E2EA792E100F41540 /* AddTriggerButtonController.swift in Sources */,
 				57DCE8052E0D9F300079E3AA /* RowCompatible.swift in Sources */,
 				57DCE8062E0D9F300079E3AA /* OptionRow.swift in Sources */,
@@ -5452,6 +5523,7 @@
 				57F633002D718366007270E8 /* SettingItem.swift in Sources */,
 				57B6ECC02D7969E2002E619C /* AddCheatCodeView.swift in Sources */,
 				57CCB4172D69D1C30036476B /* HowToButton.swift in Sources */,
+				578F28DB2F39FBC200D2D998 /* PSPNetworkingConfigOnlineView.swift in Sources */,
 				57605FFC2D20F28100A98B0C /* ImportViewController.swift in Sources */,
 				57B6EC592D77DDFE002E619C /* GameSetting.swift in Sources */,
 				570F59202DC7ACA8007BFD92 /* GameCoverView.swift in Sources */,
@@ -5464,10 +5536,12 @@
 				57478A712D52037F006F0D99 /* RandomGameCollectionReusableView.swift in Sources */,
 				573CEE6D2F224FB300EA24F1 /* ShaderConfig.swift in Sources */,
 				5720E8112E559EE600EC0DA5 /* RetroAchievementCountView.swift in Sources */,
+				578F28D52F39E0A200D2D998 /* PSPNetworkingConfigLocalView.swift in Sources */,
 				577005B92D3E71BC00762E8F /* ImportService.swift in Sources */,
 				570622EC2D7BD2FE004F09E7 /* ShaderManager.swift in Sources */,
 				57D7CF622EA792FB00F41540 /* AddTriggerButtonView.swift in Sources */,
 				57B5E3362ECDF75F00DE17E9 /* MAMEBiosView.swift in Sources */,
+				578F28EC2F3A056600D2D998 /* CollectionFooterReusableView.swift in Sources */,
 				57B6EC652D77F832002E619C /* SettingItemCollectionViewCell.swift in Sources */,
 				57F1A9252D7D36D200D0CC93 /* GameViewExtensions.swift in Sources */,
 				570F59DC2DC9D52C007BFD92 /* ThemeManager.swift in Sources */,
@@ -5479,6 +5553,7 @@
 				5781F49E2EEE957200916D8B /* ShaderOrderCell.swift in Sources */,
 				576F0E0C2D880DE600D2A1BA /* GradientImageView.swift in Sources */,
 				571BB8072DA4357D00830134 /* ThreeDS.swift in Sources */,
+				578F288E2F37838300D2D998 /* OnlinePlayCollectionCell.swift in Sources */,
 				576060222D24E07500A98B0C /* AnimatedGradientView.swift in Sources */,
 				570F59132DC5BB1D007BFD92 /* CoverStyleCollectionViewCell.swift in Sources */,
 				5771C20A2E6569BE0062EDE0 /* LeaderboardView.swift in Sources */,
@@ -5489,7 +5564,7 @@
 				57D7CF3F2EA7355900F41540 /* TriggerProListViewController.swift in Sources */,
 				576F0E072D8806B500D2A1BA /* GameSavePurchaseGuideReusableView.swift in Sources */,
 				B2C97B502A09F3DE00053A4C /* UIimageExtensions.swift in Sources */,
-				577006092D3F980400762E8F /* LowestHaderReusableView.swift in Sources */,
+				577006092D3F980400762E8F /* CollectionHaderReusableView.swift in Sources */,
 				570F592E2DC885EF007BFD92 /* ThemeViewController.swift in Sources */,
 				57B5E3242ECCCD0800DE17E9 /* MAMEKit.swift in Sources */,
 				573CEE912F23396400EA24F1 /* Jaguar.swift in Sources */,
@@ -5497,6 +5572,7 @@
 				5720E7652E540F7200EC0DA5 /* RetroAchievementsLoginView.swift in Sources */,
 				5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */,
 				B2383F512A2733DF000563E6 /* UIFontExtensions.swift in Sources */,
+				578F287E2F37805000D2D998 /* WFCSettingViewController.swift in Sources */,
 				57E0C1A72D56580F00962555 /* UITextFieldExtensions.swift in Sources */,
 				5744C72B2E377C800088081A /* ControllableSideMenu.swift in Sources */,
 				5720E7CA2E54470000EC0DA5 /* ArrayExtensions.swift in Sources */,
@@ -5505,6 +5581,7 @@
 				5706AFC62DF7DABD0066122E /* BIOSCollectionViewCell.swift in Sources */,
 				57E9632E2D6B0B8A0022914C /* SparkleSeperatorView.swift in Sources */,
 				576C46352E16DA1B0008D087 /* MultiDiscItemCollectionCell.swift in Sources */,
+				578F28A62F3786D100D2D998 /* PSPNetworkingSwitchCell.swift in Sources */,
 				5706B05A2DFC0F7E0066122E /* SS.swift in Sources */,
 				57CC35822DC069BB00DF7418 /* DownloadItemCollectionViewCell.swift in Sources */,
 				5744C6FF2E368BB40088081A /* NoControllCollectionView.swift in Sources */,
@@ -5516,6 +5593,7 @@
 				A392D5B32E9796B900F920E7 /* ServiceIconView.swift in Sources */,
 				5706AFCF2DF7FC730066122E /* SettingDescriptionCollectionViewCell.swift in Sources */,
 				573CEE812F2338BC00EA24F1 /* A2600.swift in Sources */,
+				578F28922F37855A00D2D998 /* PSPNetworkingViewController.swift in Sources */,
 				575FF91D2D350F210043B2F3 /* PlayViewController.swift in Sources */,
 				5781F4842EEE586000916D8B /* ShaderInfoInputCell.swift in Sources */,
 				5706B0452DFBF7DF0066122E /* MCD.swift in Sources */,
@@ -5554,6 +5632,7 @@
 				57D029192E6C9C5200BF1F9D /* CheevosProgressView.swift in Sources */,
 				57047A0A2D85217C00C62FF6 /* PurchaseView.swift in Sources */,
 				57EC6AB82D803810002920F0 /* PlayHistoryBlankSlateView.swift in Sources */,
+				578F28972F37856B00D2D998 /* PSPNetworkingView.swift in Sources */,
 				5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */,
 				B23E3DF22A0C9D9B0068EADA /* GradientView.swift in Sources */,
 				57EC6AC82D8119D9002920F0 /* SyncManager.swift in Sources */,
@@ -5562,6 +5641,7 @@
 				A3A043BA2E9CF350006442C2 /* GameplayManualsView.swift in Sources */,
 				A3A043C42E9D3956006442C2 /* GameplayManualsViewController.swift in Sources */,
 				57526B7E2EADEED0003F91BD /* FDS.swift in Sources */,
+				578F28C12F39A9CD00D2D998 /* BonjourKit.swift in Sources */,
 				579213532D95314800E88819 /* BaseNavigationController.swift in Sources */,
 				57E0CC532D8EACC70027FB8C /* ResourcesKit.swift in Sources */,
 				570CF88C2EEB0AE000696C1B /* ShadersListView.swift in Sources */,

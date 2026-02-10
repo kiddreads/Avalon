@@ -850,3 +850,22 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "RemoveShaderForGlobal" = "Elimină Shader Global";
 "FeaturedItems" = "Articole Recomandate";
 "ReUpload" = "Reîncărcare";
+
+"Service" = "Servicii";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "Rețea PSP";
+"Networking" = "Rețea";
+"NetworkingConfiguration" = "Configurare rețea";
+"EnableNetworking" = "Activează rețeaua";
+"LANNetworking" = "Rețea locală";
+"WANNetworking" = "Rețea online";
+"SetAsHost" = "Setează ca gazdă";
+"IPAddress" = "Adresă IP";
+"ServerAddress" = "Adresă server";
+"PortOffset" = "Port";
+"HostAddress" = "Adresă gazdă";
+"ServiceFound" = "Găzduitori disponibile";
+"Connect" = "Conectează";
+"Connected" = "Conectat";
+"LocalNetworkingDesc" = "Pentru jocul multiplayer local este necesar cel puțin un dispozitiv ca gazdă. Gazda difuzează serviciul în rețeaua locală, iar celelalte dispozitive vor căuta automat gazde disponibile. Dacă nu este găsită nicio gazdă, poți introduce manual adresa IP a acesteia. După conectare, poți începe jocul multiplayer.";
+"OnlineNetworkingDesc" = "Pentru jocul multiplayer online este necesară introducerea unei adrese de server online valide.";

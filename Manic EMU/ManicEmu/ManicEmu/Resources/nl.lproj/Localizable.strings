@@ -851,3 +851,22 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "RemoveShaderForGlobal" = "Globale Shader Verwijderen";
 "FeaturedItems" = "Uitgelichte Items";
 "ReUpload" = "Opnieuw Uploaden";
+
+"Service" = "Diensten";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "PSP Netwerk";
+"Networking" = "Netwerk";
+"NetworkingConfiguration" = "Netwerkconfiguratie";
+"EnableNetworking" = "Netwerk inschakelen";
+"LANNetworking" = "Lokaal netwerk";
+"WANNetworking" = "Onlinenetwerk";
+"SetAsHost" = "Als host instellen";
+"IPAddress" = "IP-adres";
+"ServerAddress" = "Serveradres";
+"PortOffset" = "Poort";
+"HostAddress" = "Hostadres";
+"ServiceFound" = "Beschikbare hosts";
+"Connect" = "Verbinden";
+"Connected" = "Verbonden";
+"LocalNetworkingDesc" = "Lokale multiplayer vereist minimaal één apparaat als host. De host zendt zijn service uit op het lokale netwerk en andere apparaten zoeken automatisch naar beschikbare hosts. Als er geen host wordt gevonden, kun je handmatig het IP-adres van de host invoeren. Na het verbinden kan de multiplayersessie beginnen.";
+"OnlineNetworkingDesc" = "Online multiplayer vereist het invoeren van een geldig online serveradres.";

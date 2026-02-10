@@ -823,3 +823,22 @@
 "RemoveShaderForGlobal" = "إزالة الشادر العالمي";
 "FeaturedItems" = "العناصر المميزة";
 "ReUpload" = "إعادة التحميل";
+
+"Service" = "الخدمات";
+"NintendoWFC" = "Nintendo WFC";
+"PSPNetworking" = "شبكة PSP";
+"Networking" = "الشبكة";
+"NetworkingConfiguration" = "تكوين الشبكة";
+"EnableNetworking" = "تمكين الشبكة";
+"LANNetworking" = "الشبكة المحلية";
+"WANNetworking" = "الشبكة عبر الإنترنت";
+"SetAsHost" = "تعيين كخادم مضيف";
+"IPAddress" = "عنوان IP";
+"ServerAddress" = "عنوان الخادم";
+"PortOffset" = "المنفذ";
+"HostAddress" = "عنوان المضيف";
+"ServiceFound" = "الخوادم المضيفة المتاحة";
+"Connect" = "اتصال";
+"Connected" = "متصل";
+"LocalNetworkingDesc" = "يتطلب اللعب الجماعي المحلي جهازًا واحدًا على الأقل ليعمل كخادم مضيف. يبث المضيف خدمته على الشبكة المحلية، وستبحث الأجهزة الأخرى تلقائيًا عن المضيفين المتاحين. إذا لم يتم العثور على مضيف، يمكنك إدخال عنوان IP الخاص بالمضيف يدويًا. بمجرد الاتصال، يمكن بدء اللعب الجماعي.";
+"OnlineNetworkingDesc" = "يتطلب اللعب الجماعي عبر الإنترنت إدخال عنوان خادم عبر الإنترنت صالح.";

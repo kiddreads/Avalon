@@ -856,3 +856,22 @@ PlayCase 專注於高品質 iPhone 保護殼，設計時充分考慮了配件與
 "RemoveShaderForGlobal" = "移除全局著色器";
 "FeaturedItems" = "精選周邊";
 "ReUpload" = "重新上傳";
+
+"Service" = "服務";
+"NintendoWFC" = "任天堂 WFC";
+"PSPNetworking" = "PSP 網路";
+"Networking" = "網路";
+"NetworkingConfiguration" = "網路設定";
+"EnableNetworking" = "啟用網路";
+"LANNetworking" = "區域網路";
+"WANNetworking" = "網際網路";
+"SetAsHost" = "將本設備設為主機";
+"IPAddress" = "IP 位址";
+"ServerAddress" = "伺服器位址";
+"PortOffset" = "通訊埠";
+"HostAddress" = "主機位址";
+"ServiceFound" = "可用主機";
+"Connect" = "連線";
+"Connected" = "已連線";
+"LocalNetworkingDesc" = "區域網路連線需要至少一台設備作為主機。主機會在區域網路內廣播服務，其他設備將自動搜尋可用主機。若未能搜尋到主機，可手動輸入主機的 IP 位址。連線成功後即可開始連線遊戲。";
+"OnlineNetworkingDesc" = "網際網路連線需要填寫可用的線上伺服器位址。";

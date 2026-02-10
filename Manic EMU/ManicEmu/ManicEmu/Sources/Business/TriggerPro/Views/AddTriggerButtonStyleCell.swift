@@ -194,15 +194,18 @@ class AddTriggerButtonStyleCell: UICollectionViewCell {
         }()
         
         var didValueChange: ((CGFloat)->Void)? = nil
+        var didChangeEnd: ((CGFloat)->Void)? = nil
+        private var numberOfDecimalPlaces: Int
         var valueSufix: String?
         var value: Float = 0 {
             didSet {
-                detailLabel.text = "\(value)" + (valueSufix ?? "")
+                detailLabel.text = (numberOfDecimalPlaces == -1 ? "\(Int(value))" : "\(value)") + (valueSufix ?? "")
                 sliderView.value = value
             }
         }
         
         init(title: String, valueSufix: String?, minimumValue: Float, maximumValue: Float, numberOfDecimalPlaces: Int = 0) {
+            self.numberOfDecimalPlaces = numberOfDecimalPlaces
             self.valueSufix = valueSufix
             super.init(frame: .zero)
             
@@ -225,15 +228,27 @@ class AddTriggerButtonStyleCell: UICollectionViewCell {
             }
             
             titleLabel.text = title
-            detailLabel.text = "\(value)" + (valueSufix ?? "")
+            detailLabel.text = (numberOfDecimalPlaces == -1 ? "\(Int(value))" : "\(value)") + (valueSufix ?? "")
             sliderView.minimumValue = minimumValue
             sliderView.maximumValue = maximumValue
+            
+            sliderView.on(.touchUpInside) { [weak self] sender, forEvent in
+                guard let self = self else { return }
+                let value = self.sliderView.value.rounded(numberOfDecimalPlaces: numberOfDecimalPlaces, rule: .toNearestOrEven)
+                self.didChangeEnd?(CGFloat(value))
+            }
+            
+            sliderView.on(.touchUpOutside) { [weak self] sender, forEvent in
+                guard let self = self else { return }
+                let value = self.sliderView.value.rounded(numberOfDecimalPlaces: numberOfDecimalPlaces, rule: .toNearestOrEven)
+                self.didChangeEnd?(CGFloat(value))
+            }
             
             sliderView.on(.valueChanged) { [weak self] sender, forEvent in
                 guard let self = self else { return }
                 let value = self.sliderView.value.rounded(numberOfDecimalPlaces: numberOfDecimalPlaces, rule: .toNearestOrEven)
                 self.didValueChange?(CGFloat(value))
-                self.detailLabel.text = "\(value)" + (self.valueSufix ?? "")
+                self.detailLabel.text = (numberOfDecimalPlaces == -1 ? "\(Int(value))" : "\(value)") + (self.valueSufix ?? "")
             }
         }
         

@@ -20,7 +20,8 @@ class SettingDescriptionCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         addSubview(descLabel)
         descLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.bottom.equalToSuperview().inset(10)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
         }
     }
     
