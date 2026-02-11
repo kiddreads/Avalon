@@ -653,7 +653,7 @@
 		57A481542E7A8B84001D4598 /* bsnes-jg.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A481682E7F05AB001D4598 /* melondsds.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A481672E7F059D001D4598 /* melondsds.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A4816A2E7F05D2001D4598 /* NDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A481692E7F05CD001D4598 /* NDS.swift */; };
-		57A912042F3B767800628B04 /* NDSSaveConventer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A912022F3B765B00628B04 /* NDSSaveConventer.swift */; };
+		57A912042F3B767800628B04 /* NDSSaveConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A912022F3B765B00628B04 /* NDSSaveConverter.swift */; };
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
 		57AEB9DC2F2614C6005CB496 /* NavigationBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */; };
@@ -1770,7 +1770,7 @@
 		57A481532E7A8B76001D4598 /* bsnes-jg.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "bsnes-jg.libretro.framework"; path = "../Cores/bsnes-jg.libretro.framework"; sourceTree = SOURCE_ROOT; };
 		57A481672E7F059D001D4598 /* melondsds.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = melondsds.libretro.framework; path = ../Cores/melondsds.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57A481692E7F05CD001D4598 /* NDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDS.swift; sourceTree = "<group>"; };
-		57A912022F3B765B00628B04 /* NDSSaveConventer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDSSaveConventer.swift; sourceTree = "<group>"; };
+		57A912022F3B765B00628B04 /* NDSSaveConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDSSaveConverter.swift; sourceTree = "<group>"; };
 		57AD35E92D7DEB900092FD03 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheerExtensions.swift; sourceTree = "<group>"; };
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -4512,7 +4512,7 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
-				57A912022F3B765B00628B04 /* NDSSaveConventer.swift */,
+				57A912022F3B765B00628B04 /* NDSSaveConverter.swift */,
 				578F28C02F39A9CA00D2D998 /* BonjourKit.swift */,
 				573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */,
 				5781F5442EF1383F00916D8B /* MeloNXKit.swift */,
@@ -5407,7 +5407,7 @@
 				57DE104E2D6088BE00CDD82A /* BlankPlaceholderView.swift in Sources */,
 				57E962F82D6AB4540022914C /* PlayHistoryItemCollectionCell.swift in Sources */,
 				57CCB33B2D6584BC0036476B /* ObjectUpdatable.swift in Sources */,
-				57A912042F3B767800628B04 /* NDSSaveConventer.swift in Sources */,
+				57A912042F3B767800628B04 /* NDSSaveConverter.swift in Sources */,
 				576C46312E16D9090008D087 /* MultiDiscDescCollectionCell.swift in Sources */,
 				57399AC52E40ACE100AB73DD /* PSXSBIImportViewController.swift in Sources */,
 				570F59152DC5BB48007BFD92 /* PlatformSortCollectionViewCell.swift in Sources */,

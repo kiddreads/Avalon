@@ -687,7 +687,7 @@ class GameListView: BaseView {
                 Game.change { realm in
                     for game in games {
                         if game.isRomExtsts {
-                            if game.gameType == ._3ds, game.fileExtension.lowercased() == "app", let range = game.romUrl.path.range(of: "/content/00000000.app") {
+                            if game.gameType == ._3ds, game.fileExtension.lowercased() == "app", let range = game.romUrl.path.range(of: "/content/") {
                                 let gamePath = String(game.romUrl.path[...range.lowerBound])
                                 try FileManager.safeRemoveItem(at: URL(fileURLWithPath: gamePath))
                                 SyncManager.delete(localFilePath: gamePath)

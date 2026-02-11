@@ -694,10 +694,10 @@ class Game: Object, ObjectUpdatable {
         
         func processSave() {
             //melonDS的srm存档和Desmume的dsv存档不互通，这里需要先进行转换
-            if coreIndex == 0, NDSSaveConventer.checkSaveType(fileURL: saveUrl) == .dsv {
-                NDSSaveConventer.dsvToSav(saveUrl: saveUrl)
-            } else if coreIndex == 1, NDSSaveConventer.checkSaveType(fileURL: saveUrl) == .sav {
-                NDSSaveConventer.savToDsv(saveUrl: saveUrl)
+            if coreIndex == 0, NDSSaveConverter.checkSaveType(fileURL: saveUrl) == .dsv {
+                NDSSaveConverter.dsvToSav(saveUrl: saveUrl)
+            } else if coreIndex == 1, NDSSaveConverter.checkSaveType(fileURL: saveUrl) == .sav {
+                NDSSaveConverter.savToDsv(saveUrl: saveUrl)
             }
         }
         
