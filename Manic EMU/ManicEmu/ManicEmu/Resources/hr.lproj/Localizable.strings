@@ -867,3 +867,5 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "Connected" = "Povezano";
 "LocalNetworkingDesc" = "Lokalni multiplayer zahtijeva barem jedan uređaj kao host. Host emitira svoju uslugu na lokalnoj mreži, a drugi uređaji će automatski tražiti dostupne hostove. Ako se ne pronađe host, možete ručno unijeti IP adresu hosta. Nakon povezivanja, može započeti multiplayer igra.";
 "OnlineNetworkingDesc" = "Online multiplayer zahtijeva unos valjane adrese online poslužitelja.";
+"SafeMode" = "Sigurni Način Rada";
+"SafeModeDesc" = "Pokretanje igre u sigurnom načinu rada onemogućuje sve dodatne postavke (poput prilagođene razlučivosti, brzog premotavanja i sjenčara) i pokreće je s minimalnom konfiguracijom. To može pomoći u rješavanju problema uzrokovanih netočnim postavkama koje sprečavaju pokretanje igre. Primjenjuje se samo na ovo pokretanje.";

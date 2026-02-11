@@ -652,7 +652,6 @@ class GameListView: BaseView {
             ShareManager.shareFiles(games: games, shareFileType: .rom)
         case .importSave:
             if firstGame.gameType == .dc {
-                
                 return
             }
             FilesImporter.shared.presentImportController(supportedTypes: UTType.gamesaveTypes, allowsMultipleSelection: false) { urls in
@@ -668,10 +667,12 @@ class GameListView: BaseView {
                                              confirmAction: {
                                 try? FileManager.safeCopyItem(at: url, to: firstGame.gameSaveUrl, shouldReplace: true)
                                 UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle())
+                                firstGame.processNDSGameSave()
                             })
                         } else {
                             try? FileManager.safeCopyItem(at: url, to: firstGame.gameSaveUrl, shouldReplace: true)
                             UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle())
+                            firstGame.processNDSGameSave()
                         }
                     }
                 }
@@ -1193,8 +1194,8 @@ extension GameListView: UICollectionViewDelegate {
                 if game.gameType.supportCores.count > 0 {
                     var supportSwitchCore = true
                     #if !SIDE_LOAD
-                    if game.isClownMDEmuCore || game.isGearSystemCore {
-                        //AppStore版本的md、ms、gg、sg-1000不支持核心切换
+                    if game.gameType == .md || game.gameType == ._32x || game.gameType == .arcade || game.isGearSystemCore {
+                        //AppStore版本的md、32x、、arcade、ms、gg、sg-1000不支持核心切换
                         supportSwitchCore = false
                     }
                     #endif

@@ -334,15 +334,13 @@ extension GameType {
         } else if self == .gb || self == .gbc {
             return [LibretroCore.Cores.Gambatte.name, LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
         } else if self == .arcade {
-#if SIDE_LOAD
             return [LibretroCore.Cores.MAME.name, LibretroCore.Cores.FinalBurnNeo.name]
-#endif
         } else if self == ._3ds {
             return [LibretroCore.Cores.Citra.name, LibretroCore.Cores.Azahar.name]
-        } else if self == ._32x || self == .mcd {
-#if SIDE_LOAD
+        } else if self == ._32x {
             return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name]
-#endif
+        } else if self == .mcd {
+            return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name, LibretroCore.Cores.ClownMDEmu.name]
         } else if self == .ds {
             return [LibretroCore.Cores.melonDSDS.name, LibretroCore.Cores.DeSmuME.name]
         }

@@ -870,3 +870,5 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "Connected" = "Yhdistetty";
 "LocalNetworkingDesc" = "Paikallinen moninpeli vaatii vähintään yhden laitteen isännäksi. Isäntä lähettää palvelunsa paikallisessa verkossa, ja muut laitteet etsivät automaattisesti käytettävissä olevia isäntiä. Jos isäntää ei löydy, voit syöttää sen IP-osoitteen manuaalisesti. Yhdistämisen jälkeen moninpeli voi alkaa.";
 "OnlineNetworkingDesc" = "Verkkomoninpeli vaatii kelvollisen verkkopalvelimen osoitteen.";
+"SafeMode" = "Turvatila";
+"SafeModeDesc" = "Pelin käynnistäminen turvatilassa poistaa käytöstä kaikki lisäasetukset (kuten mukautetun resoluution, pikakelauksen ja varjostimet) ja suorittaa sen minimaalisella konfiguraatiolla. Tämä voi auttaa ratkaisemaan ongelmia, jotka johtuvat vääristä asetuksista, jotka estävät pelin käynnistymisen. Koskee vain tätä käynnistystä.";

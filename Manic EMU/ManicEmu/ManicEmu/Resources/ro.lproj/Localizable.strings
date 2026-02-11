@@ -869,3 +869,5 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "Connected" = "Conectat";
 "LocalNetworkingDesc" = "Pentru jocul multiplayer local este necesar cel puțin un dispozitiv ca gazdă. Gazda difuzează serviciul în rețeaua locală, iar celelalte dispozitive vor căuta automat gazde disponibile. Dacă nu este găsită nicio gazdă, poți introduce manual adresa IP a acesteia. După conectare, poți începe jocul multiplayer.";
 "OnlineNetworkingDesc" = "Pentru jocul multiplayer online este necesară introducerea unei adrese de server online valide.";
+"SafeMode" = "Mod Securizat";
+"SafeModeDesc" = "Lansarea unui joc în Mod Securizat dezactivează toate setările adiționale (precum rezoluția personalizată, derularea rapidă și shaderele) și îl rulează cu o configurație minimă. Acest lucru poate ajuta la rezolvarea problemelor cauzate de setări incorecte care împiedică pornirea jocului. Se aplică numai pentru această lansare.";

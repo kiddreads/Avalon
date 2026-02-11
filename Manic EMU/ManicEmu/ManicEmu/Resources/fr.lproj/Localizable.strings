@@ -871,3 +871,5 @@ Si vous souhaitez améliorer votre configuration, PlayCase est le complément id
 "Connected" = "Connecté";
 "LocalNetworkingDesc" = "Le multijoueur en local nécessite au moins un appareil faisant office d'hôte. L'hôte diffuse son service sur le réseau local, et les autres appareils rechercheront automatiquement les hôtes disponibles. Si aucun hôte n'est trouvé, vous pouvez saisir manuellement son adresse IP. Une fois connectés, la partie multijoueur peut commencer.";
 "OnlineNetworkingDesc" = "Le multijoueur en ligne nécessite de saisir une adresse de serveur en ligne valide.";
+"SafeMode" = "Mode Sans Échec";
+"SafeModeDesc" = "Lancer un jeu en Mode Sans Échec désactive tous les paramètres supplémentaires (tels que la résolution personnalisée, l'avance rapide et les shaders) et s'exécute avec une configuration minimale. Cela peut résoudre les problèmes causés par des paramètres incorrects empêchant le jeu de démarrer. Ne s'applique qu'à ce lancement.";

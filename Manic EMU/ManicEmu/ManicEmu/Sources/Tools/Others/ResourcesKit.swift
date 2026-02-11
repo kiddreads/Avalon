@@ -159,6 +159,22 @@ struct ResourcesKit {
                                 }
                             }
                         }
+                        //升级1.8.3将DeSmuME核心的dsv存档全转转换为srm
+                        if systemCoreVersionNumber < 183 {
+                            if let contents = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.DSSavePath) {
+                                for content in contents {
+                                    if content.pathExtension.lowercased() == "dsv" {
+                                        let contentUrl = URL(fileURLWithPath: Constants.Path.DSSavePath.appendingPathComponent(content))
+                                        let newContentUrl = URL(fileURLWithPath: Constants.Path.DSSavePath.appendingPathComponent(content.deletingPathExtension + ".srm"))
+                                        if FileManager.default.fileExists(atPath: newContentUrl.path) {
+                                            continue
+                                        } else {
+                                            try? FileManager.safeMoveItem(at: contentUrl, to: newContentUrl)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     
                     Log.info("资源解压成功!")

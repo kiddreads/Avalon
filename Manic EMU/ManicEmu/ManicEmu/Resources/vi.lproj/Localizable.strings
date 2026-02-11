@@ -863,3 +863,5 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "Connected" = "Đã kết nối";
 "LocalNetworkingDesc" = "Chơi mạng cục bộ yêu cầu ít nhất một thiết bị đóng vai trò máy chủ. Máy chủ phát dịch vụ trong mạng cục bộ và các thiết bị khác sẽ tự động tìm kiếm máy chủ có sẵn. Nếu không tìm thấy máy chủ, bạn có thể nhập thủ công địa chỉ IP của máy chủ. Sau khi kết nối, có thể bắt đầu chơi game nhiều người.";
 "OnlineNetworkingDesc" = "Chơi trực tuyến nhiều người yêu cầu nhập địa chỉ máy chủ trực tuyến hợp lệ.";
+"SafeMode" = "Chế độ An toàn";
+"SafeModeDesc" = "Khởi chạy trò chơi ở Chế độ An toàn sẽ tắt tất cả cài đặt bổ sung (như độ phân giải tùy chỉnh, tua nhanh và bộ tô bóng) và chạy với cấu hình tối thiểu. Điều này có thể giúp giải quyết các sự cố do cài đặt không chính xác khiến trò chơi không khởi động được. Chỉ áp dụng cho lần khởi chạy này.";

@@ -843,3 +843,5 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "Connected" = "Disambungkan";
 "LocalNetworkingDesc" = "Permainan berbilang pemain setempat memerlukan sekurang-kurangnya satu peranti sebagai hos. Hos menyiarkan perkhidmatannya dalam rangkaian setempat, dan peranti lain akan mencari hos yang tersedia secara automatik. Jika tiada hos ditemui, anda boleh memasukkan alamat IP hos secara manual. Setelah disambung, permainan berbilang pemain boleh dimulakan.";
 "OnlineNetworkingDesc" = "Permainan berbilang pemain dalam talian memerlukan alamat pelayan dalam talian yang sah.";
+"SafeMode" = "Mod Selamat";
+"SafeModeDesc" = "Melancarkan permainan dalam Mod Selamat menyahdayakan semua tetapan tambahan (seperti resolusi tersuai, maju pantas dan pelindung) dan berjalan dengan konfigurasi minimum. Ini boleh membantu menyelesaikan masalah yang disebabkan oleh tetapan salah yang menghalang permainan dimulakan. Hanya terpakai untuk pelancaran ini.";

@@ -871,3 +871,5 @@ Wenn Sie Ihr Setup verbessern möchten, ist PlayCase die perfekte Ergänzung zu 
 "Connected" = "Verbunden";
 "LocalNetworkingDesc" = "Lokaler Mehrspielermodus erfordert mindestens ein Gerät als Host. Der Host überträgt seinen Dienst im lokalen Netzwerk, andere Geräte suchen automatisch nach verfügbaren Hosts. Wird kein Host gefunden, kann die IP-Adresse des Hosts manuell eingegeben werden. Nach erfolgreicher Verbindung kann der Mehrspielermodus beginnen.";
 "OnlineNetworkingDesc" = "Online-Mehrspielermodus erfordert die Eingabe einer gültigen Online-Serveradresse.";
+"SafeMode" = "Abgesicherter Modus";
+"SafeModeDesc" = "Das Starten eines Spiels im abgesicherten Modus deaktiviert alle zusätzlichen Einstellungen (wie benutzerdefinierte Auflösung, Schnellvorlauf und Shader) und führt es mit einer Minimal-Konfiguration aus. Dies kann Probleme beheben, die durch falsche Einstellungen verursacht werden und den Start verhindern. Gilt nur für diesen Start.";

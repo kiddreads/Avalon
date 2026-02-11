@@ -1130,6 +1130,10 @@ static BOOL RespectSilentMode = false;
 }
 
 - (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath {
+    settings_t *settings = config_get_ptr();
+    settings->bools.video_font_enable = false;//禁用通知
+    settings->bools.audio_respect_silent_mode = RespectSilentMode;
+    set_custom_save_ext(g_customSaveExtension ? g_customSaveExtension.UTF8String : NULL);
     // 直接调用RetroArch的无内容核心加载函数
     task_push_load_contentless_core_from_menu(corePath.UTF8String);
 }

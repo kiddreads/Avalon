@@ -870,3 +870,5 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "Connected" = "Verbonden";
 "LocalNetworkingDesc" = "Lokale multiplayer vereist minimaal één apparaat als host. De host zendt zijn service uit op het lokale netwerk en andere apparaten zoeken automatisch naar beschikbare hosts. Als er geen host wordt gevonden, kun je handmatig het IP-adres van de host invoeren. Na het verbinden kan de multiplayersessie beginnen.";
 "OnlineNetworkingDesc" = "Online multiplayer vereist het invoeren van een geldig online serveradres.";
+"SafeMode" = "Veilige Modus";
+"SafeModeDesc" = "Een game starten in de Veilige Modus schakelt alle aanvullende instellingen uit (zoals aangepaste resolutie, snel vooruit en shaders) en voert deze uit met een minimale configuratie. Dit kan helpen problemen op te lossen die worden veroorzaakt door onjuiste instellingen waardoor de game niet start. Geldt alleen voor deze start.";

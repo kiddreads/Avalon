@@ -869,3 +869,5 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "Connected" = "Bağlandı";
 "LocalNetworkingDesc" = "Yerel çok oyunculu oyun için en az bir cihazın ana bilgisayar olarak ayarlanması gerekir. Ana bilgisayar, hizmetini yerel ağda yayınlar ve diğer cihazlar otomatik olarak kullanılabilir ana bilgisayarları arar. Ana bilgisayar bulunamazsa, IP adresini elle girebilirsiniz. Bağlantı kurulduktan sonra çok oyunculu oyuna başlanabilir.";
 "OnlineNetworkingDesc" = "Çevrimiçi çok oyunculu oyun için geçerli bir çevrimiçi sunucu adresi girmek gerekir.";
+"SafeMode" = "Güvenli Mod";
+"SafeModeDesc" = "Bir oyunu Güvenli Mod'da başlatmak, tüm ek ayarları (özel çözünürlük, hızlı ileri sarma ve gölgelendiriciler gibi) devre dışı bırakır ve asgari yapılandırmayla çalıştırır. Bu, oyunun başlamasını engelleyen yanlış ayarlardan kaynaklanan sorunları çözmenize yardımcı olabilir. Yalnızca bu başlatma için geçerlidir.";

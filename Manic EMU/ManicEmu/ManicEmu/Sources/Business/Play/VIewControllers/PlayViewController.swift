@@ -716,11 +716,17 @@ class PlayViewController: GameViewController {
         //设置外设控制器
         updateExternalGameController()
         //如果需要加载默认配置
-        loadConfig()
+        if manicGame.safeMode {
+            loadMinimalConfig()
+        } else {
+            loadConfig()
+        }
         //更新皮肤
         updateSkin()
         //更新TriggerPro
-        updateTriggerPro()
+        if !manicGame.safeMode {
+            updateTriggerPro()
+        }
         //全屏模式的时候点击屏幕临时展示menu和flex按钮
         view.addTapGesture(handler: { [weak self] _ in
             guard let self, self.isFullScreen else { return }
@@ -740,6 +746,12 @@ class PlayViewController: GameViewController {
         //更新声音
         updateAudio()
         functionButtonContainer.isHidden = false
+        //游戏启动稳定后禁用安全模式
+        if manicGame.safeMode {
+            DispatchQueue.main.asyncAfter(delay: 5, execute: { [weak self] in
+                self?.manicGame.safeMode = false
+            })
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -1748,7 +1760,6 @@ extension PlayViewController {
                     let scale = UInt32(item.resolution == .undefine ? 1 : item.resolution.rawValue)
                     let option = "\(256*scale)x\(192*scale)"
                     LibretroCore.sharedInstance().updateRunningCoreConfigs(["desmume_internal_resolution": option], flush: false)
-                    DSEmulatorBridge.shared.touchScale = CGFloat(scale)*0.25
                 }
             }
             let message: String
@@ -2132,6 +2143,7 @@ extension PlayViewController {
     }
     
     private func updateCheatCodes(firstInit: Bool = false) {
+        guard !manicGame.safeMode else { return }
         guard !isWFCConnect else { return }
         guard !isHardcoreMode else { return }
         if manicGame.gameType == ._3ds {
@@ -2234,6 +2246,7 @@ extension PlayViewController {
     }
     
     private func updateFilter() {
+        guard !manicGame.safeMode else { return }
         guard !manicGame.isCitra3DS, !manicGame.isJGenesisCore else { return }
         
         if manicGame.isLibretroType {
@@ -2365,6 +2378,9 @@ extension PlayViewController {
         } else if manicGame.isClownMDEmuCore {
             let tvStandard = (manicGame.getExtraInt(key: ExtraKey.tvStandard.rawValue) ?? 0) == 0 ? "ntsc" : "pal"
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.ClownMDEmu.name, key: "clownmdemu_tv_standard", value: tvStandard, reload: false)
+            if manicGame.gameType == .mcd {
+                MCD.isJGenesisCore = false
+            }
         } else if manicGame.gameType == .ss {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Yabause.name, key: "yabause_addon_cartridge", value: "4M_ram", reload: false)
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_cart", value: "Extended RAM (4MB)", reload: false)
@@ -2410,7 +2426,6 @@ extension PlayViewController {
                 //wfc
                 LibretroCore.sharedInstance().setNDSWFCDNS( WFC.currentDNS());
                 DSEmulatorBridge.shared.isDeSmuMECore = false
-                DSEmulatorBridge.shared.touchScale = 1
             } else {
                 //DeSmuME
                 let languageOptions = Constants.Strings.DSConsoleLanguage
@@ -2430,7 +2445,6 @@ extension PlayViewController {
                                                                      "desmume_mic_mode": microphone ? "physical" : "pattern"],
                                                            reload: false)
                 DSEmulatorBridge.shared.isDeSmuMECore = true
-                DSEmulatorBridge.shared.touchScale = CGFloat(scale)*0.25
             }
         } else if manicGame.gameType == .gba {
             if manicGame.defaultCore == 1 {
@@ -2641,6 +2655,292 @@ extension PlayViewController {
             
             //配置Rumble
             LibretroCore.sharedInstance().setEnableRumble(Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false)
+            
+            //配置System的位置
+            if manicGame.gameType == .dc {
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.Flycast)
+            } else {
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.System.libretroPath)
+            }
+        }
+        
+        //配置控制器死区，
+        ExternalGameControllerUtils.shared.deadZone = (Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0).float
+        if !manicGame.gameType.supportAnalogInput {
+            //对于没有摇杆输入的平台，如果使用外置控制器的摇杆来映射按键的时候，会有很多不可预见的问题
+            let settingDeadzone = Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0
+            if settingDeadzone < 0.4 {
+                //强制设置0.4以上可以避免摇杆细微变动输入带来的错误
+                ExternalGameControllerUtils.shared.deadZone = 0.4
+            }
+        }
+        
+        skinSwitchBindDatas["reverseScreens"] = manicGame.swapScreen
+        skinSwitchBindDatas["volume"] = manicGame.volume
+        skinSwitchBindDatas["toggleControlls"] = manicGame.forceFullSkin
+    }
+    
+    private func loadMinimalConfig() {
+        if manicGame.gameType == .psp {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PPSSPP.name, configs: [
+                "ppsspp_cheats": "enabled",
+                "ppsspp_language": "Automatic",
+                "ppsspp_backend": "auto",
+                "ppsspp_texture_replacement": "disabled",
+                "ppsspp_enable_wlan": "disabled",
+                "ppsspp_internal_resolution": "480x272"
+            ], reload: false)
+        } else if manicGame.gameType == .nes || manicGame.gameType == .fds {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, configs: [
+                "nestopia_aspect": "uncorrected",
+                "nestopia_palette": "cxa2025as"
+            ], reload: false)
+        } else if manicGame.gameType == .snes {
+            if manicGame.getExtraBool(key: ExtraKey.snesVRAM.rawValue) ?? false {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.bsnes.name, key: "bsnes_ppu_no_vram_blocking", value: "ON", reload: false)
+            }
+        } else if manicGame.isPicodriveCore {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PicoDrive.name, key: "picodrive_input1", value: "6 button pad", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PicoDrive.name, key: "picodrive_input2", value: "6 button pad", reload: false)
+        } else if manicGame.isClownMDEmuCore {
+            let tvStandard = (manicGame.getExtraInt(key: ExtraKey.tvStandard.rawValue) ?? 0) == 0 ? "ntsc" : "pal"
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.ClownMDEmu.name, key: "clownmdemu_tv_standard", value: tvStandard, reload: false)
+            if manicGame.gameType == .mcd {
+                MCD.isJGenesisCore = false
+            }
+        } else if manicGame.gameType == .ss {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Yabause.name, key: "yabause_addon_cartridge", value: "4M_ram", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_cart", value: "Extended RAM (4MB)", reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_region", value: Constants.Strings.SaturnConsoleLanguage[manicGame.region], reload: false)
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleSaturn.name, key: "beetle_saturn_horizontal_overscan", value: "20", reload: false)
+        } else if manicGame.gameType == .ds {
+            if manicGame.defaultCore == 0 {
+                //systemType
+                let systemType: String
+                if manicGame.isDSHomeMenuGame {
+                    systemType = "ds"
+                } else if manicGame.isDSiHomeMenuGame {
+                    systemType = "dsi"
+                } else {
+                    systemType = "ds"
+                }
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.melonDSDS.name,
+                                                           configs: ["melonds_firmware_language": "auto",
+                                                                     "melonds_console_mode": systemType,
+                                                                     "melonds_mic_input": "silence",
+                                                                     "melonds_mic_input_active": "always",
+                                                                     "melonds_number_of_screen_layouts": "1",
+                                                                     "melonds_screen_layout1": "custom",
+                                                                     "melonds_show_cursor": "disabled"],
+                                                           reload: false)
+                //wfc
+                LibretroCore.sharedInstance().setNDSWFCDNS( WFC.currentDNS());
+                DSEmulatorBridge.shared.isDeSmuMECore = false
+            } else {
+                //DeSmuME
+                let scale = UInt32(manicGame.resolution == .undefine ? 1 : manicGame.resolution.rawValue)
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.DeSmuME.name,
+                                                           configs: ["desmume_pointer_type": "touch",
+                                                                     "desmume_internal_resolution": "256x192",
+                                                                     "desmume_firmware_language": "Auto",
+                                                                     "desmume_pointer_device_l": "emulated",
+                                                                     "desmume_pointer_device_r": "emulated",
+                                                                     "desmume_mic_mode": "physical"],
+                                                           reload: false)
+                DSEmulatorBridge.shared.isDeSmuMECore = true
+            }
+        } else if manicGame.gameType == .gba {
+            if manicGame.defaultCore == 1 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.VBAM.name, configs: [
+                    "vbam_usebios": "enabled",
+                    "vbam_gbHardware": "gba"
+                ], reload: false)
+            }
+        } else if manicGame.gameType == .gbc {
+            if manicGame.defaultCore == 0 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, key: "gambatte_gbc_color_correction", value: "disabled", reload: false)
+            } else if manicGame.defaultCore == 2 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.VBAM.name, configs: [
+                    "vbam_usebios": "enabled",
+                    "vbam_gbHardware": "gbc"
+                ], reload: false)
+            }
+        } else if manicGame.gameType == .gb {
+            if manicGame.defaultCore == 0 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Gambatte.name, configs: [
+                    "gambatte_gb_colorization": "disabled",
+                    "gambatte_gb_internal_palette": "GB - DMG"
+                ], reload: false)
+            } else if manicGame.defaultCore == 1 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.mGBA.name, configs: [
+                    "mgba_gb_colors": "Grayscale"], reload: false)
+            } else if manicGame.defaultCore == 2 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.VBAM.name, configs: [
+                    "vbam_usebios": "enabled",
+                    "vbam_gbHardware": "gb",
+                    "vbam_palettes": "black and white"], reload: false)
+            }
+        } else if manicGame.gameType == .n64 {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, configs:
+                                                        ["mupen64plus-43screensize": "640x480",
+                                                         "mupen64plus-rdp-plugin": "gliden64",
+                                                         "mupen64plus-pak1": "memory"],
+                                                       reload: false)
+        } else if manicGame.gameType == .vb {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleVB.name, key: "vb_color_mode", value: manicGame.pallete.paletteTitleForVB, reload: false)
+        } else if manicGame.gameType == .pm {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PokeMini.name, key: "pokemini_palette", value: "black & red", reload: false)
+        } else if manicGame.gameType == .ps1 {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetlePSXHW.name,
+                                                       configs: [
+                                                        //video
+                                                        "beetle_psx_hw_internal_resolution": "1x",
+                                                        "beetle_psx_hw_dither_mode": "disabled",
+                                                        "beetle_psx_hw_msaa": "8x",
+                                                        "beetle_psx_hw_mdec_yuv": "enabled",
+                                                        "beetle_psx_hw_aspect_ratio": "4:3",
+                                                        //memory card
+                                                        "beetle_psx_hw_enable_memcard1": "disabled",
+                                                        //pgxp
+                                                        "beetle_psx_hw_pgxp_mode": "memory only",
+                                                        "beetle_psx_hw_pgxp_nclip": "enabled",
+                                                        "beetle_psx_hw_pgxp_texture": "enabled",
+                                                        //hacks
+                                                        "beetle_psx_hw_gte_overclock": "enabled",
+                                                        "beetle_psx_hw_override_bios": manicGame.ps1OverrideBIOSConfig,
+                                                        //common
+                                                        "beetle_psx_hw_renderer": "hardware_vk",
+                                                       ],
+                                                       reload: false)
+        } else if manicGame.gameType == .dc {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Flycast.name,
+                                                       configs: ["reicast_renderer": "Vulkan",
+                                                                 "reicast_internal_resolution": "640x480",
+                                                                 "reicast_language" : "Default"],
+                                                       reload: false)
+        } else if manicGame.gameType == .arcade {
+            if manicGame.defaultCore == 0 {
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.MAME.name, configs: ["mame_cheats_enable": "enabled"], reload: false)
+                LibretroCore.sharedInstance().setLibretroLogMonitor(true)
+            }
+        } else if manicGame.gameType == ._3ds {
+            ThreeDS.isAzaharCore = manicGame.isAzahar3DS
+            if manicGame.isAzahar3DS {
+                var enableJIT = false
+                if LibretroCore.jitAvailable() {
+                    if let value = LibretroCore.sharedInstance().coreConfigValue(LibretroCore.Cores.Azahar.name, key: "citra_use_cpu_jit"), value == "disabled" {
+                        enableJIT = false
+                    } else {
+                        enableJIT = true
+                    }
+                }
+                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name,
+                                                           configs: [
+                                                            "citra_layout_option": "custom",
+                                                            "citra_touch_touchscreen": "enabled",
+                                                            "citra_input_type": "frontend",
+                                                            "citra_use_cpu_jit": enableJIT ? "enabled" : "disabled"
+                                                           ],
+                                                           reload: false)
+                //Azahar核心每次启动都不进行加速，免得闪退
+                Game.change { realm in
+                    self.manicGame.speed = .one
+                }
+            }
+        } else if manicGame.gameType == ._32x {
+            S2X.isJGenesisCore = manicGame.defaultCore == 1
+        } else if manicGame.gameType == .mcd {
+            MCD.isJGenesisCore = manicGame.defaultCore == 1
+        } else if manicGame.gameType == .a2600 {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Stella.name, configs: ["stella_crop_hoverscan": "enabled"], reload: false)
+            self.update2600TvColor(isInit: true)
+            self.update2600LeftDifficulty(isInit: true)
+            self.update2600RightDifficulty(isInit: true)
+            self.updateSkin()
+        } else if manicGame.gameType == .a5200 {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Atari800.name, configs: ["atari800_system": "5200"], reload: false)
+        } else if manicGame.gameType == .jaguar {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.VirtualJaguar.name,
+                                                       configs: ["virtualjaguar_alt_inputs": "enabled",
+                                                                 "virtualjaguar_bios": "enabled",
+                                                                 "virtualjaguar_doom_res_hack": "enabled",
+                                                                 "virtualjaguar_p1_retropad_analog_lu": "num_7",
+                                                                 "virtualjaguar_p1_retropad_analog_ld": "num_8",
+                                                                 "virtualjaguar_p1_retropad_analog_ll": "num_9",
+                                                                 "virtualjaguar_p1_retropad_analog_lr": "star",
+                                                                 "virtualjaguar_p1_retropad_analog_ru": "hash",
+                                                                 "virtualjaguar_p2_retropad_analog_lu": "num_7",
+                                                                 "irtualjaguar_p2_retropad_analog_ld": "num_8",
+                                                                 "virtualjaguar_p2_retropad_analog_ll": "num_9",
+                                                                 "virtualjaguar_p2_retropad_analog_lr": "star",
+                                                                 "virtualjaguar_p2_retropad_analog_ru": "hash"
+                                                                ],
+                                                       reload: false)
+        }
+        
+        //配置静音模式
+        if manicGame.isLibretroType {
+            LibretroCore.sharedInstance().setRespectSilentMode(Settings.defalut.respectSilentMode)
+        } else if manicGame.isCitra3DS {
+            //不需要配置
+        } else {
+            manicEmuCore?.audioManager.followSilentMode = Settings.defalut.respectSilentMode
+        }
+        if Settings.defalut.respectSilentMode {
+            //监听静音键
+            muteSwitchMonitor.startMonitoring { [weak self] isMute in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.updateAudio()
+                }
+            }
+        }
+        
+        //Libretro配置
+        if manicGame.isLibretroType {
+            var enableLibretroLog = "false"
+            var libretroLogLevel = "1"
+#if DEBUG
+            enableLibretroLog = "true"
+            libretroLogLevel = "0"
+#endif
+            let enableMircophone = (manicGame.gameType == .ds && (manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false)) || manicGame.isAzahar3DS
+            LibretroCore.sharedInstance().updateLibretroConfigs([
+                "fastforward_frameskip": "false",
+                "log_verbosity": enableLibretroLog,
+                "libretro_log_level": libretroLogLevel,
+                "camera_allow": "true",
+                "camera_driver": "avfoundation",
+                "microphone_enable": "false",
+                "microphone_driver": "coreaudio",
+                "audio_latency": "200"
+            ])
+            if manicGame.isN64ParaLLEl {
+                LibretroCore.sharedInstance().setReloadDelay(1)
+            } else {
+                LibretroCore.sharedInstance().setReloadDelay(0)
+            }
+            
+            //RetroAchievements配置
+            LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
+            
+            //适配PKSM修改存档位置
+            if manicGame.gameType == .gb {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBSavePath.libretroPath)
+            } else if manicGame.gameType == .gbc {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBCSavePath.libretroPath)
+            } else if manicGame.gameType == .gba {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBASavePath.libretroPath)
+            } else if manicGame.gameType == .snes {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.bsnes.libretroPath)
+            } else if manicGame.gameType == .ds {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DSSavePath.libretroPath)
+            } else {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
+            }
+            
+            //配置Rumble
+            LibretroCore.sharedInstance().setEnableRumble(false)
             
             //配置System的位置
             if manicGame.gameType == .dc {
@@ -3190,7 +3490,7 @@ extension PlayViewController {
                         }
                     }
                 } else if self.manicGame.gameType == .mcd {
-                    DispatchQueue.main.asyncAfter(delay: 3) {
+                    DispatchQueue.main.asyncAfter(delay: 4) {
                         let biosPaths = Constants.BIOS.MegaCDBios.map({ Constants.Path.System.appendingPathComponent($0.fileName) })
                         self.jGenesisCore?.openSegaCdFile(filePath: self.manicGame.romUrl.path, americasBiosPath: biosPaths[1], japanBiosPath: biosPaths[2], europeBiosPath: biosPaths[0])
                         DispatchQueue.main.asyncAfter(delay: 5) {
@@ -3802,6 +4102,7 @@ extension PlayViewController {
     }
     
     private func updateFastforward(speed: GameSetting.FastForwardSpeed) {
+        guard !manicGame.safeMode else { return }
         if manicGame.isLibretroType {
             switch speed {
             case .one, .two:
@@ -3862,6 +4163,7 @@ extension PlayViewController {
     }
     
     private func updateBackground() {
+        guard !manicGame.safeMode else { return }
         guard controllerView.controllerSkin?.identifier.lowercased() == manicGame.gameType.rawValue.lowercased() + ".flex" else {
             return
         }

@@ -869,3 +869,5 @@ Si quieres mejorar tu experiencia, PlayCase combina perfecto con esta funda.";
 "Connected" = "Conectado";
 "LocalNetworkingDesc" = "Para el multijugador local se necesita al menos un dispositivo como servidor. El servidor transmite su servicio en la red local, y otros dispositivos buscarán automáticamente servidores disponibles. Si no se encuentra un servidor, puedes ingresar manualmente su dirección IP. Tras conectarse, podrán comenzar a jugar.";
 "OnlineNetworkingDesc" = "El multijugador en línea requiere ingresar una dirección de servidor en línea válida.";
+"SafeMode" = "Modo Seguro";
+"SafeModeDesc" = "Al iniciar un juego en Modo Seguro, se desactivan todos los ajustes adicionales (como resolución personalizada, avance rápido y sombreadores) y se ejecuta con una configuración mínima. Esto puede ayudar a resolver problemas causados por ajustes incorrectos que impiden que el juego se inicie. Solo aplica para este inicio.";

@@ -844,3 +844,5 @@ Si quieres mejorar tu configuración, PlayCase es el complemento perfecto para e
 "Connected" = "Conectado";
 "LocalNetworkingDesc" = "El multijugador local requiere al menos un dispositivo como anfitrión. El anfitrión emite su servicio en la red local y los demás dispositivos buscarán automáticamente anfitriones disponibles. Si no se encuentra ninguno, puedes introducir manualmente la dirección IP del anfitrión. Una vez conectados, puede comenzar el juego multijugador.";
 "OnlineNetworkingDesc" = "El multijugador en línea requiere introducir una dirección de servidor en línea válida.";
+"SafeMode" = "Modo Seguro";
+"SafeModeDesc" = "Iniciar un juego en Modo Seguro desactiva toda configuración adicional (como resolución personalizada, avance rápido y sombreadores) y lo ejecuta con una configuración mínima. Esto puede ayudar a resolver problemas causados por configuraciones incorrectas que impiden el inicio del juego. Solo se aplica a este inicio.";

@@ -844,3 +844,5 @@ Jeśli chcesz ulepszyć swoją konfigurację, PlayCase jest idealnym uzupełnien
 "Connected" = "Połączono";
 "LocalNetworkingDesc" = "Gra wieloosobowa w sieci lokalnej wymaga co najmniej jednego urządzenia jako hosta. Host emituje swoją usługę w sieci lokalnej, a inne urządzenia automatycznie wyszukują dostępnych hostów. Jeśli nie znaleziono hosta, można ręcznie wprowadzić jego adres IP. Po połączeniu można rozpocząć rozgrywkę wieloosobową.";
 "OnlineNetworkingDesc" = "Gra wieloosobowa online wymaga podania prawidłowego adresu serwera online.";
+"SafeMode" = "Tryb Bezpieczny";
+"SafeModeDesc" = "Uruchomienie gry w trybie bezpiecznym wyłącza wszystkie dodatkowe ustawienia (takie jak niestandardowa rozdzielczość, szybkie przewijanie i shadery) i uruchamia ją z minimalną konfiguracją. Może to pomóc w rozwiązaniu problemów spowodowanych nieprawidłowymi ustawieniami, które uniemożliwiają uruchomienie gry. Dotyczy tylko tego uruchomienia.";

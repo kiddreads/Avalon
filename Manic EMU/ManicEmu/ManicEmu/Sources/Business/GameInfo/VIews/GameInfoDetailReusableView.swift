@@ -910,6 +910,22 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self, let game = self.game else { return }
             PlayViewController.startGame(game: game)
         }
+        view.addLongPressGesture(handler: { [weak self] gesture in
+            guard let self = self, let game = self.game else { return }
+            switch gesture.state {
+            case .began:
+                UIDevice.generateHaptic()
+                UIView.makeAlert(title: R.string.localizable.safeMode(),
+                                 detail: R.string.localizable.safeModeDesc(),
+                                 confirmTitle: R.string.localizable.confirmTitle(),
+                                 confirmAction: {
+                    game.safeMode = true
+                    PlayViewController.startGame(game: game)
+                })
+            default:
+                break
+            }
+        })
         
         // 无障碍配置
         view.isAccessibilityElement = true
@@ -1183,13 +1199,13 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                     } else if game.gameType == .n64 {
                         updateN64FunctionButton()
                     } else if game.gameType == .vb || game.gameType == .pm || game.isJGenesisCore {
-                        updateVBOrPMFunctionButton()
+                        updateNoCheatCodeFunctionButton()
                     } else if game.gameType == .ps1 {
                         updatePS1FunctionButton()
                     } else if game.gameType == .dc {
                         updateDCFunctionButton()
-                    } else if game.gameType == .md {
-                        updateMDFunctionButton()
+                    } else if game.isClownMDEmuCore {
+                        updateClownMDEmuFunctionButton()
                     } else if game.gameType == .snes {
                         updateSNESFunctionButton()
                     } else if game.gameType == .ns {
@@ -1608,7 +1624,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
-    private func updateVBOrPMFunctionButton() {
+    private func updateNoCheatCodeFunctionButton() {
         cheatCodeButton.removeFromSuperview()
         
         retroButton.snp.makeConstraints { make in
@@ -1718,11 +1734,11 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
-    private func updateMDFunctionButton() {
+    private func updateClownMDEmuFunctionButton() {
         manualButton.removeFromSuperview()
         tvStandardMenuButton.removeFromSuperview()
         tVStandardButton.removeFromSuperview()
-        if let game, game.defaultCore == 0 {
+        if let game, game.isClownMDEmuCore {
             cheatCodeButton.removeFromSuperview()
             if let lastView = functionButtonContainerView.subviews.last {
                 //TV Standard

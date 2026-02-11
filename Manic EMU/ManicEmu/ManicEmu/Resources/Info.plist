@@ -128,7 +128,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Owner</string>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.aoshuang.game.md</string>
@@ -368,7 +368,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Owner</string>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string></string>
@@ -807,10 +807,6 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>MD Game</string>
-			<key>UTTypeIconFiles</key>
-			<array>
-				<string>file_icon.png</string>
-			</array>
 			<key>UTTypeIdentifier</key>
 			<string>public.aoshuang.game.md</string>
 			<key>UTTypeTagSpecification</key>
@@ -1282,10 +1278,6 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Manic EMU Game Save</string>
-			<key>UTTypeIconFiles</key>
-			<array>
-				<string>file_icon.png</string>
-			</array>
 			<key>UTTypeIdentifier</key>
 			<string>public.aoshuang.zip</string>
 			<key>UTTypeTagSpecification</key>

@@ -491,7 +491,7 @@ extension FilesImporter {
                         }
                         
 #if !SIDE_LOAD
-                        if game.isJGenesisCore {
+                        if game.gameType == ._32x || gameType == .mcd {
                             game.defaultCore = 1
                         }
 #endif

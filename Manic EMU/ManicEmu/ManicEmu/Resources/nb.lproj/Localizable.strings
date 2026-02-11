@@ -861,3 +861,5 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "Connected" = "Tilkoblet";
 "LocalNetworkingDesc" = "Lokalt flerspillermodus krever minst én enhet som vert. Verten kringkaster tjenesten på det lokale nettverket, og andre enheter søker automatisk etter tilgjengelige verter. Hvis ingen vert blir funnet, kan du angi vertens IP-adresse manuelt. Når tilkoblingen er etablert, kan flerspiller-spillet begynne.";
 "OnlineNetworkingDesc" = "Online flerspillermodus krever at du angir en gyldig onlineserveradresse.";
+"SafeMode" = "Sikker Modus";
+"SafeModeDesc" = "Å starte et spill i Sikker Modus deaktiverer alle tilleggsinnstillinger (som tilpasset oppløsning, rask fremspoling og shadere) og kjører med en minimal konfigurasjon. Dette kan bidra til å løse problemer forårsaket av feil innstillinger som hindrer spillet i å starte. Gjelder kun for denne oppstarten.";

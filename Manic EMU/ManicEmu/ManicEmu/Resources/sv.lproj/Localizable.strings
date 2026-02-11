@@ -863,3 +863,5 @@ Om du vill höja din upplevelse är PlayCase en perfekt match för detta skin.";
 "Connected" = "Ansluten";
 "LocalNetworkingDesc" = "Lokalt flerspelarläge kräver minst en enhet som värd. Värden sänder sin tjänst i det lokala nätverket och andra enheter söker automatiskt efter tillgängliga värdar. Om ingen värd hittas kan du manuellt ange värdens IP-adress. När anslutningen är etablerad kan flerspelarläget börja.";
 "OnlineNetworkingDesc" = "Onlinespel i flerspelarläge kräver att du anger en giltig onlineserveradress.";
+"SafeMode" = "Säkert Läge";
+"SafeModeDesc" = "Att starta ett spel i säkert läge inaktiverar alla extra inställningar (som anpassad upplösning, snabbspolning och shaders) och kör med en minimal konfiguration. Detta kan hjälpa till att lösa problem orsakade av felaktiga inställningar som förhindrar spelet från att starta. Gäller endast denna start.";

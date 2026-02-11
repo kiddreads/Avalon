@@ -870,3 +870,5 @@ Se você deseja aprimorar sua configuração, a PlayCase é o complemento perfei
 "Connected" = "Conectado";
 "LocalNetworkingDesc" = "O multijogador local requer pelo menos um dispositivo atuando como host. O host transmite seu serviço na rede local e outros dispositivos procurarão automaticamente por hosts disponíveis. Se nenhum host for encontrado, você pode inserir manualmente o endereço IP do host. Uma vez conectados, a partida multijogador pode começar.";
 "OnlineNetworkingDesc" = "O multijogador online requer o endereço de um servidor online válido.";
+"SafeMode" = "Modo Seguro";
+"SafeModeDesc" = "Iniciar um jogo no Modo Seguro desativa todas as configurações adicionais (como resolução personalizada, avanço rápido e shaders) e executa com uma configuração mínima. Isso pode ajudar a resolver problemas causados por configurações incorretas que impedem o jogo de iniciar. Aplica-se apenas a esta inicialização.";

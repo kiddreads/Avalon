@@ -95,6 +95,8 @@ class Game: Object, ObjectUpdatable {
     var totalDiskCount: UInt = 0
     static let DsHomeMenuPrimaryKey = "Home Menu"
     static let DsiHomeMenuPrimaryKey = "Home Menu (DSi)"
+    ///安全模式
+    var safeMode = false
     
     ///文件是否存在
     var isRomExtsts: Bool {
@@ -242,6 +244,10 @@ class Game: Object, ObjectUpdatable {
     func isBIOSMissing(required: Bool = true) -> Bool {
         let requireBIOS: [BIOSItem]
         if gameType == .mcd {
+            if defaultCore == 2 {
+                //ClownMDEmu核心不需要bios
+                return false
+            }
             requireBIOS = Constants.BIOS.MegaCDBios.filter({ required ? $0.required : true })
         } else if gameType == .ss {
             if defaultCore == 0 {
@@ -394,15 +400,9 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isPicodriveCore: Bool {
-#if SIDE_LOAD
         if (gameType == ._32x || gameType == .mcd) && defaultCore == 0 {
             return true
         }
-#else
-        if gameType == ._32x || gameType == .mcd {
-            return false
-        }
-#endif
         
         if (gameType == .md || gameType == .sg1000 || gameType == .gg || gameType == .ms) && defaultCore == 1 {
             return true
@@ -418,7 +418,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isClownMDEmuCore: Bool {
-        if gameType == .md, defaultCore == 0 {
+        if (gameType == .md && defaultCore == 0) || (gameType == .mcd && defaultCore == 2) {
             return true
         }
         return false
@@ -657,10 +657,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isLibretroType: Bool {
-        if gameType == ._3ds, defaultCore == 0 {
-            return false
-        }
-        if (gameType == ._32x || gameType == .mcd) && defaultCore == 1 {
+        if isCitra3DS || isJGenesisCore {
             return false
         }
         return true
@@ -675,12 +672,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isJGenesisCore: Bool {
-#if SIDE_LOAD
         return ((gameType == ._32x || gameType == .mcd) && defaultCore == 1)
-#else
-        return gameType == ._32x || gameType == .mcd
-#endif
-        
     }
     
     var coreNameForMultiSupport: String {
@@ -692,6 +684,30 @@ class Game: Object, ObjectUpdatable {
     
     var isAtari: Bool {
         return gameType == .a2600 || gameType == .a5200 || gameType == .a7800 || gameType == .jaguar || gameType == .lynx
+    }
+    
+    func processNDSGameSave(runInBackground: Bool = true) {
+        guard gameType == .ds, isSaveExtsts else { return }
+        //处理DS的存档
+        let coreIndex = defaultCore
+        let saveUrl = gameSaveUrl
+        
+        func processSave() {
+            //melonDS的srm存档和Desmume的dsv存档不互通，这里需要先进行转换
+            if coreIndex == 0, NDSSaveConventer.checkSaveType(fileURL: saveUrl) == .dsv {
+                NDSSaveConventer.dsvToSav(saveUrl: saveUrl)
+            } else if coreIndex == 1, NDSSaveConventer.checkSaveType(fileURL: saveUrl) == .sav {
+                NDSSaveConventer.savToDsv(saveUrl: saveUrl)
+            }
+        }
+        
+        if runInBackground {
+            DispatchQueue.global().async {
+                processSave()
+            }
+        } else {
+            processSave()
+        }
     }
 }
 

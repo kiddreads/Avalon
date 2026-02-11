@@ -691,16 +691,16 @@ struct GameSetting: SettingCellItem {
             }
             
             if gameType == ._32x || gameType == .mcd {
+                //JGenesis核心
                 let notEnableForJGenesis = (type == .cheatCode || type == .filter || type == .retro || type == .swapDisk)
-#if SIDE_LOAD
                 if defaultCore == 1 && notEnableForJGenesis {
                     return false
                 }
-#else
-                if notEnableForJGenesis {
-                    return false
-                }
-#endif
+            }
+            
+            if ((gameType == .mcd && defaultCore == 2) || (gameType == .md && defaultCore == 0)) && type == .cheatCode {
+                //ClownMDEmu核心
+                return false
             }
             
             if (gameType == .mcd || gameType == .ss || gameType == .fds) && type == .swapDisk {
@@ -713,10 +713,6 @@ struct GameSetting: SettingCellItem {
             
             if (gameType == .nes || gameType == .fds) && type == .simBlowing {
                 return true
-            }
-            
-            if gameType == .md , type == .cheatCode, defaultCore == 0 {
-                return false
             }
             
             if gameType == .arcade, type == .retro, defaultCore == 0 {

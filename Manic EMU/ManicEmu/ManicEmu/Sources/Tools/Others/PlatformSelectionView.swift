@@ -92,7 +92,7 @@ class PlatformSelectionView: BaseView {
                     Game.change { realm in
                         game.gameType = gameType
 #if !SIDE_LOAD
-                        if game.isJGenesisCore {
+                        if game.gameType == ._32x || game.gameType == .mcd {
                             game.defaultCore = 1
                         }
 #endif

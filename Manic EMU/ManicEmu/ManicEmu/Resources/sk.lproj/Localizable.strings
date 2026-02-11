@@ -869,3 +869,5 @@ Ak chcete vylepšiť svoje nastavenie, PlayCase je perfektným doplnkom tohto sk
 "Connected" = "Pripojené";
 "LocalNetworkingDesc" = "Lokálny multiplayer vyžaduje aspoň jedno zariadenie ako hostiteľa. Hostiteľ vysiela svoju službu v lokálnej sieti a ostatné zariadenia automaticky vyhľadajú dostupných hostiteľov. Ak sa nenájde žiadny hostiteľ, môžete ručne zadať jeho IP adresu. Po pripojení sa môže začať hra pre viacerých hráčov.";
 "OnlineNetworkingDesc" = "Online multiplayer vyžaduje zadanie platnej adresy online servera.";
+"SafeMode" = "Bezpečný Režim";
+"SafeModeDesc" = "Spustenie hry v bezpečnom režime deaktivuje všetky dodatočné nastavenia (ako vlastné rozlíšenie, rýchly posun a shadery) a spustí ju s minimálnou konfiguráciou. To môže pomôcť vyriešiť problémy spôsobené nesprávnym nastavením, ktoré bránia spusteniu hry. Platí len pre toto spustenie.";

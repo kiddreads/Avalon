@@ -869,3 +869,5 @@ Si voleu millorar la vostra configuració, PlayCase és el complement perfecte p
 "Connected" = "Connectat";
 "LocalNetworkingDesc" = "El multijugador local requereix almenys un dispositiu com a amfitrió. L'amfitrió transmet el seu servei a la xarxa local i els altres dispositius buscaran automàticament amfitrions disponibles. Si no se'n troba cap, pots introduir manualment l'adreça IP de l'amfitrió. Un cop connectats, es pot iniciar la partida multijugador.";
 "OnlineNetworkingDesc" = "El multijugador en línia requereix introduir una adreça de servidor en línia vàlida.";
+"SafeMode" = "Mode Segur";
+"SafeModeDesc" = "Iniciar un joc en Mode Segur desactiva tots els paràmetres addicionals (com ara resolució personalitzada, avanç ràpid i shaders) i s'executa amb una configuració mínima. Això pot ajudar a resoldre problemes causats per paràmetres incorrectes que impedeixen l'inici del joc. S'aplica només a aquest inici.";

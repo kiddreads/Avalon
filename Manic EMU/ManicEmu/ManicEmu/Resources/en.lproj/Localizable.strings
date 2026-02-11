@@ -884,3 +884,6 @@ Press the controller button to complete mapping...";
 "Connected" = "Connected";
 "LocalNetworkingDesc" = "Local multiplayer requires at least one device to act as a host. The host broadcasts its service on the local network, and other devices will automatically search for available hosts. If no host is found, you can manually enter the host’s IP address. Once connected, multiplayer gameplay can begin.";
 "OnlineNetworkingDesc" = "Online multiplayer requires entering a valid online server address.";
+
+"SafeMode" = "Safe Mode";
+"SafeModeDesc" = "Launching a game in Safe Mode disables all additional settings (such as custom resolution, fast forward, and shaders) and runs with a minimal configuration. This can help resolve issues caused by incorrect settings that prevent the game from starting. Applies to this launch only.";

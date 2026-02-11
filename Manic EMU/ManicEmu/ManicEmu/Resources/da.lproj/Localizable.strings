@@ -867,3 +867,5 @@ Hvis du vil forbedre dit setup, er PlayCase et perfekt match til dette skin.";
 "Connected" = "Forbundet";
 "LocalNetworkingDesc" = "Lokal multiplayer kræver mindst én enhed som vært. Værten udsender sin tjeneste på det lokale netværk, og andre enheder søger automatisk efter tilgængelige værter. Hvis der ikke findes nogen vært, kan du manuelt indtaste værten IP-adresse. Når forbindelsen er etableret, kan multiplayer-spillet begynde.";
 "OnlineNetworkingDesc" = "Online multiplayer kræver indtastning af en gyldig online-serveradresse.";
+"SafeMode" = "Sikker Tilstand";
+"SafeModeDesc" = "At starte et spil i Sikker Tilstand deaktiverer alle yderligere indstillinger (såsom brugerdefineret opløsning, hurtig fremadspoling og shaders) og kører med en minimal konfiguration. Dette kan hjælpe med at løse problemer forårsaget af forkerte indstillinger, der forhindrer spillet i at starte. Gælder kun for denne start.";

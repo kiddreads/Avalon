@@ -862,3 +862,5 @@ Jika Anda ingin meningkatkan setup Anda, PlayCase adalah pasangan sempurna untuk
 "Connected" = "Terhubung";
 "LocalNetworkingDesc" = "Multiplayer lokal membutuhkan setidaknya satu perangkat sebagai host. Host menyiarkan layanannya di jaringan lokal, dan perangkat lain akan secara otomatis mencari host yang tersedia. Jika tidak ada host yang ditemukan, Anda dapat memasukkan alamat IP host secara manual. Setelah terhubung, permainan multiplayer dapat dimulai.";
 "OnlineNetworkingDesc" = "Multiplayer daring membutuhkan alamat server daring yang valid.";
+"SafeMode" = "Mode Aman";
+"SafeModeDesc" = "Meluncurkan game dalam Mode Aman akan menonaktifkan semua pengaturan tambahan (seperti resolusi kustom, maju cepat, dan shader) dan berjalan dengan konfigurasi minimal. Ini dapat membantu mengatasi masalah yang disebabkan oleh pengaturan yang salah yang mencegah game dimulai. Hanya berlaku untuk peluncuran ini.";

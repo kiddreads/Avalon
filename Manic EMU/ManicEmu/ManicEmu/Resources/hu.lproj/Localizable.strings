@@ -869,3 +869,5 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "Connected" = "Csatlakoztatva";
 "LocalNetworkingDesc" = "A helyi többjátékos módhoz legalább egy eszköznek kiszolgálóként kell működnie. A kiszolgáló hirdeti a szolgáltatását a helyi hálózaton, és a többi eszköz automatikusan keresni fogja az elérhető kiszolgálókat. Ha nem található kiszolgáló, manuálisan is megadhatja annak IP-címét. A csatlakozás után megkezdhető a többjátékos játék.";
 "OnlineNetworkingDesc" = "Az online többjátékos módhoz érvényes online szervercím megadása szükséges.";
+"SafeMode" = "Biztonságos Mód";
+"SafeModeDesc" = "A játék Biztonságos Módban történő indítása letiltja az összes további beállítást (például az egyéni felbontást, a gyors előretekerést és a shadereket), és minimális konfigurációval futtatja. Ez segíthet megoldani a hibás beállítások által okozott problémákat, amelyek megakadályozzák a játék indítását. Csak erre az indításra vonatkozik.";

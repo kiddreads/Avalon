@@ -89,16 +89,26 @@ class CoreSelectionView: BaseView {
             
             let CoreSelectionView = CoreSelectionView(cores: gameType.supportCores, currentCoreIndex: currentCoreIndex)
             CoreSelectionView.didSelected = { [weak sheet] coreIndex in
+#if !SIDE_LOAD
+                    //AppStore版本的MCD不支持PicoDrive核心的选择
+                    if game.gameType == .mcd, coreIndex == 0 {
+                        UIView.makeToast(message: R.string.localizable.gameTypeLicensingError(LibretroCore.Cores.PicoDrive.name))
+                        return
+                    }
+#endif
                 sheet?.pop {
                     if game.defaultCore != coreIndex {
                         let oldSaveUrl = game.gameSaveUrl
                         Game.change { realm in
                             game.defaultCore = coreIndex
                         }
+                        //处理SS的存档
                         let newSaveUrl = game.gameSaveUrl
                         if game.gameType != .ss, FileManager.default.fileExists(atPath: oldSaveUrl.path) {
                             try? FileManager.safeMoveItem(at: oldSaveUrl, to: newSaveUrl)
                         }
+                        //处理DS的存档
+                        game.processNDSGameSave()
                     }
                     completion?()
                 }

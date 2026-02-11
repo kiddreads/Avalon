@@ -108,7 +108,6 @@ struct DS: ManicEmuCoreProtocol {
 
 class DSEmulatorBridge : NSObject, EmulatorBase {
     static let shared = DSEmulatorBridge()
-    var touchScale: CGFloat = 1
     var isDeSmuMECore: Bool = false
     
     var gameURL: URL?
@@ -154,10 +153,9 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
                     touchPointY = value
                 }
                 if let x = touchPointX, let y = touchPointY {
-                    let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x*touchScale, y: touchInputFrame.minY + touchInputFrame.height*y*touchScale)
-                    
+                    let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x, y: touchInputFrame.minY + touchInputFrame.height*y)
 #if DEBUG
-                    Log.debug("\(String(describing: Self.self)) 触摸屏幕:\(touchPoint) Ratio:(\(x), \(y))")
+                    Log.debug("\(String(describing: Self.self)) \n触摸屏幕:(\(touchInputFrame.minX + touchInputFrame.width*x), \(touchInputFrame.minY + touchInputFrame.height*y) touchPoint:\(touchPoint) Ratio:(\(x), \(y))")
 #endif
                     LibretroCore.sharedInstance().sendTouchEventX(touchPoint.x, y: touchPoint.y)
                     touchPointX = nil
