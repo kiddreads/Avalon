@@ -3490,7 +3490,7 @@ extension PlayViewController {
                         }
                     }
                 } else if self.manicGame.gameType == .mcd {
-                    DispatchQueue.main.asyncAfter(delay: 4) {
+                    DispatchQueue.main.asyncAfter(delay: 3) {
                         let biosPaths = Constants.BIOS.MegaCDBios.map({ Constants.Path.System.appendingPathComponent($0.fileName) })
                         self.jGenesisCore?.openSegaCdFile(filePath: self.manicGame.romUrl.path, americasBiosPath: biosPaths[1], japanBiosPath: biosPaths[2], europeBiosPath: biosPaths[0])
                         DispatchQueue.main.asyncAfter(delay: 5) {

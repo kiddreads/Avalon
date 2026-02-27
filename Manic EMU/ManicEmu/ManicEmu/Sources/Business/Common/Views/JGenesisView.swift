@@ -275,7 +275,7 @@ extension JGenesisView {
             try {
                 console.log('🔄 开始加载 Sega CD 文件: \(fileName)');
                 
-                // 加载 ROM 文件
+                // 加载 ROM 文件（直接保持为 Uint8Array，避免 Array.from() 导致的内存膨胀）
                 const romResponse = await fetch('\(romURL)');
                 if (!romResponse.ok) {
                     console.log('ROM Download error:' + romResponse.status);
@@ -285,7 +285,7 @@ extension JGenesisView {
                 const romBytes = new Uint8Array(romBuffer);
                 console.log('📦 ROM 文件大小:', romBytes.length, 'bytes');
                 
-                // 加载 BIOS 文件
+                // 加载 BIOS 文件（BIOS 文件较小，使用 Uint8Array）
                 let americasBiosBytes = null;
                 let japanBiosBytes = null;
                 let europeBiosBytes = null;
@@ -339,19 +339,14 @@ extension JGenesisView {
                     throw new Error('No Sega CD BIOS available');
                 }
                 
-                // 调用 WASM 端的方法来加载 Sega CD ROM 和 BIOS
-                const romVec = Array.from(romBytes);
-                const americasBiosVec = americasBiosBytes ? Array.from(americasBiosBytes) : null;
-                const japanBiosVec = japanBiosBytes ? Array.from(japanBiosBytes) : null;
-                const europeBiosVec = europeBiosBytes ? Array.from(europeBiosBytes) : null;
-                
-                console.log('✅ 调用 channel.load_sega_cd_file');
-                window.jgenesisAPI.channel.load_sega_cd_file(
-                    romVec,
+                // 调用 openSegaCdFile API（ROM 直接传递 Uint8Array，避免内存膨胀）
+                console.log('✅ 调用 window.jgenesisAPI.openSegaCdFile');
+                window.jgenesisAPI.openSegaCdFile(
+                    romBytes,
                     '\(fileName)',
-                    americasBiosVec,
-                    japanBiosVec,
-                    europeBiosVec
+                    americasBiosBytes,
+                    japanBiosBytes,
+                    europeBiosBytes
                 );
                 
                 console.log('✅ Sega CD 文件加载成功: \(fileName)');
