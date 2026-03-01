@@ -243,6 +243,19 @@ extension String {
         
         return (ipDigits, port)
     }
+    
+    /// 转义 JavaScript 字符串中的特殊字符
+    /// - Returns: 转义后的字符串，可安全用于 JavaScript 单引号字符串
+    func escapeJSString() -> String {
+        var result = self
+        result = result.replacingOccurrences(of: "\\", with: "\\\\")  // 反斜杠
+        result = result.replacingOccurrences(of: "'", with: "\\'")    // 单引号
+        result = result.replacingOccurrences(of: "\"", with: "\\\"")  // 双引号
+        result = result.replacingOccurrences(of: "\n", with: "\\n")   // 换行
+        result = result.replacingOccurrences(of: "\r", with: "\\r")   // 回车
+        result = result.replacingOccurrences(of: "\t", with: "\\t")   // 制表符
+        return result
+    }
 }
 
 // 扩展用于识别 emoji 的字符集

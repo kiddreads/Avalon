@@ -95,4 +95,6 @@ Cores/libretro-desmume
 Cores/libretro-melondsds
 Cores/libretro-ppsspp
 Cores/libretro-azahar
+Cores/J2meJS
+Cores/freej2me-web
 i18n/

@@ -85,20 +85,6 @@ class JGenesisView: BaseView {
     /// ROM路径
     var romPath: String? = nil
     
-    /// 转义 JavaScript 字符串中的特殊字符
-    /// - Parameter string: 原始字符串
-    /// - Returns: 转义后的字符串，可安全用于 JavaScript 单引号字符串
-    private func escapeJSString(_ string: String) -> String {
-        var result = string
-        result = result.replacingOccurrences(of: "\\", with: "\\\\")  // 反斜杠
-        result = result.replacingOccurrences(of: "'", with: "\\'")    // 单引号
-        result = result.replacingOccurrences(of: "\"", with: "\\\"")  // 双引号
-        result = result.replacingOccurrences(of: "\n", with: "\\n")   // 换行
-        result = result.replacingOccurrences(of: "\r", with: "\\r")   // 回车
-        result = result.replacingOccurrences(of: "\t", with: "\\t")   // 制表符
-        return result
-    }
-    
     private lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
@@ -188,7 +174,7 @@ extension JGenesisView {
         }
         
         romPath = filePath
-        let fileName = escapeJSString(filePath.lastPathComponent)
+        let fileName = filePath.lastPathComponent.escapeJSString()
         
         // 注册文件到本地服务器
         let fileId = localServer.registerFile(filePath: filePath)
@@ -239,7 +225,7 @@ extension JGenesisView {
         }
         
         romPath = filePath
-        let fileName = escapeJSString(filePath.lastPathComponent)
+        let fileName = filePath.lastPathComponent.escapeJSString()
         
         // 注册 ROM 文件到本地服务器
         let romFileId = localServer.registerFile(filePath: filePath)
@@ -709,23 +695,6 @@ extension JGenesisView {
         }
     }
     
-}
-
-final class WeakScriptMessageHandler: NSObject, WKScriptMessageHandler {
-
-    weak var target: WKScriptMessageHandler?
-
-    init(target: WKScriptMessageHandler) {
-        self.target = target
-        super.init()
-    }
-
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceive message: WKScriptMessage
-    ) {
-        target?.userContentController(userContentController, didReceive: message)
-    }
 }
 
 // MARK: - WKScriptMessageHandler

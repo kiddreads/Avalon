@@ -752,6 +752,8 @@
 		57D7CFC22EAA1B5E00F41540 /* ShadowLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 57D7CFC12EAA1B5E00F41540 /* ShadowLabel.m */; };
 		57DA89132D82B0C20074052A /* SmartCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 57DA89122D82B0C20074052A /* SmartCodable */; };
 		57DA89322D8328510074052A /* CKAccountStatusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DA89312D8328420074052A /* CKAccountStatusExtensions.swift */; };
+		57DC7FF52F52E931004B6FFD /* J2MEView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7FF32F52E92B004B6FFD /* J2MEView.swift */; };
+		57DC7FFC2F52EC39004B6FFD /* WeakScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7FFB2F52EC38004B6FFD /* WeakScriptMessageHandler.swift */; };
 		57DCE7A12E0C434C0079E3AA /* mednafen.saturn.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57DCE79D2E0C43310079E3AA /* mednafen.saturn.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57DCE7D72E0D2EFC0079E3AA /* CitraAdvancedSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DCE7D62E0D2EEB0079E3AA /* CitraAdvancedSettingViewController.swift */; };
 		57DCE7DB2E0D38650079E3AA /* INIFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DCE7DA2E0D385E0079E3AA /* INIFile.swift */; };
@@ -1864,6 +1866,8 @@
 		57D7CFC02EAA1B5E00F41540 /* ShadowLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShadowLabel.h; sourceTree = "<group>"; };
 		57D7CFC12EAA1B5E00F41540 /* ShadowLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShadowLabel.m; sourceTree = "<group>"; };
 		57DA89312D8328420074052A /* CKAccountStatusExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKAccountStatusExtensions.swift; sourceTree = "<group>"; };
+		57DC7FF32F52E92B004B6FFD /* J2MEView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2MEView.swift; sourceTree = "<group>"; };
+		57DC7FFB2F52EC38004B6FFD /* WeakScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakScriptMessageHandler.swift; sourceTree = "<group>"; };
 		57DCE79D2E0C43310079E3AA /* mednafen.saturn.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.saturn.libretro.framework; path = ../Cores/mednafen.saturn.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57DCE7D62E0D2EEB0079E3AA /* CitraAdvancedSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitraAdvancedSettingViewController.swift; sourceTree = "<group>"; };
 		57DCE7DA2E0D385E0079E3AA /* INIFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = INIFile.swift; sourceTree = "<group>"; };
@@ -4374,6 +4378,7 @@
 			children = (
 				57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */,
 				573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */,
+				57DC7FF32F52E92B004B6FFD /* J2MEView.swift */,
 				5781F5AB2EF45C6900916D8B /* JGenesisView.swift */,
 				57EED0752ECB8172003971BD /* IconView.swift */,
 				A392D5B22E9796B800F920E7 /* ServiceIconView.swift */,
@@ -4512,6 +4517,7 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				57DC7FFB2F52EC38004B6FFD /* WeakScriptMessageHandler.swift */,
 				57A912022F3B765B00628B04 /* NDSSaveConverter.swift */,
 				578F28C02F39A9CA00D2D998 /* BonjourKit.swift */,
 				573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */,
@@ -5508,6 +5514,7 @@
 				57DCE8092E0D9F300079E3AA /* SwitchCell.swift in Sources */,
 				574BCC742F324C92009BD74E /* Cipher.swift in Sources */,
 				57DCE80A2E0D9F300079E3AA /* Section.swift in Sources */,
+				57DC7FFC2F52EC39004B6FFD /* WeakScriptMessageHandler.swift in Sources */,
 				57DCE80B2E0D9F300079E3AA /* Subtitle.swift in Sources */,
 				57DCE80C2E0D9F300079E3AA /* Row.swift in Sources */,
 				5754D8962E2752C6001EA5ED /* ExtraKey.swift in Sources */,
@@ -5540,6 +5547,7 @@
 				57478A712D52037F006F0D99 /* RandomGameCollectionReusableView.swift in Sources */,
 				573CEE6D2F224FB300EA24F1 /* ShaderConfig.swift in Sources */,
 				5720E8112E559EE600EC0DA5 /* RetroAchievementCountView.swift in Sources */,
+				57DC7FF52F52E931004B6FFD /* J2MEView.swift in Sources */,
 				578F28D52F39E0A200D2D998 /* PSPNetworkingConfigLocalView.swift in Sources */,
 				577005B92D3E71BC00762E8F /* ImportService.swift in Sources */,
 				570622EC2D7BD2FE004F09E7 /* ShaderManager.swift in Sources */,

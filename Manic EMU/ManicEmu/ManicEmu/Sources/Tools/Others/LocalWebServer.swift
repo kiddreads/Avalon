@@ -9,7 +9,7 @@ import GCDWebServer
 
 class LocalWebServer {
     enum ServerType {
-        case JGenesis, RomPatcher
+        case JGenesis, RomPatcher, J2meJS, freej2me
     }
     
     private var server: GCDWebServer?
@@ -86,6 +86,10 @@ class LocalWebServer {
                                   indexFilename: nil,
                                   cacheAge: 0,
                                   allowRangeRequests: true)
+        case .J2meJS:
+            break
+        case .freej2me:
+            break
         }
 
         try server?.start(options: [
