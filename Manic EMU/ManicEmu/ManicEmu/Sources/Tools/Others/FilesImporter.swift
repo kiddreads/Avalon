@@ -444,6 +444,11 @@ extension FilesImporter {
                                 for item in items {
                                     try FileManager.safeCopyItem(at: item, to: URL(fileURLWithPath: romParentPath.appendingPathComponent(item.lastPathComponent)), shouldReplace: true)
                                 }
+                                // Upload all files (main + companions) to iCloud
+                                SyncManager.upload(localFilePath: romUrl.path)
+                                for item in items {
+                                    SyncManager.upload(localFilePath: romParentPath.appendingPathComponent(item.lastPathComponent))
+                                }
                             } else {
                                 try FileManager.safeCopyItem(at: url, to: game.romUrl, shouldReplace: true)
                                 //文件复制成功
@@ -513,6 +518,13 @@ extension FilesImporter {
                             do {
                                 try realm.write { realm.add(game) }
                                 SyncManager.upload(localFilePath: game.romUrl.path)
+                                // Upload companion files (.bin, .img, .sub, etc.) for multi-file ROMs
+                                if items.count > 0 {
+                                    let romParentPath = game.romUrl.path.deletingLastPathComponent
+                                    for item in items {
+                                        SyncManager.upload(localFilePath: romParentPath.appendingPathComponent(item.lastPathComponent))
+                                    }
+                                }
                                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
                                 completion?(game.gameType == ._3ds ? (game.aliasName ?? game.name) : game.name, nil)
                                 
