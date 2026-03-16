@@ -126,7 +126,13 @@ More platforms coming soon!
   **PS.**
 - Some Apple services require a Developer Program account to work properly—like App Groups, In-App Purchases, and iCloud. You’ll need to set these up yourself. If you don’t have a Developer Program account, you can remove these services before compiling.
 - Some third-party services also need your own API keys to function correctly. You can configure these in the `Cipher` section of `Constant.swift`.   
-
+- The binary build instructions in the `/Cores` directory: To simplify the project's build process, some cores are integrated as binaries, while most cores are built from upstream source code without any modifications. The cores and some components listed below have been partially modified.
+  - [azahar](https://github.com/Daiuno/azahar)
+  - [desmume](https://github.com/Daiuno/desmume)
+  - [melonds-ds](https://github.com/Daiuno/melonds-ds)
+  - [dynarmic](https://github.com/Daiuno/dynarmic)
+  - [oaknut](https://github.com/Daiuno/oaknut)
+  - [melonDS](https://github.com/Daiuno/melonDS)
 
 ## Acknowledgements
 This project is made possible by the contributions of many outstanding open-source projects:
