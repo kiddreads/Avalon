@@ -1128,6 +1128,22 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var j2mesettingButton: SymbolButton = {
+        let title = R.string.localizable.j2MESettings()
+        let view = SymbolButton(image: R.image.customJava()!.applySymbolConfig(size: 30), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            if let game = self.game {
+                J2MESettingView.show(game: game)
+            }
+        }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
+        return view
+    }()
+    
     var didSegmentChange: ((_ index: Int)->Void)?
     lazy var segmentView: BetterSegmentedControl = {
         let titles = [R.string.localizable.readySegmentManualSave(), R.string.localizable.readySegmentAutoSave()]
@@ -1208,10 +1224,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                         updateClownMDEmuFunctionButton()
                     } else if game.gameType == .snes {
                         updateSNESFunctionButton()
-                    } else if game.gameType == .ns {
+                    } else if game.gameType == .ns || game.gameType == .xbox360 {
                         updateNSFunctionButton()
                     } else if game.isAtari {
                         updateAtariFunctionButton()
+                    } else if game.isJ2MECore {
+                        updateJ2MEFunctionButton()
                     }
                     addManualsButton()
                     hasSetupViews = true
@@ -1796,6 +1814,27 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
+    private func updateJ2MEFunctionButton() {
+        retroButton.removeFromSuperview()
+        cheatCodeButton.removeFromSuperview()
+        j2mesettingButton.removeFromSuperview()
+        
+        skinButton.snp.makeConstraints { make in
+            make.leading.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+        }
+        
+        if let lastView = functionButtonContainerView.subviews.last {
+            //VRAM
+            functionButtonContainerView.addSubview(j2mesettingButton)
+            j2mesettingButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+        }
+    }
     
     private func addManualsButton() {
         //添加游戏手册按钮

@@ -48,7 +48,7 @@ struct Database {
                 //设置已经存在，检查一下皮肤数量是否和模拟器数量一致，不一致的话 需要更新默认皮肤
                 let defaultSkins = realm.objects(Skin.self).where { $0.skinType == .default }
                 let defaultSkinsCount = defaultSkins.count
-                if defaultSkinsCount != System.allCases.filter({ $0 != .ns }).count {
+                if defaultSkinsCount != System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).count {
                     Log.debug("更新设置 新增皮肤")
                     //默认皮肤数量不正确 可能新增了核心 需要重置皮肤
                     try? realm.write {

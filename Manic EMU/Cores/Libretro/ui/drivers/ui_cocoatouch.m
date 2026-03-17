@@ -2264,6 +2264,17 @@ static NSString * _Nullable g_customSaveExtension = nil;
     return NO;
 }
 
+- (void)setFullScreen:(BOOL)isFullScreen {
+    settings_t *settings = config_get_ptr();
+    if (!settings) {
+        return;
+    }
+    
+    configuration_set_uint(settings, settings->uints.video_aspect_ratio_idx, isFullScreen ? ASPECT_RATIO_FULL : ASPECT_RATIO_CORE)
+    
+    command_event(CMD_EVENT_VIDEO_SET_ASPECT_RATIO, NULL);
+}
+
 @end
 
 ui_companion_driver_t ui_companion_cocoatouch = {

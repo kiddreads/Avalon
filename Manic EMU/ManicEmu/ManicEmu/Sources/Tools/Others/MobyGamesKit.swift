@@ -17,9 +17,9 @@ struct MobyGamesKit {
         var url: String
     }
     
-    static func getGameInfoUrl(game: Game, completion: ((URL)->Void)? = nil) {
-        let gameTypeName = game.gameType == .fds ? GameType.nes.localizedShortName : game.gameType.localizedShortName
-        let searchPattern = game.translatedName ?? game.aliasName ?? game.name
+    static func getGameInfoUrl(gameType: GameType, name: String, completion: ((URL)->Void)? = nil) {
+        let gameTypeName = gameType == .fds ? GameType.nes.localizedShortName : gameType.localizedShortName
+        let searchPattern = name
         DispatchQueue.global().async {
             do {
                 let db = try Connection(Constants.Path.GamesDB)
@@ -71,5 +71,9 @@ struct MobyGamesKit {
                 }
             }
         }
+    }
+    
+    static func getGameInfoUrl(game: Game, completion: ((URL)->Void)? = nil) {
+        self.getGameInfoUrl(gameType: game.gameType, name: game.translatedName ?? game.aliasName ?? game.name, completion: completion)
     }
 }

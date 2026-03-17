@@ -495,6 +495,15 @@ extension FilesImporter {
                             game.defaultCore = 1
                         }
 #endif
+                        
+                        var j2MEManifest: J2MEManifest? = nil
+                        if game.gameType == .j2me {
+                            j2MEManifest = J2MEManifest.read(from: url.path)
+                            if let j2MEManifest {
+                                game.aliasName = j2MEManifest.displayName
+                            }
+                        }
+                        
                         do {
                             if ciaTitleUrl == nil {
                                 //cia格式的3DS不需要拷贝了 因为已经安装进游戏目录了
@@ -520,6 +529,11 @@ extension FilesImporter {
                                 if gameType == .psp,
                                     let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
                                     game.updateExtra(key: ExtraKey.PSPGameCode.rawValue, value: gameCode)
+                                }
+                                
+                                //获取j2me的ScreenSize
+                                if gameType == .j2me, let j2MEManifest {
+                                    game.updateExtra(key: ExtraKey.j2meScreenSize.rawValue, value: j2MEManifest.screenSize.stringValue)
                                 }
                                 
                                 return

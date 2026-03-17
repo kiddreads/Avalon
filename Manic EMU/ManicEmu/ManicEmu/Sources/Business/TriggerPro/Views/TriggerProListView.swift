@@ -20,7 +20,7 @@ class TriggerProListView: BaseView {
     }()
     
     private lazy var addButton: ContextMenuButton = {
-        let allGameTypes = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
+        let allGameTypes = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType }
         var actions: [UIMenuElement] = []
         for gameType in allGameTypes {
             actions.append(UIAction(title: gameType.localizedShortName) { [weak self] gesture in
@@ -229,7 +229,7 @@ extension TriggerProListView: UITableViewDataSource, UITableViewDelegate {
         if let customPlatformOrder = Constants.Config.PlatformOrder {
             predefinedOrder = customPlatformOrder.compactMap { GameType(shortName: $0) }
         } else {
-            predefinedOrder = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
+            predefinedOrder = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType }
         }
         let sortedKeys: [GameType] = predefinedOrder.filter { datas.keys.contains($0) }
         return sortedKeys

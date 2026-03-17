@@ -101,6 +101,8 @@ struct Constants {
                 case .a7800: return 0.709
                 case .jaguar: return 0.724
                 case .lynx: return 1.118
+                case .xbox360: return 0.7062
+                case .j2me: return 0.75
                 default: return 1.0
                 }
             case .style2:
@@ -336,6 +338,8 @@ struct Constants {
         static let ShaderImportedInDocument = Document.appendingPathComponent("Shaders")
         static let JGenesis = Resource.appendingPathComponent("jgenesis")
         static let RomPatcher = Resource.appendingPathComponent("RomPatcher")
+        static let J2meJS = Resource.appendingPathComponent("j2mejs")
+        static let Freej2meWeb = Resource.appendingPathComponent("freej2me")
     }
     
     struct DefaultKey {
@@ -356,6 +360,7 @@ struct Constants {
         static let Appearance = "Appearance"
         static let HasShowPlayCasePromo = "HasShowPlayCasePromo"
         static let HasImportedPlayCaseSkin = "HasImportedPlayCaseSkin"
+        static let HasShowFreeJ2meAlert = "HasShowFreeJ2meAlert"
     }
     
     struct Font {
@@ -434,6 +439,8 @@ struct Constants {
         static let AppendedShaders = "MANIC_EMU_PRESET_LIST"
         static let ShaderForceBase = "MANIC_EMU_FORCE_BASE"
         static let MeloNXScheme = "atariemulator"
+        static let XeniOSScheme = "xenios"
+        static let J2MEScreenSizes = ["96x65", "96x96", "104x80", "128x128", "132x176", "128x160", "176x208", "176x220", "208x208", "240x320", "320x240", "240x400", "352x416", "360x640", "640x360", "480x800", "800x480"]
     }
     
     enum Config {
@@ -531,6 +538,8 @@ struct Constants {
         static let ManufacturerFilterChange = NSNotification.Name(rawValue: "ManufacturerFilterChange")
         //RetroArch的着色器下载成功
         static let RetroArchShadersDownloadSuccess = NSNotification.Name(rawValue: "RetroArchShadersDownloadSuccess")
+        //重置游戏
+        static let ResetImmediately = NSNotification.Name(rawValue: "ResetImmediately")
     }
     
     struct URLs {
@@ -621,6 +630,8 @@ struct Constants {
         static let PlayCasePromo = URL(string: "https://playcase.gg/playmanic")!
         static let FetchMeloNXGames = URL(string: "\(Constants.Strings.MeloNXScheme)://gameInfo?scheme=manicemu")!
         static func MeloNXGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.MeloNXScheme)://game?id=\(gameId)")! }
+        static let FetchXeniOSGames = URL(string: "\(Constants.Strings.XeniOSScheme)://gameInfo?scheme=manicemu")!
+        static func XeniOSGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.XeniOSScheme)://launch?title-id=\(gameId)")! }
     }
     
     struct BIOS {

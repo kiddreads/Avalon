@@ -96,6 +96,8 @@ extension GameType {
             self = .jaguar
         } else if ["lnx", "o"].contains(ext) {
             self = .lynx
+        } else if ["jar"].contains(ext) {
+            self = .j2me
         } else {
             self = .notSupport
         }
@@ -168,7 +170,11 @@ extension GameType {
             self = .jaguar
         } else if shortName.uppercased() == "LYNX" {
             self = .lynx
-        } else {
+        } else if shortName.uppercased() == "XBOX360" {
+            self = .xbox360
+        }  else if shortName.uppercased() == "J2ME" {
+            self = .j2me
+        }  else {
             return nil
         }
     }
@@ -204,6 +210,8 @@ extension GameType {
         case .a7800: return "Atari 7800 ProSystem"
         case .jaguar: return "Atari Jaguar"
         case .lynx: return "Atari Lynx"
+        case .j2me: return "Java ME"
+        case .xbox360: return "Xbox 360"
         default: return ""
         }
     }
@@ -239,6 +247,8 @@ extension GameType {
         case .a7800: return  NSLocalizedString("7800", comment: "")
         case .jaguar: return  NSLocalizedString("JAGUAR", comment: "")
         case .lynx: return  NSLocalizedString("LYNX", comment: "")
+        case .j2me: return  NSLocalizedString("J2ME", comment: "")
+        case .xbox360: return  NSLocalizedString("XBOX360", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -275,6 +285,8 @@ extension GameType {
         case .a7800: return 1986
         case .lynx: return 1989
         case .jaguar: return 1993
+        case .j2me: return 1999
+        case .xbox360: return 2005
         default: return 0
         }
     }
@@ -309,6 +321,7 @@ extension GameType {
         case .a7800: return A7800.core
         case .jaguar: return Jaguar.core
         case .lynx: return Lynx.core
+        case .j2me: return J2ME.core
         default: return nil
         }
     }
@@ -343,6 +356,8 @@ extension GameType {
             return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name, LibretroCore.Cores.ClownMDEmu.name]
         } else if self == .ds {
             return [LibretroCore.Cores.melonDSDS.name, LibretroCore.Cores.DeSmuME.name]
+        } else if self == .j2me {
+            return [LibretroCore.Cores.J2meJS.name, LibretroCore.Cores.freej2me.name]
         }
         return []
     }
@@ -399,6 +414,10 @@ extension GameType {
             return .arcade
         case .a2600, .a5200, .a7800, .jaguar, .lynx:
             return .atari
+        case .j2me:
+            return .sun
+        case .xbox360:
+            return .microsoft
         default:
             return .nintendo
         }

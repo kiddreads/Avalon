@@ -48,6 +48,7 @@ class PlayViewController: GameViewController {
     private var turnOffHardcoreNotification: Any? = nil
     private var turnOffAlwaysShowProgressNotification: Any? = nil
     private var mameGameFileMissingNotification: Any? = nil
+    private var resetGamingNotification: Any? = nil
     
     //每分钟执行一次
     private lazy var repeatTimer: Schedule.Task = {
@@ -92,6 +93,13 @@ class PlayViewController: GameViewController {
     private var jGenesisCore: JGenesisView? {
         if manicGame.isJGenesisCore {
             return gameMetalView as? JGenesisView
+        }
+        return nil
+    }
+    //J2ME核心
+    private var j2meCore: J2MEView? {
+        if manicGame.isJ2MECore {
+            return gameMetalView as? J2MEView
         }
         return nil
     }
@@ -187,6 +195,9 @@ class PlayViewController: GameViewController {
         if SyncManager.shared.hasDownloadTask {
             UIView.makeLoadingToast(message: R.string.localizable.loadingTitle())
         }
+        if let resetGamingNotification {
+            NotificationCenter.default.removeObserver(resetGamingNotification)
+        }
     }
     
     //数据库变化通知
@@ -215,7 +226,10 @@ class PlayViewController: GameViewController {
     
     static func startGame(game: Game, saveState: GameSaveState? = nil) {
         if game.gameType == .ns {
-            MeloNXKit.startGame(id: game.id)
+            EmulatorInteractionKit.startGame(type: .meloNX, id: game.id)
+            return
+        } else if game.gameType == .xbox360 {
+            EmulatorInteractionKit.startGame(type: .xeniOS, id: game.id)
             return
         }
         
@@ -298,6 +312,15 @@ class PlayViewController: GameViewController {
                     topViewController(appController: true)?.present(BIOSSelectionViewController(gameType: .ss), animated: true)
                 }, hideAction: {
                     UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowSSPlayAlert)
+                });
+            } else if game.gameType == .j2me, game.defaultCore == 1, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowFreeJ2meAlert) {
+                UIView.makeAlert(title: R.string.localizable.headsUp(),
+                                 detail: R.string.localizable.freej2meAlert(),
+                                 detailAlignment: .left,
+                                 cancelTitle: R.string.localizable.confirmTitle(),
+                                 cancelAction: {
+                    UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowFreeJ2meAlert)
+                    showPlayView()
                 });
             } else {
                 showPlayView()
@@ -604,6 +627,13 @@ class PlayViewController: GameViewController {
             UIView.makeAlert(title: R.string.localizable.mameFileMissingTitle(), detail: R.string.localizable.mameFileMissingDesc(), cancelTitle: R.string.localizable.confirmTitle())
         }
         
+        //重置游戏通知
+        quitGamingNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ResetImmediately, object: nil, queue: .main, using: { [weak self] notification in
+            guard let self else { return }
+            UIView.hideAllAlert()
+            self.handleMenuGameSetting(GameSetting(type: .reload), nil)
+        })
+        
         //更新最新游戏时间
         updateLatestPlayDate()
         
@@ -703,6 +733,8 @@ class PlayViewController: GameViewController {
         functionButtonContainer.snp.makeConstraints { make in
             if manicGame.gameType == .n64 && UIDevice.isPad {
                 make.top.equalTo(gameView.snp.bottom).offset(-9)
+            } else if manicGame.gameType == .j2me {
+                make.top.equalTo(gameView.snp.bottom).offset(2)
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
@@ -711,7 +743,12 @@ class PlayViewController: GameViewController {
             } else {
                 make.leading.trailing.equalTo(gameView)
             }
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+            if manicGame.gameType == .j2me {
+                make.height.equalTo(30)
+            } else {
+                make.height.equalTo(Constants.Size.ItemHeightMid)
+            }
+            
         }
         //设置外设控制器
         updateExternalGameController()
@@ -764,7 +801,7 @@ class PlayViewController: GameViewController {
         repeatTimer.suspend()
         //清理AirPlay画面
         if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let airPlayGameView = airPlayViewController.libretroView {
-            if manicGame.isLibretroType || manicGame.isJGenesisCore {
+            if manicGame.isLibretroType || manicGame.isJGenesisCore || manicGame.isJ2MECore {
                 airPlayGameView.parentViewController?.removeFromParent()
                 airPlayGameView.removeFromSuperview()
                 airPlayViewController.libretroView = nil
@@ -878,6 +915,9 @@ class PlayViewController: GameViewController {
             return true
         } else if manicGame.isJGenesisCore {
             jGenesisCore?.pause()
+            return true
+        } else if manicGame.isJ2MECore {
+            j2meCore?.pause()
             return true
         } else {
             return super.pauseEmulation()
@@ -1094,7 +1134,7 @@ extension PlayViewController {
             UIView.makeToast(message: R.string.localizable.gameSaveStateQuickLoadFailed())
         }
     }
-    
+
     private func quickLoadStateForJGenesis(_ state: GameSaveState?) {
         let now = Date.now
         if let lastLoadDate = lastLoadDate, now.timeIntervalSince1970ms - lastLoadDate.timeIntervalSince1970ms < 1000 {
@@ -1122,7 +1162,7 @@ extension PlayViewController {
             
         }
     }
-    
+
     private func handleGameInput(_ inputStringValue: String) {
         let input = SomeInput(stringValue: inputStringValue, intValue: nil, type: .controller(.controllerSkin))
         //点击menu弹出菜单
@@ -1205,6 +1245,8 @@ extension PlayViewController {
                 }
             } else if manicGame.isJGenesisCore {
                 updateFlex(images: [jGenesisCore?.snapShot()])
+            } else if manicGame.isJ2MECore {
+                updateFlex(images: [j2meCore?.snapShot()])
             } else {
                 let mainGameView = gameViews.first!
                 let secondGameView: GameView? = gameViews.count > 1 ? gameViews[1] : nil
@@ -1302,9 +1344,9 @@ extension PlayViewController {
         } else if input.stringValue == "retroAchievements" {
             handleMenuGameSetting(GameSetting(type: .retro), nil)
         } else if input.stringValue == "airPlayScaling" {
-            handleMenuGameSetting(GameSetting(type: .retro, airPlayScaling: Settings.defalut.airPlayScaling.next), nil)
+            handleMenuGameSetting(GameSetting(type: .airPlayScaling, airPlayScaling: Settings.defalut.airPlayScaling.next), nil)
         } else if input.stringValue == "airPlayLayout" {
-            handleMenuGameSetting(GameSetting(type: .retro, airPlayLayout: Settings.defalut.airPlayLayout.next), nil)
+            handleMenuGameSetting(GameSetting(type: .airPlayLayout, airPlayLayout: Settings.defalut.airPlayLayout.next), nil)
         } else if input.stringValue == "gameplayManuals" {
             handleMenuGameSetting(GameSetting(type: .gameplayManuals), nil)
         } else if input.stringValue == "triggerPro" {
@@ -1321,6 +1363,10 @@ extension PlayViewController {
             update2600LeftDifficulty(isInit: false)
         } else if  input.stringValue == "rightDifficulty" {
             update2600RightDifficulty(isInit: false)
+        } else if input.stringValue == "screenScaling" {
+            handleMenuGameSetting(GameSetting(type: .screenScaling, screenScaling: manicGame.screenScaling.next), nil)
+        } else if input.stringValue == "j2meSettings" {
+            handleMenuGameSetting(GameSetting(type: .j2meSettings), nil)
         }
     }
     
@@ -1628,6 +1674,11 @@ extension PlayViewController {
                     PhotoSaver.save(image: image)
                 }
                 return false
+            } else if manicGame.isJ2MECore {
+                if let image = j2meCore?.snapShot() {
+                    PhotoSaver.save(image: image)
+                }
+                return false
             } else {
                 PhotoSaver.save(datas: gameViews.compactMap { $0.snapshot()?.processGameSnapshop() })
                 return false
@@ -1713,6 +1764,15 @@ extension PlayViewController {
                 updateFilter()
             } else if manicGame.isJGenesisCore {
                 jGenesisCore?.reset()
+            } else if manicGame.isJ2MECore {
+                j2meCore?.reset(screenSize: manicGame.j2meScreenSize, rotation: manicGame.j2meScreenRotation) { [weak self] success in
+                    guard let self = self else { return }
+                    if success {
+                        self.updateFastforward(speed: self.manicGame.speed)
+                        self.updateAudio()
+                        self.updateScreenScaling(self.manicGame.screenScaling)
+                    }
+                }
             }
         case .quit:
             //MARK: handleMenuGameSetting.quit
@@ -1728,6 +1788,11 @@ extension PlayViewController {
                     self.dismiss(animated: true)
                 }
             } else if manicGame.isJGenesisCore {
+                gameMetalView = nil
+                DispatchQueue.main.asyncAfter(delay: 0.5) {
+                    self.dismiss(animated: true)
+                }
+            } else if manicGame.isJ2MECore {
                 gameMetalView = nil
                 DispatchQueue.main.asyncAfter(delay: 0.5) {
                     self.dismiss(animated: true)
@@ -2058,6 +2123,19 @@ extension PlayViewController {
             }
             self.updateTriggerPro(showToast: true)
             return true
+            
+        case .screenScaling:
+            //MARK: handleMenuGameSetting.screenScaling
+            if item.screenScaling != manicGame.screenScaling {
+                manicGame.updateExtra(key: ExtraKey.screenScaling.rawValue, value: item.screenScaling.rawValue)
+                updateScreenScaling(item.screenScaling)
+            }
+            UIView.makeToast(message: R.string.localizable.screenScaling() + ": " + item.screenScaling.title)
+            
+        case .j2meSettings:
+            //MARK: handleMenuGameSetting.j2meSettings
+            J2MESettingView.show(game: manicGame)
+            return false
         }
         //默认关闭菜单
         return true
@@ -2113,9 +2191,12 @@ extension PlayViewController {
         } else if manicGame.isJGenesisCore {
             jGenesisCore?.resume()
             updateAudio()
+        } else if manicGame.isJ2MECore {
+            j2meCore?.resume()
+            updateAudio()
         }
     }
-    
+
     private func updateAudio() {
         if manicGame.isCitra3DS {
             if manicGame.volume {
@@ -2138,6 +2219,12 @@ extension PlayViewController {
                 jGenesisCore?.setMute(true)
             } else {
                 jGenesisCore?.setMute(!manicGame.volume)
+            }
+        } else if manicGame.isJ2MECore {
+            if Settings.defalut.respectSilentMode, muteSwitchMonitor.isMonitoring, muteSwitchMonitor.isMuted {
+                j2meCore?.setMute(true)
+            } else {
+                j2meCore?.setMute(!manicGame.volume)
             }
         }
     }
@@ -2241,13 +2328,15 @@ extension PlayViewController {
             }
             
         } else if manicGame.isJGenesisCore {
-            
+
+        } else if manicGame.isJ2MECore {
+            // J2ME does not support cheat codes
         }
     }
-    
+
     private func updateFilter() {
         guard !manicGame.safeMode else { return }
-        guard !manicGame.isCitra3DS, !manicGame.isJGenesisCore else { return }
+        guard !manicGame.isCitra3DS, !manicGame.isJGenesisCore, !manicGame.isJ2MECore else { return }
         
         if manicGame.isLibretroType {
             //Libretro filterName是滤镜的路径
@@ -2678,6 +2767,9 @@ extension PlayViewController {
         skinSwitchBindDatas["reverseScreens"] = manicGame.swapScreen
         skinSwitchBindDatas["volume"] = manicGame.volume
         skinSwitchBindDatas["toggleControlls"] = manicGame.forceFullSkin
+        
+        //配置屏幕的拉伸模式
+        updateScreenScaling(manicGame.screenScaling)
     }
     
     private func loadMinimalConfig() {
@@ -2964,6 +3056,9 @@ extension PlayViewController {
         skinSwitchBindDatas["reverseScreens"] = manicGame.swapScreen
         skinSwitchBindDatas["volume"] = manicGame.volume
         skinSwitchBindDatas["toggleControlls"] = manicGame.forceFullSkin
+        
+        //配置屏幕的拉伸模式
+        updateScreenScaling(manicGame.screenScaling)
     }
     
     //更新皮肤
@@ -3048,7 +3143,9 @@ extension PlayViewController {
         updateCitra3DSViews()
         //更新JGenesis画面
         updateJGenesisView()
-        
+        //更新J2ME画面
+        updateJ2MEView()
+
         if controllerView.isIncludeSwitch {
             controllerView.updateSwitchState(skinSwitchBindDatas)
         }
@@ -3144,8 +3241,8 @@ extension PlayViewController {
     /// 更新AirPlay
     private func updateAirPlay() {
         guard !manicGame.isCitra3DS else { return }
-        
-        if manicGame.isLibretroType || manicGame.isJGenesisCore {
+
+        if manicGame.isLibretroType || manicGame.isJGenesisCore || manicGame.isJ2MECore {
             if PurchaseManager.isMember, Settings.defalut.airPlay, ExternalSceneDelegate.isAirPlaying {
                 //执行全屏投屏
                 if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
@@ -3508,7 +3605,83 @@ extension PlayViewController {
             }
         }
     }
-    
+
+    private func updateJ2MEView() {
+        guard manicGame.isJ2MECore else { return }
+        if let gameMetalView {
+            if gameMetalView.superview == view {
+                gameMetalView.snp.remakeConstraints { make in
+                    make.edges.equalTo(gameView)
+                }
+            }
+        } else {
+            //允许点击穿透
+            controllerView.allowTapThroughIfButtonNotHit = true
+            
+            let j2meView = J2MEView(coreType: manicGame.defaultCore == 0 ? .j2meJS : .freej2meWeb)
+            gameMetalView = j2meView
+            guard let gameMetalView else { return }
+            self.view.insertSubview(gameMetalView, belowSubview: controllerView)
+            gameMetalView.snp.makeConstraints { make in
+                make.edges.equalTo(self.gameView)
+            }
+            gameMetalView.isHidden = true
+            
+            j2meView.onExit = { [weak self] in
+                guard let self = self else { return }
+                self.handleMenuGameSetting(GameSetting(type: .quit), nil)
+            }
+            
+            var loadSuccess = false
+            let group = DispatchGroup()
+            group.enter()
+            j2meView.didFinishedInit = { [weak self] in
+                loadSuccess = true
+                group.leave()
+                UIView.hideLoading()
+                guard let self = self else { return }
+                self.j2meCore?.openJar(filePath: self.manicGame.romUrl.path,
+                                       savePath: self.manicGame.gameSaveUrl.path,
+                                       screenSize: self.manicGame.j2meScreenSize,
+                                       rotation: self.manicGame.j2meScreenRotation) { [weak self] success in
+                    guard let self = self else { return }
+                    if success {
+                        self.updateFastforward(speed: self.manicGame.speed)
+                        self.updateAudio()
+                        self.updateScreenScaling(self.manicGame.screenScaling)
+                    }
+                }
+
+                self.gameMetalView?.isHidden = false
+                self.updateAirPlay()
+            }
+            
+            if manicGame.defaultCore == 1 {
+                //freej2me的CheerpJ可能加载很长时间
+                DispatchQueue.main.asyncAfter(delay: 3) {
+                    if !loadSuccess {
+                        UIView.makeLoadingToast(message: R.string.localizable.loadingCheerpJ())
+                        UIView.makeLoading(timeout: 30)
+                        DispatchQueue.global().async {
+                            let result = group.wait(timeout: .now() + 30)
+                            DispatchQueue.main.async {
+                                if result == .success {
+                                    UIView.hideLoadingToast()
+                                    UIView.hideLoading()
+                                } else {
+                                    UIView.hideLoadingToast()
+                                    UIView.makeAlert(detail: R.string.localizable.cheerpJLoadFailed(),
+                                                     detailAlignment: .left,
+                                                     cancelTitle: R.string.localizable.confirmTitle())
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private func updateDualScreenViews() {
         guard manicGame.gameType == .ds || manicGame.isAzahar3DS else { return }
         
@@ -4135,6 +4308,19 @@ extension PlayViewController {
             case .five:
                 jGenesisCore?.fastForward(speed: 7)
             }
+        } else if manicGame.isJ2MECore {
+            switch speed {
+            case .one:
+                j2meCore?.fastForward(speed: 1.0)
+            case .two:
+                j2meCore?.fastForward(speed: 1.5)
+            case .three:
+                j2meCore?.fastForward(speed: 3)
+            case .four:
+                j2meCore?.fastForward(speed: 5)
+            case .five:
+                j2meCore?.fastForward(speed: 7)
+            }
         }
     }
     
@@ -4236,6 +4422,14 @@ extension PlayViewController {
             }
         })
     }
+    
+    private func updateScreenScaling(_ scaling: GameSetting.ScreenScaling) {
+        if manicGame.isLibretroType {
+            LibretroCore.sharedInstance().setFullScreen(scaling == .stretch ? true : false)
+        } else if manicGame.isJ2MECore {
+            j2meCore?.setScaleMode(scaling)
+        }
+    }
 }
 
 //MARK: GameViewControllerDelegate代理
@@ -4253,7 +4447,7 @@ extension PlayViewController: GameViewControllerDelegate {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {
             return false
         }
-        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || ShadersListView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow || FBNeoCheatCodeListView.isShow) ? false : true
+        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || ShadersListView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow || FBNeoCheatCodeListView.isShow || J2MESettingView.isShow) ? false : true
     }
     
 }
@@ -4297,6 +4491,13 @@ extension PlayViewController {
     static var jGenesisView: JGenesisView? {
         if let currentPlayViewController {
             return currentPlayViewController.jGenesisCore
+        }
+        return nil
+    }
+    
+    static var j2meView: J2MEView? {
+        if let currentPlayViewController {
+            return currentPlayViewController.j2meCore
         }
         return nil
     }

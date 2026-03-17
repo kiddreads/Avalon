@@ -49,4 +49,7 @@ enum ExtraKey: String {
     case rightDifficulty
     case ignoreShaderConfig
     case pspConfig
+    case screenScaling
+    case j2meScreenSize
+    case j2meScreenRotate
 }

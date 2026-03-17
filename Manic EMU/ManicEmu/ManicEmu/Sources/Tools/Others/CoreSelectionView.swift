@@ -102,9 +102,9 @@ class CoreSelectionView: BaseView {
                         Game.change { realm in
                             game.defaultCore = coreIndex
                         }
-                        //处理SS的存档
+                        //SS J2me的存档不切换
                         let newSaveUrl = game.gameSaveUrl
-                        if game.gameType != .ss, FileManager.default.fileExists(atPath: oldSaveUrl.path) {
+                        if game.gameType != .ss, game.gameType != .j2me, FileManager.default.fileExists(atPath: oldSaveUrl.path) {
                             try? FileManager.safeMoveItem(at: oldSaveUrl, to: newSaveUrl)
                         }
                         //处理DS的存档

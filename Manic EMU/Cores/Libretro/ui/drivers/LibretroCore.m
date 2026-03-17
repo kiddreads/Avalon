@@ -680,6 +680,10 @@ static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_
     return [[self getRetroArch] isSearchingAmiibo];
 }
 
+- (void)setFullScreen:(BOOL)isFullScreen {
+    [[self getRetroArch] setFullScreen:isFullScreen];
+}
+
 #pragma mark - Azahar Keyboard Support
 
 // Structure matching retro_keyboard_config from libretro.h

@@ -619,7 +619,7 @@
 		5781F4992EEE71B500916D8B /* ShaderOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4972EEE71A800916D8B /* ShaderOrderView.swift */; };
 		5781F49E2EEE957200916D8B /* ShaderOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */; };
 		5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */; };
-		5781F5462EF1384500916D8B /* MeloNXKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* MeloNXKit.swift */; };
+		5781F5462EF1384500916D8B /* EmulatorInteractionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* EmulatorInteractionKit.swift */; };
 		5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5AB2EF45C6900916D8B /* JGenesisView.swift */; };
 		578F287E2F37805000D2D998 /* WFCSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F287C2F37804600D2D998 /* WFCSettingViewController.swift */; };
 		578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28812F3780B700D2D998 /* WFCSettingView.swift */; };
@@ -825,6 +825,7 @@
 		57F2E9482DA289C2000E5BA6 /* OpenSSL in Frameworks */ = {isa = PBXBuildFile; productRef = 57F2E9472DA289C2000E5BA6 /* OpenSSL */; };
 		57F30CD82EC048880035327C /* ManufacturerCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F30CD62EC048780035327C /* ManufacturerCategoryView.swift */; };
 		57F30CDF2EC44F390035327C /* Manufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F30CDD2EC44F340035327C /* Manufacturer.swift */; };
+		57F3BAEC2F6541C900ABF4B3 /* J2MESettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F3BAEA2F6541AB00ABF4B3 /* J2MESettingView.swift */; };
 		57F632452D6D4A03007270E8 /* AddImportServiceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F632442D6D4A02007270E8 /* AddImportServiceCollectionViewCell.swift */; };
 		57F6327C2D6EA8D3007270E8 /* DropGlowEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F6327B2D6EA8BD007270E8 /* DropGlowEffectView.swift */; };
 		57F632852D6EB485007270E8 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F632842D6EB47F007270E8 /* UIScreenExtensions.swift */; };
@@ -842,6 +843,7 @@
 		57FC198D2DF04E160076D93C /* right_eye_disabler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57FC198C2DF04E160076D93C /* right_eye_disabler.cpp */; };
 		57FC19982DF051180076D93C /* hack_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57FC19962DF051180076D93C /* hack_manager.cpp */; };
 		57FC19992DF051180076D93C /* hack_list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57FC19952DF051180076D93C /* hack_list.cpp */; };
+		57J2ME02F23397000EA24F1 /* J2ME.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57J2ME01F23397000EA24F1 /* J2ME.swift */; };
 		A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A392D5632E96682600F920E7 /* DisabledTapSwitch.swift */; };
 		A392D5B32E9796B900F920E7 /* ServiceIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A392D5B22E9796B800F920E7 /* ServiceIconView.swift */; };
 		A3A043802E9BF57A006442C2 /* UIScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */; };
@@ -1737,7 +1739,7 @@
 		5781F4972EEE71A800916D8B /* ShaderOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderOrderView.swift; sourceTree = "<group>"; };
 		5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderOrderCell.swift; sourceTree = "<group>"; };
 		5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersExtensions.swift; sourceTree = "<group>"; };
-		5781F5442EF1383F00916D8B /* MeloNXKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeloNXKit.swift; sourceTree = "<group>"; };
+		5781F5442EF1383F00916D8B /* EmulatorInteractionKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmulatorInteractionKit.swift; sourceTree = "<group>"; };
 		5781F5AB2EF45C6900916D8B /* JGenesisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGenesisView.swift; sourceTree = "<group>"; };
 		578F287C2F37804600D2D998 /* WFCSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingViewController.swift; sourceTree = "<group>"; };
 		578F28812F3780B700D2D998 /* WFCSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingView.swift; sourceTree = "<group>"; };
@@ -1936,6 +1938,7 @@
 		57F1A9382D7D703500D0CC93 /* AirPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPlayViewController.swift; sourceTree = "<group>"; };
 		57F30CD62EC048780035327C /* ManufacturerCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManufacturerCategoryView.swift; sourceTree = "<group>"; };
 		57F30CDD2EC44F340035327C /* Manufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manufacturer.swift; sourceTree = "<group>"; };
+		57F3BAEA2F6541AB00ABF4B3 /* J2MESettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2MESettingView.swift; sourceTree = "<group>"; };
 		57F456CF2DA98BB8007203AF /* Config-DevRelease.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-DevRelease.xcconfig"; sourceTree = "<group>"; };
 		57F632442D6D4A02007270E8 /* AddImportServiceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImportServiceCollectionViewCell.swift; sourceTree = "<group>"; };
 		57F6327B2D6EA8BD007270E8 /* DropGlowEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropGlowEffectView.swift; sourceTree = "<group>"; };
@@ -1951,6 +1954,7 @@
 		57FC198C2DF04E160076D93C /* right_eye_disabler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = right_eye_disabler.cpp; sourceTree = "<group>"; };
 		57FC19952DF051180076D93C /* hack_list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hack_list.cpp; sourceTree = "<group>"; };
 		57FC19962DF051180076D93C /* hack_manager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hack_manager.cpp; sourceTree = "<group>"; };
+		57J2ME01F23397000EA24F1 /* J2ME.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2ME.swift; sourceTree = "<group>"; };
 		5D42AD15F67D97D2A7EF83B9 /* Pods-ManicEmu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManicEmu.release.xcconfig"; path = "Target Support Files/Pods-ManicEmu/Pods-ManicEmu.release.xcconfig"; sourceTree = "<group>"; };
 		7436F3E00AF2863DB4D7DBA6 /* Pods-ManicEmu.debugsimulator.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManicEmu.debugsimulator.xcconfig"; path = "Target Support Files/Pods-ManicEmu/Pods-ManicEmu.debugsimulator.xcconfig"; sourceTree = "<group>"; };
 		8716E0FB35012D3F5C750B94 /* Pods-ManicEmu.devrelease.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManicEmu.devrelease.xcconfig"; path = "Target Support Files/Pods-ManicEmu/Pods-ManicEmu.devrelease.xcconfig"; sourceTree = "<group>"; };
@@ -3938,6 +3942,7 @@
 		57913B432D5ED727004D51AA /* VIews */ = {
 			isa = PBXGroup;
 			children = (
+				57F3BAEA2F6541AB00ABF4B3 /* J2MESettingView.swift */,
 				57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */,
 				57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */,
 				576F0E042D88005800D2A1BA /* GameSavePurchaseGuideView.swift */,
@@ -4269,6 +4274,7 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				57J2ME01F23397000EA24F1 /* J2ME.swift */,
 				573CEE952F23396C00EA24F1 /* Lynx.swift */,
 				573CEE902F23396200EA24F1 /* Jaguar.swift */,
 				573CEE882F2338D500EA24F1 /* A7800.swift */,
@@ -4521,7 +4527,7 @@
 				57A912022F3B765B00628B04 /* NDSSaveConverter.swift */,
 				578F28C02F39A9CA00D2D998 /* BonjourKit.swift */,
 				573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */,
-				5781F5442EF1383F00916D8B /* MeloNXKit.swift */,
+				5781F5442EF1383F00916D8B /* EmulatorInteractionKit.swift */,
 				57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */,
 				5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */,
 				5744C6CE2E360AD50088081A /* UIControllerKit.swift */,
@@ -5410,6 +5416,7 @@
 				57DF840C2D61B3D500AA0AAB /* BlankSlateCollectionView.swift in Sources */,
 				575FF8E82D34A6DF0043B2F3 /* System.swift in Sources */,
 				573CEE962F23396D00EA24F1 /* Lynx.swift in Sources */,
+				57J2ME02F23397000EA24F1 /* J2ME.swift in Sources */,
 				57DE104E2D6088BE00CDD82A /* BlankPlaceholderView.swift in Sources */,
 				57E962F82D6AB4540022914C /* PlayHistoryItemCollectionCell.swift in Sources */,
 				57CCB33B2D6584BC0036476B /* ObjectUpdatable.swift in Sources */,
@@ -5625,13 +5632,14 @@
 				A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */,
 				57F632852D6EB485007270E8 /* UIScreenExtensions.swift in Sources */,
 				57B6ECC92D797CA3002E619C /* AddCheatCodeTitleCell.swift in Sources */,
-				5781F5462EF1384500916D8B /* MeloNXKit.swift in Sources */,
+				5781F5462EF1384500916D8B /* EmulatorInteractionKit.swift in Sources */,
 				5706B0402DFBEC300066122E /* MS.swift in Sources */,
 				A5A001F324555A5F006E0F0E /* AppDelegate.swift in Sources */,
 				575A39CE2DCD011500B28FC2 /* OnlineCoverManager.swift in Sources */,
 				57B6ECEC2D79E19E002E619C /* BlankSlateTableView.swift in Sources */,
 				5720D1C32DBA01990090C0F6 /* MappingTipView.swift in Sources */,
 				57E0C19E2D562F8600962555 /* GamesToolView.swift in Sources */,
+				57F3BAEC2F6541C900ABF4B3 /* J2MESettingView.swift in Sources */,
 				57D7CF8B2EA8C8A000F41540 /* TriggerProMappingListView.swift in Sources */,
 				57DF847A2D62E98100AA0AAB /* NSAttributedStringExtensions.swift in Sources */,
 				576F0DA52D85CD3A00D2A1BA /* FeaturesCell.swift in Sources */,

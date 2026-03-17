@@ -33,7 +33,11 @@ class ImportServiceListView: BaseView {
         }))
         actions.append((UIAction(title: R.string.localizable.fetchGamesFromMeloNX(), image: UIImage(symbol: .gamecontroller)) { [weak self] _ in
             guard let self = self else { return }
-            MeloNXKit.fetchGames()
+            EmulatorInteractionKit.fetchGames(type: .meloNX)
+        }))
+        actions.append((UIAction(title: R.string.localizable.fetchGamesFromXeniOS(), image: UIImage(symbol: .gamecontroller)) { [weak self] _ in
+            guard let self = self else { return }
+            EmulatorInteractionKit.fetchGames(type: .xeniOS)
         }))
         let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view

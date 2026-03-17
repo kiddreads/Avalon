@@ -65,7 +65,7 @@ enum GameEditToolItem: SettingCellItem, CaseIterable {
     var enableLongPress: Bool { false }
     
     func support(for gameType: GameType) -> Bool {
-        if gameType == .ns {
+        if gameType == .ns || gameType == .xbox360 {
             switch self {
             case .rename, .cover, .delete:
                 return true

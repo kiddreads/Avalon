@@ -199,7 +199,7 @@ extension UIView {
         if forceHide {
             hideAction()
         } else {
-            //判断一下还有没有下载中的人物
+            //判断一下还有没有下载中的任务
             if !DownloadManager.shared.hasDownloadTask && !SyncManager.shared.hasDownloadTask {
                 hideAction()
             }

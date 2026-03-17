@@ -194,6 +194,8 @@ class Game: Object, ObjectUpdatable {
             }
         } else if gameType == .lynx {
             return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).srm"))
+        } else if gameType == .j2me {
+            return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
         }
         
         let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
@@ -503,6 +505,9 @@ class Game: Object, ObjectUpdatable {
         if isJGenesisCore {
             return false
         }
+        if isJ2MECore {
+            return false
+        }
         return true
     }
     
@@ -657,7 +662,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isLibretroType: Bool {
-        if isCitra3DS || isJGenesisCore {
+        if isCitra3DS || isJGenesisCore || isJ2MECore {
             return false
         }
         return true
@@ -674,7 +679,11 @@ class Game: Object, ObjectUpdatable {
     var isJGenesisCore: Bool {
         return ((gameType == ._32x || gameType == .mcd) && defaultCore == 1)
     }
-    
+
+    var isJ2MECore: Bool {
+        return gameType == .j2me
+    }
+
     var coreNameForMultiSupport: String {
         if gameType.supportCores.count > 0, defaultCore < gameType.supportCores.count {
             return "(\(gameType.supportCores[defaultCore]))"
@@ -708,6 +717,36 @@ class Game: Object, ObjectUpdatable {
         } else {
             processSave()
         }
+    }
+    
+    var screenScaling: GameSetting.ScreenScaling {
+        if let scalingInt = getExtraInt(key: ExtraKey.screenScaling.rawValue),
+            let scaling = GameSetting.ScreenScaling(rawValue: scalingInt) {
+            return scaling
+        }
+        return .stretch
+    }
+    
+    var j2meScreenSize: J2MESize {
+        if let sizeString = getExtraString(key: ExtraKey.j2meScreenSize.rawValue),
+           let size = J2MESize(stringValue: sizeString) {
+            return size
+        }
+        return J2MESize.defaultSize
+    }
+    
+    var j2meScreenRotation: Bool {
+        getExtraBool(key: ExtraKey.j2meScreenRotate.rawValue) ?? false
+    }
+    
+    func deleteJ2meSaves() {
+        let j2mejsUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.J2meJS.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+        try? FileManager.safeRemoveItem(at: j2mejsUrl)
+        SyncManager.delete(localFilePath: j2mejsUrl.path)
+        
+        let freej2meUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+        try? FileManager.safeRemoveItem(at: freej2meUrl)
+        SyncManager.delete(localFilePath: freej2meUrl.path)
     }
 }
 

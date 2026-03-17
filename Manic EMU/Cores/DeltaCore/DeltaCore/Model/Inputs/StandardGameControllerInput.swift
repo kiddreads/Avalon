@@ -55,6 +55,8 @@ public enum StandardGameControllerInput: String, Codable
     case tvType//Color or BW bindable
     case leftDifficulty // A or B bindable
     case rightDifficulty //A or B bindable
+    case screenScaling
+    case j2meSettings
 
     case up
     case down

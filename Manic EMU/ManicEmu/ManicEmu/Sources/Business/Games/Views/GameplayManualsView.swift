@@ -175,7 +175,7 @@ extension GameplayManualsView {
     }
     
     static func show(game: Game, hideCompletion: (()->Void)? = nil) {
-        Sheet { sheet in
+        Sheet.lazyPush(identifier: String(describing: GameplayManualsView.self)) { sheet in
             sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
             
             let view = UIView()

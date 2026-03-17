@@ -97,4 +97,17 @@ Cores/libretro-ppsspp
 Cores/libretro-azahar
 Cores/J2meJS
 Cores/freej2me-web
+Cores/melonDS
 i18n/
+
+#claude code
+.claude
+CLAUDE.md
+SKILL.md
+.xcodebuildmcp
+
+#cursor
+.cursor
+
+#vscode
+.vscode

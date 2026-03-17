@@ -619,14 +619,14 @@ class GameListView: BaseView {
         var games: [Game] = []
         if let indexPath = indexPath, let game = self.getGame(at: indexPath) {
             if !item.support(for: game.gameType) {
-                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(GameType.ns.localizedShortName))
+                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(game.gameType.localizedShortName))
                 return
             }
             games.append(game)
         } else if let tempIndexPaths = collectionView.indexPathsForSelectedItems {
             games.append(contentsOf: tempIndexPaths.compactMap({ getGame(at: $0) }))
             if games.count == 1, !item.support(for: games.first!.gameType) {
-                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(GameType.ns.localizedShortName))
+                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(games.first!.gameType.localizedShortName))
                 return
             }
         } else {
@@ -707,19 +707,25 @@ class GameListView: BaseView {
                                 SyncManager.delete(localFilePath: game.romUrl.path)
                             }
                         }
-                        if game.isSaveExtsts {
-                            if game.gameType == .psp, let code = game.gameCodeForPSP {
-                                //psp的存档可能分为多个文件夹
-                                try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.PSPSave).filter({ $0.hasPrefix(code)}).forEach { savePath in
-                                    let deletePath = Constants.Path.PSPSave.appendingPathComponent(savePath)
-                                    try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: deletePath))
-                                    SyncManager.deletePath(localPath: deletePath)
+                        
+                        if game.gameType == .j2me {
+                            game.deleteJ2meSaves()
+                        } else {
+                            if game.isSaveExtsts {
+                                if game.gameType == .psp, let code = game.gameCodeForPSP {
+                                    //psp的存档可能分为多个文件夹
+                                    try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.PSPSave).filter({ $0.hasPrefix(code)}).forEach { savePath in
+                                        let deletePath = Constants.Path.PSPSave.appendingPathComponent(savePath)
+                                        try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: deletePath))
+                                        SyncManager.deletePath(localPath: deletePath)
+                                    }
+                                } else {
+                                    try FileManager.safeRemoveItem(at: game.gameSaveUrl)
+                                    SyncManager.delete(localFilePath: game.gameSaveUrl.path)
                                 }
-                            } else {
-                                try FileManager.safeRemoveItem(at: game.gameSaveUrl)
-                                SyncManager.delete(localFilePath: game.gameSaveUrl.path)
                             }
                         }
+                        
                         if let coverData = game.gameCover {
                             coverData.deleteAndClean(realm: realm)
                         }
@@ -1128,7 +1134,7 @@ extension GameListView: UICollectionViewDelegate {
                     guard let self = self else { return }
                     self.editGame(item: editItems[index], indexPath: indexPath)
                 }
-                if game.gameType == .ns {
+                if game.gameType == .ns || game.gameType == .xbox360 {
                     if editItem == .rename {
                         firstGroup.append(action)
                     } else if editItem == .cover {
@@ -1218,7 +1224,13 @@ extension GameListView: UICollectionViewDelegate {
             
             //添加"复制启动链接"
             let action = UIAction(title: R.string.localizable.copyLaunchLinkTitle(), image: .symbolImage(.link)) { _ in
-                UIPasteboard.general.string = (game.gameType == .ns ? Constants.URLs.MeloNXGameLaunch(gameId: game.id).absoluteString : "manicemu://launch/\(game.id)")
+                if game.gameType == .ns {
+                    UIPasteboard.general.string = Constants.URLs.MeloNXGameLaunch(gameId: game.id).absoluteString
+                } else if game.gameType == .xbox360 {
+                    UIPasteboard.general.string = Constants.URLs.XeniOSGameLaunch(gameId: game.id).absoluteString
+                } else {
+                    UIPasteboard.general.string = "manicemu://launch/\(game.id)"
+                }
                 if game.gameCover != nil || game.onlineCoverUrl != nil {
                     //弹出提示询问用户是否需要进行封面的保存
                     UIView.makeAlert(detail: R.string.localizable.askIfNeedToSaveCover(), confirmTitle: R.string.localizable.saveTitle(), confirmAction: {

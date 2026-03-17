@@ -133,15 +133,11 @@ class GameInfoCoverView: BaseView {
     private func generateMenu() -> UIMenu {
         //点击选择封面照片
         var titles = [R.string.localizable.readyEditCoverTakePhoto(),
-                          R.string.localizable.readyEditCoverAlbum(),
-                          R.string.localizable.readyEditCoverFile()]
+                      R.string.localizable.readyEditCoverAlbum(),
+                      R.string.localizable.readyEditCoverFile(),
+                      R.string.localizable.readyEditCoverSearch()]
         
-        var symbols: [SFSymbol] = [.camera, .photoOnRectangleAngled, .folder]
-        
-        if game.gameType != .ns {
-            titles.append(R.string.localizable.readyEditCoverSearch())
-            symbols.append(.magnifyingglass)
-        }
+        var symbols: [SFSymbol] = [.camera, .photoOnRectangleAngled, .folder, .magnifyingglass]
         
         if let _ = game.gameCover?.storedData() {
             titles.append(R.string.localizable.editTitle())
@@ -164,10 +160,10 @@ class GameInfoCoverView: BaseView {
                 } else if index == 2 {
                     //文件
                     ImageFetcher.file(completion: self.coverUpdation)
-                } else if game.gameType != .ns, index == 3 {
+                } else if index == 3 {
                     //搜索
                     topViewController()?.present(GameCoverSearchViewController(game: game, completion: self.coverUpdation), animated: true)
-                } else if (game.gameType == .ns && index == 3) || (index == 4) {
+                } else if index == 4 {
                     //编辑
                     if let imageData = game.gameCover?.storedData(), let image = UIImage(data: imageData) {
                         ImageFetcher.edit(image: image, completion: self.coverUpdation)

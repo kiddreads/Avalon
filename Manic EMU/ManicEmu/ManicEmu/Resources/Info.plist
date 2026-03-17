@@ -340,6 +340,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>J2ME Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.j2me</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -478,6 +490,7 @@
 	<array>
 		<string>sidestore</string>
 		<string>atariemulator</string>
+		<string>xenios</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -1214,6 +1227,27 @@
 				<array>
 					<string>lnx</string>
 					<string>o</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>J2ME Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.j2me</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>jar</string>
 				</array>
 			</dict>
 		</dict>

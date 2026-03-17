@@ -6,6 +6,8 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 
+import WebKit
+
 final class WeakScriptMessageHandler: NSObject, WKScriptMessageHandler {
 
     weak var target: WKScriptMessageHandler?

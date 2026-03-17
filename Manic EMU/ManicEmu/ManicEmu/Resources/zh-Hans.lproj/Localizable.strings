@@ -881,3 +881,22 @@
 
 "SafeMode" = "安全模式";
 "SafeModeDesc" = "以安全模式启动游戏将停用所有额外配置（如自定义分辨率、快进、着色器等），并以最小化配置运行。这有助于解决因配置错误导致游戏无法启动的问题。仅本次启动有效。";
+
+"NotInstall" = "%@ 未安装";
+"FetchGamesFromXeniOS" = "从 XeniOS 导入游戏";
+"ScreenScaling" = "屏幕缩放";
+"ScreenScalingStretch" = "拉伸";
+"ScreenScalingFit" = "适配";
+"HeadsUp" = "注意";
+"Freej2meAlert" = "freej2me 核心依赖 CheerpJ 虚拟机。由于 CheerpJ 的商业授权限制，无法将其直接集成到应用中，因此每次启动游戏时都需要在线加载。如果设备没有网络连接，则可能无法正常加载。下载 CheerpJ 运行库可能需要一些时间，请耐心等待。";
+"CheerpJLoadFailed" = "CheerpJ 似乎未能成功加载。您可以继续等待，或检查网络连接后重新启动游戏以再次尝试加载。";
+"RotateScreen" = "旋转屏幕";
+"Width" = "宽度";
+"Height" = "高度";
+"ScreenSize" = "屏幕尺寸";
+"J2MESettings" = "J2ME 设置";
+"J2MESettingsTips" = "由于 JAR 标准存在差异，Manic EMU 有时无法自动获取正确的分辨率或屏幕方向。为了获得更好的显示效果，您可以手动进行配置。";
+"J2MEScreenChange" = "J2ME 屏幕设置已保存。若要立即生效，需要重置游戏，未保存的游戏进度可能会丢失。是否立即重置？";
+"Later" = "稍后";
+"ResetImmediately" = "立即重置";
+"LoadingCheerpJ" = "正在加载 CheerpJ";

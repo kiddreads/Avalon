@@ -430,6 +430,24 @@ struct GameSetting: SettingCellItem {
         }
     }
     
+    enum ScreenScaling: Int, CaseIterable {
+        case stretch, fit
+        var title: String {
+            switch self {
+            case .stretch: R.string.localizable.screenScalingStretch()
+            case .fit: R.string.localizable.screenScalingFit()
+            }
+        }
+        
+        var next: ScreenScaling {
+            if let type = ScreenScaling(rawValue: self.rawValue + 1) {
+                return type
+            } else {
+                return .stretch
+            }
+        }
+    }
+    
     enum MappingOnlyType: Int, CaseIterable, SettingCellItem {
         case holdX2FastForward, holdX3FastForward, holdX4FastForward, holdMaxFastForward
         
@@ -484,7 +502,7 @@ struct GameSetting: SettingCellItem {
     
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
-        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals, triggerPro
+        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals, triggerPro, screenScaling, j2meSettings
     }
     
     var type: ItemType
@@ -503,6 +521,7 @@ struct GameSetting: SettingCellItem {
     var mappingOnlyType: MappingOnlyType? = nil
     var nesPalette = Game.defaultNesPalette
     var triggerProID: Int? = nil
+    var screenScaling: ScreenScaling = .stretch
     
     var image: UIImage {
         switch type {
@@ -570,6 +589,10 @@ struct GameSetting: SettingCellItem {
             UIImage(symbol: .textBookClosed)
         case .triggerPro:
             R.image.customXmarkTriangleCircleSquare()!.applySymbolConfig()
+        case .screenScaling:
+            UIImage(symbol: .arrowUpRightAndArrowDownLeftRectangle)
+        case .j2meSettings:
+            R.image.customJava()!.applySymbolConfig(size: 30)
         }
     }
     
@@ -639,6 +662,10 @@ struct GameSetting: SettingCellItem {
             R.string.localizable.gameplayManuals()
         case .triggerPro:
             "TriggerPro"
+        case .screenScaling:
+            R.string.localizable.screenScaling()
+        case .j2meSettings:
+            R.string.localizable.j2MESettings()
         }
     }
     
@@ -655,7 +682,32 @@ struct GameSetting: SettingCellItem {
             return gameType == .ps1
         }
         
+        if type == .j2meSettings {
+            return gameType == .j2me
+        }
+        
         switch gameType {
+        case .j2me:
+            if  type == .saveState ||
+                type == .quickLoadState ||
+                (type == .fastForward && defaultCore == 1) ||
+                type == .stateList ||
+                type == .cheatCode ||
+                type == .filter ||
+                type == .swapScreen ||
+                type == .resolution ||
+                type == .consoleHome ||
+                type == .amiibo ||
+                type == .simBlowing ||
+                type == .palette ||
+                type == .swapDisk ||
+                type == .retro ||
+                type == .airPlayLayout ||
+                type == .toggleAnalog  {
+                return false
+            }
+            return true
+                
         case .a2600, .a5200, .a7800, .lynx, .jaguar:
             if gameType == .a5200, type == .retro {
                 return false
@@ -671,7 +723,7 @@ struct GameSetting: SettingCellItem {
             return true
         case ._3ds:
             if defaultCore == 0 {
-                if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling {
+                if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling || type == .screenScaling {
                     return false
                 }
             } else {
@@ -692,7 +744,7 @@ struct GameSetting: SettingCellItem {
             
             if gameType == ._32x || gameType == .mcd {
                 //JGenesis核心
-                let notEnableForJGenesis = (type == .cheatCode || type == .filter || type == .retro || type == .swapDisk)
+                let notEnableForJGenesis = (type == .cheatCode || type == .filter || type == .retro || type == .swapDisk || type == .screenScaling)
                 if defaultCore == 1 && notEnableForJGenesis {
                     return false
                 }
@@ -745,7 +797,7 @@ struct GameSetting: SettingCellItem {
     
     var enableLongPress: Bool {
         switch self.type {
-        case .quickLoadState, .fastForward, .haptic, .orientation, .resolution, .palette, .swapDisk, .airPlayScaling, .airPlayLayout, .triggerPro:
+        case .quickLoadState, .fastForward, .haptic, .orientation, .resolution, .palette, .swapDisk, .airPlayScaling, .airPlayLayout, .triggerPro, .screenScaling:
             return true
         default:
             return false
@@ -818,6 +870,10 @@ struct GameSetting: SettingCellItem {
             return "gameplayManuals"
         case .triggerPro:
             return "triggerPro"
+        case .screenScaling:
+            return "screenScaling"
+        case .j2meSettings:
+            return "j2meSettings"
         }
     }
     

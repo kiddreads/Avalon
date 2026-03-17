@@ -9,7 +9,7 @@ import GCDWebServer
 
 class LocalWebServer {
     enum ServerType {
-        case JGenesis, RomPatcher, J2meJS, freej2me
+        case JGenesis, RomPatcher, J2meJS, freej2meWeb
     }
     
     private var server: GCDWebServer?
@@ -87,9 +87,73 @@ class LocalWebServer {
                                   cacheAge: 0,
                                   allowRangeRequests: true)
         case .J2meJS:
-            break
-        case .freej2me:
-            break
+            resourcePath = Constants.Path.J2meJS
+
+            // Add generic directory handler
+            server?.addGETHandler(forBasePath: "/",
+                                  directoryPath: resourcePath,
+                                  indexFilename: nil,
+                                  cacheAge: 0,
+                                  allowRangeRequests: true)
+
+            // JAR file handler for game loading
+            server?.addHandler(forMethod: "GET", pathRegex: "/file/.*", request: GCDWebServerRequest.self) { [weak self] request in
+                guard let self else { return nil }
+                let fileId = request.path.lastPathComponent
+                guard let filePath = self.files[fileId] else {
+                    return GCDWebServerResponse(statusCode: 404)
+                }
+
+                guard FileManager.default.fileExists(atPath: filePath) else {
+                    return GCDWebServerResponse(statusCode: 404)
+                }
+
+                let response = GCDWebServerFileResponse(file: filePath)
+                response?.cacheControlMaxAge = 0
+                response?.setValue("no-cache, no-store, must-revalidate", forAdditionalHeader: "Cache-Control")
+                response?.contentType = "application/java-archive"
+                return response
+            }
+
+        case .freej2meWeb:
+            resourcePath = Constants.Path.Freej2meWeb
+
+            // Add generic directory handler
+            server?.addGETHandler(forBasePath: "/",
+                                  directoryPath: resourcePath,
+                                  indexFilename: nil,
+                                  cacheAge: 3600,
+                                  allowRangeRequests: true)
+
+            // WASM file handler with correct MIME type
+            server?.addHandler(forMethod: "GET", pathRegex: "/.*\\.wasm", request: GCDWebServerRequest.self) { request in
+                let wasmPath = resourcePath.appendingPathComponent(request.path)
+                guard FileManager.default.fileExists(atPath: wasmPath) else {
+                    return GCDWebServerResponse(statusCode: 404)
+                }
+                let response = GCDWebServerFileResponse(file: wasmPath)
+                response?.contentType = "application/wasm"
+                return response
+            }
+
+            // JAR file handler for game loading
+            server?.addHandler(forMethod: "GET", pathRegex: "/file/.*", request: GCDWebServerRequest.self) { [weak self] request in
+                guard let self else { return nil }
+                let fileId = request.path.lastPathComponent
+                guard let filePath = self.files[fileId] else {
+                    return GCDWebServerResponse(statusCode: 404)
+                }
+
+                guard FileManager.default.fileExists(atPath: filePath) else {
+                    return GCDWebServerResponse(statusCode: 404)
+                }
+
+                let response = GCDWebServerFileResponse(file: filePath)
+                response?.cacheControlMaxAge = 0
+                response?.setValue("no-cache, no-store, must-revalidate", forAdditionalHeader: "Cache-Control")
+                response?.contentType = "application/java-archive"
+                return response
+            }
         }
 
         try server?.start(options: [

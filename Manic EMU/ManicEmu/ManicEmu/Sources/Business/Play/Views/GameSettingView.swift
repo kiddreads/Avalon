@@ -225,6 +225,7 @@ class GameSettingView: BaseView {
         if let id = game.getExtraInt(key: ExtraKey.triggerProID.rawValue), id != -1 {
             triggerProId = id
         }
+        let screenScaling = game.screenScaling
         
         gameSettings = settings.gameFunctionList.compactMap { itemTypeValue in
             if let itemType = GameSetting.ItemType(rawValue: itemTypeValue) {
@@ -244,7 +245,8 @@ class GameSettingView: BaseView {
                                        airPlayScaling: airPlayScaling,
                                        airPlayLayout: airPlayLayout,
                                        nesPalette: nesPalettes,
-                                       triggerProID: triggerProId)
+                                       triggerProID: triggerProId,
+                                       screenScaling: screenScaling)
                 }
             }
             return nil
@@ -556,6 +558,8 @@ extension GameSettingView: UICollectionViewDelegate {
                 return
             case .triggerPro:
                 item.triggerProID = Trigger.nextTriggerID(gameType: game.gameType, currentID: item.triggerProID)
+            case .screenScaling:
+                item.screenScaling = item.screenScaling.next
             default:
                 break
             }
@@ -816,6 +820,16 @@ extension GameSettingView: UICollectionViewDelegate {
                 menus.append(UIMenu(options: .displayInline, children: thirdGroup))
             }
             return UIContextMenuConfiguration(actionProvider: { _ in UIMenu(children: menus) } )
+        } else if item.type == .screenScaling {
+            let actions = GameSetting.ScreenScaling.allCases.map { scaling in
+                UIAction(title: scaling.title,
+                         image: scaling == game.screenScaling ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
+                    guard let self = self else { return }
+                    item.screenScaling = scaling
+                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                }
+            }
+            return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
         }
         return nil
     }

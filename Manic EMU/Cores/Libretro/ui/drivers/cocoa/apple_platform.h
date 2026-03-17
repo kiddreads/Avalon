@@ -157,6 +157,7 @@ UINavigationControllerDelegate> {
 - (void)setFastforwardFrameSkip:(BOOL)frameSkip;
 - (void)loadAmiibo:(NSString *_Nonnull)path;
 - (BOOL)isSearchingAmiibo;
+- (void)setFullScreen:(BOOL)isFullScreen;
 @end
 
 #else

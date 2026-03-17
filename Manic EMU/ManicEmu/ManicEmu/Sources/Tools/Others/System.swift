@@ -11,6 +11,8 @@ import ManicEmuCore
 
 enum System: CaseIterable
 {
+    case j2me
+    case xbox360
     case jaguar
     case lynx
     case a7800
@@ -46,7 +48,7 @@ enum System: CaseIterable
     }
     
     static var allCores: [ManicEmuCoreProtocol] {
-        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core, DS.core, FDS.core, Arcade.core, A2600.core, A5200.core, A7800.core, Lynx.core, Jaguar.core]
+        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core, DS.core, FDS.core, Arcade.core, A2600.core, A5200.core, A7800.core, Lynx.core, Jaguar.core, J2ME.core]
     }
 }
 
@@ -83,6 +85,8 @@ extension System {
         case .a7800: return .a7800
         case .jaguar: return .jaguar
         case .lynx: return .lynx
+        case .j2me: return .j2me
+        case .xbox360: return .xbox360
         }
     }
 }

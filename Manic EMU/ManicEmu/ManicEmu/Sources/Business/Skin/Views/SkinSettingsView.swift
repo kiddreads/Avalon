@@ -43,8 +43,8 @@ class SkinSettingsView: BaseView {
         } else {
             view.addTapGesture { [weak self] gesture in
                 guard let self = self else { return }
-                let allGameTypes = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
-                let itemTitles = System.allCases.filter({ $0 != .ns }).map { $0.gameType.localizedShortName }
+                let allGameTypes = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType }
+                let itemTitles = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType.localizedShortName }
                 var items: [UIAction] = []
                 let currentGameTypeName = self.gameType.localizedShortName
                 for (index, title) in itemTitles.enumerated() {
@@ -175,7 +175,7 @@ class SkinSettingsView: BaseView {
     ///游戏类型
     private var gameType: GameType = {
         if let platformOrder = Constants.Config.PlatformOrder, let shortName = platformOrder.first, let type = GameType(shortName: shortName) {
-            if type == .ns {
+            if type == .ns || type == .xbox360 {
                 if platformOrder.count > 1, let type = GameType(shortName: platformOrder[1]) {
                     return type
                 } else {

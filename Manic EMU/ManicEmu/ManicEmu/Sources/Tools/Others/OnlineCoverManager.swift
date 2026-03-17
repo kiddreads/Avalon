@@ -22,7 +22,7 @@ class OnlineCoverManager {
         init(game: Game) {
             self.gameType = game.gameType
             self.gameID = game.id
-            self.gameName = game.aliasName ?? game.name
+            self.gameName = game.translatedName ?? game.aliasName ?? game.name
             self.fileExtension = game.fileExtension
         }
         
@@ -45,12 +45,12 @@ class OnlineCoverManager {
             guard !isCancelled else { return }
             let semaphore = DispatchSemaphore(value: 0)
             
-            MatchOperation.searchCovers(coverMatch: coverMatch, fetchOne: true) { [weak self] urls, requestFailed in
+            MatchOperation.searchCovers(coverMatch: coverMatch, fetchOne: true) { [weak self] urls, needMatchNextTime in
                 guard let self = self else {
                     semaphore.signal()
                     return
                 }
-                guard !requestFailed else {
+                guard !needMatchNextTime else {
                     semaphore.signal()
                     return
                 }
@@ -127,6 +127,12 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("Atari - Jaguar/Named_Boxarts")
             case .lynx:
                 boxArtUrl = host.appendingPathComponent("Atari - Lynx/Named_Boxarts")
+            case .ns, .xbox360, .j2me:
+                searchCoversFromMoby(coverMatch: coverMatch,
+                                     persistentedTranslation: persistentedTranslation,
+                                     isCallBackMain: isCallBackMain,
+                                     completion: completion)
+                return
             default:
                 boxArtUrl = nil
             }
@@ -190,6 +196,55 @@ class OnlineCoverManager {
                         }
                     } else {
                         completion?(onlineCoverUrls, matchList.count == 0)
+                    }
+                }
+            }
+        }
+        
+        static func searchCoversFromMoby(coverMatch: CoverMatch, persistentedTranslation: Bool = true, isCallBackMain: Bool = false, completion: (([URL], Bool)->Void)? = nil) {
+            translateGameName(coverMatch.gameName,
+                              gameID: persistentedTranslation ? coverMatch.gameID : nil) { translatedName in
+                MobyGamesKit.getGameInfoUrl(gameType: coverMatch.gameType, name: translatedName) { url in
+                    func callback(urls: [URL], needMatchNextTime: Bool) {
+                        if isCallBackMain {
+                            DispatchQueue.main.async {
+                                completion?(urls, needMatchNextTime)
+                            }
+                        } else {
+                            completion?(urls, needMatchNextTime)
+                        }
+                    }
+                    
+                    if url == Constants.URLs.MobyGames {
+                        callback(urls: [], needMatchNextTime: false)
+                    } else {
+                        //获取到结果
+                        URLSession.shared.dataTask(with: url) { data, response, error in
+                            if let data = data,
+                                let html = String(data: data, encoding: .utf8),
+                                let document = try? SwiftSoup.parse(html) {
+                                let links = try? document.select("img.img-box").filter({ element in
+                                    if element.hasAttr("src"), let alt = try? element.attr("alt"), alt == "box cover" {
+                                        return true
+                                    }
+                                    return false
+                                }).compactMap({
+                                    if let src = try? $0.attr("src") {
+                                        return URL(string: src.removingPercentEncoding)
+                                    }
+                                    return nil
+                                })
+                                if let links {
+                                    callback(urls: links, needMatchNextTime: false)
+                                } else {
+                                    callback(urls: [], needMatchNextTime: false)
+                                }
+                                
+                            } else {
+                                callback(urls: [], needMatchNextTime: true)
+                            }
+                        }.resume()
+                        
                     }
                 }
             }

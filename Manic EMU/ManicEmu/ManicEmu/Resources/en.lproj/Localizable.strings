@@ -887,3 +887,22 @@ Press the controller button to complete mapping...";
 
 "SafeMode" = "Safe Mode";
 "SafeModeDesc" = "Launching a game in Safe Mode disables all additional settings (such as custom resolution, fast forward, and shaders) and runs with a minimal configuration. This can help resolve issues caused by incorrect settings that prevent the game from starting. Applies to this launch only.";
+
+"NotInstall" = "%@ is not installed.";
+"FetchGamesFromXeniOS" = "Import Games from XeniOS";
+"ScreenScaling" = "Screen Scaling";
+"ScreenScalingStretch" = "Stretch";
+"ScreenScalingFit" = "Fit";
+"HeadsUp" = "Heads Up";
+"Freej2meAlert" = "The freej2me core relies on the CheerpJ virtual machine. Due to CheerpJ licensing restrictions, it cannot be bundled with the app and must be loaded online each time the game starts. If no internet connection is available, it may fail to load. Downloading the CheerpJ runtime may take some time, so please be patient.";
+"CheerpJLoadFailed" = "CheerpJ did not load successfully. You can continue waiting, or check your network connection and restart the game to try again.";
+"RotateScreen" = "Rotate Screen";
+"Width" = "Width";
+"Height" = "Height";
+"ScreenSize" = "Screen Size";
+"J2MESettings" = "J2ME Settings";
+"J2MESettingsTips" = "Due to differences in JAR standards, Manic EMU may not always detect the correct screen resolution or orientation. For the best display results, you can configure them manually.";
+"J2MEScreenChange" = "J2ME screen settings have been saved. To apply the changes immediately, the game must be reset. Any unsaved progress may be lost. Reset now?";
+"Later" = "Later";
+"ResetImmediately" = "Reset Now";
+"LoadingCheerpJ" = "Loading CheerpJ";

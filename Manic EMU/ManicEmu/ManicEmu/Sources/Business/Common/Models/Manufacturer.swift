@@ -9,13 +9,13 @@
 import ManicEmuCore
 
 enum Manufacturer: Int, CaseIterable {
-    case nintendo, sony, sega, arcade, atari
+    case nintendo, sony, sega, arcade, atari, sun, microsoft
     
     static var allCases: [Manufacturer] {
         if Locale.prefersUS {
-            [.nintendo, .sony, .sega, .atari, .arcade]
+            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft]
         } else {
-            [.nintendo, .sony, .sega, .arcade, .atari]
+            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft]
         }
     }
     
@@ -31,6 +31,10 @@ enum Manufacturer: Int, CaseIterable {
             "Arcade"
         case .atari:
             "Atari"
+        case .sun:
+            "Sun"
+        case .microsoft:
+            "Microsoft"
         }
     }
     
@@ -50,6 +54,10 @@ enum Manufacturer: Int, CaseIterable {
             R.image.arcade_normal()!
         case .atari:
             R.image.atari_normal()!
+        case .sun:
+            R.image.sun_normal()!
+        case .microsoft:
+            R.image.microsoft_normal()!
         }
     }
     
@@ -65,6 +73,10 @@ enum Manufacturer: Int, CaseIterable {
             R.image.arcade_highlight()!
         case .atari:
             R.image.atari_highlight()!
+        case .sun:
+            R.image.sun_highlight()!
+        case .microsoft:
+            R.image.microsoft_highlight()!
         }
     }
 }

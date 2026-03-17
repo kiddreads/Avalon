@@ -34,8 +34,8 @@ class ControllerMappingView: UIView {
         view.backgroundColor = .clear
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
-            let allGameTypes = System.allCases.filter({ $0 != .ns }).map { $0.gameType }
-            let itemTitles = System.allCases.filter({ $0 != .ns }).map { $0.gameType.localizedShortName }
+            let allGameTypes = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType }
+            let itemTitles = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType.localizedShortName }
             var items: [UIAction] = []
             let currentGameTypeName = self.gameType.localizedShortName
             for (index, title) in itemTitles.enumerated() {

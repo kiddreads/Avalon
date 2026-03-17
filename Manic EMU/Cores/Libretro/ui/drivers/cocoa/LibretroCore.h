@@ -109,6 +109,7 @@ extern NSString * const RetroAchievementsNotification;
 - (void)registerAzaharKeyboard:(void(^ _Nullable)(AzaharKeyboardConfig *_Nonnull config))callback;
 - (void)inputAzaharKeyboard:(NSString *_Nullable)text buttonType:(AzaharButtonType)buttonType;
 + (NSString *_Nullable)getPSPGameIDWithRomPath:(NSString *_Nonnull)romPath;
+- (void)setFullScreen:(BOOL)isFullScreen;
 
 @end
 

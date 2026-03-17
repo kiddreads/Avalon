@@ -176,6 +176,9 @@ public class ControllerView: UIView, GameController
     
     private(set) var imageCache = NSCache<NSString, NSCache<NSString, UIImage>>()
     
+    //如果允许的话 会判断按钮是否被点中，没有被点中则允许点击穿透，默认为false 设置为true可能会有性能损失
+    public var allowTapThroughIfButtonNotHit = false
+    
     public override var intrinsicContentSize: CGSize {
         return buttonsView.intrinsicContentSize
     }
@@ -370,6 +373,15 @@ public class ControllerView: UIView, GameController
         {
             guard switchView.frame.contains(point) else { continue }
             return switchView
+        }
+        
+        if allowTapThroughIfButtonNotHit {
+            let buttonsViewPoint = buttonsView.convert(point, from: self)
+            if let inputs = buttonsView.inputs(at: buttonsViewPoint), inputs.count > 0 {
+                return buttonsView
+            } else {
+                return nil
+            }
         }
         
         return buttonsView
