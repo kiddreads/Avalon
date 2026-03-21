@@ -89,12 +89,12 @@ class Game: Object, ObjectUpdatable {
     @Persisted var pallete: GameSetting.Palette = .None
     ///是否强制全屏 不进行同步
     var forceFullSkin: Bool = false
-    ///当前光盘的index 多碟游戏才有效
-    var currentDiskIndex: UInt = 0
-    ///当前游戏总共有多少张光盘 多碟游戏才有效
-    var totalDiskCount: UInt = 0
+
     static let DsHomeMenuPrimaryKey = "Home Menu"
     static let DsiHomeMenuPrimaryKey = "Home Menu (DSi)"
+    
+    static let DOSHomeMenuPrimaryKey = "Home Menu (DOSBox)"
+    
     ///安全模式
     var safeMode = false
     
@@ -198,6 +198,17 @@ class Game: Object, ObjectUpdatable {
             return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).srm"))
         } else if gameType == .j2me {
             return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+        } else if gameType == .dos {
+            if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
+                for case let fileURL as URL in enumerator {
+                    let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
+                    guard !isDirectory else { continue }
+                    if fileURL.lastPathComponent == "\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")" {
+                        return fileURL
+                    }
+                }
+            }
+            return URL(fileURLWithPath: Constants.Path.DOSBoxPure.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
         }
         
         let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
@@ -401,6 +412,8 @@ class Game: Object, ObjectUpdatable {
             return Bundle.main.path(forResource: "virtualjaguar.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .lynx {
             return Bundle.main.path(forResource: "holani.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .dos {
+            return Bundle.main.path(forResource: "dosbox.pure.libretro", ofType: "framework", inDirectory: "Frameworks")
         }
         return nil
     }
@@ -500,7 +513,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportRetroAchievements: Bool {
-        if gameType == ._3ds || gameType == .doom || gameType == .a5200 {
+        if gameType == ._3ds || gameType == .doom || gameType == .a5200 || gameType == .dos {
             return false
         }
         if gameType == .arcade, defaultCore == 0 {
@@ -517,6 +530,8 @@ class Game: Object, ObjectUpdatable {
     
     var supportSwapDisc: Bool {
         if fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "pbp" {
+            return true
+        } else if gameType == .dos, let diskCount = diskInfo?.diskCount, diskCount > 0 {
             return true
         }
         return false
@@ -751,6 +766,55 @@ class Game: Object, ObjectUpdatable {
         let freej2meUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: freej2meUrl)
         SyncManager.delete(localFilePath: freej2meUrl.path)
+    }
+    
+    func getStoreCoreConfigs() -> [String: String]? {
+        guard isLibretroType else { return nil }
+        if let coreConfigsString = getExtraString(key: ExtraKey.coreConfigs.rawValue),
+            let jsonData = coreConfigsString.data(using: .utf8),
+            let json = try? JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
+            return json
+        }
+        return nil
+    }
+    
+    func getStoreCoreConfigsString() -> String? {
+        if let coreConfigs = getStoreCoreConfigs() {
+            var result = ""
+            for (key, value) in coreConfigs {
+                result += "\(key) = \"\(value)\"\n"
+            }
+            return result
+        }
+        return nil
+    }
+    
+    var diskInfo: LibretroDisk? { LibretroCore.sharedInstance().getDiskInfo() }
+    
+    func deleteDosFiles() {
+        var fileUrls = [URL]()
+        if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
+            for case let fileURL as URL in enumerator {
+                let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
+                guard !isDirectory else { continue }
+                if fileURL.lastPathComponent.contains(name) {
+                    fileUrls.append(fileURL)
+                }
+            }
+        }
+        
+        fileUrls.forEach({
+            try? FileManager.safeRemoveItem(at: $0)
+            SyncManager.delete(localFilePath: $0.path)
+        })
+    }
+    
+    var isDOSHomeMenuGame: Bool {
+        guard gameType == .dos else { return false }
+        if id == Game.DOSHomeMenuPrimaryKey {
+            return true
+        }
+        return false
     }
 }
 

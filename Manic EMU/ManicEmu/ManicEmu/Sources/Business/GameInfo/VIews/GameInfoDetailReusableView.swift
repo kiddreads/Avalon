@@ -11,6 +11,7 @@ import UIKit
 import BetterSegmentedControl
 import RealmSwift
 import UniformTypeIdentifiers
+import ManicEmuCore
 
 class GameInfoDetailReusableView: UICollectionReusableView {
     let backgroundBlurView: UIView = {
@@ -1128,14 +1129,30 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
-    private lazy var j2mesettingButton: SymbolButton = {
-        let title = R.string.localizable.j2MESettings()
-        let view = SymbolButton(image: R.image.customJava()!.applySymbolConfig(size: 30), title: title, horizontalContian: true)
+    private lazy var j2meSettingButton: SymbolButton = {
+        let title = GameType.j2me.coreConfigTitle
+        let view = SymbolButton(image: GameType.j2me.coreConfigIcon?.applySymbolConfig(size: 30), title: title, horizontalContian: true)
         view.titleLabel.numberOfLines = 0
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
             if let game = self.game {
                 J2MESettingView.show(game: game)
+            }
+        }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
+        return view
+    }()
+    
+    private lazy var dosSettingButton: SymbolButton = {
+        let title = GameType.dos.coreConfigTitle
+        let view = SymbolButton(image: GameType.dos.coreConfigIcon?.applySymbolConfig(size: 24), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            if let game = self.game {
+                CoreConfigsView.show(game: game)
             }
         }
         view.isAccessibilityElement = true
@@ -1225,13 +1242,19 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                     } else if game.gameType == .snes {
                         updateSNESFunctionButton()
                     } else if game.gameType == .ns || game.gameType == .xbox360 {
-                        updateNSFunctionButton()
+                        hideDefaultFunctionButtons([retroButton, skinButton, cheatCodeButton])
                     } else if game.isAtari {
-                        updateAtariFunctionButton()
+                        if game.gameType == .a5200 {
+                            hideDefaultFunctionButtons([retroButton, cheatCodeButton])
+                        } else {
+                            hideDefaultFunctionButtons([cheatCodeButton])
+                        }
                     } else if game.isJ2MECore {
                         updateJ2MEFunctionButton()
                     } else if game.gameType == .doom || (game.gameType == .arcade && game.defaultCore == 0) {
                         hideDefaultFunctionButtons([retroButton])
+                    } else if game.gameType == .dos {
+                        updateDOSFunctionButton()
                     }
                     addManualsButton()
                     hasSetupViews = true
@@ -1370,6 +1393,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         rightEyeRenderMenuButton.removeFromSuperview()
         rightEyeRenderButton.removeFromSuperview()
         threeDSAdvancedSettingButton.removeFromSuperview()
+        manualButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
             functionButtonContainerView.addSubview(threeDSAdvancedModeButton)
             threeDSAdvancedModeButton.snp.makeConstraints { make in
@@ -1645,25 +1669,6 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
-    private func hideDefaultFunctionButtons(_ buttons: [UIView]) {
-        guard buttons.count > 0 else { return }
-        var removeButtons = [UIView]()
-        functionButtonContainerView.subviews.forEach { button in
-            if buttons.contains(where: { $0 == button }) {
-                removeButtons.append(button)
-            }
-        }
-        if removeButtons.count > 0 {
-            removeButtons.forEach { $0.removeFromSuperview() }
-        }
-        if let firstView = functionButtonContainerView.subviews.first {
-            firstView.snp.makeConstraints { make in
-                make.leading.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeHuge)
-            }
-        }
-    }
-    
     private func updatePS1FunctionButton() {
         manualButton.removeFromSuperview()
         psxImportSbiButton.removeFromSuperview()
@@ -1802,35 +1807,59 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
-    private func updateNSFunctionButton() {
-        functionButtonContainerView.subviews.forEach({ $0.removeFromSuperview() })
-    }
-    
-    private func updateAtariFunctionButton() {
-        if let game, game.gameType == .a5200 {
-            hideDefaultFunctionButtons([retroButton, cheatCodeButton])
-        } else {
-            hideDefaultFunctionButtons([cheatCodeButton])
-        }
-    }
-    
     private func updateJ2MEFunctionButton() {
         hideDefaultFunctionButtons([retroButton, cheatCodeButton])
-        j2mesettingButton.removeFromSuperview()
-        
-        skinButton.snp.makeConstraints { make in
-            make.leading.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeHuge)
-        }
+        j2meSettingButton.removeFromSuperview()
         
         if let lastView = functionButtonContainerView.subviews.last {
-            //VRAM
-            functionButtonContainerView.addSubview(j2mesettingButton)
-            j2mesettingButton.snp.makeConstraints { make in
+            functionButtonContainerView.addSubview(j2meSettingButton)
+            j2meSettingButton.snp.makeConstraints { make in
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
                 make.trailing.equalToSuperview()
+            }
+        }
+    }
+    
+    private func updateDOSFunctionButton() {
+        hideDefaultFunctionButtons([retroButton, cheatCodeButton])
+        dosSettingButton.removeFromSuperview()
+        
+        if let lastView = functionButtonContainerView.subviews.last {
+            functionButtonContainerView.addSubview(dosSettingButton)
+            dosSettingButton.snp.makeConstraints { make in
+                make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+        }
+    }
+    
+    private func hideDefaultFunctionButtons(_ buttons: [UIView]) {
+        guard buttons.count > 0 else { return }
+        var removeButtons = [UIView]()
+        functionButtonContainerView.subviews.forEach { button in
+            if buttons.contains(where: { $0 == button }) {
+                removeButtons.append(button)
+            }
+        }
+        if removeButtons.count > 0 {
+            removeButtons.forEach { $0.removeFromSuperview() }
+        }
+        
+        let visableSubViews = functionButtonContainerView.subviews.filter({ !$0.isKind(of: ContextMenuButton.self) })
+        for (index, subView) in visableSubViews.enumerated() {
+            
+            subView.snp.remakeConstraints { make in
+                if index == 0 {
+                    make.leading.equalToSuperview()
+                } else {
+                    make.leading.equalTo(visableSubViews[index-1].snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                }
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
             }
         }
     }

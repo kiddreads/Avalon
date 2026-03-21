@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders, featuredItems
+        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders, featuredItems, skinSound
     }
     
     var type: ItemType
@@ -27,7 +27,7 @@ struct SettingItem {
             return Constants.Color.Green
         case .airPlay, .FAQ, .about, .rumble, .jit:
             return Constants.Color.Indigo
-        case .iCloud, .userAgreement, .appearance:
+        case .iCloud, .userAgreement, .appearance, .skinSound:
             return Constants.Color.Blue
         case .fullScreenWhenConnectController, .shareApp, .triggerPro:
             return Constants.Color.Orange
@@ -106,6 +106,8 @@ struct SettingItem {
             R.image.customAppBackgroundDotted()!.applySymbolConfig(font: Constants.Font.body(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .featuredItems:
             UIImage(symbol: .shippingboxFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        case .skinSound:
+            UIImage(symbol: .waveform, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         }
     }
     
@@ -167,6 +169,8 @@ struct SettingItem {
             R.string.localizable.shaders()
         case .featuredItems:
             R.string.localizable.featuredItems()
+        case .skinSound:
+            R.string.localizable.skinSoundEffects()
         }
     }
     

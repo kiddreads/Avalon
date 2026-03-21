@@ -13,7 +13,7 @@ class LocalWebServer {
     }
     
     private var server: GCDWebServer?
-    private let port: UInt = 8080
+    var port: UInt = 8080
     private var files: [String: String] = [:] // fileId -> filePath
     
     func start(serverType: ServerType) throws {
@@ -87,6 +87,7 @@ class LocalWebServer {
                                   cacheAge: 0,
                                   allowRangeRequests: true)
         case .J2meJS:
+            port = 8081
             resourcePath = Constants.Path.J2meJS
 
             // Add generic directory handler
@@ -116,6 +117,7 @@ class LocalWebServer {
             }
 
         case .freej2meWeb:
+            port = 8082
             resourcePath = Constants.Path.Freej2meWeb
 
             // Add generic directory handler

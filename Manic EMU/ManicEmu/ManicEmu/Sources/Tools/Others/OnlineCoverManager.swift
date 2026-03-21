@@ -135,6 +135,8 @@ class OnlineCoverManager {
                 return
             case .doom:
                 boxArtUrl = host.appendingPathComponent("DOOM/Named_Boxarts")
+            case .dos:
+                boxArtUrl = host.appendingPathComponent("DOS/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }

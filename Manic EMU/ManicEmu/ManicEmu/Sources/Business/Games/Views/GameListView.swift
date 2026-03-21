@@ -710,6 +710,8 @@ class GameListView: BaseView {
                         
                         if game.gameType == .j2me {
                             game.deleteJ2meSaves()
+                        } else if game.gameType == .dos {
+                            game.deleteDosFiles()
                         } else {
                             if game.isSaveExtsts {
                                 if game.gameType == .psp, let code = game.gameCodeForPSP {
@@ -1216,6 +1218,21 @@ extension GameListView: UICollectionViewDelegate {
                             }
                         }
                         firstGroup.append(action)
+                    }
+                }
+                
+                if game.gameType == .dos, !game.isDOSHomeMenuGame {
+                    let realm = Database.realm
+                    if let _ = realm.object(ofType: Game.self, forPrimaryKey: Game.DOSHomeMenuPrimaryKey) {} else {
+                        //add gen home menu action
+                        firstGroup.append(UIAction(title: R.string.localizable.generateHomeMenu(), image: .symbolImage(.house)) { _ in
+                            let game = Game()
+                            game.id = Game.DOSHomeMenuPrimaryKey
+                            game.name = Game.DOSHomeMenuPrimaryKey
+                            try? realm.write {
+                                realm.add(game)
+                            }
+                        })
                     }
                 }
             }

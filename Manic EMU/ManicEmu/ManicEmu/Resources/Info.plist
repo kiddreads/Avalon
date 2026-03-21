@@ -364,6 +364,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>DOS Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.dos</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -1283,6 +1295,40 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>jar</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DOS Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.dos</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>zip</string>
+					<string>dosz</string>
+					<string>exe</string>
+					<string>com</string>
+					<string>bat</string>
+					<string>iso</string>
+					<string>cue</string>
+					<string>img</string>
+					<string>ima</string>
+					<string>vhd</string>
+					<string>jrc</string>
+					<string>tc</string>
+					<string>m3u</string>
+					<string>conf</string>
 				</array>
 			</dict>
 		</dict>

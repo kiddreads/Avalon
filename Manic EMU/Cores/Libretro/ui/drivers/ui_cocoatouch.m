@@ -1138,6 +1138,138 @@ static BOOL RespectSilentMode = false;
     task_push_load_contentless_core_from_menu(corePath.UTF8String);
 }
 
+- (void)loadCoreWithoutRunning:(NSString *_Nonnull)corePath {
+    content_ctx_info_t content_info;
+    content_info.argc        = 0;
+    content_info.argv        = NULL;
+    content_info.args        = NULL;
+    content_info.environ_get = NULL;
+    // 设置核心路径并通过 CMD_EVENT_LOAD_CORE 加载动态库，触发 retro_set_environment
+    // 使核心有机会注册其 core options，但不加载任何游戏内容
+    task_push_load_new_core(corePath.UTF8String, NULL, &content_info, CORE_TYPE_PLAIN, NULL, NULL);
+}
+
+- (NSArray<CoreOptionCategory *> *_Nullable)getCoreOptions:(NSString *_Nonnull)corePath {
+    BOOL needToShutdown = false;
+    if (!LibretroInitial) {
+        needToShutdown = true;
+        [self startWithCustomSaveDir:nil];
+        // loadCoreWithoutRunning 内部用 task_push_load_new_core，
+        // 只触发 CMD_EVENT_LOAD_CORE → libretro_get_system_info（临时加载，带 IGNORE_ENVIRONMENT_CB），
+        // 不会执行 retro_set_environment(runloop_environment_cb) + retro_init()，
+        // 因此 core_options 不会被填充。
+        // 必须用 loadCoreWithoutContent: 走完整的 content_load 流程。
+        [self loadCoreWithoutContent:corePath];
+    }
+    
+    NSArray<CoreOptionCategory *> *result = nil;
+
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    core_option_manager_t *opt = runloop_st ? runloop_st->core_options : NULL;
+
+    if (opt && opt->size > 0) {
+        NSMutableArray<CoreOptionCategory *> *categories = [NSMutableArray array];
+        // 无分类选项（category_key 为空）暂存
+        NSMutableArray<CoreOption *> *uncategorizedOptions = [NSMutableArray array];
+        // 按 category_key 归类的选项
+        NSMutableDictionary<NSString *, NSMutableArray<CoreOption *> *> *categoryOptionsMap = [NSMutableDictionary dictionary];
+
+        for (size_t i = 0; i < opt->size; i++) {
+            struct core_option *option = &opt->opts[i];
+            if (!option->key)
+                continue;
+
+            CoreOption *coreOption        = [[CoreOption alloc] init];
+            coreOption.key                = @(option->key);
+            coreOption.index              = (NSInteger)option->index;
+            coreOption.visible            = core_option_manager_get_visible(opt, i);
+
+            BOOL isCategorized            = option->category_key != NULL;
+            const char *desc              = core_option_manager_get_desc(opt, i, isCategorized);
+            coreOption.desc               = desc ? @(desc) : @"";
+
+            const char *info              = core_option_manager_get_info(opt, i, isCategorized);
+            coreOption.info               = info ? @(info) : @"";
+
+            const char *val               = core_option_manager_get_val(opt, i);
+            coreOption.value              = val ? @(val) : @"";
+
+            const char *valLabel          = core_option_manager_get_val_label(opt, i);
+            coreOption.label              = valLabel ? @(valLabel) : @"";
+
+            // 收集所有可选值及其标签
+            NSMutableArray<Options *> *optItems = [NSMutableArray array];
+            if (option->vals) {
+                for (size_t j = 0; j < option->vals->size; j++) {
+                    const char *v = option->vals->elems[j].data;
+                    const char *l = (option->val_labels && j < option->val_labels->size)
+                                        ? option->val_labels->elems[j].data : NULL;
+                    Options *opt_item  = [[Options alloc] init];
+                    opt_item.value = v ? @(v) : @"";
+                    opt_item.label = l ? @(l) : (v ? @(v) : @"");
+                    [optItems addObject:opt_item];
+                }
+            }
+            coreOption.options = [optItems copy];
+
+            if (option->category_key) {
+                NSString *catKey = @(option->category_key);
+                NSMutableArray<CoreOption *> *catOpts = categoryOptionsMap[catKey];
+                if (!catOpts) {
+                    catOpts = [NSMutableArray array];
+                    categoryOptionsMap[catKey] = catOpts;
+                }
+                [catOpts addObject:coreOption];
+            } else {
+                [uncategorizedOptions addObject:coreOption];
+            }
+        }
+
+        // 无分类选项作为第一个 category（title/desc 均为空）
+        if (uncategorizedOptions.count > 0) {
+            CoreOptionCategory *cat = [[CoreOptionCategory alloc] init];
+            cat.title   = @"";
+            cat.desc    = @"";
+            cat.info    = @"";
+            cat.index   = 0;
+            cat.options = [uncategorizedOptions copy];
+            cat.visible = YES;
+            [categories addObject:cat];
+        }
+
+        // 按 cats 数组顺序构建有名分类
+        for (size_t i = 0; i < opt->cats_size; i++) {
+            struct core_category *cat_def = &opt->cats[i];
+            if (!cat_def->key)
+                break;
+
+            NSString *catKey = @(cat_def->key);
+            NSMutableArray<CoreOption *> *catOpts = categoryOptionsMap[catKey];
+
+            CoreOptionCategory *cat = [[CoreOptionCategory alloc] init];
+            const char *catDesc     = core_option_manager_get_category_desc(opt, cat_def->key);
+            cat.title               = catDesc ? @(catDesc) : catKey;
+            cat.desc                = catKey; // key 作为唯一标识符
+            const char *catInfo     = core_option_manager_get_category_info(opt, cat_def->key);
+            cat.info                = catInfo ? @(catInfo) : @"";
+            cat.index               = (NSInteger)categories.count;
+            cat.options             = catOpts ? [catOpts copy] : @[];
+            cat.visible             = core_option_manager_get_category_visible(opt, cat_def->key);
+            [categories addObject:cat];
+        }
+
+        if (categories.count > 0)
+            result = [categories copy];
+    }
+
+    if (needToShutdown) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self stop];
+        });
+    }
+    return result;
+}
+
 extern void manic_input_button_event(unsigned port, unsigned button_id, bool pressed);
 extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_value, float y_value);
 - (void)pressButton:(unsigned)button playerIndex:(unsigned)playerIndex {
@@ -1602,50 +1734,7 @@ static NSString *_Nullable needToLoadStatePath = nil;
 }
 
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload {
-    NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
-    NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:configFilePath]) {
-        core_options_flush();//生成配置
-    }
-    
-    NSError *error = nil;
-    NSString *fileContents = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:&error];
-    
-    if (error) {
-        NSLog(@"读取文件失败: %@", error.localizedDescription);
-        [NSFileManager.defaultManager createDirectoryAtPath:[configFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
-        fileContents = [NSString stringWithFormat:@"%@ = \"%@\"", key, value];
-        // 写回文件
-        [fileContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-        if (reload) {
-            [self reloadByKeepState:YES];
-        }
-        return;
-    }
-    
-    NSString *oldValue = [self configValueForKey:key inFileContents:fileContents];
-    if ([oldValue isEqualToString:value]) {
-        return;
-    }
-    
-    // 正则匹配并替换
-    NSString *pattern = [NSString stringWithFormat:@"%@\\s*=\\s*\"[^\"]*\"", key] ;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
-    
-    if (error) {
-        NSLog(@"正则表达式错误: %@", error.localizedDescription);
-        return;
-    }
-    NSString *replacement = [NSString stringWithFormat:@"%@ = \"%@\"", key, value];
-    NSString *updatedContents = [regex stringByReplacingMatchesInString:fileContents
-                                                                options:0
-                                                                  range:NSMakeRange(0, fileContents.length)
-                                                           withTemplate:replacement];
-    // 写回文件
-    [updatedContents writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    if (reload) {
-        [self reloadByKeepState:YES];
-    }
+    [self updateCoreConfig:coreName configs:@{key: value} reload:reload];
 }
 
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload {
@@ -1703,6 +1792,21 @@ static NSString *_Nullable needToLoadStatePath = nil;
         if (reload) {
             [self reloadByKeepState:YES];
         }
+    }
+}
+
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName content:(NSString *_Nullable)content reload:(BOOL)reload {
+    NSString *configPath = [NSString stringWithFormat:@"config/%@/%@.opt", coreName, coreName];
+    NSString *configFilePath = [self.workspace stringByAppendingPathComponent:configPath];
+    
+    [NSFileManager.defaultManager removeItemAtPath:configFilePath error:nil];
+    if (content && [content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0) {
+        [content writeToFile:configFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    } else {
+        //Remove the configuration and let the core generate it automatically—that way, it'll just use the default settings.
+    }
+    if (reload) {
+        [self reloadByKeepState:YES];
     }
 }
 
@@ -2078,38 +2182,100 @@ bool set_shader_preset(const char * _Nullable preset_path)
     }
 }
 
-- (NSUInteger)getCurrentDiskIndex {
+- (void)setDiskIndex2:(unsigned)index {
     runloop_state_t *runloop_st = runloop_state_get_ptr();
     if (!runloop_st) {
-        return 0;
+        return;
     }
-    rarch_system_info_t *sys_info = &runloop_st->system;
-    if (!sys_info) {
-        return 0;
+    disk_control_interface_t *disk_control = &runloop_st->system.disk_control;
+    if (!disk_control_enabled(disk_control)) {
+        return;
     }
-    disk_control_interface_t *disk_control = &sys_info->disk_control;
-    if (!disk_control) {
-        return 0;
+    // 直接调用底层同步 API，避免使用 CMD_EVENT 事件触发的异步路径
+    // eject → set_index → close，三步均同步完成，无需延迟
+    if (!disk_control_get_eject_state(disk_control)) {
+        disk_control_set_eject_state(disk_control, true, false);
     }
-    unsigned image_index = disk_control->cb.get_image_index();
-    return image_index;
+    disk_control_set_index(disk_control, index, false);
+    disk_control_set_eject_state(disk_control, false, false);
 }
 
-- (NSUInteger)getDiskCount {
+- (LibretroDisk *_Nullable)getDiskInfo {
     runloop_state_t *runloop_st = runloop_state_get_ptr();
     if (!runloop_st) {
-        return 0;
+        return nil;
     }
-    rarch_system_info_t *sys_info = &runloop_st->system;
-    if (!sys_info) {
-        return 0;
+    disk_control_interface_t *disk_control = &runloop_st->system.disk_control;
+    if (!disk_control_enabled(disk_control)) {
+        return nil;
     }
-    disk_control_interface_t *disk_control = &sys_info->disk_control;
-    if (!disk_control) {
-        return 0;
+
+    unsigned num   = disk_control_get_num_images(disk_control);
+    unsigned index = disk_control_get_image_index(disk_control);
+    bool ejected   = disk_control_get_eject_state(disk_control);
+
+    // 支持 get_image_path 时读取路径，否则路径留空
+    BOOL hasPath  = disk_control_initial_image_enabled(disk_control);
+    // 支持 get_image_label 时读取标签，否则回退使用路径的文件名
+    BOOL hasLabel = disk_control_image_label_enabled(disk_control);
+
+    NSMutableArray<NSString *> *paths  = [NSMutableArray arrayWithCapacity:num];
+    NSMutableArray<NSString *> *labels = [NSMutableArray arrayWithCapacity:num];
+
+    for (unsigned i = 0; i < num; i++) {
+        // 路径
+        NSString *pathStr = @"";
+        if (hasPath) {
+            char pathBuf[PATH_MAX_LENGTH];
+            pathBuf[0] = '\0';
+            disk_control->cb.get_image_path(i, pathBuf, sizeof(pathBuf));
+            if (pathBuf[0] != '\0') {
+                pathStr = @(pathBuf);
+            }
+        }
+        [paths addObject:pathStr];
+
+        // 标签：优先使用核心提供的 label，其次取路径的文件名，最后留空
+        NSString *labelStr = @"";
+        if (hasLabel) {
+            char labelBuf[512];
+            labelBuf[0] = '\0';
+            disk_control_get_image_label(disk_control, i, labelBuf, sizeof(labelBuf));
+            if (labelBuf[0] != '\0') {
+                labelStr = @(labelBuf);
+            }
+        }
+        if (labelStr.length == 0 && pathStr.length > 0) {
+            labelStr = [pathStr lastPathComponent];
+        }
+        [labels addObject:labelStr];
     }
-    unsigned num_images  = disk_control->cb.get_num_images();
-    return num_images;
+
+    LibretroDisk *info      = [[LibretroDisk alloc] init];
+    info.diskCount          = num;
+    info.currentDiskIndex   = index;
+    info.ejected            = ejected;
+    info.diskPaths          = [paths copy];
+    info.diskLabels         = [labels copy];
+    return info;
+}
+
+- (BOOL)insertDisk:(NSString *_Nonnull)path {
+    runloop_state_t *runloop_st = runloop_state_get_ptr();
+    if (!runloop_st) {
+        return NO;
+    }
+    disk_control_interface_t *disk_control = &runloop_st->system.disk_control;
+    // disk_control_append_image 内部会验证 add_image_index / replace_image_index 等回调，
+    // 会自动处理弹出→追加→切换到新磁盘→关闭的完整流程
+    bool success = disk_control_append_image(disk_control, path.UTF8String);
+    if (success) {
+        LibretroDisk *disk = [self getDiskInfo];
+        [self setDiskIndex2:(unsigned)disk.diskCount];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (void)setPSXAnalog:(BOOL)isAnalog {
@@ -2179,12 +2345,36 @@ static NSString * _Nullable g_customSaveExtension = nil;
 - (void)releaseTouchEvent {
 #if !TARGET_OS_TV
     cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
-    
+
     if (!apple) {
         return;
     }
-    
+
     apple->touch_count = 0;
+#endif
+}
+
+- (void)sendMultiTouchEvent:(NSArray<NSDictionary *> *)points {
+#if !TARGET_OS_TV
+    cocoa_input_data_t *apple = (cocoa_input_data_t*) input_state_get_ptr()->current_data;
+    float scale = cocoa_screen_get_native_scale();
+
+    if (!apple) {
+        return;
+    }
+
+    NSUInteger count = MIN(points.count, (NSUInteger)MAX_TOUCHES);
+    apple->touch_count = (int)count;
+
+    for (NSUInteger i = 0; i < count; i++) {
+        NSDictionary *point = points[i];
+        NSNumber *x = point[@"x"];
+        NSNumber *y = point[@"y"];
+        if (x && y) {
+            apple->touches[i].screen_x = [x floatValue] * scale;
+            apple->touches[i].screen_y = [y floatValue] * scale;
+        }
+    }
 #endif
 }
 

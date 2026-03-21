@@ -113,6 +113,7 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
                                   SettingItem(type: .onlinePlay),
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
+                                  SettingItem(type: .skinSound, isOn: Settings.defalut.getExtraBool(key: ExtraKey.skinSoundEffects.rawValue) ?? true),
                                   SettingItem(type: .retro),
                                   SettingItem(type: .triggerPro),
                                   SettingItem(type: .jit),
@@ -126,6 +127,7 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
                                   SettingItem(type: .onlinePlay),
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
+                                  SettingItem(type: .skinSound, isOn: Settings.defalut.getExtraBool(key: ExtraKey.skinSoundEffects.rawValue) ?? true),
                                   SettingItem(type: .retro),
                                   SettingItem(type: .triggerPro),
                                   SettingItem(type: .jit),
@@ -427,7 +429,12 @@ extension SettingsListView: UICollectionViewDataSource {
                     Settings.appearance = Settings.Appearance(rawValue: index) ?? .dark
                     cell?.setData(item: item)
                 }
-            } else {
+            } else if item.type == .skinSound {
+                cell.switchButton.onChange { value in
+                    //设置皮肤音效
+                    Settings.defalut.updateExtra(key: ExtraKey.skinSoundEffects.rawValue, value: value)
+                }
+            }  else {
                 cell.switchButton.onChange { value in }
             }
             return cell

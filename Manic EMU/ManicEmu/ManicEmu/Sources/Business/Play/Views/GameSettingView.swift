@@ -212,7 +212,7 @@ class GameSettingView: BaseView {
         let orientation = game.orientation
         let isFullScreen = game.forceFullSkin
         let palette = game.pallete
-        let currentDiskIndex = game.currentDiskIndex
+        let currentDiskIndex = game.diskInfo?.currentDiskIndex ?? 0
         let airPlayScaling = Settings.defalut.airPlayScaling
         let airPlayLayout = Settings.defalut.airPlayLayout
         let nesPalettes: Game.NESPalette
@@ -241,7 +241,7 @@ class GameSettingView: BaseView {
                                        orientation: orientation,
                                        isFullScreen: isFullScreen,
                                        palette: palette,
-                                       currentDiskIndex: currentDiskIndex,
+                                       currentDiskIndex: UInt(currentDiskIndex),
                                        airPlayScaling: airPlayScaling,
                                        airPlayLayout: airPlayLayout,
                                        nesPalette: nesPalettes,
@@ -539,13 +539,13 @@ extension GameSettingView: UICollectionViewDelegate {
             case .swapDisk:
                 if game.gameType == .fds {
                     item.currentDiskIndex = 0
-                    game.currentDiskIndex = 0
                     updateCellAndCallBack(item: item, indexPath: indexPath)
                     return
                 } else if game.supportSwapDisc {
-                    item.currentDiskIndex = item.currentDiskIndex + 1 < game.totalDiskCount ? item.currentDiskIndex + 1 : 0
-                    game.currentDiskIndex = item.currentDiskIndex
-                    updateCellAndCallBack(item: item, indexPath: indexPath)
+                    if let diskInfo = game.diskInfo {
+                        item.currentDiskIndex = item.currentDiskIndex + 1 < diskInfo.diskCount ? item.currentDiskIndex + 1 : 0
+                        updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
                     return
                 }
             case .airPlayScaling:
@@ -754,14 +754,23 @@ extension GameSettingView: UICollectionViewDelegate {
                 return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             } else if game.supportSwapDisc {
                 var actions = [UIAction]()
-                for index in 0..<game.totalDiskCount {
-                    actions.append(UIAction(title: "Disc \(index + 1)",
-                                            image: index == game.currentDiskIndex ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                            handler: { [weak self] _ in
-                        guard let self = self else { return }
-                        item.currentDiskIndex = index
-                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
-                    }))
+                if let diskInfo = game.diskInfo {
+                    for index in 0..<diskInfo.diskCount {
+                        var diskLabel = "Disc \(index + 1)"
+                        if diskInfo.diskLabels.count == diskInfo.diskCount {
+                            let label = diskInfo.diskLabels[index]
+                            if !label.isEmpty {
+                                diskLabel += "(\(label))"
+                            }
+                        }
+                        actions.append(UIAction(title: diskLabel,
+                                                image: index == diskInfo.currentDiskIndex ? UIImage(symbol: .checkmarkCircleFill) : nil,
+                                                handler: { [weak self] _ in
+                            guard let self = self else { return }
+                            item.currentDiskIndex = UInt(index)
+                            self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                        }))
+                    }
                 }
                 return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             }

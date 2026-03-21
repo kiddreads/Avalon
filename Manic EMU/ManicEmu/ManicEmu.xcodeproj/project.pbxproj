@@ -83,6 +83,10 @@
 		5726FEF22D720B8800041AD5 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FEF12D720B8800041AD5 /* ColorfulX */; };
 		5726FF462D741F5C00041AD5 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FF452D741F5C00041AD5 /* ColorfulX */; };
 		5726FF812D74AC9D00041AD5 /* RoundAndBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726FF802D74AC8D00041AD5 /* RoundAndBorderView.swift */; };
+		572C5C642F6C30CE00776F8C /* LibretroDisk.h in Headers */ = {isa = PBXBuildFile; fileRef = 572C5C622F6C30CE00776F8C /* LibretroDisk.h */; };
+		572C5C652F6C30CE00776F8C /* LibretroDisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 572C5C632F6C30CE00776F8C /* LibretroDisk.m */; };
+		572C5CB42F6E983600776F8C /* J2MENetworkBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */; };
+		572C5CD52F6EDB9200776F8C /* LetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CD32F6EDB8800776F8C /* LetterView.swift */; };
 		57399AC52E40ACE100AB73DD /* PSXSBIImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */; };
 		57399AC82E40AFBA00AB73DD /* PSXSBICollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */; };
 		57399ACF2E40BB4D00AB73DD /* PSXSBIDescCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */; };
@@ -105,6 +109,11 @@
 		573CEEA52F23405F00EA24F1 /* prosystem.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9B2F23403100EA24F1 /* prosystem.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		573CEEA82F23407500EA24F1 /* holani.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9A2F23403100EA24F1 /* holani.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		573CEEAB2F23408400EA24F1 /* virtualjaguar.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9D2F23403100EA24F1 /* virtualjaguar.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573DE1882F6AA3B20091CE59 /* LibretroCoreOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 573DE1872F6AA3B20091CE59 /* LibretroCoreOptions.m */; };
+		573DE1892F6AA3B20091CE59 /* LibretroCoreOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 573DE1862F6AA3B20091CE59 /* LibretroCoreOptions.h */; };
+		573DE1A72F6AF6C70091CE59 /* ZipHandlerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573DE1A52F6AF6AA0091CE59 /* ZipHandlerView.swift */; };
+		573DE1B72F6B97660091CE59 /* CoreConfigsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573DE1B52F6B97610091CE59 /* CoreConfigsView.swift */; };
+		573DE1BB2F6BA55E0091CE59 /* CoreConfigsOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573DE1BA2F6BA55B0091CE59 /* CoreConfigsOptionView.swift */; };
 		5744C6622E34D6E20088081A /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5744C6612E34D6E20088081A /* KeyboardKit */; };
 		5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C6CE2E360AD50088081A /* UIControllerKit.swift */; };
 		5744C6FF2E368BB40088081A /* NoControllCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */; };
@@ -621,6 +630,8 @@
 		5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */; };
 		5781F5462EF1384500916D8B /* EmulatorInteractionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* EmulatorInteractionKit.swift */; };
 		5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5AB2EF45C6900916D8B /* JGenesisView.swift */; };
+		578452BA2F6A79370020A88F /* DOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452B92F6A79340020A88F /* DOS.swift */; };
+		578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		578F287E2F37805000D2D998 /* WFCSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F287C2F37804600D2D998 /* WFCSettingViewController.swift */; };
 		578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28812F3780B700D2D998 /* WFCSettingView.swift */; };
 		578F288E2F37838300D2D998 /* OnlinePlayCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */; };
@@ -900,6 +911,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */,
+				D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */,
 				573CEEAB2F23408400EA24F1 /* virtualjaguar.libretro.framework in Embed Frameworks */,
 				573CEEA82F23407500EA24F1 /* holani.libretro.framework in Embed Frameworks */,
 				573CEEA52F23405F00EA24F1 /* prosystem.libretro.framework in Embed Frameworks */,
@@ -932,7 +945,6 @@
 				57BFBE732DD3361800AABF98 /* ppsspp.libretro.framework in Embed Frameworks */,
 				57BFBE1E2DD32F7700AABF98 /* Libretro.framework in Embed Frameworks */,
 				5768FE6C2DAE018E009974D1 /* MoltenVK.xcframework in Embed Frameworks */,
-				D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1041,6 +1053,10 @@
 		5726FEDC2D71BEF900041AD5 /* SettingsItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		5726FEE62D71D7F100041AD5 /* SettingsListFooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsListFooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		5726FF802D74AC8D00041AD5 /* RoundAndBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundAndBorderView.swift; sourceTree = "<group>"; };
+		572C5C622F6C30CE00776F8C /* LibretroDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroDisk.h; sourceTree = "<group>"; };
+		572C5C632F6C30CE00776F8C /* LibretroDisk.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroDisk.m; sourceTree = "<group>"; };
+		572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2MENetworkBridge.swift; sourceTree = "<group>"; };
+		572C5CD32F6EDB8800776F8C /* LetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterView.swift; sourceTree = "<group>"; };
 		57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIImportViewController.swift; sourceTree = "<group>"; };
 		57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBICollectionCell.swift; sourceTree = "<group>"; };
 		57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIDescCollectionCell.swift; sourceTree = "<group>"; };
@@ -1063,6 +1079,11 @@
 		573CEE9B2F23403100EA24F1 /* prosystem.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = prosystem.libretro.framework; path = ../Cores/prosystem.libretro.framework; sourceTree = SOURCE_ROOT; };
 		573CEE9C2F23403100EA24F1 /* stella.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = stella.libretro.framework; path = ../Cores/stella.libretro.framework; sourceTree = SOURCE_ROOT; };
 		573CEE9D2F23403100EA24F1 /* virtualjaguar.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = virtualjaguar.libretro.framework; path = ../Cores/virtualjaguar.libretro.framework; sourceTree = SOURCE_ROOT; };
+		573DE1862F6AA3B20091CE59 /* LibretroCoreOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroCoreOptions.h; sourceTree = "<group>"; };
+		573DE1872F6AA3B20091CE59 /* LibretroCoreOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroCoreOptions.m; sourceTree = "<group>"; };
+		573DE1A52F6AF6AA0091CE59 /* ZipHandlerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipHandlerView.swift; sourceTree = "<group>"; };
+		573DE1B52F6B97610091CE59 /* CoreConfigsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreConfigsView.swift; sourceTree = "<group>"; };
+		573DE1BA2F6BA55B0091CE59 /* CoreConfigsOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreConfigsOptionView.swift; sourceTree = "<group>"; };
 		5744C6CE2E360AD50088081A /* UIControllerKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControllerKit.swift; sourceTree = "<group>"; };
 		5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoControllCollectionView.swift; sourceTree = "<group>"; };
 		5744C7172E375BF00088081A /* PM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PM.swift; sourceTree = "<group>"; };
@@ -1746,6 +1767,8 @@
 		5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersExtensions.swift; sourceTree = "<group>"; };
 		5781F5442EF1383F00916D8B /* EmulatorInteractionKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmulatorInteractionKit.swift; sourceTree = "<group>"; };
 		5781F5AB2EF45C6900916D8B /* JGenesisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGenesisView.swift; sourceTree = "<group>"; };
+		578452B92F6A79340020A88F /* DOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOS.swift; sourceTree = "<group>"; };
+		578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = dosbox.pure.libretro.framework; path = ../Cores/dosbox.pure.libretro.framework; sourceTree = SOURCE_ROOT; };
 		578F287C2F37804600D2D998 /* WFCSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingViewController.swift; sourceTree = "<group>"; };
 		578F28812F3780B700D2D998 /* WFCSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingView.swift; sourceTree = "<group>"; };
 		578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlayCollectionCell.swift; sourceTree = "<group>"; };
@@ -3947,6 +3970,8 @@
 		57913B432D5ED727004D51AA /* VIews */ = {
 			isa = PBXGroup;
 			children = (
+				573DE1BA2F6BA55B0091CE59 /* CoreConfigsOptionView.swift */,
+				573DE1B52F6B97610091CE59 /* CoreConfigsView.swift */,
 				57F3BAEA2F6541AB00ABF4B3 /* J2MESettingView.swift */,
 				57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */,
 				57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */,
@@ -4013,6 +4038,10 @@
 				570CF8332EEA58DE00696C1B /* AzaharKeyboardConfig.m */,
 				5781F4542EECF7CF00916D8B /* LibretroShaders.h */,
 				5781F4552EECF7CF00916D8B /* LibretroShaders.m */,
+				573DE1862F6AA3B20091CE59 /* LibretroCoreOptions.h */,
+				573DE1872F6AA3B20091CE59 /* LibretroCoreOptions.m */,
+				572C5C622F6C30CE00776F8C /* LibretroDisk.h */,
+				572C5C632F6C30CE00776F8C /* LibretroDisk.m */,
 				575AD5812F24902F00C2B7E4 /* LibretroKeyboardCode.h */,
 				575AD5822F24902F00C2B7E4 /* LibretroKeyboardCode.m */,
 				57BFBE642DD3330900AABF98 /* keyboard_event_apple.h */,
@@ -4040,6 +4069,7 @@
 		57BFBE702DD335FD00AABF98 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */,
 				573CEE992F23403100EA24F1 /* atari800.libretro.framework */,
 				573CEE9A2F23403100EA24F1 /* holani.libretro.framework */,
 				573CEE9B2F23403100EA24F1 /* prosystem.libretro.framework */,
@@ -4280,6 +4310,7 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				578452B92F6A79340020A88F /* DOS.swift */,
 				57J2ME01F23397000EA24F1 /* J2ME.swift */,
 				2068D6E791D56FF6148997EA /* DOOM.swift */,
 				573CEE952F23396C00EA24F1 /* Lynx.swift */,
@@ -4389,8 +4420,10 @@
 		A561F94D257DCB5200E800A8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				572C5CD32F6EDB8800776F8C /* LetterView.swift */,
 				57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */,
 				573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */,
+				572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */,
 				57DC7FF32F52E92B004B6FFD /* J2MEView.swift */,
 				5781F5AB2EF45C6900916D8B /* JGenesisView.swift */,
 				57EED0752ECB8172003971BD /* IconView.swift */,
@@ -4539,6 +4572,7 @@
 				5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */,
 				5744C6CE2E360AD50088081A /* UIControllerKit.swift */,
 				57DCE8552E0FC9B60079E3AA /* CoreSelectionView.swift */,
+				573DE1A52F6AF6AA0091CE59 /* ZipHandlerView.swift */,
 				57DCE7DA2E0D385E0079E3AA /* INIFile.swift */,
 				57655C252DF6BCE3003E4A6E /* PlatformSelectionView.swift */,
 				575A39CD2DCD00FE00B28FC2 /* OnlineCoverManager.swift */,
@@ -4683,7 +4717,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				573DE1892F6AA3B20091CE59 /* LibretroCoreOptions.h in Headers */,
 				57BFBE5B2DD332A100AABF98 /* LibretroCore.h in Headers */,
+				572C5C642F6C30CE00776F8C /* LibretroDisk.h in Headers */,
 				575AD5832F24902F00C2B7E4 /* LibretroKeyboardCode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5315,6 +5351,7 @@
 				57BFBE6B2DD3331A00AABF98 /* griffin_glslang.cpp in Sources */,
 				5781F4572EECF7CF00916D8B /* LibretroShaders.m in Sources */,
 				575AD5842F24902F00C2B7E4 /* LibretroKeyboardCode.m in Sources */,
+				572C5C652F6C30CE00776F8C /* LibretroDisk.m in Sources */,
 				57BFBE6C2DD3331A00AABF98 /* griffin_cpp.cpp in Sources */,
 				57BFBE6E2DD3331A00AABF98 /* griffin_objc.m in Sources */,
 				57BFBE5F2DD332DA00AABF98 /* LibretroCore.m in Sources */,
@@ -5322,6 +5359,7 @@
 				5720E7A32E541BF500EC0DA5 /* CheevosBridge.m in Sources */,
 				57BFBE522DD3328500AABF98 /* JITSupport.m in Sources */,
 				570CF8352EEA58DE00696C1B /* AzaharKeyboardConfig.m in Sources */,
+				573DE1882F6AA3B20091CE59 /* LibretroCoreOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5330,6 +5368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57E48D932D8D73AD008000A3 /* CheersView.swift in Sources */,
+				573DE1B72F6B97660091CE59 /* CoreConfigsView.swift in Sources */,
 				577005B32D3E6F1600762E8F /* ImportServiceListView.swift in Sources */,
 				57C8A11A2DF2BA3E00593F82 /* SNES.swift in Sources */,
 				57DCE7D72E0D2EFC0079E3AA /* CitraAdvancedSettingViewController.swift in Sources */,
@@ -5410,6 +5449,7 @@
 				5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */,
 				5781F4612EED62E200916D8B /* ShadersListCell.swift in Sources */,
 				5770069C2D44BDEA00762E8F /* GameCollectionViewCell.swift in Sources */,
+				572C5CD52F6EDB9200776F8C /* LetterView.swift in Sources */,
 				577005782D3D60B700762E8F /* GameCheat.swift in Sources */,
 				574ABEBC2E609FE60045F76E /* GBA.swift in Sources */,
 				5754D8932E2751CA001EA5ED /* WFC.swift in Sources */,
@@ -5445,6 +5485,7 @@
 				574789BD2D4F8769006F0D99 /* SectionIndexViewItemIndicator.swift in Sources */,
 				57CCB3FF2D69B4050036476B /* ContextMenuButton.swift in Sources */,
 				576F0E052D88006300D2A1BA /* GameSavePurchaseGuideView.swift in Sources */,
+				572C5CB42F6E983600776F8C /* J2MENetworkBridge.swift in Sources */,
 				57D7CF592EA78B2B00F41540 /* TriggerProPreviewController.swift in Sources */,
 				570F591C2DC70843007BFD92 /* Theme.swift in Sources */,
 				574789BE2D4F8769006F0D99 /* SectionIndexViewItem.swift in Sources */,
@@ -5532,8 +5573,10 @@
 				57DCE80B2E0D9F300079E3AA /* Subtitle.swift in Sources */,
 				57DCE80C2E0D9F300079E3AA /* Row.swift in Sources */,
 				5754D8962E2752C6001EA5ED /* ExtraKey.swift in Sources */,
+				578452BA2F6A79370020A88F /* DOS.swift in Sources */,
 				57DCE80D2E0D9F300079E3AA /* Reusable.swift in Sources */,
 				57DCE80E2E0D9F300079E3AA /* RadioSection.swift in Sources */,
+				573DE1BB2F6BA55E0091CE59 /* CoreConfigsOptionView.swift in Sources */,
 				57DCE80F2E0D9F300079E3AA /* TapActionCell.swift in Sources */,
 				57F0D81A2DE1C2D700760F57 /* GameListStyleCollectionViewCell.swift in Sources */,
 				573CEE122F20D46D00EA24F1 /* LocalWebServer.swift in Sources */,
@@ -5684,6 +5727,7 @@
 				577005452D3C91F300762E8F /* AddImportServiceViewController.swift in Sources */,
 				570F59C02DC91FF5007BFD92 /* ColorPickerView.swift in Sources */,
 				57B6ECBD2D7953EC002E619C /* CheatCodeListView.swift in Sources */,
+				573DE1A72F6AF6C70091CE59 /* ZipHandlerView.swift in Sources */,
 				5781F4892EEE591500916D8B /* ShaderInfoAppendCell.swift in Sources */,
 				5726FEE72D71D7FA00041AD5 /* SettingsListFooterCollectionReusableView.swift in Sources */,
 				57F632B72D700A06007270E8 /* LanServiceEditCollectionViewCell.swift in Sources */,

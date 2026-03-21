@@ -12,6 +12,8 @@
 #import "AzaharKeyboardConfig.h"
 #import "LibretroShaders.h"
 #import "LibretroKeyboardCode.h"
+#import "LibretroCoreOptions.h"
+#import "LibretroDisk.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -56,16 +58,21 @@ extern NSString * const RetroAchievementsNotification;
 - (void)reloadByKeepState:(BOOL)keepState;
 - (BOOL)loadGame:(NSString *_Nonnull)gamePath corePath:(NSString *_Nonnull)corePath completion:(void(^ _Nullable)(NSDictionary *_Nullable))completion;
 - (void)loadCoreWithoutContent:(NSString *_Nonnull)corePath;
+- (void)loadCoreWithoutRunning:(NSString *_Nonnull)corePath;
+- (NSArray<CoreOptionCategory *> *_Nullable)getCoreOptions:(NSString *_Nonnull)corePath;
 - (void)sendEvent:(UIEvent * _Nonnull)event;
 - (void)pressButton:(LibretroButton)button playerIndex:(unsigned)playerIndex;
 - (void)releaseButton:(LibretroButton)button playerIndex:(unsigned)playerIndex;
 - (void)pressKeyboard:(LibretroKeyboardCode *_Nonnull)keyboardCode;
 - (void)releaseKeyboard:(LibretroKeyboardCode *_Nonnull)keyboardCode;
+- (void)handleUIPress:(UIPress *)press withEvent:(UIPressesEvent *)event down:(BOOL)down;
+- (void)keyboardEvent:(UIEvent *_Nonnull)event;
 ///x,y取值范围 -1~1
 - (void)moveStick:(BOOL)isLeft x:(CGFloat)x y:(CGFloat)y playerIndex:(unsigned)playerIndex;
 - (void)updatePSPCheat:(NSString *_Nonnull)cheatCode cheatFilePath:(NSString *_Nonnull)cheatFilePath reloadGame:(BOOL)reloadGame;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName key:(NSString *_Nonnull)key value:(NSString *_Nonnull)value reload:(BOOL)reload;
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload;
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName content:(NSString *_Nullable)content reload:(BOOL)reload;
 - (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush;
 - (void)updateLibretroConfig:(NSString *_Nonnull)key value:(NSString *_Nonnull)value;
 - (void)updateLibretroConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs;
@@ -82,8 +89,9 @@ extern NSString * const RetroAchievementsNotification;
 - (NSString * _Nullable)libretroConfigValue:(NSString * _Nonnull)key;
 - (void)setRespectSilentMode:(BOOL)respect;
 - (void)setDiskIndex:(unsigned)index delay:(BOOL)delay;
-- (NSUInteger)getCurrentDiskIndex;
-- (NSUInteger)getDiskCount;
+- (void)setDiskIndex2:(unsigned)index;
+- (LibretroDisk *_Nullable)getDiskInfo;
+- (BOOL)insertDisk:(NSString *_Nonnull)path;
 - (void)setPSXAnalog:(BOOL)isAnalog;
 - (void)setReloadDelay:(double)delay;
 - (void)turnOffHardcode;
@@ -99,6 +107,7 @@ extern NSString * const RetroAchievementsNotification;
 - (void)setCoreOptionNeedsUpdate;
 - (void)sendTouchEventX:(CGFloat)x y:(CGFloat)y;
 - (void)releaseTouchEvent;
+- (void)sendMultiTouchEvent:(NSArray<NSDictionary *> *)points;
 - (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName;
 - (void)updateFBNeoCheatCode:(NSArray<NSString *> *_Nonnull)keys enable:(BOOL)enable;
 - (void)setFastforwardFrameSkip:(BOOL)frameSkip;

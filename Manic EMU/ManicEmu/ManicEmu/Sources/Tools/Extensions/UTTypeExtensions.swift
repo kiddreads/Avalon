@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UniformTypeIdentifiers
+import ManicEmuCore
 
 extension UTType {
     static var gamesaveTypes: [UTType] { allSystemTypes.gamesaveTypes }
@@ -25,6 +26,13 @@ extension UTType {
     
     static var configTypes: [UTType] {
         if let uttype = UTType("public.aoshuang.config") {
+            return getAllTypes([uttype])
+        }
+        return []
+    }
+    
+    static func getGameTypes(gameType: GameType) -> [UTType] {
+        if let uttype = UTType(gameType.rawValue) {
             return getAllTypes([uttype])
         }
         return []

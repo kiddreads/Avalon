@@ -310,6 +310,9 @@ class J2MEView: BaseView {
     private var pressingButtons: [J2MEButton] = []
     private var lastKnownBounds: CGRect = .zero
 
+    /// Network bridge for evalNative HTTP/socket operations (J2meJS only)
+    private var networkBridge: J2MENetworkBridge?
+
     // MARK: - Initialization
 
     init(coreType: J2MECoreType) {
@@ -329,8 +332,13 @@ class J2MEView: BaseView {
 
         // Start local server
         try? localServer.start(serverType: serverType)
-        
+
         setupWebView()
+
+        // Initialize network bridge for J2meJS (freej2meWeb has its own network handling)
+        if coreType == .j2meJS {
+            networkBridge = J2MENetworkBridge(webView: webView)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -344,7 +352,7 @@ class J2MEView: BaseView {
 
     // MARK: - WebView Setup
 
-    private lazy var webView: WKWebView = {
+    lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
         configuration.mediaTypesRequiringUserActionForPlayback = []
@@ -472,7 +480,7 @@ class J2MEView: BaseView {
 
         // Register file to local server
         let fileId = localServer.registerFile(filePath: filePath)
-        let jarURL = "http://localhost:8080/file/\(fileId)"
+        let jarURL = "http://localhost:\(localServer.port)/file/\(fileId)"
         let fileName = filePath.lastPathComponent
 
         // Build the JavaScript to load the JAR
@@ -985,6 +993,19 @@ extension J2MEView: WKScriptMessageHandler {
         case "exit":
             Log.debug("🚪 MIDlet requested exit")
             onExit?()
+
+        case "evalNative":
+            // Handle network commands from JavaScript evalNative bridge
+            guard let networkBridge = networkBridge,
+                  let command = body["command"] as? String,
+                  let data = body["data"] as? [String: Any] else {
+                break
+            }
+            let hasCallback = body["hasCallback"] as? Bool ?? false
+            networkBridge.handleCommand(command, data: data, callback: hasCallback ? { result in
+                // Callback is handled by injectCallback in networkBridge
+                // The result is already injected into JavaScript by the bridge
+            } : nil)
 
         default:
             break

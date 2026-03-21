@@ -72,7 +72,6 @@ class GameSaveMatchGameView: BaseView {
             
             let detailLabel = UILabel()
             detailLabel.numberOfLines = 0
-            detailLabel.textAlignment = .center
             detailLabel.text = detail
             detailLabel.font = Constants.Font.body(size: .m)
             detailLabel.textColor = Constants.Color.LabelPrimary
@@ -192,7 +191,6 @@ class GameSaveMatchGameView: BaseView {
             
             let detailLabel = UILabel()
             detailLabel.numberOfLines = 0
-            detailLabel.textAlignment = .center
             detailLabel.text = detail
             detailLabel.font = Constants.Font.body(size: .m)
             detailLabel.textColor = Constants.Color.LabelPrimary

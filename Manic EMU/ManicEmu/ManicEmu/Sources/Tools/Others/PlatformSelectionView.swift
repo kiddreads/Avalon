@@ -76,7 +76,6 @@ class PlatformSelectionView: BaseView {
             
             let detailLabel = UILabel()
             detailLabel.numberOfLines = 0
-            detailLabel.textAlignment = .center
             detailLabel.text = R.string.localizable.platformSelectionDetail(gameName)
             detailLabel.font = Constants.Font.body(size: .m)
             detailLabel.textColor = Constants.Color.LabelPrimary

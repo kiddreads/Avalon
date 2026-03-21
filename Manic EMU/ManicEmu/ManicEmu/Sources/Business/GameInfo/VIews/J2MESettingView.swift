@@ -416,7 +416,7 @@ class J2MESettingView: BaseView {
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
 
-        let icon = UIImageView(image: R.image.customJava()!.applySymbolConfig(size: 30))
+        let icon = UIImageView(image: game.gameType.coreConfigIcon?.applySymbolConfig(size: 30))
         icon.contentMode = .scaleAspectFit
         navigationBlurView.addSubview(icon)
         icon.snp.makeConstraints { make in
@@ -425,7 +425,7 @@ class J2MESettingView: BaseView {
             make.centerY.equalToSuperview()
         }
         let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.j2MESettings()
+        headerTitleLabel.text = game.gameType.coreConfigTitle
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
         navigationBlurView.addSubview(headerTitleLabel)

@@ -162,7 +162,7 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
                     touchPointY = nil
                 }
             } else if let gameInput = DSGameInput(rawValue: input),
-               let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+                      let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
                 Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
 #endif

@@ -186,7 +186,7 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
         titleLabel.attributedText = matt
         
         switch item.type {
-        case .quickGame, .airPlay, .fullScreenWhenConnectController, .autoSaveState, .respectSilentMode, .rumble:
+        case .quickGame, .airPlay, .fullScreenWhenConnectController, .autoSaveState, .respectSilentMode, .rumble, .skinSound:
             switchButton.isHidden = false
             chevronIconView.isHidden = true
             enableInteractive = false

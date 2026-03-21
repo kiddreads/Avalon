@@ -502,7 +502,7 @@ struct GameSetting: SettingCellItem {
     
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
-        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals, triggerPro, screenScaling, j2meSettings
+        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals, triggerPro, screenScaling, j2meSettings, dosSettings, insertDisc
     }
     
     var type: ItemType
@@ -593,6 +593,10 @@ struct GameSetting: SettingCellItem {
             UIImage(symbol: .arrowUpRightAndArrowDownLeftRectangle)
         case .j2meSettings:
             R.image.customJava()!.applySymbolConfig(size: 30)
+        case .dosSettings:
+            R.image.customDos()!.applySymbolConfig(size: 24)
+        case .insertDisc:
+            R.image.customInsertDisc()!.applySymbolConfig(size: 24)
         }
     }
     
@@ -665,7 +669,11 @@ struct GameSetting: SettingCellItem {
         case .screenScaling:
             R.string.localizable.screenScaling()
         case .j2meSettings:
-            R.string.localizable.j2MESettings()
+            GameType.j2me.coreConfigTitle
+        case .dosSettings:
+            GameType.dos.coreConfigTitle
+        case .insertDisc:
+            R.string.localizable.insertDisc()
         }
     }
     
@@ -674,131 +682,103 @@ struct GameSetting: SettingCellItem {
             return mappingOnlyType.enable(for: gameType, defaultCore: defaultCore)
         }
         
-        if type == .airPlayLayout {
-            return gameType == .ds || (gameType == ._3ds && defaultCore == 1)
-        }
-        
-        if type == .toggleAnalog {
-            return gameType == .ps1
-        }
-        
-        if type == .j2meSettings {
-            return gameType == .j2me
-        }
-        
+        var disableTypes = [GameSetting.ItemType]()
         switch gameType {
-        case .j2me:
-            if  type == .saveState ||
-                type == .quickLoadState ||
-                (type == .fastForward && defaultCore == 1) ||
-                type == .stateList ||
-                type == .cheatCode ||
-                type == .filter ||
-                type == .swapScreen ||
-                type == .resolution ||
-                type == .consoleHome ||
-                type == .amiibo ||
-                type == .simBlowing ||
-                type == .palette ||
-                type == .swapDisk ||
-                type == .retro ||
-                type == .airPlayLayout ||
-                type == .toggleAnalog  {
-                return false
-            }
-            return true
-            
-        case .doom:
-            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .retro {
-                return false
-            }
-            return true
-                
-        case .a2600, .a5200, .a7800, .lynx, .jaguar:
-            if gameType == .a5200, type == .retro {
-                return false
-            }
-            
-            if gameType == .jaguar && (type == .saveState || type == .quickLoadState || type == .stateList) {
-                return false
-            }
-            
-            if type == .cheatCode || type == .swapScreen || type == .resolution || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk || type == .airPlayLayout || type == .toggleAnalog {
-                return false
-            }
-            return true
+        case .nes:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .fds:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .snes:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case ._3ds:
             if defaultCore == 0 {
-                if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling || type == .screenScaling {
-                    return false
-                }
+                disableTypes += [.fastForward, .filter, .palette, .swapDisk, .retro, .airPlayScaling, .screenScaling, .airPlayLayout, .toggleAnalog, .j2meSettings, .screenScaling, .dosSettings, .insertDisc]
             } else {
-                if type == .palette || type == .swapDisk || type == .retro || type == .consoleHome {
-                    return false
-                }
+                disableTypes += [.palette, .swapDisk, .retro, .consoleHome, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
             }
-            return true
+        case .gbc:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .gb:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .gba:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case .ds:
-            if (type == .resolution && defaultCore == 0) || type == .consoleHome || type == .amiibo || type == .palette || type == .swapDisk {
-                return false
+            if defaultCore == 0 {
+                disableTypes += [.resolution, .consoleHome, .amiibo, .palette, .amiibo, .swapDisk, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+            } else {
+                disableTypes += [.consoleHome, .amiibo, .palette, .amiibo, .swapDisk, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
             }
-            return true
-        case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm, .arcade:
-            if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes || gameType == .fds) && type == .palette {
-                return true
+        case .psp:
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .md:
+            if defaultCore == 0 {
+                disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .cheatCode, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+            } else {
+                disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
             }
-            
-            if gameType == ._32x || gameType == .mcd {
-                //JGenesis核心
-                let notEnableForJGenesis = (type == .cheatCode || type == .filter || type == .retro || type == .swapDisk || type == .screenScaling)
-                if defaultCore == 1 && notEnableForJGenesis {
-                    return false
-                }
+        case .mcd:
+            if defaultCore == 0 {
+                disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+            } else {
+                disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .cheatCode, .filter, .retro, .screenScaling, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings]
             }
-            
-            if ((gameType == .mcd && defaultCore == 2) || (gameType == .md && defaultCore == 0)) && type == .cheatCode {
-                //ClownMDEmu核心
-                return false
+        case ._32x:
+            if defaultCore == 0 {
+                disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+            } else {
+                disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .cheatCode, .filter, .retro, .swapDisk, .screenScaling, .airPlayLayout, .toggleAnalog, .j2meSettings, .screenScaling, .dosSettings, .insertDisc]
             }
-            
-            if (gameType == .mcd || gameType == .ss || gameType == .fds) && type == .swapDisk {
-                return true
-            }
-            
-            if (gameType == .vb || gameType == .pm) && type == .cheatCode {
-                return false
-            }
-            
-            if (gameType == .nes || gameType == .fds) && type == .simBlowing {
-                return true
-            }
-            
-            if gameType == .arcade, type == .retro, defaultCore == 0 {
-                return false
-            }
-            
-            if type == .swapScreen || type == .resolution || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
-                return false
-            }
-            return true
-        case .psp, .n64:
-            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
-                return false
-            }
-            return true
+        case .sg1000:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .gg:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .ms:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .ss:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings]
+        case .n64:
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .vb:
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .swapDisk, .cheatCode, .resolution, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .pm:
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .swapDisk, .cheatCode, .resolution, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case .ps1:
-            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette {
-                return false
-            }
-            return true
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .airPlayLayout, .j2meSettings, .dosSettings]
         case .dc:
-            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .cheatCode {
-                return false
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .cheatCode, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings]
+        case .doom:
+            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .retro, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .arcade:
+            if defaultCore == 0 {
+                disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .retro, .resolution, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+            } else {
+                disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .resolution, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
             }
-            return true
-        default:
+        case .a2600:
+            disableTypes += [.cheatCode, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .a5200:
+            disableTypes += [.cheatCode, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .retro, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .a7800:
+            disableTypes += [.cheatCode, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .jaguar:
+            disableTypes += [.cheatCode, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .saveState, .quickLoadState, .stateList, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .lynx:
+            disableTypes += [.cheatCode, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .airPlayLayout, .toggleAnalog, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .j2me:
+            if defaultCore == 0 {
+                disableTypes += [.saveState, .quickLoadState, .stateList, .cheatCode, .filter, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .retro, .airPlayLayout, .toggleAnalog, .toggleAnalog, .dosSettings, .insertDisc]
+            } else {
+                disableTypes += [.saveState, .quickLoadState, .stateList, .cheatCode, .filter, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .retro, .airPlayLayout, .toggleAnalog, .fastForward, .toggleAnalog, .dosSettings, .insertDisc]
+            }
+        case .dos:
+            disableTypes += [.cheatCode, .swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .retro, .airPlayLayout, .toggleAnalog, .j2meSettings, .toggleAnalog, .j2meSettings]
+            
+        default: return false
+        }
+        if disableTypes.contains([type]) {
             return false
         }
+        return true
     }
     
     var enableLongPress: Bool {
@@ -880,6 +860,10 @@ struct GameSetting: SettingCellItem {
             return "screenScaling"
         case .j2meSettings:
             return "j2meSettings"
+        case .dosSettings:
+            return "dosSettings"
+        case .insertDisc:
+            return "insertDisc"
         }
     }
     

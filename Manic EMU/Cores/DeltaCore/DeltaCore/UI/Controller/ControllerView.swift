@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 private struct ControllerViewInputMapping: GameControllerInputMappingBase
 {
@@ -58,6 +59,11 @@ public class ControllerView: UIView, GameController
         didSet {
             self.updateSkin()
             NotificationCenter.default.post(name: ControllerView.controllerSkinDidChangeNotification, object: self)
+            if let skin = controllerSkin as? ControllerSkin, let soundID = skin.soundID {
+                self.soundID = soundID
+            } else {
+                self.soundID = nil
+            }
         }
     }
     
@@ -176,8 +182,25 @@ public class ControllerView: UIView, GameController
     
     private(set) var imageCache = NSCache<NSString, NSCache<NSString, UIImage>>()
     
-    //如果允许的话 会判断按钮是否被点中，没有被点中则允许点击穿透，默认为false 设置为true可能会有性能损失
+    //If enabled, it checks whether the button is pressed. If not, it allows click-through. Default is false; setting it to true may cause performance loss.
     public var allowTapThroughIfButtonNotHit = false
+    
+    //Keyboard events allowed? Default is yes.
+    public var allowKeyboardEvents = true
+    
+    public var enableSkinSoundEffects: Bool = true
+    
+    //Event interception from external sources: if the closure returns true, it means the external party has intercepted; otherwise, it indicates no intention to intercept.
+    public var activateButtonInputInterception: ((SomeInput)->Bool)? = nil
+    public var deactivateButtonInputInterception: ((SomeInput)->Bool)? = nil
+    
+    private var soundID: SystemSoundID? {
+        didSet {
+            if let oldValue {
+                AudioServicesDisposeSystemSoundID(oldValue)
+            }
+        }
+    }
     
     public override var intrinsicContentSize: CGSize {
         return buttonsView.intrinsicContentSize
@@ -456,6 +479,7 @@ public class ControllerView: UIView, GameController
     
     internal override func _keyCommand(for event: UIEvent, target: UnsafeMutablePointer<UIResponder>) -> UIKeyCommand?
     {
+        guard allowKeyboardEvents else { return nil }
         let keyCommand = super._keyCommand(for: event, target: target)
         
         if #available(iOS 15, *)
@@ -825,8 +849,17 @@ public class ControllerView: UIView, GameController
     {
         for input in inputs
         {
-            activate(input)
+            if let activateButtonInputInterception {
+                if !activateButtonInputInterception(input) {
+                    activate(input)
+                }
+            } else {
+                activate(input)
+            }
             buttonsDynamicEffectView.activateButtonEffect(input: input)
+            if let soundID, enableSkinSoundEffects {
+                AudioServicesPlaySystemSound(soundID)
+            }
         }
     }
     
@@ -834,7 +867,13 @@ public class ControllerView: UIView, GameController
     {
         for input in inputs
         {
-            deactivate(input)
+            if let deactivateButtonInputInterception {
+                if !deactivateButtonInputInterception(input) {
+                    deactivate(input)
+                }
+            } else {
+                deactivate(input)
+            }
             buttonsDynamicEffectView.deactivateButtonEffect(input: input)
         }
     }

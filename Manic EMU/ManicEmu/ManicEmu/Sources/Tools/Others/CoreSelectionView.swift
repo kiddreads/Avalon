@@ -77,7 +77,6 @@ class CoreSelectionView: BaseView {
             
             let detailLabel = UILabel()
             detailLabel.numberOfLines = 0
-            detailLabel.textAlignment = .center
             detailLabel.text = R.string.localizable.switchEmulationCoreDetail(gameName)
             detailLabel.font = Constants.Font.body(size: .m)
             detailLabel.textColor = Constants.Color.LabelPrimary

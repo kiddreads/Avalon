@@ -10,7 +10,7 @@ import Kingfisher
 
 extension UIImageView {
     func setGameCover(game: Game, size: CGSize? = nil, completion: ((UIImage)->Void)? = nil) {
-        if game.isNDSHomeMenuGame || game.is3DSHomeMenuGame {
+        if game.isNDSHomeMenuGame || game.is3DSHomeMenuGame || game.isDOSHomeMenuGame {
             //Home Menu的图标进行特殊处理
             self.kf.cancelDownloadTask()
             self.contentMode = .scaleAspectFill

@@ -57,6 +57,8 @@ public enum StandardGameControllerInput: String, Codable
     case rightDifficulty //A or B bindable
     case screenScaling
     case j2meSettings
+    case dosSettings
+    case insertDisc
 
     case up
     case down

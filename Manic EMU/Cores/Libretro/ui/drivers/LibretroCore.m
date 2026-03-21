@@ -169,6 +169,14 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
     [[self getRetroArch] loadCoreWithoutContent:corePath];
 }
 
+- (void)loadCoreWithoutRunning:(NSString *_Nonnull)corePath {
+    [[self getRetroArch] loadCoreWithoutRunning:corePath];
+}
+
+- (NSArray<CoreOptionCategory *> *_Nullable)getCoreOptions:(NSString *_Nonnull)corePath {
+    return [[self getRetroArch] getCoreOptions:corePath];
+}
+
 - (void)pressButton:(LibretroButton)button playerIndex:(unsigned)playerIndex {
     [[self getRetroArch] pressButton:(unsigned)button playerIndex:playerIndex];
 }
@@ -205,6 +213,256 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
     apple_direct_input_keyboard_event(false, keyboardCode.code, 0, _keyboardMods, RETRO_DEVICE_KEYBOARD);
 }
 
+- (void)handleUIPress:(UIPress *)press withEvent:(UIPressesEvent *)event down:(BOOL)down {
+   NSString       *ch;
+   uint32_t character = 0;
+   uint32_t mod       = 0;
+   NSUInteger mods    = 0;
+   if (@available(iOS 13.4, tvOS 13.4, *))
+   {
+      ch = (NSString*)press.key.characters;
+      mods = event.modifierFlags;
+   }
+
+   if (mods & UIKeyModifierAlphaShift)
+      mod |= RETROKMOD_CAPSLOCK;
+   if (mods & UIKeyModifierShift)
+      mod |= RETROKMOD_SHIFT;
+   if (mods & UIKeyModifierControl)
+      mod |= RETROKMOD_CTRL;
+   if (mods & UIKeyModifierAlternate)
+      mod |= RETROKMOD_ALT;
+   if (mods & UIKeyModifierCommand)
+      mod |= RETROKMOD_META;
+   if (mods & UIKeyModifierNumericPad)
+      mod |= RETROKMOD_NUMLOCK;
+
+   if (ch && ch.length != 0)
+   {
+      unsigned i;
+      character = [ch characterAtIndex:0];
+
+      apple_input_keyboard_event(down,
+                                 (uint32_t)press.key.keyCode, 0, mod,
+                                 RETRO_DEVICE_KEYBOARD);
+
+      for (i = 1; i < ch.length; i++)
+         apple_input_keyboard_event(down,
+                                    0, [ch characterAtIndex:i], mod,
+                                    RETRO_DEVICE_KEYBOARD);
+   }
+
+   if (@available(iOS 13.4, tvOS 13.4, *))
+      apple_input_keyboard_event(down,
+                                 (uint32_t)press.key.keyCode, character, mod,
+                                 RETRO_DEVICE_KEYBOARD);
+}
+
+- (void)keyboardEvent:(UIEvent *_Nonnull)event {
+    // 严格参考 DeltaCore KeyboardResponder.swift 实现
+    // 通过 KVC 从私有字段直接读取
+    NSNumber *keyCodeNum       = [event valueForKey:@"_keyCode"];
+    NSNumber *isKeyDownNum     = [event valueForKey:@"_isKeyDown"];
+    NSNumber *modifierFlagsNum = [event valueForKey:@"_modifierFlags"];
+    NSString *unmodifiedInput  = [event valueForKey:@"_unmodifiedInput"];
+
+    if (!keyCodeNum || !isKeyDownNum || !modifierFlagsNum) {
+        return;
+    }
+
+    NSInteger hidKeyCode   = keyCodeNum.integerValue;
+    BOOL isKeyDown         = isKeyDownNum.boolValue;
+    NSInteger rawModifiers = modifierFlagsNum.integerValue;
+
+    // ── 1. 计算 RETROKMOD 位掩码 ─────────────────────────────────────────
+    static const NSInteger kShift   = 1 << 17; // UIKeyModifierShift
+    static const NSInteger kCtrl    = 1 << 18; // UIKeyModifierControl
+    static const NSInteger kAlt     = 1 << 19; // UIKeyModifierAlternate
+    static const NSInteger kMeta    = 1 << 20; // UIKeyModifierCommand
+    static const NSInteger kCapsLk  = 1 << 16; // UIKeyModifierAlphaShift
+
+    uint32_t newMods = RETROKMOD_NONE;
+    if (rawModifiers & kShift)  newMods |= RETROKMOD_SHIFT;
+    if (rawModifiers & kCtrl)   newMods |= RETROKMOD_CTRL;
+    if (rawModifiers & kAlt)    newMods |= RETROKMOD_ALT;
+    if (rawModifiers & kMeta)   newMods |= RETROKMOD_META;
+    if (rawModifiers & kCapsLk) newMods |= RETROKMOD_CAPSLOCK;
+
+    // ── 2. HID Usage → RETROK 映射表（初始化一次）────────────────────────
+    static unsigned hidToRetrok[0x200];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        memset(hidToRetrok, 0, sizeof(hidToRetrok));
+        // 字母 a-z (HID 0x04–0x1D)
+        hidToRetrok[0x04] = RETROK_a; hidToRetrok[0x05] = RETROK_b;
+        hidToRetrok[0x06] = RETROK_c; hidToRetrok[0x07] = RETROK_d;
+        hidToRetrok[0x08] = RETROK_e; hidToRetrok[0x09] = RETROK_f;
+        hidToRetrok[0x0A] = RETROK_g; hidToRetrok[0x0B] = RETROK_h;
+        hidToRetrok[0x0C] = RETROK_i; hidToRetrok[0x0D] = RETROK_j;
+        hidToRetrok[0x0E] = RETROK_k; hidToRetrok[0x0F] = RETROK_l;
+        hidToRetrok[0x10] = RETROK_m; hidToRetrok[0x11] = RETROK_n;
+        hidToRetrok[0x12] = RETROK_o; hidToRetrok[0x13] = RETROK_p;
+        hidToRetrok[0x14] = RETROK_q; hidToRetrok[0x15] = RETROK_r;
+        hidToRetrok[0x16] = RETROK_s; hidToRetrok[0x17] = RETROK_t;
+        hidToRetrok[0x18] = RETROK_u; hidToRetrok[0x19] = RETROK_v;
+        hidToRetrok[0x1A] = RETROK_w; hidToRetrok[0x1B] = RETROK_x;
+        hidToRetrok[0x1C] = RETROK_y; hidToRetrok[0x1D] = RETROK_z;
+        // 数字 1-9, 0 (HID 0x1E–0x27)
+        hidToRetrok[0x1E] = RETROK_1; hidToRetrok[0x1F] = RETROK_2;
+        hidToRetrok[0x20] = RETROK_3; hidToRetrok[0x21] = RETROK_4;
+        hidToRetrok[0x22] = RETROK_5; hidToRetrok[0x23] = RETROK_6;
+        hidToRetrok[0x24] = RETROK_7; hidToRetrok[0x25] = RETROK_8;
+        hidToRetrok[0x26] = RETROK_9; hidToRetrok[0x27] = RETROK_0;
+        // 控制键
+        hidToRetrok[0x28] = RETROK_RETURN;    // Return
+        hidToRetrok[0x29] = RETROK_ESCAPE;    // Escape
+        hidToRetrok[0x2A] = RETROK_BACKSPACE; // Backspace
+        hidToRetrok[0x2B] = RETROK_TAB;       // Tab
+        hidToRetrok[0x2C] = RETROK_SPACE;     // Space
+        // 符号
+        hidToRetrok[0x2D] = RETROK_MINUS;        // -
+        hidToRetrok[0x2E] = RETROK_EQUALS;       // =
+        hidToRetrok[0x2F] = RETROK_LEFTBRACKET;  // [
+        hidToRetrok[0x30] = RETROK_RIGHTBRACKET; // ]
+        hidToRetrok[0x31] = RETROK_BACKSLASH;    // backslash
+        hidToRetrok[0x33] = RETROK_SEMICOLON;    // ;
+        hidToRetrok[0x34] = RETROK_QUOTE;        // '
+        hidToRetrok[0x35] = RETROK_BACKQUOTE;    // `
+        hidToRetrok[0x36] = RETROK_COMMA;        // ,
+        hidToRetrok[0x37] = RETROK_PERIOD;       // .
+        hidToRetrok[0x38] = RETROK_SLASH;        // /
+        // CapsLock
+        hidToRetrok[0x39] = RETROK_CAPSLOCK;
+        // F1–F12 (HID 0x3A–0x45)
+        hidToRetrok[0x3A] = RETROK_F1;  hidToRetrok[0x3B] = RETROK_F2;
+        hidToRetrok[0x3C] = RETROK_F3;  hidToRetrok[0x3D] = RETROK_F4;
+        hidToRetrok[0x3E] = RETROK_F5;  hidToRetrok[0x3F] = RETROK_F6;
+        hidToRetrok[0x40] = RETROK_F7;  hidToRetrok[0x41] = RETROK_F8;
+        hidToRetrok[0x42] = RETROK_F9;  hidToRetrok[0x43] = RETROK_F10;
+        hidToRetrok[0x44] = RETROK_F11; hidToRetrok[0x45] = RETROK_F12;
+        // 导航区
+        hidToRetrok[0x49] = RETROK_INSERT;   hidToRetrok[0x4A] = RETROK_HOME;
+        hidToRetrok[0x4B] = RETROK_PAGEUP;   hidToRetrok[0x4C] = RETROK_DELETE;
+        hidToRetrok[0x4D] = RETROK_END;      hidToRetrok[0x4E] = RETROK_PAGEDOWN;
+        hidToRetrok[0x4F] = RETROK_RIGHT;    hidToRetrok[0x50] = RETROK_LEFT;
+        hidToRetrok[0x51] = RETROK_DOWN;     hidToRetrok[0x52] = RETROK_UP;
+        // 小键盘
+        hidToRetrok[0x53] = RETROK_NUMLOCK;
+        hidToRetrok[0x54] = RETROK_KP_DIVIDE;   hidToRetrok[0x55] = RETROK_KP_MULTIPLY;
+        hidToRetrok[0x56] = RETROK_KP_MINUS;    hidToRetrok[0x57] = RETROK_KP_PLUS;
+        hidToRetrok[0x58] = RETROK_KP_ENTER;
+        hidToRetrok[0x59] = RETROK_KP1; hidToRetrok[0x5A] = RETROK_KP2;
+        hidToRetrok[0x5B] = RETROK_KP3; hidToRetrok[0x5C] = RETROK_KP4;
+        hidToRetrok[0x5D] = RETROK_KP5; hidToRetrok[0x5E] = RETROK_KP6;
+        hidToRetrok[0x5F] = RETROK_KP7; hidToRetrok[0x60] = RETROK_KP8;
+        hidToRetrok[0x61] = RETROK_KP9; hidToRetrok[0x62] = RETROK_KP0;
+        hidToRetrok[0x63] = RETROK_KP_PERIOD;
+        // PrintScreen/SysReq, ScrollLock, Pause (HID 0x46–0x48)
+        hidToRetrok[0x46] = RETROK_PRINT;
+        hidToRetrok[0x47] = RETROK_SCROLLOCK;
+        hidToRetrok[0x48] = RETROK_PAUSE;
+        // F13–F15 (HID 0x68–0x6A)
+        hidToRetrok[0x68] = RETROK_F13;
+        hidToRetrok[0x69] = RETROK_F14;
+        hidToRetrok[0x6A] = RETROK_F15;
+        // 小键盘等号 (HID 0x67)
+        hidToRetrok[0x67] = RETROK_KP_EQUALS;
+        // 非 US 键盘第102键反斜杠 (HID 0x64)
+        hidToRetrok[0x64] = RETROK_OEM_102;
+        // Application/Menu 键 → Compose (HID 0x65)
+        hidToRetrok[0x65] = RETROK_COMPOSE;
+        // Power 键 (HID 0x66)
+        hidToRetrok[0x66] = RETROK_POWER;
+        // Help 键 (HID 0x75)
+        hidToRetrok[0x75] = RETROK_HELP;
+        // 键盘音量键（HID 键盘页 0x07：0x7F–0x81）
+        hidToRetrok[0x7F] = RETROK_VOLUME_MUTE;
+        hidToRetrok[0x80] = RETROK_VOLUME_UP;
+        hidToRetrok[0x81] = RETROK_VOLUME_DOWN;
+        // 修饰键（左/右）(HID 0xE0–0xE7)
+        hidToRetrok[0xE0] = RETROK_LCTRL;  hidToRetrok[0xE1] = RETROK_LSHIFT;
+        hidToRetrok[0xE2] = RETROK_LALT;   hidToRetrok[0xE3] = RETROK_LMETA;
+        hidToRetrok[0xE4] = RETROK_RCTRL;  hidToRetrok[0xE5] = RETROK_RSHIFT;
+        hidToRetrok[0xE6] = RETROK_RALT;   hidToRetrok[0xE7] = RETROK_RMETA;
+    });
+
+    // ── 3. 统一的 activeKeys 跟踪（参考 KeyboardResponder.activeKeyPresses）──
+    // 字典存储每个 HID keyCode 的 {retrok, isActive}，用于：
+    //   a) 去重（过滤 key-repeat）
+    //   b) keyUp 时使用按下时记录的 retrok（因为 keyUp 时 _unmodifiedInput 可能无效）
+    //   c) 修饰键也统一走此路径，不再单独 early return
+
+    // activeKeys: key=HID keyCode, value=@[@(retrok), @(isActive)]
+    static NSMutableDictionary<NSNumber *, NSArray<NSNumber *> *> *activeKeys = nil;
+    static dispatch_once_t keysOnce;
+    dispatch_once(&keysOnce, ^{ activeKeys = [NSMutableDictionary dictionary]; });
+
+    NSNumber *keyNum = @(hidKeyCode);
+    NSArray<NSNumber *> *previousEntry = activeKeys[keyNum];
+    BOOL previousIsActive = previousEntry ? previousEntry[1].boolValue : NO;
+
+    // 参考 KeyboardResponder: guard previousKeyPress?.isActive != isActive
+    // 过滤重复的 down/up 事件（包括 key-repeat 和重复 up）
+    if (previousEntry && previousIsActive == isKeyDown) {
+        return;
+    }
+
+    // ── 4. 确定 RETROK 值 ────────────────────────────────────────────────
+    unsigned retrok = RETROK_UNKNOWN;
+
+    if (!isKeyDown && previousEntry) {
+        // keyUp 时优先使用按下时记录的 retrok（参考 KeyboardResponder: previousKeyPress?.key）
+        // 因为 _unmodifiedInput 在 keyUp 时可能无效或不同
+        retrok = previousEntry[0].unsignedIntValue;
+    } else {
+        // keyDown：根据 unmodifiedInput 和 HID keyCode 确定 retrok
+        if (unmodifiedInput.length == 0) {
+            // 纯修饰键事件（参考 KeyboardResponder 对空 key 的处理）
+            // 通过比较前后 modifier flags 确定是哪个修饰键
+            if (isKeyDown) {
+                // 新按下的修饰键 = 当前 flags 中新增的部分
+                uint32_t activated = newMods & ~((uint32_t)_keyboardMods);
+                retrok = [self retrokForModifierFlags:activated];
+            } else {
+                // 新释放的修饰键 = 之前 flags 中消失的部分
+                uint32_t deactivated = ((uint32_t)_keyboardMods) & ~newMods;
+                retrok = [self retrokForModifierFlags:deactivated];
+            }
+        } else {
+            // 有 unmodifiedInput：使用 HID keyCode 映射
+            if (hidKeyCode > 0 && hidKeyCode < 0x200) {
+                retrok = hidToRetrok[hidKeyCode];
+            }
+        }
+    }
+
+    // 更新修饰键状态（参考 KeyboardResponder 的 defer 语义：无论是否发送事件都要更新）
+    _keyboardMods = newMods;
+
+    if (retrok == RETROK_UNKNOWN) {
+        return;
+    }
+
+    // ── 5. 更新 activeKeys 并发送事件 ────────────────────────────────────
+    if (isKeyDown) {
+        activeKeys[keyNum] = @[@(retrok), @YES];
+        apple_direct_input_keyboard_event(true, retrok, 0, newMods, RETRO_DEVICE_KEYBOARD);
+    } else {
+        apple_direct_input_keyboard_event(false, retrok, 0, newMods, RETRO_DEVICE_KEYBOARD);
+        [activeKeys removeObjectForKey:keyNum];
+    }
+}
+
+// 辅助方法：根据 modifier flags 差异确定对应的 RETROK（参考 KeyboardResponder.key(for:)）
+- (unsigned)retrokForModifierFlags:(uint32_t)flags {
+    if (flags & RETROKMOD_SHIFT)    return RETROK_LSHIFT;
+    if (flags & RETROKMOD_CTRL)     return RETROK_LCTRL;
+    if (flags & RETROKMOD_ALT)      return RETROK_LALT;
+    if (flags & RETROKMOD_META)     return RETROK_LMETA;
+    if (flags & RETROKMOD_CAPSLOCK) return RETROK_CAPSLOCK;
+    return RETROK_UNKNOWN;
+}
+
 - (void)moveStick:(BOOL)isLeft x:(CGFloat)x y:(CGFloat)y playerIndex:(unsigned)playerIndex {
     [[self getRetroArch] moveStick:isLeft x:x y:y playerIndex:playerIndex];
 }
@@ -219,6 +477,10 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
 
 - (void)updateCoreConfig:(NSString *_Nonnull)coreName configs:(NSDictionary<NSString*, NSString*> *_Nullable)configs reload:(BOOL)reload {
     [[self getRetroArch] updateCoreConfig:coreName configs:configs reload:reload];
+}
+
+- (void)updateCoreConfig:(NSString *_Nonnull)coreName content:(NSString *_Nullable)content reload:(BOOL)reload {
+    [[self getRetroArch] updateCoreConfig:coreName content:content reload:reload];
 }
 
 - (void)updateRunningCoreConfigs:(NSDictionary<NSString*, NSString*> *_Nullable)configs flush:(BOOL)flush {
@@ -301,12 +563,16 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
     [[self getRetroArch] setDiskIndex:index delay:delay];
 }
 
-- (NSUInteger)getCurrentDiskIndex {
-    return [[self getRetroArch] getCurrentDiskIndex];
+- (void)setDiskIndex2:(unsigned)index {
+    [[self getRetroArch] setDiskIndex2:index];
 }
 
-- (NSUInteger)getDiskCount {
-    return [[self getRetroArch] getDiskCount];
+- (LibretroDisk *_Nullable)getDiskInfo {
+    return [[self getRetroArch] getDiskInfo];
+}
+
+- (BOOL)insertDisk:(NSString *_Nonnull)path {
+    return [[self getRetroArch] insertDisk:path];
 }
 
 - (void)setPSXAnalog:(BOOL)isAnalog {
@@ -658,6 +924,10 @@ static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_
 
 - (void)releaseTouchEvent {
     [[self getRetroArch] releaseTouchEvent];
+}
+
+- (void)sendMultiTouchEvent:(NSArray<NSDictionary *> *)points {
+    [[self getRetroArch] sendMultiTouchEvent:points];
 }
 
 - (NSString *_Nullable)getCoreConfigs:(NSString *_Nonnull)coreName {

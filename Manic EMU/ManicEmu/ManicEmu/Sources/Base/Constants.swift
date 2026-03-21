@@ -104,6 +104,7 @@ struct Constants {
                 case .lynx: return 1.118
                 case .xbox360: return 0.7062
                 case .j2me: return 0.75
+                case .dos: return 0.8
                 default: return 1.0
                 }
             case .style2:
@@ -348,6 +349,8 @@ struct Constants {
         static let RomPatcher = Resource.appendingPathComponent("RomPatcher")
         static let J2meJS = Resource.appendingPathComponent("j2mejs")
         static let Freej2meWeb = Resource.appendingPathComponent("freej2me")
+        static let DOSBoxPure = Document.appendingPathComponent(LibretroCore.Cores.DOSBoxPure.name)
+        static let DOSBoxPureSystem = DOSBoxPure.appendingPathComponent("system")
     }
     
     struct DefaultKey {
@@ -369,6 +372,7 @@ struct Constants {
         static let HasShowPlayCasePromo = "HasShowPlayCasePromo"
         static let HasImportedPlayCaseSkin = "HasImportedPlayCaseSkin"
         static let HasShowFreeJ2meAlert = "HasShowFreeJ2meAlert"
+        static let HasShowFirstAnniversaryLetter = "HasShowFirstAnniversaryLetter"
     }
     
     struct Font {
@@ -408,7 +412,7 @@ struct Constants {
         
         /// caption
         /// - Parameters:
-        ///   - size: s: 8 m: 10 l: 12
+        ///   - size: s: 8 m: 10 l: 11
         ///   - weight: 默认regular
         /// - Returns: UIFont
         static func caption(size: Size = .m, weight: UIFont.Weight = .regular) -> UIFont {
@@ -418,7 +422,7 @@ struct Constants {
             case .m:
                 UIFont.systemFont(ofSize: 10, weight: weight)
             case .l:
-                UIFont.systemFont(ofSize: 12, weight: weight)
+                UIFont.systemFont(ofSize: 11, weight: weight)
             }
         }
     }
@@ -449,6 +453,7 @@ struct Constants {
         static let MeloNXScheme = "atariemulator"
         static let XeniOSScheme = "xenios"
         static let J2MEScreenSizes = ["96x65", "96x96", "104x80", "128x128", "132x176", "128x160", "176x208", "176x220", "208x208", "240x320", "320x240", "240x400", "352x416", "360x640", "640x360", "480x800", "800x480"]
+        static let DOSKeyboardSkinID = "public.aoshuang.game.dos.standard.keyboard"
     }
     
     enum Config {

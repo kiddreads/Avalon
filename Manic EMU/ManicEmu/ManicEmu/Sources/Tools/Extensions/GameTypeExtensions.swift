@@ -12,7 +12,7 @@ import RealmSwift
 
 ///通过文件名后缀生成GameType
 extension GameType {
-    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd"]
+    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip"]
     
     static func gameTypes(multiPlatformFileExtension: String) -> [GameType] {
         let ext = multiPlatformFileExtension.lowercased()
@@ -21,17 +21,19 @@ extension GameType {
         case "chd":
             return [.ps1, .psp, .mcd, .ss, .dc]
         case "iso":
-            return [.psp, .mcd, .ss]
+            return [.psp, .mcd, .ss, .dos]
         case "bin":
             return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar]
         case "cue":
-            return [.ps1, .mcd, .ss, .dc]
+            return [.ps1, .mcd, .ss, .dc, .dos]
         case "m3u":
-            return [ ps1, .mcd, .ss, .dc]
+            return [ ps1, .mcd, .ss, .dc, .dos]
         case "pbp":
             return [.ps1, .psp]
         case "ccd":
             return [.ps1, .ss]
+        case "zip":
+            return [.arcade, .dos]
         default:
             return []
         }
@@ -100,6 +102,8 @@ extension GameType {
             self = .lynx
         } else if ["jar"].contains(ext) {
             self = .j2me
+        } else if ["zip", "dosz", "exe", "com", "bat", "iso", "cue", "img", "ima", "vhd", "jrc", "tc", "m3u", "conf"].contains(ext) {
+            self = .dos
         } else {
             self = .notSupport
         }
@@ -176,9 +180,11 @@ extension GameType {
             self = .lynx
         } else if shortName.uppercased() == "XBOX360" {
             self = .xbox360
-        }  else if shortName.uppercased() == "J2ME" {
+        } else if shortName.uppercased() == "J2ME" {
             self = .j2me
-        }  else {
+        } else if shortName.uppercased() == "DOS" {
+            self = .dos
+        } else {
             return nil
         }
     }
@@ -217,6 +223,7 @@ extension GameType {
         case .lynx: return "Atari Lynx"
         case .j2me: return "Java ME"
         case .xbox360: return "Xbox 360"
+        case .dos: return "MS-DOS"
         default: return ""
         }
     }
@@ -255,6 +262,7 @@ extension GameType {
         case .lynx: return  NSLocalizedString("LYNX", comment: "")
         case .j2me: return  NSLocalizedString("J2ME", comment: "")
         case .xbox360: return  NSLocalizedString("XBOX360", comment: "")
+        case .dos: return  NSLocalizedString("DOS", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -294,6 +302,7 @@ extension GameType {
         case .jaguar: return 1993
         case .j2me: return 1999
         case .xbox360: return 2005
+        case .dos: return 1981
         default: return 0
         }
     }
@@ -330,6 +339,7 @@ extension GameType {
         case .jaguar: return Jaguar.core
         case .lynx: return Lynx.core
         case .j2me: return J2ME.core
+        case .dos: return DOS.core
         default: return nil
         }
     }
@@ -340,7 +350,7 @@ extension GameType {
         } else if self == .fds {
             return .nes
         } else if self == .doom {
-            return .arcade
+            return .dos
         }
         return self
     }
@@ -381,6 +391,8 @@ extension GameType {
             return [.ms, .gg, .sg1000]
         } else if self == .nes || self == .fds {
             return [.nes, .fds]
+        } else if self == .dos || self == .doom {
+            return [.dos, .doom]
         }
         return [self]
     }
@@ -426,7 +438,7 @@ extension GameType {
             return .atari
         case .j2me:
             return .sun
-        case .xbox360:
+        case .xbox360, .dos:
             return .microsoft
         default:
             return .nintendo
@@ -435,10 +447,25 @@ extension GameType {
     
     var supportAnalogInput: Bool {
         switch self {
-        case .psp, ._3ds, .arcade, .dc, .ps1, .n64:
+        case .psp, ._3ds, .arcade, .dc, .ps1, .n64, .dos:
             return true
         default: return false
         }
+    }
+    
+    var coreConfigIcon: UIImage? {
+        switch self {
+        case .dos:
+            return R.image.customDos()
+        case .j2me:
+            return R.image.customJava()
+        default:
+            return nil
+        }
+    }
+    
+    var coreConfigTitle: String {
+        localizedShortName + R.string.localizable.tabbarTitleSettings()
     }
 }
 

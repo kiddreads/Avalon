@@ -52,4 +52,6 @@ enum ExtraKey: String {
     case screenScaling
     case j2meScreenSize
     case j2meScreenRotate
+    case coreConfigs
+    case skinSoundEffects
 }

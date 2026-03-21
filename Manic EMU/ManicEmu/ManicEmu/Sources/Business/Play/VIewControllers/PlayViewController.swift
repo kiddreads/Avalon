@@ -233,7 +233,7 @@ class PlayViewController: GameViewController {
             return
         }
         
-        if game.isRomExtsts || game.isNDSHomeMenuGame {
+        if game.isRomExtsts || game.isNDSHomeMenuGame || game.isDOSHomeMenuGame {
             UIView.hideLoadingToast(forceHide: true)
             func showPlayView() {
                 if game.isBIOSMissing() {
@@ -735,6 +735,14 @@ class PlayViewController: GameViewController {
                 make.top.equalTo(gameView.snp.bottom).offset(-9)
             } else if manicGame.gameType == .j2me {
                 make.top.equalTo(gameView.snp.bottom).offset(2)
+            } else if manicGame.gameType == .dos {
+                if UIDevice.isPad {
+                    make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
+                } else if UIDevice.isSmallScreenPhone {
+                    make.top.equalTo(gameView.snp.bottom).offset(17)
+                } else {
+                    make.top.equalTo(gameView.snp.bottom).offset(22)
+                }
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
@@ -743,7 +751,7 @@ class PlayViewController: GameViewController {
             } else {
                 make.leading.trailing.equalTo(gameView)
             }
-            if manicGame.gameType == .j2me {
+            if manicGame.gameType == .j2me || manicGame.gameType == .dos {
                 make.height.equalTo(30)
             } else {
                 make.height.equalTo(Constants.Size.ItemHeightMid)
@@ -1173,10 +1181,6 @@ extension PlayViewController {
                 }
             } else {
                 pauseEmulation()
-                if manicGame.supportSwapDisc {
-                    manicGame.totalDiskCount = LibretroCore.sharedInstance().getDiskCount()
-                    manicGame.currentDiskIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
-                }
                 GameSettingView.show(game: manicGame,
                                      didSelectItem: { [weak self] item, sheet in
                     //点击菜单选项
@@ -1334,10 +1338,12 @@ extension PlayViewController {
             if manicGame.gameType == .fds {
                 handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: 0), nil)
             } else {
-                let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
-                let totalCount = LibretroCore.sharedInstance().getDiskCount()
-                let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
-                handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: nextIndex), nil)
+                if let diskInfo = manicGame.diskInfo {
+                    let currentIndex = diskInfo.currentDiskIndex
+                    let totalCount = diskInfo.diskCount
+                    let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
+                    handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: UInt(nextIndex)), nil)
+                }
             }
         } else if input.stringValue == "toggleAnalog" {
             handleMenuGameSetting(GameSetting(type: .toggleAnalog), nil)
@@ -1367,6 +1373,38 @@ extension PlayViewController {
             handleMenuGameSetting(GameSetting(type: .screenScaling, screenScaling: manicGame.screenScaling.next), nil)
         } else if input.stringValue == "j2meSettings" {
             handleMenuGameSetting(GameSetting(type: .j2meSettings), nil)
+        } else if input.stringValue == "dosSettings" {
+            handleMenuGameSetting(GameSetting(type: .dosSettings), nil)
+        } else if input.stringValue == "insertDisc" {
+            handleMenuGameSetting(GameSetting(type: .insertDisc), nil)
+        } else if input.stringValue == "useKeyboardSkin" {
+            guard manicGame.gameType == .dos else {
+                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(manicGame.gameType.localizedShortName))
+                return
+            }
+            let realm = Database.realm
+            if let skin = realm.objects(Skin.self).where({
+                $0.gameType == .dos &&
+                $0.skinType == .buildIn &&
+                $0.identifier == Constants.Strings.DOSKeyboardSkinID
+            }).first {
+                try? realm.write {
+                    manicGame.portraitSkin = skin
+                    manicGame.landscapeSkin = skin
+                }
+            }
+        } else if input.stringValue == "useJoypadSkin" {
+            guard manicGame.gameType == .dos else {
+                UIView.makeToast(message: R.string.localizable.notSupportGameSetting(manicGame.gameType.localizedShortName))
+                return
+            }
+            let realm = Database.realm
+            if let skin = realm.objects(Skin.self).where({ $0.gameType == .dos && $0.skinType == .default }).first {
+                try? realm.write {
+                    manicGame.portraitSkin = skin
+                    manicGame.landscapeSkin = skin
+                }
+            }
         }
     }
     
@@ -1782,6 +1820,8 @@ extension PlayViewController {
                     self.dismiss(animated: true)
                 }
             } else if manicGame.isLibretroType {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.System.libretroPath)
                 LibretroCore.sharedInstance().stop()
                 gameMetalView = nil;
                 DispatchQueue.main.asyncAfter(delay: 0.5) {
@@ -2010,7 +2050,7 @@ extension PlayViewController {
                 return true
             }
             
-            guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 || manicGame.gameType == .dc else { return false }
+            guard manicGame.gameType == .mcd || manicGame.gameType == .ss || manicGame.gameType == .ps1 || manicGame.gameType == .dc || manicGame.gameType == .dos else { return false }
             if manicGame.supportSwapDisc {
                 LibretroCore.sharedInstance().setDiskIndex(UInt32(item.currentDiskIndex), delay: manicGame.gameType == .ps1 ? true : false)
                 UIView.makeToast(message: R.string.localizable.discInsert(Int(item.currentDiskIndex + 1)))
@@ -2140,6 +2180,68 @@ extension PlayViewController {
         case .j2meSettings:
             //MARK: handleMenuGameSetting.j2meSettings
             J2MESettingView.show(game: manicGame)
+            return false
+        case .dosSettings:
+            //MARK: handleMenuGameSetting.dosSettings
+            CoreConfigsView.show(game: manicGame, configChange: {
+                Log.debug("change DOS config:\($0)")
+                LibretroCore.sharedInstance().updateRunningCoreConfigs($0, flush: false)
+            })
+            return false
+        case .insertDisc:
+            //MARK: handleMenuGameSetting.insertDisc
+            UIView.makeAlert(title: R.string.localizable.insertDisc(),
+                             detail: R.string.localizable.insertDiscAlert(),
+                             cancelTitle: R.string.localizable.transferPakFromLibrary(),
+                             confirmTitle: R.string.localizable.transferPakFromFiles(), cancelAction: { [weak self] in
+                guard let self else { return }
+                let realm = Database.realm
+                let objects = realm.objects(Game.self).where({ $0.gameType == self.manicGame.gameType && !$0.isDeleted })
+                var games = [Game]()
+                games.append(contentsOf: objects)
+                if games.count > 0 {
+                    GameSaveMatchGameView.show(showGames: games,
+                                               title: R.string.localizable.insertDisc(),
+                                               detail: "",
+                                               cancelTitle: R.string.localizable.cancelTitle(), completion: { game in
+                        if let path = game?.romUrl.path {
+                            if LibretroCore.sharedInstance().insertDisk(path) {
+                                UIView.makeToast(message: R.string.localizable.discInsert(self.manicGame.diskInfo?.currentDiskIndex ?? 0))
+                            } else {
+                                UIView.makeToast(message: R.string.localizable.insertDiscFailed())
+                            }
+                        } else {
+                            UIView.makeToast(message: R.string.localizable.transferPakNoGames())
+                        }
+                    })
+                } else {
+                    UIView.makeToast(message: R.string.localizable.transferPakNoGames())
+                }
+            }, confirmAction: { [weak self] in
+                guard let self else { return }
+                let types = UTType.getGameTypes(gameType: self.manicGame.gameType)
+                DispatchQueue.main.asyncAfter(delay: 1) {
+                    FilesImporter.shared.presentImportController(supportedTypes: types,
+                                                                 allowsMultipleSelection: false,
+                                                                 manualHandle: { urls in
+                        if let url = urls.first {
+                            let toCachePath = Constants.Path.Cache.appendingPathComponent(url.lastPathComponent)
+                            if !FileManager.default.fileExists(atPath: toCachePath) {
+                                UIView.makeLoading()
+                                try? FileManager.safeCopyItem(at: url, to: URL(fileURLWithPath: toCachePath))
+                                DispatchQueue.main.async {
+                                    UIView.hideLoading()
+                                }
+                            }
+                            if LibretroCore.sharedInstance().insertDisk(toCachePath) {
+                                UIView.makeToast(message: R.string.localizable.discInsert(self.manicGame.diskInfo?.currentDiskIndex ?? 0))
+                            } else {
+                                UIView.makeToast(message: R.string.localizable.insertDiscFailed())
+                            }
+                        }
+                    })
+                }
+            })
             return false
         }
         //默认关闭菜单
@@ -2673,6 +2775,8 @@ extension PlayViewController {
                                                        configs: ["prboom-resolution": option,
                                                                  "prboom-rumble": "enabled"],
                                                        reload: false)
+        } else if manicGame.gameType == .dos {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.DOSBoxPure.name, content: manicGame.getStoreCoreConfigsString(), reload: false)
         }
         
         //配置静音模式
@@ -2710,7 +2814,8 @@ extension PlayViewController {
                 "camera_driver": "avfoundation",
                 "microphone_enable": enableMircophone ? "true" : "false",
                 "microphone_driver": "coreaudio",
-                "audio_latency": "200"
+                "audio_latency": "200",
+                "input_auto_game_focus": "1"
             ])
             if manicGame.isN64ParaLLEl {
                 LibretroCore.sharedInstance().setReloadDelay(1)
@@ -2739,7 +2844,7 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
             }
             
-            //适配PKSM修改存档位置
+            //修改存档位置
             if manicGame.gameType == .gb {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBSavePath.libretroPath)
             } else if manicGame.gameType == .gbc {
@@ -2752,6 +2857,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DSSavePath.libretroPath)
             } else if manicGame.gameType == .doom {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.PrBoom.libretroPath)
+            } else if manicGame.gameType == .dos {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DOSBoxPure.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
             }
@@ -2762,6 +2869,8 @@ extension PlayViewController {
             //配置System的位置
             if manicGame.gameType == .dc {
                 LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.Flycast)
+            } else if manicGame.gameType == .dos {
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.DOSBoxPureSystem.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.System.libretroPath)
             }
@@ -2981,6 +3090,13 @@ extension PlayViewController {
                                                                  "virtualjaguar_p2_retropad_analog_ru": "hash"
                                                                 ],
                                                        reload: false)
+        } else if manicGame.gameType == .doom  {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PrBoom.name,
+                                                       configs: ["prboom-resolution": "320x200",
+                                                                 "prboom-rumble": "enabled"],
+                                                       reload: false)
+        } else if manicGame.gameType == .dos {
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.DOSBoxPure.name, content: nil, reload: false)
         }
         
         //配置静音模式
@@ -3028,7 +3144,7 @@ extension PlayViewController {
             //RetroAchievements配置
             LibretroCore.sharedInstance().updateLibretroConfig("cheevos_enable", value: "false")
             
-            //适配PKSM修改存档位置
+            //修改存档位置
             if manicGame.gameType == .gb {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.GBSavePath.libretroPath)
             } else if manicGame.gameType == .gbc {
@@ -3041,6 +3157,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DSSavePath.libretroPath)
             } else if manicGame.gameType == .doom {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.PrBoom.libretroPath)
+            } else if manicGame.gameType == .dos {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DOSBoxPure.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
             }
@@ -3051,6 +3169,8 @@ extension PlayViewController {
             //配置System的位置
             if manicGame.gameType == .dc {
                 LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.Flycast)
+            } else if manicGame.gameType == .dos {
+                LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.DOSBoxPureSystem.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("system_directory", value: Constants.Path.System.libretroPath)
             }
@@ -3139,6 +3259,9 @@ extension PlayViewController {
 #else
         setPreferredSkin()
 #endif
+        //Set Skin Sound Effects
+        controllerView.enableSkinSoundEffects = Settings.defalut.getExtraBool(key: ExtraKey.skinSoundEffects.rawValue) ?? true
+        
         //更新背景
         updateBackground()
 
@@ -3150,7 +3273,7 @@ extension PlayViewController {
         updateFilter()
         //尝试添加屏幕按钮
         updateFunctionButton()
-        if manicGame.gameType == .ds || manicGame.gameType == ._3ds {
+        if manicGame.gameType == .ds || manicGame.gameType == ._3ds || (manicGame.gameType == .dos && UIDevice.isPad) {
             updateFunctionButtonContainer()
         }
         //更新3DS画面视图
@@ -3299,7 +3422,11 @@ extension PlayViewController {
                             gameSetting.volumeOn = manicGame.volume
                             gameSetting.hapticType = manicGame.haptic
                             let button = UIImageView(image: gameSetting.image.withRenderingMode(.alwaysTemplate).applySymbolConfig(color: Constants.Color.LabelTertiary))
-                            button.tintColor = Constants.Color.LabelTertiary
+                            if manicGame.gameType == .dos {
+                                button.tintColor = Constants.Color.LabelTertiary.forceStyle(.dark)
+                            } else {
+                                button.tintColor = Constants.Color.LabelTertiary
+                            }
                             button.contentMode = .center
                             button.isUserInteractionEnabled = true
                             button.enableInteractive = true
@@ -3375,10 +3502,12 @@ extension PlayViewController {
                                     if self.manicGame.gameType == .fds {
                                         newGameSetting.currentDiskIndex = 0
                                     } else {
-                                        let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
-                                        let totalCount = LibretroCore.sharedInstance().getDiskCount()
-                                        let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
-                                        newGameSetting.currentDiskIndex = nextIndex
+                                        if let diskInfo = manicGame.diskInfo {
+                                            let currentIndex = diskInfo.currentDiskIndex
+                                            let totalCount = diskInfo.diskCount
+                                            let nextIndex = currentIndex + 1 < totalCount ? currentIndex + 1 : 0
+                                            newGameSetting.currentDiskIndex = UInt(nextIndex)
+                                        }
                                     }
                                 case .airPlayScaling:
                                     newGameSetting.airPlayScaling = Settings.defalut.airPlayScaling.next
@@ -3427,6 +3556,10 @@ extension PlayViewController {
                     }
                 }
             }
+        } else if manicGame.gameType == .dos, UIDevice.isPad {
+            functionButtonContainer.snp.updateConstraints { make in
+                make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
+            }
         }
     }
     
@@ -3468,6 +3601,33 @@ extension PlayViewController {
     
     private func updateLibretroViews() {
         guard manicGame.isLibretroType else { return }
+        
+        if manicGame.gameType == .dos {
+            controllerView.allowTapThroughIfButtonNotHit = true
+            controllerView.allowKeyboardEvents = false
+            if let skin = controllerView.controllerSkin,
+               skin.identifier == Constants.Strings.DOSKeyboardSkinID {
+                controllerView.activateButtonInputInterception = { input in
+                    if input.stringValue == "menu" || input.stringValue == "useJoypadSkin" {
+                        return false
+                    }
+                    Log.debug("[LibretroKeyboardCode] input: >>>\(input.stringValue)<<<<")
+                    LibretroCore.sharedInstance().pressKeyboard(LibretroKeyboardCode.createCode(withLabel: input.stringValue))
+                    return true
+                }
+                controllerView.deactivateButtonInputInterception = { input in
+                    if input.stringValue == "menu" || input.stringValue == "useJoypadSkin" {
+                        return false
+                    }
+                    LibretroCore.sharedInstance().releaseKeyboard(LibretroKeyboardCode.createCode(withLabel: input.stringValue))
+                    return true
+                }
+            } else {
+                controllerView.activateButtonInputInterception = nil
+                controllerView.deactivateButtonInputInterception = nil
+            }
+        }
+        
         if let gameMetalView {
             if gameMetalView.superview == view {
                 gameMetalView.snp.remakeConstraints { make in
@@ -3546,7 +3706,7 @@ extension PlayViewController {
                     }
                     self.updateDualScreenViews()
                     LibretroCore.sharedInstance().setCustomSaveExtension(customSaveExtension)
-                    if self.manicGame.isNDSHomeMenuGame || self.manicGame.isDSiHomeMenuGame {
+                    if self.manicGame.isNDSHomeMenuGame || self.manicGame.isDSiHomeMenuGame || self.manicGame.isDOSHomeMenuGame {
                         LibretroCore.sharedInstance().loadWithoutContent(corePath)
                     } else {
                         LibretroCore.sharedInstance().loadGame(manicGame.romUrl.path, corePath: corePath, completion: compltion)
@@ -4463,7 +4623,7 @@ extension PlayViewController: GameViewControllerDelegate {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {
             return false
         }
-        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || ShadersListView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow || FBNeoCheatCodeListView.isShow || J2MESettingView.isShow) ? false : true
+        return (GameSettingView.isShow || GameInfoView.isShow || CheatCodeListView.isShow || SkinSettingsView.isShow || ShadersListView.isShow || ControllersSettingView.isShow || GameSettingView.isEditingShow || WebViewController.isShow || FlexSkinSettingViewController.isShow || RetroAchievementsListViewController.isShow || CheevosPopupView.isShow || GameplayManualsView.isShow || FBNeoCheatCodeListView.isShow || J2MESettingView.isShow || CoreConfigsView.isShow) ? false : true
     }
     
 }
@@ -4514,6 +4674,13 @@ extension PlayViewController {
     static var j2meView: J2MEView? {
         if let currentPlayViewController {
             return currentPlayViewController.j2meCore
+        }
+        return nil
+    }
+    
+    static var currentGameType: GameType? {
+        if let currentPlayViewController {
+            return currentPlayViewController.manicGame.gameType
         }
         return nil
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 #if FRAMEWORK || STATIC_LIBRARY || SWIFT_PACKAGE
 import ZIPFoundation
@@ -75,6 +76,8 @@ public struct ControllerSkin: ControllerSkinBase
     public var isSwapScreen: Bool = false
     public var isPlayCase: Bool = false
     
+    public var soundID: SystemSoundID? = nil
+    
     let archive: Archive
     
     public init?(fileURL: URL, initGameType: GameType? = nil, supportGameTypes: [GameType]? = nil)
@@ -142,6 +145,28 @@ public struct ControllerSkin: ControllerSkinBase
             
             return nil
         }
+        
+        do {
+            if let soundEntry = archive["sound.caf"] {
+                let soundData = try archive.extract(soundEntry)
+                var soundID: SystemSoundID = 0
+                let soundPath = NSTemporaryDirectory().appending("/sound.caf")
+                let soundUrl = URL(fileURLWithPath: soundPath)
+                if FileManager.default.fileExists(atPath: soundPath) {
+                    try FileManager.default.removeItem(atPath: soundPath)
+                }
+                try soundData.write(to: soundUrl)
+                if FileManager.default.fileExists(atPath: soundPath) {
+                    AudioServicesCreateSystemSoundID(soundUrl as CFURL, &soundID)
+                    if soundID != 0 {
+                        self.soundID = soundID
+                    }
+                }
+            }
+        } catch {
+            print("Delta Core create sound failed: \(error)")
+        }
+        
     }
     
     // Sometimes, recursion really is the best solution ¯\_(ツ)_/¯

@@ -69,8 +69,7 @@ extension FilesImporter {
         
         //处理zip包
         handleZip(urls: urls, silentMode: silentMode) { unzipUrls in
-            var urls = urls.filter({ !FileType.zip.extensions.contains($0.pathExtension) }) + unzipUrls
-            
+            var urls = urls.filter({ !FileType.zip.extensions.contains($0.pathExtension.lowercased()) }) + unzipUrls
             //先处理cue和m3u
             let (multiFileResultUrls, multiFileResultError, multiFileResultItems) = handleMultiFiles(urls: urls)
             let (m3uResultUrls, m3uResultError, m3uResultM3uItems, m3uResultMultiFileItems) = handleM3uFiles(urls: multiFileResultUrls, multiFileItems: multiFileResultItems)
@@ -722,115 +721,160 @@ extension FilesImporter {
     static func handleZip(urls: [URL], silentMode: Bool, completion: @escaping ([URL])->Void) {
         DispatchQueue.global().async {
             var results = [URL]()
+            var needToHandleUrls = [URL]()
+            
+            
             for url in urls {
-                if FileType.zip.extensions.contains(url.pathExtension) {
-                    var innerResults = [URL]()
-                    if url.pathExtension.lowercased() == "zip" {
-                        
-                        //街机ROM则不解压
-                        if MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
-                            results.append(url)
-                            continue
-                        }
-                        
-                        //先检查zip里面有没有支持的文件类型
-                        if SSZipArchive.isFilePasswordProtected(atPath: url.path) {
-                            //加密文件先不处理
-                            if !silentMode {
-                                UIView.makeToast(message: R.string.localizable.notSupportPasswordZip(url.lastPathComponent))
+                if (url.pathExtension.lowercased() == "zip" || url.pathExtension.lowercased() == "7z") && MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+                    results.append(url)
+                    continue
+                }
+                
+                
+                if url.pathExtension.lowercased() == "7z"  {
+                    var sevenZipSnnerResults = [URL]()
+                    do {
+                        Log.debug("开始解压7z")
+                        let archivePath = try Path(url.path)
+                        let archivePathInStream = try InStream(path: archivePath)
+                        let decoder = try Decoder(stream: archivePathInStream, fileType: .sevenZ)
+                        let _ = try decoder.open()
+                        let numberOfArchiveItems = try decoder.count()
+                        for itemIndex in 0..<numberOfArchiveItems {
+                            let item = try decoder.item(at: itemIndex)
+                            if item.isDir {
+                                continue
                             }
-                            continue
-                        } else {
-                            //未加密
-                            if let archive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
-                                for entry in archive {
-                                    if entry.type == .file, let _ = FileType(fileExtension: entry.path.pathExtension) {
-                                        if entry.path.lastPathComponent.hasPrefix(".") {
-                                            //跳过隐藏文件夹
-                                            continue
-                                        }
-                                        do {
-                                            let dstPath = Constants.Path.ZipWorkSpace.appendingPathComponent(entry.decodedPath)
-                                            let destUrl = URL(fileURLWithPath: dstPath)
-                                            if FileManager.default.fileExists(atPath: dstPath) {
-                                                try FileManager.safeRemoveItem(at: destUrl)
+                            let path = try item.path().description
+                            if path.lastPathComponent.hasPrefix(".") {
+                                //跳过隐藏文件夹
+                                continue
+                            }
+                            let itemArray = try ItemArray(capacity: 1)
+                            if let _ = FileType(fileExtension: path.pathExtension) {
+                                try itemArray.add(item: item)
+                            } else {
+                                continue
+                            }
+                            let dstPath = Constants.Path.ZipWorkSpace.appendingPathComponent(path)
+                            Log.debug("构建路径:\(dstPath)")
+                            let destUrl = URL(fileURLWithPath: dstPath)
+                            if FileManager.default.fileExists(atPath: dstPath) {
+                                try FileManager.safeRemoveItem(at: destUrl)
+                            }
+                            if !FileManager.default.fileExists(atPath: dstPath.deletingLastPathComponent) {
+                                try FileManager.default.createDirectory(at: URL(fileURLWithPath: dstPath.deletingLastPathComponent), withIntermediateDirectories: true)
+                            }
+                            let _ = try decoder.extract(items: itemArray, to: Path(Constants.Path.ZipWorkSpace))
+                            Log.debug("解压成功!")
+                            sevenZipSnnerResults.append(destUrl)
+                        }
+                        results.append(contentsOf: sevenZipSnnerResults)
+                    } catch {
+                        Log.debug("解压7z失败:\(error)")
+                        DispatchQueue.main.async {
+                            UIView.makeToast(message: R.string.localizable.sevenZipDecompressError())
+                        }
+                    }
+                    if sevenZipSnnerResults.isEmpty, !silentMode {
+                        DispatchQueue.main.async {
+                            UIView.makeToast(message: R.string.localizable.noSupportInZip(url.lastPathComponent))
+                        }
+                    }
+                } else if url.pathExtension.lowercased() == "zip" {
+                    needToHandleUrls.append(url)
+                }
+            }
+            
+            if needToHandleUrls.count > 0 {
+                DispatchQueue.main.async {
+                    UIView.hideLoading()
+                    ZipHandlerView.show(urls: needToHandleUrls) { unzipUrls, noActionUrls in
+                        results.append(contentsOf: noActionUrls)
+                        if unzipUrls.count > 0 {
+                            if !silentMode {
+                                UIView.makeLoading()
+                            }
+                            
+                            DispatchQueue.global().async {
+                                for url in unzipUrls {
+                                    if FileType.zip.extensions.contains(url.pathExtension) {
+                                        var zipInnerResults = [URL]()
+                                        if url.pathExtension.lowercased() == "zip" {
+                                            
+                                            //街机ROM则不解压
+                                            if MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+                                                results.append(url)
+                                                continue
                                             }
-                                            _ = try archive.extract(entry, to: destUrl)
-                                            innerResults.append(destUrl)
-                                        } catch {
-                                            if !silentMode {
-                                                UIView.makeToast(message: R.string.localizable.unzipFailed(entry.path.lastPathComponent))
+                                            
+                                            //先检查zip里面有没有支持的文件类型
+                                            if SSZipArchive.isFilePasswordProtected(atPath: url.path) {
+                                                //加密文件先不处理
+                                                if !silentMode {
+                                                    UIView.makeToast(message: R.string.localizable.notSupportPasswordZip(url.lastPathComponent))
+                                                }
+                                                continue
+                                            } else {
+                                                //未加密
+                                                if let archive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
+                                                    for entry in archive {
+                                                        if entry.type == .file, let _ = FileType(fileExtension: entry.path.pathExtension) {
+                                                            if entry.path.lastPathComponent.hasPrefix(".") {
+                                                                //跳过隐藏文件夹
+                                                                continue
+                                                            }
+                                                            do {
+                                                                let dstPath = Constants.Path.ZipWorkSpace.appendingPathComponent(entry.decodedPath)
+                                                                let destUrl = URL(fileURLWithPath: dstPath)
+                                                                if FileManager.default.fileExists(atPath: dstPath) {
+                                                                    try FileManager.safeRemoveItem(at: destUrl)
+                                                                }
+                                                                _ = try archive.extract(entry, to: destUrl)
+                                                                zipInnerResults.append(destUrl)
+                                                            } catch {
+                                                                if !silentMode {
+                                                                    DispatchQueue.main.async {
+                                                                        UIView.makeToast(message: R.string.localizable.unzipFailed(entry.path.lastPathComponent))
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    results.append(contentsOf: zipInnerResults)
+                                                } else {
+                                                    if !silentMode {
+                                                        DispatchQueue.main.async {
+                                                            UIView.makeToast(message: R.string.localizable.unzipFailed(url.lastPathComponent))
+                                                        }
+                                                    }
+                                                    continue
+                                                }
+                                            }
+                                        }
+                                        if zipInnerResults.isEmpty, !silentMode {
+                                            DispatchQueue.main.async {
+                                                UIView.makeToast(message: R.string.localizable.noSupportInZip(url.lastPathComponent))
                                             }
                                         }
                                     }
                                 }
-                                results.append(contentsOf: innerResults)
-                            } else {
-                                if !silentMode {
-                                    UIView.makeToast(message: R.string.localizable.unzipFailed(url.lastPathComponent))
+                                DispatchQueue.main.async {
+                                    completion(results)
+                                    return
                                 }
-                                continue
                             }
-                        }
-                    } else if url.pathExtension.lowercased() == "7z"  {
-                        
-                        //街机ROM则不解压
-                        if MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
-                            results.append(url)
-                            continue
-                        }
-                        
-                        do {
-                            Log.debug("开始解压7z")
-                            let archivePath = try Path(url.path)
-                            let archivePathInStream = try InStream(path: archivePath)
-                            let decoder = try Decoder(stream: archivePathInStream, fileType: .sevenZ)
-                            let _ = try decoder.open()
-                            let numberOfArchiveItems = try decoder.count()
-                            for itemIndex in 0..<numberOfArchiveItems {
-                                let item = try decoder.item(at: itemIndex)
-                                if item.isDir {
-                                    continue
-                                }
-                                let path = try item.path().description
-                                if path.lastPathComponent.hasPrefix(".") {
-                                    //跳过隐藏文件夹
-                                    continue
-                                }
-                                let itemArray = try ItemArray(capacity: 1)
-                                if let _ = FileType(fileExtension: path.pathExtension) {
-                                    try itemArray.add(item: item)
-                                } else {
-                                    continue
-                                }
-                                let dstPath = Constants.Path.ZipWorkSpace.appendingPathComponent(path)
-                                Log.debug("构建路径:\(dstPath)")
-                                let destUrl = URL(fileURLWithPath: dstPath)
-                                if FileManager.default.fileExists(atPath: dstPath) {
-                                    try FileManager.safeRemoveItem(at: destUrl)
-                                }
-                                if !FileManager.default.fileExists(atPath: dstPath.deletingLastPathComponent) {
-                                    try FileManager.default.createDirectory(at: URL(fileURLWithPath: dstPath.deletingLastPathComponent), withIntermediateDirectories: true)
-                                }
-                                let _ = try decoder.extract(items: itemArray, to: Path(Constants.Path.ZipWorkSpace))
-                                Log.debug("解压成功!")
-                                innerResults.append(destUrl)
-                            }
-                            results.append(contentsOf: innerResults)
-                        } catch {
-                            Log.debug("解压7z失败:\(error)")
-                            UIView.makeToast(message: R.string.localizable.sevenZipDecompressError())
-                        }
-                    }
-                    if innerResults.isEmpty {
-                        if !silentMode {
-                            UIView.makeToast(message: R.string.localizable.noSupportInZip(url.lastPathComponent))
+                        } else {
+                            completion(results)
+                            return
                         }
                     }
                 }
-            }
-            DispatchQueue.main.async {
-                completion(results)
+            } else {
+                DispatchQueue.main.async {
+                    completion(results)
+                    return
+                }
             }
         }
     }

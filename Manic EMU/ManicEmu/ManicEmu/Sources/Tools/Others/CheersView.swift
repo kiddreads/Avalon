@@ -60,8 +60,14 @@ struct CheersView: View {
         }
     }
     
-    static func makeNormalCheers() {
-        if let window = ApplicationSceneDelegate.applicationWindow {
+    static func makeNormalCheers(userTopWindow: Bool = false) {
+        let window = userTopWindow ? (ApplicationSceneDelegate.applicationScene?.windows.last(where: {
+            $0.isHidden == false &&
+            $0.rootViewController != nil &&
+            (String(describing: type(of: $0)) == "SheetWindow" || String(describing: type(of: $0)) == "AlertWindow" || $0.windowLevel == .normal)
+        })) : ApplicationSceneDelegate.applicationWindow
+        
+        if let window {
             let vc = UIHostingController(rootView: CheersView().edgesIgnoringSafeArea(.all))
             if let cheersView = vc.view {
                 

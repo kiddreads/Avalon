@@ -21,12 +21,15 @@ class ManicApplication: UIApplication {
     
     override func sendEvent(_ event: UIEvent) {
         super.sendEvent(event)
-//        LibretroCore.sharedInstance().send(event)
+        if PlayViewController.isGaming, PlayViewController.currentGameType == .dos {
+            LibretroCore.sharedInstance().send(event)
+        }
     }
     
-    // 处理键盘事件 - 对应Objective-C中的handleKeyUIEvent方法
+    // 处理键盘事件 - 对应Objective-C中的handleKeyUIEvent方法 主要将键盘事件传递给DeltaCore
     override func handleKeyboardKey(for event: UIEvent) {
         super.handleKeyboardKey(for: event)
+        
         if #available(iOS 26.0, *) {
             guard let firstResponder = UIResponder.firstResponder as? ControllerView else { return }
             // 检查是否是重复的时间戳，避免重复处理
@@ -40,5 +43,23 @@ class ManicApplication: UIApplication {
         }
     }
     
+    
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if let event, PlayViewController.isGaming, PlayViewController.currentGameType == .dos {
+            for press in presses {
+                LibretroCore.sharedInstance().handle(press, with: event, down: true)
+            }
+        }
+        super.pressesBegan(presses, with: event)
+    }
+    
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if let event, PlayViewController.isGaming, PlayViewController.currentGameType == .dos {
+            for press in presses {
+                LibretroCore.sharedInstance().handle(press, with: event, down: false)
+            }
+        }
+        super.pressesEnded(presses, with: event)
+    }
     
 }
