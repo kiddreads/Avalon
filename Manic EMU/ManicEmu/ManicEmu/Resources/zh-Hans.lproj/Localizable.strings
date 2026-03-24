@@ -908,3 +908,6 @@
 "InsertDiscFailed" = "插入光盘失败";
 "GenerateHomeMenu" = "创建 Home Menu";
 "SkinSoundEffects" = "皮肤音效";
+"FirstAnniversary" = "谢谢你一直在这里\n我们写了一些话，想给你。";
+"ApirlFoolsDayTitle" = "咦，Manic EMU 出问题了吗？";
+"ApirlFoolsDayDetail" = "别担心！\n只是开个小玩笑——愚人节快乐！\n\n关闭弹窗后就会恢复正常。";

@@ -975,6 +975,14 @@ extension GameListView: UICollectionViewDelegate {
             }
             return true
         }
+        
+        if CelebrationView.prank2026AprilFools() {
+            if let cell = collectionView.cellForItem(at: indexPath) {
+                cell.shake()
+            }
+            return false
+        }
+        
         if let game = getGame(at: indexPath) {
             if game.isNDSHomeMenuGame {
                 let biosCompletion = game.gameType.isNDSBiosComplete()
@@ -1318,6 +1326,16 @@ extension GameListView: SectionIndexViewDataSource, SectionIndexViewDelegate {
         sectionIndexView.showCurrentItemIndicator()
         sectionIndexView.impact()
         collectionView.panGestureRecognizer.isEnabled = false
+        let numberOfSections = collectionView.numberOfSections
+        if numberOfSections < section {
+            return
+        }
+        if collectionView.numberOfItems(inSection: section) == 0 {
+            if let sectionWithItems = nearestSectionWithItems(from: section) {
+                collectionView.scrollToItem(at: IndexPath(row: 0, section: sectionWithItems), at: .top, animated: true)
+            }
+            return
+        }
         collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: true)
     }
     
@@ -1330,5 +1348,39 @@ extension GameListView: SectionIndexViewDataSource, SectionIndexViewDelegate {
     
     func sectionIndexViewDidSelectSearch(_ sectionIndexView: SectionIndexView) {
         collectionView.scrollToTop()
+    }
+    
+    //从指定 section 向两边扩散查找最近的非空 section（双向 BFS）
+    private func nearestSectionWithItems(from section: Int) -> Int? {
+        let total = collectionView.numberOfSections
+        guard total > 0, section >= 0, section < total else { return nil }
+        
+        // 如果当前 section 本身就有
+        if collectionView.numberOfItems(inSection: section) > 0 {
+            return section
+        }
+        
+        var offset = 1
+        
+        while section - offset >= 0 || section + offset < total {
+            
+            // 左边
+            let left = section - offset
+            if left >= 0,
+               collectionView.numberOfItems(inSection: left) > 0 {
+                return left
+            }
+            
+            // 右边
+            let right = section + offset
+            if right < total,
+               collectionView.numberOfItems(inSection: right) > 0 {
+                return right
+            }
+            
+            offset += 1
+        }
+        
+        return nil
     }
 }

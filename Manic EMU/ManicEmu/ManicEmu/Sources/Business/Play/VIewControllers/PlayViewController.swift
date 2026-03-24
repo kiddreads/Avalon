@@ -735,13 +735,15 @@ class PlayViewController: GameViewController {
                 make.top.equalTo(gameView.snp.bottom).offset(-9)
             } else if manicGame.gameType == .j2me {
                 make.top.equalTo(gameView.snp.bottom).offset(2)
-            } else if manicGame.gameType == .dos {
+            } else if manicGame.gameType == .dos || manicGame.gameType == .doom {
                 if UIDevice.isPad {
                     make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
                 } else if UIDevice.isSmallScreenPhone {
                     make.top.equalTo(gameView.snp.bottom).offset(17)
-                } else {
+                } else if UIDevice.isProMaxPhone {
                     make.top.equalTo(gameView.snp.bottom).offset(22)
+                } else {
+                    make.top.equalTo(gameView.snp.bottom).offset(19)
                 }
             } else {
                 make.top.equalTo(gameView.snp.bottom)
@@ -751,7 +753,7 @@ class PlayViewController: GameViewController {
             } else {
                 make.leading.trailing.equalTo(gameView)
             }
-            if manicGame.gameType == .j2me || manicGame.gameType == .dos {
+            if manicGame.gameType == .j2me || manicGame.gameType == .dos || manicGame.gameType == .doom {
                 make.height.equalTo(30)
             } else {
                 make.height.equalTo(Constants.Size.ItemHeightMid)

@@ -43,7 +43,11 @@ extension SheetTarget {
             sheetSize = CGSize(width: width, height: height)
         } else {
             let width = 500.0
-            var height = GameSettingView.estimatedHeight(for: width)
+            var height = Constants.Size.WindowHeight*3/4
+            if isForGameMenu {
+                height = GameSettingView.estimatedHeight(for: width)
+            }
+            
             let maxHeight = Constants.Size.WindowHeight - Constants.Size.ItemHeightHuge*2
             if height > maxHeight {
                 height = maxHeight

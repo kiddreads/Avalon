@@ -98,12 +98,20 @@ struct CheersView: View {
     
     
     @State private var trigger: Int = 0
-        
-        var body: some View {
-            Button(" "){}
-                .confettiCannon(trigger: $trigger, num: 100, confettiSize: 22.5, rainHeight: Constants.Size.WindowHeight, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 180), radius: Constants.Size.WindowWidth/(UIDevice.isPad ? 2 : 1))
-                .onAppear {
-                    trigger += 1
-                }
+    
+    var body: some View {
+        Button(" "){}
+            .confettiCannon(trigger: $trigger, num: 100, confettiSize: 22.5, rainHeight: Constants.Size.WindowHeight, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 180), radius: customRadius)
+            .onAppear {
+                trigger += 1
+            }
+    }
+    
+    private var customRadius: CGFloat {
+        var radius = Constants.Size.WindowWidth/(UIDevice.isPad ? 2 : 1)
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            radius = radius/2
         }
+        return radius
+    }
 }

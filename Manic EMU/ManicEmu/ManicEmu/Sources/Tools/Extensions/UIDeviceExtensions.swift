@@ -99,6 +99,10 @@ extension UIDevice {
         return Device.size().rawValue < Size.screen5_8Inch.rawValue
     }
     
+    static var isProMaxPhone: Bool {
+        return isPhone && Device.size().rawValue >= Size.screen6_3Inch.rawValue
+    }
+    
     static var currentOrientation: UIInterfaceOrientation {
         UIWindow.applicationWindow?.windowScene?.interfaceOrientation ?? .portrait
     }

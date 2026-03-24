@@ -373,6 +373,7 @@ struct Constants {
         static let HasImportedPlayCaseSkin = "HasImportedPlayCaseSkin"
         static let HasShowFreeJ2meAlert = "HasShowFreeJ2meAlert"
         static let HasShowFirstAnniversaryLetter = "HasShowFirstAnniversaryLetter"
+        static let FoolsDayTrickCount = "FoolsDayTrickCount"
     }
     
     struct Font {

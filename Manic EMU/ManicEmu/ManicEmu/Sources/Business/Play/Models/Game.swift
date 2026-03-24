@@ -177,8 +177,6 @@ class Game: Object, ObjectUpdatable {
             return URL(fileURLWithPath: Constants.Path.PokeMini.appendingPathComponent("\(name).eep"))
         } else if gameType == .ps1 {
             return URL(fileURLWithPath: Constants.Path.BeetlePSXHW.appendingPathComponent("\(name).srm"))
-        } else if gameType == .doom {
-            return URL(fileURLWithPath: Constants.Path.PrBoom.appendingPathComponent(name))
         } else if gameType == .arcade {
             return URL(fileURLWithPath: Constants.Path.MAME.appendingPathComponent("\(name).srm"))
         } else if gameType == .a2600 {

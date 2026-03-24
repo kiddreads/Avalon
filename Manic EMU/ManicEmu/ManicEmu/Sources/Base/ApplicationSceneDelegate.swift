@@ -57,9 +57,9 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     })
                     
-//                    DispatchQueue.main.asyncAfter(delay: 3) {
-//                        LetterView.showFirstAnniversaryLetterIfNeed()
-//                    }
+                    DispatchQueue.main.asyncAfter(delay: 3) {
+                        CelebrationView.showFirstAnniversaryLetterIfNeed()
+                    }
                 }
             }
             let dropInteraction = UIDropInteraction(delegate: self)

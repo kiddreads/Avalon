@@ -5,7 +5,7 @@ PODS:
   - CloudServiceKit (1.0.4):
     - OAuthSwift
   - CollectionViewPagingLayout (1.1.0)
-  - Device (3.7.0)
+  - Device (3.8.0)
   - DNSPageView (2.2.0):
     - CollectionViewPagingLayout
     - SnapKit
@@ -193,7 +193,7 @@ DEPENDENCIES:
   - Closures (from `../Closures/Xcode/Closures`)
   - CloudServiceKit (from `../CloudServiceKit`)
   - CollectionViewPagingLayout (from `../CollectionViewPagingLayout`)
-  - Device (from `https://github.com/LeeAoshuang/Device.git`, branch `master`)
+  - Device (from `https://github.com/Daiuno/Device.git`, branch `master`)
   - DNSPageView (from `../DNSPageView`)
   - Fireworks (from `https://github.com/tomkowz/fireworks.git`, branch `master`)
   - FLEX
@@ -283,7 +283,7 @@ EXTERNAL SOURCES:
     :path: "../CollectionViewPagingLayout"
   Device:
     :branch: master
-    :git: https://github.com/LeeAoshuang/Device.git
+    :git: https://github.com/Daiuno/Device.git
   DNSPageView:
     :path: "../DNSPageView"
   Fireworks:
@@ -314,8 +314,8 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Device:
-    :commit: acbc1606d8fa7daa843dd65a60d8b1ae57b3536a
-    :git: https://github.com/LeeAoshuang/Device.git
+    :commit: d0bfd1fb1d9793c92c44137035c64ed67cc3e1c4
+    :git: https://github.com/Daiuno/Device.git
   Fireworks:
     :commit: c54a983649510ddaf1ff315000626eb43486410b
     :git: https://github.com/tomkowz/fireworks.git
@@ -326,7 +326,7 @@ SPEC CHECKSUMS:
   Closures: f517d860081aa7a4e9773a1d89ccbf7b44ac6adf
   CloudServiceKit: 4a0e2c0d9135e3f479f9848cea023ac27c61066c
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
-  Device: acf18785fd7359aca095040e9c4745caf33b9cf1
+  Device: 382adf2f1452045d22451a0e38b5702a85f47298
   DNSPageView: d3ce7bd62b9e7bde1614d1ae07a525cc056887df
   Fireworks: 62a6f2b8b693a2a8420702cbaee36c0fb0f06d6c
   FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
@@ -376,6 +376,6 @@ SPEC CHECKSUMS:
   VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 63d510ee083b754e40a0382fc4d0d289b0f67886
+PODFILE CHECKSUM: 18570bf086cc3e1bff7a0fee93f2d3d9fe696a9e
 
 COCOAPODS: 1.16.2

@@ -86,7 +86,7 @@
 		572C5C642F6C30CE00776F8C /* LibretroDisk.h in Headers */ = {isa = PBXBuildFile; fileRef = 572C5C622F6C30CE00776F8C /* LibretroDisk.h */; };
 		572C5C652F6C30CE00776F8C /* LibretroDisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 572C5C632F6C30CE00776F8C /* LibretroDisk.m */; };
 		572C5CB42F6E983600776F8C /* J2MENetworkBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */; };
-		572C5CD52F6EDB9200776F8C /* LetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CD32F6EDB8800776F8C /* LetterView.swift */; };
+		572C5CD52F6EDB9200776F8C /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CD32F6EDB8800776F8C /* CelebrationView.swift */; };
 		57399AC52E40ACE100AB73DD /* PSXSBIImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */; };
 		57399AC82E40AFBA00AB73DD /* PSXSBICollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */; };
 		57399ACF2E40BB4D00AB73DD /* PSXSBIDescCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */; };
@@ -814,6 +814,7 @@
 		57E9632A2D6B01450022914C /* ImportFileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E963292D6B013B0022914C /* ImportFileCollectionViewCell.swift */; };
 		57E9632C2D6B06320022914C /* ImportFooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E9632B2D6B06090022914C /* ImportFooterCollectionReusableView.swift */; };
 		57E9632E2D6B0B8A0022914C /* SparkleSeperatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E9632D2D6B0B7D0022914C /* SparkleSeperatorView.swift */; };
+		57EB89E72F6FF89200EDF9AF /* letter.json in Resources */ = {isa = PBXBuildFile; fileRef = 57EB89E62F6FF89200EDF9AF /* letter.json */; };
 		57EC6A6D2D7FC1E4002920F0 /* GameSettingSortCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EC6A6C2D7FC1E3002920F0 /* GameSettingSortCollectionReusableView.swift */; };
 		57EC6AA62D801F56002920F0 /* GamesListBlankSlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EC6AA52D801F4D002920F0 /* GamesListBlankSlateView.swift */; };
 		57EC6AB02D80321B002920F0 /* CheatCodeBlankSlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EC6AAF2D803210002920F0 /* CheatCodeBlankSlateView.swift */; };
@@ -1056,7 +1057,7 @@
 		572C5C622F6C30CE00776F8C /* LibretroDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroDisk.h; sourceTree = "<group>"; };
 		572C5C632F6C30CE00776F8C /* LibretroDisk.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroDisk.m; sourceTree = "<group>"; };
 		572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2MENetworkBridge.swift; sourceTree = "<group>"; };
-		572C5CD32F6EDB8800776F8C /* LetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterView.swift; sourceTree = "<group>"; };
+		572C5CD32F6EDB8800776F8C /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationView.swift; sourceTree = "<group>"; };
 		57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIImportViewController.swift; sourceTree = "<group>"; };
 		57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBICollectionCell.swift; sourceTree = "<group>"; };
 		57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIDescCollectionCell.swift; sourceTree = "<group>"; };
@@ -1946,6 +1947,7 @@
 		57E963292D6B013B0022914C /* ImportFileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFileCollectionViewCell.swift; sourceTree = "<group>"; };
 		57E9632B2D6B06090022914C /* ImportFooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		57E9632D2D6B0B7D0022914C /* SparkleSeperatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleSeperatorView.swift; sourceTree = "<group>"; };
+		57EB89E62F6FF89200EDF9AF /* letter.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = letter.json; sourceTree = "<group>"; };
 		57EC6A6C2D7FC1E3002920F0 /* GameSettingSortCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingSortCollectionReusableView.swift; sourceTree = "<group>"; };
 		57EC6AA52D801F4D002920F0 /* GamesListBlankSlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesListBlankSlateView.swift; sourceTree = "<group>"; };
 		57EC6AAF2D803210002920F0 /* CheatCodeBlankSlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatCodeBlankSlateView.swift; sourceTree = "<group>"; };
@@ -4420,7 +4422,7 @@
 		A561F94D257DCB5200E800A8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				572C5CD32F6EDB8800776F8C /* LetterView.swift */,
+				572C5CD32F6EDB8800776F8C /* CelebrationView.swift */,
 				57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */,
 				573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */,
 				572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */,
@@ -4543,6 +4545,7 @@
 		A5A0020724556F1E006E0F0E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				57EB89E62F6FF89200EDF9AF /* letter.json */,
 				57E0CCC62D9075110027FB8C /* file_icon.png */,
 				A5A001FB24555A5F006E0F0E /* Assets.xcassets */,
 				A5A001FD24555A5F006E0F0E /* LaunchScreen.storyboard */,
@@ -4904,6 +4907,7 @@
 				A5DE1F1F256BC7F10099425B /* Localizable.strings in Resources */,
 				A5DE1F18256BC78B0099425B /* InfoPlist.strings in Resources */,
 				A5A001FC24555A5F006E0F0E /* Assets.xcassets in Resources */,
+				57EB89E72F6FF89200EDF9AF /* letter.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5449,7 +5453,7 @@
 				5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */,
 				5781F4612EED62E200916D8B /* ShadersListCell.swift in Sources */,
 				5770069C2D44BDEA00762E8F /* GameCollectionViewCell.swift in Sources */,
-				572C5CD52F6EDB9200776F8C /* LetterView.swift in Sources */,
+				572C5CD52F6EDB9200776F8C /* CelebrationView.swift in Sources */,
 				577005782D3D60B700762E8F /* GameCheat.swift in Sources */,
 				574ABEBC2E609FE60045F76E /* GBA.swift in Sources */,
 				5754D8932E2751CA001EA5ED /* WFC.swift in Sources */,

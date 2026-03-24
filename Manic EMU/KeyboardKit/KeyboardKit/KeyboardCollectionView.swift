@@ -288,11 +288,12 @@ extension UICollectionView: SelectableCollection {
     }
 
     var indexPathsForFocusedOrSelectedItems: [IndexPath] {
-        if UIFocusSystem(for: self) != nil {
-            return preferredFocusEnvironments.compactMap { $0 as? UICollectionViewCell }.compactMap { indexPath(for: $0) }
-        } else {
-            return indexPathsForSelectedItems ?? []
-        }
+//        if UIFocusSystem(for: self) != nil {
+//            return preferredFocusEnvironments.compactMap { $0 as? UICollectionViewCell }.compactMap { indexPath(for: $0) }
+//        } else {
+//            return indexPathsForSelectedItems ?? []
+//        }
+        return indexPathsForSelectedItems ?? []
     }
 
     func notifyDelegateOfSelectionChange() {
