@@ -226,13 +226,16 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
     func setSimBlowing(start: Bool) {
         threeDSCore.setSimBlowing(start: start)
     }
+
+    func setFrameLimit(_ limit: UInt16) {
+        threeDSCore.setFrameLimit(limit)
+    }
     
     func jumpToHome() {
         threeDSCore.jumpToHome()
     }
     
     func loadAmiibo(path: String) {
-        //https://drive.google.com/drive/folders/1Rto0H_1cATSvgrFk0Ku6HnDHQwx_nnx_?usp=sharing
         threeDSCore.loadAmiibo(path: path)
     }
     
@@ -476,13 +479,13 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
         }
     }
     
-    func updateViews(topRect: CGRect, bottomRect: CGRect) {
+    func updateViews(topRect: CGRect, bottomRect: CGRect, isAirPlay: Bool = false) {
         self.topRect = topRect
         self.bottomRect = bottomRect
         updateConfig(buildLayoutConfig())
         DispatchQueue.main.asyncAfter(delay: 0.75) {
             if let metalView = self.metalView {
-                self.threeDSCore.orientationChange(with: UIDevice.currentOrientation, using: metalView)
+                self.threeDSCore.orientationChange(with: isAirPlay ? .landscapeLeft : UIDevice.currentOrientation, using: metalView)
             }
         }
     }

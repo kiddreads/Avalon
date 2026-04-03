@@ -774,4 +774,13 @@ static NSString *ThreeDSSdmcDir = nil;
     Settings::values.simBlowing = start;
 }
 
+- (void)setFrameLimit:(uint16_t)limit {
+    const bool is_normal_speed = (limit == 100);
+    Settings::values.frame_limit.SetValue(limit);
+    // 快进时需要关闭VSync，否则Vulkan FIFO present会阻塞在60fps
+    Settings::values.use_vsync_new.SetValue(is_normal_speed);
+    // 快进时启用帧跳过，跳过部分帧的GPU渲染以提升速度
+    Settings::values.frame_skip = !is_normal_speed;
+}
+
 @end

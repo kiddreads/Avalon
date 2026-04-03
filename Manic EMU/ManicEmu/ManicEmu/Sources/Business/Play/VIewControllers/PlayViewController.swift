@@ -289,17 +289,7 @@ class PlayViewController: GameViewController {
                     launchGameByDismissOtherVC()
                 }
             }
-            if game.isCitra3DS, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShow3DSPlayAlert) {
-                UIView.makeAlert(title: R.string.localizable.threeDSBetaAlertTitle(),
-                                 detail: R.string.localizable.threeDSBetaAlertDetail(),
-                                 detailAlignment: .left,
-                                 cancelTitle: R.string.localizable.confirmTitle(), cancelAction: {
-                    UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShow3DSPlayAlert)
-                    showPlayView()
-                }, hideAction: {
-                    UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShow3DSPlayAlert)
-                });
-            } else if game.gameType == .ss, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowSSPlayAlert), game.isBIOSMissing(required: false), game.defaultCore == 1 {
+            if game.gameType == .ss, !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowSSPlayAlert), game.isBIOSMissing(required: false), game.defaultCore == 1 {
                 UIView.makeAlert(title: R.string.localizable.saturnBiosAlertTitle(),
                                  detail: R.string.localizable.saturnBiosAlertDetail(),
                                  detailAlignment: .left,
@@ -1222,10 +1212,9 @@ extension PlayViewController {
                         self.updateSkin()
                         //更新声音
                         self.updateAudio()
-                        if !self.manicGame.isCitra3DS {
-                            //设置速度
-                            self.updateFastforward(speed: self.manicGame.speed)
-                        }
+                        //设置速度
+                        self.updateFastforward(speed: self.manicGame.speed)
+                        
                         self.resumeEmulationAndHandleAudio()
                     }
                     topViewController()?.present(vc, animated: true)
@@ -1497,7 +1486,6 @@ extension PlayViewController {
                 UIView.makeToast(message: R.string.localizable.notAllowOnlineGame())
                 return true
             }
-            guard !manicGame.isCitra3DS else { return true }
             //快进
             if !PurchaseManager.isMember && item.fastForwardSpeed.rawValue > GameSetting.FastForwardSpeed.two.rawValue {
                 //超限了
@@ -2728,6 +2716,7 @@ extension PlayViewController {
                         enableJIT = false
                     } else {
                         enableJIT = true
+                        setupUniversalScript(gameType: ._3ds)
                     }
                 }
                 LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name,
@@ -3050,6 +3039,7 @@ extension PlayViewController {
                         enableJIT = false
                     } else {
                         enableJIT = true
+                        setupUniversalScript(gameType: ._3ds)
                     }
                 }
                 LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name,
@@ -3381,29 +3371,29 @@ extension PlayViewController {
     
     /// 更新AirPlay
     private func updateAirPlay() {
-        guard !manicGame.isCitra3DS else { return }
-
-        if manicGame.isLibretroType || manicGame.isJGenesisCore || manicGame.isJ2MECore {
-            if PurchaseManager.isMember, Settings.defalut.airPlay, ExternalSceneDelegate.isAirPlaying {
-                //执行全屏投屏
-                if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
-                    gameMetalView.removeFromSuperview()
-                    var dimensions = manicEmuCore?.videoManager.videoFormat.dimensions ?? CGSize(width: 480, height: 360)
-                    if manicGame.gameType == .ds || manicGame.isAzahar3DS {
-                        dimensions.height = dimensions.height/2
-                    }
-                    aiplayScaledDimensions = airPlayViewController.addLibretroView(gameMetalView, dimensions: dimensions, scalingType: Settings.defalut.airPlayScaling)
-                    updateDualScreenViews()
-                    updateNDSCursor()
+        if PurchaseManager.isMember, Settings.defalut.airPlay, ExternalSceneDelegate.isAirPlaying {
+            //执行全屏投屏
+            if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
+                gameMetalView.removeFromSuperview()
+                var dimensions = manicEmuCore?.videoManager.videoFormat.dimensions ?? CGSize(width: 480, height: 360)
+                if manicGame.gameType == .ds || manicGame.gameType == ._3ds {
+                    dimensions.height = dimensions.height/2
                 }
-            } else {
-                //不执行全屏投屏
-                if let _ = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
-                    gameMetalView.removeFromSuperview()
-                    view.insertSubview(gameMetalView, belowSubview: controllerView)
-                    updateLibretroViews()
-                    updateNDSCursor()
+                if manicGame.isCitra3DS {
+                    dimensions = dimensions.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale))
                 }
+                aiplayScaledDimensions = airPlayViewController.addLibretroView(gameMetalView, dimensions: dimensions, scalingType: Settings.defalut.airPlayScaling)
+                updateDualScreenViews()
+                updateNDSCursor()
+            }
+        } else {
+            //不执行全屏投屏
+            if let _ = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
+                gameMetalView.removeFromSuperview()
+                view.insertSubview(gameMetalView, belowSubview: controllerView)
+                updateLibretroViews()
+                updateCitra3DSViews()
+                updateNDSCursor()
             }
         }
     }
@@ -3574,10 +3564,13 @@ extension PlayViewController {
         guard let touchGameViewFrame = frames.touchGameViewFrame else { return }
         
         Log.debug("更新3DS视图 frames:\(frames)")
-        if let _ = gameMetalView {
-            //渲染视图已经生成
-            threeDSCore?.updateViews(topRect: frames.mainGameViewFrame,
-                                     bottomRect: touchGameViewFrame)
+        if let gameMetalView {
+            if gameMetalView.superview == view {
+                gameMetalView.snp.remakeConstraints { make in
+                    make.edges.equalTo(controllerView)
+                }
+            }
+            updateDualScreenViews()
         } else {
             threeDSCore = self.manicEmuCore?.manicCore.emulatorConnector as? ThreeDSEmulatorBridge
             gameMetalView = MTKView(frame: .zero, device: MTLCreateSystemDefaultDevice())
@@ -3586,6 +3579,10 @@ extension PlayViewController {
             gameMetalView.snp.makeConstraints { make in
                 make.edges.equalTo(controllerView)
             }
+            let jitEnable = LibretroCore.jitAvailable() ? manicGame.jit : false
+            if jitEnable {
+                setupUniversalScript(gameType: ._3ds)
+            }
             threeDSCore?.start(withGameURL: manicGame.romUrl,
                                metalView: gameMetalView as! MTKView,
                                metalViewFrame: frames.skinFrame,
@@ -3593,10 +3590,15 @@ extension PlayViewController {
                                bottomRect: touchGameViewFrame,
                                mute: !manicGame.volume,
                                resolution: manicGame.resolution,
-                               jit: LibretroCore.jitAvailable() ? manicGame.jit : false,
+                               jit: jitEnable,
                                accurateShaders: manicGame.accurateShaders,
                                language: manicGame.region-1,
                                renderRightEye: manicGame.renderRightEye)
+            DispatchQueue.main.asyncAfter(delay: 3.25) { [weak self] in
+                guard let self else { return }
+                self.updateFastforward(speed: self.manicGame.speed)
+                self.updateAirPlay()
+            }
             threeDSCore?.openKeyboardAction { hintText, keyboardType, maxTextSize in
                 ThreeDSKeyboardView.showForCitra(hintText: hintText, keyboardType: keyboardType, maxTextSize: maxTextSize)
             }
@@ -3863,7 +3865,7 @@ extension PlayViewController {
     }
 
     private func updateDualScreenViews() {
-        guard manicGame.gameType == .ds || manicGame.isAzahar3DS else { return }
+        guard manicGame.gameType == .ds || manicGame.gameType == ._3ds else { return }
         
         if ExternalSceneDelegate.isAirPlaying {
             let layoutType = Settings.defalut.airPlayLayout
@@ -3939,14 +3941,22 @@ extension PlayViewController {
             Log.debug(">>>>>传入核心的Layout:\(layout)")
             if manicGame.gameType == .ds {
                 LibretroCore.sharedInstance().setNDSCustomLayout(layout)
-            } else {
+            } else if manicGame.isAzahar3DS {
                 LibretroCore.sharedInstance().set3DSCustomLayout(layout)
+            } else if manicGame.isCitra3DS {
+                let frames = layout.components(separatedBy: ",").compactMap({ $0.cgFloat() })
+                if frames.count == 10 {
+                    let topRect = CGRect(x: frames[0], y: frames[1], width: frames[2], height: frames[3]).applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
+                    let bottomRect = CGRect(x: frames[4], y: frames[5], width: frames[6], height: frames[7]).applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
+                    threeDSCore?.updateViews(topRect: topRect,
+                                             bottomRect: bottomRect, isAirPlay: true)
+                }
             }
             let params = (manicGame.swapScreen ? (layout.components(separatedBy: ",")[0...3]) : (layout.components(separatedBy: ",")[4...7])).compactMap({ $0.cgFloat() })
             if params.count == 4 {
                 if manicGame.gameType == .ds {
                     DSEmulatorBridge.shared.touchInputFrame = CGRect(x: params[0], y: params[1], width: params[2], height: params[3]).applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
-                } else {
+                } else if manicGame.isAzahar3DS {
                     AzaharEmulatorBridge.shared.touchInputFrame = CGRect(x: params[0], y: params[1], width: params[2], height: params[3]).applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
                 }
                 
@@ -3956,6 +3966,14 @@ extension PlayViewController {
             guard let controllerSkin = controllerView.controllerSkin as? ControllerSkin else { return }
             guard let frames = controllerSkin.getFrames() else { return }
             guard let libretroViewFrame = getDualScreenViewFrame() else { return }
+            
+            if manicGame.isCitra3DS {
+                guard let touchGameViewFrame = frames.touchGameViewFrame else { return }
+                threeDSCore?.updateViews(topRect: frames.mainGameViewFrame,
+                                         bottomRect: touchGameViewFrame)
+                return
+            }
+            
             let skinframe = frames.skinFrame
             var topFrame = frames.mainGameViewFrame
             var layout = ""
@@ -3993,7 +4011,7 @@ extension PlayViewController {
             if manicGame.gameType == .ds {
                 LibretroCore.sharedInstance().setNDSCustomLayout(layout)
                 DSEmulatorBridge.shared.touchInputFrame = touchGameViewFrame
-            } else {
+            } else if manicGame.isAzahar3DS {
                 LibretroCore.sharedInstance().set3DSCustomLayout(layout)
                 AzaharEmulatorBridge.shared.touchInputFrame = touchGameViewFrame
             }
@@ -4501,6 +4519,22 @@ extension PlayViewController {
             case .five:
                 j2meCore?.fastForward(speed: 7)
             }
+        } else if manicGame.isCitra3DS {
+            #if !targetEnvironment(simulator)
+            let bridge = ThreeDSEmulatorBridge.shared
+            switch speed {
+            case .one:
+                bridge.setFrameLimit(100)
+            case .two:
+                bridge.setFrameLimit(120)
+            case .three:
+                bridge.setFrameLimit(150)
+            case .four:
+                bridge.setFrameLimit(200)
+            case .five:
+                bridge.setFrameLimit(300)
+            }
+            #endif
         }
     }
     
@@ -4637,7 +4671,7 @@ extension PlayViewController {
     static var isGaming: Bool { currentPlayViewController != nil }
     
     static var enableAirplay: Bool {
-        if let currentPlayViewController, !currentPlayViewController.manicGame.isCitra3DS {
+        if let currentPlayViewController {
             return true
         }
         return false

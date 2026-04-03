@@ -974,7 +974,7 @@ void JitShader::Compile(const std::array<u32, MAX_PROGRAM_CODE_LENGTH>* program_
     LOG_DEBUG(HW_GPU, "Compiled shader size={}", code_size);
 }
 
-JitShader::JitShader() : CodeBlock(MAX_SHADER_SIZE), CodeGenerator(CodeBlock::ptr()) {
+JitShader::JitShader() : CodeBlock(MAX_SHADER_SIZE), CodeGenerator(CodeBlock::wptr(), CodeBlock::ptr()) {
     unprotect();
     CompilePrelude();
 }

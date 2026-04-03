@@ -237,4 +237,8 @@ public struct ThreeDSCore : @unchecked Sendable {
     public func setSimBlowing(start: Bool) {
         threeDSObjC.setSimBlowing(start)
     }
+
+    public func setFrameLimit(_ limit: UInt16) {
+        threeDSObjC.setFrameLimit(limit)
+    }
 }

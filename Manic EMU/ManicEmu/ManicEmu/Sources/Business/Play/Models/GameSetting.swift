@@ -472,10 +472,6 @@ struct GameSetting: SettingCellItem {
         }
         
         func enable(for gameType: GameType, defaultCore: Int) -> Bool {
-            if gameType == ._3ds,
-               (self == .holdX2FastForward || self == .holdX3FastForward || self == .holdX4FastForward || self == .holdMaxFastForward) {
-                return false
-            }
             return true
         }
         
@@ -692,7 +688,7 @@ struct GameSetting: SettingCellItem {
             disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case ._3ds:
             if defaultCore == 0 {
-                disableTypes += [.fastForward, .filter, .palette, .swapDisk, .retro, .airPlayScaling, .screenScaling, .airPlayLayout, .toggleAnalog, .j2meSettings, .screenScaling, .dosSettings, .insertDisc]
+                disableTypes += [.filter, .palette, .swapDisk, .retro, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
             } else {
                 disableTypes += [.palette, .swapDisk, .retro, .consoleHome, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
             }

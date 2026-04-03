@@ -362,7 +362,6 @@ struct Constants {
         static let ShowRequestReviewDate = "ShowRequestReviewDate"
         static let SystemCoreVersion = "SystemCoreVersion"
         static let SystemCoreBuildVersion = "SystemCoreBuildVersion"
-        static let HasShow3DSPlayAlert = "HasShow3DSPlayAlert"
         static let HasShow3DSNotSupportAlert = "HasShow3DSNotSupportAlert"
         static let FlexSkinFirstTimeGuide = "FlexSkinFirstTimeGuide"
         static let HasShowSSPlayAlert = "HasShowSSPlayAlert"
@@ -620,6 +619,7 @@ struct Constants {
             case .ps1: return URL(string: "\(deltastyles)/systems/ps1")!
             case .dc: return URL(string: "\(deltastyles)/systems/dreamcast")!
             case .arcade: return URL(string: "\(deltastyles)/systems/arcade")!
+            case .a2600, .a5200, .a7800, .lynx, .jaguar: return URL(string: "\(deltastyles)/systems/atari")!
             default: return URL(string: deltastyles)!
             }
         }

@@ -304,6 +304,7 @@ typedef NS_ENUM(uint8_t, New3DSKernelMemoryMode) {
 -(void) deallocateVulkanLibrary;
 
 -(void) allocateMetalLayer:(CAMetalLayer*)layer withSize:(CGSize)size isSecondary:(BOOL)secondary;
+-(void) updateMetalLayerSize:(CGSize)size;
 -(void) deallocateMetalLayers;
 
 -(void) insertCartridgeAndBoot:(NSURL *)url advancedMode:(BOOL)advancedMode jitSupport:(BOOL)jitSupport;
@@ -355,6 +356,7 @@ typedef NS_ENUM(uint8_t, New3DSKernelMemoryMode) {
 - (BOOL)isSearchingAmiibo;
 - (void)jumpToHome;
 - (void)setSimBlowing:(BOOL)start;
+- (void)setFrameLimit:(uint16_t)limit;
 
 @end
 

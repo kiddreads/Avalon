@@ -53,7 +53,6 @@
 		571748392DA26F1E007CCE25 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 571748382DA26F1E007CCE25 /* CoreBluetooth.framework */; };
 		571BB8072DA4357D00830134 /* ThreeDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571BB8062DA4357900830134 /* ThreeDS.swift */; };
 		571BB93A2DA44D6B00830134 /* SDL in Frameworks */ = {isa = PBXBuildFile; productRef = 571BB9392DA44D6B00830134 /* SDL */; };
-		571F835A2ECF485500D52663 /* azahar.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 571F83582ECF484700D52663 /* azahar.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		571F837B2ECFFE4900D52663 /* AzaharAdvancedSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571F83782ECFFE4100D52663 /* AzaharAdvancedSettingViewController.swift */; };
 		571F83D12ED1B02F00D52663 /* flycast-jitless-fuse.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 571F83CF2ED1B02300D52663 /* flycast-jitless-fuse.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5720CACC2DB555990090C0F6 /* ThreeDSKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720CACB2DB5558B0090C0F6 /* ThreeDSKeyboardView.swift */; };
@@ -617,6 +616,8 @@
 		5771C20A2E6569BE0062EDE0 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C2092E6569B60062EDE0 /* LeaderboardView.swift */; };
 		5771C28B2E6986C00062EDE0 /* DC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771C28A2E6986BE0062EDE0 /* DC.swift */; };
 		5771C2922E699C930062EDE0 /* flycast.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5771C2902E699C880062EDE0 /* flycast.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		577EC5602F7E561900E8E3EB /* UniversalScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577EC55F2F7E561900E8E3EB /* UniversalScript.swift */; };
+		577EC5AB2F7E566700E8E3EB /* UniversalScript.c in Sources */ = {isa = PBXBuildFile; fileRef = 577EC5AA2F7E566700E8E3EB /* UniversalScript.c */; };
 		5781F4572EECF7CF00916D8B /* LibretroShaders.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4552EECF7CF00916D8B /* LibretroShaders.m */; };
 		5781F4612EED62E200916D8B /* ShadersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F45F2EED62DA00916D8B /* ShadersListCell.swift */; };
 		5781F4652EED639F00916D8B /* ShadersListBlankSlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4642EED639C00916D8B /* ShadersListBlankSlateView.swift */; };
@@ -632,6 +633,7 @@
 		5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5AB2EF45C6900916D8B /* JGenesisView.swift */; };
 		578452BA2F6A79370020A88F /* DOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452B92F6A79340020A88F /* DOS.swift */; };
 		578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		578F24032F7A75AC00C8D834 /* azahar.libretro.framework/azahar.libretro in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 578F23C22F7A759300C8D834 /* azahar.libretro.framework/azahar.libretro */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		578F287E2F37805000D2D998 /* WFCSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F287C2F37804600D2D998 /* WFCSettingViewController.swift */; };
 		578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28812F3780B700D2D998 /* WFCSettingView.swift */; };
 		578F288E2F37838300D2D998 /* OnlinePlayCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */; };
@@ -887,6 +889,321 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		578F23A72F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0980F17D22094E62B84BB637;
+			remoteInfo = GenericCodeGen;
+		};
+		578F23A92F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 829931EC4294453782DBE9B1;
+			remoteInfo = MachineIndependent;
+		};
+		578F23AB2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6520BECA99224092BA74B530;
+			remoteInfo = OSDependent;
+		};
+		578F23AD2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 492BA9EF27F2417B8F5BD913;
+			remoteInfo = SPIRV;
+		};
+		578F23AF2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5A07BE1EDDF5437B95CAFA56;
+			remoteInfo = "SPIRV-Tools-diff";
+		};
+		578F23B12F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 498D85D32B064A868C97E0F3;
+			remoteInfo = "SPIRV-Tools-link";
+		};
+		578F23B32F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 15DC5C47C9024BF6B9426C10;
+			remoteInfo = "SPIRV-Tools-lint";
+		};
+		578F23B52F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9C9CACAD0E3749419AF26B87;
+			remoteInfo = "SPIRV-Tools-opt";
+		};
+		578F23B72F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E399EECA9D0F4E6EBF4B1B22;
+			remoteInfo = "SPIRV-Tools-reduce";
+		};
+		578F23B92F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 48F4801A1EEC466BB0D5EE4E;
+			remoteInfo = "SPIRV-Tools-shared";
+		};
+		578F23BB2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FFAE4657F42C426E9186C8B3;
+			remoteInfo = "SPIRV-Tools-static";
+		};
+		578F23BD2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 92FB7B8EC4574BFD99EBC598;
+			remoteInfo = SoundTouch;
+		};
+		578F23BF2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 51432B86FA8148E99305259E;
+			remoteInfo = audio_core;
+		};
+		578F23C12F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 66CBC979597942179D87887C;
+			remoteInfo = azahar_libretro;
+		};
+		578F23C32F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0A58A0C599D442E28E55AB95;
+			remoteInfo = azahar_libretro_common;
+		};
+		578F23C52F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0645CDBCD8754C45A923DC6C;
+			remoteInfo = boost_iostreams;
+		};
+		578F23C72F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 570EFAD613C1411F85D0F5A9;
+			remoteInfo = boost_serialization;
+		};
+		578F23C92F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C071244D41FC4537940B4F7F;
+			remoteInfo = bs_obj;
+		};
+		578F23CB2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 112B2B18BC1B44B08BBDA0C0;
+			remoteInfo = citra_common;
+		};
+		578F23CD2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 39186B2C55E04A0380B6259F;
+			remoteInfo = citra_core;
+		};
+		578F23CF2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 70605AFEBB2242C1813A051E;
+			remoteInfo = crypto;
+		};
+		578F23D12F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6D05751091DA40F58832ED30;
+			remoteInfo = crypto_obj;
+		};
+		578F23D32F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FC9F30C593244937933D95D8;
+			remoteInfo = cryptopp;
+		};
+		578F23D52F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B419D1D439A495C817E8FD2;
+			remoteInfo = dynarmic;
+		};
+		578F23D72F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0AC62F23A42C4CE08DE0C14B;
+			remoteInfo = enet;
+		};
+		578F23D92F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 194475BF60DF4789899C7FBC;
+			remoteInfo = faad2;
+		};
+		578F23DB2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 302C36246AD44774B26D9917;
+			remoteInfo = fmt;
+		};
+		578F23DD2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0D5D5E007336462E9ECBA0D9;
+			remoteInfo = glslang;
+		};
+		578F23DF2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 05F1390D62C54D47A9303439;
+			remoteInfo = "glslang-default-resource-limits";
+		};
+		578F23E12F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52AF2ABE92604201807388C5;
+			remoteInfo = inih;
+		};
+		578F23E32F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B1CDED58A5774BB083B2EDE5;
+			remoteInfo = input_common;
+		};
+		578F23E52F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3EB9C7F9BD1F4D8DB30F60A4;
+			remoteInfo = libzstd_static;
+		};
+		578F23E72F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4187C426559442B18DA8D958;
+			remoteInfo = lodepng;
+		};
+		578F23E92F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 000A38E11F72480297F80008;
+			remoteInfo = mcl;
+		};
+		578F23EB2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 455E6C7A1163437FBF10C4DA;
+			remoteInfo = network;
+		};
+		578F23ED2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C174493B86A24731B843E59E;
+			remoteInfo = sirit;
+		};
+		578F23EF2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 83E68252D85A4650BA2F3CF4;
+			remoteInfo = ssl;
+		};
+		578F23F12F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9EEE3D73954C47AE93711CAE;
+			remoteInfo = ssl_obj;
+		};
+		578F23F32F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 93E961F2259A465EA2588E22;
+			remoteInfo = teakra;
+		};
+		578F23F52F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CF244138353F48A0B4F5313E;
+			remoteInfo = teakra_c;
+		};
+		578F23F72F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4E1FD28AE8CA4E66AEC2C24C;
+			remoteInfo = tls;
+		};
+		578F23F92F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7287DFE1E06B4E0280FC264F;
+			remoteInfo = tls_obj;
+		};
+		578F23FB2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 156B8EE2B36B48768BE2FDDF;
+			remoteInfo = video_core;
+		};
+		578F23FD2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 303E8A6C5DCA46479E0F27F2;
+			remoteInfo = xxhash;
+		};
+		578F23FF2F7A759300C8D834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63FC4E6773984CDE910F2494;
+			remoteInfo = zstd_seekable;
+		};
 		57BFBEB02DD489C700AABF98 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A5A001E724555A5F006E0F0E /* Project object */;
@@ -912,6 +1229,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				578F24032F7A75AC00C8D834 /* azahar.libretro.framework/azahar.libretro in Embed Frameworks */,
 				578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */,
 				D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */,
 				573CEEAB2F23408400EA24F1 /* virtualjaguar.libretro.framework in Embed Frameworks */,
@@ -920,7 +1238,6 @@
 				573CEEA22F23405800EA24F1 /* atari800.libretro.framework in Embed Frameworks */,
 				573CEE9F2F23404B00EA24F1 /* stella.libretro.framework in Embed Frameworks */,
 				573CED7E2F1CE2D900EA24F1 /* desmume.libretro.framework in Embed Frameworks */,
-				571F835A2ECF485500D52663 /* azahar.libretro.framework in Embed Frameworks */,
 				57B5E34A2ECE0A2800DE17E9 /* fbneo.libretro.framework in Embed Frameworks */,
 				57B5E31B2ECC738500DE17E9 /* mame.libretro.framework in Embed Frameworks */,
 				57A481682E7F05AB001D4598 /* melondsds.libretro.framework in Embed Frameworks */,
@@ -1005,7 +1322,6 @@
 		571744142DA2637F007CCE25 /* libThreeDS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libThreeDS.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		571748382DA26F1E007CCE25 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		571BB8062DA4357900830134 /* ThreeDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDS.swift; sourceTree = "<group>"; };
-		571F83582ECF484700D52663 /* azahar.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = azahar.libretro.framework; path = ../Cores/azahar.libretro.framework; sourceTree = SOURCE_ROOT; };
 		571F83782ECFFE4100D52663 /* AzaharAdvancedSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzaharAdvancedSettingViewController.swift; sourceTree = "<group>"; };
 		571F83CF2ED1B02300D52663 /* flycast-jitless-fuse.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "flycast-jitless-fuse.libretro.framework"; path = "../Cores/flycast-jitless-fuse.libretro.framework"; sourceTree = SOURCE_ROOT; };
 		5720CACB2DB5558B0090C0F6 /* ThreeDSKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDSKeyboardView.swift; sourceTree = "<group>"; };
@@ -1684,6 +2000,8 @@
 		5771C2092E6569B60062EDE0 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
 		5771C28A2E6986BE0062EDE0 /* DC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DC.swift; sourceTree = "<group>"; };
 		5771C2902E699C880062EDE0 /* flycast.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = flycast.libretro.framework; path = ../Cores/flycast.libretro.framework; sourceTree = SOURCE_ROOT; };
+		577EC55F2F7E561900E8E3EB /* UniversalScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalScript.swift; sourceTree = "<group>"; };
+		577EC5AA2F7E566700E8E3EB /* UniversalScript.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = UniversalScript.c; sourceTree = "<group>"; };
 		5780E7F42D9586FB005130D5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5780E7F52D9586FB005130D5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5780E7F72D958D6F005130D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1770,6 +2088,8 @@
 		5781F5AB2EF45C6900916D8B /* JGenesisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGenesisView.swift; sourceTree = "<group>"; };
 		578452B92F6A79340020A88F /* DOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOS.swift; sourceTree = "<group>"; };
 		578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = dosbox.pure.libretro.framework; path = ../Cores/dosbox.pure.libretro.framework; sourceTree = SOURCE_ROOT; };
+		578F23542F7A748100C8D834 /* azahar.libretro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = azahar.libretro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		578F235B2F7A759300C8D834 /* azahar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = azahar.xcodeproj; path = "../Cores/Azahar/build/ios-arm64-xcode/azahar.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		578F287C2F37804600D2D998 /* WFCSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingViewController.swift; sourceTree = "<group>"; };
 		578F28812F3780B700D2D998 /* WFCSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingView.swift; sourceTree = "<group>"; };
 		578F288C2F37837B00D2D998 /* OnlinePlayCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlayCollectionCell.swift; sourceTree = "<group>"; };
@@ -3865,6 +4185,58 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		578F235E2F7A759300C8D834 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				578F23A82F7A759300C8D834 /* libGenericCodeGen.a */,
+				578F23AA2F7A759300C8D834 /* libMachineIndependent.a */,
+				578F23AC2F7A759300C8D834 /* libOSDependent.a */,
+				578F23AE2F7A759300C8D834 /* libSPIRV.a */,
+				578F23B02F7A759300C8D834 /* libSPIRV-Tools-diff.a */,
+				578F23B22F7A759300C8D834 /* libSPIRV-Tools-link.a */,
+				578F23B42F7A759300C8D834 /* libSPIRV-Tools-lint.a */,
+				578F23B62F7A759300C8D834 /* libSPIRV-Tools-opt.a */,
+				578F23B82F7A759300C8D834 /* libSPIRV-Tools-reduce.a */,
+				578F23BA2F7A759300C8D834 /* libSPIRV-Tools-shared.dylib */,
+				578F23BC2F7A759300C8D834 /* libSPIRV-Tools.a */,
+				578F23BE2F7A759300C8D834 /* libSoundTouch.a */,
+				578F23C02F7A759300C8D834 /* libaudio_core.a */,
+				578F23C22F7A759300C8D834 /* azahar.libretro.framework/azahar.libretro */,
+				578F23C42F7A759300C8D834 /* libazahar_libretro_common.a */,
+				578F23C62F7A759300C8D834 /* libboost_iostreams.a */,
+				578F23C82F7A759300C8D834 /* libboost_serialization.a */,
+				578F23CA2F7A759300C8D834 /* libbs_obj.a */,
+				578F23CC2F7A759300C8D834 /* libcitra_common.a */,
+				578F23CE2F7A759300C8D834 /* libcitra_core.a */,
+				578F23D02F7A759300C8D834 /* libcrypto.a */,
+				578F23D22F7A759300C8D834 /* libcrypto_obj.a */,
+				578F23D42F7A759300C8D834 /* libcryptopp.a */,
+				578F23D62F7A759300C8D834 /* libdynarmic.a */,
+				578F23D82F7A759300C8D834 /* libenet.a */,
+				578F23DA2F7A759300C8D834 /* libfaad2.a */,
+				578F23DC2F7A759300C8D834 /* libfmtd.a */,
+				578F23DE2F7A759300C8D834 /* libglslang.a */,
+				578F23E02F7A759300C8D834 /* libglslang-default-resource-limits.a */,
+				578F23E22F7A759300C8D834 /* libinih.a */,
+				578F23E42F7A759300C8D834 /* libinput_common.a */,
+				578F23E62F7A759300C8D834 /* libzstd.a */,
+				578F23E82F7A759300C8D834 /* liblodepng.a */,
+				578F23EA2F7A759300C8D834 /* libmcl.a */,
+				578F23EC2F7A759300C8D834 /* libnetwork.a */,
+				578F23EE2F7A759300C8D834 /* libsirit.a */,
+				578F23F02F7A759300C8D834 /* libssl.a */,
+				578F23F22F7A759300C8D834 /* libssl_obj.a */,
+				578F23F42F7A759300C8D834 /* libteakra.a */,
+				578F23F62F7A759300C8D834 /* libteakra_c.a */,
+				578F23F82F7A759300C8D834 /* libtls.a */,
+				578F23FA2F7A759300C8D834 /* libtls_obj.a */,
+				578F23FC2F7A759300C8D834 /* libvideo_core.a */,
+				578F23FE2F7A759300C8D834 /* libxxhash.a */,
+				578F24002F7A759300C8D834 /* libzstd_seekable.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		578F28712F377FBB00D2D998 /* OnlinePlay */ = {
 			isa = PBXGroup;
 			children = (
@@ -4078,7 +4450,6 @@
 				573CEE9C2F23403100EA24F1 /* stella.libretro.framework */,
 				573CEE9D2F23403100EA24F1 /* virtualjaguar.libretro.framework */,
 				573CED7C2F1CE2C100EA24F1 /* desmume.libretro.framework */,
-				571F83582ECF484700D52663 /* azahar.libretro.framework */,
 				57B5E3482ECE0A1A00DE17E9 /* fbneo.libretro.framework */,
 				57B5E3192ECC735D00DE17E9 /* mame.libretro.framework */,
 				57A481672E7F059D001D4598 /* melondsds.libretro.framework */,
@@ -4516,6 +4887,7 @@
 				A5A001F124555A5F006E0F0E /* ManicEmu */,
 				5768F8272DAE005F009974D1 /* ThreeDS */,
 				57BFBE482DD3321A00AABF98 /* Libretro */,
+				578F235B2F7A759300C8D834 /* azahar.xcodeproj */,
 				A5A001F024555A5F006E0F0E /* Products */,
 				20137E78C79666610E451EFB /* Pods */,
 				E2E460DE79D75653B9E6B44C /* Frameworks */,
@@ -4566,6 +4938,8 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				577EC55F2F7E561900E8E3EB /* UniversalScript.swift */,
+				577EC5AA2F7E566700E8E3EB /* UniversalScript.c */,
 				57DC7FFB2F52EC38004B6FFD /* WeakScriptMessageHandler.swift */,
 				57A912022F3B765B00628B04 /* NDSSaveConverter.swift */,
 				578F28C02F39A9CA00D2D998 /* BonjourKit.swift */,
@@ -4684,6 +5058,7 @@
 		E2E460DE79D75653B9E6B44C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				578F23542F7A748100C8D834 /* azahar.libretro.framework */,
 				5720CF3A2DB776100090C0F6 /* MobileCoreServices.framework */,
 				5720CF382DB776090090C0F6 /* CFNetwork.framework */,
 				5720CF362DB775FA0090C0F6 /* libz.tbd */,
@@ -4881,6 +5256,12 @@
 			);
 			productRefGroup = A5A001F024555A5F006E0F0E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 578F235E2F7A759300C8D834 /* Products */;
+					ProjectRef = 578F235B2F7A759300C8D834 /* azahar.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A5A001EE24555A5F006E0F0E /* ManicEmu */,
@@ -4889,6 +5270,325 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		578F23A82F7A759300C8D834 /* libGenericCodeGen.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGenericCodeGen.a;
+			remoteRef = 578F23A72F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23AA2F7A759300C8D834 /* libMachineIndependent.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMachineIndependent.a;
+			remoteRef = 578F23A92F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23AC2F7A759300C8D834 /* libOSDependent.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libOSDependent.a;
+			remoteRef = 578F23AB2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23AE2F7A759300C8D834 /* libSPIRV.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSPIRV.a;
+			remoteRef = 578F23AD2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23B02F7A759300C8D834 /* libSPIRV-Tools-diff.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSPIRV-Tools-diff.a";
+			remoteRef = 578F23AF2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23B22F7A759300C8D834 /* libSPIRV-Tools-link.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSPIRV-Tools-link.a";
+			remoteRef = 578F23B12F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23B42F7A759300C8D834 /* libSPIRV-Tools-lint.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSPIRV-Tools-lint.a";
+			remoteRef = 578F23B32F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23B62F7A759300C8D834 /* libSPIRV-Tools-opt.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSPIRV-Tools-opt.a";
+			remoteRef = 578F23B52F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23B82F7A759300C8D834 /* libSPIRV-Tools-reduce.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSPIRV-Tools-reduce.a";
+			remoteRef = 578F23B72F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23BA2F7A759300C8D834 /* libSPIRV-Tools-shared.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = "libSPIRV-Tools-shared.dylib";
+			remoteRef = 578F23B92F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23BC2F7A759300C8D834 /* libSPIRV-Tools.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSPIRV-Tools.a";
+			remoteRef = 578F23BB2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23BE2F7A759300C8D834 /* libSoundTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSoundTouch.a;
+			remoteRef = 578F23BD2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23C02F7A759300C8D834 /* libaudio_core.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libaudio_core.a;
+			remoteRef = 578F23BF2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23C22F7A759300C8D834 /* azahar.libretro.framework/azahar.libretro */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = azahar.libretro.framework/azahar.libretro;
+			path = azahar.libretro.framework;
+			remoteRef = 578F23C12F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23C42F7A759300C8D834 /* libazahar_libretro_common.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libazahar_libretro_common.a;
+			remoteRef = 578F23C32F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23C62F7A759300C8D834 /* libboost_iostreams.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libboost_iostreams.a;
+			remoteRef = 578F23C52F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23C82F7A759300C8D834 /* libboost_serialization.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libboost_serialization.a;
+			remoteRef = 578F23C72F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23CA2F7A759300C8D834 /* libbs_obj.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libbs_obj.a;
+			remoteRef = 578F23C92F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23CC2F7A759300C8D834 /* libcitra_common.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcitra_common.a;
+			remoteRef = 578F23CB2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23CE2F7A759300C8D834 /* libcitra_core.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcitra_core.a;
+			remoteRef = 578F23CD2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23D02F7A759300C8D834 /* libcrypto.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcrypto.a;
+			remoteRef = 578F23CF2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23D22F7A759300C8D834 /* libcrypto_obj.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcrypto_obj.a;
+			remoteRef = 578F23D12F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23D42F7A759300C8D834 /* libcryptopp.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcryptopp.a;
+			remoteRef = 578F23D32F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23D62F7A759300C8D834 /* libdynarmic.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libdynarmic.a;
+			remoteRef = 578F23D52F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23D82F7A759300C8D834 /* libenet.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libenet.a;
+			remoteRef = 578F23D72F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23DA2F7A759300C8D834 /* libfaad2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libfaad2.a;
+			remoteRef = 578F23D92F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23DC2F7A759300C8D834 /* libfmtd.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libfmtd.a;
+			remoteRef = 578F23DB2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23DE2F7A759300C8D834 /* libglslang.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libglslang.a;
+			remoteRef = 578F23DD2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23E02F7A759300C8D834 /* libglslang-default-resource-limits.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libglslang-default-resource-limits.a";
+			remoteRef = 578F23DF2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23E22F7A759300C8D834 /* libinih.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libinih.a;
+			remoteRef = 578F23E12F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23E42F7A759300C8D834 /* libinput_common.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libinput_common.a;
+			remoteRef = 578F23E32F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23E62F7A759300C8D834 /* libzstd.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libzstd.a;
+			remoteRef = 578F23E52F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23E82F7A759300C8D834 /* liblodepng.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblodepng.a;
+			remoteRef = 578F23E72F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23EA2F7A759300C8D834 /* libmcl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmcl.a;
+			remoteRef = 578F23E92F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23EC2F7A759300C8D834 /* libnetwork.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnetwork.a;
+			remoteRef = 578F23EB2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23EE2F7A759300C8D834 /* libsirit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libsirit.a;
+			remoteRef = 578F23ED2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23F02F7A759300C8D834 /* libssl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libssl.a;
+			remoteRef = 578F23EF2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23F22F7A759300C8D834 /* libssl_obj.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libssl_obj.a;
+			remoteRef = 578F23F12F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23F42F7A759300C8D834 /* libteakra.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libteakra.a;
+			remoteRef = 578F23F32F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23F62F7A759300C8D834 /* libteakra_c.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libteakra_c.a;
+			remoteRef = 578F23F52F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23F82F7A759300C8D834 /* libtls.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libtls.a;
+			remoteRef = 578F23F72F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23FA2F7A759300C8D834 /* libtls_obj.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libtls_obj.a;
+			remoteRef = 578F23F92F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23FC2F7A759300C8D834 /* libvideo_core.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libvideo_core.a;
+			remoteRef = 578F23FB2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F23FE2F7A759300C8D834 /* libxxhash.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libxxhash.a;
+			remoteRef = 578F23FD2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		578F24002F7A759300C8D834 /* libzstd_seekable.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libzstd_seekable.a;
+			remoteRef = 578F23FF2F7A759300C8D834 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		57BFBE152DD32F7700AABF98 /* Resources */ = {
@@ -5415,6 +6115,7 @@
 				5726FEDD2D71BF0400041AD5 /* SettingsItemCollectionViewCell.swift in Sources */,
 				5720E76D2E540FDB00EC0DA5 /* RetroAchievementsProfileView.swift in Sources */,
 				57605FFE2D20F29000A98B0C /* SettingsViewController.swift in Sources */,
+				577EC5602F7E561900E8E3EB /* UniversalScript.swift in Sources */,
 				573BECBD2D1D3F6B008AD18D /* HomeTabBar.swift in Sources */,
 				57EED0772ECB817C003971BD /* IconView.swift in Sources */,
 				5781F46F2EED6DC100916D8B /* Shader.swift in Sources */,
@@ -5674,6 +6375,7 @@
 				57BA59B52E3F13D100110849 /* LibretroCoreExtensions.swift in Sources */,
 				577006892D438F1100762E8F /* GameListView.swift in Sources */,
 				57D7CF862EA88AC100F41540 /* TriggerButton.swift in Sources */,
+				577EC5AB2F7E566700E8E3EB /* UniversalScript.c in Sources */,
 				5781F47E2EEE572A00916D8B /* ShaderInfoView.swift in Sources */,
 				57F632FE2D718236007270E8 /* SettingsListView.swift in Sources */,
 				5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */,

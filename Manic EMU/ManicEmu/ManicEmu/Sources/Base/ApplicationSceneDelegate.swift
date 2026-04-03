@@ -56,10 +56,6 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                             AchievementsUser.updateUser(username: u, password: p, token: t)
                         }
                     })
-                    
-                    DispatchQueue.main.asyncAfter(delay: 3) {
-                        CelebrationView.showFirstAnniversaryLetterIfNeed()
-                    }
                 }
             }
             let dropInteraction = UIDropInteraction(delegate: self)

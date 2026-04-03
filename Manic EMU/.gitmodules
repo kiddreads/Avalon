@@ -1,0 +1,3 @@
+[submodule "Cores/Azahar"]
+	path = Cores/Azahar
+	url = https://github.com/Daiuno/azahar.git

@@ -832,21 +832,25 @@ void RendererVulkan::DrawScreens(Frame* frame, const Layout::FramebufferLayout& 
 }
 
 void RendererVulkan::SwapBuffers() {
-    const Layout::FramebufferLayout& layout = render_window.GetFramebufferLayout();
-    PrepareRendertarget();
-    RenderScreenshot();
-    RenderToWindow(main_window, layout, false);
+    const bool skip_frame = Settings::values.frame_skip &&
+                            (current_frame % 2 != 0);
+    if (!skip_frame) {
+        const Layout::FramebufferLayout& layout = render_window.GetFramebufferLayout();
+        PrepareRendertarget();
+        RenderScreenshot();
+        RenderToWindow(main_window, layout, false);
 #ifndef ANDROID
-    if (Settings::values.layout_option.GetValue() == Settings::LayoutOption::SeparateWindows) {
-        ASSERT(secondary_window);
-        const auto& secondary_layout = secondary_window->GetFramebufferLayout();
-        if (!second_window) {
-            second_window = std::make_unique<PresentWindow>(*secondary_window, instance, scheduler);
+        if (Settings::values.layout_option.GetValue() == Settings::LayoutOption::SeparateWindows) {
+            ASSERT(secondary_window);
+            const auto& secondary_layout = secondary_window->GetFramebufferLayout();
+            if (!second_window) {
+                second_window = std::make_unique<PresentWindow>(*secondary_window, instance, scheduler);
+            }
+            RenderToWindow(*second_window, secondary_layout, false);
+            secondary_window->PollEvents();
         }
-        RenderToWindow(*second_window, secondary_layout, false);
-        secondary_window->PollEvents();
-    }
 #endif
+    }
     rasterizer.TickFrame();
     EndFrame();
 }

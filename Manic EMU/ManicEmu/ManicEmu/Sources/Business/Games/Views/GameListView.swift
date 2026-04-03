@@ -976,13 +976,6 @@ extension GameListView: UICollectionViewDelegate {
             return true
         }
         
-        if CelebrationView.prank2026AprilFools() {
-            if let cell = collectionView.cellForItem(at: indexPath) {
-                cell.shake()
-            }
-            return false
-        }
-        
         if let game = getGame(at: indexPath) {
             if game.isNDSHomeMenuGame {
                 let biosCompletion = game.gameType.isNDSBiosComplete()
