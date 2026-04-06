@@ -272,9 +272,6 @@ extension BIOSSelectionView: UICollectionViewDataSource {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundColorHaderReusableView.self, for: indexPath)
         let section = datas[indexPath.section]
         let matt = NSMutableAttributedString(string: section.title, attributes: [.font: Constants.Font.body(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelSecondary])
-        if section == .ps1 {
-            matt.append(NSAttributedString(string: " (\(R.string.localizable.chooseOne()))", attributes: [.font: Constants.Font.caption(size: .m), .foregroundColor: Constants.Color.LabelTertiary]))
-        }
         header.titleLabel.attributedText = matt
         return header
     }

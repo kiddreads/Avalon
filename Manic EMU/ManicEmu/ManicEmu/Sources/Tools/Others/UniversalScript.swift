@@ -57,6 +57,22 @@ func setupUniversalScript(gameType: GameType) {
           legacyCommands[0x70] = function(b) {};
           legacyCommands[0x71] = function(b) {};
       """
+    case .n64:
+        script = """
+          legacyCommands[0x70] = function(b) {};
+          legacyCommands[0x71] = function(b) {};
+          legacyCommands[0x69] = manicN64Breakpoint;
+          continuesWithSignal = true;
+          var n64JitRequests = 0;
+          function manicN64Breakpoint(brkResponse) {
+              n64JitRequests++;
+              var jitAddr = x0;
+              var size = x1 > 0n ? x1 : 0x10000n;
+              log('[N64] JIT Request #' + n64JitRequests + ' addr=0x' + jitAddr.toString(16) + ' size=0x' + size.toString(16));
+              var result = prepare_memory_region(Number(jitAddr), Number(size));
+              log('[N64] prepare_memory_region result: ' + result);
+          }
+      """
     default: return
     }
     

@@ -656,6 +656,7 @@
 		57913B492D5ED7D7004D51AA /* SaveItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913B482D5ED7D7004D51AA /* SaveItemCollectionViewCell.swift */; };
 		57913B532D5EF725004D51AA /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913B522D5EF71D004D51AA /* DateExtension.swift */; };
 		579213532D95314800E88819 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579213522D95313800E88819 /* BaseNavigationController.swift */; };
+		5792E7312F83B2650015CE0E /* mupen64plus.next.jit.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5792E7302F83B2560015CE0E /* mupen64plus.next.jit.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		579C114B2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C114A2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift */; };
 		579C114D2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */; };
 		57A480CC2E733B83001D4598 /* flycast-jitless.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A480CB2E733B77001D4598 /* flycast-jitless.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1229,6 +1230,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5792E7312F83B2650015CE0E /* mupen64plus.next.jit.libretro.framework in Embed Frameworks */,
 				578F24032F7A75AC00C8D834 /* azahar.libretro.framework/azahar.libretro in Embed Frameworks */,
 				578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */,
 				D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */,
@@ -2112,6 +2114,7 @@
 		57913B482D5ED7D7004D51AA /* SaveItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		57913B522D5EF71D004D51AA /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		579213522D95313800E88819 /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
+		5792E7302F83B2560015CE0E /* mupen64plus.next.jit.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mupen64plus.next.jit.libretro.framework; path = ../Cores/mupen64plus.next.jit.libretro.framework; sourceTree = SOURCE_ROOT; };
 		579AB9D52E6C1118000868CB /* Config-SideloadDebug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-SideloadDebug.xcconfig"; sourceTree = "<group>"; };
 		579C114A2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationSceneDelegate.swift; sourceTree = "<group>"; };
 		579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
@@ -4468,6 +4471,7 @@
 				5744C71B2E375EFF0088081A /* pokemini.libretro.framework */,
 				5754D8C22E27A562001EA5ED /* mednafen.vb.libretro.framework */,
 				57D0BC0D2E1AD31A008C3049 /* mupen64plus.next.libretro.framework */,
+				5792E7302F83B2560015CE0E /* mupen64plus.next.jit.libretro.framework */,
 				57DCE8522E0F97780079E3AA /* yabause.libretro.framework */,
 				57DCE79D2E0C43310079E3AA /* mednafen.saturn.libretro.framework */,
 				57655C1E2DF6B94C003E4A6E /* picodrive.libretro.framework */,

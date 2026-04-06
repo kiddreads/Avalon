@@ -54,4 +54,6 @@ enum ExtraKey: String {
     case j2meScreenRotate
     case coreConfigs
     case skinSoundEffects
+    case jitType
+    case biosName
 }

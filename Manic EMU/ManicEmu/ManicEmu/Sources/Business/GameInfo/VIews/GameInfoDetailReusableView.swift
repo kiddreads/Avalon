@@ -269,7 +269,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         actions.append((UIAction(title: R.string.localizable.on()) { [weak self] _ in
             guard let self = self else { return }
             self.jitButton.titleLabel.text = "JIT \(R.string.localizable.on())"
-            if let game {
+            if let game = self.game {
                 Game.change { _ in
                     game.jit = true
                 }
@@ -278,7 +278,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         actions.append(UIAction(title: R.string.localizable.off()) { [weak self] _ in
             guard let self = self else { return }
             self.jitButton.titleLabel.text = "JIT \(R.string.localizable.off())"
-            if let game {
+            if let game = self.game {
                 Game.change { _ in
                     game.jit = false
                 }
@@ -309,6 +309,83 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 self.jitContextMenuButton.triggerTapGesture()
             } else {
                 UIView.makeToast(message: R.string.localizable.jitNoSupportDesc())
+            }
+        }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
+        return view
+    }()
+    
+    private lazy var jitTypeContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: "JIT") { [weak self] _ in
+            guard let self = self else { return }
+            self.jitTypeButton.titleLabel.text = "\(R.string.localizable.jitType())\nJIT"
+            self.game?.updateExtra(key: ExtraKey.jitType.rawValue, value: 0)
+        }))
+        actions.append(UIAction(title: "IR JIT") { [weak self] _ in
+            guard let self = self else { return }
+            self.jitTypeButton.titleLabel.text = "\(R.string.localizable.jitType())\nIR JIT"
+            self.game?.updateExtra(key: ExtraKey.jitType.rawValue, value: 1)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.jitTypeDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var jitTypeButton: SymbolButton = {
+        let title: String
+        let jitAvailable = LibretroCore.jitAvailable()
+        if jitAvailable {
+            let jitType = ((game?.getExtraInt(key: ExtraKey.jitType.rawValue) ?? 0) == 0) ? "JIT" : "IR JIT"
+            title = "\(R.string.localizable.jitType())\n\(jitType)"
+        } else {
+            title = R.string.localizable.jitNotAllow()
+        }
+        let view = SymbolButton(symbol: .boltFill, title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            if jitAvailable {
+                self.jitTypeContextMenuButton.triggerTapGesture()
+            } else {
+                UIView.makeToast(message: R.string.localizable.jitNoSupportDesc())
+            }
+        }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
+        return view
+    }()
+    
+    private lazy var biosSelectionContextMenuButton: ContextMenuButton = {
+        let ps1Bios = game?.ps1ImportedBios ?? []
+        var actions: [UIMenuElement] = ps1Bios.map({ bios in
+            UIAction(title: bios.fileName, subtitle: bios.desc) { [weak self] _ in
+                guard let self = self else { return }
+                self.biosSelectionButton.titleLabel.text = "BIOS\n" + bios.fileName.deletingPathExtension
+                self.game?.updateExtra(key: ExtraKey.biosName.rawValue, value: bios.fileName)
+            }
+        })
+        actions.append(UIAction(title: "OpenBIOS") { [weak self] _ in
+            guard let self = self else { return }
+            self.biosSelectionButton.titleLabel.text = "BIOS\nOpenBIOS"
+            self.game?.updateExtra(key: ExtraKey.biosName.rawValue, value: nil)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: "BIOS", children: actions))
+        return view
+    }()
+    
+    private lazy var biosSelectionButton: SymbolButton = {
+        let title = "BIOS\n" + (game?.getExtraString(key: ExtraKey.biosName.rawValue) ?? "OpenBIOS").deletingPathExtension
+        let view = SymbolButton(symbol: .cpu, title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self, let game = self.game else { return }
+            if game.ps1ImportedBios.count > 0 {
+                self.biosSelectionContextMenuButton.triggerTapGesture()
+            } else {
+                UIView.makeToast(message: R.string.localizable.saturnBiosAlertTitle())
             }
         }
         view.isAccessibilityElement = true
@@ -1497,6 +1574,10 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         pspRendererButton.removeFromSuperview()
         pspTextureContextMenuButton.removeFromSuperview()
         pspTextureButton.removeFromSuperview()
+        jitContextMenuButton.removeFromSuperview()
+        jitButton.removeFromSuperview()
+        jitTypeContextMenuButton.removeFromSuperview()
+        jitTypeButton.removeFromSuperview()
         
         if let lastView = functionButtonContainerView.subviews.last {
             //语言选择按钮
@@ -1528,11 +1609,36 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(pspRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             pspTextureContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(pspTextureButton)
             }
+            
+            //jit
+            functionButtonContainerView.addSubview(jitContextMenuButton)
+            functionButtonContainerView.addSubview(jitButton)
+            jitButton.snp.makeConstraints { make in
+                make.leading.equalTo(pspTextureButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            jitContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(jitButton)
+            }
+            
+            //jitType
+            functionButtonContainerView.addSubview(jitTypeContextMenuButton)
+            functionButtonContainerView.addSubview(jitTypeButton)
+            jitTypeButton.snp.makeConstraints { make in
+                make.leading.equalTo(jitButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            jitTypeContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(jitTypeButton)
+            }
+            
         }
     }
     
@@ -1570,6 +1676,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         ndsSystemTypeButton.removeFromSuperview()
         gbaSlotContextMenuButton.removeFromSuperview()
         gbaSlotButton.removeFromSuperview()
+        jitContextMenuButton.removeFromSuperview()
+        jitButton.removeFromSuperview()
         let isMelonDS = (game?.defaultCore ?? 0) == 0
         if let lastView = functionButtonContainerView.subviews.last {
             //语言选择按钮
@@ -1625,11 +1733,23 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                         make.leading.equalTo(ndsSystemTypeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                         make.centerY.equalToSuperview()
                         make.size.equalTo(Constants.Size.IconSizeHuge)
-                        make.trailing.equalToSuperview()
                     }
                     gbaSlotContextMenuButton.snp.makeConstraints { make in
                         make.edges.equalTo(gbaSlotButton)
                     }
+                }
+                
+                //jit
+                functionButtonContainerView.addSubview(jitContextMenuButton)
+                functionButtonContainerView.addSubview(jitButton)
+                jitButton.snp.makeConstraints { make in
+                    make.leading.equalTo((enableGBASlot ? gbaSlotButton : ndsSystemTypeButton).snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                    make.trailing.equalToSuperview()
+                }
+                jitContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(jitButton)
                 }
             }
         }
@@ -1641,6 +1761,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         transferPakButton.removeFromSuperview()
         rdpPluginContextMenuButton.removeFromSuperview()
         rdpPluginButton.removeFromSuperview()
+        jitContextMenuButton.removeFromSuperview()
+        jitButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
             //transferPak
             functionButtonContainerView.addSubview(transferPakContextMenuButton)
@@ -1661,10 +1783,22 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(transferPakButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             rdpPluginContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(rdpPluginButton)
+            }
+            
+            //jit
+            functionButtonContainerView.addSubview(jitContextMenuButton)
+            functionButtonContainerView.addSubview(jitButton)
+            jitButton.snp.makeConstraints { make in
+                make.leading.equalTo(rdpPluginButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            jitContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(jitButton)
             }
         }
     }
@@ -1676,6 +1810,10 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         psxModeButton.removeFromSuperview()
         psxRendererContextMenuButton.removeFromSuperview()
         psxRendererButton.removeFromSuperview()
+        jitContextMenuButton.removeFromSuperview()
+        jitButton.removeFromSuperview()
+        biosSelectionContextMenuButton.removeFromSuperview()
+        biosSelectionButton.removeFromSuperview()
         
         if let lastView = functionButtonContainerView.subviews.last {
             //导入sbi文件
@@ -1705,10 +1843,34 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(psxModeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
             psxRendererContextMenuButton.snp.makeConstraints { make in
                 make.edges.equalTo(psxRendererButton)
+            }
+            
+            //jit
+            functionButtonContainerView.addSubview(jitContextMenuButton)
+            functionButtonContainerView.addSubview(jitButton)
+            jitButton.snp.makeConstraints { make in
+                make.leading.equalTo(psxRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            jitContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(jitButton)
+            }
+            
+            //bios
+            functionButtonContainerView.addSubview(biosSelectionContextMenuButton)
+            functionButtonContainerView.addSubview(biosSelectionButton)
+            biosSelectionButton.snp.makeConstraints { make in
+                make.leading.equalTo(psxRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+                make.trailing.equalToSuperview()
+            }
+            biosSelectionContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(biosSelectionButton)
             }
             
         }
@@ -1825,6 +1987,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     private func updateDOSFunctionButton() {
         hideDefaultFunctionButtons([retroButton, cheatCodeButton])
         dosSettingButton.removeFromSuperview()
+        jitContextMenuButton.removeFromSuperview()
+        jitButton.removeFromSuperview()
         
         if let lastView = functionButtonContainerView.subviews.last {
             functionButtonContainerView.addSubview(dosSettingButton)
@@ -1832,8 +1996,20 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
             }
+        }
+        
+        //jit
+        functionButtonContainerView.addSubview(jitContextMenuButton)
+        functionButtonContainerView.addSubview(jitButton)
+        jitButton.snp.makeConstraints { make in
+            make.leading.equalTo(dosSettingButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+            make.trailing.equalToSuperview()
+        }
+        jitContextMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(jitButton)
         }
     }
     

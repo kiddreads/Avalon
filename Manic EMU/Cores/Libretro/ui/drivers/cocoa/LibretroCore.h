@@ -42,6 +42,7 @@ extern NSString * const RetroAchievementsNotification;
 
 @property(nonatomic, strong) id retroArch_iOS;
 @property (nonatomic, copy, nullable) NSString *workspace;
+@property (assign) BOOL forbitJIT;
 
 + (instancetype)sharedInstance;
 

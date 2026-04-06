@@ -270,23 +270,6 @@ class Game: Object, ObjectUpdatable {
             }
         } else if gameType == .ds {
             requireBIOS = Constants.BIOS.DSBios.filter({ required ? $0.required : true })
-        } else if gameType == .ps1 {
-            //PS1的BIOS必须确保至少拥有一个
-            var isPS1BIOSMissing = true
-            let fileManager = FileManager.default
-            for bios in Constants.BIOS.PS1Bios {
-                let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
-                let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
-                if fileManager.fileExists(atPath: biosInLib) {
-                    isPS1BIOSMissing = false
-                    break
-                } else if fileManager.fileExists(atPath: biosInDoc) {
-                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc), to: URL(fileURLWithPath: biosInLib))
-                    isPS1BIOSMissing = false
-                    break
-                }
-            }
-            return isPS1BIOSMissing
         } else if gameType == .fds {
             requireBIOS = Constants.BIOS.FDSBios
         } else {
@@ -311,20 +294,34 @@ class Game: Object, ObjectUpdatable {
         return false
     }
     
-    var ps1OverrideBIOSConfig: String {
-        let regionFreeBios = ["ps1_rom.bin", "PSXONPSP660.bin"]
+    var ps1ImportedBios: [BIOSItem] {
+        let ps1Bios = Constants.BIOS.PS1Bios
         let fileManager = FileManager.default
-        for (index, bios) in regionFreeBios.enumerated() {
-            let biosInLib = Constants.Path.System.appendingPathComponent(bios)
-            let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios)
+        var result = [BIOSItem]()
+        for bios in ps1Bios {
+            let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+            let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
             if fileManager.fileExists(atPath: biosInLib) {
-                return index == 0 ? "ps1_rom" : "psxonpsp"
+                result.append(bios)
             } else if fileManager.fileExists(atPath: biosInDoc) {
                 try? FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc), to: URL(fileURLWithPath: biosInLib))
-                return index == 0 ? "ps1_rom" : "psxonpsp"
+                result.append(bios)
             }
         }
-        return "disabled"
+        return result
+    }
+    
+    var ps1OverrideBios: String {
+        if let biosConfig = getExtraString(key: ExtraKey.biosName.rawValue) {
+            if biosConfig == "ps1_rom.bin" {
+                return "ps1_rom"
+            } else if biosConfig == "PSXONPSP660.bin" {
+                return "psxonpsp"
+            } else {
+                return "disabled"
+            }
+        }
+        return "openbios"
     }
     
     var libretroCorePath: String? {
@@ -351,7 +348,11 @@ class Game: Object, ObjectUpdatable {
                 return Bundle.main.path(forResource: "mednafen.saturn.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .n64 {
-            return Bundle.main.path(forResource: "mupen64plus.next.libretro", ofType: "framework", inDirectory: "Frameworks")
+            if LibretroCore.jitAvailable(), jit {
+                return Bundle.main.path(forResource: "mupen64plus.next.jit.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else {
+                return Bundle.main.path(forResource: "mupen64plus.next.libretro", ofType: "framework", inDirectory: "Frameworks")
+            }
         } else if gameType == .vb {
             return Bundle.main.path(forResource: "mednafen.vb.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .pm {
@@ -373,7 +374,7 @@ class Game: Object, ObjectUpdatable {
                 return Bundle.main.path(forResource: "vbam.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .dc {
-            if jit {
+            if LibretroCore.jitAvailable(), jit {
                 return Bundle.main.path(forResource: "flycast.libretro", ofType: "framework", inDirectory: "Frameworks")
             } else {
                 if defaultCore == 0 {
@@ -502,6 +503,9 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isN64ParaLLEl: Bool {
+        if LibretroCore.jitAvailable(), jit {
+            return false
+        }
         return gameType == .n64 && !(getExtraBool(key: ExtraKey.rdpPlugin.rawValue) ?? true)
     }
     
@@ -776,11 +780,16 @@ class Game: Object, ObjectUpdatable {
         return nil
     }
     
-    func getStoreCoreConfigsString() -> String? {
-        if let coreConfigs = getStoreCoreConfigs() {
+    func getStoreCoreConfigsString(enableJIT: Bool = false) -> String? {
+        if var coreConfigs = getStoreCoreConfigs() {
+            coreConfigs["dosbox_pure_cpu_core"] = "normal"
             var result = ""
             for (key, value) in coreConfigs {
-                result += "\(key) = \"\(value)\"\n"
+                if key == "dosbox_pure_cpu_core" {
+                    result += "\(key) = \"\(enableJIT ? "dynamic" : "normal")\"\n"
+                } else {
+                    result += "\(key) = \"\(value)\"\n"
+                }
             }
             return result
         }

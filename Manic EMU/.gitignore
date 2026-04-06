@@ -98,6 +98,12 @@ Cores/libretro-azahar
 Cores/J2meJS
 Cores/freej2me-web
 Cores/melonDS
+Cores/flycast
+Cores/beetle-psx-libretro
+Cores/dosbox-pure
+Cores/mupen64plus
+Cores/libretro-common
+StikDebug
 i18n/
 
 #claude code

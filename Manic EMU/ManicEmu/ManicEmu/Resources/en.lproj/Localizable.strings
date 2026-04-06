@@ -917,3 +917,7 @@ Press the controller button to complete mapping...";
 "FirstAnniversary" = "THANKS FOR BEING HERE,\nWE WROTE YOU SOMETHING";
 "ApirlFoolsDayTitle" = "Uh-oh, is Manic EMU broken?";
 "ApirlFoolsDayDetail" = "Don't worry!\nJust kidding—happy April Fools' Day!\n\nEverything will be back to normal once you close this.";
+
+"JITType" = "JIT Type";
+"JITTypeDesc" = "JIT is the fastest, while IR JIT is moderately fast.";
+

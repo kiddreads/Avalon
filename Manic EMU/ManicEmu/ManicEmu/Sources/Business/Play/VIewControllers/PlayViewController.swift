@@ -753,6 +753,7 @@ class PlayViewController: GameViewController {
         //设置外设控制器
         updateExternalGameController()
         //如果需要加载默认配置
+        LibretroCore.sharedInstance().forbitJIT = manicGame.safeMode
         if manicGame.safeMode {
             loadMinimalConfig()
         } else {
@@ -2546,11 +2547,19 @@ extension PlayViewController {
                 //禁用网络
                 networkingConfigs += ["ppsspp_enable_wlan": "disabled"]
             }
+            
+            //jit
+            let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+            if enableJIT {
+                setupUniversalScript(gameType: .psp)
+            }
+            let jitValue = ((manicGame.getExtraInt(key: ExtraKey.jitType.rawValue) ?? 0) == 0) ? "JIT" : "IR JIT"
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PPSSPP.name, configs: [
                 "ppsspp_cheats": "enabled",
                 "ppsspp_language": languages[manicGame.region],
                 "ppsspp_backend": backend,
-                "ppsspp_texture_replacement": (manicGame.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "enabled" : "disabled"
+                "ppsspp_texture_replacement": (manicGame.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "enabled" : "disabled",
+                "ppsspp_cpu_core" : enableJIT ? jitValue : "Interpreter"
             ] + networkingConfigs, reload: false)
             updatePSPResolution(manicGame.resolution, reload: false)
         } else if manicGame.gameType == .nes || manicGame.gameType == .fds {
@@ -2601,6 +2610,12 @@ extension PlayViewController {
                 //麦克风
                 let microphone = manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false
                 
+                //jit
+                let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+                if enableJIT {
+                    setupUniversalScript(gameType: .ds)
+                }
+                
                 //设置配置
                 LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.melonDSDS.name,
                                                            configs: ["melonds_firmware_language": dsLanguageOption,
@@ -2609,7 +2624,8 @@ extension PlayViewController {
                                                                      "melonds_mic_input_active": "always",
                                                                      "melonds_number_of_screen_layouts": "1",
                                                                      "melonds_screen_layout1": "custom",
-                                                                     "melonds_show_cursor": "disabled"],
+                                                                     "melonds_show_cursor": "disabled",
+                                                                     "melonds_jit_enable": enableJIT ? "enabled" : "disabled"],
                                                            reload: false)
                 //wfc
                 LibretroCore.sharedInstance().setNDSWFCDNS( WFC.currentDNS());
@@ -2666,15 +2682,28 @@ extension PlayViewController {
                     "vbam_palettes": manicGame.pallete.optionForVBAM], reload: false)
             }
         } else if manicGame.gameType == .n64 {
-            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-rdp-plugin", value: manicGame.isN64ParaLLEl ? "parallel" : "gliden64", reload: false)
+            
+            let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+            if enableJIT {
+                setupUniversalScript(gameType: .n64)
+            }
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, configs: [
+                "mupen64plus-cpucore": (enableJIT ? "dynamic_recompiler" : "cached_interpreter"),
+                "mupen64plus-rdp-plugin": ((manicGame.isN64ParaLLEl && !enableJIT) ? "parallel" : "gliden64"),
+                "mupen64plus-pak1": manicGame.hasTransferPak ? "transfer" : "memory"
+            ], reload: false)
             updateN64Resolution(manicGame.resolution, reload: false)
-            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, key: "mupen64plus-pak1", value: manicGame.hasTransferPak ? "transfer" : "memory", reload: false)
         } else if manicGame.gameType == .vb {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleVB.name, key: "vb_color_mode", value: manicGame.pallete.paletteTitleForVB, reload: false)
         } else if manicGame.gameType == .pm {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PokeMini.name, key: "pokemini_palette", value: manicGame.pallete.paletteTitleForPM, reload: false)
         } else if manicGame.gameType == .ps1 {
+            let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+            if enableJIT {
+                setupUniversalScript(gameType: .ps1)
+            }
             let isHardwareRenderer = manicGame.getExtraBool(key: ExtraKey.psxRenderer.rawValue) ?? true
+            
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetlePSXHW.name,
                                                        configs: [
                                                         //video
@@ -2691,12 +2720,17 @@ extension PlayViewController {
                                                         "beetle_psx_hw_pgxp_texture": "enabled",
                                                         //hacks
                                                         "beetle_psx_hw_gte_overclock": "enabled",
-                                                        "beetle_psx_hw_override_bios": manicGame.ps1OverrideBIOSConfig,
+                                                        "beetle_psx_hw_override_bios": manicGame.ps1OverrideBios,
                                                         //common
                                                         "beetle_psx_hw_renderer": isHardwareRenderer ? "hardware_vk" : "software",
+                                                        //jit
+                                                        "beetle_psx_hw_cpu_dynarec": enableJIT ? "execute" : "disabled",
                                                        ],
                                                        reload: false)
         } else if manicGame.gameType == .dc {
+            if LibretroCore.jitAvailable(), manicGame.jit {
+                setupUniversalScript(gameType: .dc)
+            }
             updateDCResolution(manicGame.resolution, reload: false)
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Flycast.name,
                                                        configs: ["reicast_renderer": "Vulkan",
@@ -2769,7 +2803,12 @@ extension PlayViewController {
                                                                  "prboom-rumble": "enabled"],
                                                        reload: false)
         } else if manicGame.gameType == .dos {
-            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.DOSBoxPure.name, content: manicGame.getStoreCoreConfigsString(), reload: false)
+            //jit
+            let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+            if enableJIT {
+                setupUniversalScript(gameType: .dos)
+            }
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.DOSBoxPure.name, content: manicGame.getStoreCoreConfigsString(enableJIT: enableJIT), reload: false)
         }
         
         //配置静音模式
@@ -2792,12 +2831,12 @@ extension PlayViewController {
         
         //Libretro配置
         if manicGame.isLibretroType {
-            var enableLibretroLog = "false"
-            var libretroLogLevel = "1"
-#if DEBUG
-            enableLibretroLog = "true"
-            libretroLogLevel = "0"
-#endif
+//            var enableLibretroLog = "false"
+//            var libretroLogLevel = "1"
+//#if DEBUG
+            let enableLibretroLog = "true"
+            let libretroLogLevel = "0"
+//#endif
             let enableMircophone = (manicGame.gameType == .ds && (manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false)) || manicGame.isAzahar3DS
             LibretroCore.sharedInstance().updateLibretroConfigs([
                 "fastforward_frameskip": "false",
@@ -2896,7 +2935,8 @@ extension PlayViewController {
                 "ppsspp_backend": "auto",
                 "ppsspp_texture_replacement": "disabled",
                 "ppsspp_enable_wlan": "disabled",
-                "ppsspp_internal_resolution": "480x272"
+                "ppsspp_internal_resolution": "480x272",
+                "ppsspp_cpu_core": "Interpreter"
             ], reload: false)
         } else if manicGame.gameType == .nes || manicGame.gameType == .fds {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, configs: [
@@ -2939,7 +2979,8 @@ extension PlayViewController {
                                                                      "melonds_mic_input_active": "always",
                                                                      "melonds_number_of_screen_layouts": "1",
                                                                      "melonds_screen_layout1": "custom",
-                                                                     "melonds_show_cursor": "disabled"],
+                                                                     "melonds_show_cursor": "disabled",
+                                                                     "melonds_jit_enable": "disabled"],
                                                            reload: false)
                 //wfc
                 LibretroCore.sharedInstance().setNDSWFCDNS( WFC.currentDNS());
@@ -2989,7 +3030,8 @@ extension PlayViewController {
             }
         } else if manicGame.gameType == .n64 {
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name, configs:
-                                                        ["mupen64plus-43screensize": "640x480",
+                                                        ["mupen64plus-cpucore": "cached_interpreter",
+                                                         "mupen64plus-43screensize": "640x480",
                                                          "mupen64plus-rdp-plugin": "gliden64",
                                                          "mupen64plus-pak1": "memory"],
                                                        reload: false)
@@ -3014,9 +3056,11 @@ extension PlayViewController {
                                                         "beetle_psx_hw_pgxp_texture": "enabled",
                                                         //hacks
                                                         "beetle_psx_hw_gte_overclock": "enabled",
-                                                        "beetle_psx_hw_override_bios": manicGame.ps1OverrideBIOSConfig,
+                                                        "beetle_psx_hw_override_bios": "disabled",
                                                         //common
                                                         "beetle_psx_hw_renderer": "hardware_vk",
+                                                        //jit
+                                                        "beetle_psx_hw_cpu_dynarec": "disabled",
                                                        ],
                                                        reload: false)
         } else if manicGame.gameType == .dc {
@@ -4671,7 +4715,7 @@ extension PlayViewController {
     static var isGaming: Bool { currentPlayViewController != nil }
     
     static var enableAirplay: Bool {
-        if let currentPlayViewController {
+        if let _ = currentPlayViewController {
             return true
         }
         return false

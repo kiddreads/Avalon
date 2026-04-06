@@ -544,6 +544,9 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
 }
 
 + (BOOL)JITAvailable {
+    if (LibretroCore.sharedInstance.forbitJIT) {
+        return false;
+    }
     return jit_available();
 }
 
