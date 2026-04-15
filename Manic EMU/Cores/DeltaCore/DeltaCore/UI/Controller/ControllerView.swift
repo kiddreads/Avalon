@@ -425,8 +425,7 @@ public class ControllerView: UIView, GameController
         
         guard let controllerSkin = controllerSkin, let traits = controllerSkinTraits else { return false }
         
-        if let keyboardController = ExternalGameControllerUtils.shared.keyboardController, keyboardController.playerIndex != nil
-        {
+        if let keyboardController = ExternalGameControllerUtils.shared.keyboardController {
             // Keyboard is connected and has non-nil player index, so return true to receive keyboard presses.
             return true
         }

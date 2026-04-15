@@ -244,6 +244,47 @@ extension String {
         return (ipDigits, port)
     }
     
+    func parseIPv4String() -> (ip: String, port: Int)? {
+        let parts = self.split(separator: ":", omittingEmptySubsequences: false)
+        
+        // 处理端口
+        var ipPart: String
+        var port: Int = 0
+        
+        switch parts.count {
+        case 1:
+            ipPart = String(parts[0])
+        case 2:
+            ipPart = String(parts[0])
+            guard let p = Int(parts[1]), p >= 0 && p <= 65535 else {
+                return nil
+            }
+            port = p
+        default:
+            return nil
+        }
+        
+        // 处理 IPv4
+        let octets = ipPart.split(separator: ".", omittingEmptySubsequences: false)
+        guard octets.count == 4 else { return nil }
+        
+        var normalized: [String] = []
+        
+        for octet in octets {
+            // 允许前导0，但必须是纯数字
+            guard !octet.isEmpty,
+                  octet.allSatisfy({ $0.isNumber }),
+                  let value = Int(octet),
+                  value >= 0 && value <= 255 else {
+                return nil
+            }
+            normalized.append(String(value)) // 去掉前导0
+        }
+        
+        let ip = normalized.joined(separator: ".")
+        return (ip: ip, port: port)
+    }
+    
     /// 转义 JavaScript 字符串中的特殊字符
     /// - Returns: 转义后的字符串，可安全用于 JavaScript 单引号字符串
     func escapeJSString() -> String {

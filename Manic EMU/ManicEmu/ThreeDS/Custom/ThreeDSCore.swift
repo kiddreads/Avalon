@@ -123,9 +123,9 @@ public struct ThreeDSCore : @unchecked Sendable {
         threeDSObjC.orientationChanged(orientation, metalView: mtkView)
     }
     
-    public func getCIAInfo(url: URL) -> (identifier: UInt64, contentPath: String?, titlePath: String?) {
+    public func getCIAInfo(url: URL, isSdmc: Bool = true) -> (identifier: UInt64, contentPath: String?, titlePath: String?) {
         let identifier = threeDSObjC.getCIAIdentifier(at: url)
-        return (identifier, threeDSObjC.getCIAContentPath(withIdentifier: identifier), threeDSObjC.getCIATitlePath(withIdentifier: identifier))
+        return (identifier, threeDSObjC.getCIAContentPath(withIdentifier: identifier, isSdmc: isSdmc), threeDSObjC.getCIATitlePath(withIdentifier: identifier, isSdmc: isSdmc))
     }
     
     public func installed() -> [URL] {
@@ -226,12 +226,12 @@ public struct ThreeDSCore : @unchecked Sendable {
         threeDSObjC.jumpToHome()
     }
     
-    public func getTitlePath(identifier: UInt64) -> String? {
-        return threeDSObjC.getCIATitlePath(withIdentifier: identifier)
+    public func getTitlePath(identifier: UInt64, isSdmc: Bool = true) -> String? {
+        return threeDSObjC.getCIATitlePath(withIdentifier: identifier, isSdmc: isSdmc)
     }
     
-    public func getCIAContentPath(identifier: UInt64) -> String? {
-        return threeDSObjC.getCIAContentPath(withIdentifier: identifier)
+    public func getCIAContentPath(identifier: UInt64, isSdmc: Bool = true) -> String? {
+        return threeDSObjC.getCIAContentPath(withIdentifier: identifier, isSdmc: isSdmc)
     }
     
     public func setSimBlowing(start: Bool) {

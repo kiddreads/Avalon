@@ -93,7 +93,11 @@ class GameCoverView: UIView {
             autoCornerRadius = true
         }
         imageView.setGameCover(game: game, size: coverSize)
-        updateStyle(style, gameType: game.gameType, scalePlatform: scalePlatform)
+        var gameTypeCategory = 0
+        if game.supportChangeCategory {
+            gameTypeCategory = game.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
+        }
+        updateStyle(style, gameType: game.gameType, scalePlatform: scalePlatform, gameTypeCategory: gameTypeCategory)
     }
     
     ///主题圆角配置时使用
@@ -105,9 +109,9 @@ class GameCoverView: UIView {
         updateStyle(style, gameType: gameType, scalePlatform: scalePlatform)
     }
     
-    func updateStyle(_ style: CoverStyle, gameType: GameType, scalePlatform: Bool = true) {
+    func updateStyle(_ style: CoverStyle, gameType: GameType, scalePlatform: Bool = true, gameTypeCategory: Int = 0) {
         self.style = style
-        platformView.image = Self.getPlatformImage(gameType: gameType, style: style, scalePlatform: scalePlatform)
+        platformView.image = Self.getPlatformImage(gameType: gameType, style: style, scalePlatform: scalePlatform, gameTypeCategory: gameTypeCategory)
         switch style {
         case .style1:
             imageView.snp.remakeConstraints { make in
@@ -156,9 +160,9 @@ class GameCoverView: UIView {
     }
     
     private static var platformImageCaches = [String: UIImage?]()
-    static func getPlatformImage(gameType: GameType, style: CoverStyle, scalePlatform: Bool = true) -> UIImage? {
+    static func getPlatformImage(gameType: GameType, style: CoverStyle, scalePlatform: Bool = true, gameTypeCategory: Int = 0) -> UIImage? {
         guard style != .style1 else { return nil }
-        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && !UIDevice.isLandscape && scalePlatform ? "_\(Constants.Size.GamesPerRow)" : "")
+        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && !UIDevice.isLandscape && scalePlatform ? "_\(Constants.Size.GamesPerRow)" : "") + "_\(gameTypeCategory)"
         if let image = GameCoverView.platformImageCaches[key] {
             return image
         } else {
@@ -172,7 +176,11 @@ class GameCoverView: UIView {
             } else if gameType == .gbc {
                 image = style == .style2 ? R.image.gbc_cover_v() : R.image.gbc_cover_h()
             } else if gameType == .gb {
-                image = style == .style2 ? R.image.gb_cover_v() : R.image.gb_cover_h()
+                if gameTypeCategory == 0 {
+                    image = style == .style2 ? R.image.gb_cover_v() : R.image.gb_cover_h()
+                } else if gameTypeCategory == 1 {
+                    image = style == .style2 ? R.image.chm_cover_v() : R.image.chm_cover_h()
+                }
             } else if gameType == .nes {
                 image = style == .style2 ? R.image.nes_cover_v() : R.image.nes_cover_h()
             } else if gameType == .fds {
@@ -238,7 +246,13 @@ class GameCoverView: UIView {
             } else if gameType == .doom {
                 image = style == .style2 ? R.image.doom_cover_v() : R.image.doom_cover_h()
             } else if gameType == .dos {
-                image = style == .style2 ? R.image.dos_cover_v() : R.image.dos_cover_h()
+                if gameTypeCategory == 0 {
+                    image = style == .style2 ? R.image.dos_cover_v() : R.image.dos_cover_h()
+                } else if gameTypeCategory == 1 {
+                    image = style == .style2 ? R.image.win95_cover_v() : R.image.win95_cover_h()
+                } else if gameTypeCategory == 2 {
+                    image = style == .style2 ? R.image.win98_cover_v() : R.image.win98_cover_h()
+                }   
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))

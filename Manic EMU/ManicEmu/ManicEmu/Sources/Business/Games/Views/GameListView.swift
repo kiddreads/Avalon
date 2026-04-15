@@ -134,6 +134,9 @@ class GameListView: BaseView {
         }
     }
     
+    ///need to Stop manufacturer filter
+    var needToStopManufacturerFilter: (()->Void)? = nil
+    
     ///搜索模式
     var isSearchMode = false
     private var searchString: String? = nil
@@ -168,6 +171,7 @@ class GameListView: BaseView {
     private var gameControllerDidDisConnectNotification: Any? = nil
     private var stopPlayGameNotification: Any? = nil
     private var gameSortChangeNotification: Any? = nil
+    private var platformVisableChangeNotification: Any? = nil
     
     var hasReloadCollectionView = false
     var enableBackground: Bool = false {
@@ -262,6 +266,19 @@ class GameListView: BaseView {
             self.collectionView.reloadData()
             self.reloadIndexView()
         }
+        
+        platformVisableChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.PlatformVisableChange, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let platform = notification.object as? String,
+               let gameType = GameType(shortName: platform),
+                games.where({ $0.gameType == gameType }).count > 0 {
+                self.needToStopManufacturerFilter?()
+                self.updateDatas()
+                self.collectionView.reloadData()
+                self.reloadIndexView()
+                
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -299,6 +316,10 @@ class GameListView: BaseView {
         }
         if let stopPlayGameNotification {
             NotificationCenter.default.removeObserver(stopPlayGameNotification)
+        }
+        
+        if let platformVisableChangeNotification {
+            NotificationCenter.default.removeObserver(platformVisableChangeNotification)
         }
     }
     
@@ -350,6 +371,12 @@ class GameListView: BaseView {
             $0.gameType
         }).filter({
             if let filteredManufacturer {
+                if filteredManufacturer == .modRetro, $0.key == .gb {
+                    let gbGames = $0.value
+                    return gbGames.contains(where: { gb in
+                        return (gb.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 1
+                    })
+                }
                 if filteredManufacturer.gameTypes.contains([$0.key]) {
                     return true
                 } else {
@@ -377,6 +404,66 @@ class GameListView: BaseView {
                 return self.sortDatas(game1: $0, game2: $1, sortType: sortType, sortOrder: sortOrder)
             }
         }) }
+        
+        //GB games can switch categories
+        if let gbGames = normalDatas[.gb], gbGames.count > 0 {
+            var newGbGames = [Game]()
+            var chmGames = [Game]()
+            for gb in gbGames {
+                if (gb.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 0 {
+                    newGbGames.append(gb)
+                } else {
+                    chmGames.append(gb)
+                }
+            }
+            var includeGB = true
+            var includeCHM = true
+            if let filteredManufacturer {
+                if filteredManufacturer == .nintendo {
+                    includeCHM = false
+                } else if filteredManufacturer == .modRetro {
+                    includeGB = false
+                }
+            }
+            normalDatas[.gb] = (newGbGames.count > 0 && includeGB) ? newGbGames : nil
+            normalDatas[.chm] = (chmGames.count > 0 && includeCHM) ? chmGames : nil
+        }
+        
+        //DOS games can switch categories
+        if let dosGames = normalDatas[.dos], dosGames.count > 0 {
+            var newDosGames = [Game]()
+            var win95Games = [Game]()
+            var win98Games = [Game]()
+            for dos in dosGames {
+                let dosGameType = dos.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
+                if dosGameType == 0 {
+                    newDosGames.append(dos)
+                } else if dosGameType == 1 {
+                    win95Games.append(dos)
+                } else if dosGameType == 2 {
+                    win98Games.append(dos)
+                }
+            }
+            normalDatas[.dos] = newDosGames.count > 0 ? newDosGames : nil
+            normalDatas[.win95] = win95Games.count > 0 ? win95Games: nil
+            normalDatas[.win98] = win98Games.count > 0 ? win98Games : nil
+        }
+        
+        //hide platform
+        let allGameTypes = normalDatas.keys
+        for gameType in allGameTypes {
+            var visable = true
+            var platform = gameType.localizedShortName
+            if gameType == .chm {
+                platform = GameType.gb.localizedShortName
+            } else if gameType == .win95 || gameType == .win98 {
+                platform = GameType.dos.localizedShortName
+            }
+            visable = Settings.defalut.getPlatformVisable(platform: platform)
+            if !visable {
+                normalDatas[gameType] = nil
+            }
+        }
         
         if isSearchMode {
             //如果当前处于搜索模式 则搜索数据也进行更新
@@ -773,6 +860,24 @@ class GameListView: BaseView {
     
     func isGameExist(for manufacturer: Manufacturer) -> Bool {
         for gameType in manufacturer.gameTypes {
+            if !Settings.defalut.getPlatformVisable(platform: gameType.localizedShortName) {
+                continue
+            }
+            if gameType == .chm,
+               games.where({ $0.gameType == .gb }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 1 }).count > 0 {
+                return true
+            }
+            
+            if gameType == .win95,
+               games.where({ $0.gameType == .dos }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 1 }).count > 0 {
+                return true
+            }
+            
+            if gameType == .win98,
+               games.where({ $0.gameType == .dos }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 2 }).count > 0 {
+                return true
+            }
+            
             if games.count(where: { $0.gameType == gameType }) > 0 {
                 return true
             }
@@ -796,6 +901,9 @@ extension GameListView: UICollectionViewDataSource {
             predefinedOrder = System.allCases.map { $0.gameType }
         }
         predefinedOrder.append(.unknown)
+        predefinedOrder.insert(.chm, at: predefinedOrder.firstIndex(of: .gb)!)
+        predefinedOrder.insert(.win95, at: predefinedOrder.firstIndex(of: .dos)!)
+        predefinedOrder.insert(.win98, at: predefinedOrder.firstIndex(of: .win95)!)
         let sortedKeys: [GameType] = predefinedOrder.filter { (isSearchMode ? searchDatas : normalDatas).keys.contains($0) }
         return sortedKeys
     }
@@ -865,10 +973,27 @@ extension GameListView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: GameCollectionViewCell.self, for: indexPath)
         if let game = getGame(at: indexPath) {
+            var coverGameType = game.gameType
+            
+            if game.supportChangeCategory {
+                let gameTypeCategory = game.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
+                if gameTypeCategory > 0 {
+                    if game.gameType == .gb {
+                        coverGameType = .chm
+                    } else if game.gameType == .dos {
+                        if gameTypeCategory == 1 {
+                            coverGameType = .win95
+                        } else if gameTypeCategory == 2 {
+                            coverGameType = .win98
+                        }
+                    }
+                }
+            }
+            
             cell.setData(game: game,
                          isSelect: isSelectionMode,
                          highlightString: searchString,
-                         coverSize: coverSizes[CoverSizeIdentifier(gameType: game.gameType)] ?? .zero,
+                         coverSize: coverSizes[CoverSizeIdentifier(gameType: coverGameType)] ?? .zero,
                          showTitle: !Constants.Size.GamesHideTitle || isSearchMode,
                          indexPath: indexPath)
         }
@@ -1209,6 +1334,10 @@ extension GameListView: UICollectionViewDelegate {
                     }
                     #endif
                     
+                    if game.isArticBaseHomeMenu {
+                        supportSwitchCore = false
+                    }
+                    
                     if supportSwitchCore {
                         //添加切换核心的操作
                         let action = UIAction(title: R.string.localizable.switchEmulationCore(), image: .symbolImage(.memorychip)) { _ in
@@ -1235,6 +1364,24 @@ extension GameListView: UICollectionViewDelegate {
                             }
                         })
                     }
+                }
+                
+                if game.supportChangeCategory {
+                    //Add category change
+                    firstGroup.append(UIAction(title: R.string.localizable.changeCategory(), image: .symbolImage(.listBulletIndent)) { _ in
+                        let supportCategories = game.supportCategories
+                        OptionsChooseView.show(options: supportCategories.map({ $0.localizedName }),
+                                               title: R.string.localizable.changeCategory(),
+                                               detail: nil,
+                                               completion: { index in
+                            if let index {
+                                game.updateCategory(gameType: supportCategories[index])
+                                self.updateDatas()
+                                self.collectionView.reloadData()
+                                self.reloadIndexView()
+                            }
+                        })
+                    })
                 }
             }
             

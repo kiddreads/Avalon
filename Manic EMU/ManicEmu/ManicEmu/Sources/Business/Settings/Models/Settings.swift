@@ -126,6 +126,21 @@ class Settings: Object, ObjectUpdatable {
     var airPlayLayout: GameSetting.AirPlayLayout {
         GameSetting.AirPlayLayout(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayLayout.rawValue) ?? 0) ?? .embeddedTopLeft
     }
+    
+    func getPlatformVisable(platform: String) -> Bool {
+        var realPlatform = platform
+        if GameType.chm.localizedShortName == platform {
+            realPlatform = GameType.gb.localizedName
+        } else if GameType.win95.localizedShortName == platform || GameType.win98.localizedShortName == platform {
+            realPlatform = GameType.dos.localizedName
+        }
+        return getExtraBool(key: realPlatform + "Visable") ?? true
+    }
+    
+    func setPlatformVisable(platform: String, visable: Bool) {
+        updateExtra(key: platform + "Visable", value: visable ? nil : false)
+        NotificationCenter.default.post(name: Constants.NotificationName.PlatformVisableChange, object: platform)
+    }
 }
 
 struct SkinConfig: SmartCodable {

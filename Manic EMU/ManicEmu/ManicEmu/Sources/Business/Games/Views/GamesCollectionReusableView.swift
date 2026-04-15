@@ -220,6 +220,12 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.doom_group_brand(compatibleWith: traitCollection)
             } else if gameType == .dos {
                 image = R.image.dos_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .chm {
+                image = R.image.chm_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .win95 {
+                image = R.image.win95_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .win98 {
+                image = R.image.win98_group_brand(compatibleWith: traitCollection)
             }
             Self.brandImageCaches[key] = image
             return image

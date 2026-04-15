@@ -384,7 +384,14 @@ extension GameSettingView: UICollectionViewDataSource {
         if isMappingMode, let mappingItem = item.mappingOnlyType {
             cell.setDataForMappingOnly(item: mappingItem)
         } else {
-            cell.setData(item: item, editable: isEditingMode, isPlus: indexPath.section != 0, enable: item.enable(for: game.gameType, defaultCore: game.defaultCore), mappingMode: isMappingMode, specialTitle: specialTitle)
+            cell.setData(item: item,
+                         editable: isEditingMode,
+                         isPlus: indexPath.section != 0,
+                         enable: item.enable(for: game.gameType,
+                                             defaultCore: game.defaultCore,
+                                             onlyQuit: game.isAzaharArticBase),
+                         mappingMode: isMappingMode,
+                         specialTitle: specialTitle)
         }
         
         if isEditingMode {
@@ -482,7 +489,7 @@ extension GameSettingView: UICollectionViewDelegate {
             return
         }
         var item = gameSettings[indexPath.row]
-        guard item.enable(for: game.gameType, defaultCore: game.defaultCore) else {
+        guard item.enable(for: game.gameType, defaultCore: game.defaultCore, onlyQuit: game.isAzaharArticBase) else {
             UIView.makeToast(message: R.string.localizable.notSupportGameSetting(game.gameType.localizedShortName + game.coreNameForMultiSupport))
             return
         }
@@ -583,7 +590,7 @@ extension GameSettingView: UICollectionViewDelegate {
     private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
         guard !isEditingMode, !isMappingMode else { return nil }
         var item = gameSettings[indexPath.row]
-        guard item.enable(for: game.gameType, defaultCore: game.defaultCore) else { return nil }
+        guard item.enable(for: game.gameType, defaultCore: game.defaultCore, onlyQuit: game.isAzaharArticBase) else { return nil }
         if item.type == .quickLoadState {
             //设置快速读档
             let actions = self.game.gameSaveStates.filter({ $0.type == .manualSaveState }).suffix(5).map { state in

@@ -436,19 +436,19 @@ static void TryShutdown() {
 }
 
 //Documents/3DS/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/title/0004000e/00198d00/content/00000000.app
--(NSString *_Nullable)getCIAContentPathWithIdentifier:(uint64_t)tid {
+-(NSString *_Nullable)getCIAContentPathWithIdentifier:(uint64_t)tid isSdmc:(BOOL)isSdmc {
     if (tid == 0) {
         return nil;
     }
-    return [NSString stringWithCString:Service::AM::GetTitleContentPath(Service::FS::MediaType::SDMC, tid).c_str() encoding:NSUTF8StringEncoding];
+    return [NSString stringWithCString:Service::AM::GetTitleContentPath(isSdmc ? Service::FS::MediaType::SDMC : Service::FS::MediaType::NAND, tid).c_str() encoding:NSUTF8StringEncoding];
 }
 
 //Documents/3DS/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/title/0004000e/00198d00/
--(NSString *_Nullable)getCIATitlePathWithIdentifier:(uint64_t)tid {
+-(NSString *_Nullable)getCIATitlePathWithIdentifier:(uint64_t)tid isSdmc:(BOOL)isSdmc {
     if (tid == 0) {
         return nil;
     }
-    return [NSString stringWithCString:Service::AM::GetTitlePath(Service::FS::MediaType::SDMC, tid).c_str() encoding:NSUTF8StringEncoding];
+    return [NSString stringWithCString:Service::AM::GetTitlePath(isSdmc ? Service::FS::MediaType::SDMC : Service::FS::MediaType::NAND, tid).c_str() encoding:NSUTF8StringEncoding];
 }
 
 -(void) touchBeganAtPoint:(CGPoint)point {

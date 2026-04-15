@@ -70,6 +70,12 @@ class ManufacturerCategoryView: BaseView {
         }
     }
     
+    private var manufacturers: [Manufacturer] = {
+        return Theme.defalut.manufacturerOrder
+    }()
+    
+    private var manufacturerOrderUpdateNotification: Any? = nil
+    
     var didManufacturerChange: ((Manufacturer?)->Bool)? = nil
     
     private lazy var collectionView: UICollectionView = {
@@ -88,12 +94,22 @@ class ManufacturerCategoryView: BaseView {
         return view
     }()
     
+    deinit {
+        if let manufacturerOrderUpdateNotification {
+            NotificationCenter.default.removeObserver(manufacturerOrderUpdateNotification)
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        manufacturerOrderUpdateNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ManufacturerOrderUpdate, object: nil, queue: .main, using: { [weak self] _ in
+            self?.updateDatas()
+        })
     }
     
     required init?(coder: NSCoder) {
@@ -127,20 +143,25 @@ class ManufacturerCategoryView: BaseView {
             _ = didManufacturerChange?(nil)
         }
     }
+    
+    private func updateDatas() {
+        deselectAll()
+        manufacturers = Theme.defalut.manufacturerOrder
+        collectionView.reloadData()
+    }
 }
 
 extension ManufacturerCategoryView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Manufacturer.allCases.count
+        return manufacturers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: ManufacturerCategoryCell.self, for: indexPath)
-        if let manufacturer = Manufacturer(rawValue: indexPath.row) {
-            cell.setDatas(normalImage: manufacturer.normalImage, highlightImage: manufacturer.highlightImage)
-            cell.onLongPress = {
-                topViewController()?.present(WebViewController(url: Constants.URLs.manufacturer(manufacturer)), animated: true)
-            }
+        let manufacturer = manufacturers[indexPath.row]
+        cell.setDatas(normalImage: manufacturer.normalImage, highlightImage: manufacturer.highlightImage)
+        cell.onLongPress = {
+            topViewController()?.present(WebViewController(url: Constants.URLs.manufacturer(manufacturer)), animated: true)
         }
         return cell
     }
@@ -152,11 +173,6 @@ extension ManufacturerCategoryView: UICollectionViewDelegate {
             collectionView.deselectItem(at: indexPath, animated: true)
             return didManufacturerChange?(nil) ?? false
         }
-        
-        if let manufacturer = Manufacturer(rawValue: indexPath.row) {
-            return didManufacturerChange?(manufacturer) ?? false
-        }
-        
-        return false
+        return didManufacturerChange?(manufacturers[indexPath.row]) ?? false
     }
 }

@@ -95,6 +95,12 @@ class PlatformSelectionView: BaseView {
                             game.defaultCore = 1
                         }
 #endif
+                        //Using the default core configured by the user.
+                        let globalCoreSwitch = GlobalCoreSwitch.getConfig(realm: realm)
+                        if let index = globalCoreSwitch.getUsingCoreIndex(gameType: gameType) {
+                            Log.debug("[PlatformSelection] using \(globalCoreSwitch.getUsingCoreName(gameType: gameType) ?? "Unknown")(index) core for \(gameType.localizedShortName)")
+                            game.defaultCore = index
+                        }
                     }
                     //如果切换到PSP 则检查game code
                     if gameType == .psp,
@@ -102,6 +108,8 @@ class PlatformSelectionView: BaseView {
                         let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
                         game.updateExtra(key: ExtraKey.PSPGameCode.rawValue, value: gameCode)
                     }
+                    
+                    
                     
                     NotificationCenter.default.post(name: Constants.NotificationName.PlatformSelectionChange, object: nil)
                     if !game.hasCoverMatch {
@@ -155,7 +163,7 @@ class PlatformSelectionView: BaseView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
-        view.register(cellWithClass: PlatformSortCollectionViewCell.self)
+        view.register(cellWithClass: TitleCollectionCell.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -245,8 +253,8 @@ extension PlatformSelectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let gameType = gameTypes[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withClass: PlatformSortCollectionViewCell.self, for: indexPath)
-        cell.setData(platform: gameType.localizedName, hideIcon: true)
+        let cell = collectionView.dequeueReusableCell(withClass: TitleCollectionCell.self, for: indexPath)
+        cell.setData(title: gameType.localizedName)
         return cell
     }
 }

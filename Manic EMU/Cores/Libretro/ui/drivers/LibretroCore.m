@@ -837,6 +837,7 @@ static BOOL g_enableMonitorLibretroLog = NO;
     g_enableMonitorLibretroLog = enable;
 }
 
+static NSString *g_mameMissingFileLog = nil;
 static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_list args) {
     if (!g_enableMonitorLibretroLog) {
         return;
@@ -848,11 +849,20 @@ static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_
     // 根据日志级别输出
     NSString *logMessage = [NSString stringWithUTF8String:buffer];
     
+    if ([logMessage containsString:@" NOT FOUND (tried in "]) {
+        if (g_mameMissingFileLog && g_mameMissingFileLog.length > 0) {
+            g_mameMissingFileLog = [g_mameMissingFileLog stringByAppendingFormat:@"\n%@", logMessage];
+        } else {
+            g_mameMissingFileLog = logMessage;
+        }
+    }
+    
     switch (level) {
         case RETRO_LOG_ERROR:
             if ([logMessage containsString:@"Required files are missing,"]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MAMEGameFileMissingNotification object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MAMEGameFileMissingNotification object:g_mameMissingFileLog];
+                    g_mameMissingFileLog = nil;
                 });
             }
             break;
@@ -1082,6 +1092,27 @@ static void azahar_keyboard_request_callback(const struct retro_keyboard_config_
 #endif
 }
 
+- (void)installAzaharCIA:(NSString *_Nonnull)path {
+    NSString *corePath = [[NSBundle mainBundle] pathForResource:@"azahar.libretro" ofType:@"framework" inDirectory:@"Frameworks"];
+    if (!corePath) {
+        return;
+    }
+    
+    NSString *dylibPath = [corePath stringByAppendingPathComponent:@"azahar.libretro"];
+    dylib_t lib = dylib_load([dylibPath UTF8String]);
+    if (!lib) {
+        return;
+    }
+    
+    typedef void (*retro_install_cia_t)(const char*);
+    retro_install_cia_t install_cia = (retro_install_cia_t)dylib_proc(lib, "retro_install_cia");
+    
+    if (install_cia) {
+        const char* path_cstr = [path UTF8String];
+        install_cia(path_cstr);
+    }
+}
+
 + (NSString *_Nullable)getPSPGameIDWithRomPath:(NSString *_Nonnull)romPath {
     NSString *corePath = [[NSBundle mainBundle] pathForResource:@"ppsspp.libretro" ofType:@"framework" inDirectory:@"Frameworks"];
     if (!corePath) {
@@ -1110,6 +1141,59 @@ static void azahar_keyboard_request_callback(const struct retro_keyboard_config_
     dylib_close(lib);
     
     return result;
+}
+
++ (LibretroPSPGame *_Nullable)installPSPGameWithZipPath:(NSString *_Nonnull)zipPath destDir:(NSString *_Nonnull)destDir {
+    NSString *corePath = [[NSBundle mainBundle] pathForResource:@"ppsspp.libretro" ofType:@"framework" inDirectory:@"Frameworks"];
+    if (!corePath) {
+        return nil;
+    }
+
+    NSString *dylibPath = [corePath stringByAppendingPathComponent:@"ppsspp.libretro"];
+    dylib_t lib = dylib_load([dylibPath UTF8String]);
+    if (!lib) {
+        return nil;
+    }
+
+    typedef struct {
+        int success;
+        const char *title;
+        const char *gameID;
+        const char *gamePath;
+        const void *iconData;
+        int iconSize;
+    } PSPZipInstallResult;
+
+    typedef const PSPZipInstallResult* (*retro_install_psp_zip_t)(const char*, const char*);
+    retro_install_psp_zip_t install_psp_zip = (retro_install_psp_zip_t)dylib_proc(lib, "retro_install_psp_zip");
+    if (!install_psp_zip) {
+        dylib_close(lib);
+        return nil;
+    }
+
+    const PSPZipInstallResult *result = install_psp_zip([zipPath UTF8String], [destDir UTF8String]);
+    LibretroPSPGame *game = nil;
+
+    if (result && result->success) {
+        game = [[LibretroPSPGame alloc] init];
+
+        if (result->title) {
+            game.title = [NSString stringWithUTF8String:result->title];
+        }
+        if (result->gameID) {
+            game.gameID = [NSString stringWithUTF8String:result->gameID];
+        }
+        if (result->gamePath) {
+            game.gamePath = [NSString stringWithUTF8String:result->gamePath];
+        }
+        if (result->iconData && result->iconSize > 0) {
+            NSData *iconData = [NSData dataWithBytes:result->iconData length:result->iconSize];
+            game.icon = [UIImage imageWithData:iconData];
+        }
+    }
+
+    dylib_close(lib);
+    return game;
 }
 
 @end

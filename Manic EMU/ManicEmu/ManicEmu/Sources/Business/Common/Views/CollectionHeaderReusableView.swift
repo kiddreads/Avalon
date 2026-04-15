@@ -72,6 +72,44 @@ class BackgroundColorHaderReusableView: UICollectionReusableView {
         
 }
 
+class MultiLineBackgroundColorHaderReusableView: UICollectionReusableView {
+    var titleLabel: UILabel = {
+        let view = UILabel()
+        view.numberOfLines = 0
+        view.textColor = Constants.Color.LabelSecondary.forceStyle(UIDevice.isDarkMode ? .dark : .light)
+        view.font = Constants.Font.body(size: .s)
+        return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubviews([titleLabel])
+        makeBlur(blurColor: Constants.Color.Background)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.bottom.equalTo(14)
+            make.leading.trailing.equalToSuperview().inset(-Constants.Size.ContentSpaceHuge)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //完全搞不懂为什么UICollectionView的滚动会导致UIColor的dynamicColor错乱，只能这样处理了
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.userInterfaceStyle.rawValue != previousTraitCollection?.userInterfaceStyle.rawValue {
+            if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
+                blurView.colorTint = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light)
+                blurView.colorTintAlpha = 0.9
+            }
+            titleLabel.textColor = Constants.Color.LabelSecondary.forceStyle(UIDevice.isDarkMode ? .dark : .light)
+        }
+    }
+        
+}
+
 class BackgroundColorTitleAndButtonHaderReusableView: UICollectionReusableView {
     var titleLabel: UILabel = {
         let view = UILabel()

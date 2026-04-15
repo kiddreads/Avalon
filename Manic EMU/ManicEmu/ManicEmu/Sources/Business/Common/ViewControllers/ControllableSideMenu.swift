@@ -30,6 +30,10 @@ extension ControllableSideMenu: UIControllerPressable {
     }
     
     @objc func didSideMenuKeyboardPress(_ sender: UIKeyCommand) {
+        if let topViewController = ManicEmu.topViewController(),
+            topViewController is ControllerMappingViewController {
+            return
+        }
         if let inputString = sender.input {
             if inputString == "[" || inputString == "]" {
                 self.dismiss(animated: true)

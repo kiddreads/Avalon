@@ -58,6 +58,33 @@ extension FileManager {
         }
     }
     
+    static func safeMergeDirectories(srcURL: URL, dstURL: URL) throws {
+        let fileManager = FileManager.default
+        
+        guard fileManager.fileExists(atPath: srcURL.path) else {
+            throw NSError(domain: "MergeError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Source not exists"])
+        }
+        
+        try completePath(url: dstURL)
+        
+        let items = try fileManager.contentsOfDirectory(at: srcURL, includingPropertiesForKeys: [.isDirectoryKey], options: [])
+        
+        for item in items {
+            let destItem = dstURL.appendingPathComponent(item.lastPathComponent)
+            
+            let resourceValues = try item.resourceValues(forKeys: [.isDirectoryKey])
+            let isDirectory = resourceValues.isDirectory ?? false
+            
+            if isDirectory {
+                // Recursively merge folders (without overwriting entire folders)
+                try safeMergeDirectories(srcURL: item, dstURL: destItem)
+            } else {
+                // File: Overwrite if exists
+                try safeCopyItem(at: item, to: destItem, shouldReplace: true)
+            }
+        }
+    }
+    
     static func completePath(url: URL) throws {
         do {
             let manager = FileManager.default

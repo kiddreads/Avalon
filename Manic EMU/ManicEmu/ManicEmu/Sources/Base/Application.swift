@@ -21,9 +21,9 @@ class ManicApplication: UIApplication {
     
     override func sendEvent(_ event: UIEvent) {
         super.sendEvent(event)
-        if PlayViewController.isGaming, PlayViewController.currentGameType == .dos {
-            LibretroCore.sharedInstance().send(event)
-        }
+//        if PlayViewController.isGaming, PlayViewController.currentGameType == .dos {
+//            LibretroCore.sharedInstance().send(event)
+//        }
     }
     
     // 处理键盘事件 - 对应Objective-C中的handleKeyUIEvent方法 主要将键盘事件传递给DeltaCore

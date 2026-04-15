@@ -104,7 +104,8 @@ struct Constants {
                 case .lynx: return 1.118
                 case .xbox360: return 0.7062
                 case .j2me: return 0.75
-                case .dos: return 0.8
+                case .dos, .win95, .win98: return 0.8
+                case .chm: return 0.7908
                 default: return 1.0
                 }
             case .style2:
@@ -281,6 +282,7 @@ struct Constants {
         static let ThreeDS = Document.appendingPathComponent("3DS")
         static let ThreeDSSystemData = ThreeDS.appendingPathComponent("sysdata")
         static let ThreeDSStateLoad = ThreeDS.appendingPathComponent("states")
+        static let ThreeDSHomeMenuBase = ThreeDS.appendingPathComponent("nand/00000000000000000000000000000000/title/00040030")
         static let CitraConfig = ThreeDS.appendingPathComponent("config/config.ini")
         static let CitraDefaultConfig = Resource.appendingPathComponent("3DS.ini")
         static let AzaharConfig = Libretro.appendingPathComponent("config/Azahar/Azahar.opt")
@@ -291,6 +293,7 @@ struct Constants {
         static let Shaders = Libretro.appendingPathComponent("shaders")
         static let Screenshot = Libretro.appendingPathComponent("screenshots")
         static let PSPSave = Document.appendingPathComponent("PPSSPP/PSP/SAVEDATA")
+        static let PSPGame = Document.appendingPathComponent("PPSSPP/PSP/GAME")
         static let Nestopia = Document.appendingPathComponent(LibretroCore.Cores.Nestopia.name)
         static let Snes9x = Document.appendingPathComponent(LibretroCore.Cores.Snes9x.name)
         static let PicoDrive = Document.appendingPathComponent(LibretroCore.Cores.PicoDrive.name)
@@ -308,6 +311,7 @@ struct Constants {
         static let BeetleVB = Document.appendingPathComponent(LibretroCore.Cores.BeetleVB.name)
         static let PokeMini = Document.appendingPathComponent(LibretroCore.Cores.PokeMini.name)
         static let BeetlePSXHW = Document.appendingPathComponent(LibretroCore.Cores.BeetlePSXHW.name)
+        static let PCSXReArmed = Document.appendingPathComponent(LibretroCore.Cores.PCSXReArmed.name)
         static let Flycast = Document.appendingPathComponent(LibretroCore.Cores.Flycast.name)
         static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
         static let MAME = Document.appendingPathComponent(LibretroCore.Cores.MAME.name)
@@ -351,6 +355,9 @@ struct Constants {
         static let Freej2meWeb = Resource.appendingPathComponent("freej2me")
         static let DOSBoxPure = Document.appendingPathComponent(LibretroCore.Cores.DOSBoxPure.name)
         static let DOSBoxPureSystem = DOSBoxPure.appendingPathComponent("system")
+        static let NimbusPath = Resource.appendingPathComponent("Nimbus210")
+        static let Nimbus3DSPath = NimbusPath.appendingPathComponent("3ds")
+        static let NimbusCiaPath = NimbusPath.appendingPathComponent("cias/nimbus.cia")
     }
     
     struct DefaultKey {
@@ -454,6 +461,7 @@ struct Constants {
         static let XeniOSScheme = "xenios"
         static let J2MEScreenSizes = ["96x65", "96x96", "104x80", "128x128", "132x176", "128x160", "176x208", "176x220", "208x208", "240x320", "320x240", "240x400", "352x416", "360x640", "640x360", "480x800", "800x480"]
         static let DOSKeyboardSkinID = "public.aoshuang.game.dos.standard.keyboard"
+        static let AzaharArticBaseGameID = "AzaharArticBase"
     }
     
     enum Config {
@@ -553,6 +561,10 @@ struct Constants {
         static let RetroArchShadersDownloadSuccess = NSNotification.Name(rawValue: "RetroArchShadersDownloadSuccess")
         //重置游戏
         static let ResetImmediately = NSNotification.Name(rawValue: "ResetImmediately")
+        // manufacturer order update
+        static let ManufacturerOrderUpdate = NSNotification.Name(rawValue: "ManufacturerOrderUpdate")
+        //platform visable change object = platform
+        static let PlatformVisableChange = NSNotification.Name(rawValue: "PlatformVisableChange")
     }
     
     struct URLs {
@@ -646,6 +658,9 @@ struct Constants {
         static func MeloNXGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.MeloNXScheme)://game?id=\(gameId)")! }
         static let FetchXeniOSGames = URL(string: "\(Constants.Strings.XeniOSScheme)://gameInfo?scheme=manicemu")!
         static func XeniOSGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.XeniOSScheme)://launch?title-id=\(gameId)")! }
+#if SIDE_LOAD
+        static let EnableJITUrl = URL(string: "stikjit://enable-jit?bundle-id=com.aoshuang.manicemu&script-name=universal.js")!
+#endif
     }
     
     struct BIOS {

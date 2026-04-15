@@ -54,7 +54,7 @@ class MappingTipView: UIView {
             bubbleView.snp.makeConstraints { make in
                 make.height.equalTo(Constants.Size.ItemHeightTiny)
                 make.width.greaterThanOrEqualTo(Constants.Size.ItemHeightMid)
-                if kind == .button {
+                if kind == .button || kind == .switchButton {
                     var centerX = position.x - self.width/2
                     if position.x - bubbleWidth/2 < 0 {
                         //左侧超过屏幕外

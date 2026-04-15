@@ -234,6 +234,14 @@ class TriggerProView: UIView {
         }
     }
     
+    private func createInput(stringValue: String) -> SomeInput {
+        if stringValue.hasPrefix("KB_") {
+            return SomeInput(stringValue: stringValue.replacingOccurrences(of: "KB_", with: ""), intValue: nil, type: .controller(GameControllerInputType("directKeyboard")))
+        } else {
+            return SomeInput(stringValue: stringValue, intValue: 1, type: .controller(.controllerSkin))
+        }
+    }
+    
     // MARK: - Gesture Setup
     
     private func setupGestures(for button: TriggerButton) {
@@ -445,9 +453,7 @@ class TriggerProView: UIView {
     
     private func handleSimpleAction(button: TriggerButton, config: ItemConfig) {
         // 立即激活一次
-        let inputs = Set(config.mappings.map {
-            SomeInput(stringValue: $0, intValue: 1, type: .controller(.controllerSkin))
-        })
+        let inputs = Set(config.mappings.map { createInput(stringValue: $0) })
         activateHandler?(inputs)
         
         // 如果需要重复
@@ -463,9 +469,7 @@ class TriggerProView: UIView {
         }
         
         // 发送 deactivate
-        let inputs = Set(config.mappings.map {
-            SomeInput(stringValue: $0, intValue: 1, type: .controller(.controllerSkin))
-        })
+        let inputs = Set(config.mappings.map { createInput(stringValue: $0) })
         deactivateHandler?(inputs)
     }
     
@@ -484,9 +488,7 @@ class TriggerProView: UIView {
         timer.setEventHandler { [weak self] in
             guard let self = self else { return }
             
-            let inputs = Set(mappings.map {
-                SomeInput(stringValue: $0, intValue: 1, type: .controller(.controllerSkin))
-            })
+            let inputs = Set(mappings.map { self.createInput(stringValue: $0) })
             
             // 在主线程执行回调 - 每次重复都是一次完整的按键操作
             DispatchQueue.main.async {
@@ -538,9 +540,7 @@ class TriggerProView: UIView {
         
         state.isHoldActive = true
         
-        let inputs = Set(config.mappings.map {
-            SomeInput(stringValue: $0, intValue: 1, type: .controller(.controllerSkin))
-        })
+        let inputs = Set(config.mappings.map { createInput(stringValue: $0) })
         
         // 激活 hold
         DispatchQueue.main.async { [weak self] in
@@ -579,9 +579,7 @@ class TriggerProView: UIView {
         state.holdTimer?.cancel()
         state.holdTimer = nil
         
-        let inputs = Set(mappings.map {
-            SomeInput(stringValue: $0, intValue: 1, type: .controller(.controllerSkin))
-        })
+        let inputs = Set(mappings.map { createInput(stringValue: $0) })
         
         // 停用 hold
         DispatchQueue.main.async { [weak self] in
@@ -658,7 +656,7 @@ class TriggerProView: UIView {
     
     /// 执行单个 combo input 的 activate 和 deactivate
     private func executeComboInput(mapping: String, pressDuration: TimeInterval) {
-        let input = SomeInput(stringValue: mapping, intValue: 1, type: .controller(.controllerSkin))
+        let input = createInput(stringValue: mapping)
         
         // Activate
         DispatchQueue.main.async { [weak self] in

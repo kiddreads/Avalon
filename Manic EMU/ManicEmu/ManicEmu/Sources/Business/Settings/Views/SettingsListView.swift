@@ -118,6 +118,7 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .triggerPro),
                                   SettingItem(type: .jit),
                                   SettingItem(type: .shaders),
+                                  SettingItem(type: .globalCoreSwitch),
                 ]
 #else
                 datas[section] = [SettingItem(type: .airPlay, isOn: Settings.defalut.airPlay),
@@ -132,6 +133,7 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .triggerPro),
                                   SettingItem(type: .jit),
                                   SettingItem(type: .shaders),
+                                  SettingItem(type: .globalCoreSwitch),
                 ]
 #endif
             } else if section == .support {
@@ -592,6 +594,13 @@ extension SettingsListView: UICollectionViewDelegate {
                 }
             case .featuredItems:
                 UIApplication.shared.open(Constants.URLs.PlayCasePromo)
+            case .globalCoreSwitch:
+                let vc = GlobalCoreSwitchViewController(showClose: UIDevice.isPad ? false : true)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
             default:
                 break
             }

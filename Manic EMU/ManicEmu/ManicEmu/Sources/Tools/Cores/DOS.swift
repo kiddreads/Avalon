@@ -11,6 +11,8 @@ import AVFoundation
 
 extension GameType {
     static let dos = GameType("public.aoshuang.game.dos")
+    static let win95 = GameType("public.aoshuang.game.win95")
+    static let win98 = GameType("public.aoshuang.game.win98")
 }
 
 @objc enum DOSGameInput: Int, Input, CaseIterable {

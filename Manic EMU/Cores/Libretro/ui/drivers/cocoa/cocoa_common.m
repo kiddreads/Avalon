@@ -393,6 +393,54 @@ void cocoa_file_load_with_detect_core(const char *filename);
 
 #if TARGET_OS_IOS
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    [self handleTouchEvent:event];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesMoved:touches withEvent:event];
+    [self handleTouchEvent:event];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    [self handleTouchEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesCancelled:touches withEvent:event];
+    [self handleTouchEvent:event];
+}
+
+- (void)handleTouchEvent:(UIEvent* )event {
+    if (event.type == UIEventTypeHover) {
+        return;
+    }
+    
+    NSArray *touches = event.allTouches.allObjects;
+    
+    unsigned i;
+    cocoa_input_data_t *apple = (cocoa_input_data_t*)input_state_get_ptr()->current_data;
+    float scale = cocoa_screen_get_native_scale();
+    
+    if (!apple) {
+        return;
+    }
+    
+    apple->touch_count = 0;
+    
+    for (i = 0; i < touches.count && (apple->touch_count < MAX_TOUCHES); i++) {
+       UITouch      *touch = [touches objectAtIndex:i];
+       CGPoint       coord = [touch locationInView:[touch view]];
+       if (touch.phase != UITouchPhaseEnded && touch.phase != UITouchPhaseCancelled)
+       {
+          apple->touches[apple->touch_count   ].screen_x = coord.x * scale;
+          apple->touches[apple->touch_count ++].screen_y = coord.y * scale;
+       }
+    }
+}
+
 #pragma mark UIDocumentPickerViewController
 
 -(void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url
@@ -638,11 +686,11 @@ void cocoa_file_load_with_detect_core(const char *filename);
 -(void)viewDidLoad {
     [super viewDidLoad];
 #if TARGET_OS_IOS
-    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showNativeMenu)];
-    swipe.numberOfTouchesRequired   = 4;
-    swipe.delegate                  = self;
-    swipe.direction                 = UISwipeGestureRecognizerDirectionDown;
-    [self.view addGestureRecognizer:swipe];
+//    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showNativeMenu)];
+//    swipe.numberOfTouchesRequired   = 4;
+//    swipe.delegate                  = self;
+//    swipe.direction                 = UISwipeGestureRecognizerDirectionDown;
+//    [self.view addGestureRecognizer:swipe];
 #ifdef HAVE_IOS_TOUCHMOUSE
     if (@available(iOS 13, *))
         [self setupMouseSupport];

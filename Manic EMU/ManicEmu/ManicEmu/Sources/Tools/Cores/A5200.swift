@@ -143,16 +143,16 @@ class A5200EmulatorBridge : NSObject, EmulatorBase {
             if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
             } else {
-                if gameInput == .num4 {
-                    LibretroCore.sharedInstance().pressKeyboard(LibretroKeyboardCode.createCode(withLabel: "4"))
-                } else if gameInput == .num5 {
-                    LibretroCore.sharedInstance().pressKeyboard(LibretroKeyboardCode.createCode(withLabel: "5"))
-                } else if gameInput == .num6 {
-                    LibretroCore.sharedInstance().pressKeyboard(LibretroKeyboardCode.createCode(withLabel: "6"))
-                } else if gameInput == .num8 {
-                    LibretroCore.sharedInstance().pressKeyboard(LibretroKeyboardCode.createCode(withLabel: "8"))
-                } else if gameInput == .num9 {
-                    LibretroCore.sharedInstance().pressKeyboard(LibretroKeyboardCode.createCode(withLabel: "9"))
+                if gameInput == .num4, let keyCode = LibretroKeyboardCode.createCode(withLabel: "4") {
+                    LibretroCore.sharedInstance().pressKeyboard(keyCode)
+                } else if gameInput == .num5, let keyCode = LibretroKeyboardCode.createCode(withLabel: "5")  {
+                    LibretroCore.sharedInstance().pressKeyboard(keyCode)
+                } else if gameInput == .num6, let keyCode = LibretroKeyboardCode.createCode(withLabel: "6")  {
+                    LibretroCore.sharedInstance().pressKeyboard(keyCode)
+                } else if gameInput == .num8, let keyCode = LibretroKeyboardCode.createCode(withLabel: "8")  {
+                    LibretroCore.sharedInstance().pressKeyboard(keyCode)
+                } else if gameInput == .num9, let keyCode = LibretroKeyboardCode.createCode(withLabel: "9")  {
+                    LibretroCore.sharedInstance().pressKeyboard(keyCode)
                 }
             }
         }
@@ -196,16 +196,16 @@ class A5200EmulatorBridge : NSObject, EmulatorBase {
             if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
                 LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
             } else {
-                if gameInput == .num4 {
-                    LibretroCore.sharedInstance().releaseKeyboard(LibretroKeyboardCode.createCode(withLabel: "4"))
-                } else if gameInput == .num5 {
-                    LibretroCore.sharedInstance().releaseKeyboard(LibretroKeyboardCode.createCode(withLabel: "5"))
-                } else if gameInput == .num6 {
-                    LibretroCore.sharedInstance().releaseKeyboard(LibretroKeyboardCode.createCode(withLabel: "6"))
-                } else if gameInput == .num8 {
-                    LibretroCore.sharedInstance().releaseKeyboard(LibretroKeyboardCode.createCode(withLabel: "8"))
-                } else if gameInput == .num9 {
-                    LibretroCore.sharedInstance().releaseKeyboard(LibretroKeyboardCode.createCode(withLabel: "9"))
+                if gameInput == .num4, let keyCode = LibretroKeyboardCode.createCode(withLabel: "4")  {
+                    LibretroCore.sharedInstance().releaseKeyboard(keyCode)
+                } else if gameInput == .num5, let keyCode = LibretroKeyboardCode.createCode(withLabel: "5")  {
+                    LibretroCore.sharedInstance().releaseKeyboard(keyCode)
+                } else if gameInput == .num6, let keyCode = LibretroKeyboardCode.createCode(withLabel: "6")  {
+                    LibretroCore.sharedInstance().releaseKeyboard(keyCode)
+                } else if gameInput == .num8, let keyCode = LibretroKeyboardCode.createCode(withLabel: "8")  {
+                    LibretroCore.sharedInstance().releaseKeyboard(keyCode)
+                } else if gameInput == .num9, let keyCode = LibretroKeyboardCode.createCode(withLabel: "9")  {
+                    LibretroCore.sharedInstance().releaseKeyboard(keyCode)
                 }
             }
         }

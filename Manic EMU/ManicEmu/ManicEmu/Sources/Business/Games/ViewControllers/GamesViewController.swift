@@ -146,6 +146,10 @@ class GamesViewController: BaseViewController {
                 self.gamesToolView.isHidden = empty
             }
         }
+        view.needToStopManufacturerFilter = { [weak self] in
+            guard let self = self else { return }
+            self.gamesToolView.stopFilterManufacturer()
+        }
         return view
     }()
     
@@ -605,6 +609,10 @@ extension GamesViewController: UIControllerPressable {
     }
     
     @objc func didGamesViewKeyboardPress(_ sender: UIKeyCommand) {
+        if let topViewController = topViewController(),
+            topViewController is ControllerMappingViewController {
+            return
+        }
         if let inputString = sender.input, !(UIDevice.isPad && UIDevice.isLandscape) {
             if inputString == "[" {
                 showSideMenu(leftSide: true)

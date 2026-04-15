@@ -18,6 +18,101 @@
 
 @implementation LibretroKeyboardCode
 
++ (NSArray<NSString *> *)getAllKeyboarLabels {
+    return @[
+        @"1",
+        @"2",
+        @"3",
+        @"4",
+        @"5",
+        @"6",
+        @"7",
+        @"8",
+        @"9",
+        @"0",
+        @"a",
+        @"b",
+        @"c",
+        @"d",
+        @"e",
+        @"f",
+        @"g",
+        @"h",
+        @"i",
+        @"j",
+        @"k",
+        @"l",
+        @"m",
+        @"n",
+        @"o",
+        @"p",
+        @"q",
+        @"r",
+        @"s",
+        @"t",
+        @"u",
+        @"v",
+        @"w",
+        @"x",
+        @"y",
+        @"z",
+        @"f1",
+        @"f2",
+        @"f3",
+        @"f4",
+        @"f5",
+        @"f6",
+        @"f7",
+        @"f8",
+        @"f9",
+        @"f10",
+        @"f11",
+        @"f12",
+        @"escape",
+        @"backspace",
+        @"backquote",
+        @"minus",
+        @"equals",
+        @"insert",
+        @"home",
+        @"end",
+        @"pageup",
+        @"pagedown",
+        @"print",
+        @"scrolllock",
+        @"pause",
+        @"delete",
+        @"tab",
+        @"backslash",
+        @"rightbracket",
+        @"leftbracket",
+        @"capslock",
+        @"quote",
+        @"semicolon",
+        @"return",
+        @"shift",
+        @"lshift",
+        @"rshift",
+        @"period",
+        @"slash",
+        @"comma",
+        @"ctrl",
+        @"lctrl",
+        @"rctrl",
+        @"meta",
+        @"lmeta",
+        @"rmeta",
+        @"alt",
+        @"lalt",
+        @"ralt",
+        @"up",
+        @"space",
+        @"down",
+        @"left",
+        @"right"
+    ];
+}
+
 + (instancetype)createCodeWithLabel:(NSString *)label code:(unsigned)code {
     LibretroKeyboardCode *keyboardCode = [LibretroKeyboardCode new];
     keyboardCode.label = label;
@@ -25,7 +120,7 @@
     return keyboardCode;
 }
 
-+ (instancetype)createCodeWithLabel:(NSString *_Nonnull)label {
++ (LibretroKeyboardCode *_Nullable)createCodeWithLabel:(NSString *_Nonnull)label {
     if ([label isEqualToString:@"1"]) { return [self createCodeWithLabel:label code:RETROK_1]; }
     else if ([label isEqualToString:@"2"]) { return [self createCodeWithLabel:label code:RETROK_2]; }
     else if ([label isEqualToString:@"3"]) { return [self createCodeWithLabel:label code:RETROK_3]; }

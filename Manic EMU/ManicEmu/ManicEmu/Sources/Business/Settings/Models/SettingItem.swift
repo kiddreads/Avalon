@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders, featuredItems, skinSound
+        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders, featuredItems, skinSound, globalCoreSwitch
     }
     
     var type: ItemType
@@ -19,7 +19,7 @@ struct SettingItem {
     
     var backgroundColor: UIColor {
         switch type {
-        case .theme:
+        case .theme, .globalCoreSwitch:
             return Constants.Color.Magenta
         case .quickGame, .respectSilentMode, .privacyPolicy:
             return Constants.Color.Yellow
@@ -108,6 +108,8 @@ struct SettingItem {
             UIImage(symbol: .shippingboxFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .skinSound:
             UIImage(symbol: .waveform, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        case .globalCoreSwitch:
+            R.image.customGearshape()!.applySymbolConfig(font: Constants.Font.body(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         }
     }
     
@@ -171,6 +173,8 @@ struct SettingItem {
             R.string.localizable.featuredItems()
         case .skinSound:
             R.string.localizable.skinSoundEffects()
+        case .globalCoreSwitch:
+            R.string.localizable.globalCoreSwitch()
         }
     }
     

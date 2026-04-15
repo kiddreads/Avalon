@@ -93,7 +93,19 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(100)
         }
         
-        let icons = ["AppIcon", "AppIcon_ChineseNewYear", "AppIcon_Xmas", "AppIcon_Pixel32", "AppIcon_Halloween", "AppIcon_Dark", "AppIcon_Retro", "AppIcon_Color"]
+        let icons = ["AppIcon",
+                     "AppIcon_Lily",
+                     "AppIcon_Rainbow1",
+                     "AppIcon_Rainbow2",
+                     "AppIcon_Rainbow3",
+                     "AppIcon_Unity",
+                     "AppIcon_ChineseNewYear",
+                     "AppIcon_Xmas",
+                     "AppIcon_Pixel32",
+                     "AppIcon_Halloween",
+                     "AppIcon_Dark",
+                     "AppIcon_Retro",
+                     "AppIcon_Color"]
         let theme = Theme.defalut
         for (index, icon) in icons.enumerated() {
             let iconView = IconView()

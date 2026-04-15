@@ -82,10 +82,22 @@
 		5726FEF22D720B8800041AD5 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FEF12D720B8800041AD5 /* ColorfulX */; };
 		5726FF462D741F5C00041AD5 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FF452D741F5C00041AD5 /* ColorfulX */; };
 		5726FF812D74AC9D00041AD5 /* RoundAndBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726FF802D74AC8D00041AD5 /* RoundAndBorderView.swift */; };
+		572918D32F8B9F7200985D2C /* snes9x.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5729188A2F8B9F6400985D2C /* snes9x.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		572918D52F8B9F7A00985D2C /* pcsx.rearmed.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 572918892F8B9F6400985D2C /* pcsx.rearmed.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		572C5C642F6C30CE00776F8C /* LibretroDisk.h in Headers */ = {isa = PBXBuildFile; fileRef = 572C5C622F6C30CE00776F8C /* LibretroDisk.h */; };
 		572C5C652F6C30CE00776F8C /* LibretroDisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 572C5C632F6C30CE00776F8C /* LibretroDisk.m */; };
 		572C5CB42F6E983600776F8C /* J2MENetworkBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */; };
 		572C5CD52F6EDB9200776F8C /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C5CD32F6EDB8800776F8C /* CelebrationView.swift */; };
+		572D02602F87E3D8000BD6F4 /* PretendoNetworkingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D025E2F87E3CC000BD6F4 /* PretendoNetworkingViewController.swift */; };
+		572D026B2F87E3F8000BD6F4 /* PretendoNetworkingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D02682F87E3F1000BD6F4 /* PretendoNetworkingView.swift */; };
+		572D02722F87E45B000BD6F4 /* PretendoNetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D02702F87E453000BD6F4 /* PretendoNetworkingConfig.swift */; };
+		572D027A2F87EC49000BD6F4 /* ArticBaseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D02782F87EC3A000BD6F4 /* ArticBaseCollectionCell.swift */; };
+		572D02802F87EC63000BD6F4 /* NimbusCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D027B2F87EC4D000BD6F4 /* NimbusCollectionCell.swift */; };
+		572D02862F87EC79000BD6F4 /* PretendoHomeMenuCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D02832F87EC6B000BD6F4 /* PretendoHomeMenuCollectionCell.swift */; };
+		572D028B2F8805A1000BD6F4 /* ArticBaseRegionChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D02892F880592000BD6F4 /* ArticBaseRegionChooseView.swift */; };
+		572D02C92F891874000BD6F4 /* LibretroPSPGame.h in Headers */ = {isa = PBXBuildFile; fileRef = 572D02C72F891874000BD6F4 /* LibretroPSPGame.h */; };
+		572D02CA2F891874000BD6F4 /* LibretroPSPGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 572D02C82F891874000BD6F4 /* LibretroPSPGame.m */; };
+		572D02DD2F89483E000BD6F4 /* OptionsChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D02DB2F894812000BD6F4 /* OptionsChooseView.swift */; };
 		57399AC52E40ACE100AB73DD /* PSXSBIImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */; };
 		57399AC82E40AFBA00AB73DD /* PSXSBICollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */; };
 		57399ACF2E40BB4D00AB73DD /* PSXSBIDescCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */; };
@@ -598,7 +610,7 @@
 		577005D42D3F2F8E00762E8F /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D32D3F2F8200762E8F /* WebServer.swift */; };
 		577005D62D3F398100762E8F /* PasteImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D52D3F396C00762E8F /* PasteImporter.swift */; };
 		577005DA2D3F404F00762E8F /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577005D92D3F404D00762E8F /* ImportError.swift */; };
-		577006092D3F980400762E8F /* CollectionHaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006082D3F980400762E8F /* CollectionHaderReusableView.swift */; };
+		577006092D3F980400762E8F /* CollectionHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006082D3F980400762E8F /* CollectionHeaderReusableView.swift */; };
 		5770061B2D4089ED00762E8F /* CloudDriveConnetor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770061A2D4089DD00762E8F /* CloudDriveConnetor.swift */; };
 		5770064F2D40E45F00762E8F /* CloudDriveBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770064E2D40E45F00762E8F /* CloudDriveBrowserViewController.swift */; };
 		577006572D410D7F00762E8F /* BrowserItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */; };
@@ -633,6 +645,12 @@
 		5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5AB2EF45C6900916D8B /* JGenesisView.swift */; };
 		578452BA2F6A79370020A88F /* DOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452B92F6A79340020A88F /* DOS.swift */; };
 		578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		578E4B4A2F8A27F10027E6D0 /* GlobalCoreSwitchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E4B482F8A27E40027E6D0 /* GlobalCoreSwitchViewController.swift */; };
+		578E4B502F8A2AA60027E6D0 /* GlobalCoreSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E4B4F2F8A2AA50027E6D0 /* GlobalCoreSwitchView.swift */; };
+		578E4B552F8A2B440027E6D0 /* TitleDetailChevronCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E4B532F8A2B2E0027E6D0 /* TitleDetailChevronCollectionCell.swift */; };
+		578E4B592F8A2F480027E6D0 /* GlobalCoreSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E4B582F8A2F430027E6D0 /* GlobalCoreSwitch.swift */; };
+		578E4B9B2F8A8F6B0027E6D0 /* TitleCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E4B992F8A8F640027E6D0 /* TitleCollectionCell.swift */; };
+		578E4BA52F8A9B230027E6D0 /* TitleSortCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E4BA32F8A9B140027E6D0 /* TitleSortCollectionCell.swift */; };
 		578F24032F7A75AC00C8D834 /* azahar.libretro.framework/azahar.libretro in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 578F23C22F7A759300C8D834 /* azahar.libretro.framework/azahar.libretro */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		578F287E2F37805000D2D998 /* WFCSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F287C2F37804600D2D998 /* WFCSettingViewController.swift */; };
 		578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F28812F3780B700D2D998 /* WFCSettingView.swift */; };
@@ -817,7 +835,6 @@
 		57E9632A2D6B01450022914C /* ImportFileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E963292D6B013B0022914C /* ImportFileCollectionViewCell.swift */; };
 		57E9632C2D6B06320022914C /* ImportFooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E9632B2D6B06090022914C /* ImportFooterCollectionReusableView.swift */; };
 		57E9632E2D6B0B8A0022914C /* SparkleSeperatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E9632D2D6B0B7D0022914C /* SparkleSeperatorView.swift */; };
-		57EB89E72F6FF89200EDF9AF /* letter.json in Resources */ = {isa = PBXBuildFile; fileRef = 57EB89E62F6FF89200EDF9AF /* letter.json */; };
 		57EC6A6D2D7FC1E4002920F0 /* GameSettingSortCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EC6A6C2D7FC1E3002920F0 /* GameSettingSortCollectionReusableView.swift */; };
 		57EC6AA62D801F56002920F0 /* GamesListBlankSlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EC6AA52D801F4D002920F0 /* GamesListBlankSlateView.swift */; };
 		57EC6AB02D80321B002920F0 /* CheatCodeBlankSlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EC6AAF2D803210002920F0 /* CheatCodeBlankSlateView.swift */; };
@@ -1230,6 +1247,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				572918D52F8B9F7A00985D2C /* pcsx.rearmed.libretro.framework in Embed Frameworks */,
+				572918D32F8B9F7200985D2C /* snes9x.libretro.framework in Embed Frameworks */,
 				5792E7312F83B2650015CE0E /* mupen64plus.next.jit.libretro.framework in Embed Frameworks */,
 				578F24032F7A75AC00C8D834 /* azahar.libretro.framework/azahar.libretro in Embed Frameworks */,
 				578452C02F6A7F500020A88F /* dosbox.pure.libretro.framework in Embed Frameworks */,
@@ -1372,10 +1391,22 @@
 		5726FEDC2D71BEF900041AD5 /* SettingsItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		5726FEE62D71D7F100041AD5 /* SettingsListFooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsListFooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		5726FF802D74AC8D00041AD5 /* RoundAndBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundAndBorderView.swift; sourceTree = "<group>"; };
+		572918892F8B9F6400985D2C /* pcsx.rearmed.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pcsx.rearmed.libretro.framework; path = ../Cores/pcsx.rearmed.libretro.framework; sourceTree = SOURCE_ROOT; };
+		5729188A2F8B9F6400985D2C /* snes9x.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = snes9x.libretro.framework; path = ../Cores/snes9x.libretro.framework; sourceTree = SOURCE_ROOT; };
 		572C5C622F6C30CE00776F8C /* LibretroDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroDisk.h; sourceTree = "<group>"; };
 		572C5C632F6C30CE00776F8C /* LibretroDisk.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroDisk.m; sourceTree = "<group>"; };
 		572C5CB32F6E983600776F8C /* J2MENetworkBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2MENetworkBridge.swift; sourceTree = "<group>"; };
 		572C5CD32F6EDB8800776F8C /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationView.swift; sourceTree = "<group>"; };
+		572D025E2F87E3CC000BD6F4 /* PretendoNetworkingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PretendoNetworkingViewController.swift; sourceTree = "<group>"; };
+		572D02682F87E3F1000BD6F4 /* PretendoNetworkingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PretendoNetworkingView.swift; sourceTree = "<group>"; };
+		572D02702F87E453000BD6F4 /* PretendoNetworkingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PretendoNetworkingConfig.swift; sourceTree = "<group>"; };
+		572D02782F87EC3A000BD6F4 /* ArticBaseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticBaseCollectionCell.swift; sourceTree = "<group>"; };
+		572D027B2F87EC4D000BD6F4 /* NimbusCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusCollectionCell.swift; sourceTree = "<group>"; };
+		572D02832F87EC6B000BD6F4 /* PretendoHomeMenuCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PretendoHomeMenuCollectionCell.swift; sourceTree = "<group>"; };
+		572D02892F880592000BD6F4 /* ArticBaseRegionChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticBaseRegionChooseView.swift; sourceTree = "<group>"; };
+		572D02C72F891874000BD6F4 /* LibretroPSPGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroPSPGame.h; sourceTree = "<group>"; };
+		572D02C82F891874000BD6F4 /* LibretroPSPGame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroPSPGame.m; sourceTree = "<group>"; };
+		572D02DB2F894812000BD6F4 /* OptionsChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsChooseView.swift; sourceTree = "<group>"; };
 		57399AC42E40ACCF00AB73DD /* PSXSBIImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIImportViewController.swift; sourceTree = "<group>"; };
 		57399AC72E40AFB100AB73DD /* PSXSBICollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBICollectionCell.swift; sourceTree = "<group>"; };
 		57399ACE2E40BB4400AB73DD /* PSXSBIDescCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSXSBIDescCollectionCell.swift; sourceTree = "<group>"; };
@@ -1984,7 +2015,7 @@
 		577005D32D3F2F8200762E8F /* WebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
 		577005D52D3F396C00762E8F /* PasteImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteImporter.swift; sourceTree = "<group>"; };
 		577005D92D3F404D00762E8F /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
-		577006082D3F980400762E8F /* CollectionHaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHaderReusableView.swift; sourceTree = "<group>"; };
+		577006082D3F980400762E8F /* CollectionHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderReusableView.swift; sourceTree = "<group>"; };
 		5770061A2D4089DD00762E8F /* CloudDriveConnetor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDriveConnetor.swift; sourceTree = "<group>"; };
 		5770064E2D40E45F00762E8F /* CloudDriveBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDriveBrowserViewController.swift; sourceTree = "<group>"; };
 		577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserItemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -2090,6 +2121,12 @@
 		5781F5AB2EF45C6900916D8B /* JGenesisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGenesisView.swift; sourceTree = "<group>"; };
 		578452B92F6A79340020A88F /* DOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOS.swift; sourceTree = "<group>"; };
 		578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = dosbox.pure.libretro.framework; path = ../Cores/dosbox.pure.libretro.framework; sourceTree = SOURCE_ROOT; };
+		578E4B482F8A27E40027E6D0 /* GlobalCoreSwitchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoreSwitchViewController.swift; sourceTree = "<group>"; };
+		578E4B4F2F8A2AA50027E6D0 /* GlobalCoreSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoreSwitchView.swift; sourceTree = "<group>"; };
+		578E4B532F8A2B2E0027E6D0 /* TitleDetailChevronCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDetailChevronCollectionCell.swift; sourceTree = "<group>"; };
+		578E4B582F8A2F430027E6D0 /* GlobalCoreSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoreSwitch.swift; sourceTree = "<group>"; };
+		578E4B992F8A8F640027E6D0 /* TitleCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionCell.swift; sourceTree = "<group>"; };
+		578E4BA32F8A9B140027E6D0 /* TitleSortCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleSortCollectionCell.swift; sourceTree = "<group>"; };
 		578F23542F7A748100C8D834 /* azahar.libretro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = azahar.libretro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		578F235B2F7A759300C8D834 /* azahar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = azahar.xcodeproj; path = "../Cores/Azahar/build/ios-arm64-xcode/azahar.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		578F287C2F37804600D2D998 /* WFCSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFCSettingViewController.swift; sourceTree = "<group>"; };
@@ -2270,7 +2307,6 @@
 		57E963292D6B013B0022914C /* ImportFileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFileCollectionViewCell.swift; sourceTree = "<group>"; };
 		57E9632B2D6B06090022914C /* ImportFooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		57E9632D2D6B0B7D0022914C /* SparkleSeperatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleSeperatorView.swift; sourceTree = "<group>"; };
-		57EB89E62F6FF89200EDF9AF /* letter.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = letter.json; sourceTree = "<group>"; };
 		57EC6A6C2D7FC1E3002920F0 /* GameSettingSortCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingSortCollectionReusableView.swift; sourceTree = "<group>"; };
 		57EC6AA52D801F4D002920F0 /* GamesListBlankSlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesListBlankSlateView.swift; sourceTree = "<group>"; };
 		57EC6AAF2D803210002920F0 /* CheatCodeBlankSlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatCodeBlankSlateView.swift; sourceTree = "<group>"; };
@@ -2625,6 +2661,7 @@
 		57605FF62D20F23200A98B0C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				578E4B482F8A27E40027E6D0 /* GlobalCoreSwitchViewController.swift */,
 				57EED02F2EC8D99D003971BD /* JITSettingViewController.swift */,
 				57EED0252EC8D783003971BD /* iCloudSettingViewController.swift */,
 				5706AFBC2DF7D8A40066122E /* BIOSSelectionViewController.swift */,
@@ -4256,6 +4293,7 @@
 				5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */,
 				578F287C2F37804600D2D998 /* WFCSettingViewController.swift */,
 				578F28912F37855900D2D998 /* PSPNetworkingViewController.swift */,
+				572D025E2F87E3CC000BD6F4 /* PretendoNetworkingViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -4272,6 +4310,11 @@
 				578F28D42F39E0A100D2D998 /* PSPNetworkingConfigLocalView.swift */,
 				578F28DA2F39FBC100D2D998 /* PSPNetworkingConfigOnlineView.swift */,
 				578F28952F37856700D2D998 /* PSPNetworkingView.swift */,
+				572D02682F87E3F1000BD6F4 /* PretendoNetworkingView.swift */,
+				572D02782F87EC3A000BD6F4 /* ArticBaseCollectionCell.swift */,
+				572D027B2F87EC4D000BD6F4 /* NimbusCollectionCell.swift */,
+				572D02832F87EC6B000BD6F4 /* PretendoHomeMenuCollectionCell.swift */,
+				572D02892F880592000BD6F4 /* ArticBaseRegionChooseView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -4280,6 +4323,7 @@
 			isa = PBXGroup;
 			children = (
 				578F28B52F37881400D2D998 /* PSPNetworkingConfig.swift */,
+				572D02702F87E453000BD6F4 /* PretendoNetworkingConfig.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -4419,6 +4463,8 @@
 				573DE1872F6AA3B20091CE59 /* LibretroCoreOptions.m */,
 				572C5C622F6C30CE00776F8C /* LibretroDisk.h */,
 				572C5C632F6C30CE00776F8C /* LibretroDisk.m */,
+				572D02C72F891874000BD6F4 /* LibretroPSPGame.h */,
+				572D02C82F891874000BD6F4 /* LibretroPSPGame.m */,
 				575AD5812F24902F00C2B7E4 /* LibretroKeyboardCode.h */,
 				575AD5822F24902F00C2B7E4 /* LibretroKeyboardCode.m */,
 				57BFBE642DD3330900AABF98 /* keyboard_event_apple.h */,
@@ -4446,6 +4492,8 @@
 		57BFBE702DD335FD00AABF98 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				572918892F8B9F6400985D2C /* pcsx.rearmed.libretro.framework */,
+				5729188A2F8B9F6400985D2C /* snes9x.libretro.framework */,
 				578452BE2F6A7F380020A88F /* dosbox.pure.libretro.framework */,
 				573CEE992F23403100EA24F1 /* atari800.libretro.framework */,
 				573CEE9A2F23403100EA24F1 /* holani.libretro.framework */,
@@ -4506,6 +4554,7 @@
 		57CCB3C62D6770C20036476B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				578E4B582F8A2F430027E6D0 /* GlobalCoreSwitch.swift */,
 				5754D8922E2751C0001EA5ED /* WFC.swift */,
 				57E8B1012E2366D800F93E60 /* BIOSItem.swift */,
 				570F591B2DC7083E007BFD92 /* Theme.swift */,
@@ -4740,6 +4789,7 @@
 		57F632FC2D718224007270E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				578E4B4F2F8A2AA50027E6D0 /* GlobalCoreSwitchView.swift */,
 				57EED0342EC8D9BB003971BD /* JITSettingView.swift */,
 				57EED02A2EC8D7C1003971BD /* iCloudSettingView.swift */,
 				5706AFCE2DF7FC510066122E /* SettingDescriptionCollectionViewCell.swift */,
@@ -4797,6 +4847,10 @@
 		A561F94D257DCB5200E800A8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				578E4BA32F8A9B140027E6D0 /* TitleSortCollectionCell.swift */,
+				578E4B992F8A8F640027E6D0 /* TitleCollectionCell.swift */,
+				578E4B532F8A2B2E0027E6D0 /* TitleDetailChevronCollectionCell.swift */,
+				572D02DB2F894812000BD6F4 /* OptionsChooseView.swift */,
 				572C5CD32F6EDB8800776F8C /* CelebrationView.swift */,
 				57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */,
 				573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */,
@@ -4824,7 +4878,7 @@
 				5760601B2D2393EB00A98B0C /* SymbolView.swift */,
 				57DE10462D606C4700CDD82A /* SymbolButton.swift */,
 				57CCB3FE2D69B3FE0036476B /* ContextMenuButton.swift */,
-				577006082D3F980400762E8F /* CollectionHaderReusableView.swift */,
+				577006082D3F980400762E8F /* CollectionHeaderReusableView.swift */,
 				578F28E92F3A055F00D2D998 /* CollectionFooterReusableView.swift */,
 				57DF840B2D61B3D500AA0AAB /* BlankSlateCollectionView.swift */,
 				57B6ECEB2D79E19B002E619C /* BlankSlateTableView.swift */,
@@ -4921,7 +4975,6 @@
 		A5A0020724556F1E006E0F0E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				57EB89E62F6FF89200EDF9AF /* letter.json */,
 				57E0CCC62D9075110027FB8C /* file_icon.png */,
 				A5A001FB24555A5F006E0F0E /* Assets.xcassets */,
 				A5A001FD24555A5F006E0F0E /* LaunchScreen.storyboard */,
@@ -5101,6 +5154,7 @@
 			files = (
 				573DE1892F6AA3B20091CE59 /* LibretroCoreOptions.h in Headers */,
 				57BFBE5B2DD332A100AABF98 /* LibretroCore.h in Headers */,
+				572D02C92F891874000BD6F4 /* LibretroPSPGame.h in Headers */,
 				572C5C642F6C30CE00776F8C /* LibretroDisk.h in Headers */,
 				575AD5832F24902F00C2B7E4 /* LibretroKeyboardCode.h in Headers */,
 			);
@@ -5611,7 +5665,6 @@
 				A5DE1F1F256BC7F10099425B /* Localizable.strings in Resources */,
 				A5DE1F18256BC78B0099425B /* InfoPlist.strings in Resources */,
 				A5A001FC24555A5F006E0F0E /* Assets.xcassets in Resources */,
-				57EB89E72F6FF89200EDF9AF /* letter.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6067,6 +6120,7 @@
 				5720E7A32E541BF500EC0DA5 /* CheevosBridge.m in Sources */,
 				57BFBE522DD3328500AABF98 /* JITSupport.m in Sources */,
 				570CF8352EEA58DE00696C1B /* AzaharKeyboardConfig.m in Sources */,
+				572D02CA2F891874000BD6F4 /* LibretroPSPGame.m in Sources */,
 				573DE1882F6AA3B20091CE59 /* LibretroCoreOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6098,8 +6152,10 @@
 				5781F48E2EEE5C7A00916D8B /* ShaderInfoParameterCell.swift in Sources */,
 				5770068B2D438F7400762E8F /* PlayHistoryView.swift in Sources */,
 				57F1A9342D7D6D7D00D0CC93 /* ExternalSceneDelegate.swift in Sources */,
+				572D026B2F87E3F8000BD6F4 /* PretendoNetworkingView.swift in Sources */,
 				5781F4652EED639F00916D8B /* ShadersListBlankSlateView.swift in Sources */,
 				57DFBE8C2E71BC7A008C2161 /* CheevosPopupView.swift in Sources */,
+				578E4B592F8A2F480027E6D0 /* GlobalCoreSwitch.swift in Sources */,
 				578F28832F3780BC00D2D998 /* WFCSettingView.swift in Sources */,
 				57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */,
 				579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */,
@@ -6233,6 +6289,7 @@
 				573CEE2B2F21036800EA24F1 /* MultiDiscAddCollectionCell.swift in Sources */,
 				57EED02C2EC8D7C8003971BD /* iCloudSettingView.swift in Sources */,
 				57CCB3CD2D6775080036476B /* Database.swift in Sources */,
+				572D02DD2F89483E000BD6F4 /* OptionsChooseView.swift in Sources */,
 				5726FED82D71B63E00041AD5 /* CacheManager.swift in Sources */,
 				577005B52D3E6F3000762E8F /* AddImportServiceView.swift in Sources */,
 				57D7CF362EA5DBA800F41540 /* Trigger.swift in Sources */,
@@ -6253,6 +6310,7 @@
 				57CCB3A92D66CE610036476B /* SkinCollectionViewCell.swift in Sources */,
 				5706B0FA2DFFED100066122E /* Shaders.metal in Sources */,
 				576060182D22BC5900A98B0C /* PersistedKit.swift in Sources */,
+				578E4B502F8A2AA60027E6D0 /* GlobalCoreSwitchView.swift in Sources */,
 				577006872D438EBF00762E8F /* PlayHistoryViewController.swift in Sources */,
 				57DCE7FE2E0D9F300079E3AA /* RowStyle.swift in Sources */,
 				57E8B18D2E2553CE00F93E60 /* HomeMenuImage.swift in Sources */,
@@ -6260,6 +6318,7 @@
 				57DCE8002E0D9F300079E3AA /* TapActionRow.swift in Sources */,
 				573CEE872F2338D100EA24F1 /* A5200.swift in Sources */,
 				57D7CF4B2EA736C900F41540 /* TriggerProListCell.swift in Sources */,
+				572D027A2F87EC49000BD6F4 /* ArticBaseCollectionCell.swift in Sources */,
 				57DCE8012E0D9F300079E3AA /* DetailText.swift in Sources */,
 				5720E7ED2E547FE100EC0DA5 /* AchievementsProfile.swift in Sources */,
 				57F30CDF2EC44F390035327C /* Manufacturer.swift in Sources */,
@@ -6275,6 +6334,7 @@
 				57DCE8062E0D9F300079E3AA /* OptionRow.swift in Sources */,
 				57DCE8072E0D9F300079E3AA /* Icon.swift in Sources */,
 				57DCE8082E0D9F300079E3AA /* Configurable.swift in Sources */,
+				572D02862F87EC79000BD6F4 /* PretendoHomeMenuCollectionCell.swift in Sources */,
 				57DCE8092E0D9F300079E3AA /* SwitchCell.swift in Sources */,
 				574BCC742F324C92009BD74E /* Cipher.swift in Sources */,
 				57DCE80A2E0D9F300079E3AA /* Section.swift in Sources */,
@@ -6285,6 +6345,7 @@
 				578452BA2F6A79370020A88F /* DOS.swift in Sources */,
 				57DCE80D2E0D9F300079E3AA /* Reusable.swift in Sources */,
 				57DCE80E2E0D9F300079E3AA /* RadioSection.swift in Sources */,
+				578E4B9B2F8A8F6B0027E6D0 /* TitleCollectionCell.swift in Sources */,
 				573DE1BB2F6BA55E0091CE59 /* CoreConfigsOptionView.swift in Sources */,
 				57DCE80F2E0D9F300079E3AA /* TapActionCell.swift in Sources */,
 				57F0D81A2DE1C2D700760F57 /* GameListStyleCollectionViewCell.swift in Sources */,
@@ -6306,6 +6367,7 @@
 				570F59202DC7ACA8007BFD92 /* GameCoverView.swift in Sources */,
 				5720E78C2E54112700EC0DA5 /* RetroAchievementsListViewController.swift in Sources */,
 				5760601C2D2393EB00A98B0C /* SymbolView.swift in Sources */,
+				578E4B4A2F8A27F10027E6D0 /* GlobalCoreSwitchViewController.swift in Sources */,
 				B26262102A260E4C00174003 /* SideMenuShowStyle.swift in Sources */,
 				576C46292E16D1060008D087 /* MultiDiscBuilderViewController.swift in Sources */,
 				5706B0FD2DFFED170066122E /* menu_pipeline.metal in Sources */,
@@ -6342,7 +6404,7 @@
 				57D7CF3F2EA7355900F41540 /* TriggerProListViewController.swift in Sources */,
 				576F0E072D8806B500D2A1BA /* GameSavePurchaseGuideReusableView.swift in Sources */,
 				B2C97B502A09F3DE00053A4C /* UIimageExtensions.swift in Sources */,
-				577006092D3F980400762E8F /* CollectionHaderReusableView.swift in Sources */,
+				577006092D3F980400762E8F /* CollectionHeaderReusableView.swift in Sources */,
 				570F592E2DC885EF007BFD92 /* ThemeViewController.swift in Sources */,
 				57B5E3242ECCCD0800DE17E9 /* MAMEKit.swift in Sources */,
 				573CEE912F23396400EA24F1 /* Jaguar.swift in Sources */,
@@ -6372,6 +6434,7 @@
 				5706AFCF2DF7FC730066122E /* SettingDescriptionCollectionViewCell.swift in Sources */,
 				573CEE812F2338BC00EA24F1 /* A2600.swift in Sources */,
 				578F28922F37855A00D2D998 /* PSPNetworkingViewController.swift in Sources */,
+				572D02602F87E3D8000BD6F4 /* PretendoNetworkingViewController.swift in Sources */,
 				575FF91D2D350F210043B2F3 /* PlayViewController.swift in Sources */,
 				5781F4842EEE586000916D8B /* ShaderInfoInputCell.swift in Sources */,
 				5706B0452DFBF7DF0066122E /* MCD.swift in Sources */,
@@ -6381,13 +6444,18 @@
 				57D7CF862EA88AC100F41540 /* TriggerButton.swift in Sources */,
 				577EC5AB2F7E566700E8E3EB /* UniversalScript.c in Sources */,
 				5781F47E2EEE572A00916D8B /* ShaderInfoView.swift in Sources */,
+				572D028B2F8805A1000BD6F4 /* ArticBaseRegionChooseView.swift in Sources */,
+				572D02722F87E45B000BD6F4 /* PretendoNetworkingConfig.swift in Sources */,
 				57F632FE2D718236007270E8 /* SettingsListView.swift in Sources */,
+				578E4BA52F8A9B230027E6D0 /* TitleSortCollectionCell.swift in Sources */,
 				5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */,
+				572D02802F87EC63000BD6F4 /* NimbusCollectionCell.swift in Sources */,
 				57CC35802DC0684500DF7418 /* DownloadManageView.swift in Sources */,
 				57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */,
 				57CC33BE2DBCDF3400DF7418 /* CGRectExtensions.swift in Sources */,
 				57B5E33B2ECDFDF500DE17E9 /* MAMEBiosViewController.swift in Sources */,
 				57399B192E42EDEA00AB73DD /* DeadZoneControl.swift in Sources */,
+				578E4B552F8A2B440027E6D0 /* TitleDetailChevronCollectionCell.swift in Sources */,
 				57913AFB2D5D8FCF004D51AA /* ControllersCollectionViewCell.swift in Sources */,
 				A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */,
 				57F632852D6EB485007270E8 /* UIScreenExtensions.swift in Sources */,
@@ -6759,7 +6827,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 575A3A422DCEE9F300B28FC2 /* Config-SideloadRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -6767,6 +6835,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(APP_BUILD_VERSION)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UU52N52JLD;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -7117,7 +7186,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 579AB9D52E6C1118000868CB /* Config-SideloadDebug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7125,6 +7194,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(APP_BUILD_VERSION)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UU52N52JLD;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -7647,7 +7717,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57E0363F2DBBE17100B222E1 /* Config-DebugSimulator.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -8125,7 +8195,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57F456CF2DA98BB8007203AF /* Config-DevRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -8133,6 +8203,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(APP_BUILD_VERSION)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UU52N52JLD;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -8564,7 +8635,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B562A0A420E00053A4C /* Config-Debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -8809,7 +8880,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B572A0A423B00053A4C /* Config-Release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -8817,6 +8888,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(APP_BUILD_VERSION)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UU52N52JLD;
 				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

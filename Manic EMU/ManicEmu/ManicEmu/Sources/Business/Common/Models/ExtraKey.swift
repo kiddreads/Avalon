@@ -56,4 +56,13 @@ enum ExtraKey: String {
     case skinSoundEffects
     case jitType
     case biosName
+    case pretendoConfig
+    case identifier
+    case regions
+    case isArticBaseHomeMenu
+    case isPSPPBPGame
+    case pspPBPGamePath
+    case gameTypeCategory
+    case globalCoreConfigs
+    case manufacturerOrder
 }

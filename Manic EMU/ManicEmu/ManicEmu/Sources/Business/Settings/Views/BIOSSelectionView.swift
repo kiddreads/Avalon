@@ -182,12 +182,11 @@ class BIOSSelectionView: BaseView {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
             guard let self else { return nil }
             //item布局
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                 heightDimension: .fractionalHeight(1)))
-            
-            
             let sectionType = self.datas[sectionIndex]
             let itemHeight: CGFloat = sectionType == .desc ? 120 : BIOSCollectionViewCell.CellHeight(gameType: sectionType.gameType)
+            
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                 heightDimension: sectionType == .desc ? .estimated(itemHeight) : .fractionalHeight(1)))
             
             //group布局
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: sectionType == .desc ? .estimated(itemHeight) : .absolute(itemHeight)), subitems: [item])

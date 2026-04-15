@@ -16,12 +16,12 @@ class ControllerMappingView: UIView {
         return view
     }()
     
-    private var contextMenuButton: ContextMenuButton = {
+    private var gameTypecontextMenuButton: ContextMenuButton = {
         let view = ContextMenuButton()
         return view
     }()
     
-    private lazy var navigationSymbolTitle: SymbolButton = {
+    private lazy var gameTypeButton: SymbolButton = {
         let defaultTitle = self.gameType.localizedShortName
         let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)),
                                 title: defaultTitle,
@@ -44,18 +44,32 @@ class ControllerMappingView: UIView {
                                       handler: { [weak self] _ in
                     guard let self = self else { return }
                     self.gameType = allGameTypes[index]
-                    self.navigationSymbolTitle.titleLabel.text = itemTitles[index]
+                    self.gameTypeButton.titleLabel.text = itemTitles[index]
                     self.updateDatas()
                     var titleColor = Constants.Color.LabelPrimary
                     if #available(iOS 26.0, *), self.gameType != .psp {
                         titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
                     }
                     self.closeButton.imageView.image = UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: titleColor)
-                    self.resetButton.titleLabel.textColor = titleColor
+                    self.moreButton.imageView.image = UIImage(symbol: .ellipsis, color: titleColor)
                 }))
             }
-            self.contextMenuButton.menu = UIMenu(children: items)
-            self.contextMenuButton.triggerTapGesture()
+            self.gameTypecontextMenuButton.menu = UIMenu(children: items)
+            self.gameTypecontextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
+    private lazy var moreContextMenuButton: ContextMenuButton = {
+        let view = ContextMenuButton()
+        return view
+    }()
+    
+    private lazy var moreButton: SymbolButton = {
+        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
+        view.enableRoundCorner = true
+        view.addTapGesture { [weak self] gesture in
+            self?.showMoreContextMenu()
         }
         return view
     }()
@@ -74,48 +88,6 @@ class ControllerMappingView: UIView {
         }
         return view
     }()
-    
-    private lazy var resetButton: SymbolButton = {
-        var titleColor = Constants.Color.LabelPrimary
-        if #available(iOS 26.0, *), gameType != .psp {
-            titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-        }
-        let view = SymbolButton(image: nil,
-                                title: R.string.localizable.controllerMappingReset(),
-                                titleFont: Constants.Font.body(size: .m),
-                                titleColor: titleColor,
-                                edgeInsets: UIEdgeInsets(top: 0, left: Constants.Size.ContentSpaceTiny+3, bottom: 0, right: Constants.Size.ContentSpaceTiny),
-                                titlePosition: .left,
-                                enableGlass: true)
-        view.titleLabel.textAlignment = .center
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.resetMapping()
-            self.updateDatas()
-        }
-        return view
-    }()
-    
-    private func resetMapping() {
-        modifiedControllerMappings.removeValue(forKey: self.gameType)
-        let realm = Database.realm
-        if let object = realm.objects(ControllerMapping.self).first(where: { $0.controllerName == gameController.name && $0.gameType == gameType && !$0.isDeleted }) {
-            //删除数据
-            ControllerMapping.change { realm in
-                if Settings.defalut.iCloudSyncEnable {
-                    //iCloud同步删除
-                    object.isDeleted = true
-                } else {
-                    //本地删除
-                    realm.delete(object)
-                }
-            }
-            NotificationCenter.default.post(name: Constants.NotificationName.ControllerMapping, object: nil)
-        }
-        stopMapping()
-    }
-    
     
     private lazy var controllerView: ControllerView = {
         let view = ControllerView()
@@ -190,7 +162,7 @@ class ControllerMappingView: UIView {
     }()
     
     ///获取当前gameType的控制器映射
-    private var modifiedControllerMapping: GameControllerInputMapping {
+    private var currentGameTypeMapping: GameControllerInputMapping {
         if let inputMapping = modifiedControllerMappings[gameType] {
             return inputMapping
         } else {
@@ -237,33 +209,32 @@ class ControllerMappingView: UIView {
                 }
             }
             
-            guard let skinInputTuple = getSkinInput(selectedSkinInput) else {
-                Log.debug("皮肤键位没有找到")
-                UIView.makeToast(message: R.string.localizable.controllerMappingNoFouond())
-                return
+            Log.debug("[ControllerMappingView] 点击键盘:\(pressKey)")
+            Log.debug("[ControllerMappingView] 开始添加映射 [\(pressKey)] -> [\(selectedSkinInput.stringValue)]")
+            
+            var mapping = currentGameTypeMapping
+            var inputMappings = mapping.inputMappings
+            var occupiedInputMappings = [String: SomeInput]()
+            for (keyboardInputString, mappingInput) in inputMappings {
+                if mappingInput.stringValue == selectedSkinInput.stringValue {
+                    Log.debug("[ControllerMappingView] 皮肤按键 [\(selectedSkinInput.stringValue)] 被键盘按键 [\(keyboardInputString)] 占用")
+                    occupiedInputMappings[keyboardInputString] = mappingInput
+                }
             }
             
-            if var controllerInputMapping = modifiedControllerMappings[gameType] {
-                //如果将要映射的按键，已经被使用，需要将使用中的映射移除
-                var deleteKeys = [String]()
-                for (key, value) in controllerInputMapping.inputMappings {
-                    if value.stringValue == skinInputTuple.key {
-                        deleteKeys.append(key)
-                    }
+            if occupiedInputMappings.count > 0 {
+                occupiedInputMappings.forEach { keyboardInputString, mappingInput in
+                    Log.debug("[ControllerMappingView] 移除被占用的映射 [\(keyboardInputString)] -> [\(selectedSkinInput.stringValue)]")
+                    inputMappings[keyboardInputString] = nil
                 }
-                if deleteKeys.count > 0 {
-                    var inputMappings = controllerInputMapping.inputMappings
-                    inputMappings.removeAll(keys: deleteKeys)
-                    controllerInputMapping.inputMappings = inputMappings
-                    Log.debug("\n控制器的\(skinInputTuple.key)被\(deleteKeys)占用 删除:\(deleteKeys)")
-                }
-                
-                controllerInputMapping.inputMappings[pressKey] = SomeInput(stringValue: skinInputTuple.key, intValue: nil, type: .controller(.standard))
-                
-                modifiedControllerMappings[gameType] = controllerInputMapping
-
-                setupMappingBubble()
             }
+            
+            inputMappings[pressKey] = SomeInput(selectedSkinInput)
+            mapping.inputMappings = inputMappings
+            modifiedControllerMappings[gameType] = mapping
+            Log.debug("[ControllerMappingView] 完成添加映射 [\(pressKey)] -> [\(selectedSkinInput.stringValue)]")
+            Log.debug("[ControllerMappingView] \(gameType) 完整映射列表:\(mapping.inputMappings.reduce("", { $0 + "\n" + "\($1.key) -> \($1.value.stringValue)"}))\n\n")
+            setupMappingBubble()
         }
     }
     
@@ -277,7 +248,6 @@ class ControllerMappingView: UIView {
             //如果是键盘的话 需要特殊处理 监听键盘的按键
             keyboardController.keyboardPress = { [weak self] pressKey in
                 guard let self = self else { return }
-                Log.debug("点击键盘:\(pressKey)")
                 self.mapKeyboard(pressKey: pressKey)
             }
         } else {
@@ -313,23 +283,15 @@ class ControllerMappingView: UIView {
             make.height.equalTo(44)
         }
         
-        navigationBlurView.addSubview(navigationSymbolTitle)
-        navigationSymbolTitle.snp.makeConstraints { make in
+        navigationBlurView.addSubview(gameTypeButton)
+        gameTypeButton.snp.makeConstraints { make in
             make.leading.equalTo(Constants.Size.ContentSpaceMax)
             make.centerY.equalToSuperview()
         }
         
-        navigationBlurView.insertSubview(contextMenuButton, belowSubview: navigationSymbolTitle)
-        contextMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(navigationSymbolTitle)
-        }
-        
-        navigationBlurView.addSubview(resetButton)
-        resetButton.snp.makeConstraints { make in
-            make.leading.equalTo(navigationSymbolTitle.snp.trailing).offset(Constants.Size.ContentSpaceMid)
-            make.centerY.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.width.greaterThanOrEqualTo(44)
+        navigationBlurView.insertSubview(gameTypecontextMenuButton, belowSubview: gameTypeButton)
+        gameTypecontextMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(gameTypeButton)
         }
         
         navigationBlurView.addSubview(closeButton)
@@ -337,6 +299,18 @@ class ControllerMappingView: UIView {
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
             make.centerY.equalToSuperview()
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        }
+        
+        navigationBlurView.addSubview(moreContextMenuButton)
+        moreContextMenuButton.snp.makeConstraints { make in
+            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        }
+        
+        navigationBlurView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.edges.equalTo(moreContextMenuButton)
         }
         
         addSubview(gameSettingView)
@@ -361,8 +335,11 @@ class ControllerMappingView: UIView {
             
             setupMappingBubble()
             guideTitleLabel.snp.remakeConstraints { make in
-                make.top.equalTo(frames.mainGameViewFrame.maxY + Constants.Size.ContentSpaceTiny)
-                make.centerX.equalTo(frames.mainGameViewFrame.center.x)
+                var moreOffset = 0.0
+                if gameType == .dos || gameType == .doom {
+                    moreOffset = 20
+                }
+                make.top.equalTo(frames.mainGameViewFrame.maxY + Constants.Size.ContentSpaceTiny + moreOffset)
                 make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
             }
             gameSettingView.updateMappingMode(gameType: gameType)
@@ -402,86 +379,64 @@ class ControllerMappingView: UIView {
         return nil
     }
     
-    private func getControllerInput(_ controllerInput: Input,
-                                    isModifiedSource: Bool = true,
-                                    onlySearchValue: Bool = false,
-                                    includeSearchValue: Bool = true) -> (key: String, input: SomeInput)? {
-        if onlySearchValue {
-            for (key, value) in (isModifiedSource ? modifiedControllerMapping : defaultControllerMapping).inputMappings {
-                if value.stringValue == controllerInput.stringValue {
-                    return (key, value)
-                }
-            }
-        } else {
-            if let input = (isModifiedSource ? modifiedControllerMapping : defaultControllerMapping).inputMappings[controllerInput.stringValue] {
-                return (controllerInput.stringValue, input)
-            } else if includeSearchValue {
-                for (key, value) in (isModifiedSource ? modifiedControllerMapping : defaultControllerMapping).inputMappings {
-                    if value.stringValue == controllerInput.stringValue {
-                        return (key, value)
-                    }
-                }
+    private func shortName(for controllerInputString: String) -> String? {
+        var inputString: String? = nil
+        
+        for (s, i) in currentGameTypeMapping.inputMappings {
+            if i.stringValue == controllerInputString {
+                inputString = s
+                break
             }
         }
-        return nil
-    }
-    
-    private func getControllerInputString(skinInput: Input) -> String? {
-        if let skinInputTuple = getSkinInput(skinInput),
-           let controllerInputTuple = getControllerInput(SomeInput(stringValue: skinInputTuple.key, intValue: nil, type: .controller(.standard)), onlySearchValue: true) {
-            return shortName(for: controllerInputTuple.key)
-        }
-        return nil
-    }
-    
-    private func shortName(for controllerInputString: String) -> String {
-        if controllerInputString == "leftShoulder" {
+        
+        guard let inputString else { return nil }
+        
+        if inputString == "leftShoulder" {
             return "L1"
-        } else if controllerInputString == "leftThumbstickDown" {
+        } else if inputString == "leftThumbstickDown" {
             return "L↓"
-        } else if controllerInputString == "leftThumbstickLeft" {
+        } else if inputString == "leftThumbstickLeft" {
             return "L←"
-        } else if controllerInputString == "leftThumbstickRight" {
+        } else if inputString == "leftThumbstickRight" {
             return "L→"
-        } else if controllerInputString == "leftThumbstickUp" {
+        } else if inputString == "leftThumbstickUp" {
             return "L↑"
-        } else if controllerInputString == "leftTrigger" {
+        } else if inputString == "leftTrigger" {
             return "L2"
-        } else if controllerInputString == "leftThumbstickButton" {
+        } else if inputString == "leftThumbstickButton" {
             return "L3"
-        }  else if controllerInputString == "rightShoulder" {
+        }  else if inputString == "rightShoulder" {
             return "R1"
-        } else if controllerInputString == "rightThumbstickDown" {
+        } else if inputString == "rightThumbstickDown" {
             return "R↓"
-        } else if controllerInputString == "rightThumbstickLeft" {
+        } else if inputString == "rightThumbstickLeft" {
             return "R←"
-        } else if controllerInputString == "rightThumbstickRight" {
+        } else if inputString == "rightThumbstickRight" {
             return "R→"
-        } else if controllerInputString == "rightThumbstickUp" {
+        } else if inputString == "rightThumbstickUp" {
             return "R↑"
-        } else if controllerInputString == "rightTrigger" {
+        } else if inputString == "rightTrigger" {
             return "R2"
-        } else if controllerInputString == "rightThumbstickButton" {
+        } else if inputString == "rightThumbstickButton" {
             return "R3"
-        }  else {
+        } else {
 //            if gameController.name.contains("DualShock", caseSensitive: false) ||  gameController.name.contains("DualSense", caseSensitive: false) {
-//                //索尼的手柄 a->× y->△ b->○ x->□
-//                if controllerInputString == "a" {
+//                //索尼的手柄 b->× x->△ a->○ y->□
+//                if controllerInputString == "b" {
 //                    return "×"
-//                } else if controllerInputString == "b" {
+//                } else if controllerInputString == "a" {
 //                    return "○"
-//                } else if controllerInputString == "x" {
-//                    return "□"
 //                } else if controllerInputString == "y" {
+//                    return "□"
+//                } else if controllerInputString == "x" {
 //                    return "△"
 //                }
 //            }
-            
-            if let firstUppercased = controllerInputString.first?.uppercased() {
-                return firstUppercased + controllerInputString.dropFirst()
+            if let firstUppercased = inputString.first?.uppercased() {
+                return firstUppercased + inputString.dropFirst()
             }
         }
-        return controllerInputString
+        return inputString
     }
     
     private func setupMappingBubble() {
@@ -492,10 +447,10 @@ class ControllerMappingView: UIView {
                 let scaledFrame = item.frame.applying(.init(scaleX: mappingTipView.width, y: mappingTipView.height))
                 
                 switch item.kind {
-                case .button:
+                case .button, .switchButton:
                     //不支持组合键
                     if let input = item.inputs.allInputs.first {
-                        mappingTipView.updateTip(kind: item.kind, inputString: getControllerInputString(skinInput: input), position: CGPoint(x: scaledFrame.center.x, y: scaledFrame.center.y))
+                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: input.stringValue), position: CGPoint(x: scaledFrame.center.x, y: scaledFrame.center.y))
                     }
                 case .dPad, .thumbstick:
                     if case .directional(let up, let down, let left, let right) = item.inputs {
@@ -505,10 +460,10 @@ class ControllerMappingView: UIView {
                         let leftFrame = CGRect(center: CGPoint(x: scaledFrame.minX, y: scaledFrame.midY), size: minSize)
                         let rightFrame = CGRect(center: CGPoint(x: scaledFrame.maxX, y: scaledFrame.midY), size: minSize)
                         let adjustFrames = adjustFrames(up: upFrame, down: downFrame, left: leftFrame, right: rightFrame)
-                        mappingTipView.updateTip(kind: item.kind, inputString: getControllerInputString(skinInput: up), position: adjustFrames.up.center)
-                        mappingTipView.updateTip(kind: item.kind, inputString: getControllerInputString(skinInput: down), position: adjustFrames.down.center)
-                        mappingTipView.updateTip(kind: item.kind, inputString: getControllerInputString(skinInput: left), position: adjustFrames.left.center)
-                        mappingTipView.updateTip(kind: item.kind, inputString: getControllerInputString(skinInput: right), position: adjustFrames.right.center)
+                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: up.stringValue), position: adjustFrames.up.center)
+                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: down.stringValue), position: adjustFrames.down.center)
+                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: left.stringValue), position: adjustFrames.left.center)
+                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: right.stringValue), position: adjustFrames.right.center)
                     }
                 default: break
                 }
@@ -588,6 +543,54 @@ class ControllerMappingView: UIView {
         guideTitleLabel.text = R.string.localizable.controllerMappingGuideTitle()
         cancelButton.isHidden = true
     }
+    
+    private func resetMapping() {
+        modifiedControllerMappings.removeValue(forKey: self.gameType)
+        let realm = Database.realm
+        if let object = realm.objects(ControllerMapping.self).first(where: { $0.controllerName == gameController.name && $0.gameType == gameType && !$0.isDeleted }) {
+            //删除数据
+            ControllerMapping.change { realm in
+                if Settings.defalut.iCloudSyncEnable {
+                    //iCloud同步删除
+                    object.isDeleted = true
+                } else {
+                    //本地删除
+                    realm.delete(object)
+                }
+            }
+            NotificationCenter.default.post(name: Constants.NotificationName.ControllerMapping, object: nil)
+        }
+        stopMapping()
+    }
+    
+    private func showMoreContextMenu() {
+        self.stopMapping()
+        var actions = [UIMenuElement]()
+        
+        actions.append(UIMenu(title: R.string.localizable.mappingKeyboardInput(),
+                              options: .singleSelection,
+                              children: LibretroKeyboardCode.getAllKeyboarLabels().map { label in
+            var mappingInfo = ""
+            if let mappingKey = currentGameTypeMapping.inputMappings.first(where: { $1.stringValue == label })?.key, mappingKey != label {
+                mappingInfo = " ( \(mappingKey) ➔ \(label) )"
+            }
+            let action = UIAction(title: label + mappingInfo,
+                                  handler: { [weak self] _ in
+                guard let self else { return }
+                self.startMapping(input: SomeInput(stringValue: label, intValue: nil, type: .controller(GameControllerInputType("directKeyboard"))))
+            })
+            return action
+        }))
+        
+        actions.append(UIAction(title: R.string.localizable.controllerMappingReset(), handler: { [weak self] _ in
+            guard let self else { return }
+            self.resetMapping()
+            self.updateDatas()
+        }))
+        
+        moreContextMenuButton.menu = UIMenu(children: actions)
+        moreContextMenuButton.triggerTapGesture()
+    }
 }
 
 extension ControllerMappingView: ControllerReceiverProtocol {
@@ -599,7 +602,7 @@ extension ControllerMappingView: ControllerReceiverProtocol {
                 input.stringValue.contains("touchScreenY", caseSensitive: false) {
                 return
             }
-            Log.debug("点击皮肤:\(input)")
+            Log.debug("[ControllerMappingView] 点击皮肤:\(input)")
             startMapping(input: input)
         } else if let selectedSkinInput, gameController.inputType != .controllerSkin, !isKeyMapping {
             
@@ -627,58 +630,45 @@ extension ControllerMappingView: ControllerReceiverProtocol {
                     self.stopMapping()
                 }
             }
-            Log.debug("点击控制器:\(input)")
             
-            //这里输出的是处理后的input，需要找到映射前的input
-            guard let skinInputTuple = getSkinInput(selectedSkinInput) else {
-                Log.debug("皮肤键位没有找到")
+            //find real controller key
+            guard let realControllerInputString = defaultControllerMapping.inputMappings.first(where: {
+                $0.value.stringValue == input.stringValue
+            })?.key else {
                 UIView.makeToast(message: R.string.localizable.controllerMappingNoFouond())
                 return
             }
             
-            var controllerInputTuple: (key: String, input: SomeInput)?
-            if let tuple = getControllerInput(input, includeSearchValue: false) {
-                Log.debug("从修改的映射中找到映射")
-                controllerInputTuple = tuple
-            } else if let tuple = getControllerInput(input, isModifiedSource: false) {
-                Log.debug("从默认的映射中找到映射")
-                controllerInputTuple = tuple
+            let controllerInput = SomeInput(stringValue: realControllerInputString, intValue: input.intValue, type: input.type)
+            
+            Log.debug("[ControllerMappingView] 点击控制器:\(controllerInput)")
+            Log.debug("[ControllerMappingView] 开始添加映射 [\(controllerInput.stringValue)] -> [\(selectedSkinInput.stringValue)]")
+            
+            var mapping = currentGameTypeMapping
+            var inputMappings = mapping.inputMappings
+            var occupiedInputMappings = [String: SomeInput]()
+            for (controllerInputString, mappingInput) in inputMappings {
+                if mappingInput.stringValue == selectedSkinInput.stringValue {
+                    Log.debug("[ControllerMappingView] 皮肤按键 [\(selectedSkinInput.stringValue)] 被控制器按键 [\(controllerInputString)] 占用")
+                    occupiedInputMappings[controllerInputString] = mappingInput
+                }
             }
             
-            guard let controllerInputTuple else {
-                Log.debug("没有找到控制器键位")
-                UIView.makeToast(message: R.string.localizable.controllerMappingNoFouond())
-                return
+            if occupiedInputMappings.count > 0 {
+                occupiedInputMappings.forEach { controllerInputString, mappingInput in
+                    Log.debug("[ControllerMappingView] 移除被占用的映射 [\(controllerInputString)] -> [\(selectedSkinInput.stringValue)]")
+                    inputMappings[controllerInputString] = nil
+                }
             }
             
-            if var controllerInputMapping = modifiedControllerMappings[gameType] {
-                //如果将要映射的按键，已经被使用，需要将使用中的映射移除
-                var deleteKeys = [String]()
-                for (key, value) in controllerInputMapping.inputMappings {
-                    if value.stringValue == skinInputTuple.key {
-                        deleteKeys.append(key)
-                    }
-                }
-                if deleteKeys.count > 0 {
-                    var inputMappings = controllerInputMapping.inputMappings
-                    inputMappings.removeAll(keys: deleteKeys)
-                    controllerInputMapping.inputMappings = inputMappings
-                    Log.debug("\n控制器的\(skinInputTuple.key)被\(deleteKeys)占用 删除:\(deleteKeys)")
-                }
-                
-                //找到了控制器和皮肤的真实的按键
-                if let beforeInput = controllerInputMapping.inputMappings[controllerInputTuple.key] {
-                    Log.debug("修改映射:从\(controllerInputTuple.key) -> \(beforeInput.stringValue) 到 \(controllerInputTuple.key) -> \(skinInputTuple.key)")
-                } else {
-                    Log.debug("添加映射:\(controllerInputTuple.key) -> \(skinInputTuple.key)")
-                }
-                controllerInputMapping.inputMappings[controllerInputTuple.key] = SomeInput(stringValue: skinInputTuple.key, intValue: nil, type: controllerInputTuple.input.type, isContinuous: controllerInputTuple.input.isContinuous)
-                modifiedControllerMappings[gameType] = controllerInputMapping
-
-                setupMappingBubble()
-            }
+            inputMappings[controllerInput.stringValue] = SomeInput(selectedSkinInput)
+            mapping.inputMappings = inputMappings
+            modifiedControllerMappings[gameType] = mapping
+            Log.debug("[ControllerMappingView] 完成添加映射 [\(controllerInput.stringValue)] -> [\(selectedSkinInput.stringValue)]")
+            Log.debug("[ControllerMappingView] \(gameType) 完整映射列表:\(mapping.inputMappings.reduce("", { $0 + "\n" + "\($1.key) -> \($1.value.stringValue)"}))\n\n")
+            setupMappingBubble()
         } else {
-            Log.debug("点击:\(input)")
+            Log.debug("[ControllerMappingView] 点击:\(input)")
         }
     }
     

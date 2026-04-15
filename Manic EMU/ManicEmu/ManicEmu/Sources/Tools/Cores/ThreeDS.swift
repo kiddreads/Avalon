@@ -105,6 +105,50 @@ extension CheatType
 }
 
 struct ThreeDS: ManicEmuCoreProtocol {
+    static func generate3DSHomeMenu() {
+        let homeMenus = [
+            "JPN": "/00008202/",
+            "USA": "/00008f02/",
+            "EUR": "/00009802/",
+            "CHN": "/0000a102/",
+            "KOR": "/0000a902/",
+            "TWN": "/0000b102/"
+        ]
+        
+        if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.Document.appendingPathComponent("3DS/nand/00000000000000000000000000000000/title/00040030")), includingPropertiesForKeys: [.isDirectoryKey]) {
+            for case let fileURL as URL in enumerator {
+                let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
+                guard !isDirectory else { continue }
+                guard fileURL.pathExtension.lowercased() == "app" else { continue }
+                for (region, path) in homeMenus {
+                    if fileURL.path.contains(path, caseSensitive: false) {
+                        print("发现home menu")
+                        let realm = Database.realm
+                        if let hash = FileHashUtil.truncatedHash(url: fileURL) {
+                            if let _ = realm.object(ofType: Game.self, forPrimaryKey: hash) {
+                                continue
+                            } else {
+                                let game = Game()
+                                game.id = hash
+                                game.name = fileURL.deletingPathExtension().lastPathComponent
+                                game.fileExtension = fileURL.pathExtension
+                                game.gameType = ._3ds
+                                game.extras = [
+                                    ExtraKey.identifier.rawValue: Constants.Numbers.ThreeDSHomeMenuIdentifiers[Constants.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }) ?? 0],
+                                    ExtraKey.regions.rawValue: region
+                                ].jsonData()
+                                game.aliasName = "Home Menu (\(region))"
+                                game.importDate = Date()
+                                game.defaultCore = 1
+                                try? realm.write { realm.add(game) }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     static let core = ThreeDS()
     
     var name: String { "3DS" }

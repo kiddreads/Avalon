@@ -41,6 +41,11 @@ class UIControllerKit {
                let _ = userInfo["value"] as? Double {
                
                 guard let firstResponder = UIResponder.firstResponder else { return }
+                
+                if let topViewController = topViewController(),
+                    topViewController is ControllerMappingViewController {
+                    return
+                }
 
                 //游戏中则直接返回
                 if firstResponder is ControllerView {
@@ -105,9 +110,9 @@ class UIControllerKit {
                 } else if inputString == "y" {
                     key = .y
                 }
-                Log.debug("控制器点击:\(inputString)")
+                Log.debug("输入按键:\(inputString)")
                 if let key {
-                    Log.debug("响应控制器点击的Responders:\(pressableResponders.map({ String(describing: type(of: $0)) }))")
+                    Log.debug("响应按键的Responders:\(pressableResponders.map({ String(describing: type(of: $0)) }))")
                     pressableResponders.forEach { $0.didControllerPress(key: key) }
                 }
             }

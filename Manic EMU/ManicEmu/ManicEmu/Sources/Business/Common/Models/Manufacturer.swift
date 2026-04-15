@@ -9,13 +9,21 @@
 import ManicEmuCore
 
 enum Manufacturer: Int, CaseIterable {
-    case nintendo, sony, sega, arcade, atari, sun, microsoft
+    case nintendo, sony, sega, arcade, atari, sun, microsoft, modRetro
     
     static var allCases: [Manufacturer] {
         if Locale.prefersUS {
-            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft]
+            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft, .modRetro]
         } else {
-            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft]
+            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft, .modRetro]
+        }
+    }
+    
+    init?(title: String) {
+        if let m = Manufacturer.allCases.first(where: { $0.title == title }) {
+            self = m
+        } else {
+            return nil
         }
     }
     
@@ -35,11 +43,16 @@ enum Manufacturer: Int, CaseIterable {
             "Sun"
         case .microsoft:
             "Microsoft"
+        case .modRetro:
+            "ModRetro"
         }
     }
     
     var gameTypes: [GameType] {
-        System.allCases.map({ $0.gameType }).filter({ $0.manufacturer == self })
+        if self == .modRetro {
+            return [.chm]
+        }
+        return System.allCases.map({ $0.gameType }).filter({ $0.manufacturer == self })
     }
     
     var normalImage: UIImage {
@@ -58,6 +71,8 @@ enum Manufacturer: Int, CaseIterable {
             R.image.sun_normal()!
         case .microsoft:
             R.image.microsoft_normal()!
+        case .modRetro:
+            R.image.modretro_normal()!
         }
     }
     
@@ -77,6 +92,8 @@ enum Manufacturer: Int, CaseIterable {
             R.image.sun_highlight()!
         case .microsoft:
             R.image.microsoft_highlight()!
+        case .modRetro:
+            R.image.modretro_highlight()!
         }
     }
 }

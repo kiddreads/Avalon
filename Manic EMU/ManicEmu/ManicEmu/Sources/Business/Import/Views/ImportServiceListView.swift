@@ -308,7 +308,9 @@ extension ImportServiceListView: UICollectionViewDataSource {
                         WebServer.shard.stop()
                         service?.detail = R.string.localizable.importServiceListWiFiOffDetail()
                     }
-                    self?.collectionView.reloadItems(at: [indexPath])
+                    DispatchQueue.main.asyncAfter(delay: 0.35) {
+                        self?.collectionView.reloadItems(at: [indexPath])
+                    }
                 }
             } else {
                 cell.enableInteractive = true

@@ -136,6 +136,10 @@ extension ImportViewController: UIControllerPressable {
     }
     
     @objc func didImportViewKeyboardPress(_ sender: UIKeyCommand) {
+        if let topViewController = topViewController(),
+            topViewController is ControllerMappingViewController {
+            return
+        }
         if let inputString = sender.input, !(UIDevice.isPad && UIDevice.isLandscape) {
             if inputString == "[" {
                 showSideMenu()

@@ -216,64 +216,80 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                     itemView.button.isSelected = b.imported
                     itemView.isHidden = false
                     itemView.button.onTap {
-                        if gameType == ._3ds {
-                            UIView.makeToast(message: R.string.localizable.threeDSNandImportToast())
-                        }
-                        FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: true) {  urls in
-                            UIView.makeLoading()
-                            DispatchQueue.global().async {
-                                var matchs = [(url: URL, fileName: String)]()
-                                var mameMatchs = [(url: URL, fileName: String)]()
-                                for url in urls {
-                                    biosItems.forEach({ bios in
-                                        if url.lastPathComponent.lowercased() == bios.fileName.lowercased() {
-                                            matchs.append((url, bios.fileName))
-                                        } else if bios.fileName == Constants.Strings.MAMEBiosTitle,
-                                                  let _ = Constants.BIOS.MAMEBiosMap[url.lastPathComponent.lowercased()] {
-                                            //MAME Bios特殊匹配
-                                            mameMatchs.append((url, url.lastPathComponent.lowercased()))
-                                        }
-                                    })
-                                }
-                                
-                                var import3DSNandSuccess = true
-                                if matchs.count > 0 {
-                                    for match in matchs {
-                                        if match.fileName.lowercased() == "nand.zip" {
-                                            import3DSNandSuccess = self.import3DSNand(url: match.url)
-                                        } else {
-                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
-                                            var matchFilePath = Constants.Path.System.appendingPathComponent(match.fileName)
-                                            if gameType == .dc {
-                                                matchFilePath = Constants.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                        func importFromFiles() {
+                            FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: true) {  urls in
+                                UIView.makeLoading()
+                                DispatchQueue.global().async {
+                                    var matchs = [(url: URL, fileName: String)]()
+                                    var mameMatchs = [(url: URL, fileName: String)]()
+                                    for url in urls {
+                                        biosItems.forEach({ bios in
+                                            if url.lastPathComponent.lowercased() == bios.fileName.lowercased() {
+                                                matchs.append((url, bios.fileName))
+                                            } else if bios.fileName == Constants.Strings.MAMEBiosTitle,
+                                                      let _ = Constants.BIOS.MAMEBiosMap[url.lastPathComponent.lowercased()] {
+                                                //MAME Bios特殊匹配
+                                                mameMatchs.append((url, url.lastPathComponent.lowercased()))
                                             }
-                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
-                                        }
-                                    }
-                                    if !import3DSNandSuccess {
-                                        matchs.removeAll(where: { $0.fileName.lowercased() == "nand.zip" })
-                                    }
-                                }
-                                
-                                if mameMatchs.count > 0 {
-                                    for match in mameMatchs {
-                                        try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(match.fileName)), shouldReplace: true)
-                                    }
-                                }
-                                DispatchQueue.main.async {
-                                    UIView.hideLoading()
-                                    if matchs.count > 0 || mameMatchs.count > 0 {
-                                        UIView.makeToast(message: R.string.localizable.biosImportSuccess((matchs+mameMatchs).reduce("") { $0 + $1.fileName + "\n" }))
-                                        importSuccess?()
-                                    } else {
-                                        UIView.makeToast(message: R.string.localizable.biosImportFailed())
+                                        })
                                     }
                                     
-                                    if !import3DSNandSuccess {
-                                        UIView.makeToast(message: R.string.localizable.threeDSNandImportFailed())
+                                    var import3DSNandSuccess = true
+                                    if matchs.count > 0 {
+                                        for match in matchs {
+                                            if match.fileName.lowercased() == "nand.zip" {
+                                                import3DSNandSuccess = self.import3DSNand(url: match.url)
+                                            } else {
+                                                try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                                var matchFilePath = Constants.Path.System.appendingPathComponent(match.fileName)
+                                                if gameType == .dc {
+                                                    matchFilePath = Constants.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                                }
+                                                try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
+                                            }
+                                        }
+                                        if !import3DSNandSuccess {
+                                            matchs.removeAll(where: { $0.fileName.lowercased() == "nand.zip" })
+                                        }
+                                    }
+                                    
+                                    if mameMatchs.count > 0 {
+                                        for match in mameMatchs {
+                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                        }
+                                    }
+                                    DispatchQueue.main.async {
+                                        UIView.hideLoading()
+                                        if matchs.count > 0 || mameMatchs.count > 0 {
+                                            UIView.makeToast(message: R.string.localizable.biosImportSuccess((matchs+mameMatchs).reduce("") { $0 + $1.fileName + "\n" }))
+                                            importSuccess?()
+                                        } else {
+                                            UIView.makeToast(message: R.string.localizable.biosImportFailed())
+                                        }
+                                        
+                                        if !import3DSNandSuccess {
+                                            UIView.makeToast(message: R.string.localizable.threeDSNandImportFailed())
+                                        }
                                     }
                                 }
                             }
+                        }
+                        
+                        if gameType == ._3ds {
+                            UIView.makeAlert(title: R.string.localizable.headsUp(),
+                                             detail: R.string.localizable.nandImportHeadsUp(),
+                                             cancelTitle: R.string.localizable.contineFilesImport(),
+                                             confirmTitle: R.string.localizable.openPage(R.string.localizable.articBaseSettings()),
+                                             cancelAction: {
+                                UIView.makeToast(message: R.string.localizable.threeDSNandImportToast())
+                                importFromFiles()
+                            }, confirmAction: {
+                                DispatchQueue.main.asyncAfter(delay: 0.35) {
+                                    topViewController()?.present(PretendoNetworkingViewController(), animated: true)
+                                }
+                            })
+                        } else {
+                            importFromFiles()
                         }
                     }
                 } else {

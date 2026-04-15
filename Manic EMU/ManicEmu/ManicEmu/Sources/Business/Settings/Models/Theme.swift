@@ -191,6 +191,31 @@ class Theme: Object, ObjectUpdatable {
             }
         }
     }
+    
+    var manufacturerOrder: [Manufacturer] {
+        if let orderJsonString = getExtraString(key: ExtraKey.manufacturerOrder.rawValue),
+            let orderJsonData = orderJsonString.data(using: .utf8),
+            let orderJson = try? JSONSerialization.jsonObject(with: orderJsonData) as? [Int]  {
+            let order = orderJson.compactMap({ Manufacturer(rawValue: $0) })
+            Log.debug("[Theme] get manufacturerOrder:\(orderJsonString)")
+            let new = Manufacturer.allCases.filter { all in
+                return !order.contains(where: { $0 == all })
+            }
+            return order + new
+        }
+        Log.debug("[Theme] get manufacturerOrder: defaul order")
+        return Manufacturer.allCases
+    }
+    
+    func updateManufacturerOrder(_ order: [String]) {
+        let manufacturerOrder = order.compactMap({ Manufacturer(title: $0)?.rawValue })
+        if let data = try? JSONSerialization.data(withJSONObject: manufacturerOrder),
+           let jsonString = String(data: data, encoding: .utf8) {
+            Log.debug("[Theme] set manufacturerOrder:\(jsonString)")
+            updateExtra(key: ExtraKey.manufacturerOrder.rawValue, value: jsonString)
+            NotificationCenter.default.post(name: Constants.NotificationName.ManufacturerOrderUpdate, object: nil)
+        }
+    }
 }
 
 struct ThemeColor: SmartCodable {

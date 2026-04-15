@@ -96,19 +96,7 @@ class CoreSelectionView: BaseView {
                     }
 #endif
                 sheet?.pop {
-                    if game.defaultCore != coreIndex {
-                        let oldSaveUrl = game.gameSaveUrl
-                        Game.change { realm in
-                            game.defaultCore = coreIndex
-                        }
-                        //SS J2me的存档不切换
-                        let newSaveUrl = game.gameSaveUrl
-                        if game.gameType != .ss, game.gameType != .j2me, FileManager.default.fileExists(atPath: oldSaveUrl.path) {
-                            try? FileManager.safeMoveItem(at: oldSaveUrl, to: newSaveUrl)
-                        }
-                        //处理DS的存档
-                        game.processNDSGameSave()
-                    }
+                    game.changeDefaultCore(coreIndex: coreIndex)
                     completion?()
                 }
             }
@@ -116,7 +104,7 @@ class CoreSelectionView: BaseView {
             CoreSelectionView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(detailLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-                let count = Double(gameType.supportCores.count)
+                let count = Double(gameType.supportCores.filter({ !$0.isEmpty }).count)
                 let estimatedHeight = count * Constants.Size.ItemHeightMid + ((count + 1) * Constants.Size.ContentSpaceMax)
                 let maxHeight = Constants.Size.WindowHeight/2
                 make.height.equalTo(min(estimatedHeight, maxHeight))
@@ -157,7 +145,7 @@ class CoreSelectionView: BaseView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
-        view.register(cellWithClass: PlatformSortCollectionViewCell.self)
+        view.register(cellWithClass: TitleCollectionCell.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -166,6 +154,7 @@ class CoreSelectionView: BaseView {
     }()
     
     private var cores: [String]
+    private var visableCores: [String]
     private var currentCoreIndex: Int
     
     deinit {
@@ -174,6 +163,7 @@ class CoreSelectionView: BaseView {
     
     init(cores: [String], currentCoreIndex: Int) {
         self.cores = cores
+        self.visableCores = cores.filter({ !$0.isEmpty })
         self.currentCoreIndex = currentCoreIndex
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
@@ -208,55 +198,34 @@ class CoreSelectionView: BaseView {
             section.interGroupSpacing = Constants.Size.ContentSpaceMax
             section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMax, leading: 0, bottom: Constants.Size.ContentSpaceMax, trailing: 0)
             
-            section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: String(describing: PlatformSelectionCollectionReusableView.self))]
+            section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: String(describing: PlatformSelectionView.PlatformSelectionCollectionReusableView.self))]
             
             
             return section
         }
-        layout.register(PlatformSelectionCollectionReusableView.self, forDecorationViewOfKind: String(describing: PlatformSelectionCollectionReusableView.self))
+        layout.register(PlatformSelectionView.PlatformSelectionCollectionReusableView.self, forDecorationViewOfKind: String(describing: PlatformSelectionView.PlatformSelectionCollectionReusableView.self))
         return layout
-    }
-    
-    class PlatformSelectionCollectionReusableView: UICollectionReusableView {
-        var backgroundView: UIView = {
-            let view = UIView()
-            view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.BackgroundPrimary
-            return view
-        }()
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            
-            addSubview(backgroundView)
-            backgroundView.snp.makeConstraints { make in
-                make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            }
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
     }
 }
 
 extension CoreSelectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cores.count
+        return visableCores.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let core = cores[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withClass: PlatformSortCollectionViewCell.self, for: indexPath)
-        cell.setData(platform: core + "\(indexPath.row == currentCoreIndex ? " (\(R.string.localizable.currentTitle()))" : "")", hideIcon: true)
+        let core = visableCores[indexPath.row]
+        let currentCore = cores[currentCoreIndex]
+        let cell = collectionView.dequeueReusableCell(withClass: TitleCollectionCell.self, for: indexPath)
+        cell.setData(title: core + "\(core == currentCore ? " (\(R.string.localizable.currentTitle()))" : "")")
         return cell
     }
 }
 
 extension CoreSelectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        didSelected?(indexPath.row)
+        let core = visableCores[indexPath.row]
+        didSelected?(cores.firstIndex(where: { $0 == core }) ?? indexPath.row)
     }
 }

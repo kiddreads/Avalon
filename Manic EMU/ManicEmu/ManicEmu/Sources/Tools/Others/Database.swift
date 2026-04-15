@@ -323,6 +323,14 @@ struct Database {
                     }
                 }
             }
+            
+            //Prevent the game from not being removed after Articbase finishes its work due to an error.
+            if let articbase = realm.object(ofType: Game.self, forPrimaryKey: Constants.Strings.AzaharArticBaseGameID) {
+                try? realm.write {
+                    realm.delete(articbase)
+                }
+            }
+            
         } catch {
             Log.error("初始化数据错误 \(error)")
         }

@@ -312,8 +312,8 @@ typedef NS_ENUM(uint8_t, New3DSKernelMemoryMode) {
 -(ImportResultStatus) importGameAt:(NSURL *)url NS_SWIFT_NAME(importGame(at:));
 
 -(uint64_t)getCIAIdentifierAt:(NSURL *)url;
--(NSString *_Nullable)getCIAContentPathWithIdentifier:(uint64_t)tid;
--(NSString *_Nullable)getCIATitlePathWithIdentifier:(uint64_t)tid;
+-(NSString *_Nullable)getCIAContentPathWithIdentifier:(uint64_t)tid isSdmc:(BOOL)isSdmc;
+-(NSString *_Nullable)getCIATitlePathWithIdentifier:(uint64_t)tid isSdmc:(BOOL)isSdmc;
 
 -(void) touchBeganAtPoint:(CGPoint)point;
 -(void) touchEnded;

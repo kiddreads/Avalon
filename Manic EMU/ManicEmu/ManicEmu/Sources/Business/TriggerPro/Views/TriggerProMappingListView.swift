@@ -359,7 +359,7 @@ extension TriggerProMappingListView {
                 }
             })
             
-            let listView = TriggerProMappingListView(inputs: [inputs, gameSettingTypes + mappingOnlyTypes])
+            let listView = TriggerProMappingListView(inputs: [inputs, gameSettingTypes + mappingOnlyTypes, LibretroKeyboardCode.getAllKeyboarLabels().map({ "KB_" + $0 })])
             listView.didSelectInput = { [weak sheet] input in
                 sheet?.pop()
                 didSelectInput?(input)

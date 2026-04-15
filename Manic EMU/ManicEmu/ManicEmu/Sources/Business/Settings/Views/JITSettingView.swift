@@ -167,6 +167,64 @@ class JITSettingView: BaseView {
             return view
         }()
         
+#if SIDE_LOAD
+        private let enableJITView: UIView = {
+            let view = UIView()
+            view.enableInteractive = true
+            view.delayInteractiveTouchEnd = true
+            view.addTapGesture { gesture in
+                if UIApplication.shared.canOpenURL(Constants.URLs.EnableJITUrl) {
+                    UIApplication.shared.open(Constants.URLs.EnableJITUrl)
+                } else {
+                    UIView.makeToast(message: R.string.localizable.notInstall("StikDebug"))
+                }
+            }
+            
+            let container = UIView()
+            container.backgroundColor = Constants.Color.BackgroundPrimary
+            container.layerCornerRadius = Constants.Size.CornerRadiusMid
+            view.addSubview(container)
+            container.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.top.equalToSuperview()
+                make.height.equalTo(Constants.Size.ItemHeightMax)
+            }
+            
+            let iconView = UIImageView()
+            iconView.contentMode = .center
+            iconView.layerCornerRadius = 6
+            iconView.image = UIImage(symbol: .bolt,
+                                     font: Constants.Font.body(size: .s, weight: .medium),
+                                     color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            iconView.backgroundColor = Constants.Color.Background.forceStyle(.dark)
+            container.addSubview(iconView)
+            iconView.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                make.size.equalTo(Constants.Size.IconSizeMid)
+                make.centerY.equalToSuperview()
+            }
+            
+            let label = UILabel()
+            label.text = LibretroCore.jitAvailable() ?  R.string.localizable.reEnableJIT() : R.string.localizable.enableJIT()
+            label.textColor = Constants.Color.LabelPrimary
+            label.font = Constants.Font.body(size: .l, weight: .semibold)
+            container.addSubview(label)
+            label.snp.makeConstraints { make in
+                make.centerY.equalTo(iconView)
+                make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            }
+            
+            let chevronIconView = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
+            chevronIconView.contentMode = .center
+            container.addSubview(chevronIconView)
+            chevronIconView.snp.makeConstraints { make in
+                make.centerY.equalTo(iconView)
+                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            }
+            
+            return view
+        }()
+#else
         private let installSideloadView: UIView = {
             let view = UIView()
             view.enableInteractive = true
@@ -221,7 +279,8 @@ class JITSettingView: BaseView {
             
             return view
         }()
-        
+#endif
+
         private let detailLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 0
@@ -247,25 +306,27 @@ class JITSettingView: BaseView {
                 make.top.equalTo(jitView.snp.bottom)
                 make.height.equalTo(288)
             }
-            
-            var detailOffset = 0
-            #if SIDE_LOAD
-            detailOffset = 12
-            #else
-            detailOffset = 92
-            
+
+#if SIDE_LOAD
+            addSubview(enableJITView)
+            enableJITView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.top.equalTo(deviceView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+                make.height.equalTo(Constants.Size.ItemHeightMax)
+            }
+#else
             addSubview(installSideloadView)
             installSideloadView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(deviceView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
                 make.height.equalTo(Constants.Size.ItemHeightMax)
             }
-            #endif
+#endif
             
             addSubview(detailLabel)
             detailLabel.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.top.equalTo(deviceView.snp.bottom).offset(detailOffset)
+                make.top.equalTo(deviceView.snp.bottom).offset(92)
             }
             
         }

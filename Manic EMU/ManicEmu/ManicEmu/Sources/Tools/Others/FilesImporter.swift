@@ -48,6 +48,8 @@ extension FilesImporter: UIDocumentPickerDelegate {
 }
 
 extension FilesImporter {
+    static var importGameInfos = [String: Any]()
+    
     static func importFiles(urls: [URL],
                             preErrors: [Error] = [],
                             silentMode: Bool = PlayViewController.isGaming,
@@ -467,11 +469,16 @@ extension FilesImporter {
                     game.id = hash
                     game.name = originalUrl.deletingPathExtension().lastPathComponent
                     game.fileExtension = url.pathExtension
+                    game.importDate = Date()
                     
 #if !targetEnvironment(simulator)
+                    //handle 3ds game info
                     if let threeDSGameInfo {
                         //读取3DS信息
-                        game.extras = ["identifier": threeDSGameInfo.identifier, "regions": threeDSGameInfo.regions].jsonData()
+                        game.extras = [
+                            ExtraKey.identifier.rawValue: threeDSGameInfo.identifier,
+                            ExtraKey.regions.rawValue: threeDSGameInfo.regions
+                        ].jsonData()
                         if !threeDSGameInfo.title.isEmpty {
                             game.aliasName = threeDSGameInfo.title
                         }
@@ -485,30 +492,61 @@ extension FilesImporter {
                         }
                     }
 #endif
-                    let gameType = GameType(fileExtension: game.fileExtension)
+                    
+                    //handle psp pbp game
+                    let isPSPPBP = isPSPPBPGame(url: url)
+                    if isPSPPBP, let pspPBPGame = importGameInfos[url.path] as? LibretroPSPGame {
+                        game.name = pspPBPGame.title
+                        if let icon = pspPBPGame.icon,
+                           let iconData = icon.jpegData(compressionQuality: 0.7) {
+                            game.gameCover = CreamAsset.create(objectID: game.id, propName: "gameCover", data: iconData)
+                        }
+                        var extras = [
+                            ExtraKey.PSPGameCode.rawValue: pspPBPGame.gameID,
+                            ExtraKey.isPSPPBPGame.rawValue: true
+                        ]
+                        if let range = url.path.range(of: "PPSSPP/PSP/GAME/") {
+                            extras[ExtraKey.pspPBPGamePath.rawValue] = String(url.path[range.upperBound...])
+                        }
+                        game.extras = extras.jsonData()
+                    }
+                    
+                    let gameType = isPSPPBP ? .psp : GameType(fileExtension: game.fileExtension)
                     if gameType != .notSupport {
                         game.gameType = gameType
-                        game.importDate = Date()
+                        ///Handling game info for specific game types.
                         
+                        //archde
                         if gameType == .arcade, let mameInfo = MAMEKit.getMAMEInfo(fileName: game.name) {
                             game.aliasName = mameInfo.name
                         }
-                        
 #if !SIDE_LOAD
+                        //32x mcd
                         if game.gameType == ._32x || gameType == .mcd {
                             game.defaultCore = 1
                         }
 #endif
                         
-                        var j2MEManifest: J2MEManifest? = nil
-                        if game.gameType == .j2me {
-                            j2MEManifest = J2MEManifest.read(from: url.path)
-                            if let j2MEManifest {
-                                game.aliasName = j2MEManifest.displayName
-                            }
+                        //Using the default core configured by the user.
+                        let globalCoreSwitch = GlobalCoreSwitch.getConfig(realm: realm)
+                        if let index = globalCoreSwitch.getUsingCoreIndex(gameType: gameType) {
+                            Log.debug("[FilesImporter] using \(globalCoreSwitch.getUsingCoreName(gameType: gameType) ?? "Unknown")(\(index)) core for \(gameType.localizedShortName)")
+                            game.defaultCore = index
+                        }
+                        
+                        //j2me
+                        if game.gameType == .j2me, let j2MEManifest = J2MEManifest.read(from: url.path) {
+                            game.aliasName = j2MEManifest.displayName
+                            game.extras = [ExtraKey.j2meScreenSize.rawValue: j2MEManifest.screenSize.stringValue].jsonData()
+                        }
+                        
+                        //Obtain the game code for PSP.
+                        if gameType == .psp, !isPSPPBP, let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
+                            game.extras = [ExtraKey.PSPGameCode.rawValue: gameCode].jsonData()
                         }
                         
                         do {
+                            //Copy the ROMs
                             if ciaTitleUrl == nil {
                                 //cia格式的3DS不需要拷贝了 因为已经安装进游戏目录了
                                 if items.count > 0 {
@@ -519,7 +557,7 @@ extension FilesImporter {
                                     for item in items {
                                         try FileManager.safeCopyItem(at: item, to: URL(fileURLWithPath: romParentPath.appendingPathComponent(item.lastPathComponent)), shouldReplace: true)
                                     }
-                                } else {
+                                } else if !isPSPPBP {
                                     try FileManager.safeCopyItem(at: url, to: game.romUrl, shouldReplace: true)
                                 }
                             }
@@ -535,17 +573,6 @@ extension FilesImporter {
                                 }
                                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
                                 completion?(game.gameType == ._3ds ? (game.aliasName ?? game.name) : game.name, nil)
-                                
-                                //获取PSP的game code
-                                if gameType == .psp,
-                                    let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
-                                    game.updateExtra(key: ExtraKey.PSPGameCode.rawValue, value: gameCode)
-                                }
-                                
-                                //获取j2me的ScreenSize
-                                if gameType == .j2me, let j2MEManifest {
-                                    game.updateExtra(key: ExtraKey.j2meScreenSize.rawValue, value: j2MEManifest.screenSize.stringValue)
-                                }
                                 
                                 return
                             } catch {
@@ -782,7 +809,12 @@ extension FilesImporter {
                         }
                     }
                 } else if url.pathExtension.lowercased() == "zip" {
-                    needToHandleUrls.append(url)
+                    //检查是不是PSP的PBP自制程序
+                    if let pbpUrl = handlePSPPBPGame(url: url) {
+                        results.append(pbpUrl)
+                    } else {
+                        needToHandleUrls.append(url)
+                    }
                 }
             }
             
@@ -989,6 +1021,32 @@ extension FilesImporter {
             UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
             completion?(nil, nil)
         }
+    }
+    
+    static func handlePSPPBPGame(url: URL) -> URL? {
+        guard url.pathExtension.lowercased() == "zip" else { return url }
+        if let archive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
+            var isPSPPSPGame = false
+            for entry in archive {
+                if entry.path.lastPathComponent.uppercased() == "EBOOT.PBP" {
+                    isPSPPSPGame = true
+                    break
+                }
+            }
+            
+            if isPSPPSPGame {
+                if let game = LibretroCore.installPSPGame(withZipPath: url.path, destDir: Constants.Path.PSPGame) {
+                    importGameInfos[game.gamePath] = game
+                    return URL(fileURLWithPath: game.gamePath)
+                }
+            }
+
+        }
+        return nil
+    }
+    
+    static func isPSPPBPGame(url: URL) -> Bool {
+        return url.path.contains("PPSSPP/PSP/GAME")
     }
     
     static func handleM3uFiles(urls: [URL], multiFileItems: [MultiFileRom]) -> (result: [URL], errors: [ImportError], m3uItems: [MultiFileRom], multiFileItems: [MultiFileRom]) {

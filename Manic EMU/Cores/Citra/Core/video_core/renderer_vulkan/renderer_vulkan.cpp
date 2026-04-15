@@ -850,6 +850,12 @@ void RendererVulkan::SwapBuffers() {
             secondary_window->PollEvents();
         }
 #endif
+    } else {
+        // Skipped frames omit RenderToWindow()'s scheduler.Flush(render_ready). Rasterizer
+        // commands may still be in flight; TickFrame() runs texture GC that destroys VkImages in
+        // Surface::~Surface. Wait for the graphics queue before GC to avoid destroying textures
+        // still referenced by submitted command buffers (MoltenVK: texture in use by MTLCommandBuffer).
+        scheduler.Finish();
     }
     rasterizer.TickFrame();
     EndFrame();

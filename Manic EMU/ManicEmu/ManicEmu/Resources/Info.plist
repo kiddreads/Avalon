@@ -515,6 +515,7 @@
 		<string>sidestore</string>
 		<string>atariemulator</string>
 		<string>xenios</string>
+		<string>stikjit</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

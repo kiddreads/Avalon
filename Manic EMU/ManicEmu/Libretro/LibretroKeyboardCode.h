@@ -100,7 +100,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(assign, readonly) unsigned code;
 
-+ (instancetype)createCodeWithLabel:(NSString *_Nonnull)label;
++ (NSArray<NSString *> *)getAllKeyboarLabels;
++ (LibretroKeyboardCode *_Nullable)createCodeWithLabel:(NSString *_Nonnull)label;
 
 @end
 

@@ -13,6 +13,7 @@ import AVFoundation
 extension GameType
 {
     static let gb = GameType("public.aoshuang.game.gb")
+    static let chm = GameType("public.aoshuang.game.chm")
 }
 
 @objc enum GBGameInput: Int, Input, CaseIterable {

@@ -13,7 +13,7 @@ import RealmSwift
 class ThemeSettingView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desktopIcon, themeColor, coverStyle, gameList, platformOrder
+        case desktopIcon, themeColor, coverStyle, gameList, platformOrder, manufacturerOrder
         var title: String {
             switch self {
             case .desktopIcon:
@@ -26,6 +26,8 @@ class ThemeSettingView: BaseView {
                 R.string.localizable.gamesThemeTitle()
             case .platformOrder:
                 R.string.localizable.themePlatformOrderTitle()
+            case .manufacturerOrder:
+                R.string.localizable.themeManufacturerOrderTitle()
             }
         }
     }
@@ -45,6 +47,7 @@ class ThemeSettingView: BaseView {
         view.register(cellWithClass: CoverStyleCollectionViewCell.self)
         view.register(cellWithClass: GameListStyleCollectionViewCell.self)
         view.register(cellWithClass: PlatformSortCollectionViewCell.self)
+        view.register(cellWithClass: TitleSortCollectionCell.self)
         view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundColorHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
@@ -68,6 +71,10 @@ class ThemeSettingView: BaseView {
     
     private var platformOrder: [String] = {
         return Theme.defalut.platformOrder.map { $0 }
+    }()
+    
+    private var manufacturerOrder: [String] = {
+        return Theme.defalut.manufacturerOrder.map { $0.title }
     }()
     
     ///点击关闭按钮回调
@@ -140,13 +147,13 @@ class ThemeSettingView: BaseView {
                 itemHeight = 444
             }  else if sectionIndex == SectionIndex.gameList.rawValue {
                 itemHeight = 845
-            }  else if sectionIndex == SectionIndex.platformOrder.rawValue {
+            }  else if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
                 itemHeight = 50
             }
             
             //group布局
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemHeight)), subitems: [item])
-            if sectionIndex == SectionIndex.platformOrder.rawValue {
+            if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                 leading: Constants.Size.ContentSpaceMid * 2,
                                                                 bottom: 0,
@@ -160,7 +167,7 @@ class ThemeSettingView: BaseView {
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            if sectionIndex == SectionIndex.platformOrder.rawValue {
+            if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
                 section.interGroupSpacing = Constants.Size.ContentSpaceMax
                 section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMax + Constants.Size.ContentSpaceHuge, leading: 0, bottom: Constants.Size.ContentSpaceMax, trailing: 0)
             } else {
@@ -175,7 +182,7 @@ class ThemeSettingView: BaseView {
             headerItem.pinToVisibleBounds = true
             section.boundarySupplementaryItems = [headerItem]
             
-            if sectionIndex == SectionIndex.platformOrder.rawValue {
+            if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
                 section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: String(describing: PlatformOrderCollectionReusableView.self))]
             }
             
@@ -234,6 +241,8 @@ extension ThemeSettingView: UICollectionViewDataSource {
         if let section = SectionIndex(rawValue: section) {
             if section == .platformOrder {
                 return platformOrder.count
+            } else if section == .manufacturerOrder {
+                return manufacturerOrder.count
             }
         }
         return 1
@@ -258,6 +267,19 @@ extension ThemeSettingView: UICollectionViewDataSource {
             let platform = platformOrder[indexPath.row]
             let cell = collectionView.dequeueReusableCell(withClass: PlatformSortCollectionViewCell.self, for: indexPath)
             cell.setData(platform: platform)
+            cell.didTapVisableButton = { [weak self] in
+                guard let self else { return }
+                let settings = Settings.defalut
+                let visable = settings.getPlatformVisable(platform: platform)
+                settings.setPlatformVisable(platform: platform, visable: !visable)
+                UIView.makeToast(message: !visable ? R.string.localizable.showPlatform(platform) : R.string.localizable.hidePlatform(platform))
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+            return cell
+        case .manufacturerOrder:
+            let manufacturer = manufacturerOrder[indexPath.row]
+            let cell = collectionView.dequeueReusableCell(withClass: TitleSortCollectionCell.self, for: indexPath)
+            cell.setData(title: manufacturer)
             return cell
         }
     }
@@ -276,36 +298,71 @@ extension ThemeSettingView: UICollectionViewDelegate {
 
 extension ThemeSettingView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard indexPath.section == SectionIndex.platformOrder.rawValue else { return [] }
-        let pf = platformOrder[indexPath.row]
-        let itemProvider = NSItemProvider(object: pf as NSString)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = pf
-        return [dragItem]
+        if indexPath.section == SectionIndex.platformOrder.rawValue {
+            let pf = platformOrder[indexPath.row]
+            let itemProvider = NSItemProvider(object: pf as NSString)
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = pf
+            return [dragItem]
+        } else if indexPath.section == SectionIndex.manufacturerOrder.rawValue {
+            let mf = manufacturerOrder[indexPath.row]
+            let itemProvider = NSItemProvider(object: mf as NSString)
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = mf
+            return [dragItem]
+        }
+        return []
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath,
-              destinationIndexPath.section == SectionIndex.platformOrder.rawValue else { return }
         
-        coordinator.items.forEach { dropItem in
-            guard let sourceIndexPath = dropItem.sourceIndexPath,
-                  sourceIndexPath.section == SectionIndex.platformOrder.rawValue,
-                  let console = dropItem.dragItem.localObject as? String else { return }
+        if let sourceIndexPath = coordinator.items.first?.sourceIndexPath,
+            let destinationIndexPath = coordinator.destinationIndexPath,
+           sourceIndexPath.section == destinationIndexPath.section,
+           (sourceIndexPath.section == SectionIndex.platformOrder.rawValue || sourceIndexPath.section == SectionIndex.manufacturerOrder.rawValue),
+           (destinationIndexPath.section == SectionIndex.platformOrder.rawValue || destinationIndexPath.section == SectionIndex.manufacturerOrder.rawValue) {
             
-            collectionView.performBatchUpdates({
-                platformOrder.remove(at: sourceIndexPath.item)
-                platformOrder.insert(console, at: destinationIndexPath.item)
-                collectionView.deleteItems(at: [sourceIndexPath])
-                collectionView.insertItems(at: [destinationIndexPath])
-            }) { [weak self] isSuccess in
-                if isSuccess {
-                    self?.updatePlatformOrder()
+            if destinationIndexPath.section == SectionIndex.platformOrder.rawValue {
+                coordinator.items.forEach { dropItem in
+                    guard let sourceIndexPath = dropItem.sourceIndexPath,
+                          sourceIndexPath.section == SectionIndex.platformOrder.rawValue,
+                          let console = dropItem.dragItem.localObject as? String else { return }
+                    
+                    collectionView.performBatchUpdates({
+                        platformOrder.remove(at: sourceIndexPath.item)
+                        platformOrder.insert(console, at: destinationIndexPath.item)
+                        collectionView.deleteItems(at: [sourceIndexPath])
+                        collectionView.insertItems(at: [destinationIndexPath])
+                    }) { [weak self] isSuccess in
+                        if isSuccess {
+                            self?.updatePlatformOrder()
+                        }
+                    }
+                    
+                    coordinator.drop(dropItem.dragItem, toItemAt: destinationIndexPath)
+                }
+            } else if destinationIndexPath.section == SectionIndex.manufacturerOrder.rawValue {
+                coordinator.items.forEach { dropItem in
+                    guard let sourceIndexPath = dropItem.sourceIndexPath,
+                          sourceIndexPath.section == SectionIndex.manufacturerOrder.rawValue,
+                          let console = dropItem.dragItem.localObject as? String else { return }
+                    
+                    collectionView.performBatchUpdates({
+                        manufacturerOrder.remove(at: sourceIndexPath.item)
+                        manufacturerOrder.insert(console, at: destinationIndexPath.item)
+                        collectionView.deleteItems(at: [sourceIndexPath])
+                        collectionView.insertItems(at: [destinationIndexPath])
+                    }) { [weak self] isSuccess in
+                        if isSuccess {
+                            self?.updateManufacturerOrder()
+                        }
+                    }
+                    
+                    coordinator.drop(dropItem.dragItem, toItemAt: destinationIndexPath)
                 }
             }
             
-            coordinator.drop(dropItem.dragItem, toItemAt: destinationIndexPath)
         }
     }
     
@@ -317,10 +374,15 @@ extension ThemeSettingView: UICollectionViewDragDelegate, UICollectionViewDropDe
     func collectionView(_ collectionView: UICollectionView,
                         dropSessionDidUpdate session: UIDropSession,
                         withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        guard let indexPath = destinationIndexPath, indexPath.section == SectionIndex.platformOrder.rawValue else {
-            return UICollectionViewDropProposal(operation: .forbidden)
+        if let dragItem = session.localDragSession?.items.first?.localObject as? String, let destinationIndexPath {
+            if platformOrder.contains(where: { $0 == dragItem }), destinationIndexPath.section == SectionIndex.platformOrder.rawValue {
+                return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            } else if manufacturerOrder.contains(where: { $0 == dragItem }), destinationIndexPath.section == SectionIndex.manufacturerOrder.rawValue {
+                return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            }
         }
-        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        return UICollectionViewDropProposal(operation: .forbidden)
+        
     }
     
     private func updatePlatformOrder() {
@@ -329,6 +391,12 @@ extension ThemeSettingView: UICollectionViewDragDelegate, UICollectionViewDropDe
         Theme.change { realm in
             theme.platformOrder.removeAll()
             theme.platformOrder.append(objectsIn: platformOrder)
+        }
+    }
+    
+    private func updateManufacturerOrder() {
+        if Theme.defalut.manufacturerOrder.map({ $0.title }) != manufacturerOrder {
+            Theme.defalut.updateManufacturerOrder(manufacturerOrder)
         }
     }
 }

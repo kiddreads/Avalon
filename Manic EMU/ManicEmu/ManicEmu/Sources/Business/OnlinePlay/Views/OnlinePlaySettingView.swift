@@ -13,12 +13,13 @@ import ManicEmuCore
 class OnlinePlaySettingView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, ds, psp
+        case desc, ds, psp, pretendo
         var title: String {
             switch self {
             case .desc: ""
             case .ds: R.string.localizable.nintendoWFC()
             case .psp: R.string.localizable.pspNetworking()
+            case .pretendo: GameType._3ds.localizedShortName + " " + R.string.localizable.pretendo()
             }
         }
         
@@ -27,6 +28,7 @@ class OnlinePlaySettingView: BaseView {
             case .desc: return .notSupport
             case .ds: return .ds
             case .psp: return .psp
+            case .pretendo: return ._3ds
             }
         }
     }
@@ -70,7 +72,7 @@ class OnlinePlaySettingView: BaseView {
     }
     
     init(showClose: Bool = true) {
-        self.datas = [.desc, .ds, .psp]
+        self.datas = [.desc, .ds, .psp, .pretendo]
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
         backgroundColor = Constants.Color.Background
@@ -122,10 +124,6 @@ class OnlinePlaySettingView: BaseView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
             guard let self else { return nil }
-            //item布局
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                 heightDimension: .fractionalHeight(1)))
-            
             let sectionType = self.datas[sectionIndex]
             var itemHeight: CGFloat = 0
             switch sectionType {
@@ -134,6 +132,10 @@ class OnlinePlaySettingView: BaseView {
             default:
                 itemHeight = Constants.Size.ItemHeightMid
             }
+            
+            //item布局
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                 heightDimension: sectionType == .desc ? .estimated(itemHeight) : .fractionalHeight(1)))
             
             //group布局
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: sectionType == .desc ? .estimated(itemHeight) : .absolute(itemHeight)), subitems: [item])
@@ -186,6 +188,8 @@ extension OnlinePlaySettingView: UICollectionViewDelegate {
             topViewController()?.present(WFCSettingViewController(), animated: true)
         case .psp:
             topViewController()?.present(PSPNetworkingViewController(), animated: true)
+        case .pretendo:
+            topViewController()?.present(PretendoNetworkingViewController(), animated: true)
         }
     }
 }

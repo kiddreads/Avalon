@@ -198,6 +198,7 @@ extension GameType {
         case ._3ds: return "Nintendo 3DS"
         case .gbc: return "Game Boy Color"
         case .gb: return "Game Boy"
+        case .chm: return "Chromatic"
         case .gba: return "Game Boy Advance"
         case .ds: return "Nintendo DS"
         case .psp: return "PlayStation Portable"
@@ -224,6 +225,8 @@ extension GameType {
         case .j2me: return "Java ME"
         case .xbox360: return "Xbox 360"
         case .dos: return "MS-DOS"
+        case .win95: return "Windows 95"
+        case .win98: return "Windows 98"
         default: return ""
         }
     }
@@ -237,6 +240,7 @@ extension GameType {
         case ._3ds: return NSLocalizedString("3DS", comment: "")
         case .gbc: return NSLocalizedString("GBC", comment: "")
         case .gb: return NSLocalizedString("GB", comment: "")
+        case .chm: return NSLocalizedString("CHM", comment: "")
         case .gba: return NSLocalizedString("GBA", comment: "")
         case .ds: return NSLocalizedString("NDS", comment: "")
         case .psp: return NSLocalizedString("PSP", comment: "")
@@ -263,6 +267,8 @@ extension GameType {
         case .j2me: return  NSLocalizedString("J2ME", comment: "")
         case .xbox360: return  NSLocalizedString("XBOX360", comment: "")
         case .dos: return  NSLocalizedString("DOS", comment: "")
+        case .win95: return  NSLocalizedString("WIN95", comment: "")
+        case .win98: return  NSLocalizedString("WIN98", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -276,6 +282,7 @@ extension GameType {
         case .snes: return 1990
         case ._3ds: return 2011
         case .gb: return 1989
+        case .chm: return 2024
         case .gbc: return 1998
         case .gba: return 2001
         case .ds: return 2004
@@ -303,6 +310,8 @@ extension GameType {
         case .j2me: return 1999
         case .xbox360: return 2005
         case .dos: return 1981
+        case .win95: return 1995
+        case .win98: return 1998
         default: return 0
         }
     }
@@ -361,23 +370,41 @@ extension GameType {
         } else if self == .gba {
             return [LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
         } else if self == .md {
+#if SIDE_LOAD
             return [LibretroCore.Cores.ClownMDEmu.name, LibretroCore.Cores.PicoDrive.name]
+#endif
         } else if self == .ms || self == .gg || self == .sg1000 {
+#if SIDE_LOAD
             return [LibretroCore.Cores.Gearsystem.name, LibretroCore.Cores.PicoDrive.name]
+#endif
         } else if self == .gb || self == .gbc {
             return [LibretroCore.Cores.Gambatte.name, LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
         } else if self == .arcade {
+#if SIDE_LOAD
             return [LibretroCore.Cores.MAME.name, LibretroCore.Cores.FinalBurnNeo.name]
+#endif
         } else if self == ._3ds {
             return [LibretroCore.Cores.Citra.name, LibretroCore.Cores.Azahar.name]
         } else if self == ._32x {
+#if SIDE_LOAD
             return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name]
+#endif
         } else if self == .mcd {
+#if SIDE_LOAD
             return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name, LibretroCore.Cores.ClownMDEmu.name]
+#else
+            return ["", LibretroCore.Cores.JGenesis.name, LibretroCore.Cores.ClownMDEmu.name]
+#endif
         } else if self == .ds {
             return [LibretroCore.Cores.melonDSDS.name, LibretroCore.Cores.DeSmuME.name]
         } else if self == .j2me {
             return [LibretroCore.Cores.J2meJS.name, LibretroCore.Cores.freej2me.name]
+        } else if self == .ps1 {
+            return [LibretroCore.Cores.BeetlePSXHW.name, LibretroCore.Cores.PCSXReArmed.name]
+        } else if self == .snes {
+#if SIDE_LOAD
+            return [LibretroCore.Cores.bsnes.name, LibretroCore.Cores.Snes9x.name]
+#endif
         }
         return []
     }
@@ -438,8 +465,10 @@ extension GameType {
             return .atari
         case .j2me:
             return .sun
-        case .xbox360, .dos:
+        case .xbox360, .dos, .win95, .win98:
             return .microsoft
+        case .chm:
+            return .modRetro
         default:
             return .nintendo
         }

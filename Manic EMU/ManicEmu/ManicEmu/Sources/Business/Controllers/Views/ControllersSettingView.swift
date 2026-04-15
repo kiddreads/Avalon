@@ -79,9 +79,16 @@ class ControllersSettingView: BaseView {
         }
     }
     
-    init(asSideMenu: Bool = true, gameType: GameType = .dc) {
+    init(asSideMenu: Bool = true, gameType: GameType? = nil) {
         self.asSideMenu = asSideMenu
-        self.initGameType = gameType
+        if let gameType {
+            self.initGameType = gameType
+        } else if let gameTypeName = Theme.defalut.platformOrder.first,
+                    let gameType = GameType(shortName: gameTypeName) {
+            self.initGameType = gameType
+        } else {
+            self.initGameType = System.allCases.last!.gameType
+        }
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
         addSubview(iconImageView)

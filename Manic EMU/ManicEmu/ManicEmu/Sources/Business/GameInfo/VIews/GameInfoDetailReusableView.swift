@@ -1804,6 +1804,10 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updatePS1FunctionButton() {
+        var isPCSXReArmed = false
+        if let game, game.defaultCore == 1 {
+            isPCSXReArmed = true
+        }
         manualButton.removeFromSuperview()
         psxImportSbiButton.removeFromSuperview()
         psxModeContextMenuButton.removeFromSuperview()
@@ -1822,57 +1826,61 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
+                if isPCSXReArmed {
+                    make.trailing.equalToSuperview()
+                }
             }
             
-            //手柄模式
-            functionButtonContainerView.addSubview(psxModeContextMenuButton)
-            functionButtonContainerView.addSubview(psxModeButton)
-            psxModeButton.snp.makeConstraints { make in
-                make.leading.equalTo(psxImportSbiButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeHuge)
+            if !isPCSXReArmed {
+                //手柄模式
+                functionButtonContainerView.addSubview(psxModeContextMenuButton)
+                functionButtonContainerView.addSubview(psxModeButton)
+                psxModeButton.snp.makeConstraints { make in
+                    make.leading.equalTo(psxImportSbiButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                }
+                psxModeContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(psxModeButton)
+                }
+                
+                //Renderer
+                functionButtonContainerView.addSubview(psxRendererContextMenuButton)
+                functionButtonContainerView.addSubview(psxRendererButton)
+                psxRendererButton.snp.makeConstraints { make in
+                    make.leading.equalTo(psxModeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                }
+                psxRendererContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(psxRendererButton)
+                }
+                
+                //jit
+                functionButtonContainerView.addSubview(jitContextMenuButton)
+                functionButtonContainerView.addSubview(jitButton)
+                jitButton.snp.makeConstraints { make in
+                    make.leading.equalTo(psxRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                }
+                jitContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(jitButton)
+                }
+                
+                //bios
+                functionButtonContainerView.addSubview(biosSelectionContextMenuButton)
+                functionButtonContainerView.addSubview(biosSelectionButton)
+                biosSelectionButton.snp.makeConstraints { make in
+                    make.leading.equalTo(psxRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                    make.trailing.equalToSuperview()
+                }
+                biosSelectionContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(biosSelectionButton)
+                }
             }
-            psxModeContextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(psxModeButton)
-            }
-            
-            //Renderer
-            functionButtonContainerView.addSubview(psxRendererContextMenuButton)
-            functionButtonContainerView.addSubview(psxRendererButton)
-            psxRendererButton.snp.makeConstraints { make in
-                make.leading.equalTo(psxModeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeHuge)
-            }
-            psxRendererContextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(psxRendererButton)
-            }
-            
-            //jit
-            functionButtonContainerView.addSubview(jitContextMenuButton)
-            functionButtonContainerView.addSubview(jitButton)
-            jitButton.snp.makeConstraints { make in
-                make.leading.equalTo(psxRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeHuge)
-            }
-            jitContextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(jitButton)
-            }
-            
-            //bios
-            functionButtonContainerView.addSubview(biosSelectionContextMenuButton)
-            functionButtonContainerView.addSubview(biosSelectionButton)
-            biosSelectionButton.snp.makeConstraints { make in
-                make.leading.equalTo(psxRendererButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeHuge)
-                make.trailing.equalToSuperview()
-            }
-            biosSelectionContextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(biosSelectionButton)
-            }
-            
         }
     }
     

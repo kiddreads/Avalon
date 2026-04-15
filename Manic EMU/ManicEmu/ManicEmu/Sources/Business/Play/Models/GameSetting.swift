@@ -673,7 +673,10 @@ struct GameSetting: SettingCellItem {
         }
     }
     
-    func enable(for gameType: GameType, defaultCore: Int) -> Bool {
+    func enable(for gameType: GameType, defaultCore: Int, onlyQuit: Bool = false) -> Bool {
+        if onlyQuit {
+            return type == .quit
+        }
         if let mappingOnlyType {
             return mappingOnlyType.enable(for: gameType, defaultCore: defaultCore)
         }
@@ -681,9 +684,9 @@ struct GameSetting: SettingCellItem {
         var disableTypes = [GameSetting.ItemType]()
         switch gameType {
         case .nes:
-            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
-        case .fds:
             disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .swapDisk, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
+        case .fds:
+            disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case .snes:
             disableTypes += [.swapScreen, .resolution, .consoleHome, .amiibo, .simBlowing, .palette, .swapDisk, .simBlowing, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case ._3ds:
@@ -739,7 +742,11 @@ struct GameSetting: SettingCellItem {
         case .pm:
             disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .swapDisk, .cheatCode, .resolution, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings, .insertDisc]
         case .ps1:
-            disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .airPlayLayout, .j2meSettings, .dosSettings]
+            if defaultCore == 0 {
+                disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .airPlayLayout, .j2meSettings, .dosSettings]
+            } else {
+                disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .airPlayLayout, .j2meSettings, .dosSettings, .resolution]
+            }
         case .dc:
             disableTypes += [.swapScreen, .consoleHome, .amiibo, .simBlowing, .palette, .cheatCode, .airPlayLayout, .toggleAnalog, .j2meSettings, .dosSettings]
         case .doom:
