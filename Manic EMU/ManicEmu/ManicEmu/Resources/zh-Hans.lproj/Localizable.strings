@@ -948,3 +948,6 @@
 "ContineFilesImport" = "继续导入";
 "OpenPage" = "打开 %@";
 "MappingKeyboardInput" = "映射键盘输入";
+
+"EmulationAccuracy" = "模拟精度";
+"EmulationAccuracyDesc" = "HLE：性能更高、功耗更低，但可能存在兼容性问题。\n\nLLE：更接近真实硬件，兼容性更佳，但性能较低。部分硬件功能（如网络访问）仅在 LLE 模式下可用。";

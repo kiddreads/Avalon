@@ -932,3 +932,5 @@ Pokud chcete vylepšit své nastavení, PlayCase je perfektním doplňkem tohoto
 "ContineFilesImport" = "Pokračovat v importu";
 "OpenPage" = "Otevřít %@";
 "MappingKeyboardInput" = "Mapování vstupu z klávesnice";
+"EmulationAccuracy"="Přesnost emulace";
+"EmulationAccuracyDesc"="HLE: Nabízí lepší výkon a nižší spotřebu energie, ale může mít problémy s kompatibilitou.\n\nLLE: Poskytuje vyšší přesnost a lepší kompatibilitu, ale se sníženým výkonem. Některé hardwarové funkce, jako je přístup k síti, jsou k dispozici pouze v režimu LLE.";

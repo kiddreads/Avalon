@@ -934,3 +934,6 @@ Hvis du vil forbedre dit setup, er PlayCase et perfekt match til dette skin.";
 "ContineFilesImport" = "Fortsæt import";
 "OpenPage" = "Åbn %@";
 "MappingKeyboardInput" = "Kortlæg tastaturinput";
+
+"EmulationAccuracy"="Emuleringsnøjagtighed";
+"EmulationAccuracyDesc"="HLE: Giver bedre ydeevne og lavere strømforbrug, men kan have kompatibilitetsproblemer.\n\nLLE: Giver højere nøjagtighed og bedre kompatibilitet, men med reduceret ydeevne. Visse hardwarefunktioner, såsom netværksadgang, er kun tilgængelige i LLE-tilstand.";

@@ -928,3 +928,6 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "ContineFilesImport" = "Fortsett import";
 "OpenPage" = "Åpne %@";
 "MappingKeyboardInput" = "Kartlegg tastaturinndata";
+
+"EmulationAccuracy"="Emuleringsnøyaktighet";
+"EmulationAccuracyDesc"="HLE: Gir bedre ytelse og lavere strømforbruk, men kan ha kompatibilitetsproblemer.\n\nLLE: Gir høyere nøyaktighet og bedre kompatibilitet, men med redusert ytelse. Enkelte maskinvarefunksjoner, som nettverkstilgang, er bare tilgjengelige i LLE-modus.";

@@ -181,6 +181,12 @@ extension FilesImporter {
                                              confirmTitle: R.string.localizable.confirmTitle(),
                                              enableForceHide: false,
                                              confirmAction: {
+                                var url = url
+                                if game.gameType == .j2me,
+                                    game.defaultCore == 0,
+                                   let fixedUrl = Database.fixJ2meJSSave(fileName: game.fileName, url: url) {
+                                    url = fixedUrl
+                                }
                                 try? FileManager.safeCopyItem(at: url, to: game.gameSaveUrl, shouldReplace: true)
                                 SyncManager.upload(localFilePath: game.gameSaveUrl.path)
                                 actionCompletion()
@@ -619,6 +625,7 @@ extension FilesImporter {
     
     private static func importSave(url: URL, completion: ((_ gameName: String?, _ error: ImportError?)->Void)?) {
         DispatchQueue.global().async {
+            var url = url
             if url.path.contains(".3ds.sav") {
                 handle3DSGameSave(url: url, completion: completion)
                 return
@@ -660,6 +667,11 @@ extension FilesImporter {
                 } else {
                     //匹配的游戏还没有存档 开始复制
                     do {
+                        if game.gameType == .j2me,
+                            game.defaultCore == 0,
+                           let fixedUrl = Database.fixJ2meJSSave(fileName: game.fileName, url: url) {
+                            url = fixedUrl
+                        }
                         try FileManager.safeCopyItem(at: url, to: game.gameSaveUrl)
                         SyncManager.upload(localFilePath: game.gameSaveUrl.path)
                         completion?(game.name, nil)

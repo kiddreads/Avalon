@@ -170,6 +170,7 @@ class PretendoNetworkingView: BaseView {
             "JPN": "00008202",
             "USA": "00008f02",
             "EUR": "00009802",
+            "AUS": "00009802",
             "CHN": "0000a102",
             "KOR": "0000a902",
             "TWN": "0000b102"

@@ -934,3 +934,6 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "ContineFilesImport" = "Nastavi uvoz";
 "OpenPage" = "Otvori %@";
 "MappingKeyboardInput" = "Mapiranje unosa s tipkovnice";
+
+"EmulationAccuracy"="Točnost emulacije";
+"EmulationAccuracyDesc"="HLE: Nudi bolje performanse i manju potrošnju energije, ali može imati problema s kompatibilnošću.\n\nLLE: Pruža veću točnost i bolju kompatibilnost, ali sa smanjenim performansama. Određene hardverske značajke, poput mrežnog pristupa, dostupne su samo u LLE načinu rada.";

@@ -943,3 +943,5 @@ PlayCase 專注於製造高品質 iPhone 手機殼，設計時已充分考慮配
 "ContineFilesImport" = "繼續導入";
 "OpenPage" = "打開%@";
 "MappingKeyboardInput" = "對應鍵盤輸入";
+"EmulationAccuracy"="模擬精確度";
+"EmulationAccuracyDesc"="HLE：效能更高、功耗更低，但可能存在兼容性問題。\n\nLLE：提供更高精確度及更佳兼容性，但效能較低。部分硬件功能（如網絡存取）僅在LLE模式下可用。";

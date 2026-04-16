@@ -141,8 +141,8 @@ class ArticBaseCollectionCell: UICollectionViewCell {
                     ArticBaseRegionChooseView.show { region in
                         if let region {
                             self.didRegionChange?(region)
-                            let regionOptions = ["Japan", "USA", "Europe", "Australia", "China", "Korea", "Taiwan"]
-                            var regionValue = "Japan"
+                            let regionOptions = Constants.Strings.ThreeDSConsoleLanguage.filter({ $0 != "Automatic" })
+                            var regionValue = regionOptions.first!
                             if let index = Constants.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }), index < regionOptions.count {
                                 regionValue = regionOptions[index]
                             }

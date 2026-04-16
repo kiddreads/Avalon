@@ -84,7 +84,13 @@ class GameSaveMatchGameView: BaseView {
             let gameListView = GameSaveMatchGameView(frame: .zero, games: showGames)
             gameListView.didSelected = { [weak sheet] game in
                 func copyGameSave() {
-                    try? FileManager.safeCopyItem(at: gameSaveUrl, to: game.gameSaveUrl, shouldReplace: true)
+                    var url = gameSaveUrl
+                    if game.gameType == .j2me,
+                       game.defaultCore == 0,
+                       let fixedUrl = Database.fixJ2meJSSave(fileName: game.fileName, url: url) {
+                        url = fixedUrl
+                    }
+                    try? FileManager.safeCopyItem(at: url, to: game.gameSaveUrl, shouldReplace: true)
                     SyncManager.upload(localFilePath: game.gameSaveUrl.path)
                     sheet?.pop(completon: completion)
                     UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle())

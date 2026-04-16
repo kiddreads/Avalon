@@ -742,10 +742,17 @@ class GameListView: BaseView {
                 return
             }
             FilesImporter.shared.presentImportController(supportedTypes: UTType.gamesaveTypes, allowsMultipleSelection: false) { urls in
-                if let url = urls.first {
+                if var url = urls.first {
                     if firstGame.gameType == ._3ds || firstGame.gameType == .psp {
                         FilesImporter.importFiles(urls: [url])
                     } else {
+                        //try to fix j2meJS saves
+                        if firstGame.gameType == .j2me,
+                            firstGame.defaultCore == 0,
+                           let fixedUrl = Database.fixJ2meJSSave(fileName: firstGame.fileName, url: url) {
+                            url = fixedUrl
+                        }
+                        
                         if firstGame.isSaveExtsts {
                             UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
                                              detail: ImportError.saveAlreadyExist(gameSaveUrl: url, game: firstGame).localizedDescription,

@@ -936,3 +936,6 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "ContineFilesImport" = "İçe Aktarmaya Devam Et";
 "OpenPage" = "%@'yi Aç";
 "MappingKeyboardInput" = "Klavye Girişini Eşle";
+
+"EmulationAccuracy"="Emülasyon Doğruluğu";
+"EmulationAccuracyDesc"="HLE: Daha iyi performans ve daha düşük güç tüketimi sunar, ancak uyumluluk sorunları olabilir.\n\nLLE: Daha yüksek doğruluk ve daha iyi uyumluluk sağlar, ancak performans düşüktür. Ağ erişimi gibi bazı donanım özellikleri yalnızca LLE modunda kullanılabilir.";

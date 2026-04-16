@@ -910,3 +910,6 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "ContineFilesImport" = "Teruskan Import";
 "OpenPage" = "Buka %@";
 "MappingKeyboardInput" = "Petakan Input Papan Kekunci";
+
+"EmulationAccuracy"="Ketepatan Emulasi";
+"EmulationAccuracyDesc"="HLE: Menawarkan prestasi yang lebih baik dan penggunaan kuasa yang lebih rendah, tetapi mungkin mempunyai masalah keserasian.\n\nLLE: Memberikan ketepatan yang lebih tinggi dan keserasian yang lebih baik, tetapi dengan prestasi yang berkurang. Ciri perkakasan tertentu, seperti akses rangkaian, hanya tersedia dalam mod LLE.";

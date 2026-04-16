@@ -930,3 +930,6 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "ContineFilesImport" = "Tiếp tục nhập";
 "OpenPage" = "Mở %@";
 "MappingKeyboardInput" = "Ánh xạ nhập từ bàn phím";
+
+"EmulationAccuracy"="Độ chính xác mô phỏng";
+"EmulationAccuracyDesc"="HLE: Hiệu suất tốt hơn và tiêu thụ điện năng thấp hơn, nhưng có thể có vấn đề tương thích.\n\nLLE: Cung cấp độ chính xác cao hơn và khả năng tương thích tốt hơn, nhưng hiệu suất giảm. Một số tính năng phần cứng, như truy cập mạng, chỉ khả dụng ở chế độ LLE.";

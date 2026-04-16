@@ -1281,6 +1281,36 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var emulationAccuracyContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIAction(title: "HLE") { [weak self] _ in
+            guard let self = self else { return }
+            self.emulationAccuracyButton.titleLabel.text = "\(R.string.localizable.emulationAccuracy()): HLE"
+            game?.updateExtra(key: ExtraKey.emulationAccuracy.rawValue, value: 0)
+        })
+        actions.append(UIAction(title: "LLE") { [weak self] _ in
+            guard let self = self else { return }
+            self.emulationAccuracyButton.titleLabel.text = "\(R.string.localizable.emulationAccuracy()): LLE"
+            game?.updateExtra(key: ExtraKey.emulationAccuracy.rawValue, value: 1)
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.emulationAccuracyDesc(), children: actions))
+        return view
+    }()
+    
+    private lazy var emulationAccuracyButton: SymbolButton = {
+        let title =  "\(R.string.localizable.emulationAccuracy()): \(((self.game?.getExtraInt(key: ExtraKey.emulationAccuracy.rawValue) ?? 0) == 0) ? "HLE" : "LLE")"
+        let view = SymbolButton(image: UIImage(symbol: .timelapse, color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.emulationAccuracyContextMenuButton.triggerTapGesture()
+        }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
+        return view
+    }()
+    
     var hasSetupViews: Bool = false
     
     var game: Game? = nil {
@@ -1555,7 +1585,22 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     
     private func updateAzahar3DSFunctionButton() {
         hideDefaultFunctionButtons([retroButton])
+        emulationAccuracyContextMenuButton.removeFromSuperview()
+        emulationAccuracyButton.removeFromSuperview()
         if let lastView = functionButtonContainerView.subviews.last {
+            if let game, !game.isArticBaseHomeMenu {
+                functionButtonContainerView.addSubview(emulationAccuracyContextMenuButton)
+                functionButtonContainerView.addSubview(emulationAccuracyButton)
+                emulationAccuracyButton.snp.makeConstraints { make in
+                    make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(Constants.Size.IconSizeHuge)
+                }
+                emulationAccuracyContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(emulationAccuracyButton)
+                }
+            }
+            
             functionButtonContainerView.addSubview(threeDSAdvancedSettingButton)
             threeDSAdvancedSettingButton.snp.makeConstraints { make in
                 make.leading.equalTo(lastView.snp.trailing).offset(Constants.Size.ContentSpaceMin)

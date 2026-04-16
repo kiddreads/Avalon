@@ -937,3 +937,6 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "ContineFilesImport" = "Doorgaan met importeren";
 "OpenPage" = "%@ openen";
 "MappingKeyboardInput" = "Toetsenbordinvoer toewijzen";
+
+"EmulationAccuracy"="Emulatienauwkeurigheid";
+"EmulationAccuracyDesc"="HLE: Biedt betere prestaties en lager stroomverbruik, maar kan compatibiliteitsproblemen hebben.\n\nLLE: Biedt hogere nauwkeurigheid en betere compatibiliteit, maar met verminderde prestaties. Bepaalde hardwarefuncties, zoals netwerktoegang, zijn alleen beschikbaar in LLE-modus.";

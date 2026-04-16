@@ -937,3 +937,6 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "ContineFilesImport" = "Jatka tuontia";
 "OpenPage" = "Avaa %@";
 "MappingKeyboardInput" = "Kartta näppäimistösyöttö";
+
+"EmulationAccuracy"="Emuloinnin tarkkuus";
+"EmulationAccuracyDesc"="HLE: Tarjoaa paremman suorituskyvyn ja pienemmän virrankulutuksen, mutta saattaa aiheuttaa yhteensopivuusongelmia.\n\nLLE: Tarjoaa korkeamman tarkkuuden ja paremman yhteensopivuuden, mutta heikommalla suorituskyvyllä. Tietyt laitteistotoiminnot, kuten verkkoyhteys, ovat käytettävissä vain LLE-tilassa.";

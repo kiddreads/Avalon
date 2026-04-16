@@ -930,3 +930,6 @@ Om du vill höja din upplevelse är PlayCase en perfekt match för detta skin.";
 "ContineFilesImport" = "Fortsätt import";
 "OpenPage" = "Öppna %@";
 "MappingKeyboardInput" = "Mappa tangentbordsinmatning";
+
+"EmulationAccuracy"="Emuleringsnoggrannhet";
+"EmulationAccuracyDesc"="HLE: Ger bättre prestanda och lägre strömförbrukning, men kan ha kompatibilitetsproblem.\n\nLLE: Ger högre noggrannhet och bättre kompatibilitet, men med minskad prestanda. Vissa hårdvarufunktioner, som nätverksåtkomst, är endast tillgängliga i LLE-läge.";

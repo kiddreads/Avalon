@@ -936,3 +936,6 @@ Si voleu millorar la vostra configuració, PlayCase és el complement perfecte p
 "ContineFilesImport" = "Continua la importació";
 "OpenPage" = "Obre %@";
 "MappingKeyboardInput" = "Mapa l'entrada del teclat";
+
+"EmulationAccuracy"="Precisió d'emulació";
+"EmulationAccuracyDesc"="HLE: Ofereix un millor rendiment i un menor consum d'energia, però pot tenir problemes de compatibilitat.\n\nLLE: Proporciona una major precisió i una millor compatibilitat, però amb un rendiment reduït. Certes funcions de maquinari, com ara l'accés a la xarxa, només estan disponibles en mode LLE.";

@@ -936,3 +936,5 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "ContineFilesImport" = "Continuați importul";
 "OpenPage" = "Deschideți %@";
 "MappingKeyboardInput" = "Maparea intrării de la tastatură";
+"EmulationAccuracy"="Precizia emulării";
+"EmulationAccuracyDesc"="HLE: Oferă performanțe mai bune și un consum mai mic de energie, dar poate avea probleme de compatibilitate.\n\nLLE: Oferă o precizie mai mare și o compatibilitate mai bună, dar cu performanțe reduse. Anumite funcții hardware, cum ar fi accesul la rețea, sunt disponibile numai în modul LLE.";

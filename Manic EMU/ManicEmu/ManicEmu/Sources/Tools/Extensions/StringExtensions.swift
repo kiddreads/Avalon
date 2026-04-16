@@ -297,6 +297,28 @@ extension String {
         result = result.replacingOccurrences(of: "\t", with: "\\t")   // 制表符
         return result
     }
+    
+    /// Remove all suffixes (including multi-level extensions), but keep the leading dot for hidden files.
+    var deletingMultiPathExtension: String {
+        // Handling Hidden Files
+        if hasPrefix(".") {
+            // After removing the initial ".", proceed with the translation into English.
+            let trimmed = dropFirst()
+            if let firstDotIndex = trimmed.firstIndex(of: ".") {
+                return "." + trimmed[..<firstDotIndex]
+            } else {
+                // Only ".xxx" without an extension.
+                return self
+            }
+        }
+        
+        // For regular files: take the part before the first "dot."
+        if let firstDotIndex = firstIndex(of: ".") {
+            return String(self[..<firstDotIndex])
+        }
+        
+        return self
+    }
 }
 
 // 扩展用于识别 emoji 的字符集

@@ -10,6 +10,7 @@
 import RealmSwift
 import ManicEmuCore
 import IceCream
+import ZIPFoundation
 
 struct Database {
     static func setup(completion: (()->Void)? = nil) {
@@ -322,6 +323,17 @@ struct Database {
                         }
                     }
                 }
+                
+                //修复1.9.1将J2meJS破坏的存档
+                if systemCoreVersionNumber <= 191 {
+                    let games = realm.objects(Game.self).where({ $0.gameType == .j2me || $0.defaultCore == 0 })
+                    for game in games {
+                        if FileManager.default.fileExists(atPath: game.gameSaveUrl.path),
+                           let newSaveUrl = fixJ2meJSSave(fileName: game.fileName, url: game.gameSaveUrl) {
+                            try? FileManager.safeMoveItem(at: newSaveUrl, to: game.gameSaveUrl, shouldReplace: true)
+                        }
+                    }
+                }
             }
             
             //Prevent the game from not being removed after Articbase finishes its work due to an error.
@@ -489,5 +501,49 @@ struct Database {
             }
 #endif
         }
+    }
+    
+    static func fixJ2meJSSave(fileName: String, url: URL) -> URL? {
+        let zipUrl = URL(fileURLWithPath: Constants.Path.Cache.appendingPathComponent("\(fileName)"))
+        let tempWorkSpaceUrl = URL(fileURLWithPath: Constants.Path.Cache.appendingPathComponent(fileName.deletingPathExtension))
+        do {
+            try FileManager.default.unzipItem(at: url, to: tempWorkSpaceUrl)
+        } catch {
+            Log.debug("not j2mejs zip save file")
+            return nil
+        }
+        
+        let oldRecordStoreJsonPath = tempWorkSpaceUrl.path.appendingPathComponent("metadata/RecordStore_game.0.json")
+        let oldRecordStoreSavePath = tempWorkSpaceUrl.path.appendingPathComponent("saves/RecordStore_game.0")
+        let newRecordStoreJsonPath = tempWorkSpaceUrl.path.appendingPathComponent("metadata/RecordStore_\(fileName)_game.0.json")
+        let newRecordStoreSavePath = tempWorkSpaceUrl.path.appendingPathComponent("saves/RecordStore_\(fileName)_game.0")
+        
+        if FileManager.default.fileExists(atPath: newRecordStoreJsonPath) {
+            //save file correct
+           return url
+        } else {
+            //This is an old save—we should try to upgrade it.
+            do {
+                //1、gen metadata/RecordStore_xxx.jar_game.0.json and adjust the path order correctly.
+                if var json = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: oldRecordStoreJsonPath))) as? [String: Any] {
+                    json["path"] = "/RecordStore/\(fileName)/game.0"
+                    if let jsonData = try? JSONSerialization.data(withJSONObject: json) {
+                        try jsonData.write(to: URL(fileURLWithPath: newRecordStoreJsonPath))
+                        //2、gen metadata/RecordStore_xxx.jar_game.0.json
+                        try FileManager.safeCopyItem(at: URL(fileURLWithPath: oldRecordStoreSavePath), to: URL(fileURLWithPath: newRecordStoreSavePath), shouldReplace: true)
+                        //3、remove old save
+                        try FileManager.safeRemoveItem(at: zipUrl)
+                        //4、gen new save
+                        try FileManager.default.zipItem(at: tempWorkSpaceUrl, to: zipUrl, shouldKeepParent: false)
+                    }
+                }
+            } catch {
+                Log.debug("update J2meJS saves failed:\(error)")
+                return nil
+            }
+        }
+        //4、Clear Cache
+        try? FileManager.default.removeItem(at: tempWorkSpaceUrl)
+        return zipUrl
     }
 }

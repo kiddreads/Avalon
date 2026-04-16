@@ -933,3 +933,5 @@ PlayCaseは、アクセサリーやスキンとの互換性を考慮して作ら
 "ContineFilesImport" = "インポートを続行";
 "OpenPage" = "%@を開く";
 "MappingKeyboardInput" = "キーボード入力をマッピング";
+"EmulationAccuracy"="エミュレーション精度";
+"EmulationAccuracyDesc"="HLE: より高いパフォーマンスと低消費電力ですが、互換性の問題がある可能性があります。\n\nLLE: より高い精度と優れた互換性を提供しますが、パフォーマンスは低下します。ネットワークアクセスなどの特定のハードウェア機能は、LLEモードでのみ利用可能です。";

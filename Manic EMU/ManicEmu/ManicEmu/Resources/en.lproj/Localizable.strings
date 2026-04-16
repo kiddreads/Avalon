@@ -954,3 +954,6 @@ Press the controller button to complete mapping...";
 "ContineFilesImport" = "Continue Import";
 "OpenPage" = "Open %@";
 "MappingKeyboardInput" = "Mapping Keyboard Input";
+
+"EmulationAccuracy" = "Emulation Accuracy";
+"EmulationAccuracyDesc" = "HLE: Offers better performance and lower power consumption, but may have compatibility issues.\n\nLLE: Provides higher accuracy and better compatibility, but with reduced performance. Certain hardware features, such as network access, are only available in LLE mode.";

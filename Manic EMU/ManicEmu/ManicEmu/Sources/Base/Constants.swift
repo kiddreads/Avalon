@@ -451,7 +451,7 @@ struct Constants {
         static let ManicScheme = "manicemu"
         static var PSXController = "PlayStation Controller"
         static var PSXDualShock = "DualShock"
-        static var ThreeDSHomeMenuRegions = ["JPN", "USA", "EUR", "CHN", "KOR", "TWN"]
+        static var ThreeDSHomeMenuRegions = ["JPN", "USA", "EUR", "AUS", "CHN", "KOR", "TWN"]
         static let MAMEBiosTitle = "MAME BIOS"
         static let GLSLShader = "shaders_glsl.zip"
         static let SlangShader = "shaders_slang.zip"

@@ -936,3 +936,5 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "ContineFilesImport" = "Importálás folytatása";
 "OpenPage" = "%@ megnyitása";
 "MappingKeyboardInput" = "Billentyűzetbemenet leképezése";
+"EmulationAccuracy"="Emulációs pontosság";
+"EmulationAccuracyDesc"="HLE: Jobb teljesítményt és alacsonyabb energiafogyasztást kínál, de kompatibilitási problémái lehetnek.\n\nLLE: Nagyobb pontosságot és jobb kompatibilitást biztosít, de csökkentett teljesítménnyel. Bizonyos hardverfunkciók, például a hálózati hozzáférés, csak LLE módban érhetők el.";

@@ -2822,6 +2822,7 @@ extension PlayViewController {
                         setupUniversalScript(gameType: ._3ds)
                     }
                 }
+                var enableLLE = (manicGame.isArticBaseHomeMenu || (manicGame.getExtraInt(key: ExtraKey.emulationAccuracy.rawValue) ?? 0 == 1)) ? true : false
                 LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name,
                                                            configs: [
                                                             "citra_layout_option": "custom",
@@ -2829,7 +2830,7 @@ extension PlayViewController {
                                                             "citra_input_type": "frontend",
                                                             "citra_use_cpu_jit": enableJIT ? "enabled" : "disabled",
                                                             "citra_use_default_aes_key": manicGame.isAzaharArticBase || manicGame.isArticBaseHomeMenu || manicGame.is3DSHomeMenuGame ? "enabled" : "disabled",
-                                                            "citra_required_online_lle_modules": manicGame.isArticBaseHomeMenu ? "enabled" : "disabled"
+                                                            "citra_required_online_lle_modules": enableLLE ? "enabled" : "disabled"
                                                            ],
                                                            reload: false)
                 //Azahar核心每次启动都不进行加速，免得闪退
@@ -3171,7 +3172,8 @@ extension PlayViewController {
                                                             "citra_touch_touchscreen": "enabled",
                                                             "citra_input_type": "frontend",
                                                             "citra_use_cpu_jit": enableJIT ? "enabled" : "disabled",
-                                                            "citra_use_default_aes_key": "disabled"
+                                                            "citra_use_default_aes_key": manicGame.isAzaharArticBase || manicGame.isArticBaseHomeMenu || manicGame.is3DSHomeMenuGame ? "enabled" : "disabled",
+                                                            "citra_required_online_lle_modules": manicGame.isArticBaseHomeMenu ? "enabled" : "disabled"
                                                            ],
                                                            reload: false)
                 //Azahar核心每次启动都不进行加速，免得闪退

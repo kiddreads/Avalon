@@ -929,3 +929,6 @@ Jika Anda ingin meningkatkan setup Anda, PlayCase adalah pasangan sempurna untuk
 "ContineFilesImport" = "Lanjutkan Impor";
 "OpenPage" = "Buka %@";
 "MappingKeyboardInput" = "Petakan Input Keyboard";
+
+"EmulationAccuracy"="Akurasi Emulasi";
+"EmulationAccuracyDesc"="HLE: Memberikan kinerja yang lebih baik dan konsumsi daya yang lebih rendah, tetapi mungkin memiliki masalah kompatibilitas.\n\nLLE: Memberikan akurasi yang lebih tinggi dan kompatibilitas yang lebih baik, tetapi dengan kinerja yang berkurang. Fitur perangkat keras tertentu, seperti akses jaringan, hanya tersedia dalam mode LLE.";

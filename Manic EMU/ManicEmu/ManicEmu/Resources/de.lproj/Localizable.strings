@@ -938,3 +938,5 @@ Wenn Sie Ihr Setup verbessern möchten, ist PlayCase die perfekte Ergänzung zu 
 "ContineFilesImport" = "Import fortsetzen";
 "OpenPage" = "%@ öffnen";
 "MappingKeyboardInput" = "Tastatureingabe zuordnen";
+"EmulationAccuracy"="Emulationsgenauigkeit";
+"EmulationAccuracyDesc"="HLE: Bietet bessere Leistung und geringeren Stromverbrauch, kann jedoch Kompatibilitätsprobleme aufweisen.\n\nLLE: Bietet höhere Genauigkeit und bessere Kompatibilität, jedoch mit reduzierter Leistung. Bestimmte Hardwarefunktionen wie Netzwerkzugriff sind nur im LLE-Modus verfügbar.";

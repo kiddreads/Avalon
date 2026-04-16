@@ -65,4 +65,5 @@ enum ExtraKey: String {
     case gameTypeCategory
     case globalCoreConfigs
     case manufacturerOrder
+    case emulationAccuracy
 }
