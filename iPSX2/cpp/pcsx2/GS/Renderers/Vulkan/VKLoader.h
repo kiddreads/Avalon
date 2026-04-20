@@ -3,6 +3,11 @@
 
 #pragma once
 
+// Guard the entire header: if Vulkan is disabled (iOS/Metal build) this file
+// must be a no-op even if Xcode indexes or accidentally compiles it, because
+// vulkan/vulkan.h is not present in the Metal-only SDK path.
+#ifdef ENABLE_VULKAN
+
 class Error;
 
 #define VK_NO_PROTOTYPES
@@ -99,3 +104,5 @@ namespace Vulkan
 	void UnloadVulkanLibrary();
 	void ResetVulkanLibraryFunctionPointers();
 } // namespace Vulkan
+
+#endif // ENABLE_VULKAN
