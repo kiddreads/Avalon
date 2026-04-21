@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #include "GS/Renderers/Vulkan/VKLoader.h"
 
 #include "common/StringUtil.h"
@@ -408,3 +410,5 @@ namespace Vulkan
 #endif
 	}
 } // namespace Vulkan
+
+#endif // ENABLE_VULKAN

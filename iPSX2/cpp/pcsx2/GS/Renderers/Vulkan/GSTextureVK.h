@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #include "GS/Renderers/Common/GSTexture.h"
 #include "GS/GS.h"
 #include "GS/Renderers/Vulkan/VKLoader.h"
@@ -105,6 +107,8 @@ private:
 	// list of color textures this depth texture is linked to or vice versa
 	std::vector<std::tuple<GSTextureVK*, VkFramebuffer, bool>> m_framebuffers;
 };
+
+#endif // ENABLE_VULKAN
 
 class GSDownloadTextureVK final : public GSDownloadTexture
 {

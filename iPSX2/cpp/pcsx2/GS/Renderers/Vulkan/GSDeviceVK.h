@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #include "GS/Renderers/Common/GSDevice.h"
 #include "GS/GSVector.h"
 #include "GS/Renderers/Vulkan/GSTextureVK.h"
@@ -701,3 +703,5 @@ private:
 	// current pipeline selector - we save this in the struct to avoid re-zeroing it every draw
 	PipelineSelector m_pipeline_selector = {};
 };
+
+#endif // ENABLE_VULKAN

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,3 +20,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+#endif // ENABLE_VULKAN

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #include "GS/Renderers/Vulkan/VKLoader.h"
 
 #include "vk_mem_alloc.h"
@@ -57,3 +59,5 @@ private:
 	// List of fences and the corresponding positions in the buffer
 	std::deque<std::pair<u64, u32>> m_tracked_fences;
 };
+
+#endif // ENABLE_VULKAN

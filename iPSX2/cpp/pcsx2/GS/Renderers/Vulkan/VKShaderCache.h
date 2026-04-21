@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #include "GS/Renderers/Vulkan/VKLoader.h"
 
 #include "common/HashCombine.h"
@@ -100,3 +102,5 @@ private:
 };
 
 extern std::unique_ptr<VKShaderCache> g_vulkan_shader_cache;
+
+#endif // ENABLE_VULKAN

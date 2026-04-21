@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef ENABLE_VULKAN
+
 #include "Config.h"
 #include "GS/Renderers/Vulkan/GSTextureVK.h"
 
@@ -110,3 +112,5 @@ private:
 	std::optional<VkResult> m_image_acquire_result;
 	std::optional<bool> m_exclusive_fullscreen_control;
 };
+
+#endif // ENABLE_VULKAN
