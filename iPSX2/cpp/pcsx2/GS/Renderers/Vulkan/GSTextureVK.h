@@ -108,8 +108,6 @@ private:
 	std::vector<std::tuple<GSTextureVK*, VkFramebuffer, bool>> m_framebuffers;
 };
 
-#endif // ENABLE_VULKAN
-
 class GSDownloadTextureVK final : public GSDownloadTexture
 {
 public:
@@ -140,3 +138,5 @@ private:
 
 	bool m_needs_cache_invalidate = false;
 };
+
+#endif // ENABLE_VULKAN
