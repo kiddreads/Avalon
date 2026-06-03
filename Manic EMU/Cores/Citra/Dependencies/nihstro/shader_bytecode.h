@@ -479,23 +479,6 @@ private:
 
 } // namespace nihstro
 
-namespace std {
-    template<>
-    struct make_unsigned<nihstro::SourceRegister> {
-        using type = nihstro::SourceRegister;
-    };
-
-    template<>
-    struct make_unsigned<nihstro::DestRegister> {
-        using type = nihstro::DestRegister;
-    };
-
-    template<>
-    struct make_unsigned<nihstro::OpCode> {
-        using type = nihstro::OpCode;
-    };
-}
-
 namespace nihstro {
 
 #pragma pack(1)

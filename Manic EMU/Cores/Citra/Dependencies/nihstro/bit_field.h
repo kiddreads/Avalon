@@ -39,6 +39,22 @@
 
 namespace nihstro {
 
+// BitField needs an unsigned "mask" type for shifts. std::make_unsigned is only
+// valid for (signed) integer types; nihstro uses std-layout structs that wrap
+// u32 (SourceRegister, etc.). Newer libc++ (e.g. Xcode 26.4) rejects user
+// specializations of std::make_unsigned, so we use a local helper instead of
+// extending namespace std.
+template<typename StorageType, typename = void>
+struct bit_field_storage_unsigned {
+    using type = typename std::make_unsigned<StorageType>::type;
+};
+
+template<typename StorageType>
+struct bit_field_storage_unsigned<StorageType,
+    typename std::enable_if<!std::is_integral<StorageType>::value && !std::is_enum<StorageType>::value>::type> {
+    using type = StorageType;
+};
+
 /*
  * Abstract bitfield class
  *
@@ -187,7 +203,7 @@ private:
         std::enable_if < true, T >> ::type::type StorageType;
 
     // Unsigned version of StorageType
-    typedef typename std::make_unsigned<StorageType>::type StorageTypeU;
+    typedef typename bit_field_storage_unsigned<StorageType>::type StorageTypeU;
 
     __forceinline StorageType GetMask() const
     {

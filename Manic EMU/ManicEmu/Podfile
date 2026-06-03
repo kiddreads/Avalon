@@ -31,7 +31,6 @@ target 'ManicEmu' do
   pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug', 'DevRelease', 'DebugSimulator']
   pod 'FLEX', :configurations => ['Debug', 'DevRelease', 'DebugSimulator']
   pod 'ShowTouches', :configurations => ['Debug', 'DevRelease', 'DebugSimulator']
-  pod 'KeychainAccess', '~> 4.2'
   pod 'Permission/Photos', '~> 3.1.2'
   pod 'Permission/Camera', '~> 3.1.2'
   pod 'Permission/Microphone', '~> 3.1.2'
@@ -40,7 +39,7 @@ target 'ManicEmu' do
   pod 'VisualEffectView', '~> 5.0'
   pod 'FluentDarkModeKit', '~> 1.0.4'
   pod "Device", :git => 'https://github.com/Daiuno/Device.git', :branch => 'master'
-  pod 'SFSafeSymbols', '~> 5.0'
+  pod 'SFSafeSymbols', '~> 7.0'
   pod "Haptica", '~> 3.0'
   pod 'IQKeyboardManagerSwift', '~> 8.0'
   pod 'Tiercel', '~> 3.0'

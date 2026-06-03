@@ -9,7 +9,6 @@
 
 import UIKit
 import RealmSwift
-import KeychainAccess
 import ManicEmuCore
 
 struct Constants {

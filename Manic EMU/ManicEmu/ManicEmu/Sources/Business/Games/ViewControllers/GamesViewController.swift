@@ -85,7 +85,10 @@ class GamesViewController: BaseViewController {
                 return false
             }
             self.gamesListView.filteredManufacturer = manufacturer
-            return (manufacturer == nil ? false : true)
+            if let manufacturer {
+                return true
+            }
+            return false
         }
         view.didFilterVisibleChange = { [weak self] in
             guard let self else { return }

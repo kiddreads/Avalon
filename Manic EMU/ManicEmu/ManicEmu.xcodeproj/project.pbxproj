@@ -689,6 +689,17 @@
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
 		57AEB9DC2F2614C6005CB496 /* NavigationBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */; };
+		57B591E52FD06473003C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57B591DC2FD06473003C4235 /* Assets.xcassets */; };
+		57B591E72FD06473003C4235 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57B591DF2FD06473003C4235 /* LaunchScreen.storyboard */; };
+		57B591E92FD06473003C4235 /* TVAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B591DB2FD06473003C4235 /* TVAppDelegate.swift */; };
+		57B591EA2FD06473003C4235 /* TVAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B591E22FD06473003C4235 /* TVAppSceneDelegate.swift */; };
+		57B592322FD06BDD003C4235 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B592312FD06BDD003C4235 /* HomeViewController.swift */; };
+		57B592342FD06D3A003C4235 /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C114C2D1D0E0A00CFD1F5 /* UIWindowExtensions.swift */; };
+		57B5923C2FD072C3003C4235 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 57B5923B2FD072C3003C4235 /* SnapKit */; };
+		57B592402FD07394003C4235 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 57B5923F2FD07394003C4235 /* SwifterSwift */; };
+		57B592462FD0799C003C4235 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 57B592452FD0799C003C4235 /* RswiftLibrary */; settings = {ATTRIBUTES = (Required, ); }; };
+		57B592572FD07B05003C4235 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 57B592562FD07B05003C4235 /* SFSafeSymbols */; };
+		57B592692FD07CE2003C4235 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 57B592682FD07CE2003C4235 /* LookinServer */; };
 		57B5E3142ECC625E00DE17E9 /* Arcade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5E3122ECC625600DE17E9 /* Arcade.swift */; };
 		57B5E31B2ECC738500DE17E9 /* mame.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57B5E3192ECC735D00DE17E9 /* mame.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57B5E3242ECCCD0800DE17E9 /* MAMEKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */; };
@@ -2169,6 +2180,13 @@
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		57ADFEDA2D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBlurView.swift; sourceTree = "<group>"; };
+		57B5917A2FD06468003C4235 /* ManicEmuTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManicEmuTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		57B591DB2FD06473003C4235 /* TVAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVAppDelegate.swift; sourceTree = "<group>"; };
+		57B591DC2FD06473003C4235 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		57B591DD2FD06473003C4235 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57B591DE2FD06473003C4235 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		57B591E22FD06473003C4235 /* TVAppSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVAppSceneDelegate.swift; sourceTree = "<group>"; };
+		57B592312FD06BDD003C4235 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		57B5E3122ECC625600DE17E9 /* Arcade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arcade.swift; sourceTree = "<group>"; };
 		57B5E3192ECC735D00DE17E9 /* mame.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mame.libretro.framework; path = ../Cores/mame.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAMEKit.swift; sourceTree = "<group>"; };
@@ -2420,6 +2438,18 @@
 				5768FE672DAE00F8009974D1 /* libSDL3.xcframework in Frameworks */,
 				5768FE682DAE00F8009974D1 /* MoltenVK.xcframework in Frameworks */,
 				5768FE692DAE00F8009974D1 /* libavformat.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		57B591772FD06468003C4235 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57B592692FD07CE2003C4235 /* LookinServer in Frameworks */,
+				57B5923C2FD072C3003C4235 /* SnapKit in Frameworks */,
+				57B592402FD07394003C4235 /* SwifterSwift in Frameworks */,
+				57B592572FD07B05003C4235 /* SFSafeSymbols in Frameworks */,
+				57B592462FD0799C003C4235 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4408,6 +4438,75 @@
 			path = VIews;
 			sourceTree = "<group>";
 		};
+		57B591E42FD06473003C4235 /* ManicEmuTV */ = {
+			isa = PBXGroup;
+			children = (
+				57B592152FD068B8003C4235 /* Sources */,
+				57B592172FD068C0003C4235 /* Resources */,
+			);
+			path = ManicEmuTV;
+			sourceTree = "<group>";
+		};
+		57B592152FD068B8003C4235 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				57B5921A2FD068CF003C4235 /* Base */,
+				57B592202FD068F5003C4235 /* Business */,
+				57B5921E2FD068EC003C4235 /* Tools */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		57B592172FD068C0003C4235 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				57B591DC2FD06473003C4235 /* Assets.xcassets */,
+				57B591DD2FD06473003C4235 /* Info.plist */,
+				57B591DF2FD06473003C4235 /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		57B5921A2FD068CF003C4235 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				57B591DB2FD06473003C4235 /* TVAppDelegate.swift */,
+				57B591E22FD06473003C4235 /* TVAppSceneDelegate.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		57B5921E2FD068EC003C4235 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		57B592202FD068F5003C4235 /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				57B5922E2FD06B90003C4235 /* Home */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		57B5922E2FD06B90003C4235 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				57B5922F2FD06BB9003C4235 /* ViewControllers */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		57B5922F2FD06BB9003C4235 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				57B592312FD06BDD003C4235 /* HomeViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		57B6EC612D77F224002E619C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -4946,6 +5045,7 @@
 				5768F8272DAE005F009974D1 /* ThreeDS */,
 				57BFBE482DD3321A00AABF98 /* Libretro */,
 				578F235B2F7A759300C8D834 /* azahar.xcodeproj */,
+				57B591E42FD06473003C4235 /* ManicEmuTV */,
 				A5A001F024555A5F006E0F0E /* Products */,
 				20137E78C79666610E451EFB /* Pods */,
 				E2E460DE79D75653B9E6B44C /* Frameworks */,
@@ -4958,6 +5058,7 @@
 				A5A001EF24555A5F006E0F0E /* ManicEmu.app */,
 				571744142DA2637F007CCE25 /* libThreeDS.a */,
 				57BFBE172DD32F7700AABF98 /* Libretro.framework */,
+				57B5917A2FD06468003C4235 /* ManicEmuTV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5184,6 +5285,31 @@
 			productReference = 571744142DA2637F007CCE25 /* libThreeDS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		57B591792FD06468003C4235 /* ManicEmuTV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57B591922FD06468003C4235 /* Build configuration list for PBXNativeTarget "ManicEmuTV" */;
+			buildPhases = (
+				57B591762FD06468003C4235 /* Sources */,
+				57B591772FD06468003C4235 /* Frameworks */,
+				57B591782FD06468003C4235 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				57B592492FD07A5E003C4235 /* PBXTargetDependency */,
+			);
+			name = ManicEmuTV;
+			packageProductDependencies = (
+				57B5923B2FD072C3003C4235 /* SnapKit */,
+				57B5923F2FD07394003C4235 /* SwifterSwift */,
+				57B592452FD0799C003C4235 /* RswiftLibrary */,
+				57B592562FD07B05003C4235 /* SFSafeSymbols */,
+				57B592682FD07CE2003C4235 /* LookinServer */,
+			);
+			productName = ManicEmuTV;
+			productReference = 57B5917A2FD06468003C4235 /* ManicEmuTV.app */;
+			productType = "com.apple.product-type.application";
+		};
 		57BFBE162DD32F7700AABF98 /* Libretro */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57BFBE202DD32F7700AABF98 /* Build configuration list for PBXNativeTarget "Libretro" */;
@@ -5232,13 +5358,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 1620;
 				ORGANIZATIONNAME = "Manic EMU";
 				TargetAttributes = {
 					571744132DA2637F007CCE25 = {
 						CreatedOnToolsVersion = 16.2;
 						LastSwiftMigration = 1620;
+					};
+					57B591792FD06468003C4235 = {
+						CreatedOnToolsVersion = 26.4.1;
 					};
 					57BFBE162DD32F7700AABF98 = {
 						CreatedOnToolsVersion = 16.2;
@@ -5311,6 +5440,10 @@
 				57F0D8492DE2E7A600760F57 /* XCRemoteSwiftPackageReference "SwiftCloudDrive" */,
 				5706B0BC2DFDE4570066122E /* XCRemoteSwiftPackageReference "BlurUIKit" */,
 				5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */,
+				57B5923A2FD072C3003C4235 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				57B5923E2FD07394003C4235 /* XCRemoteSwiftPackageReference "SwifterSwift" */,
+				57B592552FD07B05003C4235 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
+				57B592672FD07CE2003C4235 /* XCRemoteSwiftPackageReference "LookinServer" */,
 			);
 			productRefGroup = A5A001F024555A5F006E0F0E /* Products */;
 			projectDirPath = "";
@@ -5325,6 +5458,7 @@
 				A5A001EE24555A5F006E0F0E /* ManicEmu */,
 				571744132DA2637F007CCE25 /* ThreeDS */,
 				57BFBE162DD32F7700AABF98 /* Libretro */,
+				57B591792FD06468003C4235 /* ManicEmuTV */,
 			);
 		};
 /* End PBXProject section */
@@ -5649,6 +5783,15 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		57B591782FD06468003C4235 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57B591E52FD06473003C4235 /* Assets.xcassets in Resources */,
+				57B591E72FD06473003C4235 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57BFBE152DD32F7700AABF98 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6105,6 +6248,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		57B591762FD06468003C4235 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57B591E92FD06473003C4235 /* TVAppDelegate.swift in Sources */,
+				57B591EA2FD06473003C4235 /* TVAppSceneDelegate.swift in Sources */,
+				57B592342FD06D3A003C4235 /* UIWindowExtensions.swift in Sources */,
+				57B592322FD06BDD003C4235 /* HomeViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57BFBE132DD32F7700AABF98 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6521,6 +6675,10 @@
 			isa = PBXTargetDependency;
 			productRef = 576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */;
 		};
+		57B592492FD07A5E003C4235 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 57B592482FD07A5E003C4235 /* RswiftGenerateInternalResources */;
+		};
 		57BFBEB12DD489C700AABF98 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 57BFBE162DD32F7700AABF98 /* Libretro */;
@@ -6529,6 +6687,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		57B591DF2FD06473003C4235 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				57B591DE2FD06473003C4235 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		A5A001FD24555A5F006E0F0E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -7431,6 +7597,262 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = SideloadDebug;
+		};
+		57B5918B2FD06468003C4235 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UU52N52JLD;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManicEmuTV/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manic EMU";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aoshuang.ManicEmuTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+			};
+			name = Debug;
+		};
+		57B5918C2FD06468003C4235 /* DebugSimulator */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UU52N52JLD;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManicEmuTV/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manic EMU";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aoshuang.ManicEmuTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+			};
+			name = DebugSimulator;
+		};
+		57B5918D2FD06468003C4235 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UU52N52JLD;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManicEmuTV/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manic EMU";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aoshuang.ManicEmuTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+			};
+			name = Release;
+		};
+		57B5918E2FD06468003C4235 /* SideloadRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UU52N52JLD;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManicEmuTV/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manic EMU";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aoshuang.ManicEmuTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+			};
+			name = SideloadRelease;
+		};
+		57B5918F2FD06468003C4235 /* SideloadDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UU52N52JLD;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManicEmuTV/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manic EMU";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aoshuang.ManicEmuTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+			};
+			name = SideloadDebug;
+		};
+		57B591902FD06468003C4235 /* DevRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UU52N52JLD;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManicEmuTV/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Manic EMU";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aoshuang.ManicEmuTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+			};
+			name = DevRelease;
 		};
 		57BFBE212DD32F7700AABF98 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -9123,6 +9545,19 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		57B591922FD06468003C4235 /* Build configuration list for PBXNativeTarget "ManicEmuTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57B5918B2FD06468003C4235 /* Debug */,
+				57B5918C2FD06468003C4235 /* DebugSimulator */,
+				57B5918D2FD06468003C4235 /* Release */,
+				57B5918E2FD06468003C4235 /* SideloadRelease */,
+				57B5918F2FD06468003C4235 /* SideloadDebug */,
+				57B591902FD06468003C4235 /* DevRelease */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		57BFBE202DD32F7700AABF98 /* Build configuration list for PBXNativeTarget "Libretro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -9246,6 +9681,38 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 7.8.0;
+			};
+		};
+		57B5923A2FD072C3003C4235 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+		57B5923E2FD07394003C4235 /* XCRemoteSwiftPackageReference "SwifterSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwifterSwift/SwifterSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		57B592552FD07B05003C4235 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		57B592672FD07CE2003C4235 /* XCRemoteSwiftPackageReference "LookinServer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/QMUI/LookinServer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.8;
 			};
 		};
 		57DA89112D82B0C20074052A /* XCRemoteSwiftPackageReference "SmartCodable" */ = {
@@ -9373,6 +9840,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
 			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		57B5923B2FD072C3003C4235 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57B5923A2FD072C3003C4235 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		57B5923F2FD07394003C4235 /* SwifterSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57B5923E2FD07394003C4235 /* XCRemoteSwiftPackageReference "SwifterSwift" */;
+			productName = SwifterSwift;
+		};
+		57B592452FD0799C003C4235 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
+			productName = RswiftLibrary;
+		};
+		57B592482FD07A5E003C4235 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
+			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		57B592562FD07B05003C4235 /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57B592552FD07B05003C4235 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
+		57B592682FD07CE2003C4235 /* LookinServer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57B592672FD07CE2003C4235 /* XCRemoteSwiftPackageReference "LookinServer" */;
+			productName = LookinServer;
 		};
 		57DA89122D82B0C20074052A /* SmartCodable */ = {
 			isa = XCSwiftPackageProductDependency;

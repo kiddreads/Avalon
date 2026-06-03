@@ -1,5 +1,5 @@
 {
-  "originHash" : "c1f726d877955a883bac09030beee84f4d41dd2dd03f72b144b7965f81a6c916",
+  "originHash" : "d9f4bc418f640ed3f154d3fcf77894261b65f1224bd4f9d328a59af2ef1ae6ce",
   "pins" : [
     {
       "identity" : "bluruikit",
@@ -47,6 +47,15 @@
       }
     },
     {
+      "identity" : "lookinserver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/QMUI/LookinServer.git",
+      "state" : {
+        "revision" : "e553d1b689d147817dc54ad5c28fcff71e860101",
+        "version" : "1.2.8"
+      }
+    },
+    {
       "identity" : "msdisplaylink",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/MSDisplayLink.git",
@@ -83,6 +92,15 @@
       }
     },
     {
+      "identity" : "sfsafesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols.git",
+      "state" : {
+        "revision" : "e01b3d4f861412f8dcee8d93c417d2c2b0cdfd77",
+        "version" : "7.0.0"
+      }
+    },
+    {
       "identity" : "smartcodable",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/intsig171/SmartCodable.git",
@@ -98,6 +116,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "3e93430af1c830bf4ba286f13a63e0ee234740f5"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "e27a338a03a5f388de759da63f9baf7988ed9e00",
+        "version" : "6.0.0"
       }
     },
     {
@@ -125,6 +152,15 @@
       "state" : {
         "revision" : "4f2f38724d6a8724f727c1bc10d9cddd17fbb9e8",
         "version" : "1.4.4"
+      }
+    },
+    {
+      "identity" : "swifterswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwifterSwift/SwifterSwift.git",
+      "state" : {
+        "revision" : "5d948a15446bddb6c367bc7e7100cfcbaa0e9b57",
+        "version" : "8.0.0"
       }
     },
     {

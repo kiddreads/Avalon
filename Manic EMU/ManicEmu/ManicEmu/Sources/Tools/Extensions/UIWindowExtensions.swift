@@ -8,13 +8,20 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Foundation
-
+import UIKit
 
 extension UIWindow {
     static var applicationWindow: UIWindow? {
+#if os(iOS)
         return ApplicationSceneDelegate.applicationWindow
+#elseif os(tvOS)
+        return TVAppSceneDelegate.applicationWindow
+#else
+        return nil
+#endif
     }
     
+#if os(iOS)
     func showDropView() {
         guard subviews.first(where: { $0 is DropGlowEffectView }) == nil else { return }
         let dropView = DropGlowEffectView()
@@ -39,4 +46,5 @@ extension UIWindow {
             }
         }
     }
+#endif
 }

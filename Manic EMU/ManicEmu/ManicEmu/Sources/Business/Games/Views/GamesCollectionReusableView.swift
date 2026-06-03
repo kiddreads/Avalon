@@ -138,8 +138,13 @@ class GamesCollectionReusableView: UICollectionReusableView {
     private static var brandImageCaches = [String: UIImage?]()
     static func getBrandImage(gameType: GameType) -> UIImage? {
         let traitCollection = ApplicationSceneDelegate.applicationWindow?.traitCollection
-        let userInterfaceStyle = traitCollection?.userInterfaceStyle
-        let key = gameType.rawValue + (userInterfaceStyle == nil ? "" : "\(userInterfaceStyle!.rawValue)")
+        let key = {
+            if let userInterfaceStyle = traitCollection?.userInterfaceStyle {
+                return "\(userInterfaceStyle.rawValue)"
+            } else {
+                return ""
+            }
+        }()
         if let image = Self.brandImageCaches[key] {
             return image
         } else {
