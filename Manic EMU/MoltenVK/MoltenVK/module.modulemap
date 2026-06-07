@@ -1,6 +1,0 @@
-framework module MoltenVK {
-    umbrella header "WXApi.h"
-
-    export *
-    module * { export * }
-}

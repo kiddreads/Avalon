@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import ManicEmuCore
+
 
 class MappingTipView: UIView {
     class MappingBubbleView: RoundAndBorderView {

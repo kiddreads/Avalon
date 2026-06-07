@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -43,7 +43,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.ps1)
     }
     
@@ -78,7 +78,7 @@ extension GameType
     }
 }
 
-struct PS1: ManicEmuCoreProtocol {
+struct PS1: DeltaCoreProtocol {
     static let core = PS1()
     
     var name: String { "PS1" }
@@ -88,49 +88,29 @@ struct PS1: ManicEmuCoreProtocol {
     var gameType: GameType { GameType.ps1 }
     var gameInputType: Input.Type { PS1GameInput.self }
     var allInputs: [Input] { PS1GameInput.allCases }
-    var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
     
-    let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
+    
     let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 256, height: 224))
     
-    var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         let cheatFormat = CheatFormat(name: NSLocalizedString("Pro Action Replay", comment: ""), format: "XXXXXXXX YYYY", type: .actionReplay16)
         return [cheatFormat]
     }
     
-    var emulatorConnector: EmulatorBase { PS1EmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { PS1EmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class PS1EmulatorBridge : NSObject, EmulatorBase {
+class PS1EmulatorBridge : EmulatorBridgeBase {
     static let shared = PS1EmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
     
     private var leftThumbstickPosition: CGPoint = .zero
     private var rightThumbstickPosition: CGPoint = .zero
     
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if input == PS1GameInput.leftThumbstickUp || input == PS1GameInput.leftThumbstickDown {
             leftThumbstickPosition.y = input == PS1GameInput.leftThumbstickUp ? value : -value
@@ -175,7 +155,7 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == PS1GameInput.leftThumbstickUp || input == PS1GameInput.leftThumbstickDown {
             leftThumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -195,23 +175,4 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
             }
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

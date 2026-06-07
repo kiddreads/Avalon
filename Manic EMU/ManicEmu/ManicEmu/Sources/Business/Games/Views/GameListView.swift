@@ -9,7 +9,7 @@
 
 import UIKit
 import RealmSwift
-import ManicEmuCore
+
 import UniformTypeIdentifiers
 import Fireworks
 import VisualEffectView

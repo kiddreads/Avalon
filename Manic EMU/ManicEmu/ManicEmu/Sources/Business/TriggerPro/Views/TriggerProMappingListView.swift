@@ -7,7 +7,7 @@
 //
 
 import ProHUD
-import ManicEmuCore
+
 
 class TriggerProMappingListView: UIView {
     class TriggerProMappingEditCell: UICollectionViewCell {

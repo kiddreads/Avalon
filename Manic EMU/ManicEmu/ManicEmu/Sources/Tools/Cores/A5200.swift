@@ -6,7 +6,7 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -46,7 +46,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.a5200)
     }
     
@@ -85,56 +85,35 @@ extension GameType
     }
 }
 
-struct A5200: ManicEmuCoreProtocol {
-    public static let core = A5200()
+struct A5200: DeltaCoreProtocol {
+    static let core = A5200()
     
-    public var name: String { "5200" }
-    public var identifier: String { "com.aoshuang.5200Core" }
+    var name: String { "5200" }
+    var identifier: String { "com.aoshuang.5200Core" }
     
-    public var gameType: GameType { GameType.a5200 }
-    public var gameInputType: Input.Type { A5200GameInput.self }
+    var gameType: GameType { GameType.a5200 }
+    var gameInputType: Input.Type { A5200GameInput.self }
     var allInputs: [Input] { A5200GameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 35112 * 60, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 320, height: 240))
+    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 320, height: 240))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    public var emulatorConnector: EmulatorBase { A5200EmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { A5200EmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class A5200EmulatorBridge : NSObject, EmulatorBase {
+class A5200EmulatorBridge : EmulatorBridgeBase {
     static let shared = A5200EmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = A5200GameInput(rawValue: input) {
 #if DEBUG
@@ -191,7 +170,7 @@ class A5200EmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = A5200GameInput(rawValue: input) {
             if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
                 LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
@@ -211,24 +190,5 @@ class A5200EmulatorBridge : NSObject, EmulatorBase {
         }
         
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }
 

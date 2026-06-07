@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
-import ManicEmuCore
+
 import Schedule
 import Haptica
 import RealmSwift
@@ -16,10 +16,8 @@ import ProHUD
 import IceCream
 import StoreKit
 import AVFoundation
-#if targetEnvironment(simulator)
-import MetalKit
-#endif
 import Kingfisher
+import MetalKit
 
 //MARK: 主类
 class PlayViewController: GameViewController {
@@ -88,7 +86,7 @@ class PlayViewController: GameViewController {
     //渲染视图
     private var gameMetalView: UIView? = nil
     //3DS核心
-    private var threeDSCore: ThreeDSEmulatorBridge? = nil
+    private var citraCore: ThreeDSEmulatorBridge? = nil
     //JGenesis核心
     private var jGenesisCore: JGenesisView? {
         if manicGame.isJGenesisCore {
@@ -341,11 +339,10 @@ class PlayViewController: GameViewController {
         manicGame = game
         super.init()
         Log.debug("\(String(describing: Self.self)) init")
-        prefersVolumeEnable = manicGame.volume
         loadSaveState = saveState
         modalPresentationStyle = .fullScreen
         delegate = self
-        self.game = ManicEmuCore.Game(fileURL: game.romUrl, type: game.gameType)
+        self.game = DeltaCore.Game(fileURL: game.romUrl, type: game.gameType)
         
         //MARK: 通知监听
         ///管理控制外设的连接
@@ -357,7 +354,7 @@ class PlayViewController: GameViewController {
         gameControllerDidDisConnectNotification = NotificationCenter.default.addObserver(forName: .externalGameControllerDidDisconnect, object: nil, queue: .main) { [weak self] notification in
             guard let self else { return }
             //手柄断开连接
-            if ExternalGameControllerUtils.shared.linkedControllers.count == 0 {
+            if ExternalGameControllerManager.shared.connectedControllers.count == 0 {
                 self.manicGame.forceFullSkin = false
                 self.updateSkin()
                 self.updateNDSCursor()
@@ -370,7 +367,7 @@ class PlayViewController: GameViewController {
         }
         keyboardDidDisConnectNotification = NotificationCenter.default.addObserver(forName: .externalKeyboardDidDisconnect, object: nil, queue: .main) { [weak self] notification in
             //键盘断开连接
-            if ExternalGameControllerUtils.shared.linkedControllers.count == 0 {
+            if ExternalGameControllerManager.shared.connectedControllers.count == 0 {
                 self?.manicGame.forceFullSkin = false
                 self?.updateSkin()
             }
@@ -388,7 +385,7 @@ class PlayViewController: GameViewController {
         scenewillDeactivateNotification = NotificationCenter.default.addObserver(forName: UIScene.willDeactivateNotification, object: nil, queue: .main) { [weak self] notification in
             //进入后台
             guard let self = self else { return }
-            self.pauseEmulation()
+            self.pauseEmulationIfNeed()
         }
         
         sceneDidActivateNotification = NotificationCenter.default.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] notification in
@@ -536,7 +533,7 @@ class PlayViewController: GameViewController {
                             achievement.measuredProgress = achievementProgress.measuredProgress
                         }
                         topViewController(appController: true)?.present(RetroAchievementsDetailViewController(achievement: achievement), animated: true)
-                        self.pauseEmulation()
+                        self.pauseEmulationIfNeed()
                     }
                     UIDevice.generateAchievementHaptic()
                     //删除缓存的解锁进度
@@ -845,7 +842,7 @@ class PlayViewController: GameViewController {
 #endif
         
         if manicGame.isCitra3DS {
-            threeDSCore?.destory()
+            citraCore?.destory()
         }
         
         PlayViewController.currentPlayViewController = nil
@@ -929,7 +926,7 @@ class PlayViewController: GameViewController {
     }
     
     override func gameController(_ gameController: any GameController, didActivate input: any Input, value: Double) {
-        if let directKeyboardInput = input as? SomeInput,
+        if let directKeyboardInput = input as? AnyInput,
            directKeyboardInput.type == .controller(GameControllerInputType("directKeyboard")),
             manicGame.isLibretroType,
             let keyCode = LibretroKeyboardCode.createCode(withLabel: directKeyboardInput.stringValue) {
@@ -940,7 +937,7 @@ class PlayViewController: GameViewController {
     }
     
     override func gameController(_ gameController: any GameController, didDeactivate input: any Input) {
-        if let directKeyboardInput = input as? SomeInput,
+        if let directKeyboardInput = input as? AnyInput,
            directKeyboardInput.type == .controller(GameControllerInputType("directKeyboard")),
            manicGame.isLibretroType,
            let keyCode = LibretroKeyboardCode.createCode(withLabel: directKeyboardInput.stringValue) {
@@ -953,28 +950,6 @@ class PlayViewController: GameViewController {
             Log.debug("长按结束，恢复原速度")
         }
         
-    }
-    
-    @discardableResult
-    override func pauseEmulation() -> Bool {
-        guard !isWFCConnect else {
-            return false
-        }
-        if manicGame.isCitra3DS {
-            threeDSCore?.pause()
-            return true
-        } else if manicGame.isLibretroType {
-            LibretroCore.sharedInstance().pause()
-            return true
-        } else if manicGame.isJGenesisCore {
-            jGenesisCore?.pause()
-            return true
-        } else if manicGame.isJ2MECore {
-            j2meCore?.pause()
-            return true
-        } else {
-            return super.pauseEmulation()
-        }
     }
 }
 
@@ -1001,10 +976,10 @@ extension PlayViewController {
             return
         }
         
-        if let threeDSCore = self.threeDSCore {
+        if let citraCore {
             let now = Date()
             //存档 并获取存档路径
-            let result = threeDSCore.saveState()
+            let result = citraCore.saveState()
             if result.isSuccess {
                 var image: UIImage? = nil
                 if let tempImage = snapShotFor3DS(topOnly: true)?.first {
@@ -1150,13 +1125,13 @@ extension PlayViewController {
         }
         //如果传入即时存档就尝试去加载 如果没有传入则选最新的手动即时存档进行读取
         if let state = state ?? manicGame.gameSaveStates.last(where: { $0.type == .manualSaveState }),
-           let threeDSCore = self.threeDSCore,
+           let citraCore,
            let slot = UInt32(state.name.deletingPathExtension.pathExtension) {
             //现将存档移到模拟器工作目录
             if let fileUrl = state.stateData?.filePath {
-                threeDSCore.addSaveState(fileUrl: fileUrl, slot: slot)
+                citraCore.addSaveState(fileUrl: fileUrl, slot: slot)
             }
-            threeDSCore.loadState(slot)
+            citraCore.loadState(slot)
             UIView.makeToast(message: R.string.localizable.gameSaveStateLoadSuccess())
             lastLoadDate = Date.now
             updateCheatCodes()
@@ -1224,7 +1199,7 @@ extension PlayViewController {
                     self?.resumeEmulationAndHandleAudio()
                 }
             } else {
-                pauseEmulation()
+                pauseEmulationIfNeed()
                 GameSettingView.show(game: manicGame,
                                      didSelectItem: { [weak self] item, sheet in
                     //点击菜单选项
@@ -1243,7 +1218,7 @@ extension PlayViewController {
                 return
             }
             
-            pauseEmulation()
+            pauseEmulationIfNeed()
             
             func updateFlex(images: [UIImage?]) {
                 if let controllerSkin = controllerView.controllerSkin, let traits = controllerView.controllerSkinTraits,
@@ -1476,7 +1451,7 @@ extension PlayViewController {
             if !PurchaseManager.isMember && manicGame.gameSaveStates.filter({ $0.type == .manualSaveState }).count >= Constants.Numbers.NonMemberManualSaveGameCount {
                 //超限了
                 if menuSheet == nil {
-                    pauseEmulation()
+                    pauseEmulationIfNeed()
                 }
                 UIView.makeAlert(identifier: Constants.Strings.PlayPurchaseAlertIdentifier,
                                  detail: R.string.localizable.manualGameSaveCountLimit(),
@@ -1526,7 +1501,7 @@ extension PlayViewController {
                 manicGame.volume = item.volumeOn
             }
             skinSwitchBindDatas["volume"] = manicGame.volume
-            prefersVolumeEnable = item.volumeOn
+            
             if menuSheet == nil {
                 //说明这里不是由menu菜单进行设置的 则不存在恢复游戏的过程 所以需要手动更新声音
                 updateAudio()
@@ -1542,7 +1517,7 @@ extension PlayViewController {
             if !PurchaseManager.isMember && item.fastForwardSpeed.rawValue > GameSetting.FastForwardSpeed.two.rawValue {
                 //超限了
                 if menuSheet == nil {
-                    pauseEmulation()
+                    pauseEmulationIfNeed()
                 }
                 UIView.makeAlert(identifier: Constants.Strings.PlayPurchaseAlertIdentifier,
                                  detail: R.string.localizable.fastForwardSpeedLimit(),
@@ -1565,7 +1540,7 @@ extension PlayViewController {
             } else {
                 if manicGame.speed.rawValue == 0 || manicGame.speed != item.fastForwardSpeed {
                     if manicGame.gameType == .ps1, manicGame.defaultCore == 0, menuSheet == nil {
-                        pauseEmulation()
+                        pauseEmulationIfNeed()
                     }
                     updateFastforward(speed: item.fastForwardSpeed)
                     if manicGame.gameType == .ps1, manicGame.defaultCore == 0, menuSheet == nil {
@@ -1589,7 +1564,7 @@ extension PlayViewController {
                 return true
             }
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             GameInfoView.show(game: manicGame, selection: { [weak self, weak menuSheet] saveState in
                 guard let self = self else { return }
@@ -1639,7 +1614,7 @@ extension PlayViewController {
                 UIView.makeAlert(detail: R.string.localizable.mameCheatCodeDesc(), cancelTitle: R.string.localizable.confirmTitle())
             } else {
                 if menuSheet == nil {
-                    pauseEmulation()
+                    pauseEmulationIfNeed()
                 }
                 if manicGame.gameType == .arcade, manicGame.defaultCore == 1 {
                     FBNeoCheatCodeListView.show(game: manicGame, hideCompletion: { [weak self] in
@@ -1659,7 +1634,7 @@ extension PlayViewController {
         case .skins:
             //MARK: handleMenuGameSetting.skins
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             SkinSettingsView.show(game: manicGame, hideCompletion: { [weak self] in
                 if menuSheet == nil {
@@ -1671,7 +1646,7 @@ extension PlayViewController {
             //MARK: handleMenuGameSetting.filter
             guard !manicGame.isCitra3DS else { return true }
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             if manicGame.isLibretroType {
                 ShadersListView.show(game: self.manicGame,
@@ -1789,7 +1764,7 @@ extension PlayViewController {
         case .airplay:
             //MARK: handleMenuGameSetting.airplay
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             let vc = WebViewController(url: Constants.URLs.AirPlayUsageGuide, isShow: true, bottomInset: getMenuInsets()?.bottom ?? nil)
             vc.didClose = { [weak self] in
@@ -1802,7 +1777,7 @@ extension PlayViewController {
         case .controllerSetting:
             //MARK: handleMenuGameSetting.controllerSetting
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             ControllersSettingView.show(gameType: manicGame.gameType, hideCompletion: { [weak self] in
                 if menuSheet == nil {
@@ -1827,7 +1802,7 @@ extension PlayViewController {
         case .functionSort:
             //MARK: handleMenuGameSetting.functionSort
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             GameSettingView.show(game: manicGame, isEditingMode: true, hideCompletion: { [weak self] in
                 if menuSheet == nil {
@@ -1838,7 +1813,7 @@ extension PlayViewController {
         case .reload:
             //MARK: handleMenuGameSetting.reload
             if manicGame.isCitra3DS {
-                threeDSCore?.reload()
+                citraCore?.reload()
             } else if manicGame.isLibretroType {
                 LibretroCore.sharedInstance().reload()
                 updateFilter()
@@ -1857,7 +1832,7 @@ extension PlayViewController {
         case .quit:
             //MARK: handleMenuGameSetting.quit
             if manicGame.isCitra3DS {
-                threeDSCore?.stop()
+                citraCore?.stop()
                 DispatchQueue.main.asyncAfter(delay: 0.5) {
                     self.dismiss(animated: true)
                 }
@@ -1896,7 +1871,7 @@ extension PlayViewController {
                 }
                 if manicGame.gameType == ._3ds {
                     if manicGame.isCitra3DS {
-                        threeDSCore?.setResolution(resolution: item.resolution)
+                        citraCore?.setResolution(resolution: item.resolution)
                     } else {
                         let resolutionRaw = item.resolution == .undefine ? 1 : item.resolution.rawValue
                         LibretroCore.sharedInstance().updateRunningCoreConfigs(["citra_resolution_factor": "\(resolutionRaw)"], flush: false)
@@ -1942,11 +1917,11 @@ extension PlayViewController {
         case .consoleHome:
             //MARK: handleMenuGameSetting.consoleHome
             //回到主页
-            if manicGame.gameType == ._3ds, let threeDSCore {
+            if manicGame.gameType == ._3ds {
                 if manicGame.isCitra3DS {
                     if manicGame.is3DSHomeMenuGame {
                         DispatchQueue.main.asyncAfter(delay: 0.5) {
-                            threeDSCore.jumpToHome()
+                            self.citraCore?.jumpToHome()
                         }
                     } else {
                         UIView.makeToast(message: R.string.localizable.threeDSHomeMenuNotRunning())
@@ -1959,10 +1934,10 @@ extension PlayViewController {
             //MARK: handleMenuGameSetting.amiibo
             //加载amiibo
             if manicGame.gameType == ._3ds {
-                let isSearchingAmiibo = (manicGame.isCitra3DS && (threeDSCore?.isAmiiboSearching() ?? false)) || (manicGame.isAzahar3DS && LibretroCore.sharedInstance().isSearchingAmiibo())
+                let isSearchingAmiibo = (manicGame.isCitra3DS && (citraCore?.isAmiiboSearching() ?? false)) || (manicGame.isAzahar3DS && LibretroCore.sharedInstance().isSearchingAmiibo())
                 if isSearchingAmiibo {
                     if menuSheet == nil {
-                        pauseEmulation()
+                        pauseEmulationIfNeed()
                     }
                     Log.debug("amiibo正在搜索中")
                     FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: false) { [weak self] urls in
@@ -1973,7 +1948,7 @@ extension PlayViewController {
                             if let url = urls.first {
                                 DispatchQueue.main.asyncAfter(delay: 1) {
                                     if self.manicGame.isCitra3DS {
-                                        self.threeDSCore?.loadAmiibo(path: url.path)
+                                        self.citraCore?.loadAmiibo(path: url.path)
                                     } else {
                                         LibretroCore.sharedInstance().loadAmiibo(url.path)
                                     }
@@ -1998,9 +1973,9 @@ extension PlayViewController {
             //MARK: handleMenuGameSetting.simBlowing
             if manicGame.gameType == ._3ds {
                 if manicGame.isCitra3DS {
-                    threeDSCore?.setSimBlowing(start: true)
+                    citraCore?.setSimBlowing(start: true)
                     DispatchQueue.main.asyncAfter(delay: 5) { [weak self] in
-                        self?.threeDSCore?.setSimBlowing(start: false)
+                        self?.citraCore?.setSimBlowing(start: false)
                     }
                 } else {
                     LibretroCore.sharedInstance().updateRunningCoreConfigs(["citra_input_type": "static_noise"], flush: false)
@@ -2109,7 +2084,7 @@ extension PlayViewController {
         case .retro:
             //MARK: handleMenuGameSetting.retro
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             func openRetroAchievementsList() {
                 let vc = RetroAchievementsListViewController(game: manicGame, bottomInset: getMenuInsets()?.bottom ?? nil)
@@ -2165,7 +2140,7 @@ extension PlayViewController {
         case .gameplayManuals:
             //MARK: handleMenuGameSetting.gameplayManuals
             if menuSheet == nil {
-                pauseEmulation()
+                pauseEmulationIfNeed()
             }
             
             func showManualsView() {
@@ -2305,19 +2280,19 @@ extension PlayViewController {
     
     //更新外设控制器
     private func updateExternalGameController() {
-        if let manicEmuCore = self.manicEmuCore {
+        if let emulatorCore = self.emulatorCore {
             let realm = Database.realm
-            for controler in ExternalGameControllerUtils.shared.linkedControllers {
+            for controler in ExternalGameControllerManager.shared.connectedControllers {
                 var mapping: GameControllerInputMapping? = nil
                 if let object = realm.objects(ControllerMapping.self).first(where: { $0.controllerName == controler.name && $0.gameType == manicGame.gameType && !$0.isDeleted }) {
                     mapping = try? GameControllerInputMapping(mapping: object.mapping)
                 }
                 if let mapping {
                     controler.addReceiver(self, inputMapping: mapping)
-                    controler.addReceiver(manicEmuCore, inputMapping: mapping)
+                    controler.addReceiver(emulatorCore, inputMapping: mapping)
                 } else {
                     controler.addReceiver(self)
-                    controler.addReceiver(manicEmuCore)
+                    controler.addReceiver(emulatorCore)
                 }
                 if let mfi = controler as? MFiGameController, manicGame.isLibretroType, let playerIndex = mfi.playerIndex {
                     if LibretroCore.sharedInstance().getSensorEnable(Int32(playerIndex)) {
@@ -2327,7 +2302,7 @@ extension PlayViewController {
                     }
                 }
             }
-            if ExternalGameControllerUtils.shared.linkedControllers.count > 0 && Settings.defalut.fullScreenWhenConnectController {
+            if ExternalGameControllerManager.shared.connectedControllers.count > 0 && Settings.defalut.fullScreenWhenConnectController {
                 self.manicGame.forceFullSkin = true
             }
             updateNDSCursor()
@@ -2343,9 +2318,30 @@ extension PlayViewController {
         }
     }
     
+    @discardableResult
+    private func pauseEmulationIfNeed() -> Bool {
+        guard !isWFCConnect else {
+            return false
+        }
+        if manicGame.isCitra3DS {
+            citraCore?.pause()
+            return true
+        } else if manicGame.isLibretroType {
+            LibretroCore.sharedInstance().pause()
+            return true
+        } else if manicGame.isJGenesisCore {
+            jGenesisCore?.pause()
+            return true
+        } else if manicGame.isJ2MECore {
+            j2meCore?.pause()
+            return true
+        }
+        return false
+    }
+    
     private func resumeEmulationAndHandleAudio() {
         if manicGame.isCitra3DS {
-            threeDSCore?.resume()
+            citraCore?.resume()
             updateAudio()
         } else if manicGame.isLibretroType {
             LibretroCore.sharedInstance().resume()
@@ -2363,12 +2359,12 @@ extension PlayViewController {
         if manicGame.isCitra3DS {
             if manicGame.volume {
                 if Settings.defalut.respectSilentMode, muteSwitchMonitor.isMonitoring, muteSwitchMonitor.isMuted {
-                    threeDSCore?.disableVolume()
+                    citraCore?.disableVolume()
                 } else {
-                    threeDSCore?.enableVolume()
+                    citraCore?.enableVolume()
                 }
             } else {
-                threeDSCore?.disableVolume()
+                citraCore?.disableVolume()
             }
         } else if manicGame.isLibretroType {
             if Settings.defalut.respectSilentMode, muteSwitchMonitor.isMonitoring, muteSwitchMonitor.isMuted {
@@ -2822,7 +2818,7 @@ extension PlayViewController {
                         setupUniversalScript(gameType: ._3ds)
                     }
                 }
-                var enableLLE = (manicGame.isArticBaseHomeMenu || (manicGame.getExtraInt(key: ExtraKey.emulationAccuracy.rawValue) ?? 0 == 1)) ? true : false
+                let enableLLE = (manicGame.isArticBaseHomeMenu || (manicGame.getExtraInt(key: ExtraKey.emulationAccuracy.rawValue) ?? 0 == 1)) ? true : false
                 LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name,
                                                            configs: [
                                                             "citra_layout_option": "custom",
@@ -2890,10 +2886,6 @@ extension PlayViewController {
         //配置静音模式
         if manicGame.isLibretroType {
             LibretroCore.sharedInstance().setRespectSilentMode(Settings.defalut.respectSilentMode)
-        } else if manicGame.isCitra3DS {
-            //不需要配置
-        } else {
-            manicEmuCore?.audioManager.followSilentMode = Settings.defalut.respectSilentMode
         }
         if Settings.defalut.respectSilentMode {
             //监听静音键
@@ -2985,13 +2977,13 @@ extension PlayViewController {
         }
         
         //配置控制器死区，
-        ExternalGameControllerUtils.shared.deadZone = (Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0).float
+        ExternalGameControllerManager.shared.deadZone = (Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0).float
         if !manicGame.gameType.supportAnalogInput {
             //对于没有摇杆输入的平台，如果使用外置控制器的摇杆来映射按键的时候，会有很多不可预见的问题
             let settingDeadzone = Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0
             if settingDeadzone < 0.4 {
                 //强制设置0.4以上可以避免摇杆细微变动输入带来的错误
-                ExternalGameControllerUtils.shared.deadZone = 0.4
+                ExternalGameControllerManager.shared.deadZone = 0.4
             }
         }
         
@@ -3222,10 +3214,6 @@ extension PlayViewController {
         //配置静音模式
         if manicGame.isLibretroType {
             LibretroCore.sharedInstance().setRespectSilentMode(Settings.defalut.respectSilentMode)
-        } else if manicGame.isCitra3DS {
-            //不需要配置
-        } else {
-            manicEmuCore?.audioManager.followSilentMode = Settings.defalut.respectSilentMode
         }
         if Settings.defalut.respectSilentMode {
             //监听静音键
@@ -3297,13 +3285,13 @@ extension PlayViewController {
         }
         
         //配置控制器死区，
-        ExternalGameControllerUtils.shared.deadZone = (Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0).float
+        ExternalGameControllerManager.shared.deadZone = (Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0).float
         if !manicGame.gameType.supportAnalogInput {
             //对于没有摇杆输入的平台，如果使用外置控制器的摇杆来映射按键的时候，会有很多不可预见的问题
             let settingDeadzone = Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0
             if settingDeadzone < 0.4 {
                 //强制设置0.4以上可以避免摇杆细微变动输入带来的错误
-                ExternalGameControllerUtils.shared.deadZone = 0.4
+                ExternalGameControllerManager.shared.deadZone = 0.4
             }
         }
         
@@ -3356,11 +3344,10 @@ extension PlayViewController {
             }
         }
         
-#if !targetEnvironment(simulator)
         if manicGame.forceFullSkin {
             //设置全屏皮肤
             let realm = Database.realm
-            if let coreName = manicEmuCore?.manicCore.name,
+            if let coreName = emulatorCore?.deltaCore.name,
                let skin = realm.objects(Skin.self).where({ $0.fileName == "\(coreName)_FLEX.manicskin" }).first,
                let skinUrl = skin.skinData?.filePath,
                var controllerSkin = ControllerSkin(fileURL: skinUrl) {
@@ -3376,9 +3363,7 @@ extension PlayViewController {
         } else {
             setPreferredSkin()
         }
-#else
-        setPreferredSkin()
-#endif
+
         //Set Skin Sound Effects
         controllerView.enableSkinSoundEffects = Settings.defalut.getExtraBool(key: ExtraKey.skinSoundEffects.rawValue) ?? true
         
@@ -3470,11 +3455,11 @@ extension PlayViewController {
     private func updateHaptic() {
         switch manicGame.haptic {
         case .off:
-            controllerView.isButtonHaptic = false
-            controllerView.isThumbstickHaptic = false
+            controllerView.isButtonHapticFeedbackEnabled = false
+            controllerView.isThumbstickHapticFeedbackEnabled = false
         default:
-            controllerView.isButtonHaptic = true
-            controllerView.isThumbstickHaptic = true
+            controllerView.isButtonHapticFeedbackEnabled = true
+            controllerView.isThumbstickHapticFeedbackEnabled = true
         }
         
         switch manicGame.haptic {
@@ -3501,7 +3486,7 @@ extension PlayViewController {
             //执行全屏投屏
             if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
                 gameMetalView.removeFromSuperview()
-                var dimensions = manicEmuCore?.videoManager.videoFormat.dimensions ?? CGSize(width: 480, height: 360)
+                var dimensions = emulatorCore?.deltaCore.videoFormat.dimensions ?? CGSize(width: 480, height: 360)
                 if manicGame.gameType == .ds || manicGame.gameType == ._3ds {
                     dimensions.height = dimensions.height/2
                 }
@@ -3698,7 +3683,7 @@ extension PlayViewController {
             }
             updateDualScreenViews()
         } else {
-            threeDSCore = self.manicEmuCore?.manicCore.emulatorConnector as? ThreeDSEmulatorBridge
+            citraCore = self.emulatorCore?.deltaCore.emulatorBridge as? ThreeDSEmulatorBridge
             gameMetalView = MTKView(frame: .zero, device: MTLCreateSystemDefaultDevice())
             guard let gameMetalView else { return }
             self.view.insertSubview(gameMetalView, belowSubview: controllerView)
@@ -3709,7 +3694,7 @@ extension PlayViewController {
             if jitEnable {
                 setupUniversalScript(gameType: ._3ds)
             }
-            threeDSCore?.start(withGameURL: manicGame.romUrl,
+            citraCore?.start(withGameURL: manicGame.romUrl,
                                metalView: gameMetalView as! MTKView,
                                metalViewFrame: frames.skinFrame,
                                topRect: frames.mainGameViewFrame,
@@ -3725,7 +3710,7 @@ extension PlayViewController {
                 self.updateFastforward(speed: self.manicGame.speed)
                 self.updateAirPlay()
             }
-            threeDSCore?.openKeyboardAction { hintText, keyboardType, maxTextSize in
+            citraCore?.openKeyboardAction { hintText, keyboardType, maxTextSize in
                 ThreeDSKeyboardView.showForCitra(hintText: hintText, keyboardType: keyboardType, maxTextSize: maxTextSize)
             }
         }
@@ -4078,7 +4063,7 @@ extension PlayViewController {
                 if frames.count == 10 {
                     let topRect = CGRect(x: frames[0], y: frames[1], width: frames[2], height: frames[3]).applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
                     let bottomRect = CGRect(x: frames[4], y: frames[5], width: frames[6], height: frames[7]).applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
-                    threeDSCore?.updateViews(topRect: topRect,
+                    citraCore?.updateViews(topRect: topRect,
                                              bottomRect: bottomRect, isAirPlay: true)
                 }
             }
@@ -4099,7 +4084,7 @@ extension PlayViewController {
             
             if manicGame.isCitra3DS {
                 guard let touchGameViewFrame = frames.touchGameViewFrame else { return }
-                threeDSCore?.updateViews(topRect: frames.mainGameViewFrame,
+                citraCore?.updateViews(topRect: frames.mainGameViewFrame,
                                          bottomRect: touchGameViewFrame)
                 return
             }
@@ -4439,7 +4424,7 @@ extension PlayViewController {
             leaderboardView.isHidden = true
             leaderboardView.addTapGesture { [weak self] gesture in
                 guard let self else { return }
-                self.pauseEmulation()
+                self.pauseEmulationIfNeed()
                 CheevosPopupView.show(type: .leaderboard,
                                       leaderboards: leaderboards.reversed()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
@@ -4460,7 +4445,7 @@ extension PlayViewController {
             progressView.isHidden = true
             progressView.addTapGesture { [weak self] gesture in
                 guard let self else { return }
-                self.pauseEmulation()
+                self.pauseEmulationIfNeed()
                 CheevosPopupView.show(type: .progress,
                                       achievements: progressAchievements.reversed()) { [weak self] in
                     self?.resumeEmulationAndHandleAudio()
@@ -4481,7 +4466,7 @@ extension PlayViewController {
             challengeView.isHidden = true
             challengeView.addTapGesture { [weak self] gesture in
                 guard let self else { return }
-                self.pauseEmulation()
+                self.pauseEmulationIfNeed()
                 
                 CheevosPopupView.show(type: .challenge,
                                       achievements: self.challengeAchievements.reversed()) { [weak self] in
@@ -4523,7 +4508,7 @@ extension PlayViewController {
     private func updateNDSCursor() {
         guard manicGame.gameType == .ds else { return }
         if manicGame.defaultCore == 0 {
-            if ExternalGameControllerUtils.shared.linkedControllers.count > 0 || ExternalSceneDelegate.isAirPlaying {
+            if ExternalGameControllerManager.shared.connectedControllers.count > 0 || ExternalSceneDelegate.isAirPlaying {
                 //如果ds模式下连接上外置控制器，支持右摇杆控制光标移动 L3确定
                 LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_show_cursor": "always"], flush: false)
             } else {
@@ -4675,7 +4660,6 @@ extension PlayViewController {
                 j2meCore?.fastForward(speed: 7)
             }
         } else if manicGame.isCitra3DS {
-            #if !targetEnvironment(simulator)
             let bridge = ThreeDSEmulatorBridge.shared
             switch speed {
             case .one:
@@ -4689,7 +4673,6 @@ extension PlayViewController {
             case .five:
                 bridge.setFrameLimit(300)
             }
-            #endif
         }
     }
     
@@ -4803,14 +4786,6 @@ extension PlayViewController {
 
 //MARK: GameViewControllerDelegate代理
 extension PlayViewController: GameViewControllerDelegate {
-    
-    func gameViewController(_ gameViewController: GameViewController, optionsFor game: GameBase) -> [EmulatorCore.Option: Any] {
-        var options: [EmulatorCore.Option: Any] = [.metal: false]
-        if #available(iOS 18, macOS 15, *), ProcessInfo.processInfo.isiOSAppOnMac {
-            options[.metal] = true
-        }
-        return options
-    }
     
     func gameViewControllerShouldResume(_ gameViewController: GameViewController) -> Bool {
         if SheetProvider.find(identifier: Constants.Strings.PlayPurchaseAlertIdentifier).count > 0 {

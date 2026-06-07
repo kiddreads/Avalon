@@ -10,7 +10,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
-import ManicEmuCore
+
 import IceCream
 import CloudKit
 #if DEBUG
@@ -29,7 +29,8 @@ extension UIWindow {
             } else {
                 FLEXManager.shared.hideExplorer()
             }
-            UIWindow.startShowingTouches()
+            UIWindow.configure(ShowTouchesConfig(touchColor: Constants.Color.Main))
+            UIWindow.showTouches()
 #endif
         }
     }
@@ -53,27 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIScrollView.disableEdgeEffect()
         
         //注册模拟器核心
-        System.allCores.forEach { ManicEmu.register($0) }
-        
-#if CRASH_COLLECT
-        //收集闪退日志 用于内测用户测试bug时使用
-        let apmConfig = UMAPMConfig.default()
-        apmConfig.crashAndBlockMonitorEnable = true
-        apmConfig.javaScriptBridgeEnable = false
-        apmConfig.launchMonitorEnable = false
-        apmConfig.logCollectEnable = false
-        apmConfig.memMonitorEnable = false
-        apmConfig.networkEnable = false
-        apmConfig.oomMonitorEnable = false
-        apmConfig.pageMonitorEnable = false
-        apmConfig.logCollectEnable = false
-        UMCrashConfigure.setAPMConfig(apmConfig)
-        MobClick.setAutoPageEnabled(true)
-        UMConfigure.initWithAppkey(Constants.Cipher.UMAppKey, channel: nil);
-#endif
+        System.allCores.forEach { Delta.register($0) }
         
         //启动游戏手柄监听
-        ExternalGameControllerUtils.shared.startDetecting()
+        ExternalGameControllerManager.shared.startMonitoring()
         //启动游戏手柄点击监听
         UIControllerKit.shared.start()
         
@@ -87,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //监听会员状态变化
         NotificationCenter.default.addObserver(forName: Constants.NotificationName.MembershipChange, object: nil, queue: .main) { _ in
             //强制设置外置控制器是否只能玩玩家一
-            ExternalGameControllerUtils.shared.forceSetPlayerIndex = PurchaseManager.isMember ? 0 : nil
+            ExternalGameControllerManager.shared.forceSetPlayerIndex = PurchaseManager.isMember ? 0 : nil
         }
         //注册静默通知 用于CloudKit的同步
         application.registerForRemoteNotifications()

@@ -11,7 +11,7 @@ import UIKit
 import SideMenu
 import DNSPageView
 import ColorfulX
-import ManicEmuCore
+
 import UniformTypeIdentifiers
 import BlurUIKit
 import KeyboardKit

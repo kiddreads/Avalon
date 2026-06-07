@@ -8,7 +8,7 @@
 
 import UIKit
 import ProHUD
-import ManicEmuCore
+
 
 class ArticBaseRegionChooseView: BaseView {
     static func show(completion: ((_ region: String?)->Void)? = nil ) {

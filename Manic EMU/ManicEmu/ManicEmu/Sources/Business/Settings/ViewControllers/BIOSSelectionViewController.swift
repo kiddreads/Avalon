@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 
 class BIOSSelectionViewController: BaseViewController {
     private lazy var biosSelectionView: BIOSSelectionView = {

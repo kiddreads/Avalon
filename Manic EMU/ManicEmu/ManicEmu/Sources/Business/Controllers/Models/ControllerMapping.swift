@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import RealmSwift
-import ManicEmuCore
+
 import IceCream
 
 extension ControllerMapping: CKRecordConvertible & CKRecordRecoverable {}
@@ -27,7 +27,7 @@ class ControllerMapping: Object, ObjectUpdatable {
     ///额外数据备用
     @Persisted var extras: Data?
         
-    var inputMapping: GameControllerInputMappingBase? {
+    var inputMapping: GameControllerInputMappingProtocol? {
         try? GameControllerInputMapping(mapping: mapping)
     }
     

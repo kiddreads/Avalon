@@ -5,7 +5,7 @@
 //  Created by Stephen on 3/16/2026.
 //
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -39,7 +39,7 @@ extension CheatType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.doom)
     }
     
@@ -65,55 +65,34 @@ extension CheatType
     }
 }
 
-struct DOOM: ManicEmuCoreProtocol {
-    public static let core = DOOM()
+struct DOOM: DeltaCoreProtocol {
+    static let core = DOOM()
     
-    public var name: String { "DOOM" }
-    public var identifier: String { "com.aoshuang.DOOMCore" }
+    var name: String { "DOOM" }
+    var identifier: String { "com.aoshuang.DOOMCore" }
     
-    public var gameType: GameType { GameType.doom }
-    public var gameInputType: Input.Type { DOOMGameInput.self }
+    var gameType: GameType { GameType.doom }
+    var gameInputType: Input.Type { DOOMGameInput.self }
     var allInputs: [Input] { DOOMGameInput.allCases }
-    public var gameSaveExtension: String { "dsg" }
+    var gameSaveFileExtension: String { "dsg" }
     
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 320, height: 200))
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 320, height: 200))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         let doomCommandsFormat = CheatFormat(name: NSLocalizedString("DoomCommands", comment: ""), format: "", type: .doomCommands, allowedCodeCharacters: .letters)
         return [doomCommandsFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { DOOMEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { DOOMEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class DOOMEmulatorBridge : NSObject, EmulatorBase {
+class DOOMEmulatorBridge : EmulatorBridgeBase {
     static let shared = DOOMEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = DOOMGameInput(rawValue: input),
            let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -144,28 +123,10 @@ class DOOMEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = DOOMGameInput(rawValue: input),
            let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
 }

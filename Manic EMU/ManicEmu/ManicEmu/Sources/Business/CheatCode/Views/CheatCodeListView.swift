@@ -11,7 +11,7 @@ import SwipeCellKit
 import RealmSwift
 import ProHUD
 import UniformTypeIdentifiers
-import ManicEmuCore
+
 
 class CheatCodeListView: BaseView {
     /// 充当导航条
@@ -270,7 +270,7 @@ class CheatCodeListView: BaseView {
             UIView.makeLoading()
             //解析txt
             var newCheats: [GameCheat] = []
-            let supportedCheatFormats = Array(game.gameType.manicEmuCore?.supportCheatFormats ?? Set())
+            let supportedCheatFormats = Array(game.gameType.manicEmuCore?.supportedCheatFormats ?? Set())
             var index: Int = 0
             for url in urls {
                 if let txt = try? String(contentsOf: url, encoding: .utf8) {

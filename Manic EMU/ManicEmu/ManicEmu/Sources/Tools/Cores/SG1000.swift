@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -28,7 +28,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.sg1000)
     }
     
@@ -47,26 +47,26 @@ extension GameType
     }
 }
 
-struct SG1000: ManicEmuCoreProtocol {
-    public static let core = SG1000()
+struct SG1000: DeltaCoreProtocol {
+    static let core = SG1000()
     
-    public var name: String { "SG-1000" }
-    public var identifier: String { "com.aoshuang.SG1000Core" }
+    var name: String { "SG-1000" }
+    var identifier: String { "com.aoshuang.SG1000Core" }
     
-    public var gameType: GameType { GameType.sg1000 }
-    public var gameInputType: Input.Type { SG1000GameInput.self }
+    var gameType: GameType { GameType.sg1000 }
+    var gameInputType: Input.Type { SG1000GameInput.self }
     var allInputs: [Input] { SG1000GameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 192))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 192))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let gameGenieFormat = CheatFormat(name: NSLocalizedString("Game Genie", comment: ""), format: "XXX-YYY-ZZZ", type: .gameGenie)
         return [gameGenieFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { SG1000EmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { SG1000EmulatorBridge.shared }
         
     private init()
     {
@@ -74,32 +74,12 @@ struct SG1000: ManicEmuCoreProtocol {
 }
 
 
-class SG1000EmulatorBridge : NSObject, EmulatorBase {
+class SG1000EmulatorBridge : EmulatorBridgeBase {
     static let shared = SG1000EmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = SG1000GameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -122,29 +102,10 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = SG1000GameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

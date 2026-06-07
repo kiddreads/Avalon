@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
-import ManicEmuCore
+
 import AVFoundation
 
 class SkinPreviewViewController: BaseViewController {
@@ -18,7 +18,7 @@ class SkinPreviewViewController: BaseViewController {
     
     private lazy var controlView: ControllerView = {
         let view = ControllerView()
-        view.customControllerSkinTraits = traits
+        view.overrideControllerSkinTraits = traits
         view.controllerSkin = skin
         view.addReceiver(self)
         return view
@@ -102,8 +102,8 @@ class SkinPreviewViewController: BaseViewController {
     }
 }
 
-extension SkinPreviewViewController: ControllerReceiverProtocol {
-    func gameController(_ gameController: any ManicEmuCore.GameController, didDeactivate input: any ManicEmuCore.Input) {
+extension SkinPreviewViewController: GameControllerReceiver {
+    func gameController(_ gameController: any DeltaCore.GameController, didDeactivate input: any DeltaCore.Input) {
         
     }
     

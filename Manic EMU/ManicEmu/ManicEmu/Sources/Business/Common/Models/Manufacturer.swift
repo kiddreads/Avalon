@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 
-import ManicEmuCore
+
 
 enum Manufacturer: Int, CaseIterable {
     case nintendo, sony, sega, arcade, atari, sun, microsoft, modRetro

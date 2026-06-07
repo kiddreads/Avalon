@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import XCGLogger
-import SSZipArchive
+import ZipArchive
 
 let Log = XCGLogger(identifier: "XCGLogger", includeDefaultDestinations: false)
 

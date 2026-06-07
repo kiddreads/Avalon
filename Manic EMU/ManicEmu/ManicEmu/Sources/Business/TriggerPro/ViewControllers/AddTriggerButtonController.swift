@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 
-import ManicEmuCore
+
 
 class AddTriggerButtonController: BaseViewController {
     

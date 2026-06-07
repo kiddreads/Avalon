@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -34,7 +34,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.ss)
     }
     
@@ -59,26 +59,26 @@ extension GameType
     }
 }
 
-struct SS: ManicEmuCoreProtocol {
-    public static let core = SS()
+struct SS: DeltaCoreProtocol {
+    static let core = SS()
     
-    public var name: String { "SS" }
-    public var identifier: String { "com.aoshuang.SSCore" }
+    var name: String { "SS" }
+    var identifier: String { "com.aoshuang.SSCore" }
     
-    public var gameType: GameType { GameType.ss }
-    public var gameInputType: Input.Type { SSGameInput.self }
+    var gameType: GameType { GameType.ss }
+    var gameInputType: Input.Type { SSGameInput.self }
     var allInputs: [Input] { SSGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 330, height: 224))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 330, height: 224))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let codeBreakerFormat = CheatFormat(name: NSLocalizedString("Code Breaker", comment: ""), format: "XXXXXXXX YYYY", type: .codeBreaker)
         return [codeBreakerFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { SSEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { SSEmulatorBridge.shared }
         
     private init()
     {
@@ -86,32 +86,12 @@ struct SS: ManicEmuCoreProtocol {
 }
 
 
-class SSEmulatorBridge : NSObject, EmulatorBase {
+class SSEmulatorBridge : EmulatorBridgeBase {
     static let shared = SSEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = SSGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -140,29 +120,10 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = SSGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

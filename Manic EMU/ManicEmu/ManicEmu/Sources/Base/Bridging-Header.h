@@ -7,16 +7,6 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-@import SwifterSwift;
-@import Closures;
-@import SnapKit;
-@import FluentDarkModeKit;
-@import SFSafeSymbols;
-#import <UniversalDetector/UniversalDetector.h>
 #import <Libretro/LibretroCore.h>
-#if CRASH_COLLECT
-#import <UMCommon/UMCommon.h>
-#import <UMAPM/UMAPMConfig.h>
-#import <UMAPM/UMCrashConfigure.h>
-#endif
 #import "ShadowLabel.h"
+

@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -36,7 +36,7 @@ extension CheatType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.gba)
     }
     
@@ -57,59 +57,39 @@ extension CheatType
     }
 }
 
-struct GBA: ManicEmuCoreProtocol {
-    public static let core = GBA()
+struct GBA: DeltaCoreProtocol {
+    static let core = GBA()
     
-    public var name: String { "GBA" }
-    public var identifier: String { "com.aoshuang.GBACore" }
+    var name: String { "GBA" }
+    var identifier: String { "com.aoshuang.GBACore" }
     
-    public var gameType: GameType { GameType.gba }
-    public var gameInputType: Input.Type { GBAGameInput.self }
+    var gameType: GameType { GameType.gba }
+    var gameInputType: Input.Type { GBAGameInput.self }
     var allInputs: [Input] { GBAGameInput.allCases }
-    public var gameSaveExtension: String { "sav" }
+    var gameSaveFileExtension: String { "sav" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 240, height: 160))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 240, height: 160))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let actionReplayFormat = CheatFormat(name: NSLocalizedString("Action Replay", comment: ""), format: "XXXXXXXX YYYYYYYY", type: .actionReplay)
         let gameSharkFormat = CheatFormat(name: NSLocalizedString("GameShark", comment: ""), format: "XXXXXXXX YYYYYYYY", type: .gameShark)
         let codeBreakerFormat = CheatFormat(name: NSLocalizedString("Code Breaker", comment: ""), format: "XXXXXXXX YYYY", type: .codeBreaker)
         return [actionReplayFormat, gameSharkFormat, codeBreakerFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { GBAEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { GBAEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class GBAEmulatorBridge : NSObject, EmulatorBase {
+class GBAEmulatorBridge : EmulatorBridgeBase {
     static let shared = GBAEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = GBAGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -134,29 +114,10 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = GBAGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

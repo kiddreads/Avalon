@@ -9,7 +9,7 @@
 
 import SQLite
 import Fuse
-import ManicEmuCore
+
 
 struct MobyGamesKit {
     struct Result {

@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UniformTypeIdentifiers
-import ManicEmuCore
+
 
 extension UTType {
     static var gamesaveTypes: [UTType] { allSystemTypes.gamesaveTypes }

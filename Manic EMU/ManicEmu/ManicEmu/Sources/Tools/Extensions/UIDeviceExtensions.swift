@@ -25,7 +25,7 @@ extension UIDevice {
     }
     
     static func generateAchievementHaptic() {
-        let achievementPattern: [Note] = [
+        let achievementPattern: [LegacyNote] = [
             // 开场强烈震动
             .haptic(.impact(.heavy)),
             .wait(0.1),
@@ -194,4 +194,9 @@ extension UIDevice {
     }
 }
 
+extension Device {
+    static public func isPhone(detectSimulator: Bool = true) -> Bool {
+        return type(detectSimulator: detectSimulator) == .iPhone
+    }
+}
 

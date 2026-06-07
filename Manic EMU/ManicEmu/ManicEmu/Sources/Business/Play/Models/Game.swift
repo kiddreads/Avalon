@@ -8,11 +8,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import RealmSwift
-import ManicEmuCore
+
 import IceCream
-#if !targetEnvironment(simulator)
-import ThreeDS
-#endif
+import Citra
 import SmartCodable
 
 enum ThreeDSMode: Int, PersistableEnum {
@@ -123,19 +121,17 @@ class Game: Object, ObjectUpdatable {
         
         var localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(fileName))
         
-#if !targetEnvironment(simulator)
         if gameType == ._3ds,
            fileExtension.lowercased() == "app",
-           let ciaPath = ThreeDSCore.shared.getCIAContentPath(identifier: identifierFor3DS) {
+           let ciaPath = CitraCore.shared().getCIAContentPath(identifier: identifierFor3DS, isSdmc: true) {
             localUrl = URL(fileURLWithPath: ciaPath)
             if !FileManager.default.fileExists(atPath: localUrl.path),
-               let urlInNand = ThreeDSCore.shared.getCIAContentPath(identifier: identifierFor3DS, isSdmc: false){
+               let urlInNand = CitraCore.shared().getCIAContentPath(identifier: identifierFor3DS, isSdmc: false){
                 localUrl = URL(fileURLWithPath: urlInNand)
             }
         } else if isAzaharArticBase {
             return URL(string: "articinio://\(name)")!
         }
-#endif
         
         if isPSPPBPGame, let gamePath = getExtraString(key: ExtraKey.pspPBPGamePath.rawValue) {
             return URL(fileURLWithPath: Constants.Path.PSPGame.appendingPathComponent(gamePath))
@@ -145,14 +141,12 @@ class Game: Object, ObjectUpdatable {
     }
     //游戏自带存档路径
     var gameSaveUrl: URL {
-#if !targetEnvironment(simulator)
         if gameType == ._3ds {
             //存档 sdmc/Nintendo 3DS/000...0/000...0/title/[game-TID-high]/[game-TID-low]/data/00000001/
-            if let titlePath = ThreeDSCore.shared.getTitlePath(identifier: identifierFor3DS) {
+            if let titlePath = CitraCore.shared().getTitlePath(identifier: identifierFor3DS, isSdmc: true) {
                 return URL(fileURLWithPath: titlePath.appendingPathComponent("data/00000001/"))
             }
         }
-#endif
         
         if gameType == .psp {
             if let code = self.gameCodeForPSP {
@@ -218,21 +212,21 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .lynx {
             return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).srm"))
         } else if gameType == .j2me {
-            return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+            return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         } else if gameType == .dos {
             if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
                 for case let fileURL as URL in enumerator {
                     let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
                     guard !isDirectory else { continue }
-                    if fileURL.lastPathComponent == "\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")" {
+                    if fileURL.lastPathComponent == "\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")" {
                         return fileURL
                     }
                 }
             }
-            return URL(fileURLWithPath: Constants.Path.DOSBoxPure.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+            return URL(fileURLWithPath: Constants.Path.DOSBoxPure.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         }
         
-        let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+        let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         return localUrl
     }
     
@@ -786,11 +780,11 @@ class Game: Object, ObjectUpdatable {
     }
     
     func deleteJ2meSaves() {
-        let j2mejsUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.J2meJS.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+        let j2mejsUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.J2meJS.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: j2mejsUrl)
         SyncManager.delete(localFilePath: j2mejsUrl.path)
         
-        let freej2meUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
+        let freej2meUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: freej2meUrl)
         SyncManager.delete(localFilePath: freej2meUrl.path)
     }

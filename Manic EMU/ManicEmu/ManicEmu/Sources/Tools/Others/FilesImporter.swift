@@ -9,14 +9,12 @@
 
 import UniformTypeIdentifiers
 import RealmSwift
-import ManicEmuCore
-import SSZipArchive
+
+import ZipArchive
 import ZIPFoundation
 import IceCream
 import SmartCodable
-#if !targetEnvironment(simulator)
-import ThreeDS
-#endif
+import Citra
 import PLzmaSDK
 
 class FilesImporter: NSObject {
@@ -380,14 +378,13 @@ extension FilesImporter {
             let realm = Database.realm
             var ciaTitleUrl: URL? = nil
             let originalUrl = url
-#if !targetEnvironment(simulator)
             var url = url
-            var threeDSGameInfo: ThreeDSGameInformation? = nil
+            var threeDSGameInfo: CitraGameInformation? = nil
             if FileType.get3DSExtensions().contains([url.pathExtension]) {
                 if url.pathExtension.lowercased() == "cia" {
                     Log.debug("开始安装")
-                    let status = ThreeDSCore.shared.importGame(at: url)
-                    let ciaInfo = ThreeDSCore.shared.getCIAInfo(url: url)
+                    let status = CitraCore.shared().importGame(at: url)
+                    let ciaInfo = CitraCore.shared().getCIAInfo(url: url, isSdmc: true)
                     if let titlePath = ciaInfo.titlePath {
                         ciaTitleUrl = URL(fileURLWithPath: titlePath)
                     }
@@ -421,7 +418,7 @@ extension FilesImporter {
                         return
                     }
                 }
-                if let gameInfo = ThreeDSCore.shared.information(for: url) {
+                if let gameInfo = CitraCore.shared().information(for: url) {
                     Log.debug("获取游戏信息 identifier:\(gameInfo.identifier) title:\(gameInfo.title)")
                     threeDSGameInfo = gameInfo
                 } else {
@@ -431,7 +428,6 @@ extension FilesImporter {
                     return
                 }
             }
-#endif
             
             if let hash = FileHashUtil.truncatedHash(url: url) {
                 if let game = realm.object(ofType: Game.self, forPrimaryKey: hash) {
@@ -477,7 +473,6 @@ extension FilesImporter {
                     game.fileExtension = url.pathExtension
                     game.importDate = Date()
                     
-#if !targetEnvironment(simulator)
                     //handle 3ds game info
                     if let threeDSGameInfo {
                         //读取3DS信息
@@ -497,7 +492,6 @@ extension FilesImporter {
                             }
                         }
                     }
-#endif
                     
                     //handle psp pbp game
                     let isPSPPBP = isPSPPBPGame(url: url)

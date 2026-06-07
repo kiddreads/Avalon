@@ -6,7 +6,7 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -33,7 +33,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.a2600)
     }
     
@@ -58,56 +58,36 @@ extension GameType
     }
 }
 
-struct A2600: ManicEmuCoreProtocol {
-    public static let core = A2600()
+struct A2600: DeltaCoreProtocol {
+    static let core = A2600()
     
-    public var name: String { "2600" }
-    public var identifier: String { "com.aoshuang.2600Core" }
+    var name: String { "2600" }
+    var identifier: String { "com.aoshuang.2600Core" }
     
-    public var gameType: GameType { GameType.a2600 }
-    public var gameInputType: Input.Type { A2600GameInput.self }
+    var gameType: GameType { GameType.a2600 }
+    var gameInputType: Input.Type { A2600GameInput.self }
     var allInputs: [Input] { A2600GameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 35112 * 60, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 192, height: 160))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 192, height: 160))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    public var emulatorConnector: EmulatorBase { A2600EmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { A2600EmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class A2600EmulatorBridge : NSObject, EmulatorBase {
+class A2600EmulatorBridge : EmulatorBridgeBase {
     static let shared = A2600EmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = A2600GameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -137,29 +117,10 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = A2600GameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

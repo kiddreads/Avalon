@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import GCDWebServer
+import GCDWebUploader
 
 class WebServer: NSObject {
     static let shard = WebServer()

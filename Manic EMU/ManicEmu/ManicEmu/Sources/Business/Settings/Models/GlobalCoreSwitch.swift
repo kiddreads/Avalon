@@ -7,7 +7,7 @@
 //
 
 import SmartCodable
-import ManicEmuCore
+
 import RealmSwift
 
 struct GlobalCoreSwitch: SmartCodable, Equatable {

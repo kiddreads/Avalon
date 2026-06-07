@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ManicEmuCore
+
 import ProHUD
 
 class CoreConfigsView: BaseView {

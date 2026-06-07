@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
-import ManicEmuCore
+
 
 class SkinCollectionViewCell: UICollectionViewCell {
     
@@ -153,7 +153,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
                 make.height.equalToSuperview()
             }
         }
-        controllerView.customControllerSkinTraits = traits
+        controllerView.overrideControllerSkinTraits = traits
         controllerView.controllerSkin = controllerSkin
         if let subscriptTitle {
             subscriptView.isHidden = false

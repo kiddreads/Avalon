@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import ManicEmuCore
+
 import RealmSwift
 
 class ControllerMappingView: UIView {
@@ -132,15 +132,15 @@ class ControllerMappingView: UIView {
         view.didSelectItem = { [weak self] item in
             guard let self, !self.isKeyMapping else { return }
             Log.debug("点击了功能键:\(item.title)")
-            self.startMapping(input: SomeInput(stringValue: item.inputKey, intValue: nil, type: .controller(.standard)))
+            self.startMapping(input: AnyInput(stringValue: item.inputKey, intValue: nil, type: .controller(.standard)))
         }
         return view
     }()
     
     private var gameType: GameType {
         didSet {
-            let deltaCore = ManicEmu.core(for: gameType)
-            let fileURL = deltaCore!.resourceBundle.url(forResource: deltaCore!.name, withExtension: "keymapping")
+            let core = Delta.core(for: gameType)
+            let fileURL = core!.resourceBundle.url(forResource: core!.name, withExtension: "keymapping")
             skinInputMapping = try! GameControllerInputMapping(fileURL: fileURL!)
         }
     }
@@ -179,8 +179,8 @@ class ControllerMappingView: UIView {
     }
     
     private lazy var skinInputMapping: GameControllerInputMapping = {
-        let deltaCore = ManicEmu.core(for: gameType)
-        let fileURL = deltaCore!.resourceBundle.url(forResource: deltaCore!.name, withExtension: "keymapping")
+        let core = Delta.core(for: gameType)
+        let fileURL = core!.resourceBundle.url(forResource: core!.name, withExtension: "keymapping")
         let mapping = try! GameControllerInputMapping(fileURL: fileURL!)
         return mapping
     }()
@@ -214,7 +214,7 @@ class ControllerMappingView: UIView {
             
             var mapping = currentGameTypeMapping
             var inputMappings = mapping.inputMappings
-            var occupiedInputMappings = [String: SomeInput]()
+            var occupiedInputMappings = [String: AnyInput]()
             for (keyboardInputString, mappingInput) in inputMappings {
                 if mappingInput.stringValue == selectedSkinInput.stringValue {
                     Log.debug("[ControllerMappingView] 皮肤按键 [\(selectedSkinInput.stringValue)] 被键盘按键 [\(keyboardInputString)] 占用")
@@ -229,7 +229,7 @@ class ControllerMappingView: UIView {
                 }
             }
             
-            inputMappings[pressKey] = SomeInput(selectedSkinInput)
+            inputMappings[pressKey] = AnyInput(selectedSkinInput)
             mapping.inputMappings = inputMappings
             modifiedControllerMappings[gameType] = mapping
             Log.debug("[ControllerMappingView] 完成添加映射 [\(pressKey)] -> [\(selectedSkinInput.stringValue)]")
@@ -359,7 +359,7 @@ class ControllerMappingView: UIView {
         updateDatas()
     }
     
-    private func getSkinInput(_ skinInput: Input) -> (key: String, input: SomeInput)? {
+    private func getSkinInput(_ skinInput: Input) -> (key: String, input: AnyInput)? {
         if let input = skinInputMapping.inputMappings[skinInput.stringValue] {
             return (skinInput.stringValue, input)
         } else {
@@ -370,11 +370,11 @@ class ControllerMappingView: UIView {
             }
         }
         if skinInput.stringValue.lowercased() == "menu" {
-            return ("menu", SomeInput(skinInput))
+            return ("menu", AnyInput(skinInput))
         }
         //检查是否是功能按键
         if GameSetting.isValidInputKey(skinInput.stringValue) {
-            return (skinInput.stringValue, SomeInput(skinInput))
+            return (skinInput.stringValue, AnyInput(skinInput))
         }
         return nil
     }
@@ -527,7 +527,7 @@ class ControllerMappingView: UIView {
         }
     }
     
-    private func startMapping(input: ManicEmuCore.Input) {
+    private func startMapping(input: DeltaCore.Input) {
         selectedSkinInput = input
         guideTitleLabel.text = R.string.localizable.controllerMappingGuideBegin(input.stringValue)
         controllerView.isUserInteractionEnabled = false
@@ -577,7 +577,7 @@ class ControllerMappingView: UIView {
             let action = UIAction(title: label + mappingInfo,
                                   handler: { [weak self] _ in
                 guard let self else { return }
-                self.startMapping(input: SomeInput(stringValue: label, intValue: nil, type: .controller(GameControllerInputType("directKeyboard"))))
+                self.startMapping(input: AnyInput(stringValue: label, intValue: nil, type: .controller(GameControllerInputType("directKeyboard"))))
             })
             return action
         }))
@@ -593,9 +593,9 @@ class ControllerMappingView: UIView {
     }
 }
 
-extension ControllerMappingView: ControllerReceiverProtocol {
+extension ControllerMappingView: GameControllerReceiver {
     //这里只处理mfi控制器
-    func gameController(_ gameController: any ManicEmuCore.GameController, didActivate input: any ManicEmuCore.Input, value: Double) {
+    func gameController(_ gameController: any DeltaCore.GameController, didActivate input: any DeltaCore.Input, value: Double) {
         guard gameController.inputType != .keyboard else { return }
         if gameController.inputType == .controllerSkin, selectedSkinInput == nil {
             if input.stringValue.contains("touchScreenX", caseSensitive: false) ||
@@ -639,14 +639,14 @@ extension ControllerMappingView: ControllerReceiverProtocol {
                 return
             }
             
-            let controllerInput = SomeInput(stringValue: realControllerInputString, intValue: input.intValue, type: input.type)
+            let controllerInput = AnyInput(stringValue: realControllerInputString, intValue: input.intValue, type: input.type)
             
             Log.debug("[ControllerMappingView] 点击控制器:\(controllerInput)")
             Log.debug("[ControllerMappingView] 开始添加映射 [\(controllerInput.stringValue)] -> [\(selectedSkinInput.stringValue)]")
             
             var mapping = currentGameTypeMapping
             var inputMappings = mapping.inputMappings
-            var occupiedInputMappings = [String: SomeInput]()
+            var occupiedInputMappings = [String: AnyInput]()
             for (controllerInputString, mappingInput) in inputMappings {
                 if mappingInput.stringValue == selectedSkinInput.stringValue {
                     Log.debug("[ControllerMappingView] 皮肤按键 [\(selectedSkinInput.stringValue)] 被控制器按键 [\(controllerInputString)] 占用")
@@ -661,7 +661,7 @@ extension ControllerMappingView: ControllerReceiverProtocol {
                 }
             }
             
-            inputMappings[controllerInput.stringValue] = SomeInput(selectedSkinInput)
+            inputMappings[controllerInput.stringValue] = AnyInput(selectedSkinInput)
             mapping.inputMappings = inputMappings
             modifiedControllerMappings[gameType] = mapping
             Log.debug("[ControllerMappingView] 完成添加映射 [\(controllerInput.stringValue)] -> [\(selectedSkinInput.stringValue)]")
@@ -672,7 +672,7 @@ extension ControllerMappingView: ControllerReceiverProtocol {
         }
     }
     
-    func gameController(_ gameController: any ManicEmuCore.GameController, didDeactivate input: any ManicEmuCore.Input) {
+    func gameController(_ gameController: any DeltaCore.GameController, didDeactivate input: any DeltaCore.Input) {
         
     }
 }

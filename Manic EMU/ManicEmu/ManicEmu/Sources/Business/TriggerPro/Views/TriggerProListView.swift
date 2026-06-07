@@ -8,7 +8,7 @@
 
 import SwipeCellKit
 import RealmSwift
-import ManicEmuCore
+
 import ProHUD
 
 class TriggerProListView: BaseView {

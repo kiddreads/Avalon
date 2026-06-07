@@ -9,7 +9,6 @@
 
 import UIKit
 import RealmSwift
-import ManicEmuCore
 
 struct Constants {
     struct Size {

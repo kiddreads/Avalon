@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType {
@@ -43,7 +43,7 @@ extension GameType {
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.arcade)
     }
     
@@ -76,59 +76,38 @@ extension GameType {
     }
 }
 
-struct Arcade: ManicEmuCoreProtocol {
-    public static let core = Arcade()
+struct Arcade: DeltaCoreProtocol {
+    static let core = Arcade()
     
-    public var name: String { "Arcade" }
-    public var identifier: String { "com.aoshuang.ArcadeCore" }
+    var name: String { "Arcade" }
+    var identifier: String { "com.aoshuang.ArcadeCore" }
     
-    public var gameType: GameType { GameType.arcade }
-    public var gameInputType: Input.Type { ArcadeGameInput.self }
+    var gameType: GameType { GameType.arcade }
+    var gameInputType: Input.Type { ArcadeGameInput.self }
     var allInputs: [Input] { ArcadeGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 1, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 640, height: 480))
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 640, height: 480))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    public var emulatorConnector: EmulatorBase { ArcadeEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { ArcadeEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class ArcadeEmulatorBridge : NSObject, EmulatorBase {
+class ArcadeEmulatorBridge : EmulatorBridgeBase {
     static let shared = ArcadeEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var leftThumbstickPosition: CGPoint = .zero
     private var rightThumbstickPosition: CGPoint = .zero
     
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if input == ArcadeGameInput.leftThumbstickUp || input == ArcadeGameInput.leftThumbstickDown {
             leftThumbstickPosition.y = input == ArcadeGameInput.leftThumbstickUp ? value : -value
@@ -173,7 +152,7 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == ArcadeGameInput.leftThumbstickUp || input == ArcadeGameInput.leftThumbstickDown {
             leftThumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -193,23 +172,4 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
             }
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

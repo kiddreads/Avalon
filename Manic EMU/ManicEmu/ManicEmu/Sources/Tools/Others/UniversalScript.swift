@@ -5,7 +5,7 @@
 //  Created by Stossy11 on 20/3/2026.
 //
 import Foundation
-import ManicEmuCore
+
 
 #if SIDE_LOAD
 extension FileManager {

@@ -8,7 +8,7 @@
 
 import UIKit
 import ProHUD
-import ManicEmuCore
+
 
 class ZipHandlerView: BaseView {
     static func show(urls: [URL],

@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -41,7 +41,7 @@ extension CheatType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.psp)
     }
     
@@ -68,7 +68,7 @@ extension CheatType
     }
 }
 
-struct PSP: ManicEmuCoreProtocol {
+struct PSP: DeltaCoreProtocol {
     static let core = PSP()
     
     var name: String { "PSP" }
@@ -78,17 +78,17 @@ struct PSP: ManicEmuCoreProtocol {
     var gameType: GameType { GameType.psp }
     var gameInputType: Input.Type { PSPGameInput.self }
     var allInputs: [Input] { PSPGameInput.allCases }
-    var gameSaveExtension: String { "psp.sav" }
+    var gameSaveFileExtension: String { "psp.sav" }
     
-    let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
+    
     let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 480, height: 272))
     
-    var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         let cwCheatFormat = CheatFormat(name: NSLocalizedString("CWCheat", comment: ""), format: "_L 0xXXXXXXXX 0xYYYYYYYY", type: .cwCheat)
         return [cwCheatFormat]
     }
     
-    var emulatorConnector: EmulatorBase { PSPEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { PSPEmulatorBridge.shared }
     
     private init() {}
     
@@ -180,32 +180,12 @@ struct PSP: ManicEmuCoreProtocol {
 }
 
 
-class PSPEmulatorBridge : NSObject, EmulatorBase {
+class PSPEmulatorBridge : EmulatorBridgeBase {
     static let shared = PSPEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if input == PSPGameInput.leftThumbstickUp || input == PSPGameInput.leftThumbstickDown {
             thumbstickPosition.y = input == PSPGameInput.leftThumbstickUp ? value : -value
@@ -240,7 +220,7 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == PSPGameInput.leftThumbstickUp || input == PSPGameInput.leftThumbstickDown {
             thumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -254,25 +234,6 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
             }
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }
 
 

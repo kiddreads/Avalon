@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
-import ManicEmuCore
+
 import VisualEffectView
 import ProHUD
 
@@ -48,7 +48,7 @@ class ControllersSettingView: BaseView {
     private lazy var controllers: [GameController] = {
         var controllers: [GameController] = []
         //获取已连接的游戏控制器
-        for gameController in ExternalGameControllerUtils.shared.linkedControllers {
+        for gameController in ExternalGameControllerManager.shared.connectedControllers {
             controllers.append(gameController)
         }
         //屏幕控制器默认排在第一位
@@ -167,7 +167,7 @@ class ControllersSettingView: BaseView {
     
     private func updateExtenalControllers() {
         controllers.removeAll { $0.inputType != .controllerSkin }
-        controllers.append(contentsOf: ExternalGameControllerUtils.shared.linkedControllers)
+        controllers.append(contentsOf: ExternalGameControllerManager.shared.connectedControllers)
         collectionView.reloadData()
     }
     

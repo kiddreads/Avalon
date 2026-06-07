@@ -6,7 +6,7 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -46,7 +46,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.jaguar)
     }
     
@@ -85,56 +85,36 @@ extension GameType
     }
 }
 
-struct Jaguar: ManicEmuCoreProtocol {
-    public static let core = Jaguar()
+struct Jaguar: DeltaCoreProtocol {
+    static let core = Jaguar()
     
-    public var name: String { "JAGUAR" }
-    public var identifier: String { "com.aoshuang.JaguarCore" }
+    var name: String { "JAGUAR" }
+    var identifier: String { "com.aoshuang.JaguarCore" }
     
-    public var gameType: GameType { GameType.jaguar }
-    public var gameInputType: Input.Type { JaguarGameInput.self }
+    var gameType: GameType { GameType.jaguar }
+    var gameInputType: Input.Type { JaguarGameInput.self }
     var allInputs: [Input] { JaguarGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 35112 * 60, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 320, height: 240))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 320, height: 240))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    public var emulatorConnector: EmulatorBase { JaguarEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { JaguarEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class JaguarEmulatorBridge : NSObject, EmulatorBase {
+class JaguarEmulatorBridge : EmulatorBridgeBase {
     static let shared = JaguarEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = JaguarGameInput(rawValue: input) {
             if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -201,7 +181,7 @@ class JaguarEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = JaguarGameInput(rawValue: input) {
             if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
                 LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
@@ -212,23 +192,4 @@ class JaguarEmulatorBridge : NSObject, EmulatorBase {
             }
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

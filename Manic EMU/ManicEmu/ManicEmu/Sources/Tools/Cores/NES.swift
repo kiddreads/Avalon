@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -43,7 +43,7 @@ extension CheatType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.nes)
     }
     
@@ -70,58 +70,38 @@ extension CheatType
     }
 }
 
-struct NES: ManicEmuCoreProtocol {
-    public static let core = NES()
+struct NES: DeltaCoreProtocol {
+    static let core = NES()
     
-    public var name: String { "NES" }
-    public var identifier: String { "com.aoshuang.NESCore" }
+    var name: String { "NES" }
+    var identifier: String { "com.aoshuang.NESCore" }
     
-    public var gameType: GameType { GameType.nes }
-    public var gameInputType: Input.Type { NESGameInput.self }
+    var gameType: GameType { GameType.nes }
+    var gameInputType: Input.Type { NESGameInput.self }
     var allInputs: [Input] { NESGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 1, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 240))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 240))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let gameGenie6Format = CheatFormat(name: NSLocalizedString("Game Genie (6)", comment: ""), format: "XXXXXX", type: .gameGenie6, allowedCodeCharacters: .letters)
         let gameGenie8Format = CheatFormat(name: NSLocalizedString("Game Genie (8)", comment: ""), format: "XXXXXXXX", type: .gameGenie8, allowedCodeCharacters: .letters)
         return [gameGenie6Format, gameGenie8Format]
     }
     
-    public var emulatorConnector: EmulatorBase { NESEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { NESEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class NESEmulatorBridge : NSObject, EmulatorBase {
+class NESEmulatorBridge : EmulatorBridgeBase {
     static let shared = NESEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = NESGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -152,29 +132,10 @@ class NESEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = NESGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

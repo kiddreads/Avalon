@@ -71,7 +71,7 @@ extension BlankSlateCollectionView: BlankSlate.DataSource {
     }
     
     func layout(forBlankSlate view: UIView, for element: BlankSlate.Element) -> BlankSlate.Layout {
-        return .init(edgeInsets: .zero, height: Constants.Size.WindowHeight)
+        return .init(edgeInsets: .zero)
     }
     
 }

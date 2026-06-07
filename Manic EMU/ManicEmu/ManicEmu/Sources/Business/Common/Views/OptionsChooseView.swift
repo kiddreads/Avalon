@@ -8,7 +8,7 @@
 
 import UIKit
 import ProHUD
-import ManicEmuCore
+
 
 class OptionsChooseView: BaseView {
     static func show(options: [String],

@@ -11,7 +11,7 @@ import UIKit
 import BetterSegmentedControl
 import RealmSwift
 import UniformTypeIdentifiers
-import ManicEmuCore
+
 
 class GameInfoDetailReusableView: UICollectionReusableView {
     let backgroundBlurView: UIView = {

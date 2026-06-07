@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import RealmSwift
-import ManicEmuCore
+
 
 struct GameSetting: SettingCellItem {
     enum ControllerType: Int, PersistableEnum {

@@ -5,7 +5,7 @@
 //  Created by Daiuno on 2026/3/2.
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType {
@@ -36,7 +36,7 @@ extension GameType {
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.j2me)
     }
 
@@ -66,61 +66,37 @@ extension GameType {
     }
 }
 
-struct J2ME: ManicEmuCoreProtocol {
-    public static let core = J2ME()
+struct J2ME: DeltaCoreProtocol {
+    static let core = J2ME()
 
-    public var name: String { "J2ME" }
-    public var identifier: String { "com.aoshuang.J2MECore" }
+    var name: String { "J2ME" }
+    var identifier: String { "com.aoshuang.J2MECore" }
 
-    public var gameType: GameType { GameType.j2me }
-    public var gameInputType: Input.Type { J2MEGameInput.self }
+    var gameType: GameType { GameType.j2me }
+    var gameInputType: Input.Type { J2MEGameInput.self }
     var allInputs: [Input] { J2MEGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
 
     // J2ME typically runs at variable frame rate
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgba8), dimensions: J2MESize.defaultSize.cgSize)
+    
+    let videoFormat = VideoFormat(format: .bitmap(.rgba8), dimensions: J2MESize.defaultSize.cgSize)
 
-    public var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         // J2ME doesn't support cheat codes
         return []
     }
 
     // J2ME uses WebView, so it doesn't need a traditional emulator connector
-    public var emulatorConnector: EmulatorBase { J2MEEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { J2MEEmulatorBridge.shared }
 
-    private init()
-    {
-    }
+    private init() {}
 }
 
 
-class J2MEEmulatorBridge: NSObject, EmulatorBase {
+class J2MEEmulatorBridge: EmulatorBridgeBase {
     static let shared = J2MEEmulatorBridge()
 
-    var gameURL: URL?
-
-    // J2ME frame rate varies by game
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-
-    var saveUpdateHandler: (() -> Void)?
-
-    func start(withGameURL gameURL: URL) {
-        self.gameURL = gameURL
-    }
-
-    func stop() {}
-
-    func pause() {}
-
-    func resume() {}
-
-    func runFrame(processVideo: Bool) {}
-
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0,
               let gameInput = J2MEGameInput(rawValue: input) else { return }
         
@@ -130,7 +106,7 @@ class J2MEEmulatorBridge: NSObject, EmulatorBase {
         
     }
 
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         guard playerIndex >= 0,
               let gameInput = J2MEGameInput(rawValue: input) else { return }
 
@@ -163,23 +139,4 @@ class J2MEEmulatorBridge: NSObject, EmulatorBase {
         default: return nil
         }
     }
-
-    func resetInputs() {}
-
-    func saveSaveState(to url: URL) {}
-
-    func loadSaveState(from url: URL) {}
-
-    func saveGameSave(to url: URL) {}
-
-    func loadGameSave(from url: URL) {}
-
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        // J2ME doesn't support cheat codes
-        return false
-    }
-
-    func resetCheats() {}
-
-    func updateCheats() {}
 }

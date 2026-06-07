@@ -7,9 +7,9 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import UniformTypeIdentifiers
-import SSZipArchive
+import ZipArchive
 
 class BIOSCollectionViewCell: UICollectionViewCell {
     

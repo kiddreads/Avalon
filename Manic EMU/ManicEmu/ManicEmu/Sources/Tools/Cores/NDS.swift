@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -45,7 +45,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.ds)
     }
     
@@ -79,26 +79,26 @@ extension GameType
     }
 }
 
-struct DS: ManicEmuCoreProtocol {
-    public static let core = DS()
+struct DS: DeltaCoreProtocol {
+    static let core = DS()
     
-    public var name: String { "DS" }
-    public var identifier: String { "com.aoshuang.DSCore" }
+    var name: String { "DS" }
+    var identifier: String { "com.aoshuang.DSCore" }
     
-    public var gameType: GameType { GameType.ds }
-    public var gameInputType: Input.Type { DSGameInput.self }
+    var gameType: GameType { GameType.ds }
+    var gameInputType: Input.Type { DSGameInput.self }
     var allInputs: [Input] { DSGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 384))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 384))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let actionReplayFormat = CheatFormat(name: NSLocalizedString("Action Replay", comment: ""), format: "XXXXXXXX YYYYYYYY", type: .actionReplay)
         return [actionReplayFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { DSEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { DSEmulatorBridge.shared }
         
     private init()
     {
@@ -106,37 +106,17 @@ struct DS: ManicEmuCoreProtocol {
 }
 
 
-class DSEmulatorBridge : NSObject, EmulatorBase {
+class DSEmulatorBridge : EmulatorBridgeBase {
     static let shared = DSEmulatorBridge()
     var isDeSmuMECore: Bool = false
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var leftThumbstickPosition: CGPoint = .zero
     private var rightThumbstickPosition: CGPoint = .zero
     private var touchPointX: CGFloat? = nil
     private var touchPointY: CGFloat? = nil
     var touchInputFrame: CGRect = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         
         if input == DSGameInput.rightThumbstickUp || input == DSGameInput.rightThumbstickDown {
@@ -193,7 +173,7 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == DSGameInput.rightThumbstickUp || input == DSGameInput.rightThumbstickDown {
             rightThumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -216,24 +196,5 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
             }
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }
 

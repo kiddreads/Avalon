@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -35,7 +35,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.dc)
     }
     
@@ -61,26 +61,26 @@ extension GameType
     }
 }
 
-struct DC: ManicEmuCoreProtocol {
-    public static let core = DC()
+struct DC: DeltaCoreProtocol {
+    static let core = DC()
     
-    public var name: String { "DC" }
-    public var identifier: String { "com.aoshuang.DCCore" }
+    var name: String { "DC" }
+    var identifier: String { "com.aoshuang.DCCore" }
     
-    public var gameType: GameType { GameType.dc }
-    public var gameInputType: Input.Type { DCGameInput.self }
+    var gameType: GameType { GameType.dc }
+    var gameInputType: Input.Type { DCGameInput.self }
     var allInputs: [Input] { DCGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 640, height: 480))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 640, height: 480))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let actionReplayFormat = CheatFormat(name: NSLocalizedString("Action Replay", comment: ""), format: "XXXXXXXX", type: .actionReplay)
         return [actionReplayFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { DCEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { DCEmulatorBridge.shared }
         
     private init()
     {
@@ -88,32 +88,12 @@ struct DC: ManicEmuCoreProtocol {
 }
 
 
-class DCEmulatorBridge : NSObject, EmulatorBase {
+class DCEmulatorBridge : EmulatorBridgeBase {
     static let shared = DCEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         
         if input == DCGameInput.leftThumbstickUp || input == DCGameInput.leftThumbstickDown {
@@ -148,7 +128,7 @@ class DCEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == DCGameInput.leftThumbstickUp || input == DCGameInput.leftThumbstickDown {
             thumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -162,23 +142,4 @@ class DCEmulatorBridge : NSObject, EmulatorBase {
             }
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import GameController
 
 enum PlayerIndex: Int, CaseIterable {
@@ -48,5 +48,5 @@ class TouchController: NSObject, GameController {
     }
     var playerIndex: Int?
     
-    var defaultInputMapping: (any ManicEmuCore.GameControllerInputMappingBase)?
+    var defaultInputMapping: (any GameControllerInputMappingProtocol)?
 }

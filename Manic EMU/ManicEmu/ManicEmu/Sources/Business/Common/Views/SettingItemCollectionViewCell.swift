@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 
 class SettingItemCollectionViewCell: UICollectionViewCell {
     
@@ -65,7 +65,7 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
         willSet {
             if newValue {
                 let scale = CGAffineTransformMakeScale(1.05, 1.05)
-                self.roundAndBorderView.borderColor = ExternalGameControllerUtils.shared.linkedControllers.count > 0 ? .white : Constants.Color.Border
+                self.roundAndBorderView.borderColor = ExternalGameControllerManager.shared.connectedControllers.count > 0 ? .white : Constants.Color.Border
                 UIView.springAnimate(animations: {
                     self.transform = scale
                 }) { _ in

@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -28,7 +28,7 @@ extension GameType
     case menu
     case shake
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.pm)
     }
     
@@ -47,25 +47,25 @@ extension GameType
     }
 }
 
-struct PM: ManicEmuCoreProtocol {
-    public static let core = PM()
+struct PM: DeltaCoreProtocol {
+    static let core = PM()
     
-    public var name: String { "PM" }
-    public var identifier: String { "com.aoshuang.PMCore" }
+    var name: String { "PM" }
+    var identifier: String { "com.aoshuang.PMCore" }
     
-    public var gameType: GameType { GameType.pm }
-    public var gameInputType: Input.Type { PMGameInput.self }
+    var gameType: GameType { GameType.pm }
+    var gameInputType: Input.Type { PMGameInput.self }
     var allInputs: [Input] { PMGameInput.allCases }
-    public var gameSaveExtension: String { "eep" }
+    var gameSaveFileExtension: String { "eep" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 96, height: 64))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 96, height: 64))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    public var emulatorConnector: EmulatorBase { PMEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { PMEmulatorBridge.shared }
         
     private init()
     {
@@ -73,32 +73,12 @@ struct PM: ManicEmuCoreProtocol {
 }
 
 
-class PMEmulatorBridge : NSObject, EmulatorBase {
+class PMEmulatorBridge : EmulatorBridgeBase {
     static let shared = PMEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
     
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = PMGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -121,29 +101,10 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = PMGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

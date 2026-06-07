@@ -7,13 +7,10 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
-#if !targetEnvironment(simulator)
-import ThreeDS
-#else
+import Citra
 import MetalKit
-#endif
 
 extension GameType
 {
@@ -58,11 +55,11 @@ extension CheatType
     
     case flex = 0
 
-    public var type: InputType {
+    var type: InputType {
         return .game(._3ds)
     }
     
-    public var isContinuous: Bool {
+    var isContinuous: Bool {
         switch self
         {
         case .touchScreenX, .touchScreenY: return true
@@ -104,7 +101,7 @@ extension CheatType
     }
 }
 
-struct ThreeDS: ManicEmuCoreProtocol {
+struct ThreeDS: DeltaCoreProtocol {
     static func generate3DSHomeMenu() {
         let homeMenus = [
             "JPN": "/00008202/",
@@ -158,19 +155,19 @@ struct ThreeDS: ManicEmuCoreProtocol {
     var gameType: GameType { GameType._3ds }
     var gameInputType: Input.Type { ThreeDSGameInput.self }
     var allInputs: [Input] { ThreeDSGameInput.allCases }
-    var gameSaveExtension: String { "3ds.sav" }
+    var gameSaveFileExtension: String { "3ds.sav" }
     
-    let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32768, channels: 2, interleaved: true)!
+    
     let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 400, height: 480))
     
-    var supportCheatFormats: Set<CheatFormat> {
+    var supportedCheatFormats: Set<CheatFormat> {
         let actionReplayFormat = CheatFormat(name: NSLocalizedString("Gateshark", comment: ""), format: "XXXXXXXX YYYYYYYY", type: .gateshark)
         return [actionReplayFormat]
     }
     
     static var isAzaharCore: Bool = false
     
-    var emulatorConnector: EmulatorBase {
+    var emulatorBridge: EmulatorBridging {
         if Self.isAzaharCore {
             return AzaharEmulatorBridge.shared
         } else {
@@ -184,8 +181,7 @@ struct ThreeDS: ManicEmuCoreProtocol {
     
     //For Citra
     static func setupCheats(identifier: UInt64, cheatsTxt: String, enableCheats: [String]) {
-#if !targetEnvironment(simulator)
-        let manager = CheatsManager(identifier: identifier)
+        let manager = CitraCheatsManager(identifier: identifier)
         let path = manager.cheatFilePath()
         try? cheatsTxt.writeWithCompletePath(to: URL(fileURLWithPath: path))
         manager.loadCheats()
@@ -199,7 +195,6 @@ struct ThreeDS: ManicEmuCoreProtocol {
             manager.update(cheat, at: index)
         }
         manager.saveCheats()
-#endif
     }
     
     struct Cheat {
@@ -238,21 +233,10 @@ enum ThreeDSKeyboardType: UInt {
     case none
 }
 
-#if !targetEnvironment(simulator)
-class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
+class ThreeDSEmulatorBridge : EmulatorBridgeBase {
     
     static let shared = ThreeDSEmulatorBridge()
-    private let threeDSCore = ThreeDSCore.shared
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
+    private let citraCore = CitraCore.shared()
     
     private var enableControl = false
     
@@ -268,23 +252,23 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
     private var isAdvancedMode: Bool = false
     
     func setSimBlowing(start: Bool) {
-        threeDSCore.setSimBlowing(start: start)
+        citraCore.setSimBlowing(start: start)
     }
 
     func setFrameLimit(_ limit: UInt16) {
-        threeDSCore.setFrameLimit(limit)
+        citraCore.setFrameLimit(limit)
     }
     
     func jumpToHome() {
-        threeDSCore.jumpToHome()
+        citraCore.jumpToHome()
     }
     
     func loadAmiibo(path: String) {
-        threeDSCore.loadAmiibo(path: path)
+        citraCore.loadAmiibo(path: path)
     }
     
     func isAmiiboSearching() -> Bool {
-        return threeDSCore.isSearchingAmiibo()
+        return citraCore.isSearchingAmiibo()
     }
     
     func setResolution(resolution: GameSetting.Resolution) {
@@ -292,7 +276,7 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
     }
     
     func openKeyboardAction(_ action: ((_ hintText:String?, _ keyboardType: ThreeDSKeyboardType, _ maxTextSize: UInt16) -> Void)? = nil) {
-        ThreeDSCore.openKeyboardAction = { action?($0, ThreeDSKeyboardType(rawValue: $1)!, $2) }
+        CitraCore.openKeyboardAction = { action?($0, ThreeDSKeyboardType(rawValue: $1.rawValue)!, $2) }
     }
     
     func start(withGameURL gameURL: URL,
@@ -350,67 +334,72 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
         appendConfig["ManicEMU.logLevel"] = 6
 #endif
         updateConfig(appendConfig)
-        threeDSCore.allocateVulkanLibrary()
+        citraCore.allocateVulkanLibrary()
         self.metalView = metalView
         let metalLayer = metalView.layer as! CAMetalLayer
-        threeDSCore.allocateMetalLayer(for: metalLayer, with: metalViewFrame.size)
+        citraCore.allocateMetalLayer(for: metalLayer, with: metalViewFrame.size, isSecondary: false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             Thread.setThreadPriority(1.0)
             Thread.detachNewThread {
-                self.threeDSCore.insertCartridgeAndBoot(with: gameURL, advancedMode: advancedMode, jitSupport: LibretroCore.jitAvailable())
+                self.citraCore.insertCartridgeAndBoot(with: gameURL, advancedMode: advancedMode, jitSupport: LibretroCore.jitAvailable())
             }
         }
         DispatchQueue.main.asyncAfter(delay: 3.25) {
-            self.threeDSCore.orientationChange(with: UIDevice.currentOrientation, using: metalView)
+            self.citraCore.orientationChange(with: UIDevice.currentOrientation, using: metalView)
             self.enableControl = true
         }
     }
     
-    func start(withGameURL gameURL: URL) {}
+    
     
     func destory() {
-        threeDSCore.deallocateVulkanLibrary()
-        threeDSCore.deallocateMetalLayers()
+        citraCore.deallocateVulkanLibrary()
+        citraCore.deallocateMetalLayers()
     }
     
-    func stop() {
-        threeDSCore.stop()
+    override func stop() {
+        citraCore.stop()
     }
     
-    func pause() {
-        if threeDSCore.stopped() {
+    override func pause() {
+        if citraCore.stopped() {
             return
         }
-        if !threeDSCore.isPaused() {
-            threeDSCore.pausePlay(false)
+        if !citraCore.isPaused() {
+            citraCore.pausePlay(false)
         }
     }
     
-    func resume() {
-        if threeDSCore.stopped() {
+    override func resume() {
+        if citraCore.stopped() {
             return
         }
-        if threeDSCore.isPaused() {
-            threeDSCore.pausePlay(true)
+        if citraCore.isPaused() {
+            citraCore.pausePlay(true)
         }
     }
     
     var saveStateCount: Int {
-        return threeDSCore.saveStateCount
+        return citraCore.saveStateCount
     }
     
     func addSaveState(fileUrl: URL, slot: UInt32) {
-        if let path = threeDSCore.saveStatePathForRunningGame(slot: slot) {
+        if let path = citraCore.saveStatePathForRunningGame(slot: slot) {
             try? FileManager.safeCopyItem(at: fileUrl, to: URL(fileURLWithPath: path), shouldReplace: true)
         }
     }
     
     func saveState() -> (isSuccess: Bool, path: String) {
-        return threeDSCore.saveState()
+        let state = citraCore.saveState()
+        return (state.isSuccess, state.path)
     }
     
     @discardableResult func loadState(_ slot: UInt32? = nil) -> Bool {
-        return threeDSCore.loadState(slot)
+        if let slot {
+            return citraCore.loadState(slot)
+        } else {
+            return citraCore.loadState()
+        }
     }
     
     func enableVolume() {
@@ -421,9 +410,8 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
         updateConfig(["ManicEMU.audioMuted": true])
     }
     
-    func runFrame(processVideo: Bool) { }
     
-    func gameInputToCoreInput(gameInput: ThreeDSGameInput) -> VirtualControllerButtonType {
+    func gameInputToCoreInput(gameInput: ThreeDSGameInput) -> CitraVirtualControllerButtonType {
         if gameInput == .a { return .A }
         else if gameInput == .b { return .B }
         else if gameInput == .x { return .X }
@@ -441,7 +429,7 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
         else { return .debug }
     }
     
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard enableControl else { return }
         /**
          摇杆坐标
@@ -452,25 +440,24 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
          0,-1
          */
         if input == ThreeDSGameInput.leftThumbstickUp || input == ThreeDSGameInput.leftThumbstickDown {
-            
+
             thumbstickPosition.y = input == ThreeDSGameInput.leftThumbstickUp ? value : -value
-            threeDSCore.thumbstickMoved(.circlePad, Float(thumbstickPosition.x), Float(thumbstickPosition.y))
-            
+            citraCore.thumbstickMoved(.circlePad, x: Float(thumbstickPosition.x), y: Float(thumbstickPosition.y))
             
         } else if input == ThreeDSGameInput.leftThumbstickLeft || input == ThreeDSGameInput.leftThumbstickRight {
             
             thumbstickPosition.x = input == ThreeDSGameInput.leftThumbstickRight ? value : -value
-            threeDSCore.thumbstickMoved(.circlePad, Float(thumbstickPosition.x), Float(thumbstickPosition.y))
+            citraCore.thumbstickMoved(.circlePad, x: Float(thumbstickPosition.x), y: Float(thumbstickPosition.y))
             
         } else if input == ThreeDSGameInput.rightThumbstickUp || input == ThreeDSGameInput.rightThumbstickDown {
             
             cstickPosition.y = input == ThreeDSGameInput.rightThumbstickUp ? value : -value
-            threeDSCore.thumbstickMoved(.cStick, Float(cstickPosition.x), Float(cstickPosition.y))
+            citraCore.thumbstickMoved(.cStick, x: Float(cstickPosition.x), y: Float(cstickPosition.y))
             
         } else if input == ThreeDSGameInput.rightThumbstickLeft || input == ThreeDSGameInput.rightThumbstickRight {
             
             cstickPosition.x = input == ThreeDSGameInput.rightThumbstickRight ? value : -value
-            threeDSCore.thumbstickMoved(.cStick, Float(cstickPosition.x), Float(cstickPosition.y))
+            citraCore.thumbstickMoved(.cStick, x: Float(cstickPosition.x), y: Float(cstickPosition.y))
             
         } else if input == ThreeDSGameInput.touchScreenX || input == ThreeDSGameInput.touchScreenY {
             if input == ThreeDSGameInput.touchScreenX {
@@ -480,44 +467,44 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
                 touchPosition.y = value * bottomRect.height + bottomRect.minY
             }
             if touchPosition.x != 0 && touchPosition.y != 0 {
-                threeDSCore.touchBegan(at: touchPosition)
-                threeDSCore.touchMoved(at: touchPosition)
+                citraCore.touchBegan(at: touchPosition)
+                citraCore.touchMoved(at: touchPosition)
             }
             
         } else {
             if let gameInput = ThreeDSGameInput(rawValue: input) {
                 let type = gameInputToCoreInput(gameInput: gameInput)
                 if type != .debug {
-                    threeDSCore.virtualControllerButtonDown(type)
+                    citraCore.virtualControllerButtonDown(type)
                 }
             }
             
         }
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         guard enableControl else { return }
         if input == ThreeDSGameInput.leftThumbstickUp || input == ThreeDSGameInput.leftThumbstickDown {
             thumbstickPosition.y = 0
-            threeDSCore.thumbstickMoved(.circlePad, Float(thumbstickPosition.x), Float(thumbstickPosition.y))
+            citraCore.thumbstickMoved(.circlePad, x: Float(thumbstickPosition.x), y: Float(thumbstickPosition.y))
         } else if input == ThreeDSGameInput.leftThumbstickLeft || input == ThreeDSGameInput.leftThumbstickRight {
             thumbstickPosition.x = 0
-            threeDSCore.thumbstickMoved(.circlePad, Float(thumbstickPosition.x), Float(thumbstickPosition.y))
+            citraCore.thumbstickMoved(.circlePad, x: Float(thumbstickPosition.x), y: Float(thumbstickPosition.y))
         } else if input == ThreeDSGameInput.rightThumbstickUp || input == ThreeDSGameInput.rightThumbstickDown {
             cstickPosition.y = 0
-            threeDSCore.thumbstickMoved(.cStick, Float(cstickPosition.x), Float(cstickPosition.y))
+            citraCore.thumbstickMoved(.cStick, x: Float(cstickPosition.x), y: Float(cstickPosition.y))
         } else if input == ThreeDSGameInput.rightThumbstickLeft || input == ThreeDSGameInput.rightThumbstickRight {
             cstickPosition.x = 0
-            threeDSCore.thumbstickMoved(.cStick, Float(cstickPosition.x), Float(cstickPosition.y))
+            citraCore.thumbstickMoved(.cStick, x: Float(cstickPosition.x), y: Float(cstickPosition.y))
         } else if input == ThreeDSGameInput.touchScreenX || input == ThreeDSGameInput.touchScreenY {
             touchPosition = .zero
-            threeDSCore.touchEnded()
+            citraCore.touchEnded()
             
         }  else {
             if let gameInput = ThreeDSGameInput(rawValue: input) {
                 let type = gameInputToCoreInput(gameInput: gameInput)
                 if type != .debug {
-                    threeDSCore.virtualControllerButtonUp(type)
+                    citraCore.virtualControllerButtonUp(type)
                 }
             }
         }
@@ -529,33 +516,15 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
         updateConfig(buildLayoutConfig())
         DispatchQueue.main.asyncAfter(delay: 0.75) {
             if let metalView = self.metalView {
-                self.threeDSCore.orientationChange(with: isAirPlay ? .landscapeLeft : UIDevice.currentOrientation, using: metalView)
+                self.citraCore.orientationChange(with: isAirPlay ? .landscapeLeft : UIDevice.currentOrientation, using: metalView)
             }
         }
     }
     
     func reload() {
-        threeDSCore.reset()
+        citraCore.reset()
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
+
     private func updateConfig(_ updates: [String: Any] = [:]) {
         var defaultConfigs: [String: Any]
         switch Settings.defalut.threeDSMode {
@@ -588,7 +557,7 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
             UserDefaults.standard.set(value, forKey: "\(key)")
         }
         UserDefaults.standard.synchronize()
-        threeDSCore.updateSettings(advancedMode: isAdvancedMode)
+        citraCore.updateSettings(advancedMode: isAdvancedMode)
     }
     
     private func buildLayoutConfig() -> [String: Any] {
@@ -713,131 +682,9 @@ class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
     }()
 }
 
-#else
-class ThreeDSEmulatorBridge : NSObject, EmulatorBase {
-    static let shared = ThreeDSEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
-    private var thumbstickPosition: CGPoint = .zero
-    private var cstickPosition: CGPoint = .zero
-    private var touchPosition: CGPoint = .zero
-    
-    private weak var metalView: MTKView? = nil
-    
-    private var topRect: CGRect = .zero
-    private var bottomRect: CGRect = .zero
-    
-    func setSimBlowing(start: Bool) {}
-    
-    func jumpToHome() {}
-    
-    func loadAmiibo(path: String) {}
-    
-    func isAmiiboSearching() -> Bool { return false }
-    
-    func setResolution(resolution: GameSetting.Resolution) {}
-    
-    func openKeyboardAction(_ action: ((_ hintText:String?, _ keyboardType: ThreeDSKeyboardType, _ maxTextSize: UInt16) -> Void)? = nil) {}
-    
-    func start(withGameURL gameURL: URL, metalView: MTKView, metalViewFrame: CGRect, topRect: CGRect, bottomRect: CGRect, mute: Bool, resolution: GameSetting.Resolution = .one, jit: Bool = false, accurateShaders: Bool = false, language: Int = -1, renderRightEye: Bool = false, advancedMode: Bool = Settings.defalut.threeDSAdvancedSettingMode) {
-       
-    }
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func destory() {
-    }
-    
-    func stop() {
-    }
-    
-    func pause() {
-        
-    }
-    
-    func resume() {
-       
-    }
-    
-    var saveStateCount: Int {
-        return 0
-    }
-    
-    func addSaveState(fileUrl: URL, slot: UInt32) {
-       
-    }
-    
-    func saveState() -> (isSuccess: Bool, path: String) {
-      return (true, "")
-    }
-    
-    func loadState(_ slot: UInt32? = nil) {
-       
-    }
-    
-    func enableVolume() {
-        
-    }
-    
-    func disableVolume() {
-        
-    }
-    
-    func runFrame(processVideo: Bool) { }
-    
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {}
-    
-    func deactivateInput(_ input: Int, playerIndex: Int) {}
-    
-    func updateViews(topRect: CGRect, bottomRect: CGRect) {}
-    
-    func reload() {}
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-
-}
-
-#endif
-
-class AzaharEmulatorBridge : NSObject, EmulatorBase {
+class AzaharEmulatorBridge : EmulatorBridgeBase {
     
     static let shared = AzaharEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
     
     private var thumbstickPosition: CGPoint = .zero
     private var cstickPosition: CGPoint = .zero
@@ -845,17 +692,7 @@ class AzaharEmulatorBridge : NSObject, EmulatorBase {
     private var touchPointY: CGFloat? = nil
     var touchInputFrame: CGRect = .zero
     
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) { }
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         /**
          摇杆坐标
          0,1
@@ -928,7 +765,7 @@ class AzaharEmulatorBridge : NSObject, EmulatorBase {
         else { return nil }
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == ThreeDSGameInput.leftThumbstickUp || input == ThreeDSGameInput.leftThumbstickDown {
             thumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -955,22 +792,4 @@ class AzaharEmulatorBridge : NSObject, EmulatorBase {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
 }

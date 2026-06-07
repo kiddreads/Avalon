@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ManicEmuCore
+
 
 class MAMEBiosView: BaseView {
     

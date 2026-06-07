@@ -10,7 +10,7 @@
 import UIKit
 import ProHUD
 import IQKeyboardManagerSwift
-import ManicEmuCore
+
 
 class DeadZoneControl: UIView, UITextFieldDelegate {
 
@@ -37,7 +37,7 @@ class DeadZoneControl: UIView, UITextFieldDelegate {
             textField.text = String(format: "%.2f", internalValue)
             if oldValue != internalValue {
                 Settings.defalut.updateExtra(key: ExtraKey.deadZone.rawValue, value: internalValue)
-                ExternalGameControllerUtils.shared.deadZone = internalValue
+                ExternalGameControllerManager.shared.deadZone = internalValue
             }
         }
     }

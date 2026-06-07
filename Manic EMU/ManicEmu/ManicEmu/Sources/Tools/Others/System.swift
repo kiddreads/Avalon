@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 
 enum System: CaseIterable
 {
@@ -45,18 +45,18 @@ enum System: CaseIterable
     case snes
 
     static var registeredSystems: [System] {
-        let systems = System.allCases.filter { ManicEmu.registeredCores.keys.contains($0.gameType) }
+        let systems = System.allCases.filter { Delta.registeredCores.keys.contains($0.gameType) }
         return systems
     }
     
-    static var allCores: [ManicEmuCoreProtocol] {
+    static var allCores: [DeltaCoreProtocol] {
         return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core, DS.core, FDS.core, Arcade.core, A2600.core, A5200.core, A7800.core, Lynx.core, Jaguar.core, J2ME.core, DOOM.core, DOS.core]
     }
 }
 
 extension System {
     
-    var gameType: ManicEmuCore.GameType {
+    var gameType: GameType {
         switch self
         {
         case .nes: return .nes

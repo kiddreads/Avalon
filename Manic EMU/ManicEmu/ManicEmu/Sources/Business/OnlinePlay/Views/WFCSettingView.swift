@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ManicEmuCore
+
 
 class WFCSettingView: BaseView {
     

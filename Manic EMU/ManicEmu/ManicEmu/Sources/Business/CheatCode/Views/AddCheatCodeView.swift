@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import IQKeyboardManagerSwift
-import ManicEmuCore
+
 import ProHUD
 
 class AddCheatCodeView: BaseView {
@@ -109,8 +109,8 @@ class AddCheatCodeView: BaseView {
     private lazy var supportedCheatFormats: [CheatFormat] = {
         var result = [CheatFormat]()
         result.append(autoDetectCheatFormat)
-        if let supportCheatFormats = game.gameType.manicEmuCore?.supportCheatFormats {
-            result.append(contentsOf: supportCheatFormats)
+        if let supportedCheatFormats = game.gameType.manicEmuCore?.supportedCheatFormats {
+            result.append(contentsOf: supportedCheatFormats)
         }
         return result
     }()

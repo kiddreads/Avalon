@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -34,7 +34,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.mcd)
     }
     
@@ -59,29 +59,29 @@ extension GameType
     }
 }
 
-struct MCD: ManicEmuCoreProtocol {
+struct MCD: DeltaCoreProtocol {
     static var isJGenesisCore: Bool = false
     
-    public static let core = MCD()
+    static let core = MCD()
     
-    public var name: String { "MCD" }
-    public var identifier: String { "com.aoshuang.MCDCore" }
+    var name: String { "MCD" }
+    var identifier: String { "com.aoshuang.MCDCore" }
     
-    public var gameType: GameType { GameType.mcd }
-    public var gameInputType: Input.Type { MCDGameInput.self }
+    var gameType: GameType { GameType.mcd }
+    var gameInputType: Input.Type { MCDGameInput.self }
     var allInputs: [Input] { MCDGameInput.allCases }
-    public var gameSaveExtension: String { "srm" }
+    var gameSaveFileExtension: String { "srm" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 32040, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 320, height: 224))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 320, height: 224))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let gameGenieFormat = CheatFormat(name: NSLocalizedString("Game Genie", comment: ""), format: "XXXX-YYYY", type: .gameGenie)
         let proActionReplayFormat = CheatFormat(name: NSLocalizedString("Pro Action Replay 16Bit", comment: ""), format: "XXXXXXYYYY", type: .actionReplay16)
         return [gameGenieFormat, proActionReplayFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { MCDEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { MCDEmulatorBridge.shared }
         
     private init()
     {
@@ -89,32 +89,12 @@ struct MCD: ManicEmuCoreProtocol {
 }
 
 
-class MCDEmulatorBridge : NSObject, EmulatorBase {
+class MCDEmulatorBridge : EmulatorBridgeBase {
     static let shared = MCDEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = MCDGameInput(rawValue: input) {
 #if DEBUG
@@ -167,7 +147,7 @@ class MCDEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = MCDGameInput(rawValue: input) {
             if MCD.isJGenesisCore {
                 if let jGenesisButton = gameInputToJGenesisCoreInput(gameInput: gameInput) {
@@ -181,23 +161,4 @@ class MCDEmulatorBridge : NSObject, EmulatorBase {
             
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

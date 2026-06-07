@@ -7,7 +7,7 @@
 //
 
 import RealmSwift
-import ManicEmuCore
+
 import IceCream
 
 extension Trigger: CKRecordConvertible & CKRecordRecoverable {}

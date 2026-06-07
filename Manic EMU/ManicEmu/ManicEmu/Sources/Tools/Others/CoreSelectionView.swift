@@ -9,7 +9,7 @@
 
 import UIKit
 import ProHUD
-import ManicEmuCore
+
 
 class CoreSelectionView: BaseView {
     static func show(game: Game, cancelEnable: Bool = true, completion: (()->Void)? = nil ) {

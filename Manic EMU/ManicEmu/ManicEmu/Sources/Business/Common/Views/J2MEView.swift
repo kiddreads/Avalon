@@ -6,7 +6,7 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 import WebKit
-import ManicEmuCore
+
 import ZIPFoundation
 
 /// J2ME button mapping for emulator input

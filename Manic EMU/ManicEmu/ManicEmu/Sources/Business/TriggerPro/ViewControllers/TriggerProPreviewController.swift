@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ManicEmuCore
+
 import AVFoundation
 import RealmSwift
 import IQKeyboardManagerSwift
@@ -38,7 +38,7 @@ class TriggerProPreviewController: BaseViewController {
     
     private lazy var controlView: ControllerView = {
         let view = ControllerView()
-        view.customControllerSkinTraits = traits
+        view.overrideControllerSkinTraits = traits
         view.controllerSkin = skin
         view.alpha = hideControls ? 0 : 1
         return view

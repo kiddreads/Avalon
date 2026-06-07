@@ -8,7 +8,6 @@
 import UIKit
 import OAuthSwift
 import UniformTypeIdentifiers
-import ManicEmuCore
 
 class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
     static weak var applicationScene: UIWindowScene?

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ManicEmuCore
+
 import IQKeyboardManagerSwift
 
 class PSPNetworkingView: BaseView {

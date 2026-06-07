@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ManicEmuCore
+
 import IceCream
 import RealmSwift
 

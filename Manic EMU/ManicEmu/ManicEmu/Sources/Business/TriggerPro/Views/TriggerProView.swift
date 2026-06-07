@@ -5,7 +5,7 @@
 //  Created by Daiuno on 2025/10/22.
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
-import ManicEmuCore
+
 import Haptica
 
 class TriggerProView: UIView {
@@ -33,8 +33,8 @@ class TriggerProView: UIView {
     var didTapButton: ((TriggerItem)->Void)? = nil
     
     ///非EditMode回调
-    var activateHandler: ((Set<SomeInput>) -> Void)?
-    var deactivateHandler: ((Set<SomeInput>) -> Void)?
+    var activateHandler: ((Set<AnyInput>) -> Void)?
+    var deactivateHandler: ((Set<AnyInput>) -> Void)?
     
     private var isHapticEnabled = true
     private var hapticFeedbackStyle: HapticFeedbackStyle = .soft
@@ -234,11 +234,11 @@ class TriggerProView: UIView {
         }
     }
     
-    private func createInput(stringValue: String) -> SomeInput {
+    private func createInput(stringValue: String) -> AnyInput {
         if stringValue.hasPrefix("KB_") {
-            return SomeInput(stringValue: stringValue.replacingOccurrences(of: "KB_", with: ""), intValue: nil, type: .controller(GameControllerInputType("directKeyboard")))
+            return AnyInput(stringValue: stringValue.replacingOccurrences(of: "KB_", with: ""), intValue: nil, type: .controller(GameControllerInputType("directKeyboard")))
         } else {
-            return SomeInput(stringValue: stringValue, intValue: 1, type: .controller(.controllerSkin))
+            return AnyInput(stringValue: stringValue, intValue: 1, type: .controller(.controllerSkin))
         }
     }
     

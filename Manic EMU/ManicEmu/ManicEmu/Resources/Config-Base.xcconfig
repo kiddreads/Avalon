@@ -13,3 +13,6 @@
 APP_BUNDLE_IDENTIFIER = com.aoshuang.manicemu
 APP_BUILD_VERSION = 0
 APP_VERSION = 1.9.2
+
+// Prebuilt cores under ProjectManicEMU/Cores (Citra.framework, *.libretro.framework, …)
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/../Cores

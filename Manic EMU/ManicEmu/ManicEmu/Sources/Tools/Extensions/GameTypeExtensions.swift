@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import ManicEmuCore
+
 import RealmSwift
 
 ///通过文件名后缀生成GameType
@@ -316,7 +316,7 @@ extension GameType {
         }
     }
     
-    var manicEmuCore: ManicEmuCoreProtocol? {
+    var manicEmuCore: DeltaCoreProtocol? {
         switch self
         {
         case .nes: return NES.core

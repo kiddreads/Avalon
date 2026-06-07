@@ -6,7 +6,7 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType {
@@ -46,7 +46,7 @@ extension GameType {
     case useJoypadSkin
     case useKeyboardSkin
     
-    public var type: InputType {
+    var type: InputType {
         return .game(.dos)
     }
     
@@ -81,57 +81,37 @@ extension GameType {
     }
 }
 
-struct DOS: ManicEmuCoreProtocol {
-    public static let core = DOS()
+struct DOS: DeltaCoreProtocol {
+    static let core = DOS()
     
-    public var name: String { "DOS" }
-    public var identifier: String { "com.aoshuang.DOSCore" }
+    var name: String { "DOS" }
+    var identifier: String { "com.aoshuang.DOSCore" }
     
-    public var gameType: GameType { GameType.dos }
-    public var gameInputType: Input.Type { DOSGameInput.self }
+    var gameType: GameType { GameType.dos }
+    var gameInputType: Input.Type { DOSGameInput.self }
     var allInputs: [Input] { DOSGameInput.allCases }
-    public var gameSaveExtension: String { "pure.zip" }
+    var gameSaveFileExtension: String { "pure.zip" }
     
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100, channels: 1, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 640, height: 480))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 640, height: 480))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    public var emulatorConnector: EmulatorBase { DOSEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { DOSEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class DOSEmulatorBridge : NSObject, EmulatorBase {
+class DOSEmulatorBridge : EmulatorBridgeBase {
     static let shared = DOSEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var leftThumbstickPosition: CGPoint = .zero
     private var rightThumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if input == DOSGameInput.leftThumbstickUp || input == DOSGameInput.leftThumbstickDown {
             leftThumbstickPosition.y = input == DOSGameInput.leftThumbstickUp ? value : -value
@@ -174,7 +154,7 @@ class DOSEmulatorBridge : NSObject, EmulatorBase {
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == DOSGameInput.leftThumbstickUp || input == DOSGameInput.leftThumbstickDown {
             leftThumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -192,23 +172,4 @@ class DOSEmulatorBridge : NSObject, EmulatorBase {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

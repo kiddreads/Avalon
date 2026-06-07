@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import ManicEmuCore
+
 import AVFoundation
 
 extension GameType
@@ -27,7 +27,7 @@ extension GameType
     case flex
     case menu
 
-    public var type: InputType {
+    var type: InputType {
         return .game(.gbc)
     }
     
@@ -46,58 +46,38 @@ extension GameType
     }
 }
 
-struct GBC: ManicEmuCoreProtocol {
-    public static let core = GBC()
+struct GBC: DeltaCoreProtocol {
+    static let core = GBC()
     
-    public var name: String { "GBC" }
-    public var identifier: String { "com.aoshuang.GBCCore" }
+    var name: String { "GBC" }
+    var identifier: String { "com.aoshuang.GBCCore" }
     
-    public var gameType: GameType { GameType.gbc }
-    public var gameInputType: Input.Type { GBCGameInput.self }
+    var gameType: GameType { GameType.gbc }
+    var gameInputType: Input.Type { GBCGameInput.self }
     var allInputs: [Input] { GBCGameInput.allCases }
-    public var gameSaveExtension: String { "sav" }
+    var gameSaveFileExtension: String { "sav" }
         
-    public let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 35112 * 60, channels: 2, interleaved: true)!
-    public let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 160, height: 144))
     
-    public var supportCheatFormats: Set<CheatFormat> {
+    let videoFormat = VideoFormat(format: .bitmap(.bgra8), dimensions: CGSize(width: 160, height: 144))
+    
+    var supportedCheatFormats: Set<CheatFormat> {
         let gameGenieFormat = CheatFormat(name: NSLocalizedString("Game Genie", comment: ""), format: "XXX-YYY-ZZZ", type: .gameGenie)
         let gameSharkFormat = CheatFormat(name: NSLocalizedString("GameShark", comment: ""), format: "XXXXXXXX", type: .gameShark)
         return [gameGenieFormat, gameSharkFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { GBCEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { GBCEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class GBCEmulatorBridge : NSObject, EmulatorBase {
+class GBCEmulatorBridge : EmulatorBridgeBase {
     static let shared = GBCEmulatorBridge()
-    
-    var gameURL: URL?
-    
-    private(set) var frameDuration: TimeInterval = (1.0 / 60.0)
-    
-    var audioRenderer: (any ManicEmuCore.AudioRenderProtocol)?
-    
-    var videoRenderer: (any ManicEmuCore.VideoRenderProtocol)?
-    
-    var saveUpdateHandler: (() -> Void)?
-    
+
     private var thumbstickPosition: CGPoint = .zero
-    
-    func start(withGameURL gameURL: URL) {}
-    
-    func stop() {}
-    
-    func pause() {}
-    
-    func resume() {}
-    
-    func runFrame(processVideo: Bool) {}
-    
-    func activateInput(_ input: Int, value: Double, playerIndex: Int) {
+
+    override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = GBCGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
@@ -120,29 +100,10 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
-    func deactivateInput(_ input: Int, playerIndex: Int) {
+    override func deactivateInput(_ input: Int, playerIndex: Int) {
         if let gameInput = GBCGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
-    
-    func resetInputs() {}
-    
-    func saveSaveState(to url: URL) {}
-    
-    func loadSaveState(from url: URL) {}
-    
-    func saveGameSave(to url: URL) {}
-    
-    func loadGameSave(from url: URL) {}
-    
-    func addCheatCode(_ cheatCode: String, type: String) -> Bool {
-        return false
-    }
-    
-    func resetCheats() {}
-    
-    func updateCheats() {}
-    
 }

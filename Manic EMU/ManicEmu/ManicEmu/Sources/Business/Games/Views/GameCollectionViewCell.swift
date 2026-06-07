@@ -9,7 +9,7 @@
 
 import UIKit
 import MarqueeLabel
-import ManicEmuCore
+
 
 class GameCollectionViewCell: UICollectionViewCell, DynamicShadow {
     
@@ -61,7 +61,7 @@ class GameCollectionViewCell: UICollectionViewCell, DynamicShadow {
                                                      weight: .bold,
                                                      colors: [Constants.Color.LabelPrimary, Constants.Color.Main])
                 self.selectedBackground.alpha = 1
-                if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerUtils.shared.linkedControllers.count > 0 {
+                if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerManager.shared.connectedControllers.count > 0 {
                     UIView.springAnimate(animations: {
                         self.selectedBackground.backgroundColor = .white
                         self.transform = .identity
@@ -78,7 +78,7 @@ class GameCollectionViewCell: UICollectionViewCell, DynamicShadow {
                                                      size: Constants.Size.IconSizeMin.height,
                                                      color: Constants.Color.LabelPrimary.forceStyle(.dark))
                 self.selectedBackground.alpha = 0
-                if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerUtils.shared.linkedControllers.count > 0 {
+                if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerManager.shared.connectedControllers.count > 0 {
                     UIView.springAnimate(animations: {
                         self.selectedBackground.backgroundColor = Constants.Color.BackgroundSecondary
                         self.transform = CGAffineTransformMakeScale(0.8, 0.8)
@@ -138,7 +138,7 @@ class GameCollectionViewCell: UICollectionViewCell, DynamicShadow {
     
     func updateViews(isSelect: Bool) {
         self.selectImageView.alpha = isSelect ? 1 : 0
-        if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerUtils.shared.linkedControllers.count > 0 {
+        if UIDevice.isPhone, UIDevice.isLandscape, ExternalGameControllerManager.shared.connectedControllers.count > 0 {
             if isSelect {
                 self.transform = .identity
             } else {
