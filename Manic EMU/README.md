@@ -1,5 +1,6 @@
 <div align="center">
   <img src="docs/assets/branding/manic-emu-logo.svg" alt="Manic EMU" width="720">
+  <br>
   <p>
     <strong>All-in-one retro game emulation for iOS, with a clean interface and broad platform support.</strong>
   </p>
