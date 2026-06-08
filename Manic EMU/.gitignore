@@ -94,6 +94,8 @@ CoresSources
 Dependencies/*
 !Dependencies/Libretro
 i18n/
+Scripts/System.core.ver
+ManicEmu/ManicEmu/Resources/System.core
 
 #claude code
 .claude

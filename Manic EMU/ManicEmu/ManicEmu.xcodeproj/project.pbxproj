@@ -3119,6 +3119,8 @@
 			buildPhases = (
 				57CDCD8B2FD5CBD3005BA4C8 /* Sources */,
 				57CDCF0C2FD5CBD3005BA4C8 /* Frameworks */,
+				57E0CCC92D9075110027FB8E /* Verify LFS */,
+				57E0CCC82D9075110027FB8D /* Gen System.core */,
 				57CDCF462FD5CBD3005BA4C8 /* Resources */,
 				57CDCF4D2FD5CBD3005BA4C8 /* Embed Foundation Extensions */,
 				57CDCF4E2FD5CBD3005BA4C8 /* Embed Frameworks */,
@@ -3140,6 +3142,8 @@
 			buildPhases = (
 				A5A001EB24555A5F006E0F0E /* Sources */,
 				A5A001EC24555A5F006E0F0E /* Frameworks */,
+				57E0CCC92D9075110027FB8E /* Verify LFS */,
+				57E0CCC82D9075110027FB8D /* Gen System.core */,
 				A5A001ED24555A5F006E0F0E /* Resources */,
 				B28EB6D52A6E75B900086CDB /* Embed Foundation Extensions */,
 				57F633112D719BA0007270E8 /* Embed Frameworks */,
@@ -3334,6 +3338,47 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		57E0CCC92D9075110027FB8E /* Verify LFS */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Verify LFS";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${SRCROOT}/../Scripts/VerifyLFS.sh\" --fix\n";
+		};
+		57E0CCC82D9075110027FB8D /* Gen System.core */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Gen System.core";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/ManicEmu/Resources/System.core",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${SRCROOT}/../Scripts/GenSystemCore.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		57B591762FD06468003C4235 /* Sources */ = {

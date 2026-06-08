@@ -119,6 +119,10 @@ More platforms coming soon!
 
 ## Development Notes
  **Build Environment**: Requires Xcode 16+, iOS SDK 15+, and Swift 5.9+
+ 
+ **Prerequisites: Install Git LFS (macOS)**
+1. `brew install git-lfs`
+2. `git lfs install`
 
  **Build Step**
 1. `git clone --recursive https://github.com/Manic-EMU/ManicEMU.git`
@@ -129,7 +133,7 @@ More platforms coming soon!
   **PS.**
 - Some Apple services require a Developer Program account to work properly—like App Groups, In-App Purchases, and iCloud. You’ll need to set these up yourself. If you don’t have a Developer Program account, you can remove these services before compiling.
 
-- Some third-party services also need your own API keys to function correctly. You can configure these in the `Cipher` section of `Constant.swift`.   
+- Some third-party services also need your own API keys to function correctly. You can configure these in the `Cipher.swift`.   
 
 - The binary build instructions in the `/Cores` directory: To simplify the project's build process, some cores are integrated as binaries, while most cores are built from upstream source code without any modifications. All the changes made to the core can be found [here](https://github.com/Daiuno?tab=repositories).
   
