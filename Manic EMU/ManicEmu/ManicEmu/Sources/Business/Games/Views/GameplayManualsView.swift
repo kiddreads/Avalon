@@ -6,119 +6,84 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 import PDFKit
-import ProHUD
 import UniformTypeIdentifiers
 
-class GameplayManualsView: UIView {
-    var didTapClose: (()->Void)? = nil
+class GameplayManualsView: BaseView {
     private var game: Game
+    private var hideCompletion: (() -> Void)? = nil
     
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(.defaultNavigation(title: game.displayName,
+                                                       titleIcon: .symbolImage(R.image.introduction_iconSymbols()),
+                                                       tools: [
+                                                        .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red]),
+                                                        .symbolImage(R.image.folder_iconSymbols())
+                                                       ]))
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            // 记录当前阅读的页数
+            if let currentPage = self.pdfView.currentPage, let document = self.pdfView.document {
+                let pageIndex = document.index(for: currentPage)
+                self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: pageIndex)
+            }
+            // 记录当前的缩放比例
+            self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: self.pdfView.scaleFactor)
+            self.hide()
+        }
+        
+        view.didTapTools = { [weak self] index in
+            guard let self else { return }
+            if index == 0 {
+                //remove
+                if let manualsPath = game.manualsPath {
+                    try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.GameplayManuals.appendingPathComponent(manualsPath)))
+                    self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: nil)
+                    self.game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: nil)
+                    self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: nil)
+                    self.hide()
+                }
+            } else if index == 1 {
+                //add pdf
+                FilesImporter.shared.presentImportController(supportedTypes: [UTType.pdf],
+                                                             allowsMultipleSelection: false,
+                                                             manualHandle: { [weak self] urls in
+                    guard let self else { return }
+                    if let pdfUrl = urls.first {
+                        do {
+                            let pdfName = pdfUrl.lastPathComponent
+                            let manualsPath = URL(fileURLWithPath: R.Path.GameplayManuals.appendingPathComponent(pdfName))
+                            try FileManager.safeCopyItem(at: pdfUrl, to: manualsPath, shouldReplace: true)
+                            self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: nil)
+                            self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: nil)
+                            self.game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: pdfName)
+                            self.pdfView.document = PDFDocument(url: manualsPath)
+                            self.pdfView.autoScales = true
+                        } catch {}
+                    }
+                })
+            }
+        }
         return view
     }()
     
     private var pdfView: PDFView = {
         let view = PDFView()
-        view.backgroundColor = Constants.Color.Background
+        view.backgroundColor = R.Color.BackgroundPrimary
         view.autoScales = true
         return view
     }()
     
-    private lazy var moreContextMenuButton: ContextMenuButton = {
-        var actions: [UIMenuElement] = []
-        actions.append((UIAction(title: R.string.localizable.removeTitle()) { [weak self] _ in
-            guard let self = self else { return }
-            //移除
-            if let manualsPath = game.manualsPath {
-                try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.GameplayManuals.appendingPathComponent(manualsPath)))
-                self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: nil)
-                self.game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: nil)
-                self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: nil)
-                self.pdfView.document = PDFDocument()
-            }
-        }))
-        actions.append(UIAction(title: R.string.localizable.reUpload()) { [weak self] _ in
-            guard let self = self else { return }
-            //重新上传
-            FilesImporter.shared.presentImportController(supportedTypes: [UTType.pdf],
-                                                         allowsMultipleSelection: false,
-                                                         manualHandle: { [weak self] urls in
-                guard let self else { return }
-                if let pdfUrl = urls.first {
-                    do {
-                        let pdfName = pdfUrl.lastPathComponent
-                        let manualsPath = URL(fileURLWithPath: Constants.Path.GameplayManuals.appendingPathComponent(pdfName))
-                        try FileManager.safeCopyItem(at: pdfUrl, to: manualsPath, shouldReplace: true)
-                        self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: nil)
-                        self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: nil)
-                        self.game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: pdfName)
-                        self.pdfView.document = PDFDocument(url: manualsPath)
-                        self.pdfView.autoScales = true
-                    } catch {}
-                }
-            })
-        })
-        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
-        return view
-    }()
-    
-    private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            self?.moreContextMenuButton.triggerTapGesture()
-        }
-        return view
-    }()
-    
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
-            // 记录当前阅读的页数
-            if let currentPage = pdfView.currentPage, let document = pdfView.document {
-                let pageIndex = document.index(for: currentPage)
-                game.updateExtra(key: ExtraKey.manualPage.rawValue, value: pageIndex)
-            }
-            // 记录当前的缩放比例
-            game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: pdfView.scaleFactor)
-        }
-        return view
-    }()
-    
-    init(game: Game) {
+    required init?(parameters: Any...) {
+        guard let game = parameters.compactMap({ $0 as? Game }).first else { return nil }
         self.game = game
         super.init(frame: .zero)
-        backgroundColor = Constants.Color.Background
+        backgroundColor = R.Color.BackgroundPrimary
         
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
             make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(moreContextMenuButton)
-        moreContextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.edges.equalTo(moreContextMenuButton)
+            make.height.equalTo(R.Size.NavigationHeight)
         }
         
         let lastScaleFactor = game.getExtraDouble(key: ExtraKey.manualScaleFactor.rawValue)
@@ -128,9 +93,9 @@ class GameplayManualsView: UIView {
             pdfView.autoScales = false
         }
         pdfView.snp.makeConstraints { make in
-            make.top.equalTo(navigationBlurView.snp.bottom)
+            make.top.equalTo(navigationView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-Constants.Size.ContentInsetBottom)
+            make.bottom.equalTo(safeAreaLayoutGuide)
         }
         
         if let manualsPath = game.manualsPath {
@@ -169,38 +134,18 @@ class GameplayManualsView: UIView {
     }
 }
 
-extension GameplayManualsView {
-    static var isShow: Bool {
-        Sheet.find(identifier: String(describing: GameplayManualsView.self)).count > 0 ? true : false
+extension GameplayManualsView: ShowableView {
+    static func show(game: Game, hideCompletion: (() -> Void)? = nil) {
+        Self.show(parameters: game)?.hideCompletion = hideCompletion
     }
     
-    static func show(game: Game, hideCompletion: (()->Void)? = nil) {
-        Sheet.lazyPush(identifier: String(describing: GameplayManualsView.self)) { sheet in
-            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
-            
-            let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.Background
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-                if let maxHeight = sheet.config.cardMaxHeight {
-                    make.height.equalTo(maxHeight)
-                }
-            }
-            
-            let manualView = GameplayManualsView(game: game)
-            manualView.didTapClose = { [weak sheet] in
-                sheet?.pop()
-            }
-            containerView.addSubview(manualView)
-            manualView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        }
+    func dataForShow(_ defaultData: ASSheet) -> ASSheet {
+        var sheetData = defaultData
+        sheetData.fullScreenForLandscape = true
+        return sheetData
+    }
+    
+    func didHide() {
+        hideCompletion?()
     }
 }

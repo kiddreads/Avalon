@@ -16,6 +16,8 @@ class SkinPreviewViewController: BaseViewController {
     private let skin: ControllerSkin
     private let traits: ControllerSkin.Traits
     
+    private let closeButtonView = ASButtonView(.smallCloseButton())
+    
     private lazy var controlView: ControllerView = {
         let view = ControllerView()
         view.overrideControllerSkinTraits = traits
@@ -28,6 +30,8 @@ class SkinPreviewViewController: BaseViewController {
         self.skin = skin
         self.traits = traits
         super.init(fullScreen: true)
+        
+        enableBackgroundMask = false
         
         view.addSubview(controlView)
         
@@ -42,7 +46,7 @@ class SkinPreviewViewController: BaseViewController {
             controlView.snp.makeConstraints { make in
                 make.center.equalToSuperview()
                 if let aspectRatio = skin.aspectRatio(for: traits) {
-                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: CGSize(width: Constants.Size.WindowHeight, height: Constants.Size.WindowWidth)))
+                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: CGSize(width: R.Size.WindowHeight, height: R.Size.WindowWidth)))
                     make.size.equalTo(frame.size)
                 }
             }
@@ -51,20 +55,19 @@ class SkinPreviewViewController: BaseViewController {
             controlView.snp.makeConstraints { make in
                 make.center.equalToSuperview()
                 if let aspectRatio = skin.aspectRatio(for: traits) {
-                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: Constants.Size.WindowSize))
+                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: R.Size.WindowSize))
                     make.size.equalTo(frame.size)
                 }
             }
         }
         
-        view.addSubview(closeButton)
-        closeButton.addTapGesture { [weak self] gesture in
+        view.addSubview(closeButtonView)
+        closeButtonView.didTapButton = { [weak self] in
             self?.dismiss(animated: true)
         }
-        closeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Constants.Size.SafeAera.top == 0 ? 20 : Constants.Size.SafeAera.top)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        closeButtonView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(R.Size.SafeArea.top == 0 ? 20 : R.Size.SafeArea.top)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceLarge)
         }
     }
 
@@ -90,7 +93,7 @@ class SkinPreviewViewController: BaseViewController {
             AppDelegate.orientation = .landscapeRight
         default: break
         }
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
             controlView.setNeedsLayout()
             controlView.layoutIfNeeded()
         }
@@ -98,7 +101,7 @@ class SkinPreviewViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AppDelegate.orientation = Constants.Config.DefaultOrientation
+        AppDelegate.orientation = R.Config.DefaultOrientation
     }
 }
 

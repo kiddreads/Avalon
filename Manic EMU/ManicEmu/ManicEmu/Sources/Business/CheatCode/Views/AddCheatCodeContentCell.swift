@@ -16,35 +16,41 @@ class AddCheatCodeContentCell: UICollectionViewCell {
     var didChangeCheatFormat: ((CheatFormat)->Void)? = nil
     var didTextChange: ((String)->Void)? = nil
     
-    private var contextMenuButton: ContextMenuButton = {
-        let view = ContextMenuButton()
-        return view
-    }()
-    
-    private lazy var titleLabel: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold)),
-                                title: R.string.localizable.autoDetectCheatTypeName(),
-                                titleFont: Constants.Font.title(size: .s),
-                                edgeInsets: .zero,
-                                titlePosition: .left,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
-        view.layerCornerRadius = 0
-        view.backgroundColor = .clear
-        view.addTapGesture { [weak self] gesture in
+    private lazy var titleButton: ASButtonView = {
+        let view = ASButtonView(.quickButton(icon: .symbol(.chevronUpChevronDown,
+                                                           colors: [R.Color.LabelSecondary]),
+                                             title: R.string.localizable.autoDetectCheatTypeName(),
+                                             titleColor: R.Color.LabelSecondary,
+                                             titlePosition: .left,
+                                             background: .clear,
+                                             sizeStyle: .fixHeight(R.Size.ButtonMedium,
+                                                                   insets: .insets(top: R.Size.ContentSpaceSmall,
+                                                                                   bottom: R.Size.ContentSpaceSmall))))
+        view.didTapButton = { [weak self] in
             guard let self = self else { return }
-            let actions = self.supportedCheatFormats.map { cheatFormat in
-                UIAction(title: cheatFormat.name,
-                         image: cheatFormat.type == self.currentCheatFormat.type ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                      handler: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.titleLabel.titleLabel.text = cheatFormat.name
-                    self.textViewPlaceHolderLabel.attributedText = NSAttributedString(string: cheatFormat.format, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
-                    self.currentCheatFormat = cheatFormat
-                    self.didChangeCheatFormat?(cheatFormat)
-                })
-            }
-            self.contextMenuButton.menu = UIMenu(children: actions)
-            self.contextMenuButton.triggerTapGesture()
+            
+            let cells = self.supportedCheatFormats.map({
+                ASListPage.Cell.iconTitleDetailRadioCell(title: $0.name,
+                                                         detail: $0.type == .autoDetect ? nil : "\(R.string.localizable.cheatCodeFormat()): \($0.format)",
+                                                         isSelected: $0.type == self.currentCheatFormat.type)
+            })
+            
+            ChevronSheetView.show(icon: .symbolImage(R.image.cheat_iconSymbols()),
+                                  title: R.string.localizable.cheatCodeFormat(),
+                                  cellOptions: cells, completion: { [weak self] index in
+                guard let self, let index else { return }
+                let cheatFormat = self.supportedCheatFormats[index]
+                self.titleButton.setTitleString(cheatFormat.name)
+                let placeholder = cheatFormat.type == .autoDetect ? cheatFormat.format : "\(R.string.localizable.cheatCodeFormat()): \(cheatFormat.format)"
+                self.textViewPlaceHolderLabel.attributedText = NSAttributedString(string: placeholder,
+                                                                                  attributes: [
+                                                                                    .font: R.Font.Body(),
+                                                                                    .foregroundColor: R.Color.LabelTertiary
+                                                                                  ])
+                self.currentCheatFormat = cheatFormat
+                self.didChangeCheatFormat?(cheatFormat)
+                
+            })
         }
         return view
     }()
@@ -54,8 +60,8 @@ class AddCheatCodeContentCell: UICollectionViewCell {
     lazy var editTextView: UITextView = {
         let view = UITextView()
         view.backgroundColor = .clear
-        view.textColor = Constants.Color.LabelPrimary
-        view.font = Constants.Font.body(size: .l)
+        view.textColor = R.Color.LabelPrimary
+        view.font = R.Font.Body()
         view.returnKeyType = .default
         view.delegate = self
         return view
@@ -63,38 +69,31 @@ class AddCheatCodeContentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
         
-        addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
+        addSubview(titleButton)
+        titleButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
             make.top.equalToSuperview()
         }
         
-        insertSubview(contextMenuButton, belowSubview: titleLabel)
-        contextMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(titleLabel)
-        }
-        
-        let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        textFieldContainer.backgroundColor = Constants.Color.InputBackground
+        let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium)
+        textFieldContainer.backgroundColor = R.Color.InputBox
         addSubview(textFieldContainer)
         textFieldContainer.snp.makeConstraints { make in
+            make.top.equalTo(titleButton.snp.bottom)
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(120)
         }
         
         textFieldContainer.addSubview(editTextView)
         editTextView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceSmall)
         }
         
         textFieldContainer.addSubview(textViewPlaceHolderLabel)
         textViewPlaceHolderLabel.snp.makeConstraints { make in
-            make.top.equalTo(editTextView).offset(Constants.Size.ContentSpaceTiny)
-            make.leading.trailing.equalTo(editTextView).inset(Constants.Size.ContentSpaceUltraTiny)
+            make.top.equalTo(editTextView).offset(R.Size.ContentSpaceExtraSmall)
+            make.leading.trailing.equalTo(editTextView).inset(R.Size.ContentSpaceTiny)
         }
     }
     
@@ -105,8 +104,8 @@ class AddCheatCodeContentCell: UICollectionViewCell {
     func setData(supportedCheatFormats: [CheatFormat], currentCheatFormat: CheatFormat, cheatCode: String) {
         self.supportedCheatFormats = supportedCheatFormats
         self.currentCheatFormat = currentCheatFormat
-        titleLabel.titleLabel.text = currentCheatFormat.name
-        textViewPlaceHolderLabel.attributedText = NSAttributedString(string: currentCheatFormat.format, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelTertiary])
+        titleButton.setTitleString(currentCheatFormat.name)
+        textViewPlaceHolderLabel.attributedText = NSAttributedString(string: currentCheatFormat.format, attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelTertiary])
         editTextView.text = cheatCode
         textViewPlaceHolderLabel.isHidden = !cheatCode.isEmpty
     }

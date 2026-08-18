@@ -6,12 +6,13 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 
-class PSPNetworkingConfigOnlineView: UIView {
+class PSPNetworkingConfigOnlineView: BaseView {
     private lazy var ipAddressTitleTextField: UITextField = {
         let textField = UITextField()
-        textField.textColor = Constants.Color.LabelSecondary
-        textField.font = Constants.Font.caption(size: .l)
-        textField.placeholder = "socom.cc"
+        textField.textColor = R.Color.LabelSecondary
+        textField.font = R.Font.Footnote()
+        textField.attributedPlaceholder = NSAttributedString(string: "socom.cc",
+                                                             attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelTertiary])
         textField.clearButtonMode = .never
         textField.returnKeyType = .done
         textField.textAlignment = .right
@@ -31,74 +32,62 @@ class PSPNetworkingConfigOnlineView: UIView {
     
     private lazy var ipAddressInputView: UIView = {
         let view = UIView()
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
-        view.backgroundColor = Constants.Color.Background
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
+        view.backgroundColor = R.Color.BackgroundTertiary
         
         let iconView = UIImageView()
         iconView.contentMode = .center
         iconView.layerCornerRadius = 6
-        iconView.image = UIImage(symbol: .globe, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        iconView.backgroundColor = Constants.Color.Red
+        iconView.image = UIImage(symbol: .globe, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+        iconView.backgroundColor = R.Color.Red
         view.addSubview(iconView)
         iconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+            make.size.equalTo(R.Size.IconSizeLarge)
             make.centerY.equalToSuperview()
         }
         
         let titleLabel = UILabel()
         titleLabel.text = R.string.localizable.serverAddress()
-        titleLabel.textColor = Constants.Color.LabelPrimary
-        titleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+        titleLabel.textColor = R.Color.LabelPrimary
+        titleLabel.font = R.Font.Body(emphasis: true)
         view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
-            make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
         }
         
         view.addSubview(ipAddressTitleTextField)
         ipAddressTitleTextField.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceSmall)
             make.centerY.equalToSuperview()
         }
         
-        let chevronIconView: UIImageView = {
-            let view = UIImageView()
-            view.image = UIImage(symbol: .ellipsisCircle, font: Constants.Font.body(size: .l, weight: .semibold), color: Constants.Color.BackgroundSecondary)
-            return view
-        }()
-        
-        var moreContextMenuButton: ContextMenuButton = {
+        let chevronIconView = ASButtonView(.smallIconButton(icon: .symbol(.ellipsisCircle, colors: [R.Color.LabelPrimary]),
+                                                            background: .clear,
+                                                            insets: .init(inset: R.Size.ContentSpaceExtraExtraSmall)))
+        chevronIconView.didTapButton = { [weak self] in
+            guard let self else { return }
             var servers = ["socom.cc", "psp.gameplayer.club", "myneighborsushicat.com", R.string.localizable.custom()]
-            var actions = [UIMenuElement]()
-            for (index, server) in servers.enumerated() {
-                actions.append((UIAction(title: server) { [weak self] _ in
-                    guard let self else { return }
-                    if index == 3 {
-                        self.ipAddressTitleTextField.becomeFirstResponder()
-                    } else {
-                        self.ipAddressTitleTextField.resignFirstResponder()
-                        self.ipAddressTitleTextField.text = server
-                        self.didConnectedHostChange?(server)
-                    }
-                }))
-            }
-            let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
-            return view
-        }()
+            ChevronSheetView.show(stringOptions: servers, completion: { [weak self] index in
+                guard let self, let index else { return }
+                if index == 3 {
+                    self.ipAddressTitleTextField.becomeFirstResponder()
+                } else {
+                    let server = servers[index]
+                    self.ipAddressTitleTextField.resignFirstResponder()
+                    self.ipAddressTitleTextField.text = server
+                    self.didConnectedHostChange?(server)
+                }
+                
+            })
+        }
         
         view.addSubview(chevronIconView)
         chevronIconView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(ipAddressTitleTextField.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.size.equalTo(CGSize(width: 24, height: 24))
-        }
-        
-        view.addSubview(moreContextMenuButton)
-        moreContextMenuButton.snp.makeConstraints { make in
-            make.leading.equalTo(chevronIconView)
-            make.top.bottom.trailing.equalToSuperview()
+            make.leading.equalTo(ipAddressTitleTextField.snp.trailing)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceExtraSmall)
         }
         
         return view
@@ -111,9 +100,9 @@ class PSPNetworkingConfigOnlineView: UIView {
         
         addSubview(ipAddressInputView)
         ipAddressInputView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             make.top.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.height.equalTo(R.Size.ItemHeightLarge)
         }
     }
     

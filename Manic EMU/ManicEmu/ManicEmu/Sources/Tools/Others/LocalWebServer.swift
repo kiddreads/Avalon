@@ -22,7 +22,7 @@ class LocalWebServer {
         let resourcePath: String
         switch serverType {
         case .JGenesis:
-            resourcePath = Constants.Path.JGenesis
+            resourcePath = R.Path.JGenesis
             
             // 首先添加通用的目录处理器（优先级最低）
             server?.addGETHandler(forBasePath: "/",
@@ -78,7 +78,8 @@ class LocalWebServer {
             }
             
         case .RomPatcher:
-            resourcePath = Constants.Path.RomPatcher
+            port = 8083
+            resourcePath = R.Path.RomPatcher
             
             // 首先添加通用的目录处理器（优先级最低）
             server?.addGETHandler(forBasePath: "/",
@@ -88,7 +89,7 @@ class LocalWebServer {
                                   allowRangeRequests: true)
         case .J2meJS:
             port = 8081
-            resourcePath = Constants.Path.J2meJS
+            resourcePath = R.Path.J2meJS
 
             // Add generic directory handler
             server?.addGETHandler(forBasePath: "/",
@@ -118,7 +119,7 @@ class LocalWebServer {
 
         case .freej2meWeb:
             port = 8082
-            resourcePath = Constants.Path.Freej2meWeb
+            resourcePath = R.Path.Freej2meWeb
 
             // Add generic directory handler
             server?.addGETHandler(forBasePath: "/",
@@ -163,7 +164,7 @@ class LocalWebServer {
             GCDWebServerOption_BindToLocalhost: true
         ])
         
-        Log.debug("✅ 服务器启动: http://localhost:\(port)")
+        Log.debug("✅ 服务器启动: http://127.0.0.1:\(port)")
     }
     
     func stop() {
@@ -173,7 +174,7 @@ class LocalWebServer {
     }
     
     func getURL() -> URL? {
-        return URL(string: "http://localhost:\(port)/index.html")
+        return URL(string: "http://127.0.0.1:\(port)/index.html")
     }
     
     /// 注册 ROM 文件，返回唯一文件 ID

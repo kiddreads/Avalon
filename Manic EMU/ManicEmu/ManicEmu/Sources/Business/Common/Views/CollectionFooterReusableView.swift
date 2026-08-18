@@ -10,8 +10,8 @@ class BackgroundColorDetailFooterReusableView: UICollectionReusableView {
     var titleLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.textColor = Constants.Color.LabelSecondary
-        view.font = Constants.Font.caption(size: .l)
+        view.textColor = R.Color.LabelSecondary
+        view.font = R.Font.Caption()
         return view
     }()
     
@@ -21,7 +21,7 @@ class BackgroundColorDetailFooterReusableView: UICollectionReusableView {
         
         titleLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceLarge)
         }
     }
     

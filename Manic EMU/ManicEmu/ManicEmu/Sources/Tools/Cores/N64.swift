@@ -18,9 +18,13 @@ extension GameType
 @objc enum N64GameInput: Int, Input, CaseIterable {
     case a
     case b
+    case x
+    case y
     case z
     case l
+    case l1
     case r
+    case r1
     case start
     case up
     case down
@@ -45,9 +49,13 @@ extension GameType
     init?(stringValue: String) {
         if stringValue == "a" { self = .a }
         else if stringValue == "b" { self = .b }
+        else if stringValue == "x" { self = .x }
+        else if stringValue == "y" { self = .y }
         else if stringValue == "z" { self = .z }
         else if stringValue == "l" { self = .l }
+        else if stringValue == "l1" { self = .l1 }
         else if stringValue == "r" { self = .r }
+        else if stringValue == "r1" { self = .r1 }
         else if stringValue == "start" { self = .start }
         else if stringValue == "up" { self = .up }
         else if stringValue == "down" { self = .down }
@@ -113,13 +121,13 @@ class N64EmulatorBridge : EmulatorBridgeBase {
             LibretroCore.sharedInstance().moveStick(true, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else if handleCStickInput(input, value: value, playerIndex: playerIndex, press: true) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:cStick")
+Log.debug("🎮 \(objectInfo(self)) 点击了:cStick")
 #endif
         } else {
             if let gameInput = N64GameInput(rawValue: input),
                 let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
             }
@@ -129,9 +137,13 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
     func gameInputToCoreInput(gameInput: N64GameInput) -> LibretroButton? {
         if gameInput == .a { return .B }
         else if gameInput == .b { return .Y }
+        else if gameInput == .x { return .X }
+        else if gameInput == .y { return .Y }
         else if gameInput == .z { return .L2 }
         else if gameInput == .l { return .L1 }
+        else if gameInput == .l1 { return .L1 }
         else if gameInput == .r { return .R1 }
+        else if gameInput == .r1 { return .R1 }
         else if gameInput == .start { return .start }
         else if gameInput == .up { return .up }
         else if gameInput == .down { return .down }

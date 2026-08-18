@@ -12,8 +12,15 @@ class ServiceIconView: RoundAndBorderView {
         return view
     }()
     
-    override init(roundCorner: UIRectCorner = [], radius: CGFloat = Constants.Size.CornerRadiusMax, borderColor: UIColor = Constants.Color.Border, borderWidth: CGFloat = 1) {
-        super.init(roundCorner: roundCorner, radius: radius, borderColor: borderColor, borderWidth: borderWidth)
+    override init(roundCorner: UIRectCorner = [],
+                  radius: CGFloat = R.Size.CornerRadiusLarge,
+                  borderColor: UIColor = R.Color.Border,
+                  borderWidth: CGFloat = 1,
+                  dashPattern: [NSNumber]? = nil) {
+        super.init(roundCorner: roundCorner,
+                   radius: radius,
+                   borderColor: borderColor,
+                   borderWidth: borderWidth)
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

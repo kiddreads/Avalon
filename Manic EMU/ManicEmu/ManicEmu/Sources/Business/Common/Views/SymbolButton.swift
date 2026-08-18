@@ -8,14 +8,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import UIKit
 
-class SymbolButton: UIView {
+class SymbolButton: BaseView {
     // iOS 26+ 使用 UIButton 作为 glass 容器
     private var glassButton: UIButton?
     private let containerView = UIView()
     
     /// 返回应该接收手势识别器的视图（iOS 26 返回内部按钮，iOS 25 返回自身）
     var interactiveView: UIView {
-        if #available(iOS 26.0, *), let glassButton = glassButton {
+        if #available(iOS 26.0, tvOS 26.0, *), let glassButton = glassButton {
             return glassButton
         }
         return self
@@ -51,7 +51,7 @@ class SymbolButton: UIView {
             layer.cornerRadius = radius
             
             // 同时更新 glassButton 的圆角
-            if #available(iOS 26.0, *), let glassButton = glassButton {
+            if #available(iOS 26.0, tvOS 26.0, *), let glassButton = glassButton {
                 glassButton.layer.cornerRadius = radius
                 glassButton.clipsToBounds = true
             }
@@ -60,13 +60,13 @@ class SymbolButton: UIView {
     
     convenience init(symbol: SFSymbol,
                      title: String,
-                     titleFont: UIFont = Constants.Font.caption(),
-                     titleColor: UIColor = Constants.Color.LabelPrimary,
+                     titleFont: UIFont = R.Font.Caption(),
+                     titleColor: UIColor = R.Color.LabelPrimary,
                      titleAlignment: NSTextAlignment = .center,
                      edgeInsets: UIEdgeInsets? = nil,
                      horizontalContian: Bool = false,
                      titlePosition: UITextLayoutDirection = .down,
-                     imageAndTitlePadding: CGFloat = Constants.Size.ContentSpaceUltraTiny,
+                     imageAndTitlePadding: CGFloat = R.Size.ContentSpaceTiny,
                      enableGlass: Bool = false,
                      cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
         self.init(image: .symbolImage(symbol), title: title, titleFont: titleFont, titleColor: titleColor, titleAlignment: titleAlignment, edgeInsets: edgeInsets, horizontalContian: horizontalContian, titlePosition: titlePosition, imageAndTitlePadding: imageAndTitlePadding, enableGlass: enableGlass, cornerStyle: cornerStyle)
@@ -74,13 +74,13 @@ class SymbolButton: UIView {
     
     init(image: UIImage?,
          title: String,
-         titleFont: UIFont = Constants.Font.caption(),
-         titleColor: UIColor = Constants.Color.LabelPrimary,
+         titleFont: UIFont = R.Font.Caption(),
+         titleColor: UIColor = R.Color.LabelPrimary,
          titleAlignment: NSTextAlignment = .center,
          edgeInsets: UIEdgeInsets? = nil,
          horizontalContian: Bool = false,
          titlePosition: UITextLayoutDirection = .down,
-         imageAndTitlePadding: CGFloat = Constants.Size.ContentSpaceUltraTiny,
+         imageAndTitlePadding: CGFloat = R.Size.ContentSpaceTiny,
          enableGlass: Bool = false,
          cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
         super.init(frame: .zero)
@@ -91,7 +91,7 @@ class SymbolButton: UIView {
         self.isGlassEnabled = enableGlass
         
         // 只有 iOS 26+ 且 enableGlass 为 true 时才使用 glass 效果
-        if #available(iOS 26.0, *), enableGlass {
+        if #available(iOS 26.0, tvOS 26.0, *), enableGlass {
             // iOS 26 + Glass enabled: 使用 UIButton.Configuration.glass() 作为容器
             setupGlassButton(image: image,
                              title: title,
@@ -104,7 +104,7 @@ class SymbolButton: UIView {
                              imageAndTitlePadding: imageAndTitlePadding,
                              cornerStyle: cornerStyle)
         } else {
-            // iOS 25 及以下 或 enableGlass 为 false: 使用传统样式 + enableInteractive 动画
+            // iOS 25 及以下 或 enableGlass 为 false: 使用传统样式 + enablePressEffect 动画
             setupTraditionalView(image: image,
                                  title: title,
                                  titleFont: titleFont,
@@ -115,6 +115,7 @@ class SymbolButton: UIView {
                                  titlePosition: titlePosition,
                                  imageAndTitlePadding: imageAndTitlePadding)
         }
+        setupFocusConfirm()
     }
     
     @available(iOS 26.0, *)
@@ -213,9 +214,9 @@ class SymbolButton: UIView {
                                      horizontalContian: Bool,
                                      titlePosition: UITextLayoutDirection,
                                      imageAndTitlePadding: CGFloat) {
-        enableInteractive = true
-        backgroundColor = Constants.Color.BackgroundPrimary
-        layerCornerRadius = Constants.Size.CornerRadiusMid
+        enablePressEffect = true
+        backgroundColor = R.Color.BackgroundSecondary
+        layerCornerRadius = R.Size.CornerRadiusMedium
         
         addSubview(containerView)
         containerView.addSubviews([imageView, titleLabel])
@@ -277,7 +278,7 @@ class SymbolButton: UIView {
         titleLabel.text = title
     }
     
-    convenience init(symbol: SFSymbol, symbolFont: UIFont? = nil, symbolColor: UIColor = Constants.Color.LabelPrimary, enableGlass: Bool = false, cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
+    convenience init(symbol: SFSymbol, symbolFont: UIFont? = nil, symbolColor: UIColor = R.Color.LabelPrimary, enableGlass: Bool = false, cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
         self.init(image: .symbolImage(symbol).applySymbolConfig(font: symbolFont, color: symbolColor), enableGlass: enableGlass, cornerStyle: cornerStyle)
     }
     
@@ -290,7 +291,7 @@ class SymbolButton: UIView {
         self.isGlassEnabled = enableGlass
         
         // 只有 iOS 26+ 且 enableGlass 为 true 时才使用 glass 效果
-        if #available(iOS 26.0, *), enableGlass {
+        if #available(iOS 26.0, tvOS 26.0, *), enableGlass {
             // iOS 26 + Glass enabled: 使用 UIButton.Configuration.glass() 作为容器
             backgroundColor = .clear
             
@@ -313,9 +314,9 @@ class SymbolButton: UIView {
             }
             imageView.image = image
         } else {
-            // iOS 25 及以下 或 enableGlass 为 false: 使用传统样式 + enableInteractive 动画
-            enableInteractive = true
-            backgroundColor = Constants.Color.BackgroundPrimary
+            // iOS 25 及以下 或 enableGlass 为 false: 使用传统样式 + enablePressEffect 动画
+            enablePressEffect = true
+            backgroundColor = R.Color.BackgroundSecondary
             
             addSubview(imageView)
             imageView.snp.makeConstraints { make in
@@ -323,17 +324,26 @@ class SymbolButton: UIView {
             }
             imageView.image = image
         }
+        setupFocusConfirm()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setupFocusConfirm() {
+        isFocusable = true
+        onFocusConfirm = { [weak self] in
+            self?.triggerTapGesture()
+            return true
+        }
+    }
+    
     /// 重写 addGestureRecognizer，确保手势识别器添加到正确的视图
     /// iOS 26: 添加到内部的 glassButton
     /// iOS 25: 添加到父视图自身
     override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
-        if #available(iOS 26.0, *), let glassButton = glassButton {
+        if #available(iOS 26.0, tvOS 26.0, *), let glassButton = glassButton {
             glassButton.addGestureRecognizer(gestureRecognizer)
         } else {
             super.addGestureRecognizer(gestureRecognizer)
@@ -342,7 +352,7 @@ class SymbolButton: UIView {
     
     /// 重写 removeGestureRecognizer，确保从正确的视图移除
     override func removeGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
-        if #available(iOS 26.0, *), let glassButton = glassButton {
+        if #available(iOS 26.0, tvOS 26.0, *), let glassButton = glassButton {
             glassButton.removeGestureRecognizer(gestureRecognizer)
         } else {
             super.removeGestureRecognizer(gestureRecognizer)
@@ -350,16 +360,15 @@ class SymbolButton: UIView {
     }
     
     func triggerTapGesture() {
-        // iOS 26 使用 UIButton，直接发送 touch 事件
-        if #available(iOS 26.0, *), let glassButton = glassButton {
+        if #available(iOS 26.0, tvOS 26.0, *), let glassButton = glassButton {
             glassButton.sendActions(for: .touchUpInside)
-        } else {
-            // iOS 25 及以下使用手势识别器
-            for gestureRecognizer in gestureRecognizers ?? [] {
+            for gestureRecognizer in glassButton.gestureRecognizers ?? [] {
                 if let tapGesture = gestureRecognizer as? UITapGestureRecognizer {
                     tapGesture.state = .ended
                 }
             }
+        } else {
+            _ = fk_fireTapGestures()
         }
     }
 }

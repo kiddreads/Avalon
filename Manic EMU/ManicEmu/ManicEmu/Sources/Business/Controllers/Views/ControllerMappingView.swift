@@ -9,134 +9,102 @@
 
 import RealmSwift
 
-class ControllerMappingView: UIView {
-    /// 充当导航条
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        return view
-    }()
-    
-    private var gameTypecontextMenuButton: ContextMenuButton = {
-        let view = ContextMenuButton()
-        return view
-    }()
-    
-    private lazy var gameTypeButton: SymbolButton = {
-        let defaultTitle = self.gameType.localizedShortName
-        let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)),
-                                title: defaultTitle,
-                                titleFont: Constants.Font.title(size: .s),
-                                titleColor: Constants.Color.LabelPrimary.forceStyle(.dark),
-                                edgeInsets: .zero,
-                                titlePosition: .left,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
-        view.layerCornerRadius = 0
-        view.backgroundColor = .clear
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            let allGameTypes = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType }
-            let itemTitles = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType.localizedShortName }
-            var items: [UIAction] = []
-            let currentGameTypeName = self.gameType.localizedShortName
-            for (index, title) in itemTitles.enumerated() {
-                items.append(UIAction(title: title,
-                                      image: currentGameTypeName == title ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                      handler: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.gameType = allGameTypes[index]
-                    self.gameTypeButton.titleLabel.text = itemTitles[index]
-                    self.updateDatas()
-                    var titleColor = Constants.Color.LabelPrimary
-                    if #available(iOS 26.0, *), self.gameType != .psp {
-                        titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-                    }
-                    self.closeButton.imageView.image = UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: titleColor)
-                    self.moreButton.imageView.image = UIImage(symbol: .ellipsis, color: titleColor)
-                }))
-            }
-            self.gameTypecontextMenuButton.menu = UIMenu(children: items)
-            self.gameTypecontextMenuButton.triggerTapGesture()
-        }
-        return view
-    }()
-    
-    private lazy var moreContextMenuButton: ContextMenuButton = {
-        let view = ContextMenuButton()
-        return view
-    }()
-    
-    private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            self?.showMoreContextMenu()
-        }
-        return view
-    }()
-    
-    private lazy var closeButton: SymbolButton = {
-        var titleColor = Constants.Color.LabelPrimary
-        if #available(iOS 26.0, *), gameType != .psp {
-            titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-        }
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: titleColor), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.saveMappings()
-            self.didTapClose?()
-        }
-        return view
-    }()
-    
+class ControllerMappingView: BaseView {
     private lazy var controllerView: ControllerView = {
         let view = ControllerView()
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
         view.addReceiver(self)
         return view
     }()
     
-    private var mappingTipView = MappingTipView()
+    private var inputPopupView = MappingInputPopupView()
     
-    private var guideTitleLabel: UILabel = {
-        let view = UILabel()
-        view.numberOfLines = 0
-        view.textAlignment = .center
-        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-        view.font = Constants.Font.body(size: .l, weight: .semibold)
-        view.text = R.string.localizable.controllerMappingGuideTitle()
-        return view
-    }()
-    
-    private lazy var cancelButton: SymbolButton = {
-        let view = SymbolButton(image: nil,
-                                title: R.string.localizable.cancelTitle(),
-                                titleFont: Constants.Font.body(size: .m),
-                                edgeInsets: UIEdgeInsets(top: 0, left: Constants.Size.ContentSpaceTiny+3, bottom: 0, right: Constants.Size.ContentSpaceTiny),
-                                titlePosition: .left)
-        view.titleLabel.textAlignment = .center
-        view.backgroundColor = Constants.Color.Red
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
+    private lazy var tipsView: ASNavigationView = {
+        let view = ASNavigationView(getTips(.normal))
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
             self.stopMapping()
         }
-        view.isHidden = true
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
         return view
     }()
     
-    private lazy var gameSettingView: GameSettingView = {
-        let game = Game()
-        game.gameType = self.gameType
-        let view = GameSettingView(game: game, isEditingMode: false, isMappingMode: true)
-        view.didSelectItem = { [weak self] item in
-            guard let self, !self.isKeyMapping else { return }
-            Log.debug("点击了功能键:\(item.title)")
-            self.startMapping(input: AnyInput(stringValue: item.inputKey, intValue: nil, type: .controller(.standard)))
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(getNavigation())
+        view.didTapClose = { [weak self] in
+            guard let self = self else { return }
+            self.saveMappings()
+            self.didTapClose?()
+        }
+        view.didTapTools = { [weak self] index in
+            guard let self = self else { return }
+            self.stopMapping()
+            if index == 0 {
+                //keyboard input mapping
+                var allKeyboadInputs = LibretroKeyboardCode.getAllKeyboarLabels()
+                var options = allKeyboadInputs.map({ label in
+                    var mappingInfo = ""
+                    if let mappingKey = self.currentGameTypeMapping.inputMappings.first(where: { $1.stringValue == label })?.key,
+                        mappingKey != label {
+                        mappingInfo = " ( \(mappingKey) ➔ \(label) )"
+                    }
+                    return label + mappingInfo
+                })
+                ChevronSheetView.show(icon: .symbolImage(R.image.keyboard_iconSymbols()),
+                                      title: R.string.localizable.mappingKeyboardInput(),
+                                      detail: R.string.localizable.mappingKeyboardInputDesc(),
+                                      stringOptions: options, completion: { [weak self] optionIndex in
+                    guard let self else { return }
+                    if let optionIndex {
+                        self.startMapping(input: AnyInput(stringValue: allKeyboadInputs[optionIndex],
+                                                          intValue: nil,
+                                                          type: .controller(GameControllerInputType("directKeyboard"))))
+                    }
+                })
+                
+                
+            } else if index == 1 {
+                //reload
+                self.resetMapping()
+                self.updateDatas()
+            }
+        }
+        if games.count == 0 {
+            view.didTapTitle = { [weak self] in
+                guard let self = self else { return }
+                //change gameTypes
+                let allGameTypes = System.allGameTypes.filter({ !$0.externalType })
+                OptionsSheetView.show(icon: .symbolImage(R.image.controller_iconSymbols()),
+                                      title: R.string.localizable.changeGameType(),
+                                      options: allGameTypes.map({ $0.localizedShortName }),
+                                      selectedIndex: allGameTypes.firstIndex(of: self.gameType),
+                                      groupTogether: true,
+                                      completion: { index in
+                    if let index {
+                        self.stopMapping()
+                        self.gameType = allGameTypes[index]
+                        self.navigationView.navigation = self.getNavigation()
+                        self.updateDatas()
+                    }
+                })
+            }
+        }
+        
+        view.layerCornerRadius = R.Size.NavigationHeight/2
+        
+        return view
+    }()
+    
+    private lazy var mappingOptionsView: MappingOptionsView = {
+        let view = MappingOptionsView()
+        view.didTapOption = { [weak self] option in
+            guard let self else { return }
+            self.startMapping(input: AnyInput(stringValue: option.rawValue, intValue: nil, type: .controller(.standard)))
         }
         return view
     }()
     
+    private let games: [Game]
     private var gameType: GameType {
         didSet {
             let core = Delta.core(for: gameType)
@@ -144,23 +112,16 @@ class ControllerMappingView: UIView {
             skinInputMapping = try! GameControllerInputMapping(fileURL: fileURL!)
         }
     }
-    
     private var gameController: GameController
-    
     private var selectedSkinInput: Input? = nil
-    
     private var modifiedList = [GameType]()
-    
     private var isKeyMapping = false
-    
     ///修改过的控制器映射
     private var modifiedControllerMappings: [GameType: GameControllerInputMapping] = [:]
-    
     ///默认控制器映射
     private lazy var defaultControllerMapping: GameControllerInputMapping = {
         return (gameController.defaultInputMapping as! GameControllerInputMapping)
     }()
-    
     ///获取当前gameType的控制器映射
     private var currentGameTypeMapping: GameControllerInputMapping {
         if let inputMapping = modifiedControllerMappings[gameType] {
@@ -177,7 +138,6 @@ class ControllerMappingView: UIView {
             }
         }
     }
-    
     private lazy var skinInputMapping: GameControllerInputMapping = {
         let core = Delta.core(for: gameType)
         let fileURL = core!.resourceBundle.url(forResource: core!.name, withExtension: "keymapping")
@@ -190,6 +150,170 @@ class ControllerMappingView: UIView {
     
     deinit {
         gameController.removeReceiver(self)
+    }
+    
+    init(games: [Game], controller: GameController) {
+        self.games = games
+        self.gameType = games.first?.gameType ?? System.allGameTypes.first!
+        self.gameController = controller
+        super.init(frame: .zero)
+        setupInit()
+    }
+    
+    init(gameType: GameType, controller: GameController) {
+        self.gameType = gameType
+        self.gameController = controller
+        self.games = []
+        super.init(frame: .zero)
+        setupInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateDatas()
+    }
+    
+    private func setupInit() {
+        self.backgroundColor = .black
+        
+        if gameController.inputType == .keyboard, let keyboardController = gameController as? KeyboardGameController {
+            //如果是键盘的话 需要特殊处理 监听键盘的按键
+            keyboardController.keyboardPress = { [weak self] pressKey in
+                guard let self = self else { return }
+                self.mapKeyboard(pressKey: pressKey)
+            }
+        } else {
+            gameController.addReceiver(self)
+        }
+        
+        
+        addSubview(controllerView)
+        controllerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        addSubview(inputPopupView)
+        inputPopupView.snp.makeConstraints { make in
+            make.edges.equalTo(controllerView)
+        }
+        
+        addSubview(mappingOptionsView)
+        
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(R.Size.SafeArea.top)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(R.Size.ContentSpaceHuge)
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
+        
+        addSubview(tipsView)
+        tipsView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(navigationView)
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
+    }
+    
+    private func updateDatas() {
+        if let controlerSkin = ControllerSkin.standardControllerSkin(for: gameType),
+            let frames = controlerSkin.getFrames() {
+            controllerView.controllerSkin = controlerSkin
+            controllerView.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.size.equalTo(frames.skinFrame.size)
+            }
+            
+            if gameController.inputType == .keyboard {
+                controllerView.becomeFirstResponder()
+            }
+            
+            setupMappingBubble()
+            
+            if games.count > 0 {
+                mappingOptionsView.updateContents(games: games)
+            } else {
+                let game = Game()
+                game.gameType = gameType
+                mappingOptionsView.updateContents(games: [game])
+            }
+            let navigationBottom = navigationView.frame.maxY + R.Size.ContentSpaceLarge
+            let controllerViewTop = frames.mainGameViewFrame.minY + controllerView.frame.minY
+            let y = max(navigationBottom, controllerViewTop)
+            var height = frames.mainGameViewFrame.height
+            if navigationBottom > controllerViewTop {
+                height -= (navigationBottom - controllerViewTop)
+            }
+            mappingOptionsView.frame = CGRect(x: frames.mainGameViewFrame.minX + controllerView.frame.minX,
+                                           y: y,
+                                           width: frames.mainGameViewFrame.width,
+                                           height: height)
+            
+            tipsView.snp.remakeConstraints { make in
+                var moreOffset = 0.0
+                if gameType == .dos || gameType == .doom {
+                    moreOffset = R.Size.ContentSpaceExtraSmall
+                }
+                make.top.equalTo(frames.mainGameViewFrame.maxY + R.Size.ContentSpaceExtraSmall + moreOffset)
+                make.height.equalTo(R.Size.NavigationHeight)
+                make.width.equalTo(frames.mainGameViewFrame.width - R.Size.ContentSpaceMedium*2)
+                make.centerX.equalToSuperview()
+            }
+        }
+    }
+    
+    enum TipsType {
+        case normal
+        case mapping(String)
+    }
+    
+    private func getTips(_ type: TipsType) -> ASListPage.Navigation {
+        let title: ASText
+        let enableClose: Bool
+        switch type {
+        case .normal:
+            title = .init(attributes: .init(text: R.string.localizable.controllerMappingGuideTitle(),
+                                            font: R.Font.Headline(emphasis: true),
+                                            alignment: .center))
+            enableClose = false
+            
+            
+        case .mapping(let string):
+            title = .init(attributes: .init(text: R.string.localizable.controllerMappingGuideBegin(string),
+                                            font: R.Font.Body(emphasis: true),
+                                            alignment: .left,
+                                            numberOfLines: 0))
+            enableClose = true
+        }
+        
+        return ASListPage.Navigation(title: title,
+                                     backgroundColor: R.Color.BackgroundPrimary,
+                                     enableClose: enableClose,
+                                     closeBackground: R.Color.Red)
+    }
+    
+    private func getNavigation() -> ASListPage.Navigation {
+        let title: ASText
+        if games.count == 1, let game = games.first {
+            title = .extraLargeText(game.displayName)
+        } else {
+            let titleString = gameType.localizedShortName
+            let titleIcons: [ASText.Icon] = [.init(icon: .symbolImage(R.image.chevronUpdown_iconSymbols()),
+                                                   position: UInt(titleString.count))]
+            title = ASText(attributes: .init(text: titleString,
+                                             font: R.Font.Headline(emphasis: true)),
+                           textIcons: titleIcons)
+        }
+        
+        return ASListPage.Navigation(title: title,
+                                     tools: [
+                                        .symbolImage(R.image.keyboard_iconSymbols()),
+                                        .symbolImage(R.image.refresh_iconSymbols()),
+                                     ],
+                                     backgroundColor: R.Color.BackgroundPrimary)
     }
     
     private func mapKeyboard(pressKey: String) {
@@ -238,127 +362,6 @@ class ControllerMappingView: UIView {
         }
     }
     
-    init(gameType: GameType = .dc, controller: GameController) {
-        self.gameType = gameType
-        self.gameController = controller
-        super.init(frame: .zero)
-        self.backgroundColor = .black
-        
-        if gameController.inputType == .keyboard, let keyboardController = gameController as? KeyboardGameController {
-            //如果是键盘的话 需要特殊处理 监听键盘的按键
-            keyboardController.keyboardPress = { [weak self] pressKey in
-                guard let self = self else { return }
-                self.mapKeyboard(pressKey: pressKey)
-            }
-        } else {
-            gameController.addReceiver(self)
-        }
-        
-        
-        addSubview(controllerView)
-        controllerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        controllerView.addSubview(guideTitleLabel)
-        
-        
-        addSubview(mappingTipView)
-        mappingTipView.snp.makeConstraints { make in
-            make.edges.equalTo(controllerView)
-        }
-        
-        addSubview(cancelButton)
-        cancelButton.snp.makeConstraints { make in
-            make.centerX.equalTo(guideTitleLabel)
-            make.top.equalTo(guideTitleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            make.height.equalTo(Constants.Size.ItemHeightTiny)
-            make.width.greaterThanOrEqualTo(Constants.Size.ItemHeightMid)
-        }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Constants.Size.SafeAera.top)
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(44)
-        }
-        
-        navigationBlurView.addSubview(gameTypeButton)
-        gameTypeButton.snp.makeConstraints { make in
-            make.leading.equalTo(Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-        }
-        
-        navigationBlurView.insertSubview(gameTypecontextMenuButton, belowSubview: gameTypeButton)
-        gameTypecontextMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(gameTypeButton)
-        }
-        
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(moreContextMenuButton)
-        moreContextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.edges.equalTo(moreContextMenuButton)
-        }
-        
-        addSubview(gameSettingView)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func updateDatas() {
-        if let controlerSkin = ControllerSkin.standardControllerSkin(for: gameType),
-            let frames = controlerSkin.getFrames() {
-            controllerView.controllerSkin = controlerSkin
-            controllerView.snp.remakeConstraints { make in
-                make.center.equalToSuperview()
-                make.size.equalTo(frames.skinFrame.size)
-            }
-            
-            if gameController.inputType == .keyboard {
-                controllerView.becomeFirstResponder()
-            }
-            
-            setupMappingBubble()
-            guideTitleLabel.snp.remakeConstraints { make in
-                var moreOffset = 0.0
-                if gameType == .dos || gameType == .doom {
-                    moreOffset = 20
-                }
-                make.top.equalTo(frames.mainGameViewFrame.maxY + Constants.Size.ContentSpaceTiny + moreOffset)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
-            }
-            gameSettingView.updateMappingMode(gameType: gameType)
-            let navigationBottom = navigationBlurView.frame.maxY
-            let controllerViewTop = frames.mainGameViewFrame.minY + controllerView.frame.minY
-            let y = max(navigationBottom, controllerViewTop)
-            var height = frames.mainGameViewFrame.height
-            if navigationBottom > controllerViewTop {
-                height -= (navigationBottom - controllerViewTop)
-            }
-            gameSettingView.frame = CGRect(x: frames.mainGameViewFrame.minX + controllerView.frame.minX, y: y, width: frames.mainGameViewFrame.width, height: height)
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateDatas()
-    }
-    
     private func getSkinInput(_ skinInput: Input) -> (key: String, input: AnyInput)? {
         if let input = skinInputMapping.inputMappings[skinInput.stringValue] {
             return (skinInput.stringValue, input)
@@ -372,8 +375,8 @@ class ControllerMappingView: UIView {
         if skinInput.stringValue.lowercased() == "menu" {
             return ("menu", AnyInput(skinInput))
         }
-        //检查是否是功能按键
-        if GameSetting.isValidInputKey(skinInput.stringValue) {
+        //Check if it's a function key.
+        if let _ = MappingOption(rawValue: skinInput.stringValue) {
             return (skinInput.stringValue, AnyInput(skinInput))
         }
         return nil
@@ -440,30 +443,30 @@ class ControllerMappingView: UIView {
     }
     
     private func setupMappingBubble() {
-        mappingTipView.subviews.forEach { $0.removeFromSuperview() }
-        let traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: Constants.Size.WindowSize)))
+        inputPopupView.subviews.forEach { $0.removeFromSuperview() }
+        let traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: R.Size.WindowSize)))
         if let items = controllerView.controllerSkin?.items(for: traits) {
             for item in items {
-                let scaledFrame = item.frame.applying(.init(scaleX: mappingTipView.width, y: mappingTipView.height))
+                let scaledFrame = item.frame.applying(.init(scaleX: inputPopupView.width, y: inputPopupView.height))
                 
                 switch item.kind {
                 case .button, .switchButton:
                     //不支持组合键
                     if let input = item.inputs.allInputs.first {
-                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: input.stringValue), position: CGPoint(x: scaledFrame.center.x, y: scaledFrame.center.y))
+                        inputPopupView.updateTip(kind: item.kind, inputString: shortName(for: input.stringValue), position: CGPoint(x: scaledFrame.center.x, y: scaledFrame.center.y))
                     }
                 case .dPad, .thumbstick:
                     if case .directional(let up, let down, let left, let right) = item.inputs {
-                        let minSize = CGSize(width: Constants.Size.ItemHeightMid, height: Constants.Size.ItemHeightTiny)
+                        let minSize = CGSize(width: R.Size.ItemHeightMedium, height: R.Size.ItemHeightTiny)
                         let upFrame = CGRect(center: CGPoint(x: scaledFrame.midX, y: scaledFrame.minY), size: minSize)
                         let downFrame = CGRect(center: CGPoint(x: scaledFrame.midX, y: scaledFrame.maxY), size: minSize)
                         let leftFrame = CGRect(center: CGPoint(x: scaledFrame.minX, y: scaledFrame.midY), size: minSize)
                         let rightFrame = CGRect(center: CGPoint(x: scaledFrame.maxX, y: scaledFrame.midY), size: minSize)
                         let adjustFrames = adjustFrames(up: upFrame, down: downFrame, left: leftFrame, right: rightFrame)
-                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: up.stringValue), position: adjustFrames.up.center)
-                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: down.stringValue), position: adjustFrames.down.center)
-                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: left.stringValue), position: adjustFrames.left.center)
-                        mappingTipView.updateTip(kind: item.kind, inputString: shortName(for: right.stringValue), position: adjustFrames.right.center)
+                        inputPopupView.updateTip(kind: item.kind, inputString: shortName(for: up.stringValue), position: adjustFrames.up.center)
+                        inputPopupView.updateTip(kind: item.kind, inputString: shortName(for: down.stringValue), position: adjustFrames.down.center)
+                        inputPopupView.updateTip(kind: item.kind, inputString: shortName(for: left.stringValue), position: adjustFrames.left.center)
+                        inputPopupView.updateTip(kind: item.kind, inputString: shortName(for: right.stringValue), position: adjustFrames.right.center)
                     }
                 default: break
                 }
@@ -477,7 +480,7 @@ class ControllerMappingView: UIView {
         var leftFrame = left
         var rightFrame = right
         
-        let minSpacing: CGFloat = Constants.Size.ItemHeightUltraTiny
+        let minSpacing: CGFloat = R.Size.ItemHeightMicro
 
         // 垂直方向
         let verticalDistance = downFrame.minY - upFrame.maxY
@@ -523,25 +526,23 @@ class ControllerMappingView: UIView {
             }
         }
         if needToNotify {
-            NotificationCenter.default.post(name: Constants.NotificationName.ControllerMapping, object: nil)
+            NotificationCenter.default.post(name: R.NotificationName.ControllerMapping, object: nil)
         }
     }
     
     private func startMapping(input: DeltaCore.Input) {
         selectedSkinInput = input
-        guideTitleLabel.text = R.string.localizable.controllerMappingGuideBegin(input.stringValue)
+        tipsView.navigation = getTips(.mapping(input.stringValue))
         controllerView.isUserInteractionEnabled = false
         if gameController.inputType == .keyboard {
             controllerView.becomeFirstResponder()
         }
-        cancelButton.isHidden = false
     }
     
     private func stopMapping() {
         self.selectedSkinInput = nil
         controllerView.isUserInteractionEnabled = true
-        guideTitleLabel.text = R.string.localizable.controllerMappingGuideTitle()
-        cancelButton.isHidden = true
+        tipsView.navigation = getTips(.normal)
     }
     
     private func resetMapping() {
@@ -558,38 +559,9 @@ class ControllerMappingView: UIView {
                     realm.delete(object)
                 }
             }
-            NotificationCenter.default.post(name: Constants.NotificationName.ControllerMapping, object: nil)
+            NotificationCenter.default.post(name: R.NotificationName.ControllerMapping, object: nil)
         }
         stopMapping()
-    }
-    
-    private func showMoreContextMenu() {
-        self.stopMapping()
-        var actions = [UIMenuElement]()
-        
-        actions.append(UIMenu(title: R.string.localizable.mappingKeyboardInput(),
-                              options: .singleSelection,
-                              children: LibretroKeyboardCode.getAllKeyboarLabels().map { label in
-            var mappingInfo = ""
-            if let mappingKey = currentGameTypeMapping.inputMappings.first(where: { $1.stringValue == label })?.key, mappingKey != label {
-                mappingInfo = " ( \(mappingKey) ➔ \(label) )"
-            }
-            let action = UIAction(title: label + mappingInfo,
-                                  handler: { [weak self] _ in
-                guard let self else { return }
-                self.startMapping(input: AnyInput(stringValue: label, intValue: nil, type: .controller(GameControllerInputType("directKeyboard"))))
-            })
-            return action
-        }))
-        
-        actions.append(UIAction(title: R.string.localizable.controllerMappingReset(), handler: { [weak self] _ in
-            guard let self else { return }
-            self.resetMapping()
-            self.updateDatas()
-        }))
-        
-        moreContextMenuButton.menu = UIMenu(children: actions)
-        moreContextMenuButton.triggerTapGesture()
     }
 }
 

@@ -18,8 +18,17 @@ class ControllerMappingViewController: BaseViewController {
         fatalError("init() is unavailable")
     }
     
-    init(gameType: GameType = .dc, controller: GameController) {
+    init(gameType: GameType, controller: GameController) {
         self.controllerMappingView = ControllerMappingView(gameType: gameType, controller: controller)
+        super.init(fullScreen: true)
+        self.controllerMappingView.didTapClose = { [weak self] in
+            guard let self = self else { return }
+            self.dismiss(animated: true)
+        }
+    }
+    
+    init(games: [Game], controller: GameController) {
+        self.controllerMappingView = ControllerMappingView(games: games, controller: controller)
         super.init(fullScreen: true)
         self.controllerMappingView.didTapClose = { [weak self] in
             guard let self = self else { return }
@@ -35,6 +44,14 @@ class ControllerMappingViewController: BaseViewController {
         }
     }
     
+    override var shouldManageFocusContext: Bool { false }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Mapping consumes the same controller/keyboard events as FocusKit.
+        FocusSystem.shared.isEnabled = false
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         switch UIDevice.currentOrientation {
@@ -52,6 +69,7 @@ class ControllerMappingViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AppDelegate.orientation = Constants.Config.DefaultOrientation
+        FocusSystem.shared.isEnabled = true
+        AppDelegate.orientation = R.Config.DefaultOrientation
     }
 }

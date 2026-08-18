@@ -7,20 +7,21 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class AuxiliaryLineView: UIView {
+class AuxiliaryLineView: BaseView {
 
     private let crosshairLayer = CAShapeLayer()
     private let dashedBorderLayer = CAShapeLayer()
     
     var enableCrosshair: Bool
     var enableBorder: Bool
+    var enableEdgeHandles: Bool
     
     // 边缘拖动手柄
     let topHandle: UIView = {
         let view = UIView()
         let icon = IconView()
         icon.imageView.contentMode = .scaleAspectFill
-        icon.image = UIImage(symbol: .chevronCompactUp, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        icon.image = UIImage(symbol: .chevronCompactUp, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
         view.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -32,7 +33,7 @@ class AuxiliaryLineView: UIView {
         let view = UIView()
         let icon = IconView()
         icon.imageView.contentMode = .scaleAspectFill
-        icon.image = UIImage(symbol: .chevronCompactDown, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        icon.image = UIImage(symbol: .chevronCompactDown, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
         view.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -44,7 +45,7 @@ class AuxiliaryLineView: UIView {
         let view = UIView()
         let icon = IconView()
         icon.imageView.contentMode = .scaleAspectFill
-        icon.image = UIImage(symbol: .chevronCompactLeft, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        icon.image = UIImage(symbol: .chevronCompactLeft, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
         view.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -56,7 +57,7 @@ class AuxiliaryLineView: UIView {
         let view = UIView()
         let icon = IconView()
         icon.imageView.contentMode = .scaleAspectFill
-        icon.image = UIImage(symbol: .chevronCompactRight, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        icon.image = UIImage(symbol: .chevronCompactRight, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
         view.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -68,14 +69,19 @@ class AuxiliaryLineView: UIView {
     override init(frame: CGRect) {
         self.enableCrosshair = false
         self.enableBorder = false
+        self.enableEdgeHandles = true
         super.init(frame: frame)
         setupLayers()
         setupEdgeHandles()
     }
     
-    init(frame: CGRect = .zero, enableCrosshair: Bool = false, enableBorder: Bool = false) {
+    init(frame: CGRect = .zero,
+         enableCrosshair: Bool = false,
+         enableBorder: Bool = false,
+         enableEdgeHandles: Bool = true) {
         self.enableCrosshair = enableCrosshair
         self.enableBorder = enableBorder
+        self.enableEdgeHandles = enableEdgeHandles
         super.init(frame: frame)
         setupLayers()
         setupEdgeHandles()
@@ -84,6 +90,7 @@ class AuxiliaryLineView: UIView {
     required init?(coder: NSCoder) {
         self.enableCrosshair = false
         self.enableBorder = false
+        self.enableEdgeHandles = true
         super.init(coder: coder)
         setupLayers()
         setupEdgeHandles()
@@ -109,7 +116,7 @@ class AuxiliaryLineView: UIView {
     }
     
     private func setupEdgeHandles() {
-        guard enableBorder else { return }
+        guard enableBorder, enableEdgeHandles else { return }
         
         addSubview(topHandle)
         topHandle.snp.makeConstraints { make in

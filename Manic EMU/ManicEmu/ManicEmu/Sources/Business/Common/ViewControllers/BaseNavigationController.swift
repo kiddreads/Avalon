@@ -9,27 +9,30 @@
 
 class BaseNavigationController: UINavigationController {
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
+        Log.verbose("✅ \(objectInfo(self)) deinit")
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        Log.verbose("⚠️ \(objectInfo(self)) init")
         configStyle()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        Log.verbose("⚠️ \(objectInfo(self)) init")
         configStyle()
     }
     
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
+        Log.verbose("⚠️ \(objectInfo(self)) init")
         configStyle()
     }
     
     func configStyle() {
         if let sheetPresentationController = self.sheetPresentationController {
-            sheetPresentationController.preferredCornerRadius = Constants.Size.CornerRadiusMax
+            sheetPresentationController.preferredCornerRadius = R.Size.CornerRadiusLarge
         }
     }
 }

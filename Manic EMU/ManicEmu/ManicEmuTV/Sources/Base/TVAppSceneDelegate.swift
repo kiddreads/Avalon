@@ -19,7 +19,7 @@ class TVAppSceneDelegate: UIResponder, UIWindowSceneDelegate {
             TVAppSceneDelegate.applicationScene = windowScene
             window = UIWindow(windowScene: windowScene)
             TVAppSceneDelegate.applicationWindow = window
-//            window?.tintColor = Constants.Color.Main
+//            window?.tintColor = R.Color.Main
             window?.rootViewController = HomeViewController()
             window?.makeKeyAndVisible()
         }

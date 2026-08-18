@@ -9,67 +9,18 @@
 
 import UIKit
 
-class ImportServiceListCollectionViewCell: UICollectionViewCell, DynamicShadow {
-    private var iconView: ServiceIconView = {
-        let view = ServiceIconView(roundCorner: .allCorners)
-        return view
-    }()
+class ImportServiceListCollectionViewCell: UICollectionViewCell {
+    var didValueChange: ((Bool)->Void)? = nil
     
-    private var titleLabel: UILabel = {
-        let view = UILabel()
-        view.numberOfLines = 0
-        return view
-    }()
-    
-    var switchButton: DisabledTapSwitch = {
-        let view = DisabledTapSwitch()
-        view.onTintColor = Constants.Color.Main
-        view.tintColor = Constants.Color.BackgroundSecondary
-        view.alpha = 0
-        return view
-    }()
-    
-    private var mainColorChangeNotification: Any? = nil
-    
-    deinit {
-        if let mainColorChangeNotification = mainColorChangeNotification {
-            NotificationCenter.default.removeObserver(mainColorChangeNotification)
-        }
-    }
+    private var carView = ASCardView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
-        backgroundColor = Constants.Color.BackgroundPrimary
-        layerCornerRadius = Constants.Size.CornerRadiusMax
+        enablePressEffect = true
         
-        updateDynamicShadow()
-
-        addSubviews([iconView, titleLabel, switchButton])
-        
-        iconView.snp.makeConstraints { make in
-            make.trailing.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.size.equalTo(40)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.bottom.lessThanOrEqualTo(iconView.snp.top).offset(-Constants.Size.ContentSpaceUltraTiny)
-        }
-        
-        switchButton.snp.makeConstraints { make in
-            make.centerY.equalTo(iconView)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            if #available(iOS 26.0, *) {
-                make.size.equalTo(CGSize(width: 63, height: 28))
-            } else {
-                make.size.equalTo(CGSize(width: 51, height: 31))
-            }
-        }
-        if #available(iOS 26.0, *) {} else {
-            switchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        addSubview(carView)
+        carView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
     
@@ -77,40 +28,22 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell, DynamicShadow {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateDynamicShadow()
-        }
-    }
-    
     func setData(service: ImportService) {
+        let enableSwitch = service.type == .wifi
+        let switchState: ASSwitch.State = (enableSwitch && WebServer.shard.isRunning) ? .on : .off
         
-        iconView.imageView.image = service.iconImage
-        iconView.backgroundColor = service.iconBackgroundColor
-        iconView.borderColor = service.iconBorderColor
-        iconView.radius = service.iconCornerRadius
-        titleLabel.text = service.title
-        
-        var matt = NSMutableAttributedString(string: service.title, attributes: [.font: Constants.Font.title(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
-        if let detail = service.detail {
-            matt.append(NSAttributedString(string: "\n" + detail, attributes: [.font: Constants.Font.body(), .foregroundColor: Constants.Color.LabelSecondary]))
-            let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
-            matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
-        }
-        let style = NSMutableParagraphStyle()
-        style.lineBreakMode = .byTruncatingTail
-        matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
-        titleLabel.attributedText = matt
-        
-        if service.type == .wifi {
-            switchButton.alpha = 1
-            switchButton.setOn(WebServer.shard.isRunning, animated: false)
-        } else {
-            switchButton.alpha = 0
-            switchButton.setOn(false, animated: false)
-        }
+         
+        carView.setData(icon: .image(service.iconImage),
+                        iconBackgroundColor: service.iconBackgroundColor,
+                        iconBorderColor: service.iconBorderColor,
+                        iconCornerRadius: service.iconCornerRadius,
+                        title: service.title,
+                        detail: service.detail,
+                        enableSwitch: enableSwitch,
+                        switchState: switchState,
+                        didSwitchChange: enableSwitch ? { [weak self] isOn in
+            self?.didValueChange?(isOn)
+        } : nil)
     }
     
 }

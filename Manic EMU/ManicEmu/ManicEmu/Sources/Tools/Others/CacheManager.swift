@@ -11,19 +11,19 @@ import Tiercel
 struct CacheManager {
     static func clear(completion: (()->Void)? = nil) {
         DispatchQueue.global().async {
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.PasteWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.UploadWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.ShareWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.SMBWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.SaveStateWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.ZipWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.DropWorkSpace))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.ThreeDSStateLoad))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.Screenshot))
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.Temp))
-            try? FileManager.default.createDirectory(atPath: Constants.Path.Temp, withIntermediateDirectories: true)
-            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.Document.appendingPathComponent("wpkdata")))
-            try? FileManager.default.createDirectory(atPath: Constants.Path.Screenshot, withIntermediateDirectories: true)
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.PasteWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.UploadWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.ShareWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.SMBWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.SaveStateWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.ZipWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.DropWorkSpace))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.ThreeDSStateLoad))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.Screenshot))
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.Temp))
+            try? FileManager.default.createDirectory(atPath: R.Path.Temp, withIntermediateDirectories: true)
+            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: R.Path.Document.appendingPathComponent("wpkdata")))
+            try? FileManager.default.createDirectory(atPath: R.Path.Screenshot, withIntermediateDirectories: true)
             let manager = DownloadManager.shared.sessionManager
             manager.tasks.filter({ $0.status == .succeeded }).forEach { manager.remove($0.url) }
             DispatchQueue.main.async {
@@ -33,14 +33,14 @@ struct CacheManager {
     }
     
     static var totleSize: String? {
-        let size = folderSize(atPath: Constants.Path.PasteWorkSpace) +
-        folderSize(atPath: Constants.Path.UploadWorkSpace) +
-        folderSize(atPath: Constants.Path.ShareWorkSpace) +
-        folderSize(atPath: Constants.Path.DownloadWorkSpace) +
-        folderSize(atPath: Constants.Path.SMBWorkSpace) +
-        folderSize(atPath: Constants.Path.SaveStateWorkSpace) +
-        folderSize(atPath: Constants.Path.ZipWorkSpace) +
-        folderSize(atPath: Constants.Path.ThreeDSStateLoad)
+        let size = folderSize(atPath: R.Path.PasteWorkSpace) +
+        folderSize(atPath: R.Path.UploadWorkSpace) +
+        folderSize(atPath: R.Path.ShareWorkSpace) +
+        folderSize(atPath: R.Path.DownloadWorkSpace) +
+        folderSize(atPath: R.Path.SMBWorkSpace) +
+        folderSize(atPath: R.Path.SaveStateWorkSpace) +
+        folderSize(atPath: R.Path.ZipWorkSpace) +
+        folderSize(atPath: R.Path.ThreeDSStateLoad)
         return FileType.humanReadableFileSize(size)
     }
     

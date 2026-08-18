@@ -66,7 +66,7 @@ struct WFC: SmartCodable {
     }
     
     static func refreshList(completion: @escaping ([WFC])->Void) {
-        URLSession.shared.dataTask(with: Constants.URLs.WFC) { data, response, error in
+        URLSession.shared.dataTask(with: R.URLs.WFC) { data, response, error in
             DispatchQueue.main.async {
                 if var onlineWfcServers = WfcServers.deserialize(from: data), onlineWfcServers.popular.count > 0 {
                     if !onlineWfcServers.popular.contains(where: { $0.dns == "178.62.43.212" }) {

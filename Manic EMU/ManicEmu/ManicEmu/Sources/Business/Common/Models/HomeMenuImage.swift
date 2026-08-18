@@ -15,7 +15,7 @@ class HomeMenuImage: UIImage, @unchecked Sendable {
     private static var cache = NSCache<NSString, UIImage>()
     
     convenience init(size: CGSize, gameType: GameType, isDSi: Bool) {
-        let cacheKey = NSString(string: "\(gameType.rawValue)_\(Constants.Size.GameCoverStyle.rawValue)_\(isDSi)_\(size.width)x\(size.height)")
+        let cacheKey = NSString(string: "\(gameType.rawValue)_\(R.Style.GameCoverStyle.rawValue)_\(isDSi)_\(size.width)x\(size.height)")
         
         if let cachedImage = HomeMenuImage.cache.object(forKey: cacheKey) {
             self.init(cgImage: cachedImage.cgImage!)
@@ -35,7 +35,7 @@ class HomeMenuImage: UIImage, @unchecked Sendable {
             
             // Draw detailImage - bottom right with insets, no scaling
             var brand: UIImage? = nil
-            let brandRatio = Constants.Size.GameCoverStyle == .style1 ? 0.066 : 0.06
+            let brandRatio = R.Style.GameCoverStyle == .style1 ? 0.066 : 0.06
             if gameType == .ds {
                 if isDSi {
                     brand = R.image.home_menu_dsi()?.scaled(toHeight: size.height * brandRatio)
@@ -48,9 +48,9 @@ class HomeMenuImage: UIImage, @unchecked Sendable {
                 brand = R.image.home_menu_dos()?.scaled(toHeight: size.height * brandRatio)
             }
             if let brand {
-                if Constants.Size.GameCoverStyle == .style1 {
+                if R.Style.GameCoverStyle == .style1 {
                     brand.draw(at: CGPoint(x: size.width - brand.size.width - size.width*0.0333, y: size.height - brand.size.height - size.height*0.0444))
-                } else if Constants.Size.GameCoverStyle == .style2 {
+                } else if R.Style.GameCoverStyle == .style2 {
                     brand.draw(at: CGPoint(x: (size.width - brand.size.width)/2, y: (size.height-iconSize.height)/2 + iconSize.height + size.height*0.0444))
                 } else {
                     brand.draw(at: CGPoint(x: size.width - brand.size.width - size.width*0.0333, y: size.height - brand.size.height - size.height*0.1))

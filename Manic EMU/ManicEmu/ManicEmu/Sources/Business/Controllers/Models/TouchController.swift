@@ -23,16 +23,16 @@ enum PlayerIndex: Int, CaseIterable {
 }
 
 extension GameController {
-    var image: UIImage {
+    var icon: ASIcon {
         switch inputType {
         case .controllerSkin:
-                .symbolImage(.rectangleFillOnRectangleFill)
+                .symbolImage(R.image.touchscreen_iconSymbols())
         case .mfi:
-                .symbolImage(.gamecontrollerFill)
+                .symbolImage(R.image.joycon_iconSymbols())
         case .keyboard:
-                .symbolImage(.keyboardFill)
+                .symbolImage(R.image.keyboard_iconSymbols())
         default:
-                .symbolImage(.dpadLeftFilled)
+                .symbol(.dpadLeftFilled)
         }
     }
 }

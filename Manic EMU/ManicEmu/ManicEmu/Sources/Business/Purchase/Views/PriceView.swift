@@ -9,7 +9,7 @@
 
 import StoreKit
 
-class PriceView: UIView {
+class PriceView: BaseView {
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
@@ -19,7 +19,9 @@ class PriceView: UIView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ContentSpaceHuge , left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        view.isFocusable = true
+        view.contentInset = .insets(top: R.Size.ContentSpaceHuge,
+                                    bottom: R.Size.ContentInsetBottom)
         return view
     }()
     
@@ -36,13 +38,8 @@ class PriceView: UIView {
     
     var needToClosePurchaseView: (()->Void)? = nil
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
         
         UIView.makeLoading()
         PurchaseManager.getProducts { [weak self] products in
@@ -82,12 +79,12 @@ class PriceView: UIView {
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                  heightDimension: .fractionalHeight(1)))
             //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(Constants.Size.ItemHeightHuge)), subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.Size.ContentSpaceHuge, bottom: 0, trailing: Constants.Size.ContentSpaceHuge)
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(R.Size.ItemHeightExtraLarge)), subitems: [item])
+            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: R.Size.ContentSpaceHuge, bottom: 0, trailing: R.Size.ContentSpaceHuge)
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = Constants.Size.ContentSpaceMid
+            section.interGroupSpacing = R.Size.ContentSpaceMedium
             let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                                             heightDimension: .absolute(129)),
                                                                          elementKind: UICollectionView.elementKindSectionFooter,

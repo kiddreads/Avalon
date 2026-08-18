@@ -14,14 +14,14 @@ class PurchaseView: BaseView {
     
     private lazy var navigationView: UIView = {
         let view = UIView()
-        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)), enableGlass: true)
+        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark)), enableGlass: true)
         closeButton.backgroundColor = .white.withAlphaComponent(0.1)
         closeButton.enableRoundCorner = true
         view.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeMid)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.size.equalTo(R.Size.IconSizeLarge)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceLarge)
         }
         closeButton.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -30,14 +30,14 @@ class PurchaseView: BaseView {
         
         let restorePurchase = UILabel()
         restorePurchase.isUserInteractionEnabled = true
-        restorePurchase.enableInteractive = true
-        restorePurchase.font = Constants.Font.caption(size: .l, weight: .regular)
-        restorePurchase.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        restorePurchase.enablePressEffect = true
+        restorePurchase.font = R.Font.Caption()
+        restorePurchase.textColor = R.Color.LabelPrimary.forceStyle(.dark)
         restorePurchase.text = R.string.localizable.restorePurchaseButton()
         view.addSubview(restorePurchase)
         restorePurchase.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceLarge)
         }
         restorePurchase.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -60,14 +60,14 @@ class PurchaseView: BaseView {
         if #available(iOS 16.0, *) {
             let redeemOfferCode = UILabel()
             redeemOfferCode.isUserInteractionEnabled = true
-            redeemOfferCode.enableInteractive = true
-            redeemOfferCode.font = Constants.Font.caption(size: .l, weight: .regular)
-            redeemOfferCode.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+            redeemOfferCode.enablePressEffect = true
+            redeemOfferCode.font = R.Font.Caption()
+            redeemOfferCode.textColor = R.Color.LabelPrimary.forceStyle(.dark)
             redeemOfferCode.text = R.string.localizable.redeemOfferCode()
             view.addSubview(redeemOfferCode)
             redeemOfferCode.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
-                make.trailing.equalTo(restorePurchase.snp.leading).offset(-Constants.Size.ContentSpaceMid)
+                make.trailing.equalTo(restorePurchase.snp.leading).offset(-R.Size.ContentSpaceMedium)
             }
             redeemOfferCode.addTapGesture { [weak self] gesture in
                 guard let self = self else { return }
@@ -108,18 +108,13 @@ class PurchaseView: BaseView {
         return view
     }()
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
     init(featuresType: FeaturesType?) {
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
         addSubview(backgroundGradientView)
         addSubview(navigationView)
         navigationView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+            make.height.equalTo(R.Size.ItemHeightMedium)
         }
         
         addSubview(featureView)

@@ -17,36 +17,36 @@ class JITSettingView: BaseView {
             let view = UIView()
             
             let container = UIView()
-            container.backgroundColor = Constants.Color.BackgroundPrimary
-            container.layerCornerRadius = Constants.Size.CornerRadiusMid
+            container.backgroundColor = R.Color.BackgroundSecondary
+            container.layerCornerRadius = R.Size.CornerRadiusMedium
             view.addSubview(container)
             container.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
-            let iconView = UIImageView()
+            let iconView = IconView()
             iconView.contentMode = .center
             iconView.layerCornerRadius = 6
-            iconView.image = UIImage(symbol: .boltFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            iconView.backgroundColor = Constants.Color.Indigo
+            iconView.image = UIImage(symbol: .boltFill, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+            iconView.backgroundColor = R.Color.Indigo
             container.addSubview(iconView)
             iconView.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.size.equalTo(Constants.Size.IconSizeMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.size.equalTo(R.Size.IconSizeLarge)
                 make.centerY.equalToSuperview()
             }
             
             let jitLabel = UILabel()
             let jitEnable = LibretroCore.jitAvailable()
             jitLabel.text = jitEnable ? R.string.localizable.jitAllow() : R.string.localizable.jitNotAllow()
-            jitLabel.textColor = jitEnable ? Constants.Color.Green : Constants.Color.Red
-            jitLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+            jitLabel.textColor = jitEnable ? R.Color.Green : R.Color.Red
+            jitLabel.font = R.Font.Body(emphasis: true)
             container.addSubview(jitLabel)
             jitLabel.snp.makeConstraints { make in
                 make.centerY.equalTo(iconView)
-                make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
             }
             
             return view
@@ -58,23 +58,23 @@ class JITSettingView: BaseView {
             let titleContainerView = UIView()
             view.addSubview(titleContainerView)
             titleContainerView.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceUltraTiny)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceTiny)
                 make.leading.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMin)
+                make.height.equalTo(R.Size.ItemHeightSmall)
             }
             
             let titleLabel = UILabel()
             titleLabel.text = R.string.localizable.device()
-            titleLabel.font = Constants.Font.body(size: .s, weight: .semibold)
-            titleLabel.textColor = Constants.Color.LabelSecondary
+            titleLabel.font = R.Font.Footnote(emphasis: true)
+            titleLabel.textColor = R.Color.LabelSecondary
             titleContainerView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             
             let storageContainer = UIView()
-            storageContainer.backgroundColor = Constants.Color.BackgroundPrimary
-            storageContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
+            storageContainer.backgroundColor = R.Color.BackgroundSecondary
+            storageContainer.layerCornerRadius = R.Size.CornerRadiusMedium
             view.addSubview(storageContainer)
             storageContainer.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
@@ -85,36 +85,36 @@ class JITSettingView: BaseView {
             func genItemView(symbol: SFSymbol, title: String, detail: String) -> UIView {
                 let containerView = UIView()
                 
-                let iconView = UIImageView()
+                let iconView = IconView()
                 iconView.contentMode = .center
                 iconView.layerCornerRadius = 6
-                iconView.image = UIImage(symbol: symbol, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-                iconView.backgroundColor = Constants.Color.LabelTertiary.forceStyle(.dark)
+                iconView.image = UIImage(symbol: symbol, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+                iconView.backgroundColor = R.Color.LabelTertiary.forceStyle(.dark)
                 containerView.addSubview(iconView)
                 iconView.snp.makeConstraints { make in
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                    make.size.equalTo(Constants.Size.IconSizeMid)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                    make.size.equalTo(R.Size.IconSizeLarge)
                     make.centerY.equalToSuperview()
                 }
                 
                 let titleLabel = UILabel()
                 titleLabel.text = title
-                titleLabel.textColor = Constants.Color.LabelPrimary
-                titleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+                titleLabel.textColor = R.Color.LabelPrimary
+                titleLabel.font = R.Font.Body(emphasis: true)
                 containerView.addSubview(titleLabel)
                 titleLabel.snp.makeConstraints { make in
                     make.centerY.equalTo(iconView)
-                    make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
                 }
                 
                 let detailLabel = UILabel()
                 detailLabel.text = detail
-                detailLabel.textColor = Constants.Color.LabelSecondary
-                detailLabel.font = Constants.Font.caption(size: .l)
+                detailLabel.textColor = R.Color.LabelSecondary
+                detailLabel.font = R.Font.Caption()
                 containerView.addSubview(detailLabel)
                 detailLabel.snp.makeConstraints { make in
                     make.centerY.equalTo(iconView)
-                    make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
+                    make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
                 }
                 return containerView
             }
@@ -131,7 +131,7 @@ class JITSettingView: BaseView {
             sourceView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             
@@ -141,7 +141,7 @@ class JITSettingView: BaseView {
             deviceView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(sourceView.snp.bottom)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             //System
@@ -151,7 +151,7 @@ class JITSettingView: BaseView {
             systemView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(deviceView.snp.bottom)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             //Memory
@@ -161,7 +161,7 @@ class JITSettingView: BaseView {
             memoryView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(systemView.snp.bottom)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             return view
@@ -170,56 +170,55 @@ class JITSettingView: BaseView {
 #if SIDE_LOAD
         private let enableJITView: UIView = {
             let view = UIView()
-            view.enableInteractive = true
-            view.delayInteractiveTouchEnd = true
+            view.enablePressEffect = true
             view.addTapGesture { gesture in
-                if UIApplication.shared.canOpenURL(Constants.URLs.EnableJITUrl) {
-                    UIApplication.shared.open(Constants.URLs.EnableJITUrl)
+                if UIApplication.shared.canOpenURL(R.URLs.EnableJITUrl) {
+                    UIApplication.shared.open(R.URLs.EnableJITUrl)
                 } else {
                     UIView.makeToast(message: R.string.localizable.notInstall("StikDebug"))
                 }
             }
             
             let container = UIView()
-            container.backgroundColor = Constants.Color.BackgroundPrimary
-            container.layerCornerRadius = Constants.Size.CornerRadiusMid
+            container.backgroundColor = R.Color.BackgroundSecondary
+            container.layerCornerRadius = R.Size.CornerRadiusMedium
             view.addSubview(container)
             container.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
-            let iconView = UIImageView()
+            let iconView = IconView()
             iconView.contentMode = .center
             iconView.layerCornerRadius = 6
             iconView.image = UIImage(symbol: .bolt,
-                                     font: Constants.Font.body(size: .s, weight: .medium),
-                                     color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            iconView.backgroundColor = Constants.Color.Background.forceStyle(.dark)
+                                     font: R.Font.Footnote(emphasis: true),
+                                     color: R.Color.LabelPrimary.forceStyle(.dark))
+            iconView.backgroundColor = R.Color.BackgroundPrimary.forceStyle(.dark)
             container.addSubview(iconView)
             iconView.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.size.equalTo(Constants.Size.IconSizeMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.size.equalTo(R.Size.IconSizeLarge)
                 make.centerY.equalToSuperview()
             }
             
             let label = UILabel()
             label.text = LibretroCore.jitAvailable() ?  R.string.localizable.reEnableJIT() : R.string.localizable.enableJIT()
-            label.textColor = Constants.Color.LabelPrimary
-            label.font = Constants.Font.body(size: .l, weight: .semibold)
+            label.textColor = R.Color.LabelPrimary
+            label.font = R.Font.Body(emphasis: true)
             container.addSubview(label)
             label.snp.makeConstraints { make in
                 make.centerY.equalTo(iconView)
-                make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
             }
             
-            let chevronIconView = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
+            let chevronIconView = UIImageView(image: UIImage(symbol: .chevronRight, font: R.Font.Caption(emphasis: true), color: R.Color.LabelSecondary))
             chevronIconView.contentMode = .center
             container.addSubview(chevronIconView)
             chevronIconView.snp.makeConstraints { make in
                 make.centerY.equalTo(iconView)
-                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             }
             
             return view
@@ -227,54 +226,53 @@ class JITSettingView: BaseView {
 #else
         private let installSideloadView: UIView = {
             let view = UIView()
-            view.enableInteractive = true
-            view.delayInteractiveTouchEnd = true
+            view.enablePressEffect = true
             view.addTapGesture { gesture in
-                if UIApplication.shared.canOpenURL(Constants.URLs.InstallSideload) {
-                    UIApplication.shared.open(Constants.URLs.InstallSideload)
+                if UIApplication.shared.canOpenURL(R.URLs.InstallSideload) {
+                    UIApplication.shared.open(R.URLs.InstallSideload)
                 } else {
-                    UIApplication.shared.open(Constants.URLs.SideStore)
+                    UIApplication.shared.open(R.URLs.SideStore)
                 }
             }
             
             let container = UIView()
-            container.backgroundColor = Constants.Color.BackgroundPrimary
-            container.layerCornerRadius = Constants.Size.CornerRadiusMid
+            container.backgroundColor = R.Color.BackgroundSecondary
+            container.layerCornerRadius = R.Size.CornerRadiusMedium
             view.addSubview(container)
             container.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             let iconView = UIImageView()
             iconView.contentMode = .center
             iconView.layerCornerRadius = 6
-            iconView.image = R.image.customArrowTriangleheadSwap()?.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            iconView.backgroundColor = Constants.Color.Background.forceStyle(.dark)
+            iconView.image = R.image.customArrowTriangleheadSwap()?.applySymbolConfig(font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+            iconView.backgroundColor = R.Color.BackgroundPrimary.forceStyle(.dark)
             container.addSubview(iconView)
             iconView.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.size.equalTo(Constants.Size.IconSizeMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.size.equalTo(R.Size.IconSizeLarge)
                 make.centerY.equalToSuperview()
             }
             
             let label = UILabel()
             label.text = R.string.localizable.installSideloadVersion()
-            label.textColor = Constants.Color.LabelPrimary
-            label.font = Constants.Font.body(size: .l, weight: .semibold)
+            label.textColor = R.Color.LabelPrimary
+            label.font = R.Font.Body(emphasis: true)
             container.addSubview(label)
             label.snp.makeConstraints { make in
                 make.centerY.equalTo(iconView)
-                make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
             }
             
-            let chevronIconView = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
+            let chevronIconView = UIImageView(image: UIImage(symbol: .chevronRight, font: R.Font.Caption(emphasis: true), color: R.Color.BackgroundTertiary))
             chevronIconView.contentMode = .center
             container.addSubview(chevronIconView)
             chevronIconView.snp.makeConstraints { make in
                 make.centerY.equalTo(iconView)
-                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             }
             
             return view
@@ -285,8 +283,8 @@ class JITSettingView: BaseView {
             let view = UILabel()
             view.numberOfLines = 0
             view.text = R.string.localizable.jitDesc()
-            view.font = Constants.Font.caption(size: .l)
-            view.textColor = Constants.Color.LabelSecondary
+            view.font = R.Font.Caption()
+            view.textColor = R.Color.LabelSecondary
             return view
         }()
         
@@ -296,8 +294,8 @@ class JITSettingView: BaseView {
             addSubview(jitView)
             jitView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceLarge)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             addSubview(deviceView)
@@ -311,15 +309,15 @@ class JITSettingView: BaseView {
             addSubview(enableJITView)
             enableJITView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.top.equalTo(deviceView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.top.equalTo(deviceView.snp.bottom).offset(R.Size.ContentSpaceLarge)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
 #else
             addSubview(installSideloadView)
             installSideloadView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.top.equalTo(deviceView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.top.equalTo(deviceView.snp.bottom).offset(R.Size.ContentSpaceLarge)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
 #endif
             
@@ -336,9 +334,14 @@ class JITSettingView: BaseView {
         }
     }
     
-    private let topBlurView: UIView = {
-        let view = UIView()
-        view.makeBlur()
+    private lazy var navigationView: ASNavigationView = {
+        var navigation = ASListPage.Navigation.defaultNavigation(title: "JIT",
+                                                                 titleIcon: .symbolImage(R.image.jit_iconSymbols()))
+        let view = ASNavigationView(navigation)
+        view.didTapClose = { [weak self] in
+            guard let self = self else { return }
+            self.hide()
+        }
         return view
     }()
     
@@ -350,69 +353,37 @@ class JITSettingView: BaseView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: UIDevice.isPad ? (Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax) : Constants.Size.ContentInsetBottom, right: 0)
+        view.isFocusable = true
+        view.contentInset = .insets(bottom: UIDevice.isPad ? (R.Size.ContentInsetBottom + R.Size.HomeTabBarSize.height + R.Size.ContentSpaceLarge) : R.Size.ContentInsetBottom)
         return view
     }()
     
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
-        }
-        return view
-    }()
-    
-    ///点击关闭按钮回调
-    var didTapClose: (()->Void)? = nil
-    
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
-    init(showClose: Bool = true) {
+    private let showClose: Bool
+
+    required init?(parameters: Any...) {
+        self.showClose = parameters.compactMap({ $0 as? Bool }).first ?? true
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.Background
+        
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            if showClose {
+                make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            } else {
+                make.top.equalToSuperview().offset(R.Size.ContentInsetTop)
+            }
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
         }
-        
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let icon = UIImageView(image: UIImage(symbol: .boltFill, font: Constants.Font.body(weight: .bold)))
-        icon.contentMode = .scaleAspectFit
-        topBlurView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.centerY.equalToSuperview()
-        }
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = "JIT"
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(icon)
-        }
-        
-        if showClose {
-            topBlurView.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            }
-        }
+    }
+    
+    convenience init(showClose: Bool = true) {
+        self.init(parameters: showClose)!
     }
     
     required init?(coder: NSCoder) {
@@ -428,13 +399,13 @@ class JITSettingView: BaseView {
             //group布局
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(600)), subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: Constants.Size.ContentSpaceMid,
+                                                            leading: R.Size.ContentSpaceMedium,
                                                             bottom: 0,
-                                                            trailing: Constants.Size.ContentSpaceMid)
+                                                            trailing: R.Size.ContentSpaceMedium)
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: R.Size.ContentSpaceSmall, trailing: 0)
             
             return section
         }
@@ -455,5 +426,9 @@ extension JITSettingView: UICollectionViewDataSource {
 }
 
 extension JITSettingView: UICollectionViewDelegate {
+    
+}
+
+extension JITSettingView: ShowableView {
     
 }

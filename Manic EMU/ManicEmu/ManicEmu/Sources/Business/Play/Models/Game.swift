@@ -12,6 +12,7 @@ import RealmSwift
 import IceCream
 import Citra
 import SmartCodable
+import Kingfisher
 
 enum ThreeDSMode: Int, PersistableEnum {
     case compatibility, performance, quality
@@ -33,11 +34,27 @@ class Game: Object, ObjectUpdatable {
     @Persisted var gameType: GameType
     ///封面图片数据 可以用于生产UIImage
     @Persisted var gameCover: CreamAsset?
+    
+    @Persisted var icon: CreamAsset?
+    var iconImage: UIImage? {
+        guard let imageData = icon?.storedData() else { return nil }
+        return UIImage(data: imageData)
+    }
+    
+    @Persisted var banner: CreamAsset?
+    var bannerImage: UIImage? {
+        guard let imageData = banner?.storedData() else { return nil }
+        return UIImage(data: imageData)
+        
+    }
+    
     ///作弊码列表
     @Persisted var gameCheats: List<GameCheat>
     ///指定竖屏皮肤
+    @available(*, deprecated)
     @Persisted var portraitSkin: Skin?
     ///指定横屏皮肤
+    @available(*, deprecated)
     @Persisted var landscapeSkin: Skin?
     ///导入时间
     @Persisted var importDate: Date
@@ -52,18 +69,19 @@ class Game: Object, ObjectUpdatable {
     ///游戏音乐开关
     @Persisted var volume: Bool = true
     ///快进速度
-    @Persisted var speed: GameSetting.FastForwardSpeed = .one
+    @Persisted var speed: GameOption.FastForwardSpeed = .one
     ///分辨率
-    @Persisted var resolution: GameSetting.Resolution = .one
+    @Persisted var resolution: GameOption.Resolution = .one
     ///交换屏幕
     @Persisted var swapScreen: Bool = false
     ///游戏震感
-    @Persisted var haptic: GameSetting.HapticType = .soft
+    @Persisted var haptic: GameOption.HapticType = .soft
     ///控制器方式
-    @Persisted var controllerType: GameSetting.ControllerType = .dPad
+    @Persisted var controllerType: GameOption.ControllerType = .dPad
     ///屏幕旋转方式
-    @Persisted var orientation: GameSetting.OrientationType = .auto
+    @Persisted var orientation: GameOption.OrientationType = .auto
     /// 使用的滤镜名称 nil则不使用滤镜
+    @available(*, deprecated)
     @Persisted var filterName: String? = nil
     ///额外数据备用
     @Persisted var extras: Data?
@@ -81,13 +99,13 @@ class Game: Object, ObjectUpdatable {
     @Persisted var region: Int = 0
     ///是否允许渲染右眼
     @Persisted var renderRightEye: Bool = false
-    ///默认核心 土星0:Beetle 1:Yabause
+    ///默认核心 每种游戏和核心情况不一，请参考libretroCorePath
     @Persisted var defaultCore: Int = 0
     ///GBC调色板
-    @Persisted var pallete: GameSetting.Palette = .None
+    @Persisted var pallete: GameOption.Palette = .None
     ///是否强制全屏 不进行同步
     var forceFullSkin: Bool = false
-
+    
     static let DsHomeMenuPrimaryKey = "Home Menu"
     static let DsiHomeMenuPrimaryKey = "Home Menu (DSi)"
     
@@ -116,10 +134,10 @@ class Game: Object, ObjectUpdatable {
     //游戏文件路径
     var romUrl: URL {
         if isMultiFileGame {
-            return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(fileName.deletingPathExtension).appendingPathComponent(fileName))
+            return URL(fileURLWithPath: R.Path.Data.appendingPathComponent(fileName.deletingPathExtension).appendingPathComponent(fileName))
         }
         
-        var localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(fileName))
+        var localUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent(fileName))
         
         if gameType == ._3ds,
            fileExtension.lowercased() == "app",
@@ -134,7 +152,7 @@ class Game: Object, ObjectUpdatable {
         }
         
         if isPSPPBPGame, let gamePath = getExtraString(key: ExtraKey.pspPBPGamePath.rawValue) {
-            return URL(fileURLWithPath: Constants.Path.PSPGame.appendingPathComponent(gamePath))
+            return URL(fileURLWithPath: R.Path.PSPGame.appendingPathComponent(gamePath))
         }
         
         return localUrl
@@ -150,71 +168,71 @@ class Game: Object, ObjectUpdatable {
         
         if gameType == .psp {
             if let code = self.gameCodeForPSP {
-                if let path = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.PSPSave).first(where: { $0.hasPrefix(code) }) {
-                    return URL(fileURLWithPath: Constants.Path.PSPSave.appendingPathComponent(path))
+                if let path = try? FileManager.default.contentsOfDirectory(atPath: R.Path.PSPSave).first(where: { $0.hasPrefix(code) }) {
+                    return URL(fileURLWithPath: R.Path.PSPSave.appendingPathComponent(path))
                 }
             }
         } else if gameType == .nes || gameType == .fds {
-            return URL(fileURLWithPath: Constants.Path.Nestopia.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.Nestopia.appendingPathComponent("\(name).srm"))
         } else if gameType == .snes {
             if defaultCore == 0 {
-                return URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(name).srm"))
+                return URL(fileURLWithPath: R.Path.bsnes.appendingPathComponent("\(name).srm"))
             } else if defaultCore == 1 {
-                return URL(fileURLWithPath: Constants.Path.Snes9x.appendingPathComponent("\(name).srm"))
+                return URL(fileURLWithPath: R.Path.Snes9x.appendingPathComponent("\(name).srm"))
             }
         } else if isPicodriveCore {
-            return URL(fileURLWithPath: Constants.Path.PicoDrive.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.PicoDrive.appendingPathComponent("\(name).srm"))
         } else if isClownMDEmuCore {
-            return URL(fileURLWithPath: Constants.Path.ClownMDEmu.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.ClownMDEmu.appendingPathComponent("\(name).srm"))
         } else if isGearSystemCore {
-            return URL(fileURLWithPath: Constants.Path.Gearsystem.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.Gearsystem.appendingPathComponent("\(name).srm"))
         } else if gameType == .n64 {
-            return URL(fileURLWithPath: Constants.Path.Mupen64PlushNext.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.Mupen64PlushNext.appendingPathComponent("\(name).srm"))
         } else if gameType == .ss {
             if defaultCore == 0 {
-                return URL(fileURLWithPath: Constants.Path.BeetleSaturn.appendingPathComponent("\(name).bkr"))
+                return URL(fileURLWithPath: R.Path.BeetleSaturn.appendingPathComponent("\(name).bkr"))
             } else {
-                return URL(fileURLWithPath: Constants.Path.Yabause.appendingPathComponent("\(name).srm"))
+                return URL(fileURLWithPath: R.Path.Yabause.appendingPathComponent("\(name).srm"))
             }
         } else if gameType == .ds {
-            return URL(fileURLWithPath: Constants.Path.DSSavePath.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.DSSavePath.appendingPathComponent("\(name).srm"))
         } else if gameType == .gba {
-            return URL(fileURLWithPath: Constants.Path.GBASavePath.appendingPathComponent("\(name).sav"))
+            return URL(fileURLWithPath: R.Path.GBASavePath.appendingPathComponent("\(name).sav"))
         } else if gameType == .gbc {
-            return URL(fileURLWithPath: Constants.Path.GBCSavePath.appendingPathComponent("\(name).sav"))
+            return URL(fileURLWithPath: R.Path.GBCSavePath.appendingPathComponent("\(name).sav"))
         } else if gameType == .gb {
-            return URL(fileURLWithPath: Constants.Path.GBSavePath.appendingPathComponent("\(name).sav"))
+            return URL(fileURLWithPath: R.Path.GBSavePath.appendingPathComponent("\(name).sav"))
         } else if gameType == .vb {
-            return URL(fileURLWithPath: Constants.Path.BeetleVB.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.BeetleVB.appendingPathComponent("\(name).srm"))
         } else if gameType == .pm {
-            return URL(fileURLWithPath: Constants.Path.PokeMini.appendingPathComponent("\(name).eep"))
+            return URL(fileURLWithPath: R.Path.PokeMini.appendingPathComponent("\(name).eep"))
         } else if gameType == .ps1 {
             if defaultCore == 0 {
-                return URL(fileURLWithPath: Constants.Path.BeetlePSXHW.appendingPathComponent("\(name).srm"))
+                return URL(fileURLWithPath: R.Path.BeetlePSXHW.appendingPathComponent("\(name).srm"))
             } else if defaultCore == 1 {
-                return URL(fileURLWithPath: Constants.Path.PCSXReArmed.appendingPathComponent("\(name).srm"))
+                return URL(fileURLWithPath: R.Path.PCSXReArmed.appendingPathComponent("\(name).srm"))
             }
         } else if gameType == .arcade {
-            return URL(fileURLWithPath: Constants.Path.MAME.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.MAME.appendingPathComponent("\(name).srm"))
         } else if gameType == .a2600 {
-            return URL(fileURLWithPath: Constants.Path.Stella.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.Stella.appendingPathComponent("\(name).srm"))
         } else if gameType == .a5200 {
-            return URL(fileURLWithPath: Constants.Path.Atari800.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.Atari800.appendingPathComponent("\(name).srm"))
         } else if gameType == .a7800 {
-            return URL(fileURLWithPath: Constants.Path.ProSystem.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.ProSystem.appendingPathComponent("\(name).srm"))
         } else if gameType == .jaguar {
-            let srmPath = Constants.Path.Holani.appendingPathComponent("\(name).srm")
+            let srmPath = R.Path.Holani.appendingPathComponent("\(name).srm")
             if FileManager.default.fileExists(atPath: srmPath) {
                 return URL(fileURLWithPath: srmPath)
             } else {
-                return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).cdrom.srm"))
+                return URL(fileURLWithPath: R.Path.Holani.appendingPathComponent("\(name).cdrom.srm"))
             }
         } else if gameType == .lynx {
-            return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).srm"))
+            return URL(fileURLWithPath: R.Path.Holani.appendingPathComponent("\(name).srm"))
         } else if gameType == .j2me {
-            return URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+            return URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         } else if gameType == .dos {
-            if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
+            if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: R.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
                 for case let fileURL as URL in enumerator {
                     let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
                     guard !isDirectory else { continue }
@@ -223,10 +241,10 @@ class Game: Object, ObjectUpdatable {
                     }
                 }
             }
-            return URL(fileURLWithPath: Constants.Path.DOSBoxPure.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+            return URL(fileURLWithPath: R.Path.DOSBoxPure.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         }
         
-        let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+        let localUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         return localUrl
     }
     
@@ -236,7 +254,7 @@ class Game: Object, ObjectUpdatable {
     
     var gameCodeForPSP: String? {
         if gameType == .psp {
-           return getExtraString(key: ExtraKey.PSPGameCode.rawValue)
+            return getExtraString(key: ExtraKey.PSPGameCode.rawValue)
         } else {
             return nil
         }
@@ -260,7 +278,7 @@ class Game: Object, ObjectUpdatable {
     
     var libretroShaderPath: String? {
         if let filterName {
-            return Constants.Path.Shaders.appendingPathComponent(filterName)
+            return R.Path.Shaders.appendingPathComponent(filterName)
         }
         return nil
     }
@@ -272,27 +290,27 @@ class Game: Object, ObjectUpdatable {
                 //ClownMDEmu核心不需要bios
                 return false
             }
-            requireBIOS = Constants.BIOS.MegaCDBios.filter({ required ? $0.required : true })
+            requireBIOS = R.BIOS.MegaCDBios.filter({ required ? $0.required : true })
         } else if gameType == .ss {
             if defaultCore == 0 {
-                requireBIOS = Array(Constants.BIOS.SaturnBios[1...2]).filter({ required ? $0.required : true })
+                requireBIOS = Array(R.BIOS.SaturnBios[1...2]).filter({ required ? $0.required : true })
             } else {
-                requireBIOS = [Constants.BIOS.SaturnBios[0]].filter({ required ? $0.required : true })
+                requireBIOS = [R.BIOS.SaturnBios[0]].filter({ required ? $0.required : true })
             }
         } else if gameType == .ds {
-            requireBIOS = Constants.BIOS.DSBios.filter({ required ? $0.required : true })
+            requireBIOS = R.BIOS.DSBios.filter({ required ? $0.required : true })
         } else if gameType == .fds {
-            requireBIOS = Constants.BIOS.FDSBios
+            requireBIOS = R.BIOS.FDSBios
         } else {
             return false
         }
         let fileManager = FileManager.default
         for bios in requireBIOS {
-            var biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+            var biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
             if gameType == .dc {
-                biosInLib = Constants.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
+                biosInLib = R.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
             }
-            let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
+            let biosInDoc = R.Path.BIOS.appendingPathComponent(bios.fileName)
             if fileManager.fileExists(atPath: biosInLib) {
                 continue
             } else if fileManager.fileExists(atPath: biosInDoc) {
@@ -306,12 +324,12 @@ class Game: Object, ObjectUpdatable {
     }
     
     var ps1ImportedBios: [BIOSItem] {
-        let ps1Bios = Constants.BIOS.PS1Bios
+        let ps1Bios = R.BIOS.PS1Bios
         let fileManager = FileManager.default
         var result = [BIOSItem]()
         for bios in ps1Bios {
-            let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
-            let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
+            let biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
+            let biosInDoc = R.Path.BIOS.appendingPathComponent(bios.fileName)
             if fileManager.fileExists(atPath: biosInLib) {
                 result.append(bios)
             } else if fileManager.fileExists(atPath: biosInDoc) {
@@ -333,6 +351,93 @@ class Game: Object, ObjectUpdatable {
             }
         }
         return "openbios"
+    }
+    
+    var libretroCore: LibretroCore.Cores? {
+        if gameType == .psp {
+            return .PPSSPP
+        } else if gameType == .nes || gameType == .fds  {
+            return .Nestopia
+        } else if gameType == .snes {
+            if defaultCore == 0 {
+                if getExtraBool(key: ExtraKey.snesVRAM.rawValue) ?? false {
+                    return .bsnes
+                } else {
+                    return .bsnesJG
+                }
+            } else if defaultCore == 1 {
+                return .Snes9x
+            }
+        } else if isPicodriveCore {
+            return .PicoDrive
+        } else if isClownMDEmuCore {
+            return .ClownMDEmu
+        } else if isGearSystemCore {
+            return .Gearsystem
+        } else if gameType == .ss {
+            if self.fileExtension.lowercased() == "iso" || defaultCore == 1 {
+                return .Yabause
+            } else if defaultCore == 0 {
+                return .BeetleSaturn
+            }
+        } else if gameType == .n64 {
+            return .Mupen64PlushNext
+        } else if gameType == .vb {
+            return .BeetleVB
+        } else if gameType == .pm {
+            return .PokeMini
+        } else if gameType == .ps1 {
+            if defaultCore == 0 {
+                return .BeetlePSXHW
+            } else if defaultCore == 1 {
+                return .PCSXReArmed
+            }
+        } else if gameType == .gb || gameType == .gbc {
+            if defaultCore == 0 {
+                return .Gambatte
+            } else if defaultCore == 1 {
+                return .mGBA
+            } else if defaultCore == 2 {
+                return .VBAM
+            }
+        } else if gameType == .gba {
+            if defaultCore == 0 {
+                return .mGBA
+            } else {
+                return .VBAM
+            }
+        } else if gameType == .dc {
+            return .Flycast
+        } else if gameType == .ds {
+            if defaultCore == 0 {
+                return .melonDSDS
+            } else {
+                return .DeSmuME
+            }
+        } else if gameType == .doom {
+            return .PrBoom
+        } else if gameType == .arcade {
+            if defaultCore == 0 {
+                return .MAME
+            } else {
+                return .FinalBurnNeo
+            }
+        } else if gameType == ._3ds, defaultCore == 1 {
+            return .Azahar
+        } else if gameType == .a2600 {
+            return .Stella
+        } else if gameType == .a5200 {
+            return .Atari800
+        } else if gameType == .a7800 {
+            return .ProSystem
+        } else if gameType == .jaguar {
+            return .VirtualJaguar
+        } else if gameType == .lynx {
+            return .Holani
+        } else if gameType == .dos {
+            return .DOSBoxPure
+        }
+        return nil
     }
     
     var libretroCorePath: String? {
@@ -363,7 +468,7 @@ class Game: Object, ObjectUpdatable {
                 return Bundle.main.path(forResource: "mednafen.saturn.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .n64 {
-            if #available(iOS 26.0, *), LibretroCore.jitAvailable(), jit {
+            if #available(iOS 26.0, tvOS 26.0, *), LibretroCore.jitAvailable(), jit {
                 return Bundle.main.path(forResource: "mupen64plus.next.jit.libretro", ofType: "framework", inDirectory: "Frameworks")
             } else {
                 return Bundle.main.path(forResource: "mupen64plus.next.libretro", ofType: "framework", inDirectory: "Frameworks")
@@ -530,7 +635,7 @@ class Game: Object, ObjectUpdatable {
     
     var is3DSHomeMenuGame: Bool {
         guard gameType == ._3ds else { return false }
-        return Constants.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == identifierFor3DS })
+        return R.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == identifierFor3DS })
     }
     
     var supportRetroAchievements: Bool {
@@ -599,7 +704,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isMultiFileGame: Bool {
-        return fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "cue" || fileExtension.lowercased() == "gdi" 
+        return fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "cue" || fileExtension.lowercased() == "gdi"
     }
     
     var enableAchievements: Bool {
@@ -623,7 +728,7 @@ class Game: Object, ObjectUpdatable {
     
     var manualsPath: String? {
         if let fileName = getExtraString(key: ExtraKey.manualFileName.rawValue) {
-            return Constants.Path.GameplayManuals.appendingPathComponent(fileName)
+            return R.Path.GameplayManuals.appendingPathComponent(fileName)
         }
         return nil
     }
@@ -651,7 +756,7 @@ class Game: Object, ObjectUpdatable {
         var results: [NESPalette] = []
         results.append(contentsOf: nestopias.map({ NESPalette(name: $0, type: .nestopia) }))
         
-        if let buildIns = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.NESPalettes) {
+        if let buildIns = try? FileManager.default.contentsOfDirectory(atPath: R.Path.NESPalettes) {
             results.append(contentsOf: buildIns.sorted().compactMap({
                 if $0.pathExtension.lowercased() == "pal" {
                     return NESPalette(name: $0.deletingPathExtension, type: .buildIn)
@@ -661,7 +766,7 @@ class Game: Object, ObjectUpdatable {
             }))
         }
         
-        if let customs = try? FileManager.default.contentsOfDirectory(atPath: Constants.Path.CustomPalettes.appendingPathComponent(gameType.localizedShortName)) {
+        if let customs = try? FileManager.default.contentsOfDirectory(atPath: R.Path.CustomPalettes.appendingPathComponent(gameType.localizedShortName)) {
             results.append(contentsOf: customs.sorted().compactMap({
                 if $0.pathExtension.lowercased() == "pal" {
                     return NESPalette(name: $0.deletingPathExtension, type: .custom)
@@ -719,11 +824,11 @@ class Game: Object, ObjectUpdatable {
     var isJGenesisCore: Bool {
         return ((gameType == ._32x || gameType == .mcd) && defaultCore == 1)
     }
-
+    
     var isJ2MECore: Bool {
         return gameType == .j2me
     }
-
+    
     var coreNameForMultiSupport: String {
         if gameType.supportCores.count > 0, defaultCore < gameType.supportCores.count {
             return "(\(gameType.supportCores[defaultCore]))"
@@ -759,9 +864,9 @@ class Game: Object, ObjectUpdatable {
         }
     }
     
-    var screenScaling: GameSetting.ScreenScaling {
+    var screenScaling: GameOption.ScreenScaling {
         if let scalingInt = getExtraInt(key: ExtraKey.screenScaling.rawValue),
-            let scaling = GameSetting.ScreenScaling(rawValue: scalingInt) {
+           let scaling = GameOption.ScreenScaling(rawValue: scalingInt) {
             return scaling
         }
         return .stretch
@@ -780,11 +885,11 @@ class Game: Object, ObjectUpdatable {
     }
     
     func deleteJ2meSaves() {
-        let j2mejsUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.J2meJS.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+        let j2mejsUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.J2meJS.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: j2mejsUrl)
         SyncManager.delete(localFilePath: j2mejsUrl.path)
         
-        let freej2meUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+        let freej2meUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: freej2meUrl)
         SyncManager.delete(localFilePath: freej2meUrl.path)
     }
@@ -792,8 +897,8 @@ class Game: Object, ObjectUpdatable {
     func getStoreCoreConfigs() -> [String: String]? {
         guard isLibretroType else { return nil }
         if let coreConfigsString = getExtraString(key: ExtraKey.coreConfigs.rawValue),
-            let jsonData = coreConfigsString.data(using: .utf8),
-            let json = try? JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
+           let jsonData = coreConfigsString.data(using: .utf8),
+           let json = try? JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
             return json
         }
         return nil
@@ -819,7 +924,7 @@ class Game: Object, ObjectUpdatable {
     
     func deleteDosFiles() {
         var fileUrls = [URL]()
-        if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
+        if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: R.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
             for case let fileURL as URL in enumerator {
                 let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
                 guard !isDirectory else { continue }
@@ -844,7 +949,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isAzaharArticBase: Bool {
-        if gameType == ._3ds, id == Constants.Strings.AzaharArticBaseGameID {
+        if gameType == ._3ds, id == R.Strings.AzaharArticBaseGameID {
             return true
         }
         return false
@@ -867,7 +972,7 @@ class Game: Object, ObjectUpdatable {
         return false
     }
     
-    var supportCategories: [GameType] {
+    var supportedCategories: [GameType] {
         if gameType == .gb {
             return [.gb, .chm]
         } else if gameType == .dos {
@@ -904,6 +1009,231 @@ class Game: Object, ObjectUpdatable {
         }
     }
     
+    var supportCheatCode: Bool {
+        if gameType == .vb ||
+            gameType == .pm ||
+            isJGenesisCore ||
+            gameType.externalType ||
+            isAtari ||
+            (gameType == .ss && defaultCore == 0) ||
+            gameType == .dc ||
+            gameType == .j2me ||
+            gameType == .dos ||
+            isClownMDEmuCore {
+            return false
+        }
+        return true
+    }
+    
+    var supportLanguage: Bool {
+        if gameType == ._3ds ||
+            gameType == .psp ||
+            (gameType == .ss && defaultCore == 0) ||
+            gameType == .ds ||
+            gameType == .dc {
+            return true
+        }
+        return false
+    }
+    
+    var supportedLanguages: [String] {
+        var languages = [String]()
+        if gameType == ._3ds {
+            languages = R.Strings.ThreeDSConsoleLanguage
+        } else if gameType == .psp {
+            languages = R.Strings.PSPConsoleLanguage
+        } else if gameType == .ss {
+            languages = R.Strings.SaturnConsoleLanguage
+        } else if gameType == .ds {
+            languages = R.Strings.DSConsoleLanguage
+        } else if gameType == .dc {
+            languages = R.Strings.DCConsoleLanguage
+        }
+        return languages
+    }
+    
+    var supportJit: Bool {
+        if (isCitra3DS && !Settings.defalut.threeDSAdvancedSettingMode) ||
+            gameType == .psp ||
+            (gameType == .ds && defaultCore == 0) ||
+            gameType == .n64 ||
+            (gameType == .ps1 && defaultCore == 0) ||
+            gameType == .dc || gameType == .dos {
+            return true
+        }
+        return false
+    }
+    
+    var supportCoreSettings: Bool {
+        if isLibretroType || isJ2MECore || isCitra3DS {
+            return true
+        }
+        return false
+    }
+    
+    func getCoverImage(completion: ((UIImage?) -> Void)? = nil) {
+        guard let completion else { return }
+        if let imageData = gameCover?.storedData(),
+            let image = UIImage(data: imageData) {
+            completion(image)
+        } else if let onlineCoverUrl,
+                    let url = URL(string: onlineCoverUrl) {
+            KingfisherManager.shared.retrieveImage(with: url, completionHandler: { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let imageResult):
+                        completion(imageResult.image)
+                    case .failure(_):
+                        completion(nil)
+                    }
+                }
+            })
+        } else {
+            completion(nil)
+        }
+    }
+    
+    var supportFastForward: Bool {
+        if (gameType == .j2me && defaultCore != 0) {
+            return false
+        }
+        return true
+    }
+    
+    var supportSlangShaders: Bool {
+        if (gameType == ._3ds && defaultCore == 0) ||
+            (gameType == .mcd && defaultCore != 0) ||
+            (gameType == ._32x && defaultCore != 0) ||
+            gameType == .j2me ||
+            (gameType == .n64 && !isN64ParaLLEl) ||
+            gameType.externalType {
+            return false
+        }
+        return true
+    }
+    
+    var supportGlslShaders: Bool {
+        if gameType == .n64, !isN64ParaLLEl {
+            return true
+        }
+        return false
+    }
+    
+    var supportSwapScreen: Bool {
+        if gameType == ._3ds || gameType == .ds {
+            return true
+        }
+        return false
+    }
+    
+    var supportResolution: Bool {
+        if gameType == ._3ds ||
+            (gameType == .ds && defaultCore != 0) ||
+            gameType == .psp ||
+            gameType == .n64 ||
+            (gameType == .ps1 && defaultCore == 0) ||
+            gameType == .dc ||
+            gameType == .doom {
+            return true
+        }
+        return false
+    }
+    
+    var supportConsoleHome: Bool {
+        if gameType == ._3ds && defaultCore == 0 {
+            return true
+        }
+        return false
+    }
+    
+    var supportAmiibo: Bool {
+        if gameType == ._3ds {
+            return true
+        }
+        return false
+    }
+    
+    var supportSimBlowing: Bool {
+        if gameType == ._3ds || gameType == .ds {
+            return true
+        }
+        return false
+    }
+    
+    var supportPalette: Bool {
+        if gameType == .nes ||
+            gameType == .fds ||
+            gameType == .gb ||
+            gameType == .vb ||
+            gameType == .pm {
+            return true
+        }
+        return false
+    }
+    
+    var supportAirPlayLayout: Bool {
+        if gameType == ._3ds || gameType == .ds {
+            return true
+        }
+        return false
+    }
+    
+    var supportScreenScaling: Bool {
+        if (gameType == .mcd && defaultCore != 0) ||
+            (gameType == ._32x && defaultCore != 0) {
+            return false
+        }
+        return true
+    }
+    
+    var supportInsertDisc: Bool {
+        if gameType == .ps1 ||
+            gameType == .dos {
+            return true
+        }
+        return false
+    }
+    
+    var supportSaveState: Bool {
+        if gameType == .jaguar || gameType == .j2me {
+            return false
+        }
+        return true
+    }
+    
+    var gameCoverIcon: ASIcon {
+        let icon: ASIcon
+        if let imageData = gameCover?.storedData(),
+           let image = UIImage(data: imageData) {
+            icon = .image(image, cornerStyle: .radius(R.Size.CornerRadiusMicro))
+        } else if let urlString = onlineCoverUrl,
+                  let url = URL(string: urlString) {
+            icon = .imageUrl(url, cornerStyle: .radius(R.Size.CornerRadiusMicro))
+        } else {
+            icon = .symbolImage(R.image.logo_iconSymbols(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
+        }
+        return icon
+    }
+    
+    var displayName: String {
+        aliasName ?? name
+    }
+    
+    ///是否支持回朔 依据核心info文件的存档支持级别判断:rewind要求savestate_features达到serialized及以上
+    var supportRewind: Bool {
+        //非Libretro核心不支持:Citra 3DS、JGenesis(32X/MCD)、J2ME、NS/Xbox360/Xbox外部类型
+        guard isLibretroType, !gameType.externalType else { return false }
+        //virtualjaguar(Jaguar)不支持存档(savestate = false)
+        //prboom(DOOM)、azahar(3DS)、flycast全系(DC)仅basic级别存档,不支持rewind
+        if gameType == .jaguar || gameType == .doom || gameType == ._3ds || gameType == .dc {
+            return false
+        }
+        //SS只有mednafen_saturn(defaultCore == 0)支持;yabause仅basic级别
+        if gameType == .ss, fileExtension.lowercased() == "iso" || defaultCore == 1 {
+            return false
+        }
+        return true
+    }
 }
 
 

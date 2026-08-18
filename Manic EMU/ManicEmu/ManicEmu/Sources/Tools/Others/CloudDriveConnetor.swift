@@ -18,18 +18,18 @@ class CloudDriveConnetor {
     
     private func genConnector(for type: ImportServiceType) -> CloudServiceConnector? {
         let connector: CloudServiceConnector
-        let cllbackUrl = Constants.Strings.OAuthCallbackHost
+        let cllbackUrl = R.Strings.OAuthCallbackHost
         switch type {
         case .googledrive:
-            connector = GoogleDriveConnector(appId: Constants.Cipher.GoogleDriveAppId, appSecret: "", callbackUrl: Constants.Strings.OAuthGoogleDriveCallbackHost + "://")
+            connector = GoogleDriveConnector(appId: R.Cipher.GoogleDriveAppId, appSecret: "", callbackUrl: R.Strings.OAuthGoogleDriveCallbackHost + "://")
         case .dropbox:
-            connector = DropboxConnector(appId: Constants.Cipher.DropboxAppKey, appSecret: Constants.Cipher.DropboxAppSecret, callbackUrl: cllbackUrl + "://dropbox", responseType: "token")
+            connector = DropboxConnector(appId: R.Cipher.DropboxAppKey, appSecret: R.Cipher.DropboxAppSecret, callbackUrl: cllbackUrl + "://dropbox", responseType: "token")
         case .onedrive:
-            connector = OneDriveConnector(appId: Constants.Cipher.OneDriveAppId, appSecret: "", callbackUrl: Constants.Strings.OAuthOneDriveCallbackHost + "://auth")
+            connector = OneDriveConnector(appId: R.Cipher.OneDriveAppId, appSecret: "", callbackUrl: R.Strings.OAuthOneDriveCallbackHost + "://auth")
         case .baiduyun:
-            connector = BaiduPanConnector(appId: Constants.Cipher.BaiduYunAppKey, appSecret: Constants.Cipher.BaiduYunSecretKey, callbackUrl: cllbackUrl + "://baiduyun")
+            connector = BaiduPanConnector(appId: R.Cipher.BaiduYunAppKey, appSecret: R.Cipher.BaiduYunSecretKey, callbackUrl: cllbackUrl + "://baiduyun")
         case .aliyun:
-            connector = AliyunDriveConnector(appId: Constants.Cipher.AliYunAppId, appSecret: Constants.Cipher.AliYunSecrectKey, callbackUrl: cllbackUrl + "://aliyun")
+            connector = AliyunDriveConnector(appId: R.Cipher.AliYunAppId, appSecret: R.Cipher.AliYunSecrectKey, callbackUrl: cllbackUrl + "://aliyun")
         default:
             return nil
         }

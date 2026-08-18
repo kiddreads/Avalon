@@ -10,106 +10,178 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders, featuredItems, skinSound, globalCoreSwitch
+        case appearance, theme, quickGame, autoSaveState, skin, airPlay, iCloud, fullScreenWhenConnectController, bios, respectSilentMode, onlinePlay, rumble, skinSound, retro, triggerPro, jit, shaders, globalCoreSwitch, FAQ, feedback, qq, telegram, discord, about, shareApp, clearCache, language, userAgreement, privacyPolicy, featuredItems
     }
     
     var type: ItemType
-    var isOn: Bool? = false
-    var arrowDetail: String? = nil
     
-    var backgroundColor: UIColor {
+    var cellData: ASListPage.Cell {
+        var styles = [ASListPage.Cell.Style]()
+        var enablePressEffect = false
+        //icon
+        styles.append(.icon(icon,
+                            iconSize: R.Size.ButtonExtraExtraSmall))
+        //title
+        styles.append(.title(.largeText(title)))
+        //detail
+        if let detail {
+            styles.append(.detail(.extraSmallText(detail,
+                                                  color: R.Color.LabelSecondary,
+                                                  numberOfLines: 0)))
+        }
+        //switch
+        if let switchStyle {
+            styles.append(switchStyle)
+        }
+        //chevron
+        if let chevronStyle {
+            enablePressEffect = true
+            styles.append(chevronStyle)
+        }
+        //segment
+        if type == .appearance {
+            let icons: [ASIcon] = [
+                .symbolImage(R.image.dark_iconSymbols()),
+                .symbolImage(R.image.light_iconSymbols()),
+                .symbolImage(R.image.auto_iconSymbols())
+            ]
+            styles.append(.segment(.iconSegment(icons: icons, index: Settings.appearance.rawValue)))
+        }
+        return ASListPage.Cell.normal(styles, enablePressEffect: enablePressEffect)
+    }
+    
+    var switchStyle: ASListPage.Cell.Style? {
         switch type {
-        case .theme, .globalCoreSwitch:
-            return Constants.Color.Magenta
-        case .quickGame, .respectSilentMode, .privacyPolicy:
-            return Constants.Color.Yellow
-        case .autoSaveState, .onlinePlay, .feedback, .clearCache:
-            return Constants.Color.Green
-        case .airPlay, .FAQ, .about, .rumble, .jit:
-            return Constants.Color.Indigo
-        case .iCloud, .userAgreement, .appearance, .skinSound:
-            return Constants.Color.Blue
-        case .fullScreenWhenConnectController, .shareApp, .triggerPro:
-            return Constants.Color.Orange
-        case .bios, .language, .skin, .shaders:
-            return Constants.Color.Pink
-        case .qq, .telegram, .discord, .retro:
-            return .clear
-        case .featuredItems:
-            return Constants.Color.Background.forceStyle(.dark)
+        case .quickGame:
+            return .switch(.init(state: Settings.defalut.quickGame ? .on : .off))
+        case .autoSaveState:
+            return .switch(.init(state: Settings.defalut.autoSaveState ? .on : .off))
+        case .airPlay:
+            let state: ASSwitch.State = PurchaseManager.isMember ? (Settings.defalut.airPlay ? .on : .off) : .disabled
+            return .switch(.init(state: state))
+        case .fullScreenWhenConnectController:
+            return .switch(.init(state: Settings.defalut.fullScreenWhenConnectController ? .on : .off))
+        case .respectSilentMode:
+            return .switch(.init(state: Settings.defalut.respectSilentMode ? .on : .off))
+        case .rumble:
+            return .switch(.init(state: (Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false) ? .on : .off))
+        case .skinSound:
+            return .switch(.init(state: (Settings.defalut.getExtraBool(key: ExtraKey.skinSoundEffects.rawValue) ?? true) ? .on : .off))
+        default:
+            return nil
         }
     }
     
-    var icon: UIImage {
+    var chevronStyle: ASListPage.Cell.Style? {
+        switch type {
+        case .quickGame,
+                .autoSaveState,
+                .airPlay,
+                .fullScreenWhenConnectController,
+                .respectSilentMode,
+                .rumble,
+                .skinSound,
+                .appearance:
+            return nil
+            
+        case .clearCache:
+            return .chevron(ASChevron(title: CacheManager.totleSize))
+            
+        case .language:
+            return .chevron(ASChevron(title: Locale.getSystemLanguageDisplayName(preferredLanguage: Settings.defalut.language)))
+            
+        default:
+            return .chevron(ASChevron())
+        }
+    }
+    
+    var iconColors: [UIColor] {
+        switch type {
+        case .appearance, .respectSilentMode, .globalCoreSwitch, .discord, .privacyPolicy:
+            [R.Color.Purple]
+        case .theme, .onlinePlay, .FAQ, .featuredItems:
+            [R.Color.Orange]
+        case .quickGame:
+            [R.Color.Red]
+        case .autoSaveState, .rumble, .feedback:
+            [R.Color.Green]
+        case .skin, .skinSound, .about:
+            [R.Color.Pink]
+        case .airPlay, .qq, .telegram, .shareApp:
+            [R.Color.Indigo]
+        case .iCloud, .triggerPro, .clearCache:
+            [R.Color.Yellow]
+        case .fullScreenWhenConnectController, .jit, .language:
+            [R.Color.Cyan]
+        case .bios, .shaders, .userAgreement:
+            [R.Color.Magenta]
+        case .retro:
+            [R.Color.Indigo, R.Color.Yellow]
+        }
+    }
+    
+    var icon: ASIcon {
         switch type {
         case .theme:
-            UIImage(symbol: .paintpaletteFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.themeRegular_iconSymbols(), colors: iconColors)
         case .quickGame:
-            UIImage(symbol: .hareFill, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.games_iconSymbols(), colors: iconColors)
         case .airPlay:
-            UIImage(symbol: .airplayvideo, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.airplay_iconSymbols(), colors: iconColors)
         case .iCloud:
-            if #available(iOS 17.0, *) {
-                UIImage(symbol: .arrowTriangle2CirclepathIcloudFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            } else {
-                UIImage(symbol: .cloudFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            }
-        case .FAQ:
-            UIImage(symbol: .questionmarkAppFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        case .feedback:
-            UIImage(symbol: .exclamationmarkBubbleFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        case .shareApp:
-            UIImage(symbol: .arrowshapeTurnUpForwardFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        case .qq:
-            R.image.settings_qq()!
-        case .telegram:
-            R.image.settings_telegram()!
-        case .discord:
-            R.image.settings_discord()!
-        case .clearCache:
-            UIImage(symbol: .trashFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        case .language:
-            UIImage(symbol: .globeAmericasFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        case .userAgreement:
-            UIImage(symbol: .docTextFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        case .privacyPolicy:
-            UIImage(symbol: .shieldLefthalfFilled, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.icloudsync_iconSymbols(), colors: iconColors)
         case .fullScreenWhenConnectController:
-            R.image.customArrowDownLeftAndArrowUpRightRectangleFill()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.fullscreen_iconSymbols(), colors: iconColors)
+        case .FAQ:
+            ASIcon.symbolImage(R.image.faq_iconSymbols(), colors: iconColors)
+        case .feedback:
+            ASIcon.symbolImage(R.image.feedback_iconSymbols(), colors: iconColors)
+        case .shareApp:
+            ASIcon.symbolImage(R.image.shareRa_iconSymbols(), colors: iconColors)
+        case .qq:
+            ASIcon.symbolImage(R.image.qq_iconSymbols(), colors: iconColors)
+        case .telegram:
+            ASIcon.symbolImage(R.image.share_iconSymbols(), colors: iconColors)
+        case .discord:
+            ASIcon.symbolImage(R.image.discord_iconSymbols(), colors: iconColors)
+        case .clearCache:
+            ASIcon.symbolImage(R.image.clean_iconSymbols(), colors: iconColors)
+        case .language:
+            ASIcon.symbolImage(R.image.language_iconSymbols(), colors: iconColors)
+        case .userAgreement:
+            ASIcon.symbolImage(R.image.termsofservice_iconSymbols(), colors: iconColors)
+        case .privacyPolicy:
+            ASIcon.symbolImage(R.image.privacypolicy_iconSymbols(), colors: iconColors)
         case .autoSaveState:
-            UIImage(symbol: .arrowDownDocFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.autosavestates_iconSymbols(), colors: iconColors)
         case .bios:
-            UIImage(symbol: .cpuFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.bios_iconSymbols(), colors: iconColors)
         case .respectSilentMode:
-            UIImage(symbol: .bellFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.bell_iconSymbols(), colors: iconColors)
         case .onlinePlay:
-            UIImage(symbol: .person2Wave2Fill, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.online_iconSymbols(), colors: iconColors)
         case .about:
-            UIImage(symbol: .person3SequenceFill, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.aboutus_iconSymbols(), colors: iconColors)
         case .retro:
-            R.image.settings_retro()!
+            ASIcon.symbolImage(R.image.retroachievements_iconSymbols(), colors: iconColors)
         case .rumble:
-            if #available(iOS 16.1, *) {
-                UIImage(symbol: .iphoneGen1RadiowavesLeftAndRight, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            } else {
-                UIImage(symbol: .iphoneRadiowavesLeftAndRightCircleFill, font: Constants.Font.body(size: .l, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            }
+            ASIcon.symbolImage(R.image.rumble_iconSymbols(), colors: iconColors)
         case .appearance:
-            R.image.customMoonphaseFirstQuarter()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.appearance_iconSymbols(), colors: iconColors)
         case .triggerPro:
-            R.image.customXmarkTriangleCircleSquare()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.triggerpro_iconSymbols(), colors: iconColors)
         case .skin:
-            UIImage(symbol: .tshirtFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.skin_iconSymbols(), colors: iconColors)
         case .jit:
-            UIImage(symbol: .boltFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.jit_iconSymbols(), colors: iconColors)
         case .shaders:
-            R.image.customAppBackgroundDotted()!.applySymbolConfig(font: Constants.Font.body(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.shaders_iconSymbols(), colors: iconColors)
         case .featuredItems:
-            UIImage(symbol: .shippingboxFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.featureditems_iconSymbols(), colors: iconColors)
         case .skinSound:
-            UIImage(symbol: .waveform, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.skin_iconSymbols(), colors: iconColors)
         case .globalCoreSwitch:
-            R.image.customGearshape()!.applySymbolConfig(font: Constants.Font.body(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            ASIcon.symbolImage(R.image.core_iconSymbols(), colors: iconColors)
         }
     }
     

@@ -112,7 +112,7 @@ struct ThreeDS: DeltaCoreProtocol {
             "TWN": "/0000b102/"
         ]
         
-        if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: Constants.Path.Document.appendingPathComponent("3DS/nand/00000000000000000000000000000000/title/00040030")), includingPropertiesForKeys: [.isDirectoryKey]) {
+        if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: R.Path.Document.appendingPathComponent("3DS/nand/00000000000000000000000000000000/title/00040030")), includingPropertiesForKeys: [.isDirectoryKey]) {
             for case let fileURL as URL in enumerator {
                 let isDirectory = (try? fileURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
                 guard !isDirectory else { continue }
@@ -131,7 +131,7 @@ struct ThreeDS: DeltaCoreProtocol {
                                 game.fileExtension = fileURL.pathExtension
                                 game.gameType = ._3ds
                                 game.extras = [
-                                    ExtraKey.identifier.rawValue: Constants.Numbers.ThreeDSHomeMenuIdentifiers[Constants.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }) ?? 0],
+                                    ExtraKey.identifier.rawValue: R.Numbers.ThreeDSHomeMenuIdentifiers[R.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }) ?? 0],
                                     ExtraKey.regions.rawValue: region
                                 ].jsonData()
                                 game.aliasName = "Home Menu (\(region))"
@@ -271,7 +271,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         return citraCore.isSearchingAmiibo()
     }
     
-    func setResolution(resolution: GameSetting.Resolution) {
+    func setResolution(resolution: GameOption.Resolution) {
         updateConfig(["ManicEMU.resolutionFactor": resolution.rawValue])
     }
     
@@ -285,7 +285,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
                topRect: CGRect,
                bottomRect: CGRect,
                mute: Bool,
-               resolution: GameSetting.Resolution = .one,
+               resolution: GameOption.Resolution = .one,
                jit: Bool = false,
                accurateShaders: Bool = false,
                language: Int = -1,
@@ -295,7 +295,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         self.bottomRect = bottomRect
         self.gameURL = gameURL
         self.isAdvancedMode = advancedMode
-        var appendConfig: [String: Any] = ["ManicEMU.audioMuted": mute, "ManicEMU.resolutionFactor": resolution.rawValue < GameSetting.Resolution.one.rawValue ? 1 : resolution.rawValue]
+        var appendConfig: [String: Any] = ["ManicEMU.audioMuted": mute, "ManicEMU.resolutionFactor": resolution.rawValue < GameOption.Resolution.one.rawValue ? 1 : resolution.rawValue]
         if jit {
             appendConfig["ManicEMU.cpuJIT"] = true
             switch Settings.defalut.threeDSMode {
@@ -368,6 +368,10 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         if !citraCore.isPaused() {
             citraCore.pausePlay(false)
         }
+    }
+    
+    var isPaused: Bool {
+        citraCore.isPaused()
     }
     
     override func resume() {
@@ -525,7 +529,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         citraCore.reset()
     }
 
-    private func updateConfig(_ updates: [String: Any] = [:]) {
+    func updateConfig(_ updates: [String: Any] = [:]) {
         var defaultConfigs: [String: Any]
         switch Settings.defalut.threeDSMode {
         case .performance:
@@ -732,7 +736,7 @@ class AzaharEmulatorBridge : EmulatorBridgeBase {
                 let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x, y: touchInputFrame.minY + touchInputFrame.height*y)
                 
 #if DEBUG
-                Log.debug("\(String(describing: Self.self)) 触摸屏幕:\(touchPoint)")
+                Log.debug("🎮 \(objectInfo(self))  触摸屏幕:\(touchPoint)")
 #endif
                 LibretroCore.sharedInstance().sendTouchEventX(touchPoint.x, y: touchPoint.y)
                 touchPointX = nil
@@ -741,7 +745,7 @@ class AzaharEmulatorBridge : EmulatorBridgeBase {
         } else if let gameInput = ThreeDSGameInput(rawValue: input),
                   let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-                Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+                Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
         }

@@ -20,99 +20,48 @@ struct Database {
             if oldSettings == nil {
                 Log.debug("设置不存在 初始化设置")
                 let settings = Settings()
-                //添加默认皮肤
-                let genDefaultSkins = generateDefaultSkins()
-                settings.skinConfig = genDefaultSkins.defaultSkinMap
-                
-                //添加游戏菜单默认排序
-                let functionList =  GameSetting.ItemType.allCases.reduce(List<Int>()) { partialResult, type in
-                    partialResult.append(type.rawValue)
-                    return partialResult
-                }
-                
-                //将quit放置到最后
-                for (index, function) in functionList.enumerated() {
-                    if function == GameSetting.ItemType.quit {
-                        functionList.remove(at: index)
-                        break
-                    }
-                }
-                functionList.append(GameSetting.ItemType.quit.rawValue)
-                settings.gameFunctionList = functionList
                 
                 try realm.write {
-                    realm.add(genDefaultSkins.defaultSkins)
+                    realm.add(generateDefaultSkins())
                     realm.add(settings)
                 }
-            } else if let oldSettings = oldSettings {
+            } else if let _ = oldSettings {
                 //设置已经存在，检查一下皮肤数量是否和模拟器数量一致，不一致的话 需要更新默认皮肤
                 let defaultSkins = realm.objects(Skin.self).where { $0.skinType == .default }
                 let defaultSkinsCount = defaultSkins.count
-                if defaultSkinsCount != System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).count {
+                if defaultSkinsCount != System.allCases.filter({ !$0.gameType.externalType }).count {
                     Log.debug("更新设置 新增皮肤")
-                    //默认皮肤数量不正确 可能新增了核心 需要重置皮肤
+                    //Regenerate the default skin list
+                    let genDefaultSkins = generateDefaultSkins()
+                    
+                    //Check if the Preference has configured a default skin. If so, it needs to be updated to the new skin ID.
+                    defaultSkins.forEach({ oldSkin in
+                        genDefaultSkins.forEach({ newSkin in
+                            if newSkin.identifier == oldSkin.identifier && newSkin.id != oldSkin.id {
+                                Prefference.defalut.replaceValue(kind: .skin, value: oldSkin.id, replace: newSkin.id)
+                            }
+                        })
+                    })
+                    
+                    //Remove the old default skin.
                     try? realm.write {
                         realm.delete(defaultSkins)
                     }
-                    //添加默认皮肤
-                    let genDefaultSkins = generateDefaultSkins()
                     
-                    var newSkinConfig: String? = nil
-                    if let oldSkinConfigs = SkinConfig.deserialize(from: oldSettings.skinConfig),
-                       var newSkinConfigs = SkinConfig.deserialize(from: genDefaultSkins.defaultSkinMap) {
-                        newSkinConfigs.portraitSkins.forEach { key, newValue in
-                            if let oldValue = oldSkinConfigs.portraitSkins[key], oldValue != newValue {
-                                Log.debug("保留竖屏旧皮肤默认设置:\(key)")
-                                newSkinConfigs.portraitSkins[key] = oldValue
-                            }
-                        }
-                        newSkinConfigs.landscapeSkins.forEach { key, newValue in
-                            if let oldValue = oldSkinConfigs.landscapeSkins[key], oldValue != newValue {
-                                Log.debug("保留横屏旧皮肤默认设置:\(key)")
-                                newSkinConfigs.landscapeSkins[key] = oldValue
-                            }
-                        }
-                        newSkinConfig = newSkinConfigs.toJSONString()
-                    }
-                    
-                    
+                    //Add new default skin
                     try? realm.write {
-                        realm.add(genDefaultSkins.defaultSkins)
-                        oldSettings.skinConfig = newSkinConfig ?? genDefaultSkins.defaultSkinMap
-                    }
-                }
-                
-                //检查一下是否新增了GameSetting 如果新增了需要加上
-                if oldSettings.gameFunctionList.count != GameSetting.ItemType.allCases.count {
-                    //数量不一致 需要进行新增
-                    Log.debug("更新设置 新增游戏选项")
-                    //找出缺失的GameSetting
-                    var missItems = [Int]()
-                    for item in GameSetting.ItemType.allCases {
-                        if !oldSettings.gameFunctionList.contains([item.rawValue]) {
-                            missItems.append(item.rawValue)
-                        }
-                    }
-                    if missItems.count > 0 {
-                        Log.debug("缺失的游戏选项:\(missItems)")
-                        //先看看退出选项是否在最后一个
-                        if let last = oldSettings.gameFunctionList.last, let lastItem = GameSetting.ItemType(rawValue: last), lastItem == .quit {
-                            //最后一个选项是退出，则将新增的选项添加到退出前
-                            let insertIndex = oldSettings.gameFunctionList.count - 1
-                            try? realm.write({
-                                oldSettings.gameFunctionList.insert(contentsOf: missItems, at: insertIndex)
-                            })
-                            Log.debug("插入缺失选项到退出前:\(oldSettings.gameFunctionList)")
-                        } else {
-                            //用户已经自定义过设置了，就不乱搞了 直接插到后面
-                            try? realm.write({
-                                oldSettings.gameFunctionList.append(objectsIn: missItems)
-                            })
-                            Log.debug("插入缺失选项到末尾:\(oldSettings.gameFunctionList)")
-                        }
+                        realm.add(genDefaultSkins)
                     }
                 }
             }
+            
+            let prefference = realm.object(ofType: Prefference.self, forPrimaryKey: Prefference.defaultName)
+            if prefference == nil {
+                try? realm.write {
+                    realm.add(Prefference())
+                }
+            }
+            
             //新增其他皮肤
             addEmbedSkins()
             
@@ -153,7 +102,7 @@ struct Database {
                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
             }
             
-            if let systemCoreVersion = UserDefaults.standard.string(forKey: Constants.DefaultKey.SystemCoreVersion) {
+            if let systemCoreVersion = UserDefaults.standard.string(forKey: R.DefaultKey.SystemCoreVersion) {
                 //如果存在版本记录，说明是旧版本升级到新版本，需要处理一下
                 let systemCoreVersionNumber = UInt64(systemCoreVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!
                 
@@ -188,16 +137,6 @@ struct Database {
                 }
                 
                 if systemCoreVersionNumber < 150 {
-                    //1.5.0版本前的MD滤镜全部取消
-                    let mds = realm.objects(Game.self).where({ $0.gameType == .md })
-                    if mds.count > 0 {
-                        try? realm.write({
-                            for md in mds {
-                                md.filterName = nil
-                            }
-                        })
-                    }
-                    
                     //将所有GB和GBC进行分离
                     let gbcs = realm.objects(Game.self).where({ $0.gameType == .gbc }).filter({ $0.fileExtension.lowercased() == "gb" })
                     if gbcs.count > 0 {
@@ -216,7 +155,7 @@ struct Database {
                     let oldSkins = allSkins.where({ $0.skinType == .buildIn || $0.skinType == .import })
                     try? realm.write({
                         for oldSkin in oldSkins {
-                            if !oldSkin.fileName.contains("_FLEX.manicskin") {
+                            if !oldSkin.isFlexSkin {
                                 oldSkin.skinType = .import
                             }
                         }
@@ -246,9 +185,9 @@ struct Database {
                                     g.defaultCore = 1
                                 } else if g.gameType == .snes {
                                     //如果将snes游戏迁移至bsnes 则将存档文件从Snes9x迁移到bsnes
-                                    let oldSaveUrl = URL(fileURLWithPath: Constants.Path.Snes9x.appendingPathComponent("\(g.name).srm"))
+                                    let oldSaveUrl = URL(fileURLWithPath: R.Path.Snes9x.appendingPathComponent("\(g.name).srm"))
                                     if FileManager.default.fileExists(atPath: oldSaveUrl.path) {
-                                        try? FileManager.safeMoveItem(at: oldSaveUrl, to: URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(g.name).srm")), shouldReplace: true)
+                                        try? FileManager.safeMoveItem(at: oldSaveUrl, to: URL(fileURLWithPath: R.Path.bsnes.appendingPathComponent("\(g.name).srm")), shouldReplace: true)
                                     }
                                 }
                             }
@@ -285,7 +224,7 @@ struct Database {
                     if picodriveGames.count > 0 {
                         for g in picodriveGames {
                             //将picodrive的存档转移到Gearsystem或ClownMDEmu的目录
-                            let oldSaveUrl = URL(fileURLWithPath: Constants.Path.PicoDrive.appendingPathComponent("\(g.name).srm"))
+                            let oldSaveUrl = URL(fileURLWithPath: R.Path.PicoDrive.appendingPathComponent("\(g.name).srm"))
                             if FileManager.default.fileExists(atPath: oldSaveUrl.path) {
                                 try? FileManager.safeMoveItem(at: oldSaveUrl, to: g.gameSaveUrl, shouldReplace: true)
                             }
@@ -304,8 +243,8 @@ struct Database {
                 if systemCoreVersionNumber <= 173 {
                     var needsUpdate: Bool = systemCoreVersionNumber < 173
                     if !needsUpdate {
-                        let systemCoreBuildVersion = UserDefaults.standard.integer(forKey: Constants.DefaultKey.SystemCoreBuildVersion)
-                        let appBuildVersion = Int(Constants.Config.AppBuildVersion)!
+                        let systemCoreBuildVersion = UserDefaults.standard.integer(forKey: R.DefaultKey.SystemCoreBuildVersion)
+                        let appBuildVersion = Int(R.Config.AppBuildVersion)!
                         if appBuildVersion > systemCoreBuildVersion {
                             needsUpdate = true
                         }
@@ -324,7 +263,7 @@ struct Database {
                 }
                 
                 //修复1.9.1将J2meJS破坏的存档
-                if systemCoreVersionNumber <= 191 {
+                if systemCoreVersionNumber < 192 {
                     let games = realm.objects(Game.self).where({ $0.gameType == .j2me || $0.defaultCore == 0 })
                     for game in games {
                         if FileManager.default.fileExists(atPath: game.gameSaveUrl.path),
@@ -333,10 +272,115 @@ struct Database {
                         }
                     }
                 }
+                
+                if systemCoreVersionNumber < 200 {
+                    //Migrate skin configuration
+                    let games = realm.objects(Game.self).where({ $0.portraitSkin != nil || $0.landscapeSkin != nil })
+                    for game in games {
+                        if let skin = game.portraitSkin {
+                            Prefference.defalut.storePrefference(kind: .skin,
+                                                                 storeKey: .orientationKey(gameId: game.id, isLandScape: false),
+                                                                 storeValue: skin.id)
+                            try? realm.write({
+                                game.portraitSkin = nil
+                            })
+                        }
+                        if let skin = game.landscapeSkin {
+                            Prefference.defalut.storePrefference(kind: .skin,
+                                                                 storeKey: .orientationKey(gameId: game.id, isLandScape: true),
+                                                                 storeValue: skin.id)
+                            try? realm.write({
+                                game.landscapeSkin = nil
+                            })
+                        }
+                    }
+                    if let skinConfigs = SkinConfig.deserialize(from: Settings.defalut.skinConfig) {
+                        for (gameTypeString, skinId) in skinConfigs.portraitSkins {
+                            if let gameType = GameType(shortName: gameTypeString) {
+                                Prefference.defalut.storePrefference(kind: .skin,
+                                                                     storeKey: .orientationKey(gameType: gameType, isLandScape: false),
+                                                                     storeValue: skinId)
+                            }
+                        }
+                        for (gameTypeString, skinId) in skinConfigs.landscapeSkins {
+                            if let gameType = GameType(shortName: gameTypeString) {
+                                Prefference.defalut.storePrefference(kind: .skin,
+                                                                     storeKey: .orientationKey(gameType: gameType, isLandScape: true),
+                                                                     storeValue: skinId)
+                            }
+                        }
+                        try? realm.write({
+                            Settings.defalut.skinConfig = ""
+                        })
+                    }
+                    
+                    //Migrate flexBackground configuration
+                    let backgrounds = FlexBackground.getAllBackground()
+                    for background in backgrounds {
+                        let isLandScape = background.name.contains("landscape")
+                        if background.global {
+                            Prefference.defalut.storePrefference(kind: .flexBackground,
+                                                                 storeKey: .orientationKey(isLandScape: isLandScape),
+                                                                 storeValue: background.name)
+                            continue
+                        } else if background.consoles.count > 0 {
+                            for console in background.consoles {
+                                if let gameType = GameType(shortName: console) {
+                                    Prefference.defalut.storePrefference(kind: .flexBackground,
+                                                                         storeKey: .orientationKey(gameType: gameType, isLandScape: isLandScape),
+                                                                         storeValue: background.name)
+                                }
+                            }
+                            continue
+                        } else {
+                            for gameId in background.games {
+                                Prefference.defalut.storePrefference(kind: .flexBackground,
+                                                                     storeKey: .orientationKey(gameId: gameId, isLandScape: isLandScape),
+                                                                     storeValue: background.name)
+                            }
+                        }
+                    }
+                    
+                    //Migrate shader configuration
+                    let shaderGames = realm.objects(Game.self).where({ $0.filterName != nil })
+                    for game in shaderGames {
+                        if let filterName = game.filterName {
+                            Prefference.defalut.storePrefference(kind: .shader,
+                                                                 storeKey: .shaderKey(gameId: game.id,
+                                                                                      isGlsl: game.supportGlslShaders),
+                                                                 storeValue: filterName)
+                        }
+                    }
+                    
+                    if let shaderConfig = ShaderConfig.getConfig() {
+                        for (platform, shaderPath) in shaderConfig.coreConfigs {
+                            if let gameType = GameType(shortName: platform) {
+                                let isGlsl = gameType == .n64 && shaderPath.pathExtension.lowercased() == "glslp"
+                                Prefference.defalut.storePrefference(kind: .shader,
+                                                                     storeKey: .shaderKey(gameType: gameType, isGlsl: isGlsl),
+                                                                     storeValue: shaderPath)
+                            }
+                        }
+                        
+                        if let globalShaderPath = shaderConfig.globalConfig {
+                            let isGlsl = globalShaderPath.pathExtension.lowercased() == "glslp"
+                            Prefference.defalut.storePrefference(kind: .shader,
+                                                                 storeKey: .shaderKey(isGlsl: isGlsl),
+                                                                 storeValue: globalShaderPath)
+                        }
+                    }
+                    
+                    //update gamesPerRow 2 to 3 for default
+                    if Theme.defalut.gamesPerRow == 2 {
+                        Theme.change { realm in
+                            Theme.defalut.gamesPerRow = 3
+                        }
+                    }
+                }
             }
             
             //Prevent the game from not being removed after Articbase finishes its work due to an error.
-            if let articbase = realm.object(ofType: Game.self, forPrimaryKey: Constants.Strings.AzaharArticBaseGameID) {
+            if let articbase = realm.object(ofType: Game.self, forPrimaryKey: R.Strings.AzaharArticBaseGameID) {
                 try? realm.write {
                     realm.delete(articbase)
                 }
@@ -360,28 +404,26 @@ struct Database {
     private static var defaultConfig: Realm.Configuration {
         var config = Realm.Configuration.defaultConfiguration
         //配置数据库路径
-        if !FileManager.default.fileExists(atPath: Constants.Path.Realm) {
-            try? FileManager.default.createDirectory(atPath: Constants.Path.Realm, withIntermediateDirectories: true)
+        if !FileManager.default.fileExists(atPath: R.Path.Realm) {
+            try? FileManager.default.createDirectory(atPath: R.Path.Realm, withIntermediateDirectories: true)
         }
-        config.fileURL = URL(fileURLWithPath: Constants.Path.RealmFilePath)
+        config.fileURL = URL(fileURLWithPath: R.Path.RealmFilePath)
         //配置数据库版本 使用App版本来做控制
-        config.schemaVersion = UInt64(Constants.Config.AppVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!
+        config.schemaVersion = UInt64(R.Config.AppVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!
         return config
     }
     
-    private static func generateDefaultSkins() -> (defaultSkins: [Skin], defaultSkinMap: String) {
+    private static func generateDefaultSkins() -> [Skin] {
         //添加默认皮肤
         var defaultSkins = [Skin]()
-        var defaultSkinMap = [String: String]()
         System.allCores.forEach { core in
             let gameType = core.gameType
             if let controllerSkin = ControllerSkin.standardControllerSkin(for: gameType),
-                let hash = FileHashUtil.truncatedHash(url: controllerSkin.fileURL) {
+               let hash = FileHashUtil.truncatedHash(url: controllerSkin.fileURL) {
                 if let skin = realm.object(ofType: Skin.self, forPrimaryKey: hash) {
                     //这种情况 可能Settings被删除了
                     Log.error("Settings被误删除了!!!")
                     defaultSkins.append(skin)
-                    defaultSkinMap[gameType.rawValue] = skin.id
                 } else {
                     let skin = Skin()
                     skin.id = hash
@@ -391,21 +433,17 @@ struct Database {
                     skin.gameType = controllerSkin.gameType
                     skin.skinType = .default
                     defaultSkins.append(skin)
-                    defaultSkinMap[gameType.rawValue] = skin.id
                 }
             }
         }
-        if let jsonString = SkinConfig(portraitSkins: defaultSkinMap, landscapeSkins: defaultSkinMap).jsonString {
-            return (defaultSkins, jsonString)
-        }
-        return (defaultSkins, "")
+        return defaultSkins
     }
     
     private static func addEmbedSkins() {
         DispatchQueue.global().async {
             let realm = Database.realm
             let fileManager = FileManager.default
-            let resourcePath = Constants.Path.Resource
+            let resourcePath = R.Path.Resource
             //处理内置Manic皮肤
             if let contents = try? fileManager.contentsOfDirectory(atPath: resourcePath) {
                 let skinNames = contents.filter { $0.hasSuffix(".manicskin") }
@@ -447,6 +485,12 @@ struct Database {
                                 skin.skinData = CreamAsset.create(objectID: skin.id, propName: "skinData", url: controllerSkin.fileURL)
                             }
                             embedSkins.append(skin)
+                            
+                            //The skin file has been updated, so I'm trying to update the skin ID configured in Preferences.
+                            oldSkins.forEach({
+                                Prefference.defalut.replaceValue(kind: .skin, value: $0.id, replace: skin.id)
+                            })
+                            
                         }
                     }
                 }
@@ -459,7 +503,7 @@ struct Database {
             
             //PlayCase皮肤
 #if !SIDE_LOAD
-            if !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasImportedPlayCaseSkin) {
+            if !UserDefaults.standard.bool(forKey: R.DefaultKey.HasImportedPlayCaseSkin) {
                 if let contents = try? fileManager.contentsOfDirectory(atPath: resourcePath.appendingPathComponent("PlayCase")) {
                     let skinNames = contents.filter { $0.hasSuffix(".playcase") }
                     var embedSkins = [Skin]()
@@ -496,15 +540,15 @@ struct Database {
                         })
                     }
                 }
-                UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasImportedPlayCaseSkin)
+                UserDefaults.standard.set(true, forKey: R.DefaultKey.HasImportedPlayCaseSkin)
             }
 #endif
         }
     }
     
     static func fixJ2meJSSave(fileName: String, url: URL) -> URL? {
-        let zipUrl = URL(fileURLWithPath: Constants.Path.Cache.appendingPathComponent("\(fileName)"))
-        let tempWorkSpaceUrl = URL(fileURLWithPath: Constants.Path.Cache.appendingPathComponent(fileName.deletingPathExtension))
+        let zipUrl = URL(fileURLWithPath: R.Path.Cache.appendingPathComponent("\(fileName)"))
+        let tempWorkSpaceUrl = URL(fileURLWithPath: R.Path.Cache.appendingPathComponent(fileName.deletingPathExtension))
         do {
             try FileManager.default.unzipItem(at: url, to: tempWorkSpaceUrl)
         } catch {
@@ -519,7 +563,7 @@ struct Database {
         
         if FileManager.default.fileExists(atPath: newRecordStoreJsonPath) {
             //save file correct
-           return url
+            return url
         } else {
             //This is an old save—we should try to upgrade it.
             do {

@@ -10,29 +10,27 @@
 
 import Kingfisher
 
-class GameCoverView: UIView {
+class GameCoverView: BaseView {
     private var gameCoverChangeNotification: Any? = nil
+    
     
     var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        view.backgroundColor = R.Color.CoverEmpty
         return view
     }()
     
     private var platformView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .center
-        view.backgroundColor = .white
+        view.backgroundColor = R.Color.CoverSide
         view.isHidden = true
         return view
     }()
     
-    private var barShadowView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.isHidden = true
-        view.addShadow(ofColor: Constants.Color.Background, radius: 10, offset: CGSize(width: 5, height: 0))
+    private var ratingView: ASIconView = {
+        let view = ASIconView()
         return view
     }()
     
@@ -41,17 +39,17 @@ class GameCoverView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = R.Color.CoverEmpty
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        addSubview(barShadowView)
-        
         addSubview(platformView)
         
-        gameCoverChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GameCoverChange, object: nil, queue: .main) { [weak self] notification in
+        addSubview(ratingView)
+        
+        gameCoverChangeNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.GameCoverChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             DispatchQueue.main.asyncAfter(delay: 0.35) {
                 self.updateCornerRadius(self.layerCornerRadius)
@@ -67,14 +65,15 @@ class GameCoverView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if autoCornerRadius {
+            layerCornerRadius = R.Style.GameCoverCornerRatio * style.maxCornerRadius(frameHeight: height)
+        }
         if style == .style3 {
             imageView.roundCorners([.topLeft, .topRight], radius: layerCornerRadius - 6)
         } else {
             imageView.roundCorners([], radius: 0)
         }
-        if autoCornerRadius {
-            layerCornerRadius = Constants.Size.GameCoverCornerRatio * style.maxCornerRadius(frameHeight: height)
-        }
+        ratingView.makeShadow(radius: 30, opacity: 1)
     }
     
     required init?(coder: NSCoder) {
@@ -82,13 +81,16 @@ class GameCoverView: UIView {
     }
     
     ///设置游戏封面
-    func setData(game: Game, coverSize: CGSize, style: CoverStyle, scalePlatform: Bool = true) {
+    func setData(game: Game,
+                 coverSize: CGSize,
+                 style: CoverStyle,
+                 scalePlatform: Bool = true) {
         if height > 0 {
             autoCornerRadius = false
-            let gameCoverCornerRatio = Constants.Size.GameCoverCornerRatio
+            let gameCoverCornerRatio = R.Style.GameCoverCornerRatio
             let maxCornerRadius = style.maxCornerRadius(frameHeight: coverSize.height)
             let cornerRadius = gameCoverCornerRatio * maxCornerRadius
-            layerCornerRadius = cornerRadius
+            updateCornerRadius(cornerRadius)
         } else {
             autoCornerRadius = true
         }
@@ -97,19 +99,58 @@ class GameCoverView: UIView {
         if game.supportChangeCategory {
             gameTypeCategory = game.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
         }
-        updateStyle(style, gameType: game.gameType, scalePlatform: scalePlatform, gameTypeCategory: gameTypeCategory)
+        updateStyle(style,
+                    gameType: game.gameType,
+                    scalePlatform: scalePlatform,
+                    gameTypeCategory: gameTypeCategory)
+        
+        if !R.Style.GameHideRating {
+            if let esrp = GameMetadata.getGameMetadata(game: game)?.ESRPRating {
+                ratingView.isHidden = false
+                ratingView.icon = esrp.icon
+            } else {
+                ratingView.isHidden = true
+            }
+            ratingView.snp.remakeConstraints { make in
+                let width = min(coverSize.width/5.5, R.Size.ItemHeightMicro)
+                let inset = max(width * 0.27, R.Size.ContentSpaceTiny)
+                make.bottom.trailing.equalTo(imageView).inset(inset)
+                make.size.equalTo(CGSize(width: width, height: width/0.6666))
+            }
+        } else {
+            ratingView.isHidden = true
+        }
     }
     
     ///主题圆角配置时使用
-    func setData(gameType: GameType, image: UIImage?, style: CoverStyle, cornerRadius: CGFloat, scalePlatform: Bool = true) {
+    func setData(gameType: GameType,
+                 image: UIImage?,
+                 style: CoverStyle,
+                 cornerRadius: CGFloat,
+                 scalePlatform: Bool = true) {
         autoCornerRadius = false
         layerCornerRadius = cornerRadius
         imageView.image = image
         imageView.contentMode = .center
-        updateStyle(style, gameType: gameType, scalePlatform: scalePlatform)
+        updateStyle(style,
+                    gameType: gameType,
+                    scalePlatform: scalePlatform)
+        if R.Style.GameHideRating {
+            ratingView.isHidden = true
+        } else {
+            ratingView.isHidden = false
+            ratingView.icon = ESRP.E.icon
+            ratingView.snp.remakeConstraints { make in
+                make.bottom.trailing.equalTo(imageView).inset(R.Size.ContentSpaceExtraSmall)
+                make.size.equalTo(CGSize(width: R.Size.ItemHeightMicro, height: R.Size.ItemHeightMicro/0.6666))
+            }
+        }
     }
     
-    func updateStyle(_ style: CoverStyle, gameType: GameType, scalePlatform: Bool = true, gameTypeCategory: Int = 0) {
+    func updateStyle(_ style: CoverStyle,
+                     gameType: GameType,
+                     scalePlatform: Bool = true,
+                     gameTypeCategory: Int = 0) {
         self.style = style
         platformView.image = Self.getPlatformImage(gameType: gameType, style: style, scalePlatform: scalePlatform, gameTypeCategory: gameTypeCategory)
         switch style {
@@ -118,8 +159,7 @@ class GameCoverView: UIView {
                 make.edges.equalToSuperview()
             }
             platformView.isHidden = true
-            barShadowView.isHidden = true
-            backgroundColor = Constants.Color.BackgroundPrimary
+            backgroundColor = R.Color.CoverEmpty
         case .style2:
             imageView.snp.remakeConstraints { make in
                 make.top.trailing.bottom.equalToSuperview()
@@ -129,12 +169,8 @@ class GameCoverView: UIView {
                 make.leading.top.bottom.equalToSuperview()
                 make.width.equalToSuperview().multipliedBy(0.1298)
             }
-            barShadowView.snp.remakeConstraints { make in
-                make.edges.equalTo(platformView)
-            }
             platformView.isHidden = false
-            barShadowView.isHidden = false
-            backgroundColor = Constants.Color.BackgroundPrimary
+            backgroundColor = R.Color.CoverEmpty
         case .style3:
             imageView.snp.remakeConstraints { make in
                 make.leading.top.trailing.equalToSuperview().inset(6)
@@ -145,8 +181,7 @@ class GameCoverView: UIView {
                 make.height.equalToSuperview().multipliedBy(0.2077)
             }
             platformView.isHidden = false
-            barShadowView.isHidden = true
-            backgroundColor = .white
+            backgroundColor = R.Color.CoverSide
         }
     }
     
@@ -159,10 +194,19 @@ class GameCoverView: UIView {
         }
     }
     
+    func updateRating(esrp: ESRP?) {
+        if let esrp {
+            ratingView.isHidden = false
+            ratingView.icon = esrp.icon
+        } else {
+            ratingView.isHidden = true
+        }
+    }
+    
     private static var platformImageCaches = [String: UIImage?]()
     static func getPlatformImage(gameType: GameType, style: CoverStyle, scalePlatform: Bool = true, gameTypeCategory: Int = 0) -> UIImage? {
         guard style != .style1 else { return nil }
-        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && !UIDevice.isLandscape && scalePlatform ? "_\(Constants.Size.GamesPerRow)" : "") + "_\(gameTypeCategory)"
+        let key = gameType.rawValue + "_\(style.rawValue)" + (UIDevice.isPhone && !UIDevice.isLandscape && scalePlatform ? "_\(R.Style.GamesPerRow)" : "") + "_\(gameTypeCategory)"
         if let image = GameCoverView.platformImageCaches[key] {
             return image
         } else {
@@ -253,9 +297,11 @@ class GameCoverView: UIView {
                 } else if gameTypeCategory == 2 {
                     image = style == .style2 ? R.image.win98_cover_v() : R.image.win98_cover_h()
                 }   
+            } else if gameType == .xbox360 {
+                image = style == .style2 ? R.image.xbox_cover_v() : R.image.xbox_cover_h()
             }
-            if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
-                image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))
+            if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, R.Style.GamesPerRow != 2, let unwrapImage = image {
+                image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(R.Style.GamesPerRow-1)))
             }
             GameCoverView.platformImageCaches[key] = image
             return image

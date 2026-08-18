@@ -31,13 +31,13 @@ class WebServer: NSObject {
     
     func start() {
         guard webServer == nil else { return }
-        webServer = GCDWebUploader(uploadDirectory: Constants.Path.UploadWorkSpace)
+        webServer = GCDWebUploader(uploadDirectory: R.Path.UploadWorkSpace)
         webServer?.allowedFileExtensions = FileType.allSupportFileExtension()
         webServer?.delegate = self
-        if FileManager.default.fileExists(atPath: Constants.Path.UploadWorkSpace) {
-            try? FileManager.default.removeItem(atPath: Constants.Path.UploadWorkSpace)
+        if FileManager.default.fileExists(atPath: R.Path.UploadWorkSpace) {
+            try? FileManager.default.removeItem(atPath: R.Path.UploadWorkSpace)
         }
-        try? FileManager.default.createDirectory(atPath: Constants.Path.UploadWorkSpace, withIntermediateDirectories: true)
+        try? FileManager.default.createDirectory(atPath: R.Path.UploadWorkSpace, withIntermediateDirectories: true)
         webServer?.start(withPort: 6969, bonjourName: nil)
     }
     

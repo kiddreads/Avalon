@@ -9,8 +9,8 @@
 
 import KeyboardKit
 
-class NoControllCollectionView: UICollectionView, UIControllerPressable {
-    func didControllerPress(key: KeyboardKit.UIControllerKey) {}
-    
-    override var canBecomeFirstResponder: Bool { true }
-}
+//class NoControllCollectionView: UICollectionView, UIControllerPressable {
+//    func didControllerPress(key: KeyboardKit.UIControllerKey) {}
+//    
+//    override var canBecomeFirstResponder: Bool { true }
+//}

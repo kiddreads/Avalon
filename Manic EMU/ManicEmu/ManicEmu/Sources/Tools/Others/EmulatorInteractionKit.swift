@@ -12,19 +12,22 @@ import IceCream
 extension GameType {
     static let ns = GameType("public.aoshuang.game.ns")
     static let xbox360 = GameType("public.aoshuang.game.xbox360")
+    static let xbox = GameType("public.aoshuang.game.xbox")
 }
 
 struct EmulatorInteractionKit {
     enum EmulatorType {
-        case meloNX, xeniOS
+        case meloNX, xeniOS, dukeX
     }
     
     static func isInstalled(type: EmulatorType) -> Bool {
         switch type {
         case .meloNX:
-            return UIApplication.shared.canOpenURL(Constants.URLs.FetchMeloNXGames)
+            return UIApplication.shared.canOpenURL(R.URLs.FetchMeloNXGames)
         case .xeniOS:
-            return UIApplication.shared.canOpenURL(Constants.URLs.FetchXeniOSGames)
+            return UIApplication.shared.canOpenURL(R.URLs.FetchXeniOSGames)
+        case .dukeX:
+            return UIApplication.shared.canOpenURL(R.URLs.FetchDukeXGames)
         }
     }
     
@@ -32,9 +35,11 @@ struct EmulatorInteractionKit {
         if isInstalled(type: type) {
             switch type {
             case .meloNX:
-                UIApplication.shared.open(Constants.URLs.MeloNXGameLaunch(gameId: id))
+                UIApplication.shared.open(R.URLs.MeloNXGameLaunch(gameId: id))
             case .xeniOS:
-                UIApplication.shared.open(Constants.URLs.XeniOSGameLaunch(gameId: id))
+                UIApplication.shared.open(R.URLs.XeniOSGameLaunch(gameId: id))
+            case .dukeX:
+                UIApplication.shared.open(R.URLs.DukeXGameLaunch(gameId: id))
             }
         } else {
             DispatchQueue.main.asyncAfter(delay: 0.35) {
@@ -43,6 +48,8 @@ struct EmulatorInteractionKit {
                     UIView.makeToast(message: R.string.localizable.notInstallMeloNX())
                 case .xeniOS:
                     UIView.makeToast(message: R.string.localizable.notInstall("XeniOS"))
+                case .dukeX:
+                    UIView.makeToast(message: R.string.localizable.notInstall("DukeX"))
                 }
             }
         }
@@ -52,9 +59,11 @@ struct EmulatorInteractionKit {
         if isInstalled(type: type) {
             switch type {
             case .meloNX:
-                UIApplication.shared.open(Constants.URLs.FetchMeloNXGames)
+                UIApplication.shared.open(R.URLs.FetchMeloNXGames)
             case .xeniOS:
-                UIApplication.shared.open(Constants.URLs.FetchXeniOSGames)
+                UIApplication.shared.open(R.URLs.FetchXeniOSGames)
+            case .dukeX:
+                UIApplication.shared.open(R.URLs.FetchDukeXGames)
             }
             
         } else {
@@ -63,6 +72,8 @@ struct EmulatorInteractionKit {
                 UIView.makeToast(message: R.string.localizable.notInstallMeloNX())
             case .xeniOS:
                 UIView.makeToast(message: R.string.localizable.notInstall("XeniOS"))
+            case .dukeX:
+                UIView.makeToast(message: R.string.localizable.notInstall("DukeX"))
             }
         }
     }
@@ -90,6 +101,9 @@ struct EmulatorInteractionKit {
                     case .xeniOS:
                         game.fileExtension = "iso"
                         game.gameType = .xbox360
+                    case .dukeX:
+                        game.fileExtension = "xiso"
+                        game.gameType = .xbox
                     }
                     game.id = mg.titleId
                     game.name = mg.titleName
@@ -112,6 +126,8 @@ struct EmulatorInteractionKit {
                         UIView.makeToast(message: R.string.localizable.biosImportSuccess("MeloNX Games"))
                     case .xeniOS:
                         UIView.makeToast(message: R.string.localizable.biosImportSuccess("Xenios Games"))
+                    case .dukeX:
+                        UIView.makeToast(message: R.string.localizable.biosImportSuccess("DukeX Games"))
                     }
                 }
             }

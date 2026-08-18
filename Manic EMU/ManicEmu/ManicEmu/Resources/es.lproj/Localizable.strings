@@ -11,7 +11,6 @@
 //MARK: - Importación
 "ImportAddCloudServiceTitle" = "Servicios en la nube";
 "ImportAddLanServiceTitle" = "Servicios locales";
-"ImportAddDiscoverServiceTitle" = "Servicios descubiertos";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -32,7 +31,6 @@
 "LandServiceEditConnect" = "Conectar";
 "AddLandServiceSuccess" = "%@ añadido con éxito";
 "AddLandServiceFailed" = "Error al añadir %@\nVerifique la conexión y la configuración";
-"AddLandServiceTimeout" = "Tiempo de conexión agotado";
 "FilesImporterErrorFileExist" = "\"%@\" ya existe";
 "FilesImporterErrorBadCopy" = "Error al importar \"%@\": fallo en la copia";
 "FilesImporterErrorBadExtension" = "Error al importar \"%@\": extensión no compatible";
@@ -78,7 +76,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nUsar navegador para transferir";
 "ImportServiceListPasteTitle" = "Leer portapapeles";
 "ImportServiceListPasteDetail" = "Soporta archivos desde macOS y Files";
-"ImportHowTo" = "Cómo importar";
 "ImportTopHintTitle" = "¡Una aventura llena de sueños está por comenzar!";
 "ImportDragAndDropTips" = "Arrastra archivos a cualquier pantalla de Manic EMU";
 "ImportChannelTips" = "Únete a %@ para obtener ayuda";
@@ -112,7 +109,6 @@
 "TimeDurationMinuteFormat" = "%d minutos";
 "FatalErrorTitle" = "Error crítico";
 "FatalErrorDesc" = "Fallo en recursos del sistema: puede afectar a Manic EMU";
-"LodingFailedTitle" = "Error de carga";
 "AirPlayDesc" = "¡Comienza la aventura!";
 "ToastSuccess" = "Guardado";
 "ToastFailed" = "Error al guardar";
@@ -128,25 +124,22 @@
 "GamesImportSave" = "Importar partida";
 "GamesShareSave" = "Exportar partida";
 "GamesDelete" = "Eliminar";
-"GamesRandom" = "Elige por mí";
 "LoadGameErrorRomNotExist" = "ROM no encontrada";
 "GamesListEmptyGuideLeft" = "Pulsa el";
 "GamesListEmptyGuideRight" = "de abajo para importar";
 "GamesListEmptyWelcomeLeft" = "Bienvenido a";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Asegúrese de obtener ROMs legalmente";
+"LandscapeEmptyAddGame" = "Añadir juego";
 "DeleteGameAlertDetail" = "¡Se eliminarán ROM, saves y cheat codes!";
 "DeleteSkinAlertDetail" = "¡La skin se eliminará permanentemente!";
-"DeleteGameGameStateAlertTitle" = "Eliminar save state";
 "DeleteGameGameStateAlertDetail" = "¡Save state se eliminará permanentemente!";
 "confirmDelte" = "Confirmar";
 
 //MARK: - Mandos
 "ControllersTouchName" = "Pantalla táctil";
-"ControllersHeaderTitle" = "Mandos";
 "ControllersPlayerIndex" = "Jugador %d";
 "ControllersPlayerUnset" = "Sin asignar";
-"ControllersHowToConnect" = "Cómo conectar";
 
 //MARK: - Info juego
 "ReadyGameInfoSubTitle" = "Jugado hace %@ · Total %@";
@@ -158,7 +151,6 @@
 "ReadySegmentManualSave" = "Manual save states";
 "ReadySegmentAutoSave" = "Auto save states";
 "ReadyEditTitleFailed" = "Error: nombre vacío";
-"ReadyEditTitleSuccess" = "Nombre cambiado";
 "ReadyGameSaveStatesEmpty" = "Sin save states";
 "GameSaveGuideBecomTitle" = "Hazte";
 "GameSaveGuideMemberTitle" = "Miembro";
@@ -170,12 +162,10 @@
 "GameSaveTitle" = "Save %d";
 
 //MARK: - Skins
-"SkinNavigationSubTitleCommon" = "Soporta skins .deltaskin .gammaskin";
 "SkinNavigationSubTitleSpecifiedGame" = "Skin exclusiva para %@";
 "SkinSegmentPortraitTitle" = "Vertical";
 "SkinSegmentLandscapeTitle" = "Horizontal";
 "SkinAddTitle" = "Nueva skin";
-"HowToFetch" = "Cómo obtener";
 "SkinDelete" = "Eliminar skin";
 "DefaultSkinCannotEdit" = "Skin predeterminada no editable";
 
@@ -187,16 +177,11 @@
 "HistoryEmptyStartGame" = "Jugar ahora";
 
 //MARK: - Ajustes
-"LeftHandTitle" = "Modo zurdo";
-"LeftHandDetail" = "Espejar controles";
 "QuickGameTitle" = "Inicio rápido";
 "QuickGameDetail" = "Saltar pantalla de preparación";
 "AirPlayTitle" = "Modo AirPlay";
 "AirPlayDetail" = "Juego en pantalla completa";
 "iCloudTitle" = "Sincronización iCloud";
-"iCloudDetail" = "Sincroniza entre dispositivos con mismo Apple ID";
-"AppIconTitle" = "Iconos";
-"WidgetTitle" = "Widgets";
 "QATitle" = "FAQ";
 "FeedbackTitle" = "Feedback";
 "ShareAppTitle" = "Compartir Manic EMU";
@@ -210,13 +195,9 @@
 "AdvanceSettingTitle" = "Avanzados";
 "SupportSettingTitle" = "Soporte";
 "OthersSettingTitle" = "Otros";
-"RatingTitleLeft" = "Valorar";
-"RatingTitleRight" = "";
-"RatingDetail" = "¡Si te gusta, danos 5 estrellas!";
 "iCloudDisableTitle" = "iCloud no disponible";
 "iCloudDisableDetail" = "Active iCloud en Ajustes → Apple ID → iCloud";
 "iCloudSyncConfilictTitle" = "Conflicto de sincronización";
-"iCloudSyncConfilictDetail" = "Nube:\n%@\n\nLocal:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Conservar nube";
 "iCloudSyncConfilictSaveLocal" = "Conservar local";
 "SettingsNonMemberDesc" = "Tú eres el protagonista";
@@ -224,7 +205,6 @@
 "ThanksCommingDesc" = "Gracias por jugar en";
 "PlayGameDesc" = "Manic EMU";
 "NoEmailSetting" = "Email no configurado";
-"IDCopy" = "ID copiada";
 "SendEmailSuccess" = "Email enviado";
 "SendEmailFailed" = "Error: %@";
 "iCloudTipsTitle" = "Sincronización iCloud";
@@ -239,9 +219,6 @@
 "GameSettingVolume" = "Volumen";
 "GameSettingFastForwardResume" = "Velocidad normal";
 "GameSettingFastForward" = "Avance rápido %@";
-"GameSettingStateList" = "Lista de saves";
-"GameSettingSkins" = "Skins";
-"GameSettingFilter" = "Filtros";
 "GameSettingScreenShot" = "Captura";
 "GameSettingHapticOff" = "Sin vibración";
 "GameSettingHapticSoft" = "Vibración suave";
@@ -260,17 +237,13 @@
 "GameSettingReload" = "Reiniciar";
 "GameSettingQuit" = "Salir";
 "GameSaveStateSuccess" = "Save state guardado";
-"GameSaveStateLoadFailed" = "Save state dañado";
 "GameSaveStateLoadSuccess" = "Save state cargado";
 "GameSaveStateQuickLoadFailed" = "No hay saves manuales";
 "GameSaveListTitle" = "Save states";
-"GameCheatActivateFailed" = "%@\nError: cheat inválido";
 "GameCheatActivateSuccess" = "%@\nActivado";
 "AirPlayingTitle" = "Juego en AirPlay";
 "VolumeOff" = "Silencio";
 "VolumeOn" = "Sonido";
-"FunctionSortDesc1" = "Funciones rápidas predeterminadas";
-"FunctionSortDesc2" = "Arrastrar para reordenar";
 "ManualGameSaveCountLimit" = "¡Límite de saves! Actualiza a Premium";
 "FastForwardSpeedLimit" = "¡Límite x2! Premium para x5";
 "ResetSpeed" = "Velocidad normal";
@@ -284,13 +257,10 @@
 "AutoDetectFormat" = "Introduce código para detección";
 "CheatCodeFormatError" = "Formato incorrecto";
 "CheatCodeEmptyTitle" = "Sin cheats";
-"CheatCodeEmptyGuideLeft" = "Pulsa el";
-"CheatCodeEmptyGuideRight" = "superior izquierdo para añadir cheats";
 "EnableCheatCodeAlertTitle" = "Activar cheat codes";
 "EnableCheatCodeAlertDetail" = "¡Los cheat codes deben coincidir con la versión del juego! Su uso puede causar inestabilidad";
 
 //MARK: - Filtros
-"FilterSectionHeaderTitle" = "Filtros visuales";
 "FilterOriginTitle" = "Original";
 
 //MARK: - Compras
@@ -329,7 +299,6 @@
 "PurchasePending" = "Pago pendiente";
 "PurchaseUnknown" = "Estado desconocido";
 "PurchaseErrorDesc" = "Error de conexión";
-"PurchaseFailedTitle" = "Pago fallido";
 "RestoreSuccessDesc" = "¡Compras restauradas!";
 "RestoreEndDesc" = "No se encontraron compras";
 "TrialDesc" = "Prueba gratis sin cargo";
@@ -370,25 +339,12 @@
 "ShareAppSubtitle" = "¡Comparte la aventura!";
 "ShareRomFilesFailed" = "Error al compartir ROM";
 "ShareSaveFilesFailed" = "No hay partidas guardadas";
-"ShareFilesCopyFailed" = "Error al copiar";
-"ShareFilesCompressFailed" = "Error al comprimir";
 
 "TurnOnAirPlayAsk" = "AirPlay está conectado. ¿Quieres activar el modo pantalla completa ahora?";
 
 "ThreeDSModePerformance" = "Modo Rendimiento";
 "ThreeDSModeCompatibility" = "Modo Compatibilidad";
 "ThreeDSModeQuality" = "Prioridad Gráfica";
-"ThreeDSNotSupportImportSave" = "Los juegos 3DS no admiten importar partidas actualmente";
-"ThreeDSNotSupportShareSave" = "Los juegos 3DS no admiten compartir partidas actualmente";
-"ThreeDSBetaAlertTitle" = "Versión Experimental 3DS";
-"ThreeDSBetaAlertDetail" = "Para que puedas disfrutar antes de los juegos 3DS, Manic EMU ha lanzado esta función en fase experimental. Algunos aspectos aún requieren optimización.
-
-Funcionalidades temporalmente no disponibles:
-❌ Modo Pantalla Completa AirPlay
-❌ Guardado Automático
-❌ Velocidad Aumentada
-
-Si experimentas inestabilidad, consulta nuestras Preguntas Frecuentes o únete a nuestro canal de soporte. Seguimos optimizando el emulador. Tu comprensión y apoyo nos ayudarán a crear una experiencia de juego más perfecta. Trabajamos sin descanso para mejorar tu entorno de juego.";
 "ThreeDSNoSupportDeviceTitle" = "Rendimiento del dispositivo insuficiente";
 "ThreeDSNoSupportDeviceDetail" = "El rendimiento de este dispositivo podría no soportar la emulación 3DS. Continuar podría causar errores impredecibles";
 
@@ -407,8 +363,6 @@ Presiona el botón del control para completar...";
 "FullScreenWhenConnectControllerTitle" = "Pantalla completa automática";
 "FullScreenWhenConnectControllerDetail" = "Entrar automáticamente en pantalla completa al conectar un control";
 "JoinDiscordTitle" = "Unirse a Discord";
-"JoinDiscordAlertMessage" = "Gracias al jugador %@ por crear este canal. ¿Continuar?";
-"FlexSkinGuideTitle" = "Arrastra o haz zoom con dos dedos para ajustar";
 "DownloadFailed" = "Descarga fallida";
 "RemoveDownloadTask" = "¿Cancelar descarga y eliminar \"%@\"?";
 "GameSettingResolution" = "Resolución %@";
@@ -458,9 +412,6 @@ Presiona el botón del control para completar...";
 "RenderRightEyeDesc" = "Desactivar el renderizado del ojo derecho mejora el rendimiento en algunos juegos, pero puede causar problemas como parpadeo de pantalla";
 "DisableTitle" = "Desactivar";
 "EnableTitle" = "Activar";
-"NoSaveStateToast" = "%@ no disponible";
-"DeleteSelectedSaveStateAlert" = "¿Eliminar el «%@» seleccionado?\n¡Esta acción no se puede deshacer!";
-"DeleteAllSaveStateAlert" = "No hay elementos seleccionados. ¿Eliminar todos los «%@»?\n¡Esta acción no se puede deshacer!";
 "AICoverSearchDesc" = "Detectamos búsqueda en idiomas no ingleses. Actualice a Premium para que Manic EMU use IA avanzada en búsquedas multilingües";
 "MaxTextSizeAllowDesc" = "Esta opción admite hasta %@ caracteres";
 
@@ -488,29 +439,21 @@ Presiona el botón del control para completar...";
 "BiosAddTitle" = "Añadir BIOS";
 "StartGameWithoutBiosTitle" = "Iniciar sin BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Modo Avanzado";
 "ThreeDSAdvanceSettingTitle" = "Ajustes Avanzados";
-"ThreeDSBasicSettingMode" = "Modo Básico";
 "ShareConfigButtonTitle" = "Compartir Configuración";
 "ImportConfigButtonTitle" = "Importar Configuración";
 "ShareFileFailedMissing" = "Error al compartir: el archivo no existe";
 "ReadConfigFileFailed" = "No se pudo leer el archivo de configuración";
 "SwitchEmulationCore" = "Cambiar Núcleo";
 "SwitchEmulationCoreDetail" = "Cambiar núcleo de emulación para %@\nEl cambio de núcleo hará inaccesibles las partidas guardadas del núcleo anterior. Para acceder a ellas, vuelva al núcleo original";
-"BeetleSaturnNoSupportCheat" = "El núcleo Beetle Saturn no admite códigos de trucos. Si necesita trucos, cambie al núcleo Yabause";
-"CurrentTitle" = "actual";
 "NewSkinDesc" = "Manic EMU admite skins en formatos .manicskin y .deltaskin .gammaskin. Nota: las características del skin importado deben coincidir con la plataforma actual, de lo contrario no aparecerá en la lista.\nTambién proporcionamos acceso a comunidades de skins de terceros. Estas no están afiliadas oficialmente con Manic EMU. Al descargar skins, cumpla estrictamente con los términos de servicio de cada sitio";
 "VisitSite" = "Visitar %@";
 "OpenFile" = "Abrir Archivo";
 "WebViewDownloadBegin" = "Descarga iniciada";
 "RespectSilentMode" = "Respetar Modo Silencio";
 "RespectSilentModeDesc" = "Cuando está activado, Manic EMU solo reproduce audio si el modo silencio está desactivado";
-"SaturnISONoSwitchCore" = "Los juegos de Sega Saturn en formato .iso no admiten cambio de núcleo";
-"EnableFullScreenTitle" = "Activar Pantalla Completa";
-"DisableFullScreenTitle" = "Desactivar Pantalla Completa";
 "SimulateBlowingTitle" = "Simular Soplado";
 "PaletteTitle" = "Paleta";
-"SkinRestDesc" = "Restablecer la skin también devolverá las skins asignadas por el juego a su estado predeterminado";
 "SkinResetForAll" = "Restablecer todas las skins de plataforma";
 "SkinResetForPlatform" = "Restablecer skin de %@";
 "SkinDebug" = "Zona de Pruebas de Skins";
@@ -527,7 +470,6 @@ Presiona el botón del control para completar...";
 "MultiDiscCloseAlert" = "Archivo .m3u generado. Cierra esta página tras importarlo a tu biblioteca";
 "MultiDiscContinueClose" = "Cerrar";
 "SwapDisk" = "Cambiar disco";
-"NotSupportSwapDisk" = "No es un juego multidisco";
 "TransferPakDesc" = "Transfer Pak sincroniza datos GB/GBC con N64. Para activar, importa tanto el ROM (.gb/.gbc) como el archivo de guardado (.sav)";
 "TransferPakFromLibrary" = "Importar desde biblioteca";
 "TransferPakFromLibraryDesc" = "Solo se muestran juegos con archivos de guardado.\nLos juegos GB/GBC seleccionados deben coincidir con el ROM de N64, o Transfer Pak podría fallar";
@@ -536,7 +478,6 @@ Presiona el botón del control para completar...";
 "TransferPakOn" = "Activado";
 "TransferPakOff" = "Desactivado";
 "TransferPakImportError" = "Error: Importa ambos archivos (ROM y guardado, 2 archivos requeridos)";
-"ShowControlsTitle" = "Mostrar controles";
 "HideControlsTitle" = "Ocultar controles";
 
 "DesignedFor" = "Diseñado para %@";
@@ -559,7 +500,6 @@ Presiona el botón del control para completar...";
 "WfcConnectDesc" = "Conectando a Nintendo WFC...\nSe desactivan aceleración y trucos";
 "WfcDisconnectDesc" = "Desconectar de Nintendo WFC";
 "NotAllowOnlineGame" = "Función desactivada en juego online";
-"QuitGameAlert" = "¿Salir del juego? Se perderá el progreso no guardado";
 
 "SkinIdentifierExist" = "Identificador: %@ ya existe. Por favor, modifícalo y vuelve a importar.";
 "AnalogModeChange" = "Cambiar a modo %@";
@@ -593,7 +533,6 @@ Presiona el botón del control para completar...";
 "LastActivity" = "Última actividad: %@";
 "MemberSince" = "Miembro desde: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Progreso de completado";
 "AchievementsList" = "Logros";
 "TotalAchievements" = "%d logros en total";
@@ -616,7 +555,6 @@ Presiona el botón del control para completar...";
 "DisableAchievementsAlert" = "¿Desactivar RetroAchievements?";
 "SaveStateCoreUnCompatible" = "El estado de guardado se creó en %@ (actual: %@). ¡Cargarlo puede causar problemas!";
 "LatestSaveStateUnCompatible" = "El último estado de guardado no se puede cargar por incompatibilidad del núcleo";
-"Snes9xAlert" = "Debido a problemas de licencia, el núcleo Snes9x se eliminará en futuras actualizaciones. Cambia a bsnes y migra tus estados de guardado, o no funcionarán.";
 "GotIt" = "Entendido";
 "Rumble" = "Vibración";
 "RumbleDetail" = "El dispositivo vibra durante ciertos eventos";
@@ -632,7 +570,6 @@ Presiona el botón del control para completar...";
 "JumpTips" = "Abriendo página de terceros";
 "ThirdPartGameInfoTips" = "La info del juego la proporcionan terceros. Usa tu criterio y sigue las normas. Si Manic EMU no encuentra un juego, usa la búsqueda manual.";
 "NotSupportHardcore" = "El Modo Hardcore está desactivado para este juego. Quizá Manic EMU no está autorizado por RetroAchievements, o el juego no lo soporta.";
-"ChooseOne" = "Elige uno";
 "FilesImporterErrorBadCue" = "Error al importar %@. El archivo puede ser inválido o no estar codificado en UTF-8. Comprueba el formato.";
 "Leaderboard" = "Clasificación";
 "LeaderboardStart" = "Inicio clasificación: ";
@@ -648,10 +585,8 @@ Presiona el botón del control para completar...";
 "AlwaysShowProgressDesc" = "Mantener visible el progreso de logros en pantalla.";
 "Progress" = "Progreso";
 
-"DCGameNoSupportGameSave" = "Dreamcast no admite importación/exportación de partidas. Use VMU Explorer para editar archivos de memoria en la carpeta Manic EMU-Flycast-dc.";
 
 "Challenge" = "Desafío";
-"GameTypeLicensingError" = "¡Lo sentimos! Debido a restricciones de licencia con el núcleo %@, esta plataforma no está disponible temporalmente. Puedes esperar una futura actualización o usar nuestra versión de carga lateral.";
 "DCJITLessVer" = "La versión Predeterminada ofrece emulación rápida y precisa, pero no puede ejecutar juegos WinCE. Para jugar títulos WinCE, selecciona el núcleo WinCE.";
 "TVStandard" = "Si el estándar de TV del juego no coincide con la región, puede afectar la velocidad. Las regiones PAL incluyen principalmente Europa, Australia y Nueva Zelanda.";
 "SNESVRAMEnable" = "Algunas ROMs modificadas requieren esta opción para renderizar gráficos correctamente, pero su activación deshabilitará el soporte para RetroAchievements.";
@@ -674,7 +609,6 @@ Presiona el botón del control para completar...";
 "LayoutEmbeddedBottomRight" = "Incrustado (Inferior-Derecha)";
 "LayoutSingleScreen" = "Pantalla única";
 "AirPlayLayoutTips" = "Combina la disposición AirPlay con Intercambiar pantalla para más opciones. Nota: Usar Intercambiar pantalla con disposición incrustada puede causar superposición, no recomendado";
-"ToggleAnolog" = "Alternar analógico";
 "EnableGlobalAchievements" = "Habilitar RetroAchievements globales";
 "GlobalHardcoreMode" = "Modo hardcore global";
 "GlobalHardcoreAlert" = "Primero habilita RetroAchievements globales";
@@ -690,7 +624,6 @@ Presiona el botón del control para completar...";
 "AppearanceLight" = "Modo Claro";
 "AppearanceDark" = "Modo Oscuro";
 "AppearanceAuto" = "Seguir Sistema";
-"GameListBackground" = "Imagen de Fondo";
 "GameListBackgroundUpload" = "Subir";
 "GameplayManuals" = "Manuales de Juego";
 "GameplayManualsNoExists" = "No hay manual disponible para este juego.";
@@ -700,7 +633,6 @@ Presiona el botón del control para completar...";
 "UnsupportSkinsDesc" = "Las siguientes skins no son soportadas en este dispositivo:\n%@Nota: Eliminarlos también borrará estas skins de otros dispositivos sincronizados vía iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Skins no soportados eliminados exitosamente";
 "ForbitPKSM" = "Para garantizar una experiencia justa en RetroAchievements, PKSM no puede usarse mientras RetroAchievements Global esté habilitado.";
-"FDSAlert" = "Esta opción solo está disponible para juegos FDS.";
 "DiskSideChange" = "Voltear Disco";
 "EjectDisk" = "Expulsar Disco";
 
@@ -733,7 +665,6 @@ Presiona el botón del control para completar...";
 "TriggerProName" = "Nombre de TriggerPro";
 "Position" = "Posición";
 "ButtonInfo" = "Información del botón";
-"NoTriggerPro" = "No se encontró configuración de TriggerPro. Puedes ir a Ajustes o mantener pulsada la opción TriggerPro en el Menú del juego para crear una";
 "ManageTriggerPro" = "Gestionar TriggerPro";
 "EnableTriggerPro" = "Activar TriggerPro";
 "DisableTriggerPro" = "Desactivar TriggerPro";
@@ -774,7 +705,6 @@ Presiona el botón del control para completar...";
 "Default" = "Por defecto";
 "Imported" = "Importado";
 "DownloadRetroArchSahders" = "Descargar sombreadores de RetroArch";
-"ImportShaders" = "Importar sombreadores";
 "Shaders" = "Sombreadores";
 "DownloadRetroArchShaders" = "¿Quieres descargar sombreadores de RetroArch? Una vez completado, la categoría de sombreadores de RetroArch se actualizará automáticamente. Puedes cancelar este proceso en cualquier momento en el gestor de descargas.";
 "RetroArchShaderUnzipFailed" = "No se pudo extraer %@. El archivo pudo haberse dañado durante la descarga. Por favor, inténtalo de nuevo.";
@@ -807,7 +737,6 @@ Si quieres mejorar tu configuración, PlayCase es el complemento perfecto para e
 "JGenesisAlert" = "Lo sentimos, el núcleo JGenesis solo admite archivos ROM .chd.";
 "RedeemOfferCode" = "Canjear Oferta";
 "CheatImportFailed" = "Importación fallida. No se pudo analizar el archivo o no se encontraron códigos de truco coincidentes.";
-"RemoveAllCheats" = "Eliminar Todos los Trucos";
 "RemoveAllCheatsAlert" = "¿Estás seguro de que quieres eliminar todos los códigos de truco? Esta acción no se puede deshacer.";
 "CheatCodeStatus" = "Habilitado";
 "Background" = "Fondo";
@@ -820,13 +749,8 @@ Si quieres mejorar tu configuración, PlayCase es el complemento perfecto para e
 "RemoveBackgroundForGame" = "Eliminar Fondo del Juego";
 "RemoveBackgroundForConsole" = "Eliminar Fondo de la Plataforma %@";
 "RemoveBackgroundForGlobal" = "Eliminar Fondo Global";
-"ShaderConfigAlert" = "Establecido para %@.";
-"Global" = "Global";
-"RemoveShaderForGlobal" = "Eliminar Shader Global";
 "FeaturedItems" = "Artículos Destacados";
-"ReUpload" = "Volver a Subir";
 
-"Service" = "Servicios";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "Red de PSP";
 "Networking" = "Red";
@@ -865,16 +789,11 @@ Si quieres mejorar tu configuración, PlayCase es el complemento perfecto para e
 "LoadingCheerpJ" = "Cargando CheerpJ";
 "ZipHandlerTitle" = "Manejo de archivos ZIP";
 "ZipHandlerDetail" = "Algunas plataformas (como DOS y Arcade) pueden cargar ROM directamente desde archivos .zip. Para otras plataformas, las ROM dentro de un .zip deben extraerse antes de importarlas.\n\nLos archivos seleccionados se extraerán e importarán individualmente, mientras que los archivos no seleccionados se importarán como un único ZIP ROM.";
-"ConfigsResetCore" = "Restablecer valores predeterminados del núcleo";
-"ConfigsResetBefore" = "Revertir a configuración anterior";
 "InsertDisc" = "Insertar disco";
 "InsertDiscAlert" = "Puedes insertar un disco seleccionando otro juego de la misma plataforma en tu biblioteca, o eligiendo un archivo de disco desde Archivos. Debido a las limitaciones del sistema de archivos de iOS, los archivos de disco seleccionados desde Archivos se copiarán en la caché de Manic EMU.";
 "InsertDiscFailed" = "Error al insertar el disco";
 "GenerateHomeMenu" = "Crear menú de inicio";
 "SkinSoundEffects" = "Efectos de sonido de la piel";
-"FirstAnniversary" = "GRACIAS POR ESTAR AQUÍ,\nTE ESCRIBIMOS ALGO";
-"ApirlFoolsDayTitle" = "Vaya, ¿se ha roto Manic EMU?";
-"ApirlFoolsDayDetail" = "¡No te preocupes!\nEs una broma—¡Feliz Día de los Inocentes!\n\nTodo volverá a la normalidad cuando cierres esto.";
 "JITType" = "Tipo de JIT";
 "JITTypeDesc" = "El JIT estándar ofrece el mejor rendimiento, mientras que el JIT IR ofrece un rendimiento moderado.";
 "Pretendo" = "Red Pretendo";
@@ -889,7 +808,6 @@ Si quieres mejorar tu configuración, PlayCase es el complemento perfecto para e
 "HomeMenuDesc" = "Usa el botón de abajo para abrir el Menú de Inicio. Luego ve a Ajustes de Nimbus, cambia a la red Pretendo y abre Ajustes para seleccionar \"ID de Nintendo Network\" e inicia sesión con tu cuenta de Pretendo.\n\nDespués de eso, cualquier juego iniciado desde el Menú de Inicio o que se ejecute con el núcleo Azahar usará la red Pretendo.\n\nSi falta la entrada del Menú de Inicio, esta función intentará recrearla automáticamente.";
 "OpenHomeMenu" = "Abrir Menú de Inicio";
 "ChooseRegion" = "Seleccionar región";
-"ChooseRegionDesc" = "Selecciona la región correcta del dispositivo 3DS que ejecuta la herramienta Artic Setup. Elegir la región incorrecta impedirá que la transferencia de datos sea exitosa.";
 "HomeMenuNotFound" = "No se encuentra el Menú de Inicio. Completa primero la transferencia de datos de Artic Base.";
 "SystemUpdateAsk" = "¿La actualización del sistema se completó correctamente?";
 "SystemUpdateDesc" = "Si la actualización del sistema falló debido a problemas de red, intenta transferir los datos de nuevo. De lo contrario, el Menú de Inicio de 3DS podría no funcionar correctamente.";

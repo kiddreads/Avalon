@@ -9,7 +9,6 @@
 
 import UIKit
 import SideMenu
-import KeyboardKit
 
 class ImportViewController: BaseViewController {
     private var cornerMaskViewForiPad: TransparentHoleView = {
@@ -19,7 +18,7 @@ class ImportViewController: BaseViewController {
     
     private lazy var importServiceListView: ImportServiceListView = {
         let view = ImportServiceListView()
-        view.addServiceButton.addTapGesture { [weak self] gesture in
+        view.didTapAddService = { [weak self] in
             guard let self = self else { return }
             self.showSideMenu()
         }
@@ -47,7 +46,6 @@ class ImportViewController: BaseViewController {
         if UIDevice.isPhone {
             coordinator.animate(alongsideTransition: nil) { [weak self] _ in
                 self?.hideSideMenu()
-                self?.importServiceListView.updateViews()
             }
         }
     }
@@ -56,16 +54,16 @@ class ImportViewController: BaseViewController {
         if UIDevice.isPhone {
             view.addSubview(importServiceListView)
             importServiceListView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.top.bottom.equalToSuperview()
+                make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             }
         } else {
             view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-            importServiceListView.backgroundColor = Constants.Color.Background
-            importServiceListView.addServiceButton.isHidden = true
+            importServiceListView.backgroundColor = R.Color.BackgroundPrimary
             view.addSubview(importServiceListView)
             importServiceListView.snp.makeConstraints { make in
                 make.top.bottom.trailing.equalToSuperview()
-                make.width.equalToSuperview().offset(-Constants.Size.SideMenuWidth*1.15)
+                make.width.equalToSuperview().offset(-R.Size.SideMenuWidth*1.2)
             }
             
             view.addSubview(addImportServiceView)
@@ -81,7 +79,7 @@ class ImportViewController: BaseViewController {
         }
     }
     
-    override func handleScreenPanGesture(edges: UIRectEdge) {
+    override func handleScreenPanGesture(edges: UIRectEdge, gesture: UIScreenEdgePanGestureRecognizer) {
         if UIDevice.isPhone || (UIDevice.isPad && !UIDevice.isLandscape) {
             if edges == .left {
                 showSideMenu()
@@ -89,27 +87,21 @@ class ImportViewController: BaseViewController {
         }
     }
     
-    @discardableResult
-    override func becomeFirstResponder() -> Bool {
-        Log.debug("importServiceListView becomeFirstResponder")
-        return importServiceListView.collectionView.becomeFirstResponder()
-    }
-    
-    @discardableResult
-    override func resignFirstResponder() -> Bool {
-        Log.debug("importServiceListView resignFirstResponder")
-        return importServiceListView.collectionView.resignFirstResponder()
-    }
-    
     private func showSideMenu() {
         UIDevice.generateHaptic()
-        let vc = AddImportServiceViewController(addImportServiceView: addImportServiceView)
-        let menu = ControllableSideMenu(rootViewController: vc)
+        let containerVC = BaseViewController()
+        containerVC.enableBackgroundMask = false
+        containerVC.view.backgroundColor = .clear
+        containerVC.view.addSubview(addImportServiceView)
+        addImportServiceView.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        let menu = SideMenuNavigationController(rootViewController: containerVC)
         menu.navigationBar.isHidden = true
-        menu.presentDuration = Constants.Numbers.LongAnimationDuration
-        menu.dismissDuration = Constants.Numbers.LongAnimationDuration
+        menu.presentDuration = R.Numbers.LongAnimationDuration
+        menu.dismissDuration = R.Numbers.LongAnimationDuration
         menu.leftSide = !Locale.isRTLLanguage
-        menu.menuWidth = Constants.Size.SideMenuWidth
+        menu.menuWidth = R.Size.SideMenuWidth
         menu.presentationStyle = SideMenuShowStyle()
         topViewController()?.present(menu, animated: true)
         sideMenu = menu
@@ -120,30 +112,3 @@ class ImportViewController: BaseViewController {
     }
 }
 
-extension ImportViewController: UIControllerPressable {
-    override var keyCommands: [UIKeyCommand]? {
-        var commands = super.keyCommands ?? []
-        commands.append(UIKeyCommand(input: "[", modifierFlags: [], action: #selector(didImportViewKeyboardPress)))
-        return commands
-    }
-    
-    func didControllerPress(key: UIControllerKey) {
-        if !UIDevice.isPad {
-            if key == .l2 {
-                showSideMenu()
-            }
-        }
-    }
-    
-    @objc func didImportViewKeyboardPress(_ sender: UIKeyCommand) {
-        if let topViewController = topViewController(),
-            topViewController is ControllerMappingViewController {
-            return
-        }
-        if let inputString = sender.input, !(UIDevice.isPad && UIDevice.isLandscape) {
-            if inputString == "[" {
-                showSideMenu()
-            }
-        }
-    }
-}

@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import RealmSwift
-
 import IceCream
 
 extension Skin: CKRecordConvertible & CKRecordRecoverable { }
@@ -51,7 +50,7 @@ class Skin: Object, ObjectUpdatable {
             return filePath
         }
         //这里没什么用 如果返回下面的地址 说明该皮肤不可用 或者 是嵌入式manic皮肤
-        return URL(fileURLWithPath: Constants.Path.Resource.appendingPathComponent(fileName))
+        return URL(fileURLWithPath: R.Path.Resource.appendingPathComponent(fileName))
     }
     
     func getExtra(key: String) -> Any? {
@@ -71,5 +70,28 @@ class Skin: Object, ObjectUpdatable {
                 self.extras = data
             }
         }
+    }
+    
+    var canDeleted: Bool {
+        if skinType == .default || skinType == .buildIn {
+            return false
+        }
+        return true
+    }
+    
+    lazy var controllerSkin: ControllerSkin? = {
+        ControllerSkin(fileURL: fileURL)
+    }()
+    
+    var isFlexSkin: Bool {
+        return fileName.contains("_FLEX.manicskin")
+    }
+    
+    var isEditable: Bool {
+        if skinType == .default ||
+            identifier == "public.aoshuang.game.dos.standard.keyboard" {
+            return false
+        }
+        return true
     }
 }

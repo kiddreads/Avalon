@@ -102,13 +102,19 @@ public class SectionIndexViewItemView: UIView, SectionIndexViewItem {
         set { titleLabel.font = newValue }
         get { titleLabel.font }
     }
-    @objc public var titleColor: UIColor {
-        set { titleLabel.textColor = newValue }
-        get { titleLabel.textColor }
+    @objc public var titleColor: UIColor = #colorLiteral(red: 0.3005631345, green: 0.3005631345, blue: 0.3005631345, alpha: 1) {
+        didSet {
+            if !isSelected {
+                titleLabel.textColor = titleColor
+            }
+        }
     }
-    @objc public var titleSelectedColor: UIColor? {
-        set { titleLabel.highlightedTextColor = newValue }
-        get { titleLabel.highlightedTextColor }
+    @objc public var titleSelectedColor: UIColor? = nil {
+        didSet {
+            if isSelected {
+                titleLabel.textColor = titleSelectedColor
+            }
+        }
     }
     
     @objc public var selectedColor: UIColor? {
@@ -123,7 +129,6 @@ public class SectionIndexViewItemView: UIView, SectionIndexViewItem {
         label.textAlignment = .center
         label.backgroundColor = .clear
         label.textColor = #colorLiteral(red: 0.3005631345, green: 0.3005631345, blue: 0.3005631345, alpha: 1)
-        label.highlightedTextColor = #colorLiteral(red: 0, green: 0.5291740298, blue: 1, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 10)
         return label
     }()
@@ -182,7 +187,7 @@ public class SectionIndexViewItemView: UIView, SectionIndexViewItem {
     }
     
     private func selectItem(_ select: Bool) {
-        titleLabel.isHighlighted = select
+        titleLabel.textColor = select ? (titleSelectedColor ?? titleColor) : titleColor
         imageView.isHighlighted = select
         selectedView.isHidden = !select
     }

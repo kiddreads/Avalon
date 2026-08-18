@@ -19,25 +19,9 @@ enum SelectionType {
     case selectNone
 }
 
-class GamesToolView: UIView {
+class GamesToolView: BaseView {
     ///选则状态
     var isSelectAll = false
-    
-    var enableBackground: Bool = false {
-        didSet {
-            if enableBackground {
-                backgroundGradientView.isHidden = true
-            } else {
-                backgroundGradientView.isHidden = false
-            }
-        }
-    }
-    
-    var backgroundGradientView: UIView = {
-        let view = GradientView()
-        view.setupGradient(colors: [Constants.Color.BackgroundPrimary, Constants.Color.Background], locations: [0.0, 1.0], direction: .topToBottom)
-        return view
-    }()
     
     fileprivate class RightPaddingTextField: UITextField {
         override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
@@ -47,15 +31,14 @@ class GamesToolView: UIView {
     
     private lazy var searchTextField: UITextField = {
         let textField = RightPaddingTextField()
-        textField.attributedPlaceholder = NSAttributedString(string: R.string.localizable.gamesSearchPlaceHolder(), attributes: [.foregroundColor: Constants.Color.LabelSecondary, .font: Constants.Font.body()])
-        textField.textColor = Constants.Color.LabelPrimary
-        textField.font = Constants.Font.body()
+        textField.attributedPlaceholder = NSAttributedString(string: R.string.localizable.gamesSearchPlaceHolder(), attributes: [.foregroundColor: R.Color.LabelSecondary, .font: R.Font.Footnote()])
+        textField.textColor = R.Color.LabelPrimary
+        textField.font = R.Font.Footnote()
         textField.clearButtonMode = .never
         textField.returnKeyType = .search
-        textField.modifyClearButton(with: UIImage(symbol: .xmarkCircleFill, color: Constants.Color.LabelSecondary), size: 28)
-        textField.onReturnKeyPress { [weak textField, weak self] in
+        textField.modifyClearButton(with: UIImage(symbol: .xmarkCircleFill, color: R.Color.LabelSecondary), size: 28)
+        textField.onReturnKeyPress { [weak textField] in
             textField?.resignFirstResponder()
-            self?.didSearchTextResignFirstResponder?()
         }
         textField.onEditingEnded { [weak textField, weak self] in
             self?.didSearchChange?(textField?.text)
@@ -64,19 +47,35 @@ class GamesToolView: UIView {
             self?.didSearchChange?(nil)
             return true
         }
+        textField.isFocusable = true
+        textField.onFocusConfirm = { [weak textField] in
+            textField?.becomeFirstResponder() ?? false
+        }
         return textField
     }()
 
     private lazy var searchIcon: GamesToolIconView = {
-        let view = GamesToolIconView(toolView: searchTextField, normalSymbol: .magnifyingglass, iconSize: Constants.Size.SymbolSize, autoLayutType: .greater(1000))//占据尽可能多的空间
+        let view = GamesToolIconView(toolView: searchTextField, normalSymbol: .magnifyingglass, iconSize: 16, autoLayutType: .greater(1000))//占据尽可能多的空间
         view.imageView.addTapGesture { [weak self]  gesture in
             guard let self = self else { return }
+            UIDevice.generateHaptic()
             self.searchIcon.isSelected = !self.searchIcon.isSelected
             if self.searchIcon.isSelected {
                 self.startSearch()
             } else {
                 self.stopSearch()
             }
+        }
+        view.onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            UIDevice.generateHaptic()
+            self.searchIcon.isSelected = !self.searchIcon.isSelected
+            if self.searchIcon.isSelected {
+                self.startSearch()
+            } else {
+                self.stopSearch()
+            }
+            return true
         }
         return view
     }()
@@ -89,8 +88,8 @@ class GamesToolView: UIView {
         //标题
         let label = selectIconLabel
         label.textAlignment = .center
-        label.font = Constants.Font.body()
-        label.textColor = Constants.Color.LabelPrimary
+        label.font = R.Font.Footnote()
+        label.textColor = R.Color.LabelPrimary
         label.text = R.string.localizable.deSelectAll()
         let deSelectAllTextWidth = label.intrinsicContentSize.width
         label.text = R.string.localizable.selectAll()
@@ -98,11 +97,12 @@ class GamesToolView: UIView {
         toolView.addSubview(label)
         label.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceUltraTiny)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceTiny)
         }
-        let view = GamesToolIconView(toolView: toolView, normalSymbol: .checkmarkCircle, selectedSymbol: .xmarkCircle, iconSize: 18, autoLayutType: .equal(max(deSelectAllTextWidth, selectAllTextWidth) + Constants.Size.ContentSpaceUltraTiny*2))
+        let view = GamesToolIconView(toolView: toolView, normalSymbol: .checkmarkCircle, selectedSymbol: .xmarkCircle, iconSize: 18, autoLayutType: .equal(max(deSelectAllTextWidth, selectAllTextWidth) + R.Size.ContentSpaceTiny*2))
         view.addTapGesture { [weak self, weak label] gesture in
             guard let self = self else { return }
+            UIDevice.generateHaptic()
             selectIcon.isSelected = !selectIcon.isSelected
             isSelectAll = false
             if selectIcon.isSelected {
@@ -114,11 +114,50 @@ class GamesToolView: UIView {
                 didToolViewSelectionChange?(.normalMode)
             }
         }
+        view.onFocusConfirm = { [weak self, weak label] in
+            guard let self else { return false }
+            UIDevice.generateHaptic()
+            selectIcon.isSelected = !selectIcon.isSelected
+            isSelectAll = false
+            if selectIcon.isSelected {
+                didToolViewSelectionChange?(.selectionMode)
+            } else {
+                label?.text = R.string.localizable.selectAll()
+                didToolViewSelectionChange?(.normalMode)
+            }
+            return true
+        }
         toolView.addTapGesture { [weak self, weak label] gesture in
             guard let self = self else { return }
+            UIDevice.generateHaptic()
             self.isSelectAll = !self.isSelectAll
             self.updateSelectIconLabel(selectionType: self.isSelectAll ? .selectAll : .selectNone)
             didToolViewSelectionChange?(isSelectAll ? .selectAll : .deSelectAll)
+        }
+        toolView.isFocusable = true
+        toolView.onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            UIDevice.generateHaptic()
+            self.isSelectAll = !self.isSelectAll
+            self.updateSelectIconLabel(selectionType: self.isSelectAll ? .selectAll : .selectNone)
+            self.didToolViewSelectionChange?(self.isSelectAll ? .selectAll : .deSelectAll)
+            return true
+        }
+        return view
+    }()
+    
+    private lazy var themeIcon: GamesToolIconView = {
+        let view = GamesToolIconView(toolView: nil, normalSymbol: .paintpalette, selectedSymbol: .paintpalette, iconSize: 18, autoLayutType: .equal(R.Size.ItemHeightTiny))
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            UIDevice.generateHaptic()
+            ThemeSettingView.show()
+        }
+        view.onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            UIDevice.generateHaptic()
+            ThemeSettingView.show()
+            return true
         }
         return view
     }()
@@ -130,7 +169,6 @@ class GamesToolView: UIView {
     
     var didToolViewSelectionChange: ((SelectionChangeMode)->Void)?
     var didSearchChange: ((String?)->Void)?
-    var didSearchTextResignFirstResponder: (()->Void)? = nil
     var didFilterVisibleChange: (()->Void)? = nil
     
     private var manufacturerFilterChange: Any? = nil
@@ -144,39 +182,34 @@ class GamesToolView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(backgroundGradientView)
-        backgroundGradientView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
         searchIcon.isSelected = true
         
-        let icons = [searchIcon, selectIcon]
+        let icons = [searchIcon, selectIcon, themeIcon]
         addSubviews(icons)
         for (index, icon) in icons.enumerated() {
             icon.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
                 if index == 0 {
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
                 } else {
-                    make.leading.equalTo(icons[index-1].snp.trailing).offset(Constants.Size.ContentSpaceMid)
+                    make.leading.equalTo(icons[index-1].snp.trailing).offset(R.Size.ContentSpaceSmall)
                 }
                 if index == icons.count - 1 {
-                    make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)
+                    make.trailing.lessThanOrEqualToSuperview().offset(-R.Size.ContentSpaceMedium)
                 }
             }
         }
         
         addSubview(manufacturerCategoryView)
         manufacturerCategoryView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(R.Size.ItemHeightMicro)
+            make.bottom.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
         manufacturerCategoryView.isHidden = !(Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false)
         
         
-        manufacturerFilterChange = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ManufacturerFilterChange, object: nil, queue: .main) { [weak self] notification in
+        manufacturerFilterChange = NotificationCenter.default.addObserver(forName: R.NotificationName.ManufacturerFilterChange, object: nil, queue: .main) { [weak self] notification in
             let enableFilter = (notification.object as? Bool) ?? false
             self?.manufacturerCategoryView.isHidden = !enableFilter
             self?.didFilterVisibleChange?()
@@ -186,7 +219,7 @@ class GamesToolView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        roundCorners([.topLeft, .topRight], radius: Constants.Size.CornerRadiusMax)
+        roundCorners([.topLeft, .topRight], radius: R.Size.CornerRadiusLarge)
     }
     
     func updateSelectIconLabel(selectionType: SelectionType) {
@@ -209,7 +242,6 @@ class GamesToolView: UIView {
             searchTextField.text = nil
             searchTextField.resignFirstResponder()
             didSearchChange?(nil)
-            didSearchTextResignFirstResponder?()
         }
         
     }
@@ -230,7 +262,6 @@ class GamesToolView: UIView {
     func foldKeyboard() {
         if searchTextField.isFirstResponder {
             searchTextField.resignFirstResponder()
-            didSearchTextResignFirstResponder?()
         }
     }
     
@@ -239,7 +270,7 @@ class GamesToolView: UIView {
     }
 }
 
-class GamesToolIconView: UIView {
+class GamesToolIconView: BaseView {
     enum AutoLayutType {
         case equal(CGFloat)
         case greater(CGFloat)
@@ -255,10 +286,10 @@ class GamesToolIconView: UIView {
             //更新约束
             if let toolView = toolView {
                 imageView.snp.remakeConstraints { make in
-                    make.size.equalTo(Constants.Size.IconSizeMax.height)
+                    make.size.equalTo(R.Size.IconSizeExtraLarge.height)
                     make.leading.top.bottom.equalToSuperview()
                     if newValue {
-                        make.trailing.equalTo(toolView.snp.leading).offset(Constants.Size.ContentSpaceUltraTiny)
+                        make.trailing.equalTo(toolView.snp.leading).offset(R.Size.ContentSpaceTiny)
                     } else {
                         make.trailing.equalToSuperview()
                     }
@@ -279,7 +310,7 @@ class GamesToolIconView: UIView {
             //更新icon
             imageView.image = UIImage(symbol: newValue ? (selectedSymbol ?? normalSymbol) : normalSymbol,
                                       size: iconSize,
-                                      color: newValue ? Constants.Color.LabelPrimary : Constants.Color.LabelSecondary)
+                                      color: newValue ? R.Color.LabelPrimary : R.Color.LabelSecondary)
         }
     }
     
@@ -287,26 +318,26 @@ class GamesToolIconView: UIView {
         let view = UIImageView()
         view.image = UIImage(symbol: normalSymbol,
                              size: iconSize ,
-                             color: Constants.Color.LabelSecondary)
+                             color: R.Color.LabelSecondary)
         view.contentMode = .center
         view.isUserInteractionEnabled = true
         return view
     }()
     private var toolView: UIView? = nil
     
-    init(toolView: UIView? = nil, normalSymbol: SFSymbol = .wrenchAndScrewdriver, selectedSymbol: SFSymbol? = nil, iconSize: CGFloat = Constants.Size.SymbolSize, autoLayutType: AutoLayutType) {
+    init(toolView: UIView? = nil, normalSymbol: SFSymbol = .wrenchAndScrewdriver, selectedSymbol: SFSymbol? = nil, iconSize: CGFloat = R.Size.SymbolSize, autoLayutType: AutoLayutType) {
         self.normalSymbol = normalSymbol
         self.iconSize = iconSize
         super.init(frame: .zero)
         self.toolView = toolView
         self.selectedSymbol = selectedSymbol
-        makeBlur()
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
+        
+        enablePressEffect = true
+        
         
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.IconSizeMax.height)
+            make.size.equalTo(R.Size.IconSizeExtraLarge.height)
             make.edges.equalToSuperview()
         }
         
@@ -315,7 +346,7 @@ class GamesToolIconView: UIView {
         } else if let toolView = toolView {
             addSubview(toolView)
             toolView.snp.makeConstraints { make in
-                make.top.trailing.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                make.top.trailing.bottom.equalToSuperview().inset(R.Size.ContentSpaceTiny)
                 switch autoLayutType {
                 case .equal(let value):
                     make.width.equalTo(value)
@@ -335,6 +366,6 @@ class GamesToolIconView: UIView {
         super.layoutSubviews()
         layerCornerRadius = height/2
         layer.borderWidth = 1
-        layer.borderColor = Constants.Color.Border.cgColor
+        layer.borderColor = R.Color.Border.cgColor
     }
 }

@@ -7,14 +7,14 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class SparkleSeperatorView: UIView {
+class SparkleSeperatorView: BaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
     
-    init(color: UIColor, lineColor: UIColor? = nil) {
+    init(color: UIColor, lineColor: UIColor = R.Color.Border) {
         super.init(frame: .zero)
         setupViews(color: color, lineColor: lineColor)
     }
@@ -29,27 +29,30 @@ class SparkleSeperatorView: UIView {
         setupViews(starSize: starSize)
     }
     
-    private func setupViews(color: UIColor = Constants.Color.Border, lineColor: UIColor? = nil, isGradient: Bool = false, starSize: CGFloat = 24) {
+    private func setupViews(color: UIColor = R.Color.LabelTertiary,
+                            lineColor: UIColor = R.Color.Border,
+                            isGradient: Bool = false,
+                            starSize: CGFloat = R.Size.ButtonExtraExtraSmall) {
         let starView = isGradient ? GradientImageView(image: UIImage(symbol: .sparkle, size: starSize)) : UIImageView(image: UIImage(symbol: .sparkle, color: color))
         addSubview(starView)
         starView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
         let leftLine = UIView()
-        leftLine.backgroundColor = lineColor ?? color
+        leftLine.backgroundColor = lineColor
         addSubview(leftLine)
         leftLine.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.BorderLineHeight)
+            make.height.equalTo(R.Size.Border)
             make.leading.centerY.equalToSuperview()
-            make.trailing.equalTo(starView.snp.leading).offset(-Constants.Size.ContentSpaceMin)
+            make.trailing.equalTo(starView.snp.leading).offset(-R.Size.ContentSpaceSmall)
         }
         let rightLine = UIView()
-        rightLine.backgroundColor = lineColor ?? color
+        rightLine.backgroundColor = lineColor
         addSubview(rightLine)
         rightLine.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.BorderLineHeight)
+            make.height.equalTo(R.Size.Border)
             make.trailing.centerY.equalToSuperview()
-            make.leading.equalTo(starView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(starView.snp.trailing).offset(R.Size.ContentSpaceSmall)
         }
     }
     

@@ -9,11 +9,11 @@
 
 import UIKit
 
-class GradientView: UIView {
+class GradientView: BaseView {
     private let gradientLayer = CAGradientLayer()
     private var colors: [UIColor] = []
 
-    func setupGradient(colors: [SFColor], locations: [CGFloat] = [0.0, 1.0], direction: GradientDirection) {
+    func setupGradient(colors: [UIColor], locations: [CGFloat] = [0.0, 1.0], direction: GradientDirection) {
         self.colors = colors
         gradientLayer.frame = bounds
         gradientLayer.colors = colors.map(\.cgColor)

@@ -14,12 +14,17 @@ import VisualEffectView
 
 class PlayHistoryView: BaseView {
     
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        if UIDevice.isPad {
-            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-        } else {
-            view.makeBlur(blurColor: UIColor(.dm, light: .white, dark: .black))
+    private lazy var navigationView: ASNavigationView = {
+        var navigation = ASListPage.Navigation.defaultNavigation(title: R.string.localizable.historyHeaderTitle())
+        navigation.enableClose = !asSideMenu
+        let view = ASNavigationView(navigation)
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            if self.showAsSheet {
+                self.hide()
+            } else {
+                self.needToHideSideMenu?()
+            }
         }
         return view
     }()
@@ -33,13 +38,18 @@ class PlayHistoryView: BaseView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        view.contentInset = .insets(top: R.Size.ContentInsetTop + R.Size.ItemHeightMedium,
+                                    bottom: R.Size.ContentInsetBottom)
         view.blankSlateView = PlayHistoryBlankSlateView(tapAction: { [weak self] type in
             guard let self = self else { return }
             if type == .importGame {
                 FilesImporter.shared.presentImportController(supportedTypes: UTType.gameTypes)
             } else if type == .startGame {
-                self.needToHideSideMenu?()
+                if self.showAsSheet {
+                    self.hide()
+                } else {
+                    self.needToHideSideMenu?()
+                }
             }
         })
         return view
@@ -50,40 +60,28 @@ class PlayHistoryView: BaseView {
     private var favouriteGame: Game? = nil
     var needToHideSideMenu: (()->Void)? = nil
     var didTapGame:((Game)->Void)? = nil
-    var didTapGameRetro:((Game)->Void)? = nil
+    private let asSideMenu: Bool
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
+    required init?(parameters: Any...) {
+        self.asSideMenu = parameters.compactMap({ $0 as? Bool }).first ?? false
+        super.init(frame: CGRect(origin: .zero, size: R.Size.WindowSize))
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide).offset(R.Size.SheetGrabberTopInset)
             make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
-        }
-        
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.historyHeaderTitle()
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        navigationBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
-            make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+            make.height.equalTo(R.Size.NavigationHeight)
         }
         
         updateGames()
+    }
+    
+    convenience init(asSideMenu: Bool) {
+        self.init(parameters: asSideMenu)!
     }
     
     required init?(coder: NSCoder) {
@@ -98,11 +96,11 @@ class PlayHistoryView: BaseView {
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                               heightDimension: .absolute(sectionIndex == 0 ? 238*(UIDevice.isPad ? 0.8 : 1) : 64)),
                                                            subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.Size.ContentSpaceMax, bottom: 0, trailing: Constants.Size.ContentSpaceMax)
+            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: R.Size.ContentSpaceLarge, bottom: 0, trailing: R.Size.ContentSpaceLarge)
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = Constants.Size.ContentSpaceMax
-            section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMin,
+            section.interGroupSpacing = R.Size.ContentSpaceLarge
+            section.contentInsets = NSDirectionalEdgeInsets(top: R.Size.ContentSpaceSmall,
                                                             leading: 0,
                                                             bottom: 0,
                                                             trailing: 0)
@@ -117,7 +115,14 @@ class PlayHistoryView: BaseView {
         let realm = Database.realm
         let games = realm.objects(Game.self).where { $0.totalPlayDuration > 0 && !$0.isDeleted }
         //监听数据的变化
-        gamesUpdateToken = games.observe(keyPaths: [\Game.aliasName, \Game.gameCover, \Game.onlineCoverUrl, \Game.latestPlayDate, \Game.latestPlayDuration, \Game.totalPlayDuration]) { [weak self] changes in
+        gamesUpdateToken = games.observe(keyPaths: [
+            \Game.aliasName,
+             \Game.gameCover,
+             \Game.onlineCoverUrl,
+             \Game.latestPlayDate,
+             \Game.latestPlayDuration,
+             \Game.totalPlayDuration
+        ]) { [weak self] changes in
             guard let self = self else { return }
             if case .update(_, let deletes, let insertions, let modifications) = changes {
                 if !deletes.isEmpty || !insertions.isEmpty || !modifications.isEmpty {
@@ -161,18 +166,12 @@ extension PlayHistoryView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withClass: PlayHistoryFavouriteCollectionCell.self, for: indexPath)
-            cell.setData(game: favouriteGame!) { [weak self] in
-                if let game = self?.favouriteGame {
-                    self?.didTapGameRetro?(game)
-                }
-            }
+            cell.setData(game: favouriteGame!)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withClass: PlayHistoryItemCollectionCell.self, for: indexPath)
             let game = histories[indexPath.row]
-            cell.setData(game: game) { [weak self] in
-                self?.didTapGameRetro?(game)
-            }
+            cell.setData(game: game)
             return cell
         }
     }
@@ -184,4 +183,8 @@ extension PlayHistoryView: UICollectionViewDelegate {
             didTapGame?(game)
         }
     }
+}
+
+extension PlayHistoryView: ShowableView {
+    
 }

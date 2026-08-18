@@ -18,12 +18,18 @@ struct PhotoSaver {
     }
     
     static func save(image: UIImage) {
-        if let data = image.jpegData(compressionQuality: 0.7) {
+        if let data = image.jpegData(compressionQuality: 0.9) {
             save(datas: [data])
         }
     }
     
+    static func save(images: [UIImage]) {
+        guard images.count > 0 else { return }
+        save(datas: images.compactMap({ $0.jpegData(compressionQuality: 0.9) }))
+    }
+    
     static func save(datas: [Data]) {
+        guard datas.count > 0 else { return }
         PermissionKit.requestPhoto {
             PHPhotoLibrary.shared().performChanges({
                 for imageData in datas {
@@ -31,8 +37,8 @@ struct PhotoSaver {
                     creationRequest.addResource(with: .photo, data: imageData, options: nil)
                 }
             }) { (success, error) in
-                DispatchQueue.main.asyncAfter(delay: UserDefaults.standard.bool(forKey: Constants.DefaultKey.HadSavedSnapshot) ? 0 : 1) {
-                    UserDefaults.standard.setValue(true, forKey: Constants.DefaultKey.HadSavedSnapshot)
+                DispatchQueue.main.asyncAfter(delay: UserDefaults.standard.bool(forKey: R.DefaultKey.HadSavedSnapshot) ? 0 : 1) {
+                    UserDefaults.standard.setValue(true, forKey: R.DefaultKey.HadSavedSnapshot)
                     UIView.makeToast(message: success ? R.string.localizable.toastSuccess() : R.string.localizable.toastFailed(), identifier: "PhotoSaver")
                 }
             }

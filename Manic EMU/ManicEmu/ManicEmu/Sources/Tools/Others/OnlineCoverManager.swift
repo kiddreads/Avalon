@@ -22,7 +22,7 @@ class OnlineCoverManager {
         init(game: Game) {
             self.gameType = game.gameType
             self.gameID = game.id
-            self.gameName = game.translatedName ?? game.aliasName ?? game.name
+            self.gameName = game.translatedName ?? game.displayName
             self.fileExtension = game.fileExtension
         }
         
@@ -127,7 +127,9 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("Atari - Jaguar/Named_Boxarts")
             case .lynx:
                 boxArtUrl = host.appendingPathComponent("Atari - Lynx/Named_Boxarts")
-            case .ns, .xbox360, .j2me:
+            case .xbox360:
+                boxArtUrl = host.appendingPathComponent("Microsoft - Xbox 360/Named_Boxarts")
+            case .ns, .j2me:
                 searchCoversFromMoby(coverMatch: coverMatch,
                                      persistentedTranslation: persistentedTranslation,
                                      isCallBackMain: isCallBackMain,
@@ -137,6 +139,8 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("DOOM/Named_Boxarts")
             case .dos:
                 boxArtUrl = host.appendingPathComponent("DOS/Named_Boxarts")
+            case .xbox:
+                boxArtUrl = host.appendingPathComponent("Microsoft - Xbox/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }
@@ -219,7 +223,7 @@ class OnlineCoverManager {
                         }
                     }
                     
-                    if url == Constants.URLs.MobyGames {
+                    if url == R.URLs.MobyGames {
                         callback(urls: [], needMatchNextTime: false)
                     } else {
                         //获取到结果
@@ -255,8 +259,8 @@ class OnlineCoverManager {
         }
         
         private static func getMatchList(url: URL, completion: @escaping ([String])->Void) {
-            let matchListPath = Constants.Path.BoxArtsCache.appendingPathComponent("\(Insecure.MD5.hash(data: Data(url.absoluteString.utf8)).map { String(format: "%02x", $0) }.joined())")
-            try? FileManager.default.createDirectory(atPath: Constants.Path.BoxArtsCache, withIntermediateDirectories: true)
+            let matchListPath = R.Path.BoxArtsCache.appendingPathComponent("\(Insecure.MD5.hash(data: Data(url.absoluteString.utf8)).map { String(format: "%02x", $0) }.joined())")
+            try? FileManager.default.createDirectory(atPath: R.Path.BoxArtsCache, withIntermediateDirectories: true)
             if FileManager.default.fileExists(atPath: matchListPath) {
                 //已经有搜索列表缓存
                 if let content = try? String(contentsOf: URL(fileURLWithPath: matchListPath), encoding: .utf8) {
@@ -306,8 +310,7 @@ class OnlineCoverManager {
             }.resume()
         }
         
-        //如果不传入gameID，则翻译结果不会保存到game中
-        private static func translateGameName(_ name: String, gameID: String? = nil, completion:((String)->Void)? = nil) {
+        static func translateGameName(_ name: String, gameID: String? = nil, completion:((String)->Void)? = nil) {
             if name.isEnglishLanguage() {
                 Log.debug("英文语言无需翻译!")
                 completion?(name)
@@ -331,7 +334,7 @@ class OnlineCoverManager {
                 var request = URLRequest(url: URL(string: "https://api.deepseek.com/chat/completions")!)
                 request.timeoutInterval = 10
                 request.httpMethod = "POST"
-                request.addValue("Bearer \(Constants.Cipher.DeepSeek)", forHTTPHeaderField: "Authorization")
+                request.addValue("Bearer \(R.Cipher.DeepSeek)", forHTTPHeaderField: "Authorization")
                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.addValue("application/json", forHTTPHeaderField: "Accept")
                 request.httpBody = ["frequency_penalty": 0.7, "max_tokens": 2048, "model": "deepseek-chat", "presence_penalty": 0.7, "stream" : false, "temperature" : 1.3, "top_p" : 0.9, "response_format" : ["type": "json_object"], "messages": [["content": "\(content)", "role":"user"]]].jsonData()
@@ -386,6 +389,10 @@ class OnlineCoverManager {
                 task.resume()
             }
         }
+    }
+    
+    static func translateGameName(_ name: String, gameID: String? = nil, completion: ((String) -> Void)? = nil) {
+        MatchOperation.translateGameName(name, gameID: gameID, completion: completion)
     }
     
     static let shared = OnlineCoverManager()

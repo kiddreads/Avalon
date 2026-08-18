@@ -10,48 +10,48 @@
 class PlatformSortCollectionViewCell: UICollectionViewCell {
     private var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.Font.body(size: .l)
-        label.textColor = Constants.Color.LabelPrimary
+        label.font = R.Font.Body()
+        label.textColor = R.Color.LabelPrimary
         return label
     }()
     
-    private let icon = SymbolButton(image: .init(symbol: .line3Horizontal, font: Constants.Font.title(size: .s), color: Constants.Color.BackgroundSecondary))
+    private let icon = SymbolButton(image: .init(symbol: .line3Horizontal, font: R.Font.Headline(emphasis: true), color: R.Color.LabelSecondary))
     
-    private lazy var visableButton: SymbolButton = {
-        let view = SymbolButton(image: .init(symbol: .eye, font: Constants.Font.body(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
+    private lazy var visibleButton: SymbolButton = {
+        let view = SymbolButton(image: .init(symbol: .eye, font: R.Font.Body(emphasis: true), color: R.Color.LabelSecondary))
         view.addTapGesture { [weak self] gesture in
-            self?.didTapVisableButton?()
+            self?.didTapVisibleButton?()
         }
         return view
     }()
     
-    var didTapVisableButton: (()->Void)? = nil
+    var didTapVisibleButton: (()->Void)? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        layerCornerRadius = Constants.Size.CornerRadiusMid
+        layerCornerRadius = R.Size.CornerRadiusMedium
         
-        backgroundColor = Constants.Color.Background
+        backgroundColor = R.Color.BackgroundTertiary
         
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
         }
         
         icon.backgroundColor = .clear
         addSubview(icon)
         icon.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.size.equalTo(R.Size.IconSizeMedium)
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
         
-        visableButton.backgroundColor = .clear
-        addSubview(visableButton)
-        visableButton.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.IconSizeMax)
+        visibleButton.backgroundColor = .clear
+        addSubview(visibleButton)
+        visibleButton.snp.makeConstraints { make in
+            make.size.equalTo(R.Size.IconSizeExtraLarge)
             make.centerY.equalToSuperview()
             make.trailing.equalTo(icon.snp.leading)
         }
@@ -63,7 +63,7 @@ class PlatformSortCollectionViewCell: UICollectionViewCell {
     
     func setData(platform: String) {
         titleLabel.text = platform
-        let visable = Settings.defalut.getPlatformVisable(platform: platform)
-        visableButton.imageView.image = .init(symbol: visable ? .eye : .eyeSlash, font: Constants.Font.body(size: .l, weight: .bold), color: visable ? Constants.Color.BackgroundSecondary : Constants.Color.Red)
+        let visible = Settings.defalut.getPlatformVisible(platform: platform)
+        visibleButton.imageView.image = .init(symbol: visible ? .eye : .eyeSlash, font: R.Font.Body(emphasis: true), color: visible ? R.Color.LabelSecondary : R.Color.Red)
     }
 }

@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Pilvipalvelut";
 "ImportAddLanServiceTitle" = "Lähiverkkopalvelu";
-"ImportAddDiscoverServiceTitle" = "Havaintopalvelu";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Yhdistä";
 "AddLandServiceSuccess" = "Palvelun %@ lisäys onnistui";
 "AddLandServiceFailed" = "Palvelun %@ lisäys epäonnistui\nTarkista verkkoyhteys, palvelun tila tai syötetyt tiedot";
-"AddLandServiceTimeout" = "Yhteys palveluun aikakatkaistiin";
 "FilesImporterErrorFileExist" = "\"%@\" on jo olemassa, ei tarvetta tuoda";
 "FilesImporterErrorBadCopy" = "Tiedoston \"%@\" tuonti epäonnistui, kopioinnissa tapahtui virhe";
 "FilesImporterErrorBadExtension" = "Tiedoston \"%@\" tuonti epäonnistui, tiedostopäättettä ei tunnistettu";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nKäytä selainta tiedostonsiirtoon";
 "ImportServiceListPasteTitle" = "Lue leikepöydältä";
 "ImportServiceListPasteDetail" = "Tukee tiedostojen kopioimista macOS:stä ja Tiedostot-sovelluksesta";
-"ImportHowTo" = "Miten tuoda";
 "ImportTopHintTitle" = "Tarinat täynnä unelmia ja seikkailuja alkavat täältä!";
 "ImportDragAndDropTips" = "Vedä ja pudota tiedostot mihin tahansa Manic EMU:n käyttöliittymään";
 "ImportChannelTips" = "Jos sinulla on kysyttävää, liity kanavalle %@ saadaksesi apua";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d minuuttia";
 "FatalErrorTitle" = "Kriittinen virhe";
 "FatalErrorDesc" = "Järjestelmäresurssien lataus epäonnistui, Manic EMU:ssa voi olla vakavia puutteita";
-"LodingFailedTitle" = "Lataus epäonnistui";
 "AirPlayDesc" = "Aloita seikkailu heti!";
 "ToastSuccess" = "Tallennus onnistui";
 "ToastFailed" = "Tallennus epäonnistui";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Tuo pelitallennus";
 "GamesShareSave" = "Vie pelitallennus";
 "GamesDelete" = "Poista peli";
-"GamesRandom" = "En tiedä mitä pelata, arvo satunnainen peli";
 "LoadGameErrorRomNotExist" = "Pelin lataus epäonnistui, ROMia ei ole olemassa";
 "GamesListEmptyGuideLeft" = "Klikkaa alla olevaa";
 "GamesListEmptyGuideRight" = "tuodaksesi pelejä";
 "GamesListEmptyWelcomeLeft" = "Tervetuloa";
 "GamesListEmptyWelcomeRight" = ":n maailmaan";
 "GamesListEmptyWarnning" = "Varmista, että saat peli-ROMit laillisista lähteistä";
+"LandscapeEmptyAddGame" = "Lisää peli";
 "DeleteGameAlertDetail" = "Peli ROM, tallennukset ja cheat codet poistetaan pysyvästi!";
 "DeleteSkinAlertDetail" = "Skinin poistamista ei voi peruuttaa!";
-"DeleteGameGameStateAlertTitle" = "Poista pikatallennus";
 "DeleteGameGameStateAlertDetail" = "Pikatallennuksen poistamista ei voi peruuttaa!";
 "confirmDelte" = "Vahvista poisto";
 
 //Controllers
 "ControllersTouchName" = "Kosketusohjain";
-"ControllersHeaderTitle" = "Ohjaimet";
 "ControllersPlayerIndex" = "Pelaaja %d";
 "ControllersPlayerUnset" = "Ei määritetty";
-"ControllersHowToConnect" = "Miten yhdistää";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ pelattu · yhteensä %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Pelaajan pikatallennukset";
 "ReadySegmentAutoSave" = "Automaattiset pikatallennukset";
 "ReadyEditTitleFailed" = "Nimeäminen uudelleen epäonnistui, pelin nimi ei voi olla tyhjä";
-"ReadyEditTitleSuccess" = "Nimeäminen uudelleen onnistui";
 "ReadyGameSaveStatesEmpty" = "Ei tallennuksia";
 "GameSaveGuideBecomTitle" = "Tule";
 "GameSaveGuideMemberTitle" = "jäseneksi";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Tallennus %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU tukee täysimääräisesti .deltaskin .gammaskin-muotoisia skinejä";
 "SkinNavigationSubTitleSpecifiedGame" = "Vain pelille %@ asetettu skini";
 "SkinSegmentPortraitTitle" = "Pystyasento";
 "SkinSegmentLandscapeTitle" = "Vaaka-asento";
 "SkinAddTitle" = "Lisää skini";
-"HowToFetch" = "Kuinka saada";
 "SkinDelete" = "Poista skini";
 "DefaultSkinCannotEdit" = "Oletusskiniä ei voi muokata";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Aloita peli";
 
 //Settings
-"LeftHandTitle" = "Vasenkätinen tila";
-"LeftHandDetail" = "Peilaa ohjainten asettelu vasenkätiselle käytölle";
 "QuickGameTitle" = "Pikakäynnistys";
 "QuickGameDetail" = "Pelin klikkaaminen ei näytä valmistelusivua";
 "AirPlayTitle" = "AirPlay-koko näytön tila";
 "AirPlayDetail" = "Koko näytön pelikuva lähetetään AirPlaylla";
 "iCloudTitle" = "iCloud-synkronointi";
-"iCloudDetail" = "Synkronoi pelit, skinit, tallennukset ja asetukset laitteiden välillä samalla Apple ID:llä";
-"AppIconTitle" = "Sovelluskuvake";
-"WidgetTitle" = "Työpöydän widgetit";
 "QATitle" = "Usein kysytyt kysymykset";
 "FeedbackTitle" = "Palaute";
 "ShareAppTitle" = "Jaa \"Manic EMU\" ystävillesi";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Edistyneet asetukset";
 "SupportSettingTitle" = "Tuki";
 "OthersSettingTitle" = "Muut";
-"RatingTitleLeft" = "Arvioi";
-"RatingTitleRight" = "";
-"RatingDetail" = "Jos pidät tuotteestamme, anna meille viiden tähden arviointi, se on meille erittäin tärkeää :)";
 "iCloudDisableTitle" = "iCloud ei käytettävissä";
 "iCloudDisableDetail" = "iCloud-synkronointia yritettiin käynnistää, mutta synkronointi alkaa vasta kun olet kirjautunut iCloudiin ja antanut käyttöoikeudet. Mene iPhonen \"Asetukset\" > \"Apple ID\" > \"iCloud\" ja varmista, että iCloud-levy on käytössä ja Manic EMU saa käyttää sitä";
 "iCloudSyncConfilictTitle" = "iCloud-synkronoinnin ristiriita";
-"iCloudSyncConfilictDetail" = "Pilvitiedosto:\n%@\n\nPaikallinen tiedosto:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Säilytä iCloud";
 "iCloudSyncConfilictSaveLocal" = "Säilytä paikallinen";
 "SettingsNonMemberDesc" = "Sinusta tulee tämän tarinan päähenkilö";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Kiitos että tulit";
 "PlayGameDesc" = ":hen pelaamaan";
 "NoEmailSetting" = "Sähköpostia ei ole asetettu";
-"IDCopy" = "ID kopioitu";
 "SendEmailSuccess" = "Sähköpostin lähetys onnistui";
 "SendEmailFailed" = "Sähköpostin lähetys epäonnistui %@";
 "iCloudTipsTitle" = "Ota iCloud-synkronointi käyttöön";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Ääni";
 "GameSettingFastForwardResume" = "Normaali nopeus";
 "GameSettingFastForward" = "Nopeutus %@";
-"GameSettingStateList" = "Tallennuslista";
-"GameSettingSkins" = "Aseta skini";
-"GameSettingFilter" = "Suodatin";
 "GameSettingScreenShot" = "Pelin kuvakaappaus";
 "GameSettingHapticOff" = "Taktinen palaute pois";
 "GameSettingHapticSoft" = "Taktinen palaute heikko";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Käynnistä uudelleen";
 "GameSettingQuit" = "Poistu";
 "GameSaveStateSuccess" = "Pikatallennus onnistui";
-"GameSaveStateLoadFailed" = "Pikatallennuksen lataaminen epäonnistui, tallennus on vioittunut tai yhteensopimaton";
 "GameSaveStateLoadSuccess" = "Pikatallennuksen lataaminen onnistui";
 "GameSaveStateQuickLoadFailed" = "Ei manuaalisia tallennuksia, jos haluat ladata automaattisen tallennuksen, käytä \"Tallennuslistaa\"";
 "GameSaveListTitle" = "Pikatallennukset";
-"GameCheatActivateFailed" = "%@\nAktivointi epäonnistui, cheat code ei kelpaa";
 "GameCheatActivateSuccess" = "%@\nAktivointi onnistui";
 "AirPlayingTitle" = "Pelikuva lähetetty näytölle";
 "VolumeOff" = "Äänet pois";
 "VolumeOn" = "Äänet päällä";
-"FunctionSortDesc1" = "Yllä olevat toiminnot ovat oletusskinin pikatoimintoja";
-"FunctionSortDesc2" = "Pidä painettuna ja raahaa muuttaaksesi järjestystä";
 "ManualGameSaveCountLimit" = "Pikatallennuksiesi määrä on ylittänyt rajan! Päivitä jäseneksi saadaksesi rajoittamattoman määrän pikatallennuksia tai poista tallennuksia listasta";
 "FastForwardSpeedLimit" = "Suurin nopeutus on x2! Päivitä jäseneksi saadaksesi jopa x5 nopeuden";
 "ResetSpeed" = "Palauta normaali nopeus";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Syötä koodi automaattista tunnistusta varten";
 "CheatCodeFormatError" = "Cheat coden muoto on virheellinen";
 "CheatCodeEmptyTitle" = "Ei cheat codeja";
-"CheatCodeEmptyGuideLeft" = "Klikkaa vasemmalla ylhäällä olevaa";
-"CheatCodeEmptyGuideRight" = "lisätäksesi cheat coden";
 "EnableCheatCodeAlertTitle" = "Ota cheat codet käyttöön";
 "EnableCheatCodeAlertDetail" = "Cheat codet liittyvät pelin versioon ja niiden on vastattava oikeaa versiota toimiakseen! Cheat codien käyttö muokkaa pelin suoritusdataa ja voi aiheuttaa virheitä tai epävakautta, käytä harkiten.";
 
 //滤镜
-"FilterSectionHeaderTitle" = "Videosuodattimet";
 "FilterOriginTitle" = "Alkuperäinen";
 
 //内购
@@ -357,7 +327,6 @@
 "PurchasePending" = "Maksusi on kesken, kun maksu on suoritettu loppuun, jäsenyytesi aktivoituu";
 "PurchaseUnknown" = "Tuntematon maksutila";
 "PurchaseErrorDesc" = "Maksu ei onnistu, varmista verkkoyhteys ja yritä uudelleen";
-"PurchaseFailedTitle" = "Maksu epäonnistui";
 "RestoreSuccessDesc" = "Oston palautus onnistui!";
 "RestoreEndDesc" = "Oston palautus valmis, ei löytynyt voimassa olevia ostoksia!";
 "TrialDesc" = "Kokeilujakson aikana ei veloiteta, voit peruuttaa milloin tahansa";
@@ -398,23 +367,12 @@
 "ShareAppSubtitle" = "Kutsu kaverisi mukaan seikkailuun!";
 "ShareRomFilesFailed" = "ROMin jakaminen epäonnistui, tiedostoa ei löytynyt";
 "ShareSaveFilesFailed" = "Tallennuksen jakaminen epäonnistui, ei tallennuksia";
-"ShareFilesCopyFailed" = "Tiedoston jakaminen epäonnistui, kopioinnissa virhe";
-"ShareFilesCompressFailed" = "Tiedoston jakaminen epäonnistui, pakkauksessa virhe";
 
 "TurnOnAirPlayAsk" = "AirPlay on yhdistetty. Siirrytäänkö kokoruututilaan nyt?";
 
 "ThreeDSModePerformance" = "Suorituskykytila";
 "ThreeDSModeCompatibility" = "Yhteensopivuustila";
 "ThreeDSModeQuality" = "Laadun prioriteetti";
-"ThreeDSNotSupportImportSave" = "3DS-pelejä ei vielä tueta tallennusten tuontia";
-"ThreeDSNotSupportShareSave" = "3DS-pelejä ei vielä tueta tallennusten jakamista";
-"ThreeDSBetaAlertTitle" = "3DS-kokeiluversio";
-"ThreeDSBetaAlertDetail" = "Jotta voit nauttia 3DS-peleistä aikaisemmin, Manic EMU on julkaissut 3DS-tuen, mutta se on tällä hetkellä kokeiluversiossa. Jotkin toiminnot vaativat vielä optimointia.
-Seuraavat toiminnot puuttuvat toistaiseksi:
-❌ AirPlay-koko näytön tila
-❌ Automaattinen tallennus
-❌ Nopeutusominaisuus
-Jos kohtaat epävakautta 3DS:ssä, katso «Usein Kysytyt Kysymykset» tai liity kanavallemme apua varten. Parannamme jatkuvasti emulaattorin suorituskykyä, ja ymmärryksesi ja tukesi auttavat luomaan täydellisemmän pelikokemuksen. Työskentelemme jatkuvasti paremman peliympäristön puolesta.";
 "ThreeDSNoSupportDeviceTitle" = "Laitteen suorituskyky riittämätön";
 "ThreeDSNoSupportDeviceDetail" = "Tämä laite ei välttämättä tue 3DS-emulaatiota. Jatkaminen voi aiheuttaa ennakoimattomia virheitä";
 
@@ -433,8 +391,6 @@ Paina ohjaimen nappia...";
 "FullScreenWhenConnectControllerTitle" = "Automaattinen koko näyttö";
 "FullScreenWhenConnectControllerDetail" = "Koko näyttö ohjaimen yhteydessä";
 "JoinDiscordTitle" = "Liity Discordiin";
-"JoinDiscordAlertMessage" = "Kiitos pelaajalle %@ kanavasta. Jatketaanko?";
-"FlexSkinGuideTitle" = "Vedä tai zoomaa säätääksesi näyttöä";
 "DownloadFailed" = "Lataus epäonnistui";
 "RemoveDownloadTask" = "Peruuta \"%@\" lataus?";
 "GameSettingResolution" = "Resoluutio %@";
@@ -484,9 +440,6 @@ Paina ohjaimen nappia...";
 "RenderRightEyeDesc" = "Pois käytöstä parantaa suorituskykyä joissain peleissä, mutta voi aiheuttaa ruudunvälkähtelyä";
 "DisableTitle" = "Poista käytöstä";
 "EnableTitle" = "Ota käyttöön";
-"NoSaveStateToast" = "Ei tallennustilaa %@ saatavilla";
-"DeleteSelectedSaveStateAlert" = "Poista valittu «%@»?\nPoistoa ei voi perua!";
-"DeleteAllSaveStateAlert" = "Ei valintoja. Poista kaikki «%@»?\nPoistoa ei voi perua!";
 "AICoverSearchDesc" = "Havaittu ei-englantilainen haku. Päivitä Premiumiin monikieliseen AI-hakuun";
 "MaxTextSizeAllowDesc" = "Tukee enintään %@ merkkiä";
 
@@ -514,29 +467,21 @@ Paina ohjaimen nappia...";
 "BiosAddTitle" = "Lisää BIOS";
 "StartGameWithoutBiosTitle" = "Käynnistä ilman BIOS:ia";
 
-"ThreeDSAdvanceSettingMode" = "Edistynyt Tila";
 "ThreeDSAdvanceSettingTitle" = "Lisäasetukset";
-"ThreeDSBasicSettingMode" = "Perustila";
 "ShareConfigButtonTitle" = "Jaa Kokoonpano";
 "ImportConfigButtonTitle" = "Tuo Kokoonpano";
 "ShareFileFailedMissing" = "Jakaminen epäonnistui: tiedostoa ei ole";
 "ReadConfigFileFailed" = "Kokoonpanotiedoston lukeminen epäonnistui";
 "SwitchEmulationCore" = "Vaihda Ydintä";
 "SwitchEmulationCoreDetail" = "Vaihda emulaatioydin kohteelle %@\nYtimen vaihto tekee edellisen ytimen tallennuksista lukukelvottomat. Palaa alkuperäiseen ytimeen päästäksesi käsiksi";
-"BeetleSaturnNoSupportCheat" = "Beetle Saturn -ydin ei tue huijauskoodeja tällä hetkellä. Vaihda Yabause-ytimeen tarvittaessa";
-"CurrentTitle" = "nykyinen";
 "NewSkinDesc" = "Manic EMU tukee skinejä .manicskin- ja .deltaskin .gammaskin-muodoissa. Huom: Tuodun skinin on vastattava nykyistä alustaa, muuten se ei näy listassa.\nTarjoamme myös pääsyn kolmannen osapuolen skin-yhteisöihin. Nämä eivät ole virallisesti yhteydessä Manic EMU:hon. Noudata jokaisen sivuston käyttöehtoja latauksien yhteydessä";
 "VisitSite" = "Vieraile %@";
 "OpenFile" = "Avaa Tiedosto";
 "WebViewDownloadBegin" = "Lataus alkoi";
 "RespectSilentMode" = "Kunnioita Hiljainen Tila";
 "RespectSilentModeDesc" = "Käytössä Manic EMU soittaa ääntä vain hiljaisen tilan ulkopuolella";
-"SaturnISONoSwitchCore" = "Sega Saturn .iso-muotoiset pelit eivät tue ytimen vaihtoa";
-"EnableFullScreenTitle" = "Ota Koko Näyttö Käyttöön";
-"DisableFullScreenTitle" = "Poista Koko Näyttö Käytöstä";
 "SimulateBlowingTitle" = "Simuloi Puhallusta";
 "PaletteTitle" = "Paletti";
-"SkinRestDesc" = "Skinin nollaaminen palauttaa myös peleihin määritetyt skinit oletusversioihin";
 "SkinResetForAll" = "Nollaa Kaikki Alustan Skinit";
 "SkinResetForPlatform" = "Nollaa %@-skin";
 "SkinDebug" = "Skin-testialue";
@@ -553,7 +498,6 @@ Paina ohjaimen nappia...";
 "MultiDiscCloseAlert" = ".m3u luotu. Sulje sivu tuonnin jälkeen";
 "MultiDiscContinueClose" = "Sulje";
 "SwapDisk" = "Vaihda levyä";
-"NotSupportSwapDisk" = "Ei monilevyinen peli";
 "TransferPakDesc" = "Transfer Pak synkronoi GB/GBC-tiedot N64:ään. Aktivoidaksesi: tuo ROM (.gb/.gbc) ja tallennustiedosto (.sav)";
 "TransferPakFromLibrary" = "Tuo kirjastosta";
 "TransferPakFromLibraryDesc" = "Vain tallennuksia sisältävät pelit näytetään.\nValitut GB/GBC-pelit täytyy vastata N64 ROMia";
@@ -562,7 +506,6 @@ Paina ohjaimen nappia...";
 "TransferPakOn" = "Käytössä";
 "TransferPakOff" = "Pois käytöstä";
 "TransferPakImportError" = "Virhe: Tuo sekä ROM että tallennus (2 tiedostoa vaaditaan)";
-"ShowControlsTitle" = "Näytä ohjaimet";
 "HideControlsTitle" = "Piilota ohjaimet";
 
 "DesignedFor" = "Suunniteltu %@:lle";
@@ -585,7 +528,6 @@ Paina ohjaimen nappia...";
 "WfcConnectDesc" = "Yhdistetään Nintendo WFC:hen...\nNopeutus ja huijaukset poistettu käytöstä";
 "WfcDisconnectDesc" = "Katkaise yhteys Nintendo WFC:hen";
 "NotAllowOnlineGame" = "Tämä ominaisuus on pois käytöstä online-pelissä";
-"QuitGameAlert" = "Lopeta peli? Tallettamaton edistyminen katoaa";
 
 "SkinIdentifierExist" = "Tunniste %@ on jo olemassa. Muokkaa ja tuo uudelleen.";
 "AnalogModeChange" = "Vaihda %@-tilaan";
@@ -619,7 +561,6 @@ Paina ohjaimen nappia...";
 "LastActivity" = "Viimeisin toiminta: %@";
 "MemberSince" = "Jäsen alkaen: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Suoritusprosentti";
 "AchievementsList" = "Saavutukset";
 "TotalAchievements" = "Yhteensä %d saavutusta";
@@ -642,7 +583,6 @@ Paina ohjaimen nappia...";
 "DisableAchievementsAlert" = "Poistetaanko RetroAchievements käytöstä?";
 "SaveStateCoreUnCompatible" = "Tallennus luotiin %@:ssa (nykyinen: %@). Lataaminen voi aiheuttaa ongelmia!";
 "LatestSaveStateUnCompatible" = "Viimeisintä tallennusta ei voi ladata ytimen yhteensopimattomuuden vuoksi";
-"Snes9xAlert" = "Lisenssiongelmien vuoksi Snes9x-ydin poistetaan tulevissa päivityksissä. Vaihda bsnes:iin ja siirrä tallennukset, tai ne eivät toimi.";
 "GotIt" = "Selvä";
 "Rumble" = "Tärinä";
 "RumbleDetail" = "Laite täristää tiettyjen tapahtumien aikana";
@@ -658,7 +598,6 @@ Paina ohjaimen nappia...";
 "JumpTips" = "Kolmannen osapuolen sivun avaaminen";
 "ThirdPartGameInfoTips" = "Pelin tiedot tarjoaa kolmannet osapuolet. Käytä harkintaa ja noudata alustan sääntöjä. Jos Manic EMU ei löydä peliä, käytä hakua löytääksesi sen manuaalisesti.";
 "NotSupportHardcore" = "Hardcore-tila on poissa käytöstä tässä pelissä. Ehkä Manic EMU ei ole RetroAchievementsin valtuuttama, tai peli ei vain tue hardcore-tilaa.";
-"ChooseOne" = "Valitse yksi";
 "FilesImporterErrorBadCue" = "%@ tuonti epäonnistui. tiedosto voi olla virheellinen tai ei UTF-8-koodattu. Tarkista muoto.";
 "Leaderboard" = "Tulostaulukko";
 "LeaderboardStart" = "Tulostaulukon alku: ";
@@ -674,10 +613,8 @@ Paina ohjaimen nappia...";
 "AlwaysShowProgressDesc" = "Pidä saavutusten edistyminen näkyvillä näytöllä.";
 "Progress" = "Edistyminen";
 
-"DCGameNoSupportGameSave" = "Dreamcast ei tue tallennusten tuontia/vientiä. Muokkaa muistitiedostoja Manic EMU-Flycast-dc -kansiossa käyttämällä VMU Explorer -ohjelmaa.";
 
 "Challenge" = "Haaste";
-"GameTypeLicensingError" = "Pahoittelut! %@-ytimen lisenssirajoitusten vuoksi tämä alusta ei ole tällä hetkellä käytettävissä. Voit odottaa tulevaa päivitystä tai käyttää sideload-versiota.";
 "DCJITLessVer" = "Oletusversio tarjoaa nopean ja tarkan emuloinnin, mutta ei voi ajaa WinCE-pelejä. Pelaa WinCE-pelejä valitsemalla WinCE-ydin.";
 "TVStandard" = "Jos pelin TV-standardi ei vastaa aluetta, se voi vaikuttaa nopeuteen. PAL-alueisiin kuuluvat pääasiassa Eurooppa, Australia ja Uusi-Seelanti.";
 "SNESVRAMEnable" = "Jotkut hakatut ROMit vaativat tätä vaihtoehtoa grafiikan oikeanlaatuiseen renderöintiin, mutta käyttöönotto poistaa RetroAchievements-tuen.";
@@ -700,7 +637,6 @@ Paina ohjaimen nappia...";
 "LayoutEmbeddedBottomRight" = "Upotettu (Ala-Oikea)";
 "LayoutSingleScreen" = "Yksittäinen näyttö";
 "AirPlayLayoutTips" = "Yhdistä AirPlay-asettelu Näytön Vaihto -toiminnolla saadaksesi enemmän vaihtoehtoja. Huom.: Upotetun asettelun kanssa Näytön Vaihto voi aiheuttaa päällekkäisyyttä, ei suositella";
-"ToggleAnolog" = "Vaihtaa analogia";
 "EnableGlobalAchievements" = "Ota käyttöön globaalit RetroAchievements";
 "GlobalHardcoreMode" = "Globaali hardcore-tila";
 "GlobalHardcoreAlert" = "Ota ensin käyttöön globaalit RetroAchievements";
@@ -716,7 +652,6 @@ Paina ohjaimen nappia...";
 "AppearanceLight" = "Vaalea tila";
 "AppearanceDark" = "Tumma tila";
 "AppearanceAuto" = "Seuraa järjestelmää";
-"GameListBackground" = "Taustakuva";
 "GameListBackgroundUpload" = "Lataa";
 "GameplayManuals" = "Peliohjeet";
 "GameplayManualsNoExists" = "Tälle pelille ei ole ohjetta saatavilla.";
@@ -726,7 +661,6 @@ Paina ohjaimen nappia...";
 "UnsupportSkinsDesc" = "Seuraavat skin-it eivät ole tuettuja tässä laitteessa:\n%@Huom.: Poistaminen poistaa nämä skin-it myös muista iCloudin kautta synkronoiduista laitteista.";
 "UnsupportSkinsRemoveSuccess" = "Ei-tuetut skin-it poistettu onnistuneesti";
 "ForbitPKSM" = "Varmistaaksesi reilun RetroAchievements-kokemuksen, PKSM:ää ei voi käyttää, kun Global RetroAchievements on käytössä.";
-"FDSAlert" = "Tämä vaihtoehto on saatavilla vain FDS-peleissä.";
 "DiskSideChange" = "Käännä Levy";
 "EjectDisk" = "Poista Levy";
 
@@ -759,7 +693,6 @@ Paina ohjaimen nappia...";
 "TriggerProName" = "TriggerPro-nimi";
 "Position" = "Sijainti";
 "ButtonInfo" = "Painiketiedot";
-"NoTriggerPro" = "TriggerPro-määritystä ei löytynyt. Voit siirtyä Asetuksiin tai painaa pitkään TriggerPro-vaihtoehtoa Pelivalikossa luodaksesi sellaisen";
 "ManageTriggerPro" = "Hallinnoi TriggerProa";
 "EnableTriggerPro" = "Ota TriggerPro käyttöön";
 "DisableTriggerPro" = "Poista TriggerPro käytöstä";
@@ -800,7 +733,6 @@ Paina ohjaimen nappia...";
 "Default" = "Oletus";
 "Imported" = "Tuotu";
 "DownloadRetroArchSahders" = "Lataa shadereita RetroArchista";
-"ImportShaders" = "Tuo shadereita";
 "Shaders" = "Shadereita";
 "DownloadRetroArchShaders" = "Haluatko ladata shadereita RetroArchista? Valmistuttuaan RetroArchin shader-kategoria päivitetään automaattisesti. Voit peruuttaa tämän milloin tahansa lataushallinnassa.";
 "RetroArchShaderUnzipFailed" = "Tiedostoa %@ ei voitu purkaa. Tiedosto on saatettu vioittua latauksen aikana. Yritä ladata se uudelleen.";
@@ -833,7 +765,6 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "JGenesisAlert" = "Valitettavasti JGenesis-ydin tukee vain .chd ROM-tiedostoja.";
 "RedeemOfferCode" = "Lunasta Tarjous";
 "CheatImportFailed" = "Tuonti epäonnistui. Tiedostoa ei voitu jäsentää tai sopivia huijauskoodeja ei löytynyt.";
-"RemoveAllCheats" = "Poista Kaikki Huijaukset";
 "RemoveAllCheatsAlert" = "Haluatko varmasti poistaa kaikki huijauskoodit? Tätä toimintoa ei voi kumota.";
 "CheatCodeStatus" = "Käytössä";
 "Background" = "Tausta";
@@ -846,13 +777,8 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "RemoveBackgroundForGame" = "Poista Pelin Tausta";
 "RemoveBackgroundForConsole" = "Poista %@-alustan Tausta";
 "RemoveBackgroundForGlobal" = "Poista Globaali Tausta";
-"ShaderConfigAlert" = "Asetettu kohteelle %@.";
-"Global" = "Globaali";
-"RemoveShaderForGlobal" = "Poista Globaali Shader";
 "FeaturedItems" = "Suositellut Tuotteet";
-"ReUpload" = "Lataa Uudelleen";
 
-"Service" = "Palvelut";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "PSP-verkko";
 "Networking" = "Verkko";
@@ -891,16 +817,11 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "LoadingCheerpJ" = "Ladataan CheerpJ:tä";
 "ZipHandlerTitle" = "ZIP-tiedostojen käsittely";
 "ZipHandlerDetail" = "Jotkut alustat (kuten DOS ja Arcade) voivat ladata ROM-levyjä suoraan .zip-tiedostoista. Muilla alustoilla .zip-tiedoston sisällä olevat ROM-levyt on purettava ennen tuontia.\n\nValitut tiedostot puretaan ja tuodaan yksitellen, kun taas valitsemattomat tiedostot tuodaan yhtenä ZIP-ROM-levynä.";
-"ConfigsResetCore" = "Palauta ytimen oletusasetuksiin";
-"ConfigsResetBefore" = "Palaa edellisiin asetuksiin";
 "InsertDisc" = "Aseta levy";
 "InsertDiscAlert" = "Voit asettaa levyn valitsemalla toisen pelin samalta alustalta kirjastostasi tai valitsemalla levy tiedoston Tiedostot-sovelluksesta. iOS-tiedostojärjestelmän rajoitusten vuoksi Tiedostot-sovelluksesta valitut levy tiedostot kopioidaan Manic EMU:n välimuistiin.";
 "InsertDiscFailed" = "Levyn asettaminen epäonnistui";
 "GenerateHomeMenu" = "Luo aloitusvalikko";
 "SkinSoundEffects" = "Teeman äänitehosteet";
-"FirstAnniversary" = "KIITOS, ETTÄ OLET TÄÄLLÄ,\N KIRJOITTIMME SINULLE JOTAIN";
-"ApirlFoolsDayTitle" = "Hups, onko Manic EMU rikki?";
-"ApirlFoolsDayDetail" = "Älä huoli!\nVain vitsi—Hyvää aprillipäivää!\n\nKaikki palautuu normaaliksi, kun suljet tämän.";
 "JITType" = "JIT-tyyppi";
 "JITTypeDesc" = "Tavallinen JIT tarjoaa parhaan suorituskyvyn, kun taas IR JIT tarjoaa kohtalaisen suorituskyvyn.";
 "Pretendo" = "Pretendo-verkko";
@@ -915,7 +836,6 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "HomeMenuDesc" = "Avaa Kotivalikko alla olevalla painikkeella. Siirry sitten Nimbus-asetuksiin, vaihda Pretendo-verkkoon ja avaa Asetukset valitaksesi \"Nintendo Network ID\" ja kirjaudu sisään Pretendo-tililläsi.\n\nTämän jälkeen kaikki Kotivalikosta käynnistetyt tai Azahar-ytimellä toimivat pelit käyttävät Pretendo-verkkoa.\n\nJos Kotivalikon merkintä puuttuu, tämä ominaisuus yrittää luoda sen automaattisesti uudelleen.";
 "OpenHomeMenu" = "Avaa Kotivalikko";
 "ChooseRegion" = "Valitse alue";
-"ChooseRegionDesc" = "Valitse Artic Setup -työkalua suorittavan 3DS-laitteen oikea alue. Väärän alueen valitseminen estää onnistuneen tietojen siirron.";
 "HomeMenuNotFound" = "Kotivalikkoa ei löydy. Suorita Artic Base -tietojen siirto ensin.";
 "SystemUpdateAsk" = "Suoritettiinko järjestelmäpäivitys onnistuneesti?";
 "SystemUpdateDesc" = "Jos järjestelmäpäivitys epäonnistui verkko-ongelmien vuoksi, yritä siirtää tiedot uudelleen. Muutoin 3DS:n Kotivalikko ei ehkä toimi oikein.";

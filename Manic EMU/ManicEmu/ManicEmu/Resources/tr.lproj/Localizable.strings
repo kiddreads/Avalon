@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Bulut Hizmetleri";
 "ImportAddLanServiceTitle" = "Yerel Ağ Hizmeti";
-"ImportAddDiscoverServiceTitle" = "Keşif Hizmeti";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Bağlan";
 "AddLandServiceSuccess" = "%@ başarıyla eklendi";
 "AddLandServiceFailed" = "%@ eklenemedi\nLütfen ağ bağlantısını, hizmet durumunu veya bilgilerin doğruluğunu kontrol edin";
-"AddLandServiceTimeout" = "Hizmet bağlantısı zaman aşımına uğradı";
 "FilesImporterErrorFileExist" = "\"%@\" zaten mevcut, içe aktarmaya gerek yok";
 "FilesImporterErrorBadCopy" = "\"%@\" içe aktarılamadı, dosya kopyalama hatası";
 "FilesImporterErrorBadExtension" = "\"%@\" içe aktarılamadı, dosya uzantısı tanınmıyor";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nTarayıcı ile dosya aktar";
 "ImportServiceListPasteTitle" = "Panoyu Oku";
 "ImportServiceListPasteDetail" = "macOS ve Dosya uygulamasından kopyalanan dosyaları destekler";
-"ImportHowTo" = "Nasıl İçe Aktarılır?";
 "ImportTopHintTitle" = "Hayaller ve maceralarla dolu bir hikaye burada başlayacak!";
 "ImportDragAndDropTips" = "Dosyaları Manic EMU arayüzüne sürükleyerek aktarabilirsiniz";
 "ImportChannelTips" = "Sorularınız için %@ katılın";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d dakika";
 "FatalErrorTitle" = "Kritik Hata";
 "FatalErrorDesc" = "Sistem kaynakları yüklenemedi, Manic EMU'da ciddi sorunlar oluşabilir";
-"LodingFailedTitle" = "Yükleme Başarısız";
 "AirPlayDesc" = "Hemen maceraya başla!";
 "ToastSuccess" = "Başarıyla kaydedildi";
 "ToastFailed" = "Kaydetme başarısız";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Oyun Kaydını İçe Aktar";
 "GamesShareSave" = "Oyun Kaydını Dışa Aktar";
 "GamesDelete" = "Oyunu Kaldır";
-"GamesRandom" = "Ne oynayacağımı bilmiyorum, rastgele seç";
 "LoadGameErrorRomNotExist" = "Oyun yüklenemedi, ROM mevcut değil";
 "GamesListEmptyGuideLeft" = "Hemen aşağıdaki";
 "GamesListEmptyGuideRight" = "ile oyun içe aktar";
 "GamesListEmptyWelcomeLeft" = "";
 "GamesListEmptyWelcomeRight" = "dünyasına hoş geldin";
 "GamesListEmptyWarnning" = "Lütfen oyun ROM dosyalarını yasal kaynaklardan edindiğinizden emin olun";
+"LandscapeEmptyAddGame" = "Oyun Ekle";
 "DeleteGameAlertDetail" = "Oyun ROM'u, kayıtlar ve cheat kodları gibi tüm veriler kalıcı olarak silinecek!";
 "DeleteSkinAlertDetail" = "Skin kaldırıldıktan sonra geri alınamaz!";
-"DeleteGameGameStateAlertTitle" = "Anlık Kaydı Kaldır";
 "DeleteGameGameStateAlertDetail" = "Anlık kayıtlar kalıcı olarak silinecek!";
 "confirmDelte" = "Kaldırmayı Onayla";
 
 //Controllers
 "ControllersTouchName" = "Dokunmatik Kontrolcü";
-"ControllersHeaderTitle" = "Kontrolcüler";
 "ControllersPlayerIndex" = "Oyuncu %d";
 "ControllersPlayerUnset" = "Atanmamış";
-"ControllersHowToConnect" = "Nasıl Bağlanılır?";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ oynandı · Toplam %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Manuel Anlık Kayıt";
 "ReadySegmentAutoSave" = "Otomatik Anlık Kayıt";
 "ReadyEditTitleFailed" = "Yeniden adlandırma başarısız, oyun adı boş olamaz";
-"ReadyEditTitleSuccess" = "Yeniden adlandırma başarılı";
 "ReadyGameSaveStatesEmpty" = "Henüz kayıt yok";
 "GameSaveGuideBecomTitle" = "Üye Ol";
 "GameSaveGuideMemberTitle" = "Üyelik";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Kayıt %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU .deltaskin .gammaskin formatını destekler";
 "SkinNavigationSubTitleSpecifiedGame" = "Sadece %@ için skin ayarla";
 "SkinSegmentPortraitTitle" = "Dikey";
 "SkinSegmentLandscapeTitle" = "Yatay";
 "SkinAddTitle" = "Skin Ekle";
-"HowToFetch" = "Nasıl Edinilir";
 "SkinDelete" = "Skin'i Kaldır";
 "DefaultSkinCannotEdit" = "Varsayılan skin düzenlenemez";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Hemen Oyna";
 
 //Settings
-"LeftHandTitle" = "Solak Modu";
-"LeftHandDetail" = "Joystick, D-Pad ve tuşlar yatay olarak ters çevrilir";
 "QuickGameTitle" = "Hızlı Başlat";
 "QuickGameDetail" = "Oyunlara tıklandığında hazırlık sayfası gösterilmez";
 "AirPlayTitle" = "AirPlay Tam Ekran Modu";
 "AirPlayDetail" = "Açıldığında oyun ekranı tam ekran yansıtılır";
 "iCloudTitle" = "iCloud Senkronizasyonu";
-"iCloudDetail" = "Aynı Apple ID'li cihazlarda oyunlar, skinler, kayıtlar ve ayarlar senkronize edilir";
-"AppIconTitle" = "Uygulama Simgesi";
-"WidgetTitle" = "Ana Ekran Widget'ı";
 "QATitle" = "SSS";
 "FeedbackTitle" = "Geri Bildirim";
 "ShareAppTitle" = "Manic EMU'yu Arkadaşlarınla Paylaş";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Gelişmiş Ayarlar";
 "SupportSettingTitle" = "Destek";
 "OthersSettingTitle" = "Diğer";
-"RatingTitleLeft" = "";
-"RatingTitleRight" = "'yu Değerlendir";
-"RatingDetail" = "Ürünümüzü beğendiyseniz, bize 5 yıldız vererek destek olun";
 "iCloudDisableTitle" = "iCloud Kullanılamıyor";
 "iCloudDisableDetail" = "iPhone 'Ayarlar' > 'Apple ID' > 'iCloud' bölümünden iCloud Drive'ın açık olduğunu ve Manic EMU erişimine izin verdiğinizi kontrol edin";
 "iCloudSyncConfilictTitle" = "iCloud Çakışması";
-"iCloudSyncConfilictDetail" = "Bulut dosyası:\n%@\n\nYerel dosya:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "iCloud'u Koru";
 "iCloudSyncConfilictSaveLocal" = "Yereli Koru";
 "SettingsNonMemberDesc" = "Bu hikayenin kahramanı siz olacaksınız";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "";
 "PlayGameDesc" = "'ya oyun oynamak için katıldığın için teşekkürler";
 "NoEmailSetting" = "E-posta ayarlanmamış";
-"IDCopy" = "ID'niz panoya kopyalandı";
 "SendEmailSuccess" = "E-posta gönderildi";
 "SendEmailFailed" = "E-posta gönderilemedi %@";
 "iCloudTipsTitle" = "iCloud Senkronizasyonu Etkinleştir";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Ses";
 "GameSettingFastForwardResume" = "Normal Hız";
 "GameSettingFastForward" = "Hızlı İleri %@";
-"GameSettingStateList" = "Kayıt Listesi";
-"GameSettingSkins" = "Skin Ayarla";
-"GameSettingFilter" = "Filtre";
 "GameSettingScreenShot" = "Ekran Görüntüsü";
 "GameSettingHapticOff" = "Titreşim Kapalı";
 "GameSettingHapticSoft" = "Hafif Titreşim";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Yeniden Başlat";
 "GameSettingQuit" = "Çıkış";
 "GameSaveStateSuccess" = "Anlık kayıt başarılı";
-"GameSaveStateLoadFailed" = "Anlık kayıt yüklenemedi, bozuk veya uyumsuz";
 "GameSaveStateLoadSuccess" = "Anlık kayıt yüklendi";
 "GameSaveStateQuickLoadFailed" = "Manuel kayıt bulunamadı, otomatik kayıtlar için 'Kayıt Listesi'ni kullanın";
 "GameSaveListTitle" = "Anlık Kayıtlar";
-"GameCheatActivateFailed" = "%@\netkinleştirilemedi, cheat kodu geçersiz";
 "GameCheatActivateSuccess" = "%@\nbaşarıyla etkinleştirildi";
 "AirPlayingTitle" = "Oyun ekranı yansıtılıyor";
 "VolumeOff" = "Ses Kapalı";
 "VolumeOn" = "Ses Açık";
-"FunctionSortDesc1" = "Bu fonksiyonlar varsayılan skin için kısayol olarak kullanılır";
-"FunctionSortDesc2" = "Sıralamak için uzun basıp sürükleyin";
 "ManualGameSaveCountLimit" = "Anlık kayıt limitiniz doldu! Üye olarak sınırsız kayıt açın veya listeden silin";
 "FastForwardSpeedLimit" = "Maksimum hız x2! Üye olarak x5 hızını açın";
 "ResetSpeed" = "Normal Hıza Dön";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Format otomatik algılanacak";
 "CheatCodeFormatError" = "Cheat kodu formatı geçersiz";
 "CheatCodeEmptyTitle" = "Cheat kodu yok";
-"CheatCodeEmptyGuideLeft" = "Sol üstteki";
-"CheatCodeEmptyGuideRight" = "ile cheat kodu ekle";
 "EnableCheatCodeAlertTitle" = "Cheat Kodlarını Etkinleştir";
 "EnableCheatCodeAlertDetail" = "Cheat kodları oyun sürümüne bağlıdır ve yanlış kullanım hatalara yol açabilir!";
 
 //滤镜
-"FilterSectionHeaderTitle" = "Video Filtreleri";
 "FilterOriginTitle" = "Orijinal";
 
 //内购
@@ -354,7 +324,6 @@
 "PurchasePending" = "Ödeme bekleniyor";
 "PurchaseUnknown" = "Bilinmeyen durum";
 "PurchaseErrorDesc" = "Ödeme yapılamadı, internet bağlantınızı kontrol edin";
-"PurchaseFailedTitle" = "Ödeme Başarısız";
 "RestoreSuccessDesc" = "Satın alım geri yüklendi!";
 "RestoreEndDesc" = "Geri yükleme tamamlandı, aktif üyelik bulunamadı";
 "TrialDesc" = "Ücretsiz deneme süresince ücret alınmaz";
@@ -395,25 +364,12 @@
 "ShareAppSubtitle" = "Arkadaşlarını maceraya davet et!";
 "ShareRomFilesFailed" = "ROM paylaşılamadı, dosya bulunamadı";
 "ShareSaveFilesFailed" = "Kayıt paylaşılamadı, kayıt yok";
-"ShareFilesCopyFailed" = "Dosya kopyalanamadı";
-"ShareFilesCompressFailed" = "Dosya sıkıştırılamadı";
 
 "TurnOnAirPlayAsk" = "AirPlay bağlandı. Tam ekran moduna geçilsin mi?";
 
 "ThreeDSModePerformance" = "Performans Modu";
 "ThreeDSModeCompatibility" = "Uyumluluk Modu";
 "ThreeDSModeQuality" = "Görüntü Kalitesi Önceliği";
-"ThreeDSNotSupportImportSave" = "3DS oyunları şu anda kayıt dosyası içe aktarmayı desteklemiyor";
-"ThreeDSNotSupportShareSave" = "3DS oyunları şu anda kayıt dosyası paylaşmayı desteklemiyor";
-"ThreeDSBetaAlertTitle" = "3DS Deneysel Sürüm";
-"ThreeDSBetaAlertDetail" = "3DS oyunlarını daha erken deneyimlemeniz için Manic EMU, deneysel 3DS özelliğini yayınladı. Bazı iyileştirmeler gerekiyor.
-
-Geçici olarak eksik özellikler:
-❌ AirPlay Tam Ekran Modu
-❌ Otomatik Kaydetme
-❌ Hızlandırma
-
-Sorun yaşarsanız SSS'mize bakın veya destek kanalımıza katılın. Emülatörü sürekli optimize ediyoruz. Desteğiniz mükemmel bir deneyim yaratmamıza yardımcı olur. Sizin için çalışıyoruz!";
 "ThreeDSNoSupportDeviceTitle" = "Cihaz Performansı Yetersiz";
 "ThreeDSNoSupportDeviceDetail" = "Bu cihaz 3DS emülasyonunu desteklemiyor olabilir. Devam etmek öngörülemeyen hatalara neden olabilir";
 
@@ -432,8 +388,6 @@ Kontrolcü düğmesine basın...";
 "FullScreenWhenConnectControllerTitle" = "Otomatik tam ekran";
 "FullScreenWhenConnectControllerDetail" = "Kontrolcü bağlandığında tam ekran yap";
 "JoinDiscordTitle" = "Discord'a Katıl";
-"JoinDiscordAlertMessage" = "%@ tarafından oluşturulan kanala katılmak ister misiniz?";
-"FlexSkinGuideTitle" = "Ekranı ayarlamak için sürükle veya yakınlaştır";
 "DownloadFailed" = "İndirme başarısız";
 "RemoveDownloadTask" = "\"%@\" indirmesi iptal edilsin mi?";
 "GameSettingResolution" = "Çözünürlük %@";
@@ -483,9 +437,6 @@ Kontrolcü düğmesine basın...";
 "RenderRightEyeDesc" = "Devre dışı bırakmak bazı oyunlarda performansı artırır ancak ekran titremesine neden olabilir";
 "DisableTitle" = "Devre Dışı";
 "EnableTitle" = "Etkinleştir";
-"NoSaveStateToast" = "%@ Yok";
-"DeleteSelectedSaveStateAlert" = "Seçilen «%@» silinsin mi?\nGeri alınamaz!";
-"DeleteAllSaveStateAlert" = "Seçili öğe yok. Tüm «%@» silinsin mi?\nGeri alınamaz!";
 "AICoverSearchDesc" = "İngilizce olmayan arama algılandı. Manic EMU'nun çok dilli AI araması için Premium'a yükseltin";
 "MaxTextSizeAllowDesc" = "En fazla %@ karakter desteklenir";
 
@@ -513,29 +464,21 @@ Kontrolcü düğmesine basın...";
 "BiosAddTitle" = "BIOS Ekle";
 "StartGameWithoutBiosTitle" = "BIOS Olmadan Başlat";
 
-"ThreeDSAdvanceSettingMode" = "Gelişmiş Mod";
 "ThreeDSAdvanceSettingTitle" = "Gelişmiş Ayarlar";
-"ThreeDSBasicSettingMode" = "Temel Mod";
 "ShareConfigButtonTitle" = "Yapılandırmayı Paylaş";
 "ImportConfigButtonTitle" = "Yapılandırmayı İçe Aktar";
 "ShareFileFailedMissing" = "Paylaşım başarısız: dosya bulunamadı";
 "ReadConfigFileFailed" = "Yapılandırma dosyası okunamadı";
 "SwitchEmulationCore" = "Çekirdek Değiştir";
 "SwitchEmulationCoreDetail" = "%@ için emülasyon çekirdeği değiştir\nÇekirdek değişimi önceki çekirdeğin kayıtlarını okunamaz hale getirir. Erişmek için orijinal çekirdeğe dönün";
-"BeetleSaturnNoSupportCheat" = "Beetle Saturn çekirdeği şu anda hile kodu desteklemiyor. Gerekirse Yabause çekirdeğine geçin";
-"CurrentTitle" = "mevcut";
 "NewSkinDesc" = "Manic EMU, .manicskin ve .deltaskin .gammaskin formatlarında skinleri destekler. Not: İçe aktarılan skin mevcut platformla uyumlu olmalıdır, aksi takdirde listede görünmez.\nAyrıca üçüncü taraf skin topluluklarına erişim sağlıyoruz. Bunlar Manic EMU ile resmi olarak bağlantılı değildir. Skin indirirken her sitenin hizmet şartlarına uyun";
 "VisitSite" = "%@ ziyaret et";
 "OpenFile" = "Dosya Aç";
 "WebViewDownloadBegin" = "İndirme başladı";
 "RespectSilentMode" = "Sessiz Moda Uy";
 "RespectSilentModeDesc" = "Etkinleştirildiğinde, Manic EMU yalnızca sessiz mod dışında ses çalar";
-"SaturnISONoSwitchCore" = "Sega Saturn .iso formatındaki oyunlar çekirdek değiştirmeyi desteklemez";
-"EnableFullScreenTitle" = "Tam Ekran Etkinleştir";
-"DisableFullScreenTitle" = "Tam Ekran Devre Dışı Bırak";
 "SimulateBlowingTitle" = "Üfleme Simülasyonu";
 "PaletteTitle" = "Palet";
-"SkinRestDesc" = "Skin sıfırlama, oyun atanmış skinleri de varsayılan sürümlerine geri yükler";
 "SkinResetForAll" = "Tüm platform skinlerini sıfırla";
 "SkinResetForPlatform" = "%@ skinini sıfırla";
 "SkinDebug" = "Skin Test Alanı";
@@ -552,7 +495,6 @@ Kontrolcü düğmesine basın...";
 "MultiDiscCloseAlert" = ".m3u dosyası oluşturuldu. Kütüphaneye aktardıktan sonra bu sayfayı kapatın";
 "MultiDiscContinueClose" = "Kapatmaya Devam Et";
 "SwapDisk" = "Disk Değiştir";
-"NotSupportSwapDisk" = "Çok diskli oyun değil";
 "TransferPakDesc" = "Transfer Pak, GB/GBC verilerini N64 ile senkronize eder. Etkinleştirmek için ROM (.gb/.gbc) ve kayıt dosyasını (.sav) içe aktarın";
 "TransferPakFromLibrary" = "Kütüphaneden İçe Aktar";
 "TransferPakFromLibraryDesc" = "Sadece kayıt dosyası olan oyunlar gösterilir.\nSeçilen GB/GBC oyunları N64 ROM ile eşleşmeli, aksi takdirde başarısız olabilir";
@@ -561,7 +503,6 @@ Kontrolcü düğmesine basın...";
 "TransferPakOn" = "Aktif";
 "TransferPakOff" = "Pasif";
 "TransferPakImportError" = "Hata: Hem ROM hem kayıt dosyasını içe aktarın (2 dosya gerekli)";
-"ShowControlsTitle" = "Kontrolleri Göster";
 "HideControlsTitle" = "Kontrolleri Gizle";
 
 "DesignedFor" = "%@ için Tasarlanmıştır";
@@ -584,7 +525,6 @@ Kontrolcü düğmesine basın...";
 "WfcConnectDesc" = "Nintendo WFC'ye bağlanıyor...\nHızlandırma ve hileler devre dışı";
 "WfcDisconnectDesc" = "Nintendo WFC bağlantısını kes";
 "NotAllowOnlineGame" = "Çevrimiçi oyunda bu özellik devre dışı";
-"QuitGameAlert" = "Oyundan çıkılsın mı? Kaydedilmemiş ilerleme kaybolacak";
 
 "SkinIdentifierExist" = "Tanımlayıcı %@ zaten var. Lütfen değiştirip tekrar içe aktarın.";
 "AnalogModeChange" = "%@ Moduna Geç";
@@ -618,7 +558,6 @@ Kontrolcü düğmesine basın...";
 "LastActivity" = "Son etkinlik: %@";
 "MemberSince" = "Üyelik tarihi: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "İlerleme";
 "AchievementsList" = "Başarımlar";
 "TotalAchievements" = "Toplam %d başarım";
@@ -641,7 +580,6 @@ Kontrolcü düğmesine basın...";
 "DisableAchievementsAlert" = "RetroAchievements devre dışı bırakılsın mı?";
 "SaveStateCoreUnCompatible" = "Kayıt durumu %@'de oluşturuldu (mevcut: %@). Yükleme sorunlara neden olabilir!";
 "LatestSaveStateUnCompatible" = "Çekirdek uyumsuzluğu nedeniyle son kayıt yüklenemiyor";
-"Snes9xAlert" = "Lisans sorunları nedeniyle Snes9x çekirdeği future updates kaldırılacak. Lütfen bsnes'e geçin ve kayıt durumlarınızı taşıyın, aksi takdirde çalışmazlar.";
 "GotIt" = "Anladım";
 "Rumble" = "Titreşim";
 "RumbleDetail" = "Cihaz belirli olaylarda titreşir";
@@ -657,7 +595,6 @@ Kontrolcü düğmesine basın...";
 "JumpTips" = "Üçüncü taraf sayfası açılıyor";
 "ThirdPartGameInfoTips" = "Oyun bilgileri üçüncü taraflarca sağlanır. Kendi kararınızı kullanın. Manic EMU bir oyunu eşleştiremezse, manual search kullanın.";
 "NotSupportHardcore" = "Bu oyun için Hardcore Modu devre dışı. Manic EMU RetroAchievements tarafından yetkilendirilmemiş olabilir veya oyun desteklemiyor olabilir.";
-"ChooseOne" = "Birini seç";
 "FilesImporterErrorBadCue" = "%@ içe aktarılamadı. dosyası geçersiz veya UTF-8 kodlu değil. Lütfen formatı kontrol edin.";
 "Leaderboard" = "Liderlik Tablosu";
 "LeaderboardStart" = "Liderlik başlangıcı: ";
@@ -673,10 +610,8 @@ Kontrolcü düğmesine basın...";
 "AlwaysShowProgressDesc" = "Başarım ilerlemesini ekranda görünür tut.";
 "Progress" = "İlerleme";
 
-"DCGameNoSupportGameSave" = "Dreamcast kayıt içe/dışa aktarmayı desteklemez. Manic EMU-Flycast-dc klasöründeki bellek dosyalarını düzenlemek için VMU Explorer'ı kullanın.";
 
 "Challenge" = "Meydan Okuma";
-"GameTypeLicensingError" = "Üzgünüz! %@ çekirdeği için lisans kısıtlamaları nedeniyle bu platform şu anda kullanılamıyor. Bir sonraki güncellemeyi bekleyebilir veya yan yükleme sürümünü deneyebilirsiniz.";
 "DCJITLessVer" = "Varsayılan sürüm hızlı ve doğru emülasyon sunar ancak WinCE oyunlarını çalıştıramaz. WinCE oyunları için lütfen WinCE çekirdeğini seçin.";
 "TVStandard" = "Oyunun TV standardı bölgenizle uyuşmazsa hız etkilenebilir. PAL bölgeleri çoğunlukla Avrupa, Avustralya ve Yeni Zelanda’yı kapsar.";
 "SNESVRAMEnable" = "Bazı hacklenmiş ROM'lar grafiklerin doğru işlenmesi için bu seçeneği gerektirir, ancak etkinleştirmek RetroAchievements desteğini devre dışı bırakır.";
@@ -699,7 +634,6 @@ Kontrolcü düğmesine basın...";
 "LayoutEmbeddedBottomRight" = "Gömülü (Alt-Sağ)";
 "LayoutSingleScreen" = "Tek Ekran";
 "AirPlayLayoutTips" = "Daha fazla düzen seçeneği için AirPlay Düzeni ile Ekran Değiştir'i birleştirin. Not: Gömülü Düzen ile Ekran Değiştir kullanımı üst üste binmeye neden olabilir, tavsiye edilmez";
-"ToggleAnolog" = "Analog Değiştir";
 "EnableGlobalAchievements" = "Küresel RetroAchievements'ı Etkinleştir";
 "GlobalHardcoreMode" = "Küresel Zorlu Mod";
 "GlobalHardcoreAlert" = "Lütfen önce Küresel RetroAchievements'ı etkinleştirin";
@@ -715,7 +649,6 @@ Kontrolcü düğmesine basın...";
 "AppearanceLight" = "Açık Mod";
 "AppearanceDark" = "Koyu Mod";
 "AppearanceAuto" = "Sistemi Takip Et";
-"GameListBackground" = "Arka Plan Görseli";
 "GameListBackgroundUpload" = "Yükle";
 "GameplayManuals" = "Oyun Kılavuzları";
 "GameplayManualsNoExists" = "Bu oyun için mevcut kılavuz yok.";
@@ -725,7 +658,6 @@ Kontrolcü düğmesine basın...";
 "UnsupportSkinsDesc" = "Aşağıdaki skinler bu cihazda desteklenmiyor:\n%@Not: Kaldırmak, bu skinleri iCloud üzerinden senkronize edilen diğer cihazlardan da silecektir.";
 "UnsupportSkinsRemoveSuccess" = "Desteklenmeyen skinler başarıyla kaldırıldı";
 "ForbitPKSM" = "Adil bir RetroAchievements deneyimi sağlamak için, Global RetroAchievements etkinleştirildiğinde PKSM kullanılamaz.";
-"FDSAlert" = "Bu seçenek yalnızca FDS oyunları için kullanılabilir.";
 "DiskSideChange" = "Diski Çevir";
 "EjectDisk" = "Diski Çıkar";
 
@@ -758,7 +690,6 @@ Kontrolcü düğmesine basın...";
 "TriggerProName" = "TriggerPro Adı";
 "Position" = "Konum";
 "ButtonInfo" = "Tuş Bilgisi";
-"NoTriggerPro" = "TriggerPro yapılandırması bulunamadı. Ayarlar'a gidebilir veya Oyun Menüsü'nde TriggerPro seçeneğini uzun basarak yeni bir tane oluşturabilirsiniz";
 "ManageTriggerPro" = "TriggerPro'yu Yönet";
 "EnableTriggerPro" = "TriggerPro'yu Etkinleştir";
 "DisableTriggerPro" = "TriggerPro'yu Devre Dışı Bırak";
@@ -799,7 +730,6 @@ Kontrolcü düğmesine basın...";
 "Default" = "Varsayılan";
 "Imported" = "İçe Aktarıldı";
 "DownloadRetroArchSahders" = "RetroArch'tan Gölgelendiriciler İndir";
-"ImportShaders" = "Gölgelendiricileri İçe Aktar";
 "Shaders" = "Gölgelendiriciler";
 "DownloadRetroArchShaders" = "RetroArch'tan gölgelendirici indirmek istiyor musunuz? Tamamlandığında, RetroArch gölgelendirici kategorisi otomatik olarak yenilenecektir. İndirme yöneticisinden bu işlemi istediğiniz zaman iptal edebilirsiniz.";
 "RetroArchShaderUnzipFailed" = "%@ çıkarılamadı. Dosya indirme sırasında bozulmuş olabilir. Lütfen tekrar indirmeyi deneyin.";
@@ -832,7 +762,6 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "JGenesisAlert" = "Üzgünüz, JGenesis çekirdeği yalnızca .chd ROM dosyalarını destekler.";
 "RedeemOfferCode" = "Teklifi Kullan";
 "CheatImportFailed" = "İçe aktarma başarısız. Dosya ayrıştırılamadı veya eşleşen hile kodu bulunamadı.";
-"RemoveAllCheats" = "Tüm Hileleri Kaldır";
 "RemoveAllCheatsAlert" = "Tüm hile kodlarını kaldırmak istediğinizden emin misiniz? Bu işlem geri alınamaz.";
 "CheatCodeStatus" = "Etkin";
 "Background" = "Arka Plan";
@@ -845,13 +774,8 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "RemoveBackgroundForGame" = "Oyun Arka Planını Kaldır";
 "RemoveBackgroundForConsole" = "%@ Platform Arka Planını Kaldır";
 "RemoveBackgroundForGlobal" = "Genel Arka Planı Kaldır";
-"ShaderConfigAlert" = "%@ için ayarlandı.";
-"Global" = "Genel";
-"RemoveShaderForGlobal" = "Genel Shader'ı Kaldır";
 "FeaturedItems" = "Öne Çıkan Öğeler";
-"ReUpload" = "Yeniden Yükle";
 
-"Service" = "Hizmetler";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "PSP Ağı";
 "Networking" = "Ağ";
@@ -890,16 +814,11 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "LoadingCheerpJ" = "CheerpJ Yükleniyor";
 "ZipHandlerTitle" = "ZIP Dosyası İşleme";
 "ZipHandlerDetail" = "Bazı platformlar (DOS ve Arcade gibi) ROM'ları doğrudan .zip dosyalarından yükleyebilir. Diğer platformlar için, .zip içindeki ROM'lar içe aktarılmadan önce çıkarılmalıdır.\n\nSeçilen dosyalar çıkarılacak ve ayrı ayrı içe aktarılacak, seçilmeyen dosyalar ise tek bir ZIP ROM'u olarak içe aktarılacaktır.";
-"ConfigsResetCore" = "Çekirdek Varsayılanlarına Sıfırla";
-"ConfigsResetBefore" = "Önceki Ayarlara Dön";
 "InsertDisc" = "Disk Tak";
 "InsertDiscAlert" = "Kitaplığınızda aynı platformdan başka bir oyun seçerek veya Dosyalar'dan bir disk dosyası seçerek disk takabilirsiniz. iOS dosya sistemi sınırlamaları nedeniyle, Dosyalar'dan seçilen disk dosyaları Manic EMU'nun önbelleğine kopyalanacaktır.";
 "InsertDiscFailed" = "Disk Takma Başarısız";
 "GenerateHomeMenu" = "Ana Menü Oluştur";
 "SkinSoundEffects" = "Tema Ses Efektleri";
-"FirstAnniversary" = "BURADA OLDUĞUNUZ İÇİN TEŞEKKÜRLER,\nSİZE BİR ŞEYLER YAZDIK";
-"ApirlFoolsDayTitle" = "Hay aksi, Manic EMU bozuldu mu?";
-"ApirlFoolsDayDetail" = "Endişelenmeyin!\nSadece bir şaka—1 Nisan Kutlu Olsun!\n\nBunu kapattığınızda her şey normale dönecek.";
 "JITType" = "JIT Türü";
 "JITTypeDesc" = "Standart JIT en iyi performansı sunarken, IR JIT orta düzeyde performans sağlar.";
 "Pretendo" = "Pretendo Ağı";
@@ -914,7 +833,6 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "HomeMenuDesc" = "Ana Menü'yü açmak için aşağıdaki düğmeyi kullanın. Ardından Nimbus Ayarları'na gidin, Pretendo ağına geçin ve Ayarlar'ı açarak \"Nintendo Network Kimliği\"ni seçin ve Pretendo hesabınızla oturum açın.\n\nBundan sonra, Ana Menü'den başlatılan veya Azahar çekirdeği ile çalışan herhangi bir oyun Pretendo ağını kullanacaktır.\n\nAna Menü girişi eksikse, bu özellik otomatik olarak yeniden oluşturmaya çalışacaktır.";
 "OpenHomeMenu" = "Ana Menü'yü Aç";
 "ChooseRegion" = "Bölge Seç";
-"ChooseRegionDesc" = "Artic Setup Aracı'nı çalıştıran 3DS cihazının doğru bölgesini seçin. Yanlış bölgeyi seçmek, veri aktarımının başarılı olmasını engelleyecektir.";
 "HomeMenuNotFound" = "Ana Menü bulunamadı. Lütfen önce Artic Base veri aktarımını tamamlayın.";
 "SystemUpdateAsk" = "Sistem güncellemesi başarıyla tamamlandı mı?";
 "SystemUpdateDesc" = "Sistem güncellemesi ağ sorunları nedeniyle başarısız olduysa, lütfen verileri tekrar aktarmayı deneyin. Aksi takdirde, 3DS Ana Menü düzgün çalışmayabilir.";

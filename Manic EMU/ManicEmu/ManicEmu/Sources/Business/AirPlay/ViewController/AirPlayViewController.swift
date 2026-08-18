@@ -39,7 +39,7 @@ class AirPlayViewController: UIViewController {
         }
     }
     
-    func addLibretroView(_ gameView: UIView, dimensions: CGSize, scalingType: GameSetting.AirPlayScaling) -> CGSize {
+    func addLibretroView(_ gameView: UIView, dimensions: CGSize, scalingType: GameOption.AirPlayScaling) -> CGSize {
         var dimensions = dimensions
         switch scalingType {
         case .square, .standard, .widescreen:

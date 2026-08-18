@@ -41,7 +41,7 @@ class SyncManager: NSObject {
     private(set) var syncState: SyncState = .undefine {
         didSet {
             if oldValue != syncState {
-                NotificationCenter.default.post(name: Constants.NotificationName.iCloudDriveSyncChange, object: syncState)
+                NotificationCenter.default.post(name: R.NotificationName.iCloudDriveSyncChange, object: syncState)
                 Log.debug("[iCloud Sync] 同步状态变化: \(oldValue.rawValue) -> \(syncState.rawValue)")
             }
         }
@@ -79,7 +79,7 @@ class SyncManager: NSObject {
             setupDocumentSync()
             // 启动 iCloud 文件监控
             startiCloudFileMonitoring()
-            stopGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StopPlayGame, object: nil, queue: .main) { notification in
+            stopGameNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.StopPlayGame, object: nil, queue: .main) { notification in
                 SyncManager.syncDocument()
             }
         }
@@ -117,7 +117,8 @@ class SyncManager: NSObject {
             SyncObject(realmConfiguration: configuration, type: ControllerMapping.self),
             SyncObject(realmConfiguration: configuration, type: Theme.self),
             SyncObject(realmConfiguration: configuration, type: Trigger.self, uListElementType: TriggerItem.self),
-            SyncObject(realmConfiguration: configuration, type: TriggerItem.self)
+            SyncObject(realmConfiguration: configuration, type: TriggerItem.self),
+            SyncObject(realmConfiguration: configuration, type: Prefference.self)
         ])
         realmSyncEngine?.setupCompletion = { error in
             //同步设定完成之后 尝试将本地所有数据推到云端
@@ -436,7 +437,7 @@ class SyncManager: NSObject {
                             if let range = cloudFileUrl.path.range(of: "/Documents/") {
                                 let cloudFileRelativePath = String(cloudFileUrl.path[range.upperBound...])
                                 let cloudFilePath = RootRelativePath(path: "Documents/\(cloudFileRelativePath)")
-                                let localFilePath = Constants.Path.Document.appendingPathComponent(cloudFileRelativePath)
+                                let localFilePath = R.Path.Document.appendingPathComponent(cloudFileRelativePath)
                                 if FileManager.default.fileExists(atPath: localFilePath) {
                                     if let localFileModificationDate = try FileManager.default.attributesOfItem(atPath: localFilePath)[.modificationDate] as? Date {
                                         if localFileModificationDate > cloudFileModificationDate {
@@ -484,7 +485,7 @@ class SyncManager: NSObject {
                     }
                 }
                 //遍历本地
-                let localFileUrls = fetchAllLocalFiles(at: URL(fileURLWithPath: Constants.Path.Document))
+                let localFileUrls = fetchAllLocalFiles(at: URL(fileURLWithPath: R.Path.Document))
                 for localFileUrl in localFileUrls {
                     if let range = localFileUrl.path.range(of: "/Documents/") {
                         let localFileRelativePath = String(localFileUrl.path[range.upperBound...])
@@ -510,7 +511,7 @@ class SyncManager: NSObject {
                     Log.debug("[iCloud Sync]处理冲突文件:\(conflictFile)")
                     Task { @MainActor in
                         let cloudFilePath = RootRelativePath(path: "Documents/\(conflictFile)")
-                        let localFilePath = Constants.Path.Document.appendingPathComponent(conflictFile)
+                        let localFilePath = R.Path.Document.appendingPathComponent(conflictFile)
                         UIView.makeAlert(title: R.string.localizable.iCloudSyncConfilictTitle(),
                                          detail: conflictFile,
                                          cancelTitle: R.string.localizable.iCloudSyncConfilictSaveiCloud(),
@@ -596,7 +597,7 @@ class SyncManager: NSObject {
     static func convertToLocalUrl(fromCloudUrl: URL) -> URL? {
         if let range = fromCloudUrl.path.range(of: "/Documents/") {
             let cloudFileRelativePath = String(fromCloudUrl.path[range.upperBound...])
-            return URL(fileURLWithPath: Constants.Path.Document.appendingPathComponent(cloudFileRelativePath))
+            return URL(fileURLWithPath: R.Path.Document.appendingPathComponent(cloudFileRelativePath))
         }
         return nil
     }

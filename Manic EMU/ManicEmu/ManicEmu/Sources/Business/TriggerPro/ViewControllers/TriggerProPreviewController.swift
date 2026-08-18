@@ -10,7 +10,6 @@ import UIKit
 
 import AVFoundation
 import RealmSwift
-import IQKeyboardManagerSwift
 
 class TriggerProPreviewController: BaseViewController {
     
@@ -51,56 +50,47 @@ class TriggerProPreviewController: BaseViewController {
         return view
     }()
     
-    private var switchPreviewSkinMenuButton: ContextMenuButton = {
-        let view = ContextMenuButton()
-        return view
-    }()
-    
-    private lazy var switchPreviewSkinButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold)),
-                                title: R.string.localizable.switchPreviewSkin(),
-                                titleFont: Constants.Font.title(size: .s),
-                                titleColor: Constants.Color.LabelPrimary.forceStyle(.dark),
-                                edgeInsets: .zero,
-                                titlePosition: .left,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
-        view.layerCornerRadius = 0
-        view.backgroundColor = .clear
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            let itemTitles = self.supportSkins.map { $0.name }
-            var items: [UIAction] = []
-            let currentSkinName = self.skin.name
-            for (index, title) in itemTitles.enumerated() {
-                items.append(UIAction(title: title,
-                                      image: currentSkinName == title && !self.hideControls ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                      handler: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.skin = self.supportSkins[index]
-                    self.hideControls = false
-                }))
-            }
-            self.switchPreviewSkinMenuButton.menu = UIMenu(children: [
-                UIMenu(options: .displayInline,
-                       children: items),
-                UIMenu(options: .displayInline,
-                       children: [UIAction(title: R.string.localizable.hideControlsTitle(),
-                                           image: self.hideControls ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                           handler: { [weak self] _ in
-                                               guard let self = self else { return }
-                                               self.hideControls = true
-                                           })])
-            ])
-            self.switchPreviewSkinMenuButton.triggerTapGesture()
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(.init(tools: [.symbolImage(R.image.ellipsis_iconSymbols())]))
+        view.didTapTools = { [weak self] _ in
+            guard let self else { return }
+            //more
+            ChevronSheetView.show(stringOptions: [
+                R.string.localizable.switchPreviewSkin(),
+                R.string.localizable.hideControlsTitle()
+            ], completion: { [weak self] index in
+                guard let self, let index else { return }
+                if index == 0 {
+                    //switch preview skin
+                    ChevronSheetView.show(icon: .symbolImage(R.image.skin_iconSymbols()),
+                                          title: R.string.localizable.switchPreviewSkin(),
+                                          stringOptions: self.supportSkins.map({ $0.name }),
+                                          completion: { [weak self] skinIndex in
+                        guard let self, let skinIndex else { return }
+                        self.skin = self.supportSkins[skinIndex]
+                        self.hideControls = false
+                    })
+                    
+                } else if index == 1 {
+                    //hide controls
+                    self.hideControls = true
+                }
+            })
+        }
+        
+        view.didTapClose = { [weak self] in
+            self?.dismiss(animated: true)
+            self?.storeTrigger()
         }
         return view
+        
     }()
     
     private lazy var addButton: UIView = {
         let view = UIView()
-        view.enableInteractive = true
-        let iconContainerView = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        iconContainerView.backgroundColor = Constants.Color.Background
+        view.enablePressEffect = true
+        let iconContainerView = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium)
+        iconContainerView.backgroundColor = R.Color.BackgroundPrimary
         view.addSubview(iconContainerView)
         iconContainerView.snp.makeConstraints { make in
             make.size.equalTo(64)
@@ -108,7 +98,7 @@ class TriggerProPreviewController: BaseViewController {
             make.centerX.equalToSuperview()
         }
         
-        let iconView = UIImageView(image: UIImage(symbol: .plusCircleFill, font: Constants.Font.body(weight: .bold), colors: [Constants.Color.Background, Constants.Color.LabelPrimary]))
+        let iconView = UIImageView(image: UIImage(symbol: .plusCircleFill, font: R.Font.Footnote(emphasis: true), colors: [R.Color.BackgroundPrimary, R.Color.LabelPrimary]))
         iconContainerView.addSubview(iconView)
         iconView.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -116,12 +106,12 @@ class TriggerProPreviewController: BaseViewController {
         }
         
         let label = UILabel()
-        label.font = Constants.Font.body(size: .l, weight: .semibold)
-        label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        label.font = R.Font.Body(emphasis: true)
+        label.textColor = R.Color.LabelPrimary.forceStyle(.dark)
         label.text = R.string.localizable.addButton()
         view.addSubview(label)
         label.snp.makeConstraints { make in
-            make.top.equalTo(iconContainerView.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.top.equalTo(iconContainerView.snp.bottom).offset(R.Size.ContentSpaceSmall)
             make.leading.trailing.bottom.equalToSuperview()
         }
         
@@ -129,12 +119,13 @@ class TriggerProPreviewController: BaseViewController {
             guard let self else { return }
             let item = TriggerItem()
             self.trigger.items.append(item)
-            let vc = AddTriggerButtonController(triggerItem: item, gameType: self.trigger.gameType, inputs: self.getInputs())
-            vc.didPageClose = { [weak self] in
+            AddTriggerButtonView.show(triggerItem: item,
+                                      gameType: self.trigger.gameType,
+                                      inputs: self.getInputs(),
+                                      hideCompletion: { [weak self] in
                 guard let self else { return }
                 self.triggerProView.reloadButtons()
-            }
-            topViewController()?.present(vc, animated: true)
+            })
             self.triggerProView.reloadButtons()
         }
         
@@ -143,15 +134,15 @@ class TriggerProPreviewController: BaseViewController {
     
     private lazy var titleTextField: UITextField = {
         let view = UITextField()
-        view.textColor = Constants.Color.LabelPrimary
-        view.font = Constants.Font.body(size: .l)
+        view.textColor = R.Color.LabelPrimary
+        view.font = R.Font.Body()
         view.clearButtonMode = .always
         view.text = trigger.name ?? ""
         view.onReturnKeyPress { [weak self] in
             guard let self = self else { return }
             self.trigger.name = self.titleTextField.text
         }
-        view.attributedPlaceholder = NSAttributedString(string: trigger.defaultName, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelTertiary])
+        view.attributedPlaceholder = NSAttributedString(string: trigger.defaultName, attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelTertiary])
         view .returnKeyType = .done
         return view
     }()
@@ -168,13 +159,9 @@ class TriggerProPreviewController: BaseViewController {
                              cancelAction: { [weak self] in
                 guard let self else { return }
                 //编辑
-                let vc = AddTriggerButtonController(triggerItem: item, gameType: self.trigger.gameType, inputs: self.getInputs())
-                vc.didPageClose = { [weak self] in
+                AddTriggerButtonView.show(triggerItem: item, gameType: self.trigger.gameType, inputs: self.getInputs(), hideCompletion: { [weak self] in
                     guard let self else { return }
                     self.triggerProView.reloadButtons()
-                }
-                DispatchQueue.main.asyncAfter(delay: 0.15, execute: {
-                    topViewController()?.present(vc, animated: true)
                 })
             }, confirmAction: { [weak self] in
                 guard let self else { return }
@@ -186,12 +173,6 @@ class TriggerProPreviewController: BaseViewController {
         }
         return view
     }()
-    
-    deinit {
-        Task { @MainActor in
-            IQKeyboardManager.shared.isEnabled = false
-        }
-    }
 
     private var hideControls: Bool {
         didSet {
@@ -209,7 +190,7 @@ class TriggerProPreviewController: BaseViewController {
         } else {
             self.skin = self.defaultSkin
         }
-        self.traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: Constants.Size.WindowSize)))
+        self.traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: R.Size.WindowSize)))
         if let trigger {
             //将数据库实例转换为临时实例 为了更方便的修改 保存的时候统一修改数据库
             self.trigger = trigger.copyTrigger()
@@ -221,6 +202,8 @@ class TriggerProPreviewController: BaseViewController {
         }
         self.hideControls = hideControls
         super.init(fullScreen: true)
+        
+        self.enableBackgroundMask = false
         
         view.addSubview(controlView)
         
@@ -235,7 +218,7 @@ class TriggerProPreviewController: BaseViewController {
             controlView.snp.makeConstraints { make in
                 make.center.equalToSuperview()
                 if let aspectRatio = skin.aspectRatio(for: traits) {
-                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: CGSize(width: Constants.Size.WindowHeight, height: Constants.Size.WindowWidth)))
+                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: CGSize(width: R.Size.WindowHeight, height: R.Size.WindowWidth)))
                     make.size.equalTo(frame.size)
                 }
             }
@@ -244,32 +227,17 @@ class TriggerProPreviewController: BaseViewController {
             controlView.snp.makeConstraints { make in
                 make.center.equalToSuperview()
                 if let aspectRatio = skin.aspectRatio(for: traits) {
-                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: Constants.Size.WindowSize))
+                    let frame = AVMakeRect(aspectRatio: aspectRatio, insideRect: CGRect(origin: .zero, size: R.Size.WindowSize))
                     make.size.equalTo(frame.size)
                 }
             }
         }
         
-        view.addSubview(closeButton)
-        closeButton.addTapGesture { [weak self] gesture in
-            self?.dismiss(animated: true)
-            self?.storeTrigger()
-        }
-        closeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Constants.Size.SafeAera.top == 0 ? 20 : Constants.Size.SafeAera.top)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        view.addSubview(switchPreviewSkinButton)
-        switchPreviewSkinButton.snp.makeConstraints { make in
-            make.leading.equalTo(Constants.Size.ContentSpaceMax)
-            make.centerY.equalTo(closeButton)
-        }
-        
-        view.insertSubview(switchPreviewSkinMenuButton, belowSubview: switchPreviewSkinButton)
-        switchPreviewSkinMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(switchPreviewSkinButton)
+        view.addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview().offset(R.Size.ContentInsetTop)
+            make.height.equalTo(R.Size.NavigationHeight)
         }
         
         if let skinFrames = skin.getFrames() {
@@ -286,13 +254,13 @@ class TriggerProPreviewController: BaseViewController {
             }
             
             let titleEditTextContainerView = UIView()
-            titleEditTextContainerView.layerCornerRadius = Constants.Size.CornerRadiusMid
-            titleEditTextContainerView.backgroundColor = Constants.Color.Background
+            titleEditTextContainerView.layerCornerRadius = R.Size.CornerRadiusMedium
+            titleEditTextContainerView.backgroundColor = R.Color.BackgroundPrimary
             view.addSubview(titleEditTextContainerView)
             titleEditTextContainerView.snp.makeConstraints { make in
                 make.top.equalTo(addButton.snp.bottom).offset(40)
                 if UIDevice.isPhone {
-                    make.leading.trailing.equalTo(gameViewBackgroundView).inset(Constants.Size.ContentSpaceMid)
+                    make.leading.trailing.equalTo(gameViewBackgroundView).inset(R.Size.ContentSpaceMedium)
                 } else {
                     make.width.equalTo(380)
                     make.centerX.equalTo(addButton)
@@ -301,27 +269,27 @@ class TriggerProPreviewController: BaseViewController {
             
             let titleEditLabel = UILabel()
             titleEditLabel.text = R.string.localizable.triggerProName()
-            titleEditLabel.font = Constants.Font.body(size: .l, weight: .semibold)
-            titleEditLabel.textColor = Constants.Color.LabelPrimary
+            titleEditLabel.font = R.Font.Body(emphasis: true)
+            titleEditLabel.textColor = R.Color.LabelPrimary
             titleEditTextContainerView.addSubview(titleEditLabel)
             titleEditLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
-                make.top.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceLarge)
+                make.top.equalToSuperview().inset(R.Size.ContentSpaceSmall)
             }
             
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-            textFieldContainer.backgroundColor = Constants.Color.InputBackground
+            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium)
+            textFieldContainer.backgroundColor = R.Color.InputBox
             titleEditTextContainerView.addSubview(textFieldContainer)
             textFieldContainer.snp.makeConstraints { make in
-                make.top.equalTo(titleEditLabel.snp.bottom).offset(Constants.Size.ContentSpaceTiny)
-                make.leading.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
-                make.height.equalTo(Constants.Size.ItemHeightTiny)
+                make.top.equalTo(titleEditLabel.snp.bottom).offset(R.Size.ContentSpaceExtraSmall)
+                make.leading.bottom.trailing.equalToSuperview().inset(R.Size.ContentSpaceSmall)
+                make.height.equalTo(R.Size.ItemHeightExtraSmall)
             }
             
             textFieldContainer.addSubview(titleTextField)
             titleTextField.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             }
         }
         
@@ -329,9 +297,6 @@ class TriggerProPreviewController: BaseViewController {
         triggerProView.snp.makeConstraints { make in
             make.edges.equalTo(controlView)
         }
-        
-        IQKeyboardManager.shared.isEnabled = true
-        IQKeyboardManager.shared.keyboardDistance = Constants.Size.ContentSpaceHuge
     }
 
     required init?(coder: NSCoder) {
@@ -360,7 +325,7 @@ class TriggerProPreviewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AppDelegate.orientation = Constants.Config.DefaultOrientation
+        AppDelegate.orientation = R.Config.DefaultOrientation
     }
     
     private func getInputs() -> [String] {
@@ -368,25 +333,6 @@ class TriggerProPreviewController: BaseViewController {
             return inputs.compactMap({ ($0.stringValue == "flex" || $0.stringValue.contains("touchScreen")) ? nil : $0.stringValue })
         }
         return []
-//        if let items = defaultSkin.items(for: traits) {
-//            var result: [String] = []
-//            for item in items {
-//                switch item.kind {
-//                case .button:
-//                    //不支持组合键
-//                    if let input = item.inputs.allInputs.first {
-//                        result.append(input.stringValue)
-//                    }
-//                case .dPad, .thumbstick:
-//                    if case .directional(let up, let down, let left, let right) = item.inputs {
-//                        result.append(contentsOf: [up.stringValue, down.stringValue, left.stringValue, right.stringValue])
-//                    }
-//                default: break
-//                }
-//            }
-//            return result
-//        }
-//        return []
     }
     
     private func storeTrigger() {

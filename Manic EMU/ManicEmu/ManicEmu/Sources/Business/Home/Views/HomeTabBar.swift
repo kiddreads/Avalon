@@ -10,9 +10,9 @@
 import UIKit
 
 ///主页面的tabbar
-class HomeTabBar: UIView {
+class HomeTabBar: BaseView {
     /// 实现一个视图 拥有点击和非点击状态
-    private class BarView: UIView {
+    private class BarView: BaseView {
         var isSelected: Bool {
             willSet {
                 if newValue != self.isSelected {
@@ -24,27 +24,30 @@ class HomeTabBar: UIView {
         /// 计算BarView的宽度
         var contentWidth: CGFloat {
             self.titleLabel.intrinsicContentSize.width +
-            (isSelected ? Constants.Size.IconSizeTiny.width + Constants.Size.ContentSpaceTiny : 0)
+            (isSelected ? R.Size.IconSizeSmall.width + R.Size.ContentSpaceTiny : 0)
         }
-        private let symbolView: SymbolView
-        private let titleLabel: UILabel
         
-        init(frame: CGRect, isSelected: Bool = false, normalSymbol: SFSymbol, selectedSymbol: SFSymbol, title: String) {
+        private let symbolView = ASIconView()
+        private let titleLabel = ASLabelView()
+        private let normalSymbol: ASIcon
+        private let selectedSymbol: ASIcon
+        
+        init(frame: CGRect, isSelected: Bool = false, normalSymbol: ASIcon, selectedSymbol: ASIcon, title: String) {
             self.isSelected = isSelected
-            symbolView = SymbolView(normalSymbol: normalSymbol,
-                                    selectedSymbol: selectedSymbol,
-                                    normalColor: Constants.Color.LabelSecondary,
-                                    selectedColor: Constants.Color.LabelPrimary.forceStyle(.dark))
-            symbolView.isSelected = isSelected
-            
-            titleLabel = UILabel()
-            titleLabel.font = Constants.Font.body(weight: .medium)
-            titleLabel.text = title
-            titleLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-            titleLabel.alpha = isSelected ? 1 : 0
+            self.normalSymbol = normalSymbol
+            self.selectedSymbol = selectedSymbol
             super.init(frame: .zero)
             
-            enableInteractive = true
+            symbolView.icon = isSelected ? selectedSymbol : normalSymbol
+            
+            titleLabel.text = ASText(attributes: ASText.Attributes(text: title,
+                                                                   color: R.Color.LabelPrimary.forceStyle(.dark),
+                                                                   font: R.Font.Subheadline(emphasis: true)))
+            titleLabel.alpha = isSelected ? 1 : 0
+            
+            enablePressEffect = true
+            // Tab items are switched by Home's page-level left/right, not by focusing the bar itself.
+            isFocusable = false
             
             let contentView = UIView()
             contentView.addSubviews([symbolView, titleLabel])
@@ -71,7 +74,8 @@ class HomeTabBar: UIView {
                 titleLabel.alpha = 0
             }
             symbolView.snp.remakeConstraints { makeSymbolViewConstraints(make: $0, isSelected: isSelected) }
-            symbolView.isSelected = isSelected
+            symbolView.icon = isSelected ? selectedSymbol : normalSymbol
+            
             UIView.springAnimate { [weak self] in
                 self?.layoutIfNeeded()
             }
@@ -79,10 +83,9 @@ class HomeTabBar: UIView {
         
         private func makeSymbolViewConstraints(make: ConstraintMaker, isSelected: Bool) {
             make.leading.centerY.equalToSuperview()
-            make.top.bottom.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeTiny)
+            make.size.equalTo(R.Size.IconSizeMedium)
             if isSelected {
-                make.trailing.equalTo(titleLabel.snp.leading).offset(-Constants.Size.ContentSpaceTiny)
+                make.trailing.equalTo(titleLabel.snp.leading).offset(-R.Size.ContentSpaceTiny)
             } else {
                 make.trailing.equalToSuperview()
             }
@@ -117,18 +120,30 @@ class HomeTabBar: UIView {
     
     private let gamesBar = BarView(frame: .zero,
                                    isSelected: true,
-                                   normalSymbol: .gamecontroller,
-                                   selectedSymbol: .gamecontrollerFill,
+                                   normalSymbol: .symbolImage(R.image.games_iconSymbols(),
+                                                              weight: .bold,
+                                                              colors: [R.Color.LabelPrimary]),
+                                   selectedSymbol: .symbolImage(R.image.gamesFill_iconSymbols(),
+                                                                weight: .bold,
+                                                                colors: [R.Color.LabelPrimary.forceStyle(.dark)]),
                                    title: R.string.localizable.tabbarTitleGames())
     private let importBar = BarView(frame: .zero,
                                     isSelected: false,
-                                    normalSymbol: .trayAndArrowDown,
-                                    selectedSymbol: .trayAndArrowDownFill,
+                                    normalSymbol: .symbolImage(R.image.import_iconSymbols(),
+                                                               weight: .bold,
+                                                               colors: [R.Color.LabelPrimary]),
+                                    selectedSymbol: .symbolImage(R.image.importFill_iconSymbols(),
+                                                                 weight: .bold,
+                                                                 colors: [R.Color.LabelPrimary.forceStyle(.dark)]),
                                     title: R.string.localizable.tabbarTitleImport())
     private let settingsBar = BarView(frame: .zero,
                                       isSelected: false,
-                                      normalSymbol: .gearshape,
-                                      selectedSymbol: .gearshapeFill,
+                                      normalSymbol: .symbolImage(R.image.settings_iconSymbols(),
+                                                                 weight: .bold,
+                                                                 colors: [R.Color.LabelPrimary]),
+                                      selectedSymbol: .symbolImage(R.image.settingFill_iconSymbols(),
+                                                                   weight: .bold,
+                                                                   colors: [R.Color.LabelPrimary.forceStyle(.dark)]),
                                       title: R.string.localizable.tabbarTitleSettings())
     private var indicatorView: UIView = {
         let view = UIView()
@@ -137,7 +152,7 @@ class HomeTabBar: UIView {
         animView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        view.layerCornerRadius = Constants.Size.ItemHeightTiny/2
+        view.layerCornerRadius = R.Size.ItemHeightTiny/2
         return view
     }()
     
@@ -188,13 +203,27 @@ class HomeTabBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .clear
-        self.layer.cornerRadius = Constants.Size.HomeTabBarSize.height/2
-        if #available(iOS 26.0, *) {
+        self.layer.cornerRadius = R.Size.HomeTabBarSize.height/2
+        if #available(iOS 26.0, tvOS 26.0, *) {
             self.makeGlass()
         } else {
             self.layer.borderWidth = 1
-            self.layer.borderColor = Constants.Color.Border.cgColor
-            self.makeBlur(blurColor: Constants.Color.BackgroundPrimary, cornerRadius: Constants.Size.HomeTabBarSize.height/2)
+            self.layer.borderColor = R.Color.Border.cgColor
+            self.makeBlur(blurColor: R.Color.BackgroundSecondary, cornerRadius: R.Size.HomeTabBarSize.height/2)
+        }
+        
+        enablePressEffect = true
+        gamesBar.setPressEffectListener { [weak self] state in
+            guard let self, FocusSystem.shared.currentFocusedView == nil else { return }
+            self.focusEffect = state == .lift
+        }
+        importBar.setPressEffectListener { [weak self] state in
+            guard let self, FocusSystem.shared.currentFocusedView == nil else { return }
+            self.focusEffect = state == .lift
+        }
+        settingsBar.setPressEffectListener { [weak self] state in
+            guard let self, FocusSystem.shared.currentFocusedView == nil else { return }
+            self.focusEffect = state == .lift
         }
         
         addSubviews([indicatorView, gamesBar, importBar, settingsBar])
@@ -213,9 +242,9 @@ class HomeTabBar: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if #available(iOS 26.0, *) { } else {
+            if #available(iOS 26.0, tvOS 26.0, *) { } else {
                 self.layer.borderWidth = 1
-                self.layer.borderColor = Constants.Color.Border.cgColor
+                self.layer.borderColor = R.Color.Border.cgColor
             }
         }
     }
@@ -230,7 +259,7 @@ class HomeTabBar: UIView {
     }
     
     private func updateViewsConstraints(isInit: Bool = false) {
-        let contentWidth = Constants.Size.HomeTabBarSize.width - 3*Constants.Size.ContentSpaceMin
+        let contentWidth = R.Size.HomeTabBarSize.width - 3*R.Size.ContentSpaceSmall
         let selectedBarConstraintsWidth = contentWidth * 1/2
         let unselectedBarConstraintsWidth = contentWidth * 1/4
         
@@ -243,13 +272,13 @@ class HomeTabBar: UIView {
             for (index, view) in temp.enumerated() {
                 view.snp.makeConstraints { make in
                     if index == 0 {
-                        make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+                        make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall)
                     } else {
-                        make.leading.equalTo(temp[index-1].snp.trailing).offset(index == 1 ? Constants.Size.ContentSpaceMin*1.5 : 0)
+                        make.leading.equalTo(temp[index-1].snp.trailing).offset(index == 1 ? R.Size.ContentSpaceSmall*1.5 : 0)
                     }
                     make.top.bottom.equalToSuperview()
                     if index == temp.count - 1 {
-                        make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin*0.5)
+                        make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall*0.5)
                     } else {
                         makeWidthConstraints(make, view)
                     }
@@ -258,7 +287,7 @@ class HomeTabBar: UIView {
             
             indicatorView.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightTiny)
+                make.height.equalTo(R.Size.ItemHeightTiny)
                 if let view = [gamesBar, importBar, settingsBar].filter({ $0.isSelected }).first {
                     make.centerX.equalTo(view)
                     make.width.equalTo(view)
@@ -269,36 +298,36 @@ class HomeTabBar: UIView {
         } else {
             if gamesBar.isSelected {
                 gamesBar.snp.updateConstraints { make in
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall)
                 }
                 importBar.snp.updateConstraints { make in
-                    make.leading.equalTo(gamesBar.snp.trailing).offset(Constants.Size.ContentSpaceMin*1.5)
+                    make.leading.equalTo(gamesBar.snp.trailing).offset(R.Size.ContentSpaceSmall*1.5)
                 }
                 settingsBar.snp.updateConstraints { make in
                     make.leading.equalTo(importBar.snp.trailing)
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin*0.5)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall*0.5)
                 }
             } else if importBar.isSelected {
                 gamesBar.snp.updateConstraints { make in
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin*0.5)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall*0.5)
                 }
                 importBar.snp.updateConstraints { make in
-                    make.leading.equalTo(gamesBar.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.leading.equalTo(gamesBar.snp.trailing).offset(R.Size.ContentSpaceSmall)
                 }
                 settingsBar.snp.updateConstraints { make in
-                    make.leading.equalTo(importBar.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin*0.5)
+                    make.leading.equalTo(importBar.snp.trailing).offset(R.Size.ContentSpaceSmall)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall*0.5)
                 }
             } else if settingsBar.isSelected {
                 gamesBar.snp.updateConstraints { make in
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin*0.5)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall*0.5)
                 }
                 importBar.snp.updateConstraints { make in
                     make.leading.equalTo(gamesBar.snp.trailing)
                 }
                 settingsBar.snp.updateConstraints { make in
-                    make.leading.equalTo(importBar.snp.trailing).offset(Constants.Size.ContentSpaceMin*1.5)
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+                    make.leading.equalTo(importBar.snp.trailing).offset(R.Size.ContentSpaceSmall*1.5)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
                 }
             }
             
@@ -309,7 +338,7 @@ class HomeTabBar: UIView {
             }
             indicatorView.snp.remakeConstraints { make in
                 make.centerY.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightTiny)
+                make.height.equalTo(R.Size.ItemHeightTiny)
                 if let view = [gamesBar, importBar, settingsBar].filter({ $0.isSelected }).first {
                     make.centerX.equalTo(view)
                     make.width.equalTo(view)

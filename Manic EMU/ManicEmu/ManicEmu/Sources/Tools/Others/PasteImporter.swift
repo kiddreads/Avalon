@@ -31,7 +31,7 @@ struct PasteImporter {
                     let fileName = fileURL.lastPathComponent
                     do {
                         //将粘贴板的内容先复制到缓存目录中
-                        let dstUrl = URL(fileURLWithPath: Constants.Path.PasteWorkSpace.appendingPathComponent(fileName))
+                        let dstUrl = URL(fileURLWithPath: R.Path.PasteWorkSpace.appendingPathComponent(fileName))
                         try FileManager.safeCopyItem(at: fileURL, to: dstUrl, shouldReplace: true)
                         //复制成功
                         urls.append(dstUrl)
@@ -65,7 +65,7 @@ struct PasteImporter {
                             //获取到文件名
                             let fileName = suggestedName + "." + extens
                             //将粘贴板的内容先复制到缓存目录中
-                            let dstUrl = URL(fileURLWithPath: Constants.Path.PasteWorkSpace.appendingPathComponent(fileName))
+                            let dstUrl = URL(fileURLWithPath: R.Path.PasteWorkSpace.appendingPathComponent(fileName))
                             handleDataGroup.enter()
                             itemProvider.loadFileRepresentation(forTypeIdentifier: supportIdentifier) { url, error in
                                 if let url = url {

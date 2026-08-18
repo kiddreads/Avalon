@@ -12,73 +12,56 @@ import RealmSwift
 
 class ImportServiceListView: BaseView {
     
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
-        return view
-    }()
+    var didTapAddService: (() -> Void)? = nil
     
-    var addServiceButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.body(size: .m, weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        return view
-    }()
-    
-    private lazy var moreContextMenuButton: ContextMenuButton = {
-        var actions: [UIMenuElement] = []
-        actions.append((UIAction(title: R.string.localizable.importHowTo(), image: UIImage(symbol: .bookClosed)) { [weak self] _ in
+    private lazy var importNavigationView: ImportNavigationView = {
+        let view = ImportNavigationView()
+        view.addServiceButton.didTapButton = { [weak self] in
             guard let self = self else { return }
-            //how to import
-            topViewController()?.present(WebViewController(url: Constants.URLs.GameImportGuide), animated: true)
-        }))
-        actions.append((UIAction(title: R.string.localizable.fetchGamesFromMeloNX(), image: UIImage(symbol: .gamecontroller)) { [weak self] _ in
-            guard let self = self else { return }
-            EmulatorInteractionKit.fetchGames(type: .meloNX)
-        }))
-        actions.append((UIAction(title: R.string.localizable.fetchGamesFromXeniOS(), image: UIImage(symbol: .gamecontroller)) { [weak self] _ in
-            guard let self = self else { return }
-            EmulatorInteractionKit.fetchGames(type: .xeniOS)
-        }))
-        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
-        return view
-    }()
-    
-    private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            self?.moreContextMenuButton.triggerTapGesture()
+            self.didTapAddService?()
         }
-        return view
-    }()
-    
-    private var downloadManageButton: DownloadButton = {
-        let view = DownloadButton()
-        view.addTapGesture { gesture in
-            topViewController()?.present(DownloadViewController(), animated: true)
+        
+        view.toolsView.didTapButton = { [weak self] index in
+            guard let self = self else { return }
+            if index == 0 {
+                //download
+                DownloadManageView.show()
+            } else if index == 1 {
+                //question
+                ASWebView.show(url: R.URLs.GameImportGuide)
+            } else if index == 2 {
+                //More
+                ChevronSheetView.show(stringOptions: [
+                    R.string.localizable.fetchGamesFromMeloNX(),
+                    R.string.localizable.fetchGamesFromXeniOS(),
+                    R.string.localizable.fetchGamesFromDukeX(),
+                ], completion: { [weak self] index in
+                    guard let self else { return }
+                    if let index {
+                        
+                        EmulatorInteractionKit.fetchGames(type: index == 0 ? .meloNX : .xeniOS)
+                    }
+                    
+                })
+            }
         }
+        
         return view
     }()
     
-    private let backgroundGradientView: UIView = {
-        let view = UIView()
-        view.masksToBounds = true
-        return view
-    }()
-    
-    lazy var collectionView: UICollectionView = {
-        let view = NoControllCollectionView(frame: .zero, collectionViewLayout: createLayout())
+    private lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
+        view.register(cellWithClass: ImportMottoCollectionViewCell.self)
         view.register(cellWithClass: ImportFileCollectionViewCell.self)
         view.register(cellWithClass: ImportServiceListCollectionViewCell.self)
         view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withClass: ImportFooterCollectionReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        let top = Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid
-        let bottom = Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax
-        view.contentInset = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+        view.contentInset = getCollectionViewContentInset()
+        view.isFocusable = true
         return view
     }()
     
@@ -99,8 +82,6 @@ class ImportServiceListView: BaseView {
         return services
     }()
     
-    private let gradientSize = CGSize(width: 495, height: 307)
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         //访问数据库
@@ -120,74 +101,16 @@ class ImportServiceListView: BaseView {
         }
         updateServices(objects: objects)
         
-        updateBackgroundGradientView()
-        
-        addSubview(backgroundGradientView)
-        backgroundGradientView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
-            make.width.equalToSuperview()
-            make.height.equalTo(gradientSize.height)
-        }
-        
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            if UIDevice.isPhone, UIDevice.isLandscape {
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-            } else {
-                make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
-            }
-        }
-        
-        let navigationContainer = UIView()
-        navigationBlurView.addSubview(navigationContainer)
-        navigationContainer.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        navigationContainer.addSubview(addServiceButton)
-        addServiceButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-        }
-        
-        navigationContainer.addSubview(moreContextMenuButton)
-        navigationContainer.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-        }
-        moreContextMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(moreButton)
-        }
-        
-        navigationContainer.addSubview(downloadManageButton)
-        downloadManageButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.trailing.equalTo(moreButton.snp.leading).offset(-Constants.Size.ContentSpaceMin)
-        }
-    }
-    
-    func updateViews() {
-        if UIDevice.isPhone {
-            navigationBlurView.snp.updateConstraints { make in
-                if UIDevice.isLandscape {
-                    make.height.equalTo(Constants.Size.ItemHeightMid)
-                } else {
-                    make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
-                }
-            }
+        addSubview(importNavigationView)
+        importNavigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(R.Size.NavigationHeight)
+            make.top.equalToSuperview().offset(UIDevice.isPhone && UIDevice.isLandscape ? 0 : R.Size.ContentInsetTop)
         }
     }
     
@@ -195,33 +118,54 @@ class ImportServiceListView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateBackgroundGradientView()
-        }
-    }
-    
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(sectionIndex == 0 ? 1 : 0.5),
-                                                                                 heightDimension: .fractionalHeight(1)))
             
-            let group: NSCollectionLayoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension:  sectionIndex == 0 ? .absolute(164) : .absolute(154)), subitem: item, count: sectionIndex == 0 ? 1 : 2)
+            let widthDimension: NSCollectionLayoutDimension
+            if sectionIndex == 0 {
+                widthDimension = .fractionalWidth(UIDevice.isLandscape ? 0.5 : 1)
+            } else {
+                widthDimension = .fractionalWidth(UIDevice.isLandscape ? 0.25 : 0.5)
+            }
             
-            group.interItemSpacing = .fixed(Constants.Size.ContentSpaceMid)//item间距
+            let heightDimension: NSCollectionLayoutDimension
+            if sectionIndex == 0 {
+                heightDimension = .estimated(100)
+            } else {
+                heightDimension = .absolute(154)
+            }
+            
+            //item
+            let itemLayoutSize = NSCollectionLayoutSize(widthDimension: widthDimension,
+                                                        heightDimension: heightDimension)
+            let item = NSCollectionLayoutItem(layoutSize: itemLayoutSize)
+            
+            //group
+            let count: Int
+            if sectionIndex == 0 {
+                count = UIDevice.isLandscape ? 2 : 1
+            } else {
+                count = UIDevice.isLandscape ? 4 : 2
+            }
+            let groupLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                         heightDimension: heightDimension)
+            let group: NSCollectionLayoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: groupLayoutSize,
+                                                                                    subitem: item,
+                                                                                    count: count)
+            group.interItemSpacing = .fixed(R.Size.ContentSpaceMedium)
+            
             //section布局
             let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = sectionIndex == 0 ? R.Size.ContentSpaceSmall : R.Size.ContentSpaceMedium
+            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? 0 : R.Size.ContentSpaceMedium,
+                                                            leading: R.Size.ContentSpaceHuge,
+                                                            bottom: sectionIndex == 0 ? 0 : R.Size.ContentSpaceMedium,
+                                                            trailing: R.Size.ContentSpaceHuge)
             
-            section.interGroupSpacing = Constants.Size.ContentSpaceMax
             
-            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? 0 : Constants.Size.ContentSpaceMax,
-                                                            leading: Constants.Size.ContentSpaceHuge,
-                                                            bottom: sectionIndex == 0 ? 0 : Constants.Size.ContentSpaceMax,
-                                                            trailing: Constants.Size.ContentSpaceHuge)
             if sectionIndex == 1 {
                 let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                                                heightDimension: .absolute(150)),
+                                                                                                                heightDimension: .estimated(150)),
                                                                              elementKind: UICollectionView.elementKindSectionFooter,
                                                                              alignment: .bottom)
                 section.boundarySupplementaryItems.append(footerItem)
@@ -238,33 +182,30 @@ class ImportServiceListView: BaseView {
         collectionView.reloadSections([1])
     }
     
-    private func updateBackgroundGradientView() {
-        backgroundGradientView.subviews.forEach({ $0.removeFromSuperview() })
-        //渐变背景
-        let gradientView = UIView(frame: CGRect(origin: .zero, size: gradientSize))
-        let ovalLayer = CAShapeLayer()
-        ovalLayer.path = UIBezierPath(ovalIn: gradientView.frame).cgPath
-        gradientView.layer.mask = ovalLayer
-        
-        gradientView.addGradient(colors: Constants.Color.Gradient,
-                                 direction: UIView.GradientDirection(startPoint: CGPoint(x: 0, y: 0.5),
-                                                                     endPoint: CGPoint(x: 1, y: 0.5)))
-        let maskGradientView = UIView(frame: CGRect(origin: .zero, size: gradientSize))
-        maskGradientView.addGradient(colors: [Constants.Color.Background.withAlphaComponent(0.92),
-                                              Constants.Color.Background,
-                                              Constants.Color.Background],
-                                     locations: [0, 0.62, 1],
-                                     direction: UIView.GradientDirection(startPoint: CGPoint(x: 0.5, y: 0),
-                                                                         endPoint: CGPoint(x: 0.5, y: 1)))
-        
-        gradientView.addSubview(maskGradientView)
-        maskGradientView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+    private func getCollectionViewContentInset() -> UIEdgeInsets {
+        var top = R.Size.ContentInsetTop
+        if UIDevice.isLandscape {
+            top += (R.Size.NavigationHeight + R.Size.ContentSpaceLarge)
         }
-        backgroundGradientView.addSubview(gradientView)
-        gradientView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(gradientSize)
+        let bottom = R.Size.ContentInsetBottom + R.Size.HomeTabBarSize.height + R.Size.ContentSpaceLarge
+        return .insets(top: top, bottom: bottom)
+    }
+}
+
+extension ImportServiceListView: ViewTransition {
+    func viewWillTransition() {
+        if let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImportMottoCollectionViewCell {
+            cell.updateViews()
+        }
+    }
+    
+    func viewAlongsideTransition() {
+        if UIDevice.isPhone {
+            importNavigationView.snp.updateConstraints { make in
+                make.top.equalToSuperview().offset(UIDevice.isPhone && UIDevice.isLandscape ? 0 : R.Size.ContentInsetTop)
+            }
+        } else if UIDevice.isPad, UIDevice.isLandscape {
+            collectionView.contentInset = getCollectionViewContentInset()
         }
     }
 }
@@ -275,36 +216,34 @@ extension ImportServiceListView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return section == 0 ? 1 : services.count
+        return section == 0 ? 2 : services.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
-            let cell = collectionView.dequeueReusableCell(withClass: ImportFileCollectionViewCell.self, for: indexPath)
-            cell.setData(service: fileService)
-            cell.infoContainerView.addTapGesture { _ in
-                //打开系统文件浏览器
-                FilesImporter.shared.presentImportController()
+            if indexPath.row == 0 {
+                let cell = collectionView.dequeueReusableCell(withClass: ImportMottoCollectionViewCell.self, for: indexPath)
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withClass: ImportFileCollectionViewCell.self, for: indexPath)
+                cell.setData(service: fileService)
+                return cell
             }
-            return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withClass: ImportServiceListCollectionViewCell.self, for: indexPath)
             let service = services[indexPath.row]
             cell.setData(service: service)
             if service.type == .wifi {
                 let enableSelectedEffect = WebServer.shard.isRunning ? true : false
-                cell.enableInteractive = enableSelectedEffect
-                cell.delayInteractiveTouchEnd = enableSelectedEffect
-                cell.switchButton.onChange { [weak service, weak self, weak cell] isOn in
+                cell.enablePressEffect = enableSelectedEffect
+                cell.didValueChange = { [weak service, weak self, weak cell] isOn in
                     let enableSelectedEffect = WebServer.shard.isRunning ? true : false
                     if isOn {
-                        cell?.enableInteractive = enableSelectedEffect
-                        cell?.delayInteractiveTouchEnd = enableSelectedEffect
+                        cell?.enablePressEffect = enableSelectedEffect
                         WebServer.shard.start()
                         service?.detail = R.string.localizable.importServiceListWiFiOnDetail(WebServer.shard.ipAddress)
                     } else {
-                        cell?.enableInteractive = enableSelectedEffect
-                        cell?.delayInteractiveTouchEnd = enableSelectedEffect
+                        cell?.enablePressEffect = enableSelectedEffect
                         WebServer.shard.stop()
                         service?.detail = R.string.localizable.importServiceListWiFiOffDetail()
                     }
@@ -313,22 +252,29 @@ extension ImportServiceListView: UICollectionViewDataSource {
                     }
                 }
             } else {
-                cell.enableInteractive = true
-                cell.delayInteractiveTouchEnd = true
+                cell.enablePressEffect = true
+                cell.didValueChange = nil
             }
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        //随机游戏footer
         let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: ImportFooterCollectionReusableView.self, for: indexPath)
         footer.channelButton.addTapGesture { gesture in
             if Locale.prefersCN {
-                UIApplication.shared.open(Constants.URLs.JoinQQ)
+                UIApplication.shared.open(R.URLs.JoinQQ)
             } else {
-                UIApplication.shared.open(Constants.URLs.JoinDiscord)
+                UIApplication.shared.open(R.URLs.JoinDiscord)
             }
+        }
+        footer.channelButton.onFocusConfirm = {
+            if Locale.prefersCN {
+                UIApplication.shared.open(R.URLs.JoinQQ)
+            } else {
+                UIApplication.shared.open(R.URLs.JoinDiscord)
+            }
+            return true
         }
         return footer
     }
@@ -336,19 +282,25 @@ extension ImportServiceListView: UICollectionViewDataSource {
 
 extension ImportServiceListView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0, indexPath.row == 1 {
+            //files
+            FilesImporter.shared.presentImportController()
+            return
+        }
+        
         guard indexPath.section == 1 else { return }
         let service = services[indexPath.row]
         switch service.type {
-        case .files:
-            break
         case .wifi:
             if WebServer.shard.isRunning {
                 UIPasteboard.general.string = WebServer.shard.ipAddress
                 UIView.makeToast(message: R.string.localizable.ipCopy())
             }
+            
         case .paste:
             //读取粘贴板
             PasteImporter.paste()
+            
         case .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun:
             
             if !PurchaseManager.isMember {
@@ -361,9 +313,10 @@ extension ImportServiceListView: UICollectionViewDelegate {
                 UIView.makeLoading()
                 CloudDriveConnetor.shard.renewToken(service: service, provider: provider) {
                     UIView.hideLoading()
-                    topViewController(appController: true)?.present(BaseNavigationController(rootViewController: CloudDriveBrowserViewController(provider: provider, directory: provider.rootItem, navigationTitle: service.title)), animated: true)
+                    FileBrowserView.show(provider: provider, navigationTitle: service.title)
                 }
             }
+            
         case .samba, .webdav:
             
             if !PurchaseManager.isMember {
@@ -372,36 +325,45 @@ extension ImportServiceListView: UICollectionViewDelegate {
             }
             
             if let provider = service.lanDriveProvider {
-                topViewController()?.present(BaseNavigationController(rootViewController: CloudDriveBrowserViewController(provider: provider, directory: provider.rootItem, navigationTitle: service.title)), animated: true)
+                FileBrowserView.show(provider: provider, navigationTitle: service.title)
             }
+            
         case .multiDisc:
             //多碟助手
-            topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
+            MultiDiscBuilderView.show()
+            
         case .romPatcher:
             //RomPatcher
-            topViewController()?.present(RomPatcherViewController(), animated: true)
+            RomPatcherView.show()
+        
+        default:
+            break
         }
     }
     
-    //长按弹出可交互菜单 (iOS 15兼容)
+    //Long press to bring up an interactive menu (iOS 15 compatible)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return contextMenuConfiguration(for: collectionView, at: indexPath)
     }
     
-    //长按弹出可交互菜单 (iOS 16+)
+    //Long press to bring up an interactive menu (iOS 16+)
     @available(iOS 16.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         guard let indexPath = indexPaths.first else { return nil }
         return contextMenuConfiguration(for: collectionView, at: indexPath)
     }
     
-    //统一的上下文菜单配置逻辑
+    //Unified context menu configuration logic
     private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
         guard indexPath.section == 1 else { return nil }
         let service = services[indexPath.row]
         guard service.type != .wifi && service.type != .paste && service.type != .multiDisc && service.type != .romPatcher else { return nil }
-        return UIContextMenuConfiguration(actionProvider:  { _ in
-            UIMenu(children: [UIAction(title: R.string.localizable.importServiceDelete(), image: UIImage(systemSymbol: .trash), attributes: .destructive, handler: { _ in
+        
+        ChevronSheetView.show(cellOptions: [.iconTitleChevronCell(icon: .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red]),
+                                                                  title: R.string.localizable.importServiceDelete(),
+                                                                  titleColor: R.Color.Red)],
+                              completion: { index in
+            if let _ = index {
                 ImportService.change { realm in
                     if Settings.defalut.iCloudSyncEnable {
                         service.isDeleted = true
@@ -409,7 +371,8 @@ extension ImportServiceListView: UICollectionViewDelegate {
                         realm.delete(service)
                     }
                 }
-            })])
+            }
         })
+        return nil
     }
 }

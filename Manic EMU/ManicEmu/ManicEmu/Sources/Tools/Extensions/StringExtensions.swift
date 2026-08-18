@@ -16,18 +16,6 @@
 import Foundation
 import CommonCrypto
 
-//模式匹配可用
-
-func hasPrefix(prefix: String) -> ((String) -> Bool) { { $0.hasPrefix(prefix) } }
-func contains(string: String) -> ((String) -> Bool) { { $0.contains(string) } }
-
-extension String {
-    static func ~= (pattern: (String) -> Bool, value: String) -> Bool {
-        pattern(value)
-    }
-}
-
-//加密混淆使用的
 extension String {
     var a: String { return self + "a" }
     var b: String { return self + "b" }
@@ -98,7 +86,7 @@ extension String {
 extension String {
     var validateAndExtractURLComponents: (scheme: String?, host: String, port: Int?, path: String?)? {
         let trimmedInput = self.trimmingCharacters(in: .whitespacesAndNewlines)
-        // 修正正则分组结构，使用非捕获组保持索引
+        // Fix the regex grouping structure by using non-capturing groups to keep the indices.
         let pattern = #"^(([a-zA-Z][a-zA-Z0-9+.-]*)://)?((?:$$([0-9a-fA-F:]+)$$|([^/?#:]+)))(?::(\d+))?(?:/([^?#]*))?(?:[?#].*)?$"#
         
         guard let regex = try? NSRegularExpression(pattern: pattern) else {
@@ -110,25 +98,25 @@ extension String {
             return nil
         }
         
-        // 提取 scheme (分组2)
+        // Extract scheme (Group 2)
         let schemeRange = Range(match.range(at: 2), in: trimmedInput)
         let scheme = schemeRange.flatMap { String(trimmedInput[$0]) }
         
-        // 提取 host (分组3包含方括号，实际host在分组4或5)
+        // Extract host (Group 3 contains square brackets, the actual host is in Group 4 or 5)
         var host: String?
         var isIPv6 = false
         if let ipv6Range = Range(match.range(at: 4), in: trimmedInput), !ipv6Range.isEmpty {
-            host = String(trimmedInput[ipv6Range]) // IPv6实际内容在分组4
+            host = String(trimmedInput[ipv6Range]) // I Pv6 actual content is in Group 4
             isIPv6 = true
         } else if let normalHostRange = Range(match.range(at: 5), in: trimmedInput), !normalHostRange.isEmpty {
-            host = String(trimmedInput[normalHostRange]) // 普通host在分组5
+            host = String(trimmedInput[normalHostRange]) // Ordinary host in group 5
         }
         
         guard let validHost = host, !validHost.isEmpty else {
             return nil
         }
         
-        // 严格host验证（保持原逻辑）
+        // Strict host verification (keeping the original logic)
         let adjustedHost = isIPv6 ? validHost : validHost
         let isDomainValid = NSPredicate(format: "SELF MATCHES %@", #"^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"#).evaluate(with: adjustedHost)
         let isIPv4Valid = NSPredicate(format: "SELF MATCHES %@", #"^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$"#).evaluate(with: adjustedHost)
@@ -138,11 +126,11 @@ extension String {
             return nil
         }
         
-        // 提取 port (分组6)
+        // Extract port (Group 6)
         let portString = Range(match.range(at: 6), in: trimmedInput).flatMap { String(trimmedInput[$0]) }
         let port = portString.flatMap { Int($0) }.flatMap { (1...65535).contains($0) ? $0 : nil }
         
-        // 提取 path (分组7)
+        // Extract path (Group 7)
         let path = Range(match.range(at: 7), in: trimmedInput).flatMap {
             let str = String(trimmedInput[$0])
             return str.isEmpty ? nil : str
@@ -186,7 +174,7 @@ extension String {
     }
     
     func isEnglishLanguage() -> Bool {
-        // 定义允许的字符集：英文、数字、标点、空格、emoji
+        // Define the allowed character set: English letters, numbers, punctuation, spaces, emoji
         let allowedCharacterSet = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
             .union(.punctuationCharacters)
             .union(.whitespaces)
@@ -194,11 +182,11 @@ extension String {
             .union(.nonBaseCharacters)
             .union(.emojis)
         
-        // 检查是否存在不在允许集合内的字符
+        // Check if there are any characters that are not in the allowed set.
         return !self.unicodeScalars.contains { !allowedCharacterSet.contains($0) }
     }
     
-    /// 高效 SHA256（固定 64 位 hex）
+    /// High-efficiency SHA256 (fixed 64-bit hex)
     @inline(__always)
     func sha256() -> String {
         let data = Data(self.utf8)
@@ -247,7 +235,7 @@ extension String {
     func parseIPv4String() -> (ip: String, port: Int)? {
         let parts = self.split(separator: ":", omittingEmptySubsequences: false)
         
-        // 处理端口
+        // Handling port
         var ipPart: String
         var port: Int = 0
         
@@ -264,37 +252,37 @@ extension String {
             return nil
         }
         
-        // 处理 IPv4
+        // Handling IPv4
         let octets = ipPart.split(separator: ".", omittingEmptySubsequences: false)
         guard octets.count == 4 else { return nil }
         
         var normalized: [String] = []
         
         for octet in octets {
-            // 允许前导0，但必须是纯数字
+            // Leading zeros are allowed, but it must be purely numeric.
             guard !octet.isEmpty,
                   octet.allSatisfy({ $0.isNumber }),
                   let value = Int(octet),
                   value >= 0 && value <= 255 else {
                 return nil
             }
-            normalized.append(String(value)) // 去掉前导0
+            normalized.append(String(value)) // Remove leading zeros.
         }
         
         let ip = normalized.joined(separator: ".")
         return (ip: ip, port: port)
     }
     
-    /// 转义 JavaScript 字符串中的特殊字符
-    /// - Returns: 转义后的字符串，可安全用于 JavaScript 单引号字符串
+    /// Escape special characters in JavaScript strings
+    /// - Returns: The escaped string, safe to use in JavaScript single-quoted strings.
     func escapeJSString() -> String {
         var result = self
-        result = result.replacingOccurrences(of: "\\", with: "\\\\")  // 反斜杠
-        result = result.replacingOccurrences(of: "'", with: "\\'")    // 单引号
-        result = result.replacingOccurrences(of: "\"", with: "\\\"")  // 双引号
-        result = result.replacingOccurrences(of: "\n", with: "\\n")   // 换行
-        result = result.replacingOccurrences(of: "\r", with: "\\r")   // 回车
-        result = result.replacingOccurrences(of: "\t", with: "\\t")   // 制表符
+        result = result.replacingOccurrences(of: "\\", with: "\\\\")
+        result = result.replacingOccurrences(of: "'", with: "\\'")
+        result = result.replacingOccurrences(of: "\"", with: "\\\"")
+        result = result.replacingOccurrences(of: "\n", with: "\\n")
+        result = result.replacingOccurrences(of: "\r", with: "\\r")
+        result = result.replacingOccurrences(of: "\t", with: "\\t")
         return result
     }
     
@@ -319,34 +307,24 @@ extension String {
         
         return self
     }
-}
-
-// 扩展用于识别 emoji 的字符集
-extension CharacterSet {
-    static let emojis: CharacterSet = {
-        var set = CharacterSet()
-
-        // 常见 emoji 范围
-        set.insert(charactersIn: "\u{1F300}"..."\u{1F5FF}")
-        set.insert(charactersIn: "\u{1F600}"..."\u{1F64F}")
-        set.insert(charactersIn: "\u{1F680}"..."\u{1F6FF}")
-        set.insert(charactersIn: "\u{1F900}"..."\u{1F9FF}")
-        set.insert(charactersIn: "\u{1FA70}"..."\u{1FAFF}")
-        set.insert(charactersIn: "\u{2600}"..."\u{26FF}")
-        set.insert(charactersIn: "\u{2700}"..."\u{27BF}")
-        return set
-    }()
-}
-
-extension String {
     
-    @discardableResult
-    /// 替换正则表达式匹配到的字符串为指定字符串
-    /// - Parameters:
-    ///   - pattern: 正则表达式
-    ///   - text: 替换成的字符串
-    /// - Returns: 替换后的字符串
-    func replace(pattern: String, with text: String) -> String {
+    func nsRange(from range: Range<String.Index>) -> NSRange? {
+        // Check whether the boundary is valid.
+        guard range.lowerBound >= startIndex,
+              range.upperBound <= endIndex,
+              range.lowerBound <= range.upperBound else {
+            return nil
+        }
+        
+        return NSRange(range, in: self)
+    }
+    
+    ///Replace the strings matched by the regular expression with the specified string
+    ///- Parameters:
+    ///  - pattern: regular expression
+    ///  - text: the string to replace with
+    ///- Returns: the string after replacement
+    @discardableResult func replace(pattern: String, with text: String) -> String {
         let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive)
         let result = regex?.stringByReplacingMatches(in: self, range: NSMakeRange(0, self.count), withTemplate: text)
         return result ?? self
@@ -361,9 +339,7 @@ extension String {
         }
         return self.count == result.range.length
     }
-}
-
-extension String {
+    
     var queryDict: [String: String?]? {
         guard let urlComponents = URLComponents(string: self) else {
             return nil
@@ -386,4 +362,21 @@ extension String {
         }
         return self
     }
+}
+
+// Expand the character set used for recognizing emoji.
+extension CharacterSet {
+    static let emojis: CharacterSet = {
+        var set = CharacterSet()
+
+        // Common emoji range
+        set.insert(charactersIn: "\u{1F300}"..."\u{1F5FF}")
+        set.insert(charactersIn: "\u{1F600}"..."\u{1F64F}")
+        set.insert(charactersIn: "\u{1F680}"..."\u{1F6FF}")
+        set.insert(charactersIn: "\u{1F900}"..."\u{1F9FF}")
+        set.insert(charactersIn: "\u{1FA70}"..."\u{1FAFF}")
+        set.insert(charactersIn: "\u{2600}"..."\u{26FF}")
+        set.insert(charactersIn: "\u{2700}"..."\u{27BF}")
+        return set
+    }()
 }

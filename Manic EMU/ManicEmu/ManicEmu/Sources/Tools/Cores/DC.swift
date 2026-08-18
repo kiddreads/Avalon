@@ -106,7 +106,7 @@ class DCEmulatorBridge : EmulatorBridgeBase {
             if let gameInput = DCGameInput(rawValue: input),
                let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-                Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+                Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
             }

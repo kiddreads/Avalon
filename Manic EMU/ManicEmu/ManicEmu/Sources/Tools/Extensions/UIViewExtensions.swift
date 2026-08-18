@@ -16,7 +16,7 @@ import Schedule
 
 extension UIView {
     @discardableResult
-    func makeBlur(blurRadius: CGFloat = 12.5, blurColor: UIColor = Constants.Color.Background, blurAlpha: CGFloat = 0.9, cornerRadius: CGFloat? = nil) -> VisualEffectView {
+    func makeBlur(blurRadius: CGFloat = 12.5, blurColor: UIColor = R.Color.BackgroundPrimary, blurAlpha: CGFloat = 0.9, cornerRadius: CGFloat? = nil) -> VisualEffectView {
         removeBlur()
         backgroundColor = .clear
         let blur = VisualEffectView()
@@ -45,7 +45,7 @@ extension UIView {
         }
     }
     
-    func makeShadow(ofColor: UIColor = Constants.Color.Shadow, offset: CGSize = .zero, radius: CGFloat = 10, opacity: Float = 0.5) {
+    func makeShadow(ofColor: UIColor = R.Color.Shadow, offset: CGSize = .zero, radius: CGFloat = 10, opacity: Float = 0.5) {
         layer.shadowColor = ofColor.cgColor
         layer.shadowOffset = offset
         layer.shadowRadius = radius
@@ -62,7 +62,7 @@ extension UIView {
     ///   - useContainerEffect: 是否使用容器效果（UIGlassContainerEffect），默认为 false 使用普通玻璃效果（UIGlassEffect）
     /// - Note: 此方法仅在 iOS 26.0 及以上版本可用
     @available(iOS 26.0, *)
-    func makeGlass(useContainerEffect: Bool = false) {
+    func makeGlass(useContainerEffect: Bool = false, tintColor: UIColor = R.Color.BackgroundSecondary) {
         // 移除已存在的 Liquid Glass 视图
         subviews.filter { $0 is UIVisualEffectView && $0.accessibilityIdentifier == "LiquidGlassEffectView" }.forEach {
             $0.removeFromSuperview()
@@ -73,7 +73,10 @@ extension UIView {
         if useContainerEffect {
             glassEffect = UIGlassContainerEffect()
         } else {
-            glassEffect = UIGlassEffect()
+            let effect = UIGlassEffect(style: .clear)
+            effect.tintColor = tintColor.withAlphaComponent(0.2)
+            effect.isInteractive = true
+            glassEffect = effect
         }
         
         // 创建 UIVisualEffectView 并应用玻璃效果
@@ -101,9 +104,9 @@ extension UIView {
         }
     }
     
-    static func springAnimate(enable: Bool = true, animations: @escaping ()->Void, completion: ((Bool)->Void)? = nil) {
+    static func springAnimate(enable: Bool = true, options: AnimationOptions = [], animations: @escaping ()->Void, completion: ((Bool)->Void)? = nil) {
         if enable {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, animations: animations, completion: completion)
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: options,  animations: animations, completion: completion)
         } else {
             animations()
             completion?(true)
@@ -115,12 +118,12 @@ extension UIView {
             toast.onViewDidDisappear { _ in
                 hideCompletion?()
             }
-            let maxWidth = Constants.Size.WindowWidth - 2*Constants.Size.ContentSpaceMax
-            let insets = UIEdgeInsets(horizontal: Constants.Size.ContentSpaceHuge*2, vertical: 14*2)
+            let maxWidth = R.Size.WindowWidth - 2*R.Size.ContentSpaceLarge
+            let insets = UIEdgeInsets(horizontal: R.Size.ContentSpaceHuge*2, vertical: 14*2)
             toast.config.cardEdgeInsets = insets
-            let font = Constants.Font.title(size: .s, weight: .semibold)
+            let font = R.Font.Headline(emphasis: true)
             toast.config.customTextLabel { label in
-                label.textColor = Constants.Color.LabelPrimary
+                label.textColor = R.Color.LabelPrimary
                 label.font = font
                 label.textAlignment = .natural
                 label.lineBreakMode = .byWordWrapping
@@ -131,15 +134,15 @@ extension UIView {
             let textSize = NSAttributedString(string: message, attributes: [.font: font, .paragraphStyle: paragraphStyle]).size()
             let textMaxWidth = textSize.width.ceil
             let cornerRadius = (insets.top + textSize.height + insets.bottom)/2
-            toast.config.cardCornerRadius = cornerRadius > 24 ? Constants.Size.CornerRadiusMax : cornerRadius
+            toast.config.cardCornerRadius = cornerRadius > 24 ? R.Size.CornerRadiusLarge : cornerRadius
             if insets.left + textMaxWidth + insets.right < maxWidth {
                 toast.config.cardMaxWidth = insets.left + textMaxWidth + insets.right
             } else {
                 toast.config.cardMaxWidth = maxWidth
             }
-            toast.contentView.layerBorderColor = Constants.Color.Border
+            toast.contentView.layerBorderColor = R.Color.Border
             toast.contentView.layerBorderWidth = 1
-            toast.config.dynamicBackgroundColor = Constants.Color.BackgroundPrimary.withAlphaComponent(0.95)
+            toast.config.dynamicBackgroundColor = R.Color.BackgroundSecondary.withAlphaComponent(0.95)
         }
         
         if !isRemovable, let identifier = identifier {
@@ -218,24 +221,24 @@ extension UIView {
             alert.config.cardMinWidth = size
             alert.config.cardMaxHeight = size
             alert.config.cardMinHeight = size
-            alert.contentView.layerBorderColor = UIDevice.isDarkMode ? Constants.Color.Border.forceStyle(.dark) : Constants.Color.Border.forceStyle(.light)
+            alert.contentView.layerBorderColor = UIDevice.isDarkMode ? R.Color.Border.forceStyle(.dark) : R.Color.Border.forceStyle(.light)
             alert.contentView.layerBorderWidth = 1
-            alert.config.cardCornerRadius = Constants.Size.CornerRadiusMid
+            alert.config.cardCornerRadius = R.Size.CornerRadiusMedium
             alert.config.contentViewMask { mask in }
             let blur = VisualEffectView()
             blur.blurRadius = 12.5
-            blur.colorTint = UIDevice.isDarkMode ? Constants.Color.BackgroundPrimary.forceStyle(.dark) : Constants.Color.BackgroundPrimary.forceStyle(.light)
+            blur.colorTint = UIDevice.isDarkMode ? R.Color.BackgroundSecondary.forceStyle(.dark) : R.Color.BackgroundSecondary.forceStyle(.light)
             blur.colorTintAlpha = 0.925
             alert.contentMaskView = blur
             alert.config.backgroundViewMask { mask in
                 mask.backgroundColor = .black.withAlphaComponent(0.2)
             }
             let pacman = UIView()
-            let activity = NVActivityIndicatorView(frame: .zero, type: .pacman, color: UIDevice.isDarkMode ? Constants.Color.LabelPrimary.forceStyle(.dark) : Constants.Color.LabelPrimary.forceStyle(.light), padding: nil)
+            let activity = NVActivityIndicatorView(frame: .zero, type: .pacman, color: UIDevice.isDarkMode ? R.Color.LabelPrimary.forceStyle(.dark) : R.Color.LabelPrimary.forceStyle(.light), padding: nil)
             pacman.addSubview(activity)
             activity.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
-                make.centerX.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
+                make.centerX.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
                 make.size.equalTo(CGSize(width: 50, height: 50))
             }
             alert.add(subview: pacman).snp.makeConstraints { make in
@@ -287,206 +290,58 @@ extension UIView {
                           confirmAction: (()->Void)? = nil,
                           hideAction: (()->Void)? = nil,
                           tapBackgroundAction: (()->Void)? = nil) {
-        func setupSheet(_ sheet: SheetTarget) {
-            SheetIdentifiers.append(sheet.identifier)
-            sheet.contentMaskView.alpha = 0
-            sheet.config.windowEdgeInset = 0
-            sheet.onTappedBackground { sheet in
-                if enableForceHide {
-                    SheetIdentifiers.removeAll { $0 == sheet.identifier }
-                    sheet.pop {
-                        tapBackgroundAction?()
-                        hideAction?()
-                    }
-                }
-            }
-            sheet.config.backgroundViewMask { mask in
-                mask.backgroundColor = .black.withAlphaComponent(0.2)
-            }
-            
-            let view = UIView()
-            let grabber = UIImageView(image: R.image.grabber_icon())
-            grabber.isUserInteractionEnabled = true
-            grabber.contentMode = .center
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        if enableForceHide {
-                            // 达到移除的速度
-                            SheetIdentifiers.removeAll { $0 == sheet.identifier }
-                            sheet.pop(completon: hideAction)
-                        }
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
-                    })
-                }
-            }
-            view.addSubview(grabber)
-            grabber.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ContentSpaceTiny*3)
-            }
-            
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = .clear
-            containerView.makeBlur()
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.top.equalTo(grabber.snp.bottom)
-                make.leading.bottom.trailing.equalToSuperview()
-            }
-            
-            let titleLabel = UILabel()
-            titleLabel.textAlignment = .center
-            titleLabel.text = title
-            titleLabel.font = Constants.Font.title(size: .s, weight: .semibold)
-            titleLabel.textColor = Constants.Color.LabelPrimary
-            containerView.addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(30)
-            }
-            
-            let detailLabel = UILabel()
-            detailLabel.numberOfLines = 0
-            let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny
-            style.alignment = detailAlignment
-            detailLabel.attributedText = NSAttributedString(string: detail, attributes: [.font: Constants.Font.body(size: .m), .foregroundColor: Constants.Color.LabelPrimary, .paragraphStyle: style])
-            containerView.addSubview(detailLabel)
-            detailLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            }
-            
-            let line = UIView()
-            line.backgroundColor = Constants.Color.Border
-            containerView.addSubview(line)
-            line.snp.makeConstraints { make in
-                make.height.equalTo(1)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(detailLabel.snp.bottom).offset(40)
-            }
-            
-            let buttonContainerView = UIView()
-            containerView.addSubview(buttonContainerView)
-            buttonContainerView.snp.makeConstraints { make in
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-                make.leading.trailing.equalToSuperview()
-                make.top.equalTo(line.snp.bottom)
-                make.bottom.equalToSuperview().offset(-Constants.Size.ContentInsetBottom)
-            }
-            
-            if confirmTitle == nil {
-                let button1 = UILabel()
-                button1.isUserInteractionEnabled = true
-                button1.enableInteractive = true
-                button1.text = cancelTitle
-                button1.textAlignment = .center
-                button1.font = Constants.Font.title(size: .s, weight: .regular)
-                button1.textColor = Constants.Color.LabelSecondary
-                buttonContainerView.addSubview(button1)
-                button1.snp.makeConstraints { make in
-                    make.leading.top.bottom.trailing.equalToSuperview()
-                }
-                button1.addTapGesture { [weak sheet] gesture in
-                    guard let sheet = sheet else { return }
-                    SheetIdentifiers.removeAll { $0 == sheet.identifier }
-                    sheet.pop {
+        if let identifier {
+            SheetIdentifiers.append(identifier)
+        }
+        let sheet = ASSheet(style: .text(title: title,
+                                         detail: detail,
+                                         detailAlignment: detailAlignment,
+                                         buttonTitle: cancelTitle,
+                                         destructiveButtonTitle: confirmTitle),
+                            enableGrabber: enableForceHide,
+                            enableTapBackgroundDismiss: enableForceHide)
+        let enableMultiInstance = identifier == nil
+        ASSheetView.show(sheet,
+                         identifier: identifier,
+                         enableMultiInstance: enableMultiInstance,
+                         action: { action, _ in
+            if let index = action.textValue {
+                if index == 0 {
+                    //cancel
+                    return .dismiss {
                         cancelAction?()
-                        hideAction?()
                     }
-                }
-            } else {
-                let verticalLine = UIView()
-                verticalLine.backgroundColor = Constants.Color.Border
-                buttonContainerView.addSubview(verticalLine)
-                verticalLine.snp.makeConstraints { make in
-                    make.size.equalTo(CGSize(width: 1, height: 26))
-                    make.centerX.equalToSuperview()
-                    make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
-                }
-                
-                let button1 = UILabel()
-                button1.isUserInteractionEnabled = true
-                button1.enableInteractive = true
-                button1.text = cancelTitle
-                button1.textAlignment = .center
-                button1.font = Constants.Font.title(size: .s, weight: .regular)
-                button1.textColor = Constants.Color.LabelSecondary
-                buttonContainerView.addSubview(button1)
-                button1.snp.makeConstraints { make in
-                    make.leading.top.bottom.equalToSuperview()
-                    make.trailing.equalTo(verticalLine.snp.leading)
-                }
-                button1.addTapGesture { [weak sheet] gesture in
-                    guard let sheet = sheet else { return }
-                    SheetIdentifiers.removeAll { $0 == sheet.identifier }
-                    sheet.pop {
-                        cancelAction?()
-                        hideAction?()
-                    }
-                }
-                
-                let button2 = UILabel()
-                button2.isUserInteractionEnabled = true
-                button2.enableInteractive = true
-                button2.text = confirmTitle
-                button2.textAlignment = .center
-                button2.font = Constants.Font.title(size: .s, weight: .semibold)
-                button2.textColor = Constants.Color.Red
-                buttonContainerView.addSubview(button2)
-                button2.snp.makeConstraints { make in
-                    make.trailing.top.bottom.equalToSuperview()
-                    make.leading.equalTo(verticalLine.snp.trailing)
-                }
-                button2.addTapGesture { [weak sheet] gesture in
-                    guard let sheet = sheet else { return }
+                } else if index == 1 {
+                    //destructiveButtonTitle
                     if confirmAutoHide {
-                        SheetIdentifiers.removeAll { $0 == sheet.identifier }
-                        sheet.pop {
+                        return .dismiss {
                             confirmAction?()
-                            hideAction?()
                         }
                     } else {
                         confirmAction?()
+                        return .none
                     }
                 }
+            } else if action.isTapBackground {
+                tapBackgroundAction?()
+                return .none
             }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                if let bottomInset = PlayViewController.menuInsets?.bottom, bottomInset > 0, PlayViewController.isGaming {
-                    make.leading.top.trailing.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(bottomInset)
-                } else {
-                    make.edges.equalToSuperview()
-                }
+            return .dismiss()
+        }, dismiss: {
+            hideAction?()
+            if let identifier {
+                SheetIdentifiers.removeFirst { $0 == identifier }
             }
-        }
-        if let identifier = identifier {
-            Sheet.lazyPush(identifier: identifier) { sheet in
-                setupSheet(sheet)
-            }
-        } else {
-            Sheet { sheet in
-                setupSheet(sheet)
-            }
-        }
-        
+        })
     }
     
     ///只能隐藏由makeAlert展示的
-    static func hideAlert(completion: (()->Void)? = nil) {
+    static func hideAlert(completion: (() -> Void)? = nil) {
         var removes: [String] = []
         for identifier in SheetIdentifiers.reversed() {
             if let sheet = SheetProvider.find(identifier: identifier).first {
+                SheetIdentifiers.removeLast()
                 sheet.pop {
-                    SheetIdentifiers.removeLast()
                     completion?()
                 }
                 break
@@ -498,18 +353,18 @@ extension UIView {
     }
     
     ///能隐藏所有Alert
-    static func hideAllAlert(completion: (()->Void)? = nil) {
-        func hideAll(hideAllcompletion: (()->Void)? = nil) {
-            if let sheet = SheetProvider.findAll().first {
-                sheet.pop {
-                    hideAll(hideAllcompletion: hideAllcompletion)
-                }
-            } else {
-                hideAllcompletion?()
+    static func hideAllAlert(completion: (() -> Void)? = nil) {
+        let group = DispatchGroup()
+        SheetProvider.findAll().forEach({
+            group.enter()
+            $0.pop {
+                group.leave()
             }
-        }
+        })
         SheetIdentifiers.removeAll()
-        hideAll(hideAllcompletion: completion)
+        group.notify(queue: .main) {
+            completion?()
+        }
     }
     
     func asImage() -> UIImage {
@@ -522,141 +377,8 @@ extension UIView {
             drawHierarchy(in: bounds, afterScreenUpdates: false)
         }
     }
-}
-
-fileprivate var UIViewEnableInteractiveAssociationKey: UInt8 = 0
-fileprivate var UIViewDelayInteractiveTouchEndAssociationKey: UInt8 = 0
-fileprivate var UIViewEnableInteractiveOverlayAssociationKey: UInt8 = 0
-fileprivate var UIViewOverlayViewAssociationKey: UInt8 = 0
-extension UIView {
-    var enableInteractive: Bool {
-        get {
-            if let bool = objc_getAssociatedObject(self, &UIViewEnableInteractiveAssociationKey) as? Bool {
-                return bool
-            }
-            return false
-        }
-        set(newValue) {
-            objc_setAssociatedObject(self, &UIViewEnableInteractiveAssociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-        }
-    }
     
-    var delayInteractiveTouchEnd: Bool {
-        get {
-            if let bool = objc_getAssociatedObject(self, &UIViewDelayInteractiveTouchEndAssociationKey) as? Bool {
-                return bool
-            }
-            return false
-        }
-        set(newValue) {
-            objc_setAssociatedObject(self, &UIViewDelayInteractiveTouchEndAssociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-        }
-    }
-    
-    var enableInteractiveOverlay: Bool {
-        get {
-            if let bool = objc_getAssociatedObject(self, &UIViewEnableInteractiveOverlayAssociationKey) as? Bool {
-                return bool
-            }
-            return false
-        }
-        set(newValue) {
-            objc_setAssociatedObject(self, &UIViewEnableInteractiveOverlayAssociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-            addOverlay()
-        }
-    }
-    
-    private var overlayView: UIView? {
-        get {
-            if let view = objc_getAssociatedObject(self, &UIViewOverlayViewAssociationKey) as? UIView {
-                return view
-            }
-            return nil
-        }
-        set(newValue) {
-            objc_setAssociatedObject(self, &UIViewOverlayViewAssociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-        }
-    }
-    
-    private func addOverlay() {
-        guard enableInteractiveOverlay else { return }
-        if let _ = self.overlayView {
-            return
-        } else {
-            let view = UIView(frame: bounds)
-            view.backgroundColor = Constants.Color.Background.reverseStyle().withAlphaComponent(0.08)
-            view.isHidden = true
-            view.layer.cornerRadius = layer.cornerRadius
-            view.clipsToBounds = true
-            insertSubview(view, at: 0)
-            view.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            overlayView = view
-        }
-    }
-    
-    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard enableInteractive else { return }
-        touchMoved(touch: touches.first)
-    }
-    
-    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        guard enableInteractive else { return }
-        touchMoved(touch: touches.first)
-    }
-    
-    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        guard enableInteractive else { return }
-        if delayInteractiveTouchEnd {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: { [weak self] in
-                self?.touchEnded(touch: touches.first)
-            })
-        } else {
-            touchEnded(touch: touches.first)
-        }
-    }
-    
-    override public func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        guard enableInteractive else { return }
-        if delayInteractiveTouchEnd {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: { [weak self] in
-                self?.touchEnded(touch: touches.first)
-            })
-        } else {
-            touchEnded(touch: touches.first)
-        }
-    }
-    
-    func touchMoved(touch: UITouch?) {
-        
-        guard let touch = touch else { return }
-        let locationInSelf = touch.location(in: self)
-        if !bounds.contains(locationInSelf) {
-            performTransformation(CGAffineTransform(scaleX: 1, y: 1), hideOverlay: true)
-            return
-        }
-        performTransformation(CGAffineTransform(scaleX: 0.9, y: 0.9), hideOverlay: false)
-    }
-
-    func touchEnded(touch: UITouch?) {
-        performTransformation(CGAffineTransform(scaleX: 1, y: 1), hideOverlay: true)
-    }
-
-    private func performTransformation(_ transformation: CGAffineTransform, hideOverlay: Bool) {
-        let timingParameters = UISpringTimingParameters(dampingRatio: 1.0, initialVelocity: CGVector(dx: 0.2, dy: 0.2))
-        let animator = UIViewPropertyAnimator(duration: 0.0, timingParameters: timingParameters)
-        animator.addAnimations { [weak self] in
-            guard let weakSelf = self else { return }
-            weakSelf.transform = transformation
-            weakSelf.overlayView?.frame = weakSelf.bounds
-            weakSelf.overlayView?.isHidden = hideOverlay
-        }
-        animator.isInterruptible = true
-        animator.startAnimation()
+    var windowSafeArea: UIEdgeInsets {
+        window?.safeAreaInsets ?? .zero
     }
 }

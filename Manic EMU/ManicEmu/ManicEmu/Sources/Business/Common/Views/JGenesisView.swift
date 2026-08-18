@@ -85,6 +85,8 @@ class JGenesisView: BaseView {
     /// ROM路径
     var romPath: String? = nil
     
+    private(set) var isPaused: Bool = false
+    
     private lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
@@ -137,7 +139,6 @@ class JGenesisView: BaseView {
     }()
     
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
         localServer.stop()
     }
     
@@ -660,11 +661,13 @@ extension JGenesisView {
     /// 暂停模拟器
     func pause() {
         let script = "window.jgenesisAPI.pause();"
-        webView.evaluateJavaScript(script) { _, error in
+        webView.evaluateJavaScript(script) { [weak self] _, error in
+            guard let self else { return }
             if let error = error {
                 print("❌ 暂停失败: \(error)")
             } else {
                 print("⏸️ 模拟器已暂停")
+                self.isPaused = true
             }
         }
     }
@@ -672,11 +675,13 @@ extension JGenesisView {
     /// 恢复模拟器
     func resume() {
         let script = "window.jgenesisAPI.resume();"
-        webView.evaluateJavaScript(script) { _, error in
+        webView.evaluateJavaScript(script) { [weak self] _, error in
+            guard let self else { return }
             if let error = error {
                 print("❌ 恢复失败: \(error)")
             } else {
                 print("▶️ 模拟器已恢复")
+                self.isPaused = false
             }
         }
     }
@@ -685,15 +690,16 @@ extension JGenesisView {
     func togglePause() {
         let script = "window.jgenesisAPI.togglePause();"
         webView.evaluateJavaScript(script)
+        isPaused.toggle()
     }
     
     /// 获取当前暂停状态
-    func isPaused(completion: @escaping (Bool) -> Void) {
-        let script = "window.jgenesisAPI.isPaused();"
-        webView.evaluateJavaScript(script) { result, _ in
-            completion(result as? Bool ?? false)
-        }
-    }
+//    func isPaused(completion: @escaping (Bool) -> Void) {
+//        let script = "window.jgenesisAPI.isPaused();"
+//        webView.evaluateJavaScript(script) { result, _ in
+//            completion(result as? Bool ?? false)
+//        }
+//    }
     
 }
 

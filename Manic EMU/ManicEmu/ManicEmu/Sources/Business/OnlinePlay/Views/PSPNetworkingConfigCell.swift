@@ -9,24 +9,14 @@
 import BetterSegmentedControl
 
 class PSPNetworkingConfigCell: UICollectionViewCell {
-    private lazy var segmentView: BetterSegmentedControl = {
-        let segments = LabelSegment.segments(withTitles: [R.string.localizable.lanNetworking(), R.string.localizable.wanNetworking()],
-                                             normalFont: Constants.Font.body(),
-                                             normalTextColor: Constants.Color.LabelSecondary,
-                                             selectedTextColor: Constants.Color.LabelPrimary)
-        let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.Background),
-            .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.BackgroundPrimary),
-            .cornerRadius(16)
-        ]
-        let view = BetterSegmentedControl(frame: .zero,
-                                          segments: segments,
-                                          options: options)
+    private lazy var segmentView: ASSegmentView = {
+        let view = ASSegmentView(.textSegment(titles: [
+            R.string.localizable.lanNetworking(),
+            R.string.localizable.wanNetworking()
+        ]))
         
-        view.on(.valueChanged) { [weak self] sender, forEvent in
-            guard let self, let index = (sender as? BetterSegmentedControl)?.index else { return }
-            UIDevice.generateHaptic()
+        view.didSelectIndex = { [weak self] index in
+            guard let self else { return }
             self.didTypeChange?(index == 0 ? .local : .online)
         }
         return view
@@ -66,8 +56,8 @@ class PSPNetworkingConfigCell: UICollectionViewCell {
         super.init(frame: frame)
         
         let containerView = UIView()
-        containerView.layerCornerRadius = Constants.Size.CornerRadiusMax
-        containerView.backgroundColor = Constants.Color.BackgroundPrimary
+        containerView.layerCornerRadius = R.Size.CornerRadiusLarge
+        containerView.backgroundColor = R.Color.BackgroundSecondary
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -75,22 +65,22 @@ class PSPNetworkingConfigCell: UICollectionViewCell {
         
         containerView.addSubview(segmentView)
         segmentView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.height.equalTo(R.Size.ItemHeightExtraSmall)
         }
         
         containerView.addSubview(localNerworkingView)
         localNerworkingView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(segmentView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-            make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+            make.top.equalTo(segmentView.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.bottom.equalToSuperview().inset(R.Size.ContentSpaceHuge)
         }
         
         containerView.addSubview(onlineNerworkingView)
         onlineNerworkingView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(segmentView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-            make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+            make.top.equalTo(segmentView.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.bottom.equalToSuperview().inset(R.Size.ContentSpaceHuge)
         }
     }
     
@@ -99,7 +89,7 @@ class PSPNetworkingConfigCell: UICollectionViewCell {
     }
     
     func setData(config: PSPNetworkingConfig) {
-        segmentView.setIndex(config.type == .local ? 0 : 1)
+        segmentView.index = config.type == .local ? 0 : 1
         if config.type == .local {
             localNerworkingView.isHidden = false
             onlineNerworkingView.isHidden = true
@@ -115,14 +105,14 @@ class PSPNetworkingConfigCell: UICollectionViewCell {
         var configHeight: CGFloat = 0
         if config.type == .local {
             if config.asHost {
-                configHeight = 146
+                configHeight = 148
             } else {
                 let serviceItemCount = config.hostList.count
-                let serviceListHeight = 50*CGFloat(serviceItemCount) + 20*(CGFloat(serviceItemCount)-1) + 10
-                configHeight = 60 + 48 + 60 + 48 + (serviceListHeight > 0 ? serviceListHeight : 0)
+                let serviceListHeight = 60*CGFloat(serviceItemCount) + 20*(CGFloat(serviceItemCount)-1) + 10
+                configHeight = 44 + 48 + 60 + 48 + (serviceListHeight > 0 ? serviceListHeight : 0) - 11
             }
         } else {
-            configHeight = 60
+            configHeight = 44
         }
         return 16 + 50 + 20 + configHeight + 24
     }

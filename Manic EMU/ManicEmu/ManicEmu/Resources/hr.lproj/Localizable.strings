@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Cloud usluge";
 "ImportAddLanServiceTitle" = "Lokalne mrežne usluge";
-"ImportAddDiscoverServiceTitle" = "Usluge otkrivanja";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Poveži se";
 "AddLandServiceSuccess" = "Usluga %@ uspješno dodana";
 "AddLandServiceFailed" = "Dodavanje usluge %@ nije uspjelo\nProvjerite mrežnu vezu, status usluge ili točnost unesenih podataka";
-"AddLandServiceTimeout" = "Vrijeme za povezivanje s uslugom je isteklo";
 "FilesImporterErrorFileExist" = "\"%@\" već postoji, nije potrebno uvoziti";
 "FilesImporterErrorBadCopy" = "Uvoz \"%@\" nije uspio, greška pri kopiranju datoteke";
 "FilesImporterErrorBadExtension" = "Uvoz \"%@\" nije uspio, nastavak datoteke nije prepoznat";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nKoristite web preglednik za prijenos datoteka";
 "ImportServiceListPasteTitle" = "Čitanje međuspremnika";
 "ImportServiceListPasteDetail" = "Podržava kopiranje datoteka iz macOS-a i aplikacije Datoteke";
-"ImportHowTo" = "Kako uvesti";
 "ImportTopHintTitle" = "Priča puna snova i avantura počinje ovdje!";
 "ImportDragAndDropTips" = "Povucite i ispustite datoteke na bilo koji Manic EMU ekran za prijenos";
 "ImportChannelTips" = "Za pomoć, pridružite se %@";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d minuta";
 "FatalErrorTitle" = "Kritična greška";
 "FatalErrorDesc" = "Učitavanje sustavnih resursa nije uspjelo, Manic EMU može imati ozbiljne nedostatke u radu";
-"LodingFailedTitle" = "Učitavanje nije uspjelo";
 "AirPlayDesc" = "Krenite u avanturu odmah!";
 "ToastSuccess" = "Spremanje uspješno";
 "ToastFailed" = "Spremanje nije uspjelo";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Uvezi save datoteku";
 "GamesShareSave" = "Izvezi save datoteku";
 "GamesDelete" = "Ukloni igru";
-"GamesRandom" = "Ne znam što igrati, odaberi nasumično";
 "LoadGameErrorRomNotExist" = "Greška pri učitavanju igre, ROM datoteka ne postoji";
 "GamesListEmptyGuideLeft" = "Kliknite na";
 "GamesListEmptyGuideRight" = "za uvoz igara";
 "GamesListEmptyWelcomeLeft" = "Dobrodošli u svijet ";
 "GamesListEmptyWelcomeRight" = "-a";
 "GamesListEmptyWarnning" = "Provjerite da ROM datoteke dobivate na legalan način";
+"LandscapeEmptyAddGame" = "Dodaj igru";
 "DeleteGameAlertDetail" = "ROM igre, save datoteke i cheat code-ovi će biti trajno izbrisani, ova radnja je nepovratna!";
 "DeleteSkinAlertDetail" = "Skin će biti trajno uklonjen!";
-"DeleteGameGameStateAlertTitle" = "Ukloni instant save";
 "DeleteGameGameStateAlertDetail" = "Instant save će biti trajno uklonjen!";
 "confirmDelte" = "Potvrdi uklanjanje";
 
 //Controllers
 "ControllersTouchName" = "Dodirni kontroler";
-"ControllersHeaderTitle" = "Kontroleri";
 "ControllersPlayerIndex" = "Igrač %d";
 "ControllersPlayerUnset" = "Nije postavljeno";
-"ControllersHowToConnect" = "Kako se povezati";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ igranje · ukupno %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Ručni instant save";
 "ReadySegmentAutoSave" = "Automatski instant save";
 "ReadyEditTitleFailed" = "Preimenovanje nije uspjelo, naziv igre ne može biti prazan";
-"ReadyEditTitleSuccess" = "Preimenovanje uspješno";
 "ReadyGameSaveStatesEmpty" = "Nema save datoteka";
 "GameSaveGuideBecomTitle" = "Postani";
 "GameSaveGuideMemberTitle" = "član";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Save %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU savršeno podržava .deltaskin .gammaskin formate skinova";
 "SkinNavigationSubTitleSpecifiedGame" = "Skin samo za %@";
 "SkinSegmentPortraitTitle" = "Portret";
 "SkinSegmentLandscapeTitle" = "Pejzaž";
 "SkinAddTitle" = "Dodaj skin";
-"HowToFetch" = "Kako dobiti";
 "SkinDelete" = "Ukloni skin";
 "DefaultSkinCannotEdit" = "Zadani skin se ne može uređivati";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Igraj odmah";
 
 //Settings
-"LeftHandTitle" = "Ljevoruki način";
-"LeftHandDetail" = "Zrcalno okretanje upravljača, DPad-a i tipki";
 "QuickGameTitle" = "Brzo pokretanje igre";
 "QuickGameDetail" = "Klik na igru ne prikazuje početnu stranicu";
 "AirPlayTitle" = "AirPlay cjelozaslonski način";
 "AirPlayDetail" = "Prikaz igre na cijelom zaslonu prilikom AirPlay prijenosa";
 "iCloudTitle" = "iCloud sinkronizacija";
-"iCloudDetail" = "Sinkronizacija igara, skinova, save datoteka i postavki na uređajima s istim Apple ID-om";
-"AppIconTitle" = "Ikona aplikacije";
-"WidgetTitle" = "Widgeti";
 "QATitle" = "Često postavljana pitanja";
 "FeedbackTitle" = "Povratne informacije";
 "ShareAppTitle" = "Podijeli «Manic EMU» s prijateljima";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Napredne postavke";
 "SupportSettingTitle" = "Kontakt podrške";
 "OthersSettingTitle" = "Ostalo";
-"RatingTitleLeft" = "Ocijeni";
-"RatingTitleRight" = "";
-"RatingDetail" = "Ako smatrate da je naš proizvod vrijedan, molimo vas da nam date pet zvjezdica, vaša ocjena nam je jako važna : )";
 "iCloudDisableTitle" = "iCloud trenutno nedostupan";
 "iCloudDisableDetail" = "Pokrenuta je iCloud sinkronizacija, ali će se tek početi nakon što se prijavite i autorizirate iCloud. Idite na iPhone «Postavke» > «Apple ID» > «iCloud» i provjerite da je iCloud Drive uključen i da Manic EMU ima dopuštenje za pristup";
 "iCloudSyncConfilictTitle" = "Sukob iCloud sinkronizacije";
-"iCloudSyncConfilictDetail" = "Cloud datoteka:\n%@\n\nLokalna datoteka:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Zadrži iCloud";
 "iCloudSyncConfilictSaveLocal" = "Zadrži lokalno";
 "SettingsNonMemberDesc" = "Vi ćete biti glavni junak ove priče";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Hvala što ste došli igrati";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Niste postavili email";
-"IDCopy" = "Vaš ID je kopiran";
 "SendEmailSuccess" = "Email uspješno poslan";
 "SendEmailFailed" = "Slanje emaila nije uspjelo %@";
 "iCloudTipsTitle" = "Uključivanje iCloud sinkronizacije";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Zvuk";
 "GameSettingFastForwardResume" = "Normalna brzina";
 "GameSettingFastForward" = "Ubrzaj %@";
-"GameSettingStateList" = "Lista save-ova";
-"GameSettingSkins" = "Postavi skin";
-"GameSettingFilter" = "Filter";
 "GameSettingScreenShot" = "Snimka igre";
 "GameSettingHapticOff" = "Vibracije isključene";
 "GameSettingHapticSoft" = "Vibracije slabe";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Ponovno pokreni";
 "GameSettingQuit" = "Izađi";
 "GameSaveStateSuccess" = "Instant save uspješan";
-"GameSaveStateLoadFailed" = "Učitavanje instant save-a nije uspjelo, save je oštećen ili nekompatibilan";
 "GameSaveStateLoadSuccess" = "Učitavanje instant save-a uspješno";
 "GameSaveStateQuickLoadFailed" = "Nema ručnih save-ova, za učitavanje automatskih save-ova koristite «Lista save-ova»";
 "GameSaveListTitle" = "Instant save";
-"GameCheatActivateFailed" = "%@\nAktivacija nije uspjela, cheat code nije valjan";
 "GameCheatActivateSuccess" = "%@\nAktivacija uspješna";
 "AirPlayingTitle" = "Prijenos igre na ekran je u tijeku";
 "VolumeOff" = "Zvuk isključen";
 "VolumeOn" = "Zvuk uključen";
-"FunctionSortDesc1" = "Ove funkcije će biti dostupne kao prečaci u službenim skinovima";
-"FunctionSortDesc2" = "Pritisnite i držite za promjenu redoslijeda";
 "ManualGameSaveCountLimit" = "Premašili ste broj instant save-ova! Nadogradite na članstvo za neograničen broj instant save-ova ili smanjite broj save-ova u listi";
 "FastForwardSpeedLimit" = "Maksimalno ubrzanje je x2! Nadogradite na članstvo za ubrzanje do x5";
 "ResetSpeed" = "Vrati normalnu brzinu";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Unos koda automatski detektira format";
 "CheatCodeFormatError" = "Format cheat code-a nije ispravan";
 "CheatCodeEmptyTitle" = "Nema cheat code-ova";
-"CheatCodeEmptyGuideLeft" = "Kliknite na";
-"CheatCodeEmptyGuideRight" = "za dodavanje cheat code-a";
 "EnableCheatCodeAlertTitle" = "Omogući cheat code";
 "EnableCheatCodeAlertDetail" = "Cheat code-ovi ovise o verziji igre i moraju biti točni da bi funkcionirali! Korištenje cheat code-ova mijenja podatke igre i može uzrokovati pogreške ili nestabilnost, koristite na vlastitu odgovornost.";
 
 //Filter
-"FilterSectionHeaderTitle" = "Video filteri";
 "FilterOriginTitle" = "Izvorno";
 
 //In-App Purchases
@@ -355,7 +325,6 @@
 "PurchasePending" = "Vaša kupnja je na čekanju";
 "PurchaseUnknown" = "Nepoznat status kupnje";
 "PurchaseErrorDesc" = "Kupnja trenutno nije moguća, provjerite mrežnu vezu";
-"PurchaseFailedTitle" = "Kupnja nije uspjela";
 "RestoreSuccessDesc" = "Kupnja uspješno vraćena!";
 "RestoreEndDesc" = "Vraćanje kupnje završeno, nema dostupnih kupnji!";
 "TrialDesc" = "Tijekom probnog razdoblja se ne naplaćuje, možete otkazati bilo kada";
@@ -396,23 +365,12 @@
 "ShareAppSubtitle" = "Pozovite prijatelje u avanturu!";
 "ShareRomFilesFailed" = "Dijeljenje ROM-a nije uspjelo, nije moguće dohvatiti datoteku";
 "ShareSaveFilesFailed" = "Dijeljenje save datoteke nije uspjelo, nema save datoteka";
-"ShareFilesCopyFailed" = "Dijeljenje datoteke nije uspjelo, greška pri kopiranju";
-"ShareFilesCompressFailed" = "Dijeljenje datoteke nije uspjelo, greška pri komprimiranju";
 
 "TurnOnAirPlayAsk" = "AirPlay je spojen. Prebaciti u cijeloekranski modus sada?";
 
 "ThreeDSModePerformance" = "Način performansi";
 "ThreeDSModeCompatibility" = "Način kompatibilnosti";
 "ThreeDSModeQuality" = "Prioritet kvalitete";
-"ThreeDSNotSupportImportSave" = "3DS igre trenutno ne podržavaju uvoz sprema";
-"ThreeDSNotSupportShareSave" = "3DS igre trenutno ne podržavaju dijeljenje sprema";
-"ThreeDSBetaAlertTitle" = "Eksperimentalna verzija za 3DS";
-"ThreeDSBetaAlertDetail" = "Kako biste ranije uživali u 3DS igrama, Manic EMU je objavio podršku za 3DS, ali trenutno je u eksperimentalnoj fazi. Neke funkcije zahtijevaju dodatnu optimizaciju.
-Sljedeće funkcije privremeno nedostaju:
-❌ AirPlay na cijelom zaslonu
-❌ Automatsko spremanje
-❌ Funkcija ubrzanja
-Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» ili nam se pridružite na kanalu za pomoć. Stalno poboljšavamo performanse emulatora, a vaše razumijevanje i podrška pomoći će nam stvoriti savršenije iskustvo igranja. Stalno radimo na boljem okruženju za igre.";
 "ThreeDSNoSupportDeviceTitle" = "Neadekvatna performansa uređaja";
 "ThreeDSNoSupportDeviceDetail" = "Ovaj uređaj možda ne podržava 3DS emulaciju. Nastavak može uzrokovati nepredvidive greške";
 
@@ -430,8 +388,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "FullScreenWhenConnectControllerTitle" = "Automatski cijeli zaslon";
 "FullScreenWhenConnectControllerDetail" = "Automatski prelazi u cijeli zaslon kada je kontroler spojen za igru";
 "JoinDiscordTitle" = "Pridruži se Discordu";
-"JoinDiscordAlertMessage" = "Hvala igraču %@ što je kreirao Discord kanal. Želite li nastaviti s pridruživanjem?";
-"FlexSkinGuideTitle" = "Povucite ili zumirajte dvama prstima";
 "DownloadFailed" = "Preuzimanje nije uspjelo";
 "RemoveDownloadTask" = "Želite li prekinuti preuzimanje i ukloniti \"%@\"?";
 "GameSettingResolution" = "Rezolucija %@";
@@ -481,9 +437,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "RenderRightEyeDesc" = "Deaktiviranje poboljšava performanse nekih igara, ali može uzrokovati treperenje";
 "DisableTitle" = "Deaktiviraj";
 "EnableTitle" = "Aktiviraj";
-"NoSaveStateToast" = "Nema dostupnog %@";
-"DeleteSelectedSaveStateAlert" = "Izbrisati odabrani «%@»?\nNije moguće vratiti!";
-"DeleteAllSaveStateAlert" = "Nema odabira. Izbrisati sve «%@»?\nNije moguće vratiti!";
 "AICoverSearchDesc" = "Otkrivena pretraga na drugom jeziku. Nadogradi na Premium za višejezičnu AI pretragu";
 "MaxTextSizeAllowDesc" = "Podržava do %@ znakova";
 
@@ -511,29 +464,21 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "BiosAddTitle" = "Dodaj BIOS";
 "StartGameWithoutBiosTitle" = "Pokreni bez BIOS-a";
 
-"ThreeDSAdvanceSettingMode" = "Napredni Način";
 "ThreeDSAdvanceSettingTitle" = "Napredne Postavke";
-"ThreeDSBasicSettingMode" = "Osnovni Način";
 "ShareConfigButtonTitle" = "Dijeli Konfiguraciju";
 "ImportConfigButtonTitle" = "Uvezi Konfiguraciju";
 "ShareFileFailedMissing" = "Dijeljenje nije uspjelo: datoteka ne postoji";
 "ReadConfigFileFailed" = "Ne mogu pročitati konfiguracijsku datoteku";
 "SwitchEmulationCore" = "Promijeni Jezgru";
 "SwitchEmulationCoreDetail" = "Promijeni jezgru emulacije za %@\nPromjena jezgre će učiniti pohrane iz prethodne jezgre nečitljivima. Za pristup vratite se izvornoj jezgri";
-"BeetleSaturnNoSupportCheat" = "Jezgra Beetle Saturn trenutno ne podržava varalice. Ako trebate, prebacite se na jezgru Yabause";
-"CurrentTitle" = "trenutno";
 "NewSkinDesc" = "Manic EMU podržava skinove u formatima .manicskin i .deltaskin .gammaskin. Napomena: Uvezeni skin mora odgovarati trenutnoj platformi, inače se neće pojaviti na popisu.\nTakođer pružamo pristup zajednicama skinova trećih strana. One nisu službeno povezane s Manic EMU. Prilikom preuzimanja strogo se pridržavajte uvjeta usluge svake web stranice";
 "VisitSite" = "Posjeti %@";
 "OpenFile" = "Otvori Datoteku";
 "WebViewDownloadBegin" = "Preuzimanje je započelo";
 "RespectSilentMode" = "Poštuj Tihi Način";
 "RespectSilentModeDesc" = "Kada je uključeno, Manic EMU će reproducirati zvuk samo izvan tihog načina";
-"SaturnISONoSwitchCore" = "Igre Sega Saturn u .iso formatu ne podržavaju promjenu jezgre";
-"EnableFullScreenTitle" = "Omogući Puni Zaslon";
-"DisableFullScreenTitle" = "Onemogući Puni Zaslon";
 "SimulateBlowingTitle" = "Simuliraj Puhanje";
 "PaletteTitle" = "Paleta";
-"SkinRestDesc" = "Resetiranje skina također će vratiti skinove dodijeljene igrama na zadane verzije";
 "SkinResetForAll" = "Resetiraj Sve Skinove Platforme";
 "SkinResetForPlatform" = "Resetiraj %@ Skin";
 "SkinDebug" = "Testno Područje za Skinove";
@@ -550,7 +495,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "MultiDiscCloseAlert" = ".m3u stvoren. Zatvori stranicu nakon uvoza";
 "MultiDiscContinueClose" = "Zatvori";
 "SwapDisk" = "Zamijeni disk";
-"NotSupportSwapDisk" = "Nije višediskna igra";
 "TransferPakDesc" = "Transfer Pak sinkronizira GB/GBC podatke s N64. Za aktivaciju: uvezi ROM (.gb/.gbc) i save datoteku (.sav)";
 "TransferPakFromLibrary" = "Uvezi iz biblioteke";
 "TransferPakFromLibraryDesc" = "Prikazane samo igre sa save datotekama.\nOdabrane GB/GBC igre moraju odgovarati N64 ROM-u";
@@ -559,7 +503,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "TransferPakOn" = "Aktivirano";
 "TransferPakOff" = "Deaktivirano";
 "TransferPakImportError" = "Greška: Uvezi i ROM i save (potrebne 2 datoteke)";
-"ShowControlsTitle" = "Prikaži kontrole";
 "HideControlsTitle" = "Sakrij kontrole";
 
 "DesignedFor" = "Dizajnirano za %@";
@@ -582,7 +525,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "WfcConnectDesc" = "Povezivanje na Nintendo WFC...\nUbrzavanje i varanje onemogućeno";
 "WfcDisconnectDesc" = "Prekini vezu s Nintendo WFC";
 "NotAllowOnlineGame" = "Ova funkcija onemogućena u online igri";
-"QuitGameAlert" = "Izaći iz igre? Nespremljeni napredak bit će izgubljen";
 
 "SkinIdentifierExist" = "Identifikator %@ već postoji. Uredite ga i ponovno uvezite.";
 "AnalogModeChange" = "Prebaci na %@ način";
@@ -616,7 +558,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "LastActivity" = "Zadnja aktivnost: %@";
 "MemberSince" = "Član od: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Napredak završetka";
 "AchievementsList" = "Achievementi";
 "TotalAchievements" = "Ukupno %d achievementa";
@@ -639,7 +580,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "DisableAchievementsAlert" = "Onemogući RetroAchievements?";
 "SaveStateCoreUnCompatible" = "Save state je napravljen u %@ (trenutno: %@). Učitavanje može uzrokovati probleme!";
 "LatestSaveStateUnCompatible" = "Zadnji save state ne može se učitati zbog nekompatibilnosti jezgre";
-"Snes9xAlert" = "Zbog problema s licencom, jezgra Snes9x bit će uklonjena u budućim ažuriranjima. Prebaci se na bsnes i prebaci save state-ove, inače neće raditi.";
 "GotIt" = "Shvaćam";
 "Rumble" = "Vibracije";
 "RumbleDetail" = "Uređaj vibrira tijekom određenih događaja";
@@ -655,7 +595,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "JumpTips" = "Otvara se stranica treće strane";
 "ThirdPartGameInfoTips" = "Informacije o igri pružaju treće strane. Koristi vlastitu prosudbu i slijedi pravila platforme. Ako Manic EMU ne pronađe igru, upotrijebi pretraživanje za ručno pronalaženje.";
 "NotSupportHardcore" = "Hardcore način je onemogućen za ovu igru. Možda Manic EMU nije ovlašten od strane RetroAchievements, ili igra jednostavno ne podržava hardcore način.";
-"ChooseOne" = "Odaberi jedan";
 "FilesImporterErrorBadCue" = "Uvoz %@ nije uspio. datoteka može biti nevažeća ili nije UTF-8 kodirana. Provjeri format.";
 "Leaderboard" = "Ljestvica";
 "LeaderboardStart" = "Početak ljestvice: ";
@@ -671,10 +610,8 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "AlwaysShowProgressDesc" = "Održavaj napredak postignuća vidljivim na zaslonu.";
 "Progress" = "Napredak";
 
-"DCGameNoSupportGameSave" = "Dreamcast ne podržava uvoz/izvoz spremišta. Upotrijebite VMU Explorer za uređivanje memorijskih datoteka u mapi Manic EMU-Flycast-dc.";
 
 "Challenge" = "Izazov";
-"GameTypeLicensingError" = "Žao nam je! Zbog ograničenja licence s jezgrom %@, ova platforma trenutačno nije dostupna. Možete pričekati buduće ažuriranje ili koristiti sideload verziju.";
 "DCJITLessVer" = "Zadana verzija nudi brzo i precizno emuliranje, ali ne može pokretati WinCE igre. Za igranje WinCE igara odaberite WinCE jezgru.";
 "TVStandard" = "Ako TV standard igre ne odgovara regiji, brzina može biti pogođena. PAL regije uključuju uglavnom Europu, Australiju i Novi Zeland.";
 "SNESVRAMEnable" = "Neki hakovani ROM-ovi zahtijevaju ovu opciju za ispravan prikaz grafike, ali aktiviranje će onemogućiti podršku za RetroAchievements.";
@@ -697,7 +634,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "LayoutEmbeddedBottomRight" = "Ugrađeno (Dolje-Desno)";
 "LayoutSingleScreen" = "Jedan ekran";
 "AirPlayLayoutTips" = "Kombiniraj AirPlay raspored s Zamjenom Ekrana za više opcija. Napomena: Korištenje Zamjene Ekrana s ugrađenim rasporedom može uzrokovati preklapanje, nije preporučljivo";
-"ToggleAnolog" = "Prebaci analogno";
 "EnableGlobalAchievements" = "Omogući globalna RetroAchievements";
 "GlobalHardcoreMode" = "Globalni hardcore način";
 "GlobalHardcoreAlert" = "Molimo prvo omogućite globalne RetroAchievements";
@@ -713,7 +649,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "AppearanceLight" = "Svijetli način";
 "AppearanceDark" = "Tamni način";
 "AppearanceAuto" = "Prati sustav";
-"GameListBackground" = "Pozadinska slika";
 "GameListBackgroundUpload" = "Učitaj";
 "GameplayManuals" = "Priručnici za igre";
 "GameplayManualsNoExists" = "Nema dostupnog priručnika za ovu igru.";
@@ -723,7 +658,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "UnsupportSkinsDesc" = "Sljedeći skinovi nisu podržani na ovom uređaju:\n%@Napomena: Uklanjanje će također izbrisati ove skinove s drugih uređaja sinkroniziranih putem iClouda.";
 "UnsupportSkinsRemoveSuccess" = "Nepodržani skinovi uspješno uklonjeni";
 "ForbitPKSM" = "Kako bi se osigurao pošteno RetroAchievements iskustvo, PKSM se ne može koristiti dok je Global RetroAchievements omogućen.";
-"FDSAlert" = "Ova opcija dostupna je samo za FDS igre.";
 "DiskSideChange" = "Okreni disk";
 "EjectDisk" = "Izbaci disk";
 
@@ -756,7 +690,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "TriggerProName" = "Naziv TriggerPro";
 "Position" = "Položaj";
 "ButtonInfo" = "Informacije o tipki";
-"NoTriggerPro" = "Nije pronađena TriggerPro konfiguracija. Možete otići u Postavke ili dugo pritisnuti opciju TriggerPro u Izborniku igre za stvaranje";
 "ManageTriggerPro" = "Upravljaj TriggerPro";
 "EnableTriggerPro" = "Omogući TriggerPro";
 "DisableTriggerPro" = "Onemogući TriggerPro";
@@ -797,7 +730,6 @@ Ako naiđete na nestabilnost u 3DS-u, pogledajte «Često Postavljana Pitanja» 
 "Default" = "Zadano";
 "Imported" = "Uvezeno";
 "DownloadRetroArchSahders" = "Preuzmi shadere s RetroArcha";
-"ImportShaders" = "Uvezi shadere";
 "Shaders" = "Shaderi";
 "DownloadRetroArchShaders" = "Želite li preuzeti shadere s RetroArcha? Po završetku, RetroArchova kategorija shadera će se automatski osvježiti. Ovaj proces možete prekinuti u bilo kojem trenutku u upravitelju preuzimanja.";
 "RetroArchShaderUnzipFailed" = "Nije moguće raspakirati %@. Datoteka je možda oštećena tijekom preuzimanja. Pokušajte je ponovno preuzeti.";
@@ -830,7 +762,6 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "JGenesisAlert" = "Žao nam je, JGenesis jezgra podržava samo .chd ROM datoteke.";
 "RedeemOfferCode" = "Iskoristi Ponudu";
 "CheatImportFailed" = "Uvoz nije uspio. Datoteku nije bilo moguće raščlaniti ili nisu pronađeni odgovarajući cheat kodovi.";
-"RemoveAllCheats" = "Ukloni Sve Cheatove";
 "RemoveAllCheatsAlert" = "Jeste li sigurni da želite ukloniti sve cheat kodove? Ova radnja se ne može poništiti.";
 "CheatCodeStatus" = "Omogućeno";
 "Background" = "Pozadina";
@@ -843,13 +774,8 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "RemoveBackgroundForGame" = "Ukloni Pozadinu Igre";
 "RemoveBackgroundForConsole" = "Ukloni Pozadinu Platforme %@";
 "RemoveBackgroundForGlobal" = "Ukloni Globalnu Pozadinu";
-"ShaderConfigAlert" = "Postavljeno za %@.";
-"Global" = "Globalno";
-"RemoveShaderForGlobal" = "Ukloni Globalni Shader";
 "FeaturedItems" = "Istaknute Stavke";
-"ReUpload" = "Ponovno Učitaj";
 
-"Service" = "Usluge";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "PSP mreža";
 "Networking" = "Mreža";
@@ -888,16 +814,11 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "LoadingCheerpJ" = "Učitavanje CheerpJ-a";
 "ZipHandlerTitle" = "Rukovanje ZIP datotekama";
 "ZipHandlerDetail" = "Neke platforme (poput DOS-a i Arkade) mogu učitavati ROM izravno iz .zip datoteka. Za druge platforme, ROM unutar .zip-a mora se izdvojiti prije uvoza.\n\nOdabrane datoteke bit će izdvojene i uveze pojedinačno, dok će neodabrane datoteke biti uvezene kao jedna ZIP ROM.";
-"ConfigsResetCore" = "Resetiraj na zadane postavke jezgre";
-"ConfigsResetBefore" = "Vrati se na prethodne postavke";
 "InsertDisc" = "Umetni disk";
 "InsertDiscAlert" = "Disk možete umetnuti odabirom druge igre s iste platforme u svojoj biblioteci ili odabirom datoteke diska iz Datoteka. Zbog ograničenja iOS datotečnog sustava, datoteke diska odabrane iz Datoteka bit će kopirane u predmemoriju Manic EMU-a.";
 "InsertDiscFailed" = "Umetanje diska nije uspjelo";
 "GenerateHomeMenu" = "Stvori početni izbornik";
 "SkinSoundEffects" = "Zvučni efekti kože";
-"FirstAnniversary" = "HVALA ŠTO STE OVDJE,\NAPISALI SMO VAM NEŠTO";
-"ApirlFoolsDayTitle" = "Ups, je li se Manic EMU pokvario?";
-"ApirlFoolsDayDetail" = "Ne brinite!\nSamo se šalimo—Sretan Prvi april!\n\nSve će se vratiti u normalu nakon što zatvorite ovo.";
 "JITType" = "Vrsta JIT-a";
 "JITTypeDesc" = "Standardni JIT nudi najbolje performanse, dok IR JIT nudi umjerene performanse.";
 "Pretendo" = "Pretendo mreža";
@@ -912,7 +833,6 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "HomeMenuDesc" = "Upotrijebite gumb ispod za otvaranje Početnog izbornika. Zatim idite na Postavke Nimbusa, prebacite se na Pretendo mrežu i otvorite Postavke za odabir \"ID Nintendo Network\" i prijavite se sa svojim Pretendo računom.\n\nNakon toga, sve igre pokrenute iz Početnog izbornika ili koje se izvode s jezgrom Azahar koristit će Pretendo mrežu.\n\nAko nedostaje unos Početnog izbornika, ova značajka će ga pokušati automatski ponovno stvoriti.";
 "OpenHomeMenu" = "Otvori Početni izbornik";
 "ChooseRegion" = "Odaberite regiju";
-"ChooseRegionDesc" = "Odaberite ispravnu regiju 3DS uređaja koji pokreće Artic Setup alat. Odabir pogrešne regije spriječit će uspješan prijenos podataka.";
 "HomeMenuNotFound" = "Početni izbornik nije pronađen. Najprije dovršite prijenos podataka Artic Basea.";
 "SystemUpdateAsk" = "Je li ažuriranje sustava uspješno dovršeno?";
 "SystemUpdateDesc" = "Ako ažuriranje sustava nije uspjelo zbog mrežnih problema, pokušajte ponovno prenijeti podatke. Inače, Početni izbornik 3DS-a možda neće ispravno raditi.";

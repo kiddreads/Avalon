@@ -10,16 +10,16 @@
 class RetroAchievementCountView: RoundAndBorderView {
     let countLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.caption(size: .m)
+        view.font = R.Font.Caption()
         view.textColor = .white
         return view
     }()
     
     init(count: Int) {
-        super.init(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMin, borderColor: .white.withAlphaComponent(0.1), borderWidth: 1)
+        super.init(roundCorner: .allCorners, radius: R.Size.CornerRadiusSmall, borderColor: .white.withAlphaComponent(0.1), borderWidth: 1)
         
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
+        enablePressEffect = true
+        
         
         backgroundColor = .black.withAlphaComponent(0.1)
         let icon = UIImageView(image: R.image.settings_retro())
@@ -28,7 +28,7 @@ class RetroAchievementCountView: RoundAndBorderView {
         icon.snp.makeConstraints { make in
             make.size.equalTo(CGSize(width: 17, height: 12))
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
         }
         
         addSubview(countLabel)
@@ -44,7 +44,7 @@ class RetroAchievementCountView: RoundAndBorderView {
             make.size.equalTo(CGSize(width: 8, height: 8))
             make.centerY.equalToSuperview()
             make.leading.equalTo(countLabel.snp.trailing).offset(2)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceTiny)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceExtraSmall)
         }
     }
     

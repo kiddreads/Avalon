@@ -10,7 +10,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
-
+import IQKeyboardManagerSwift
 import IceCream
 import CloudKit
 #if DEBUG
@@ -22,14 +22,14 @@ extension UIWindow {
     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
         if motion == .motionShake {
-            NotificationCenter.default.post(name: Constants.NotificationName.MotionShake, object: nil)
+            NotificationCenter.default.post(name: R.NotificationName.MotionShake, object: nil)
 #if DEBUG
             if FLEXManager.shared.isHidden {
                 FLEXManager.shared.showExplorer()
             } else {
                 FLEXManager.shared.hideExplorer()
             }
-            UIWindow.configure(ShowTouchesConfig(touchColor: Constants.Color.Main))
+            UIWindow.configure(ShowTouchesConfig(touchColor: R.Color.Main))
             UIWindow.showTouches()
 #endif
         }
@@ -38,7 +38,7 @@ extension UIWindow {
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     //支持的旋转方向
-    static var orientation: UIInterfaceOrientationMask = Constants.Config.DefaultOrientation {
+    static var orientation: UIInterfaceOrientationMask = R.Config.DefaultOrientation {
         didSet {
             UIViewController.attemptRotationToDeviceOrientation()
         }
@@ -58,8 +58,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //启动游戏手柄监听
         ExternalGameControllerManager.shared.startMonitoring()
-        //启动游戏手柄点击监听
-        UIControllerKit.shared.start()
+        
+        //Start listening for game controller or keyboard clicks.
+        FocusKeyObserver.shared.start()
+        FocusSystem.shared.moveHintTitle = R.string.localizable.focusHintMove()
+        FocusSystem.shared.confirmHintTitle = R.string.localizable.confirmTitle()
+        FocusSystem.shared.cancelHintTitle = R.string.localizable.focusHintBack()
         
         //启动清理
         //wifi缓存 粘贴版缓存 下载的缓存
@@ -69,12 +73,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PurchaseManager.setup()
         
         //监听会员状态变化
-        NotificationCenter.default.addObserver(forName: Constants.NotificationName.MembershipChange, object: nil, queue: .main) { _ in
+        NotificationCenter.default.addObserver(forName: R.NotificationName.MembershipChange, object: nil, queue: .main) { _ in
             //强制设置外置控制器是否只能玩玩家一
             ExternalGameControllerManager.shared.forceSetPlayerIndex = PurchaseManager.isMember ? 0 : nil
         }
         //注册静默通知 用于CloudKit的同步
         application.registerForRemoteNotifications()
+        
+        //Enable the imitation keyboard blocking issue
+        IQKeyboardManager.shared.isEnabled = true
         return true
     }
     

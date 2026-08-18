@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 extension NSAttributedString {
-    func highlightString(_ string: String?, font: UIFont? = nil, color: UIColor = Constants.Color.Main, caseSensitive: Bool = false) -> NSAttributedString {
+    func highlightString(_ string: String?, font: UIFont? = nil, color: UIColor = R.Color.Main, caseSensitive: Bool = false) -> NSAttributedString {
         if let string = string, self.string.contains(string, caseSensitive: caseSensitive) {
             let matt = NSMutableAttributedString(attributedString: self)
             var nsRanges: [NSRange] = []

@@ -14,13 +14,13 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
     static weak var applicationWindow: UIWindow?
     var window: UIWindow?
     static var launchGameID: String? = nil
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if let windowScene = scene as? UIWindowScene {
             ApplicationSceneDelegate.applicationScene = windowScene
             window = UIWindow(windowScene: windowScene)
             ApplicationSceneDelegate.applicationWindow = window
-            window?.tintColor = Constants.Color.Main
+            window?.tintColor = R.Color.Main
             //初始化数据库
             ResourcesKit.loadResources { isSuccess in
                 Database.setup {
@@ -39,20 +39,21 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     }
                     
                     //设置RetroAchievement
-                    CheevosBridge.setup(with: Constants.Config.AppVersion, requireCredentials: {
+                    CheevosBridge.setup(with: R.Config.AppVersion, requireCredentials: {
                         if let user = AchievementsUser.getUser() {
                             let cheevosUser = CheevosUser()
                             cheevosUser.userName = user.username
                             cheevosUser.password = user.password
                             cheevosUser.token = user.token
                             return cheevosUser
-                        }                        
+                        }
                         return nil
                     }, updateCredentials: { cheevosUser in
                         if let u = cheevosUser?.userName,
                            let p = cheevosUser?.password,
                            let t = cheevosUser?.token {
                             AchievementsUser.updateUser(username: u, password: p, token: t)
+                            
                         }
                     })
                 }
@@ -67,15 +68,15 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
             let url = URLContext.url
             Log.debug("openURLContexts 回调URL:\(url)")
             if let scheme = url.scheme {
-                if scheme == Constants.Strings.OAuthGoogleDriveCallbackHost ||
-                    scheme == Constants.Strings.OAuthCallbackHost ||
-                    scheme == Constants.Strings.OAuthOneDriveCallbackHost {
+                if scheme == R.Strings.OAuthGoogleDriveCallbackHost ||
+                    scheme == R.Strings.OAuthCallbackHost ||
+                    scheme == R.Strings.OAuthOneDriveCallbackHost {
                     Log.debug("OAuth鉴权回调")
                     OAuthSwift.handle(url: url)
-                } else if scheme == Constants.Strings.ManicScheme {
-                    if let host = url.host, host == Constants.Strings.MeloNXScheme {
+                } else if scheme == R.Strings.ManicScheme {
+                    if let host = url.host, host == R.Strings.MeloNXScheme {
                         EmulatorInteractionKit.processGames(type: .meloNX, callbackUrl: url)
-                    } else if let host = url.host, host == Constants.Strings.XeniOSScheme {
+                    } else if let host = url.host, host == R.Strings.XeniOSScheme {
                         EmulatorInteractionKit.processGames(type: .xeniOS,callbackUrl: url)
                     } else {
                         Self.launchGameID = url.lastPathComponent
@@ -110,7 +111,7 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     } else {
                         let _ = fileUrl.startAccessingSecurityScopedResource()
                     }
-                    let newFileUrl = URL(fileURLWithPath: Constants.Path.Temp.appendingPathComponent(fileUrl.lastPathComponent))
+                    let newFileUrl = URL(fileURLWithPath: R.Path.Temp.appendingPathComponent(fileUrl.lastPathComponent))
                     do {
                         try FileManager.safeCopyItem(at: fileUrl, to: newFileUrl, shouldReplace: true)
                         newFileUrls.append(newFileUrl)
@@ -161,16 +162,16 @@ extension ApplicationSceneDelegate: UIDropInteractionDelegate {
                         break
                     }
                 }
-
+                
                 if let supportIdentifier = supportIdentifier {
                     //找到了支持的类型
                     if let utType = UTType(supportIdentifier),
-                        let extens = utType.tags[.filenameExtension]?.first,
-                        let suggestedName = itemProvider.suggestedName {
+                       let extens = utType.tags[.filenameExtension]?.first,
+                       let suggestedName = itemProvider.suggestedName {
                         //获取到文件名
                         let fileName = suggestedName + "." + extens
                         //将内容先复制到缓存目录中
-                        let dstUrl = URL(fileURLWithPath: Constants.Path.DropWorkSpace.appendingPathComponent(fileName))
+                        let dstUrl = URL(fileURLWithPath: R.Path.DropWorkSpace.appendingPathComponent(fileName))
                         dispatchGroup.enter()
                         itemProvider.loadFileRepresentation(forTypeIdentifier: supportIdentifier) { url, error in
                             defer { dispatchGroup.leave() }

@@ -28,7 +28,7 @@ class TriggerItem: Object {
             case .flat:
                 UIFont.monospacedDigitSystemFont(ofSize: buttonSize.height*0.4, weight: .medium)
             case .custom:
-                Constants.Font.title()
+                R.Font.LargeTitle(emphasis: true)
             }
         }
         
@@ -54,9 +54,9 @@ class TriggerItem: Object {
         
         var cellHeight: CGFloat {
             if self == .custom {
-                440
+                427
             } else {
-                370
+                357
             }
         }
         

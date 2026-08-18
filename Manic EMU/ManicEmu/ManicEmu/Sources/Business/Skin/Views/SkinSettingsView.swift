@@ -8,149 +8,205 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
-
-
 import RealmSwift
-import BetterSegmentedControl
 import UniformTypeIdentifiers
 import ProHUD
 
 class SkinSettingsView: BaseView {
-    /// 充当导航条
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
-        return view
+    
+    private var initGames = [Game]()
+    private var currentGames: [Game] {
+        guard let firstGame = initGames.first,
+                firstGame.gameType == gameType else { return [] }
+        return initGames
+    }
+    private var gameType: GameType = {
+        System.allGameTypes.filter({ !$0.externalType }).first ?? .gba
     }()
     
-    private var contextMenuButton: ContextMenuButton = {
-        let view = ContextMenuButton()
-        return view
-    }()
-    
-    private lazy var navigationSymbolTitle: SymbolButton = {
-        let defaultTitle = (game?.gameType ?? gameType).localizedShortName
-        let view = SymbolButton(image: game == nil ? UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold)) : nil,
-                                title: defaultTitle,
-                                titleFont: Constants.Font.title(size: .s),
-                                edgeInsets: .zero,
-                                titlePosition: .left,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
-        view.layerCornerRadius = 0
-        view.backgroundColor = .clear
-        if isSettingForGame {
-            view.enableInteractive = false
-        } else {
-            view.addTapGesture { [weak self] gesture in
-                guard let self = self else { return }
-                let allGameTypes = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType }
-                let itemTitles = System.allCases.filter({ $0 != .ns && $0 != .xbox360 }).map { $0.gameType.localizedShortName }
-                var items: [UIAction] = []
-                let currentGameTypeName = self.gameType.localizedShortName
-                for (index, title) in itemTitles.enumerated() {
-                    items.append(UIAction(title: title,
-                                          image: currentGameTypeName == title ? UIImage(symbol: .checkmarkCircleFill) : nil,
-                                          handler: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.gameType = allGameTypes[index]
-                        self.navigationSymbolTitle.titleLabel.text = itemTitles[index]
-                        self.landscapeInitialSelectedIndex = nil
-                        self.portraitInitialSelectedIndex = nil
-                        self.updateDatas()
-                    }))
-                }
-                self.contextMenuButton.menu = UIMenu(children: items)
-                self.contextMenuButton.triggerTapGesture()
+    private var allSkins: Results<Skin>
+    private var currentSkins: [Skin] {
+        isPortraitSkinPage ? portraitSkins : landscapeSkins
+    }
+    private var selectedSkins: [Skin] {
+        if let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems {
+            return indexPathsForSelectedItems.map({ currentSkins[$0.row] })
+        }
+        return []
+    }
+    private var portraitSkins: [Skin] = []
+    private var landscapeSkins: [Skin] = []
+    private var currentUsingIndex: Int? {
+        get {
+            return isPortraitSkinPage ? portraitUsingIndex : landscapeUsingIndex
+        }
+        set {
+            if isPortraitSkinPage {
+                portraitUsingIndex = newValue
+            } else {
+                landscapeUsingIndex = newValue
             }
         }
-        return view
+    }
+    private var portraitUsingIndex: Int?
+    private var landscapeUsingIndex: Int?
+    private var isPortraitSkinPage: Bool {
+        segmentView.segment.index == 0
+    }
+    private let defaultTraits: ControllerSkin.Traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: R.Size.WindowSize)))
+    private var currentTraits: ControllerSkin.Traits {
+        isPortraitSkinPage ? portraitTraits : landscapeTraits
+    }
+    private lazy var portraitTraits: ControllerSkin.Traits = {
+        ControllerSkin.Traits(device: self.defaultTraits.device, displayType: self.defaultTraits.displayType, orientation: .portrait)
+    }()
+    private lazy var landscapeTraits: ControllerSkin.Traits = {
+        ControllerSkin.Traits(device: self.defaultTraits.device, displayType: self.defaultTraits.displayType, orientation: .landscape)
     }()
     
-    private lazy var navigationSubTitle: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .megaphone, font: Constants.Font.caption(), color: Constants.Color.LabelSecondary),
-                                title: game == nil ? R.string.localizable.skinNavigationSubTitleCommon() : R.string.localizable.skinNavigationSubTitleSpecifiedGame(game?.aliasName ?? game!.name),
-                                titleFont: Constants.Font.caption(),
-                                titleColor: Constants.Color.LabelSecondary,
-                                titleAlignment: .left,
-                                edgeInsets: .zero,
-                                titlePosition: .right,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
-        view.layerCornerRadius = 0
-        view.backgroundColor = .clear
-        view.enableInteractive = false
-        view.titleLabel.lineBreakMode = .byTruncatingMiddle
-        return view
-    }()
+    private var skinsUpdateToken: NotificationToken? = nil
     
-    private lazy var moreContextMenuButton: ContextMenuButton = {
-        var actions: [UIMenuElement] = []
-        actions.append((UIAction(title: R.string.localizable.howToFetch()) { _ in
-            //how to
-            topViewController()?.present(WebViewController(url: Constants.URLs.SkinUsageGuide), animated: true)
-        }))
-        actions.append((UIAction(title: R.string.localizable.skinResetForAll()) { [weak self] _ in
-            guard let self = self else { return }
-            //重置所有平台皮肤
-            self.resetSkin()
-        }))
-        actions.append(UIAction(title: R.string.localizable.skinResetForPlatform(self.gameType.localizedShortName)) { [weak self] _ in
-            guard let self = self else { return }
-            //重置当前平台皮肤
-            self.resetSkin(gameType: self.gameType)
-        })
-        actions.append(UIAction(title: R.string.localizable.cleanUnsupportSkins()) { [weak self] _ in
-            guard let self = self else { return }
-            //清理不可用皮肤
-            self.cleanUnsupportSkins()
-        })
-        actions.append((UIAction(title: R.string.localizable.skinDebug()) { [weak self] _ in
-            guard let self = self else { return }
-            UIView.makeToast(message: "Coming Soon...")
-        }))
-        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.skinRestDesc(), children: actions))
-        return view
-    }()
+    var didTapClose: (() -> Void)? = nil
     
-    private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            self?.moreContextMenuButton.triggerTapGesture()
+    var didHideSheet: (() -> Void)? = nil
+    
+    private let showClose: Bool
+    
+    private var isEditMode: Bool = false {
+        didSet {
+            isSelectedAll = false
+            collectionView.reloadData()
         }
-        return view
+    }
+    private var isSelectedAll: Bool {
+        get {
+            guard let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems else {
+                return false
+            }
+            if indexPathsForSelectedItems.count > 0 {
+                let selectedItemsSet = Set(indexPathsForSelectedItems.map({ $0.row }))
+                return currentSkins.enumerated().allSatisfy({
+                    return !$1.canDeleted || selectedItemsSet.contains($0)
+                })
+            }
+            return false
+        }
+        set {
+            if newValue {
+                selectAll()
+            } else {
+                deselectAll()
+            }
+            updateNavigation()
+            updateToolView()
+        }
+    }
+    
+    private var isMoreGamesSetting = false
+    
+    private var collectionViewContentInsetBottom: CGFloat {
+        R.Size.ContentInsetBottom + ((UIDevice.isPad && !showClose) ? R.Size.HomeTabBarSize.height + R.Size.ContentSpaceMedium : 0)
+    }
+    
+    private lazy var navigation: ASListPage.Navigation = {
+        let titleString = gameType.localizedShortName
+        let titleIcons: [ASText.Icon] = [.init(icon: .symbolImage(R.image.chevronUpdown_iconSymbols()),
+                                               position: UInt(titleString.count))]
+        let title = ASText(attributes: .init(text: titleString,
+                                             font: R.Font.Headline(emphasis: true)),
+                           textIcons: titleIcons)
+        
+        return ASListPage.Navigation(title: title,
+                                     detail: getNavigationDetail(),
+                                     tools: [
+                                        .symbolImage(R.image.selectedit_iconSymbols()),
+                                        .symbolImage(R.image.faq_iconSymbols()),
+                                        .symbolImage(R.image.ellipsis_iconSymbols()),
+                                     ],
+                                     edit: R.string.localizable.selectAll(),
+                                     enableClose: showClose)
     }()
     
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(navigation)
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            if self.showAsSheet {
+                self.hide()
+            }
             self.didTapClose?()
         }
+        view.didTapEdit = { [weak self] in
+            guard let self else { return }
+            self.isSelectedAll = !self.isSelectedAll
+        }
+        view.didTapCancel = { [weak self] in
+            guard let self else { return }
+            self.isEditMode = false
+        }
+        view.didTapTools = { [weak self] toolIndex in
+            guard let self else { return }
+            if toolIndex == 0 {
+                //edit mode
+                self.isEditMode = true
+            } else if toolIndex == 1 {
+                //how to fetch
+                ASWebView.show(url: R.URLs.SkinUsageGuide)
+            } else if toolIndex == 2 {
+                //more...
+                var cells = [ASListPage.Cell]()
+                cells.append(.iconTitleChevronCell(icon: .symbolImage(R.image.refresh_iconSymbols()),
+                                                   title: R.string.localizable.skinResetForAll()))
+                cells.append(.iconTitleChevronCell(icon: .symbolImage(R.image.refresh_iconSymbols()),
+                                                   title: R.string.localizable.skinResetForPlatform(self.gameType.localizedShortName)))
+                cells.append(.iconTitleChevronCell(icon: .symbolImage(R.image.clean_iconSymbols()),
+                                                   title: R.string.localizable.cleanUnsupportSkins()))
+                //                cells.append(.iconTitleChevronCell(icon: .symbolImage(R.image.skin_iconSymbols()),
+                //                                                   title: R.string.localizable.skinDebug()))
+                ChevronSheetView.show(cellOptions: cells, completion: { [weak self] optionIndex in
+                    guard let self else { return }
+                    if optionIndex == 0 {
+                        self.resetSkin()
+                    } else if optionIndex == 1 {
+                        self.resetSkin(gameType: self.gameType)
+                    } else if optionIndex == 2 {
+                        self.cleanUnsupportSkins()
+                    } else if optionIndex == 3 {
+                        UIView.makeToast(message: "Coming Soon...")
+                    }
+                })
+            }
+        }
+        view.didTapTitle = { [weak self] in
+            guard let self else { return }
+            let allGameTypes = System.allGameTypes.filter({ !$0.externalType })
+            OptionsSheetView.show(icon: .symbolImage(R.image.controller_iconSymbols()),
+                                  title: R.string.localizable.changeGameType(),
+                                  options: allGameTypes.map({ $0.localizedShortName }),
+                                  selectedIndex: allGameTypes.firstIndex(of: self.gameType),
+                                  groupTogether: true,
+                                  completion: { index in
+                if let index {
+                    self.gameType = allGameTypes[index]
+                    self.isEditMode = false
+                    self.landscapeUsingIndex = nil
+                    self.portraitUsingIndex = nil
+                    self.updateDatas()
+                }
+            })
+        }
         return view
     }()
     
-    private lazy var segmentView: BetterSegmentedControl = {
-        let titles = [R.string.localizable.skinSegmentPortraitTitle(), R.string.localizable.skinSegmentLandscapeTitle()]
-        let segments = LabelSegment.segments(withTitles: titles,
-                                             normalFont: Constants.Font.body(),
-                                             normalTextColor: Constants.Color.LabelSecondary,
-                                            selectedTextColor: Constants.Color.LabelPrimary)
-        let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.SegmentBackground),
-            .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.SegmentHighlight),
-            .cornerRadius(16)
-        ]
-        let view = BetterSegmentedControl(frame: .zero,
-                                          segments: segments,
-                                          options: options)
-        
-        view.on(.valueChanged) { [weak self] sender, forEvent in
-            guard let self = self, let index = (sender as? BetterSegmentedControl)?.index else { return }
-            UIDevice.generateHaptic()
-            self.isPortraitSkinPage = index == 0
-            self.reloadDataAndSelectSkin()
+    private lazy var segmentView: ASSegmentView = {
+        let view = ASSegmentView(.textSegment(titles: [
+            R.string.localizable.skinSegmentPortraitTitle(),
+            R.string.localizable.skinSegmentLandscapeTitle()
+        ]))
+        view.didSelectIndex = { [weak self] _ in
+            guard let self = self else { return }
+            self.isSelectedAll = false
+            self.collectionView.reloadData()
         }
         return view
     }()
@@ -161,74 +217,214 @@ class SkinSettingsView: BaseView {
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: SkinCollectionViewCell.self)
         view.register(cellWithClass: AddSkinCollectionViewCell.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                      withClass: ASListSupplementaryReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
+        view.isFocusable = true
         view.allowsSelection = true
-        view.allowsMultipleSelection = false
-        view.contentInset = UIEdgeInsets(top: 150, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
-        return view
-    }()
-
-    ///游戏
-    private var game: Game? = nil
-    ///游戏类型
-    private var gameType: GameType = {
-        if let platformOrder = Constants.Config.PlatformOrder, let shortName = platformOrder.first, let type = GameType(shortName: shortName) {
-            if type == .ns || type == .xbox360 {
-                if platformOrder.count > 1, let type = GameType(shortName: platformOrder[1]) {
-                    return type
+        view.allowsMultipleSelection = true
+        view.contentInset = .insets(bottom: collectionViewContentInsetBottom)
+        view.addLongPressGesture(handler: { [weak self] gesture in
+            if gesture.state == .began {
+                guard let self,
+                      !self.isEditMode,
+                      let indexPath = self.collectionView.indexPathForItem(at: gesture.location(in: self.collectionView)),
+                      indexPath.row != self.currentSkins.count else { return }
+                self.isEditMode = true
+                if self.collectionView(self.collectionView, shouldSelectItemAt: indexPath) {
+                    self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                    self.updateNavigation()
+                    self.updateToolView()
                 } else {
-                    return ._3ds
+                    self.isEditMode = false
                 }
             }
-            return type
+        }).delegate = self
+        return view
+    }()
+    
+    private lazy var toolView: ASListToolView = {
+        let view = ASListToolView(.defaultTool(otherIcons: [.symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red])]))
+        view.didTapToolButtons = { [weak self] action in
+            guard let self else { return }
+            if action.isTapMain {
+                //more...
+                if self.selectedSkins.count == 1 {
+                    let selectedSkin = self.selectedSkins.first!
+                    
+                    ChevronSheetView.show(cellOptions: [
+                        .iconTitleChevronCell(icon: .symbolImage(R.image.controller_iconSymbols()),
+                                              title: R.string.localizable.moreGamesSetting()),
+                        .iconTitleDetailCheckCell(icon: .symbolImage(R.image.category_iconSymbols()),
+                                                  title: R.string.localizable.platformDefaultSkin(self.gameType.localizedShortName),
+                                                  isSelected: self.isGameTypeSetingSkin(selectedSkin))
+                    ], completion: { [weak self] index in
+                        guard let self else { return }
+                        if index == 0 {
+                            //set up for more games
+                            let realm = Database.realm
+                            let games = realm.objects(Game.self).where({ $0.gameType == self.gameType })
+                            guard games.count > 0 else {
+                                UIView.makeToast(message: R.string.localizable.transferPakNoGames())
+                                return
+                            }
+                            
+                            let prefference = Prefference.defalut.getGamePrefference(kind: .skin)
+                            
+                            var cells = [[ASListPage.Cell]]()
+                            
+                            for game in games {
+                                var isSelected = false
+                                if let prefference,
+                                   let key = Prefference.StoreKey.orientationKey(gameId: game.id, isLandScape: !self.isPortraitSkinPage).key,
+                                   let skinId = prefference[key],
+                                   skinId == selectedSkin.id {
+                                    isSelected = true
+                                }
+                                
+                                cells.append([.iconTitleDetailRadioCell(icon: game.gameCoverIcon,
+                                                                        iconSize: R.Size.ButtonMedium,
+                                                                        title: game.displayName,
+                                                                        isSelected: isSelected)])
+                                
+                            }
+                            
+                            var sheetStyle: ASSheet.Style = .simpleList(icon: .symbolImage(R.image.controller_iconSymbols()),
+                                                                        title: R.string.localizable.moreGamesSetting(),
+                                                                        detail: .smallText(R.string.localizable.moreGamesSettingDesc(selectedSkin.name),
+                                                                                           numberOfLines: 0),
+                                                                        options: cells)
+                            
+                            ASSheetView.show(.init(style: sheetStyle), action: { [weak self] action, updation in
+                                guard let self else { return .dismiss() }
+                                if let normalItemValue = action.listPageValue?.normalItemValue {
+                                    
+                                    let index = normalItemValue.indexPath.section
+                                    let game = games[index]
+                                    let storeKey = Prefference.StoreKey.orientationKey(gameId: game.id, isLandScape: !self.isPortraitSkinPage)
+                                    let isSelected: Bool
+                                    if let _ = Prefference.defalut.getPrefference(kind: .skin,
+                                                                                  storeKey: storeKey)?.skinValue?.skinId {
+                                        //unselected
+                                        Prefference.defalut.deletePrefference(kind: .skin,
+                                                                              storeKey: storeKey)
+                                        isSelected = false
+                                    } else {
+                                        //selected
+                                        Prefference.defalut.storePrefference(kind: .skin,
+                                                                             storeKey: storeKey,
+                                                                             storeValue: selectedSkin.id)
+                                        isSelected = true
+                                    }
+                                    if case let .simpleList(icon, title, detail, options, cancelEnable) = sheetStyle {
+                                        var cells = options
+                                        cells[index][0] = normalItemValue.cellData.updateNormalRadio(isSelected: isSelected)
+                                        sheetStyle = .simpleList(icon: icon, title: title, detail: detail, options: cells, cancelEnable: cancelEnable)
+                                        updation?(sheetStyle)
+                                    }
+                                    self.isMoreGamesSetting = true
+                                    return .none
+                                }
+                                return .dismiss(completion: { [weak self] in
+                                    guard let self else { return }
+                                    if self.isMoreGamesSetting {
+                                        self.isEditMode = false
+                                        self.currentUsingIndex = nil
+                                        self.updateDatas()
+                                        self.isMoreGamesSetting = false
+                                    }
+                                })
+                            })
+                            
+                            
+                        } else if index == 1 {
+                            //set gameType Skin
+                            let storeKey = Prefference.StoreKey.orientationKey(gameType: self.gameType, isLandScape: !self.isPortraitSkinPage)
+                            if self.isGameTypeSetingSkin(selectedSkin) {
+                                Prefference.defalut.deletePrefference(kind: .skin,
+                                                                      storeKey: storeKey)
+                            } else {
+                                Prefference.defalut.storePrefference(kind: .skin,
+                                                                     storeKey: storeKey,
+                                                                     storeValue: selectedSkin.id)
+                            }
+                            self.isEditMode = false
+                            self.currentUsingIndex = nil
+                            self.updateDatas()
+                        }
+                    })
+                }
+                
+            } else if let index = action.tapOthersValue {
+                if self.selectedSkins.count == 1,
+                   let flexSkin = self.selectedSkins.first,
+                   flexSkin.isFlexSkin {
+                    //flex edit
+                    let vc = FlexSkinSettingViewController(skin: flexSkin,
+                                                           traits: self.currentTraits,
+                                                           images: [],
+                                                           gameId: self.currentGames.count == 1 ? self.currentGames.first!.id : nil,
+                                                           gameType: self.gameType)
+                    vc.didCompletion = { [weak self] isModified in
+                        if isModified {
+                            flexSkin.controllerSkin = ControllerSkin(fileURL: flexSkin.fileURL)
+                            self?.collectionView.reloadData()
+                        }
+                    }
+                    topViewController()?.present(vc, animated: true)
+                    
+                } else {
+                    //delete
+                    guard self.selectedSkins.count > 0 else { return }
+                    
+                    UIView.makeAlert(title: R.string.localizable.skinDelete(),
+                                     detail: R.string.localizable.deleteSkinAlertDetail(),
+                                     confirmTitle: R.string.localizable.confirmDelte(),
+                                     confirmAction: { [weak self] in
+                        guard let self else { return }
+                        self.currentUsingIndex = nil
+                        Skin.change { realm in
+                            self.selectedSkins.forEach({
+                                $0.skinData?.deleteAndClean(realm: realm)
+                                if Settings.defalut.iCloudSyncEnable {
+                                    $0.isDeleted = true
+                                } else {
+                                    realm.delete($0)
+                                }
+                            })
+                        }
+                        self.deselectAll()
+                        self.updateToolView()
+                        self.updateNavigation()
+                    })
+                }
+            }
         }
-        return System.allCases.first?.gameType ?? .gba
+        view.isHidden = true
+        return view
     }()
-    ///是否是单独为某一个游戏设置
-    private var isSettingForGame: Bool { game != nil }
-    ///数据库中存储的用户皮肤
-    private var allSkins: Results<Skin>
-    //cell的数据源
-    private var portraitSkins: [ControllerSkin] = []
-    private var landscapeSkins: [ControllerSkin] = []
-    ///竖屏默认选择序号 用于初始化cell
-    private var portraitInitialSelectedIndex: Int?
-    ///横屏默认选择序号 用于初始化cell
-    private var landscapeInitialSelectedIndex: Int?
-    ///是否是竖屏页面
-    private var isPortraitSkinPage: Bool = true
-    ///默认特性
-    private let defaultTraits: ControllerSkin.Traits = ControllerSkin.Traits.defaults(for: UIWindow.applicationWindow ?? UIWindow(frame: .init(origin: .zero, size: Constants.Size.WindowSize)))
-    ///竖屏特性
-    private lazy var portraitTraits: ControllerSkin.Traits = {
-        ControllerSkin.Traits(device: self.defaultTraits.device, displayType: self.defaultTraits.displayType, orientation: .portrait)
-    }()
-    ///横屏特性
-    private lazy var landscapeTraits: ControllerSkin.Traits = {
-        ControllerSkin.Traits(device: self.defaultTraits.device, displayType: self.defaultTraits.displayType, orientation: .landscape)
-    }()
-    ///监听数据库skin的变化
-    private var skinsUpdateToken: NotificationToken? = nil
-    ///点击关闭按钮回调
-    var didTapClose: (()->Void)? = nil
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
-    /// 初始化控制器 如果game和gameType都不传入 则使用默认规则展示 默认优先展示GBA的skin 两个都传入只读取game
-    /// - Parameters:
-    ///   - game: 游戏 如果传入一个确定的游戏 则只为这个游戏设置皮肤 不能切换或设置别的平台的skin
-    ///   - gameType: 传入游戏类型 则有限展示次类型的skin 可以切换其他平台
-    init(game: Game? = nil, gameType: GameType? = nil, showClose: Bool = true) {
-        //查询数据库
+    required init?(parameters: Any...) {
         let realm = Database.realm
-        allSkins = realm.objects(Skin.self).where({ !$0.isDeleted })
+        self.allSkins = realm.objects(Skin.self).where({ !$0.isDeleted })
+        self.showClose = parameters.compactMap({ $0 as? Bool }).first ?? true
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
-        //监听数据的变化
+        
+        let gameType = parameters.first(where: { $0 is GameType }) as? GameType
+        var games = parameters.compactMap({ $0 as? Game })
+        games += (parameters.compactMap({ $0 as? [Game] }).first ?? [])
+        if let gameType {
+            self.initGames = games.filter({ $0.gameType == gameType })
+            self.gameType = gameType
+        } else if let firstGame = games.first {
+            self.initGames = games.filter({ $0.gameType == firstGame.gameType })
+            self.gameType = firstGame.gameType
+        } else {
+            self.initGames = []
+        }
+        
         skinsUpdateToken = allSkins.observe { [weak self] changes in
             guard let self = self else { return }
             if case .update(_, let deletions, let insertions, _) = changes {
@@ -240,88 +436,50 @@ class SkinSettingsView: BaseView {
             }
         }
         
-        if let game = game {
-            self.game = game
-            self.gameType = game.gameType
-        } else if let gameType = gameType {
-            self.gameType = gameType
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            if showClose {
+                make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            } else {
+                make.top.equalToSuperview().offset(R.Size.ContentInsetTop)
+            }
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
+        
+        addSubview(segmentView)
+        segmentView.snp.makeConstraints { make in
+            make.top.equalTo(navigationView.snp.bottom).offset(R.Size.ContentSpaceSmall)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.height.equalTo(R.Size.ItemHeightExtraSmall)
         }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(segmentView.snp.bottom).offset(R.Size.ContentSpaceSmall)
         }
         
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(130)
+        addSubview(toolView)
+        toolView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+            make.bottom.equalToSuperview().inset(collectionViewContentInsetBottom)
+            make.height.equalTo(R.Size.ButtonLarge)
         }
         
-        navigationBlurView.addSubview(navigationSymbolTitle)
-        navigationSymbolTitle.snp.makeConstraints { make in
-            make.leading.equalTo(Constants.Size.ContentSpaceMax)
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-        }
-        
-        if !isSettingForGame {
-            navigationBlurView.insertSubview(contextMenuButton, belowSubview: navigationSymbolTitle)
-            contextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(navigationSymbolTitle)
-            }
-        }
-        
-        navigationBlurView.addSubview(navigationSubTitle)
-        navigationSubTitle.imageView.setContentHuggingPriority(.required, for: .horizontal)
-        navigationSubTitle.imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-        navigationSubTitle.titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        navigationSubTitle.titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        navigationSubTitle.snp.makeConstraints { make in
-            make.leading.equalTo(navigationSymbolTitle)
-            make.top.equalTo(navigationSymbolTitle.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny/2)
-            make.trailing.equalTo(-Constants.Size.ContentSpaceMax)
-        }
-        
-        navigationBlurView.addSubview(segmentView)
-        segmentView.snp.makeConstraints { make in
-            make.top.equalTo(navigationSubTitle.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-            make.leading.equalTo(Constants.Size.ContentSpaceMid)
-            make.trailing.equalTo(-Constants.Size.ContentSpaceMid)
-        }
-        //如果是横屏状态则切换到横屏皮肤
         if UIDevice.isLandscape {
-            segmentView.setIndex(1, animated: false, shouldSendValueChangedEvent: true)
-        }
-        
-        if showClose {
-            navigationBlurView.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-                make.top.equalToSuperview().offset(10)
-                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            }
-        }
-        
-        navigationBlurView.addSubview(moreContextMenuButton)
-        moreContextMenuButton.snp.makeConstraints { make in
-            if showClose {
-                make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
-                make.centerY.equalTo(closeButton)
-            } else {
-                make.leading.equalTo(navigationSymbolTitle.snp.trailing).offset(Constants.Size.ContentSpaceMid)
-                make.centerY.equalTo(navigationSymbolTitle)
-            }
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.edges.equalTo(moreContextMenuButton)
+            segmentView.segment.index = 1
         }
         
         updateDatas()
+    }
+    
+    convenience init(gameType: GameType? = nil, games: [Game] = [], showClose: Bool = true) {
+        if let gameType {
+            self.init(parameters: gameType, games, showClose)!
+        } else {
+            self.init(parameters: games, showClose)!
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -331,23 +489,29 @@ class SkinSettingsView: BaseView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout  { [weak self] sectionIndex, env in
             guard let self = self else { return nil }
-
-            let column = self.isPortraitSkinPage ? 2.0 : 1.0
+            
+            let column: CGFloat
+            if UIDevice.isPhone || self.showClose {
+                column = self.isPortraitSkinPage ? 2.0 : 1.0
+            } else {
+                column = self.isPortraitSkinPage ? 3.0 : 2.0
+            }
+            
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/column), heightDimension: .fractionalHeight(1)))
             
-            let screenRation = Constants.Size.WindowSize.maxDimension/Constants.Size.WindowSize.minDimension
-            let itemWidth = (env.container.contentSize.width - Constants.Size.ContentSpaceMid*4 - ((column-1)*Constants.Size.ContentSpaceMid))/column
+            let screenRation = R.Size.WindowSize.maxDimension/R.Size.WindowSize.minDimension
+            let itemWidth = (env.container.contentSize.width - R.Size.ContentSpaceMedium*4 - ((column-1)*R.Size.ContentSpaceMedium))/column
             let itemHeight = self.isPortraitSkinPage ? itemWidth*screenRation : itemWidth/screenRation
             
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemHeight)), subitem: item, count: Int(column))
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.Size.ContentSpaceMid, bottom: 0, trailing: Constants.Size.ContentSpaceMid)
-            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(Constants.Size.ContentSpaceMid)
+            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: R.Size.ContentSpaceMedium, bottom: 0, trailing: R.Size.ContentSpaceMedium)
+            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(R.Size.ContentSpaceMedium)
             
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = Constants.Size.ContentSpaceMid
-
+            section.interGroupSpacing = R.Size.ContentSpaceMedium
+            
             section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: String(describing: SkinDecorationCollectionReusableView.self))]
-            section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMid, leading: Constants.Size.ContentSpaceMid, bottom: Constants.Size.ContentSpaceMid, trailing: Constants.Size.ContentSpaceMid)
+            section.contentInsets = NSDirectionalEdgeInsets(top: R.Size.ContentSpaceMedium, leading: R.Size.ContentSpaceMedium, bottom: R.Size.ContentSpaceMedium, trailing: R.Size.ContentSpaceMedium)
             
             return section
         }
@@ -358,8 +522,8 @@ class SkinSettingsView: BaseView {
     class SkinDecorationCollectionReusableView: UICollectionReusableView {
         var backgroundView: UIView = {
             let view = UIView()
-            view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.BackgroundPrimary
+            view.layerCornerRadius = R.Size.CornerRadiusLarge
+            view.backgroundColor = R.Color.BackgroundSecondary
             return view
         }()
         
@@ -369,7 +533,7 @@ class SkinSettingsView: BaseView {
             addSubview(backgroundView)
             backgroundView.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             }
         }
         
@@ -414,72 +578,95 @@ class SkinSettingsView: BaseView {
         }
         
         for skin in skins {
-            if var controllerSkin = ControllerSkin(fileURL: skin.fileURL) {
+            if var controllerSkin = skin.controllerSkin {
                 if skin.skinType == .playcase {
                     controllerSkin.isPlayCase = true
+                    skin.controllerSkin = controllerSkin
                 }
                 if controllerSkin.supports(portraitTraits) {
-                    portraitSkins.append(controllerSkin)
+                    portraitSkins.append(skin)
                 }
                 if controllerSkin.supports(landscapeTraits) {
-                    landscapeSkins.append(controllerSkin)
+                    landscapeSkins.append(skin)
                 }
             }
         }
         
-        //内部函数 寻找skin的index
-        func getIndex(for skin: Skin, in controllerSkins: [ControllerSkin]) -> Int? {
-            for (index, controllerSkin) in controllerSkins.enumerated() {
-                if controllerSkin.fileURL == skin.fileURL {
-                    return index
+        func getUsingSkinIndex(gameId: String? = nil, isLandScape: Bool) -> Int? {
+            let storeKey: Prefference.StoreKey
+            if let gameId {
+                storeKey = .orientationKey(gameId: gameId, isLandScape: isLandScape)
+            } else {
+                storeKey = .orientationKey(gameType: gameType, isLandScape: isLandScape)
+            }
+            let result = Prefference.defalut.getPrefference(kind: .skin,
+                                                            storeKey: storeKey,
+                                                            bestEfforts: true)
+            guard let skinId = result?.skinValue?.skinId else { return nil }
+            return (isLandScape ? landscapeSkins : portraitSkins).firstIndex(where: { $0.id == skinId })
+        }
+        
+        if let firstGame = currentGames.first {
+            if currentGames.count == 1 {
+                portraitUsingIndex = getUsingSkinIndex(gameId: firstGame.id, isLandScape: false)
+                landscapeUsingIndex = getUsingSkinIndex(gameId: firstGame.id, isLandScape: true)
+            } else {
+                if let firstGameUsingSkinIndex = getUsingSkinIndex(gameId: firstGame.id, isLandScape: false) {
+                    if currentGames.allSatisfy({ firstGameUsingSkinIndex == getUsingSkinIndex(gameId: $0.id, isLandScape: false) }) {
+                        portraitUsingIndex = firstGameUsingSkinIndex
+                    }
+                }
+                
+                if let firstGameUsingSkinIndex = getUsingSkinIndex(gameId: firstGame.id, isLandScape: true) {
+                    if currentGames.allSatisfy({ firstGameUsingSkinIndex == getUsingSkinIndex(gameId: $0.id, isLandScape: true) }) {
+                        landscapeUsingIndex = firstGameUsingSkinIndex
+                    }
                 }
             }
-            return nil
+        } else {
+            portraitUsingIndex = getUsingSkinIndex(isLandScape: false)
+            landscapeUsingIndex = getUsingSkinIndex(isLandScape: true)
         }
         
-        //设置默认选中
-        if isSettingForGame, let game = game {
-            //如果是为游戏设置的皮肤 则判断一下游戏中有没有配置过皮肤
-            if let storedSkin = game.portraitSkin {
-                portraitInitialSelectedIndex = getIndex(for: storedSkin, in: portraitSkins)
-            }
-            if let storedSkin = game.landscapeSkin {
-                landscapeInitialSelectedIndex = getIndex(for: storedSkin, in: landscapeSkins)
-            }
+        if portraitUsingIndex == nil, currentGames.count <= 1 {
+            portraitUsingIndex = 0
         }
         
-        //去总设置中去寻找有没有配置过皮肤 如果都没有配置过皮肤则默认选中自带默认的皮肤
-        if portraitInitialSelectedIndex == nil {
-            if let storedSkin = SkinConfig.preferredPortraitSkin(gameType: gameType) {
-                portraitInitialSelectedIndex = getIndex(for: storedSkin, in: portraitSkins) ?? 0
-            } else {
-                portraitInitialSelectedIndex = 0
-            }
+        if landscapeUsingIndex == nil, currentGames.count <= 1 {
+            landscapeUsingIndex = 0
         }
         
-        if landscapeInitialSelectedIndex == nil {
-            if let storedSkin = SkinConfig.preferredLandscapeSkin(gameType: gameType) {
-                landscapeInitialSelectedIndex = getIndex(for: storedSkin, in: landscapeSkins) ?? 0
-            } else {
-                landscapeInitialSelectedIndex = 0
-            }
-        }
-        
-        self.reloadDataAndSelectSkin()
+        collectionView.reloadData()
     }
     
-    private func reloadDataAndSelectSkin() {
-        collectionView.reloadData { [weak self] in
-            guard let self = self else { return }
-            if isPortraitSkinPage, let portraitInitialSelectedIndex = portraitInitialSelectedIndex {
-                //默认为竖屏选中已经选中的选项
-                self.collectionView.selectItem(at: IndexPath(row: portraitInitialSelectedIndex, section: 0), animated: true, scrollPosition: .top)
-            }
-            if !isPortraitSkinPage, let landscapeInitialSelectedIndex = landscapeInitialSelectedIndex {
-                //默认为横屏选中已经选中的选项
-                self.collectionView.selectItem(at: IndexPath(row: landscapeInitialSelectedIndex, section: 0), animated: true, scrollPosition: .top)
-            }
+    private func updateToolView() {
+        func hideToolView() {
+            toolView.isHidden = true
+            collectionView.contentInset.bottom = collectionViewContentInsetBottom
         }
+        
+        guard selectedSkins.count > 0 else {
+            hideToolView()
+            return
+        }
+        
+        if selectedSkins.count > 0 {
+            toolView.isHidden = false
+            if selectedSkins.count == 1, selectedSkins.first!.isFlexSkin {
+                //flex skin
+                toolView.tool = .defaultTool(otherIcons: [
+                    .symbolImage(R.image.flexFill_iconSymbols())
+                ])
+            } else {
+                toolView.tool = .defaultTool(otherIcons: [
+                    .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red])
+                ], hideMainIcon: selectedSkins.count > 1)
+            }
+            collectionView.contentInset.bottom = collectionViewContentInsetBottom + R.Size.ButtonLarge + R.Size.ContentSpaceSmall
+        } else {
+            hideToolView()
+        }
+        
     }
     
     private func cleanUnsupportSkins() {
@@ -521,150 +708,74 @@ class SkinSettingsView: BaseView {
         })
     }
     
-    private func showPlayCasePromo(showDontShow: Bool = true, hideCompletion: (()->Void)? = nil) {
-        Sheet { sheet in
-            sheet.contentMaskView.alpha = 0
-            sheet.config.windowEdgeInset = 0
-            sheet.onTappedBackground { sheet in
-                sheet.pop()
-            }
-            sheet.onViewDidDisappear { _ in
-                hideCompletion?()
-            }
-            sheet.config.backgroundViewMask { mask in
-                mask.backgroundColor = .black.withAlphaComponent(0.2)
-            }
-            
-            let view = UIView()
-            let grabber = UIImageView(image: R.image.grabber_icon())
-            grabber.isUserInteractionEnabled = true
-            grabber.contentMode = .center
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        sheet.pop()
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
-                    })
-                }
-            }
-            view.addSubview(grabber)
-            grabber.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ContentSpaceTiny*3)
-            }
-            
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = .clear
-            containerView.makeBlur()
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.top.equalTo(grabber.snp.bottom)
-                make.leading.bottom.trailing.equalToSuperview()
-            }
-            
-            let logoView = IconView()
-            logoView.image = R.image.playcase_logo()
-            containerView.addSubview(logoView)
-            logoView.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(30)
-            }
-            
-            let detailLabel = UILabel()
-            detailLabel.numberOfLines = 0
-            let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny
-            style.alignment = .left
-            detailLabel.attributedText = NSAttributedString(string: R.string.localizable.playCasePromo(), attributes: [.font: Constants.Font.body(size: .m), .foregroundColor: Constants.Color.LabelPrimary, .paragraphStyle: style])
-            containerView.addSubview(detailLabel)
-            detailLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(logoView.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            }
-            
-            let button: SymbolButton = {
-                let view = SymbolButton(image: nil, title: R.string.localizable.learnPlayCase(), titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
-                view.enableRoundCorner = true
-                view.backgroundColor = Constants.Color.Red
-                view.addTapGesture { [weak sheet] gesture in
-                    guard let sheet else { return }
-                    sheet.pop()
-                    UIApplication.shared.open(Constants.URLs.PlayCasePromo)
-                }
-                return view
-            }()
-            
-            containerView.addSubview(button)
-            button.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-                make.top.equalTo(detailLabel.snp.bottom).offset(Constants.Size.ItemHeightMin)
-                if !showDontShow {
-                    make.bottom.equalToSuperview().inset(Constants.Size.ContentInsetBottom + Constants.Size.ContentSpaceMin)
-                }
-            }
-            
-            if showDontShow {
-                let dontshowAgain: UIButton = {
-                    let view = UIButton(type: .custom)
-                    let att = NSAttributedString(string: R.string.localizable.dontshowAgain(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
-                    view.onTap { [weak sheet] in
-                        guard let sheet else { return }
-                        UserDefaults.standard.set(true, forKey: Constants.DefaultKey.HasShowPlayCasePromo)
-                        sheet.pop()
-                    }
-                    view.setAttributedTitle(att.underlined, for: .normal)
-                    return view
-                }()
-                
-                containerView.addSubview(dontshowAgain)
-                dontshowAgain.snp.makeConstraints { make in
-                    make.centerX.equalTo(button)
-                    make.top.equalTo(button.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
-                    make.bottom.equalToSuperview().inset(Constants.Size.ContentInsetBottom + Constants.Size.ContentSpaceMin)
-                }
-            }
-            
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                if let bottomInset = PlayViewController.menuInsets?.bottom, bottomInset > 0, PlayViewController.isGaming {
-                    make.leading.top.trailing.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(bottomInset)
-                } else {
-                    make.edges.equalToSuperview()
-                }
-            }
+    private func updateNavigation() {
+        navigation.state = isEditMode ? .edit : .normal
+        navigation.edit = isSelectedAll ? R.string.localizable.deSelectAll() : R.string.localizable.selectAll()
+        let titleString = gameType.localizedShortName
+        let titleIcons: [ASText.Icon] = [.init(icon: .symbolImage(R.image.chevronUpdown_iconSymbols()),
+                                               position: UInt(titleString.count))]
+        let title = ASText(attributes: .init(text: titleString,
+                                             font: R.Font.Headline(emphasis: true)),
+                           textIcons: titleIcons)
+        navigation.title = title
+        navigation.detail = getNavigationDetail()
+        navigationView.navigation = navigation
+    }
+    
+    private func getNavigationDetail() -> ASText {
+        if currentGames.count > 0 {
+            let firstGame = currentGames.first!
+            let name = firstGame.displayName + (currentGames.count > 1 ? "..." : "")
+            var text: ASText = .extraSmallTextStartingWithIcon(icon: .symbol(.megaphone),
+                                                               text: R.string.localizable.skinNavigationSubTitleSpecifiedGame(" \(name) "))
+            text.attributes?.lineBreakMode = .byTruncatingMiddle
+            return text
         }
+        return .extraSmallTextStartingWithIcon(text: R.string.localizable.skinSupport())
+    }
+    
+    private func isGameTypeSetingSkin( _ skin: Skin) -> Bool {
+        if let result = Prefference.defalut.getPrefference(kind: .skin,
+                                                           storeKey: .orientationKey(gameType: gameType,
+                                                                              isLandScape: !isPortraitSkinPage)),
+           let currentGameTypeSkinId = result.skinValue?.skinId {
+            return currentGameTypeSkinId == skin.id
+        }
+        return false
     }
 }
 
 extension SkinSettingsView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        (isPortraitSkinPage ? portraitSkins.count : landscapeSkins.count) + 1
+        currentSkins.count + (isEditMode ? 0 : 1)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let skins = (isPortraitSkinPage ? portraitSkins : landscapeSkins)
-        if indexPath.row == skins.count {
+        if indexPath.row == currentSkins.count {
             return collectionView.dequeueReusableCell(withClass: AddSkinCollectionViewCell.self, for: indexPath)
         } else {
             let cell = collectionView.dequeueReusableCell(withClass: SkinCollectionViewCell.self, for: indexPath)
-            //设置数据
-            let skin = skins[indexPath.row]
-            let traits = isPortraitSkinPage ? portraitTraits : landscapeTraits
-            cell.setData(controllerSkin: skin, traits: traits, subscriptTitle: skin.gameType == gameType ? nil : skin.gameType.localizedShortName)
-            cell.previewButton.addTapGesture { gesture in
-                topViewController()?.present(SkinPreviewViewController(skin: skin, traits: traits), animated: true)
+            let skin = currentSkins[indexPath.row]
+            let traits = currentTraits
+            var isUsing: Bool = false
+            if let currentUsingIndex, currentUsingIndex == indexPath.row {
+                isUsing = true
             }
-            cell.playcaseButton.addTapGesture { [weak self] gesture in
-                guard let self else { return }
-                self.showPlayCasePromo(showDontShow: false)
+            cell.setData(controllerSkin: skin.controllerSkin,
+                         traits: traits,
+                         subscriptTitle: skin.gameType == gameType ? nil : skin.gameType.localizedShortName,
+                         isEditMode: isEditMode,
+                         isUsing: isUsing,
+                         isEditable: skin.isEditable)
+            cell.previewButton.addTapGesture { gesture in
+                if let controllerSkin = skin.controllerSkin {
+                    topViewController()?.present(SkinPreviewViewController(skin: controllerSkin,
+                                                                           traits: traits),
+                                                 animated: true)
+                }
+            }
+            cell.playcaseButton.addTapGesture { _ in
+                PlayCasePromoView.show(showDontShow: false)
             }
             return cell
         }
@@ -672,204 +783,165 @@ extension SkinSettingsView: UICollectionViewDataSource {
 }
 
 extension SkinSettingsView: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
-        if let indexPaths = collectionView.indexPathsForSelectedItems, indexPaths.contains(where: { $0 == indexPath }) {
-            //不允许取消选择 只允许更换选择
-            return false
+    func selectAll() {
+        if currentSkins.contains(where: { $0.skinType == .import || $0.skinType == .playcase }) {
+            currentSkins.enumerated().forEach({
+                if $1.canDeleted {
+                    collectionView.selectItem(at: IndexPath(row: $0, section: 0), animated: false, scrollPosition: [])
+                } else {
+                    collectionView.deselectItem(at: IndexPath(row: $0, section: 0), animated: false)
+                }
+            })
+        } else {
+            currentSkins.enumerated().forEach({
+                if $1.skinType == .buildIn {
+                    collectionView.selectItem(at: IndexPath(row: $0, section: 0), animated: false, scrollPosition: [])
+                } else {
+                    collectionView.deselectItem(at: IndexPath(row: $0, section: 0), animated: false)
+                }
+            })
         }
-        return true
+    }
+    
+    func deselectAll() {
+        collectionView.indexPathsForSelectedItems?.forEach({
+            collectionView.deselectItem(at: $0, animated: false)
+        })
+    }
+    
+    func deselectBuildIn() {
+        collectionView.indexPathsForSelectedItems?.forEach({
+            if currentSkins[$0.row].skinType == .buildIn {
+                collectionView.deselectItem(at: $0, animated: false)
+            }
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        let skins = (isPortraitSkinPage ? portraitSkins : landscapeSkins)
-        if indexPath.row == skins.count {
-            //新增皮肤cell
-            UIView.makeAlert(title: R.string.localizable.skinAddTitle(), detail: R.string.localizable.newSkinDesc(), cancelTitle: R.string.localizable.visitSite("DELTASTYLES"), confirmTitle: R.string.localizable.openFile(), confirmAutoHide: PlayViewController.isGaming ? false : true, cancelAction: { [weak self] in
-                guard let self else { return }
-                //打开网页
-                if let vc = SkinSettingsView.skinSettingsViewSheet {
-                    vc.present(WebViewController(url: Constants.URLs.DeltaStyles(gameType: self.gameType)), animated: true)
-                } else {
-                    topViewController(appController: true)?.present(WebViewController(url: Constants.URLs.DeltaStyles(gameType: self.gameType)), animated: true)
+        if isEditMode {
+            let skin = currentSkins[indexPath.row]
+            if !skin.isEditable {
+                UIView.makeToast(message: R.string.localizable.defaultSkinCannotEdit())
+                return false
+            } else if skin.skinType == .buildIn {
+                deselectAll()
+            } else  {
+                deselectBuildIn()
+            }
+            return true
+        } else {
+            if indexPath.row == currentSkins.count {
+                UIView.makeAlert(title: R.string.localizable.skinAddTitle(), detail: R.string.localizable.newSkinDesc(), cancelTitle: R.string.localizable.visitSite("DELTASTYLES"), confirmTitle: R.string.localizable.openFile(), cancelAction: { [weak self] in
+                    guard let self else { return }
+                    ASWebView.show(url: R.URLs.DeltaStyles(gameType: self.gameType))
+                }, confirmAction: {
+                    FilesImporter.shared.presentImportController(supportedTypes: UTType.skinTypes)
+                })
+            } else {
+                if let currentUsingIndex, currentUsingIndex == indexPath.row {
+                    return false
                 }
-            }, confirmAction: {
-                //打开文件管理器
-                FilesImporter.shared.presentImportController(supportedTypes: UTType.skinTypes, appControllerPresent: PlayViewController.isGaming ? false : true)
-            })
+                
+                if currentGames.count > 0 {
+                    currentGames.forEach({
+                        Prefference.defalut.storePrefference(kind: .skin,
+                                                             storeKey: .orientationKey(gameId: $0.id, isLandScape: !isPortraitSkinPage),
+                                                             storeValue: currentSkins[indexPath.row].id)
+                    })
+                    
+                    if currentGames.count == 1 {
+                        NotificationCenter.default.post(name: R.NotificationName.SkinChange, object: currentGames.first!.id)
+                    }
+                    
+                } else {
+                    Prefference.defalut.storePrefference(kind: .skin,
+                                                         storeKey: .orientationKey(gameType: gameType, isLandScape: !isPortraitSkinPage),
+                                                         storeValue: currentSkins[indexPath.row].id)
+                }
+                
+                let oldUsingIndex = currentUsingIndex
+                currentUsingIndex = indexPath.row
+                UIView.performWithoutAnimation {
+                    var reloadItems = [indexPath]
+                    if let oldUsingIndex {
+                        reloadItems.append(IndexPath(row: oldUsingIndex, section: 0))
+                    }
+                    collectionView.reloadItems(at: reloadItems)
+                }
+#if !SIDE_LOAD
+                if currentSkins[indexPath.row].skinType == .playcase,
+                   !PlayViewController.isGaming,
+                   !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowPlayCasePromo) {
+                    PlayCasePromoView.show()
+                }
+#endif
+            }
             return false
         }
-        
-        //更新选中index
-        if isPortraitSkinPage {
-            portraitInitialSelectedIndex = indexPath.row
-        } else {
-            landscapeInitialSelectedIndex = indexPath.row
-        }
-        
-        //如果目前已经选中该cell 则不再进行数据库更新
-        if let indexPaths = collectionView.indexPathsForSelectedItems, !indexPaths.contains(where: { $0 == indexPath }) {
-            if let skin = allSkins.first(where: { $0.fileURL == skins[indexPath.row].fileURL }) {
-                if let game = game {
-                    Game.change { realm in
-                        if isPortraitSkinPage {
-                            game.portraitSkin = skin
-                        } else {
-                            game.landscapeSkin = skin
-                        }
-                    }
-                } else {
-                    SkinConfig.setDefaultSkin(skin, isLandscape: !isPortraitSkinPage)
-                }
-            }
-        }
-        
-#if !SIDE_LOAD
-        let controllerSkin = isPortraitSkinPage ? portraitSkins[indexPath.row] : landscapeSkins[indexPath.row]
-        if !PlayViewController.isGaming,
-            controllerSkin.isPlayCase,
-           !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowPlayCasePromo) {
-            self.showPlayCasePromo()
-        }
-#endif
-        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard isEditMode else { return }
+        updateNavigation()
+        updateToolView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard isEditMode else { return }
+        updateNavigation()
+        updateToolView()
     }
     
     private func resetSkin(gameType: GameType? = nil) {
-        SkinConfig.resetDefaultSkin(gameType: gameType)
-        let realm = Database.realm
-        let games: Results<Game>
         if let gameType {
-            games = realm.objects(Game.self).where({ !$0.isDeleted && ($0.portraitSkin != nil || $0.landscapeSkin != nil) && $0.gameType == gameType })
-        } else {
-            games = realm.objects(Game.self).where({ !$0.isDeleted && ($0.portraitSkin != nil || $0.landscapeSkin != nil) })
-        }
-        Game.change { realm in
-            games.forEach { game in
-                game.landscapeSkin = nil
-                game.portraitSkin = nil
-            }
-        }
-        landscapeInitialSelectedIndex = 0
-        portraitInitialSelectedIndex = 0
-        reloadDataAndSelectSkin()
-    }
-    
-    //长按弹出可交互菜单 (iOS 15兼容)
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return contextMenuConfiguration(for: collectionView, at: indexPath)
-    }
-    
-    //长按弹出可交互菜单 (iOS 16+)
-    @available(iOS 16.0, *)
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let indexPath = indexPaths.first else { return nil }
-        return contextMenuConfiguration(for: collectionView, at: indexPath)
-    }
-    
-    //统一的上下文菜单配置逻辑
-    private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
-        let skins = (isPortraitSkinPage ? portraitSkins : landscapeSkins)
-        if indexPath.row == skins.count {
-            //新增皮肤cell 不允许弹
-            return nil
-        }
-        
-        if indexPath.row == 0 {
-            //自带的skin 不允许删除
-            UIView.makeToast(message: R.string.localizable.defaultSkinCannotEdit())
-            return nil
-        }
-        
-        if let skin = allSkins.first(where: { $0.fileURL == skins[indexPath.row].fileURL }) {
-            
-            if FileManager.default.fileExists(atPath: Constants.Path.Resource.appendingPathComponent(skin.fileName)) {
-                //自带的skin 不允许删除
-                UIView.makeToast(message: R.string.localizable.defaultSkinCannotEdit())
-                return nil
-            }
-            
-            return UIContextMenuConfiguration(actionProvider:  { [weak self] _ in
-                UIMenu(children: [UIAction(title: R.string.localizable.skinDelete(), image: UIImage(systemSymbol: .trash), attributes: .destructive, handler: { _ in
-                    UIView.makeAlert(title: R.string.localizable.skinDelete(),
-                                     detail: R.string.localizable.deleteSkinAlertDetail(),
-                                     confirmTitle: R.string.localizable.confirmDelte(),
-                                     confirmAction: { [weak self] in
-                        Skin.change { realm in
-                            skin.skinData?.deleteAndClean(realm: realm)
-                            if Settings.defalut.iCloudSyncEnable {
-                                skin.isDeleted = true
-                            } else {
-                                realm.delete(skin)
-                            }
-                        }
-                        if let self = self {
-                            if self.isPortraitSkinPage {
-                                self.portraitInitialSelectedIndex = nil
-                            } else {
-                                self.landscapeInitialSelectedIndex = nil
-                            }
-                        }
-                    })
-                })])
+            Prefference.defalut.deletePrefference(kind: .skin,
+                                                  storeKey: .orientationKey(gameType: gameType,
+                                                                     isLandScape: !isPortraitSkinPage))
+            let realm = Database.realm
+            let games = realm.objects(Game.self).where({ $0.gameType == gameType })
+            let storeKeys = games.map({ Prefference.StoreKey.orientationKey(gameId: $0.id,
+                                                                     isLandScape: !self.isPortraitSkinPage) })
+            storeKeys.forEach({
+                Prefference.defalut.deletePrefference(kind: .skin, storeKey: $0)
             })
+            
+        } else {
+            Prefference.defalut.deletePrefference(kind: .skin,
+                                                  level: .game,
+                                                  extra: Prefference.StoreKey.orientationExtraKey(isLandScape: true))
+            Prefference.defalut.deletePrefference(kind: .skin,
+                                                  level: .game,
+                                                  extra: Prefference.StoreKey.orientationExtraKey(isLandScape: false))
         }
-
-        return nil
+        
+        landscapeUsingIndex = 0
+        portraitUsingIndex = 0
+        collectionView.reloadData()
     }
 }
 
-extension SkinSettingsView {
-    static var skinSettingsViewSheet: UIViewController? {
-        return Sheet.find(identifier: String(describing: SkinSettingsView.self)).first
-    }
-    
-    static var isShow: Bool {
-        Sheet.find(identifier: String(describing: SkinSettingsView.self)).count > 0 ? true : false
-    }
-    
-    static func show(game: Game, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
-        Sheet.lazyPush(identifier: String(describing: SkinSettingsView.self)) { sheet in
-            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
-            
-            let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.Background
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-                if let maxHeight = sheet.config.cardMaxHeight {
-                    make.height.equalTo(maxHeight)
-                }
-            }
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        // 达到移除的速度
-                        sheet.pop()
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
-                    })
-                }
-            }
-            
-            let listView = SkinSettingsView(game: game)
-            listView.didTapClose = { [weak sheet] in
-                sheet?.pop()
-                didTapClose?()
-            }
-            containerView.addSubview(listView)
-            listView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+extension SkinSettingsView: ShowableView {
+    static func show(gameType: GameType? = nil,
+                     games: [Game] = [],
+                     hideCompletion: (() -> Void)? = nil) {
+        if let gameType {
+            Self.show(parameters: gameType, games)
+        } else {
+            Self.show(parameters: games)
         }
+    }
+    
+    func didHide() {
+        if showAsSheet {
+            didHideSheet?()
+        }
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension SkinSettingsView: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        //When long-press is triggered, disable the cell's tap response.
+        return false
     }
 }

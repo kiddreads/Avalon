@@ -7,28 +7,28 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class SettingsMembershipGiftView: UIView {
+class SettingsMembershipGiftView: BaseView {
     
     init(symbol: SFSymbol, title: String) {
         super.init(frame: .zero)
-        backgroundColor = Constants.Color.Background.forceStyle(.dark)
+        backgroundColor = R.Color.BackgroundPrimary.forceStyle(.dark)
         
-        let gift = GradientImageView(image: UIImage(symbol: symbol))
+        let gift = GradientImageView(image: UIImage(symbol: symbol).applySymbolConfig(size: 16))
         addSubview(gift)
         gift.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall)
             make.centerY.equalToSuperview()
         }
         
         let label = GradientLabelView()
-        label.font = Constants.Font.caption(size: .l, weight: .semibold)
+        label.font = R.Font.Subheadline(emphasis: true)
         label.text = title
-        label.textColor = Constants.Color.LabelPrimary
+        label.textColor = R.Color.LabelPrimary
         addSubview(label)
         label.snp.makeConstraints { make in
-            make.leading.equalTo(gift.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(gift.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
         }
     }
     

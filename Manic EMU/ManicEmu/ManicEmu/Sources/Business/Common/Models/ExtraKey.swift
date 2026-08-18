@@ -47,7 +47,6 @@ enum ExtraKey: String {
     case tvType
     case leftDifficulty
     case rightDifficulty
-    case ignoreShaderConfig
     case pspConfig
     case screenScaling
     case j2meScreenSize
@@ -66,4 +65,13 @@ enum ExtraKey: String {
     case globalCoreConfigs
     case manufacturerOrder
     case emulationAccuracy
+    case gamehackingBookMark
+    case steamGridDBAPIKey
+    case landscapeListStyle
+    case landscapeShaderToy
+    case gameMetadata
+    case hideGameRating
+    case rewind
+    case nickname
+    case joinDate
 }

@@ -7,20 +7,20 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class GameSavePurchaseGuideView: UIView {
+class GameSavePurchaseGuideView: BaseView {
     init(hideSeperator: Bool) {
         super.init(frame: .zero)
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
+        enablePressEffect = true
+        
         addTapGesture { gesture in
             topViewController()?.present(PurchaseViewController(), animated: true)
         }
         
-        let seperator = SparkleSeperatorView(color: Constants.Color.BackgroundSecondary)
+        let seperator = SparkleSeperatorView(color: R.Color.BackgroundTertiary)
         if !hideSeperator {
             addSubview(seperator)
             seperator.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceLarge)
                 make.height.equalTo(16)
                 make.top.equalToSuperview().offset(40)
             }
@@ -31,7 +31,7 @@ class GameSavePurchaseGuideView: UIView {
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             if hideSeperator {
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceLarge)
             } else {
                 make.top.equalTo(seperator.snp.bottom).offset(40)
             }
@@ -39,28 +39,28 @@ class GameSavePurchaseGuideView: UIView {
         }
 
         let becomeLabel = UILabel()
-        becomeLabel.textColor = Constants.Color.LabelPrimary
-        becomeLabel.font = Constants.Font.title(size: .s, weight: .semibold)
+        becomeLabel.textColor = R.Color.LabelPrimary
+        becomeLabel.font = R.Font.Headline(emphasis: true)
         becomeLabel.text = R.string.localizable.gameSaveGuideBecomTitle()
         containerView.addSubview(becomeLabel)
         becomeLabel.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
         }
         
-        let appNameImage = UIImageView(image: UIImage(.dm, light: (R.image.app_title_light()?.scaled(toSize: CGSize(width: 138, height: 11.3)))!, dark: (R.image.app_title()?.scaled(toSize: CGSize(width: 138, height: 11.3)))!))
+        let appNameImage = UIImageView(image: R.image.app_title())
         containerView.addSubview(appNameImage)
         appNameImage.snp.makeConstraints { make in
-            make.leading.equalTo(becomeLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(becomeLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.centerY.equalTo(becomeLabel)
         }
         
         let memberLabel = UILabel()
-        memberLabel.textColor = Constants.Color.LabelPrimary
-        memberLabel.font = Constants.Font.title(size: .s, weight: .semibold)
+        memberLabel.textColor = R.Color.LabelPrimary
+        memberLabel.font = R.Font.Headline(emphasis: true)
         memberLabel.text = R.string.localizable.gameSaveGuideMemberTitle()
         containerView.addSubview(memberLabel)
         memberLabel.snp.makeConstraints { make in
-            make.leading.equalTo(appNameImage.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(appNameImage.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.trailing.equalToSuperview()
             make.centerY.equalTo(becomeLabel)
         }
@@ -68,24 +68,24 @@ class GameSavePurchaseGuideView: UIView {
         let detalLabel = UILabel()
         detalLabel.textAlignment = .center
         detalLabel.numberOfLines = 0
-        detalLabel.textColor = Constants.Color.LabelSecondary
-        detalLabel.font = Constants.Font.caption(size: .l)
+        detalLabel.textColor = R.Color.LabelSecondary
+        detalLabel.font = R.Font.Caption()
         detalLabel.text = R.string.localizable.gameSaveGuideDesc()
         addSubview(detalLabel)
         detalLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-            make.top.equalTo(containerView.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+            make.top.equalTo(containerView.snp.bottom).offset(R.Size.ContentSpaceTiny)
         }
         
-        let button = SymbolButton(image: nil, title: R.string.localizable.goToUpgrade(), titleFont: Constants.Font.caption(size: .l, weight: .semibold), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), titlePosition: .left, imageAndTitlePadding: 0)
+        let button = SymbolButton(image: nil, title: R.string.localizable.goToUpgrade(), titleFont: R.Font.Caption(emphasis: true), titleColor: R.Color.LabelPrimary.forceStyle(.dark), titlePosition: .left, imageAndTitlePadding: 0)
         button.enableRoundCorner = true
         let buttonBackground = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 30)))
-        buttonBackground.addGradient(colors: Constants.Color.Gradient, direction: .leftToRight)
+        buttonBackground.addGradient(colors: R.Color.Gradient, direction: .leftToRight)
         button.insertSubview(buttonBackground, at: 0)
         addSubview(button)
         button.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(detalLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(detalLabel.snp.bottom).offset(R.Size.ContentSpaceMedium)
             make.size.equalTo(CGSize(width: 100, height: 30))
             make.bottom.equalToSuperview()
         }

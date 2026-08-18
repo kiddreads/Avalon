@@ -19,6 +19,7 @@ extension GameType
     case a
     case b
     case c
+    case r1
     case up
     case down
     case left
@@ -36,6 +37,7 @@ extension GameType
         if stringValue == "a" { self = .a }
         else if stringValue == "b" { self = .b }
         else if stringValue == "c" { self = .c }
+        else if stringValue == "r1" { self = .r1 }
         else if stringValue == "menu" { self = .menu }
         else if stringValue == "up" { self = .up }
         else if stringValue == "down" { self = .down }
@@ -83,7 +85,7 @@ class PMEmulatorBridge : EmulatorBridgeBase {
         if let gameInput = PMGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
             LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
         }
@@ -93,6 +95,7 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         if gameInput == .a { return .A }
         else if gameInput == .b { return .B }
         else if gameInput == .c { return .R1 }
+        else if gameInput == .r1 { return .R1 }
         else if gameInput == .up { return .up }
         else if gameInput == .down { return .down }
         else if gameInput == .left { return .left }

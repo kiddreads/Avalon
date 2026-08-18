@@ -8,6 +8,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 class RetroAchievementListView: BaseView {
+    private let backgroundImageView: UIImageView = {
+        let view = UIImageView(image: R.image.retro_bg())
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
     private lazy var collectionView: BlankSlateCollectionView = {
         let view = BlankSlateCollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
@@ -15,31 +21,56 @@ class RetroAchievementListView: BaseView {
         view.register(cellWithClass: RetroAchievementsListCell.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
-        var bottomInset = Constants.Size.ContentInsetBottom
-        if let prefferdBottomInset = self.bottomInset, bottomInset < prefferdBottomInset {
-            bottomInset = prefferdBottomInset
-        }
-        view.contentInset = UIEdgeInsets(top: 90, left: 0, bottom: bottomInset, right: 0)
-        let blankView = BlankSlateEmptyView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 70, color: Constants.Color.LabelSecondary), title: R.string.localizable.achievementsNotSupport(game.aliasName ?? game.name))
+        view.contentInset = .insets(top: 90,
+                                    bottom: R.Size.ContentInsetBottom)
+        let blankView = BlankSlateEmptyView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 70, color: R.Color.LabelSecondary), title: R.string.localizable.achievementsNotSupport(game.displayName))
         blankView.label.isHidden = true
         view.blankSlateView = blankView
         
         return view
     }()
     
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(.defaultNavigation())
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            if self.showAsSheet {
+                self.hide()
+            }
+        }
+        return view
+    }()
+    
     private var game: Game
     private var cheevosGame: CheevosGame? = nil
-    private var bottomInset: CGFloat? = nil
+    private var quitGamingNotification: Any? = nil
+    private var didClose: (()->Void)? = nil
     
-    init(game: Game, bottomInset: CGFloat? = nil) {
+    required init?(parameters: Any...) {
+        guard let game = parameters.compactMap({ $0 as? Game }).first else {
+            return nil
+        }
         self.game = game
         super.init(frame: .zero)
-        self.bottomInset = bottomInset
-        backgroundColor = .clear
+        
+        addSubview(backgroundImageView)
+        backgroundImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.lessThanOrEqualToSuperview()
+            make.trailing.greaterThanOrEqualToSuperview()
+            make.centerX.equalToSuperview()
+        }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(R.Size.ItemHeightMedium)
         }
         
         UIView.makeLoading()
@@ -52,7 +83,7 @@ class RetroAchievementListView: BaseView {
                 blankView.label.isHidden = false
                 if result == GetGameInfoResult.noLoaded {
                     //游戏不支持RetroAchievements
-                    blankView.label.text = R.string.localizable.achievementsNotSupport(self.game.aliasName ?? self.game.name)
+                    blankView.label.text = R.string.localizable.achievementsNotSupport(self.game.displayName)
                 } else if result == GetGameInfoResult.noLogin {
                     //登录失效
                     blankView.label.text = R.string.localizable.achievementsLoginFail()
@@ -76,7 +107,7 @@ class RetroAchievementListView: BaseView {
                                              confirmTitle: R.string.localizable.confirmTitle(),
                                              confirmAction: {
                                 self.game.enableAchievements = false
-                                NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
+                                NotificationCenter.default.post(name: R.NotificationName.QuitGaming, object: nil)
                             })
                         } else {
                             self.game.enableAchievements = false
@@ -89,6 +120,12 @@ class RetroAchievementListView: BaseView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        if let quitGamingNotification {
+            NotificationCenter.default.removeObserver(quitGamingNotification)
+        }
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -126,7 +163,7 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                     self.collectionView.reloadData()
                 }, confirmAction: {
                     self.game.enableAchievements = value
-                    NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
+                    NotificationCenter.default.post(name: R.NotificationName.QuitGaming, object: nil)
                 })
             } else {
                 self.game.enableAchievements = value
@@ -146,7 +183,7 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                             self.collectionView.reloadData()
                         }, confirmAction: {
                             self.game.enableHarcore = value
-                            NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
+                            NotificationCenter.default.post(name: R.NotificationName.QuitGaming, object: nil)
                         })
                     } else {
                         //未启用RetroAchievements
@@ -156,7 +193,7 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                             self.collectionView.reloadData()
                         }, confirmAction: {
                             self.game.enableAchievements = value
-                            NotificationCenter.default.post(name: Constants.NotificationName.QuitGaming, object: nil)
+                            NotificationCenter.default.post(name: R.NotificationName.QuitGaming, object: nil)
                         })
                     }
                 } else {
@@ -167,7 +204,7 @@ extension RetroAchievementListView: UICollectionViewDataSource {
                         self.collectionView.reloadData()
                     } ,confirmAction: {
                         self.game.enableHarcore = false
-                        NotificationCenter.default.post(name: Constants.NotificationName.TurnOffHardcore, object: nil)
+                        NotificationCenter.default.post(name: R.NotificationName.TurnOffHardcore, object: nil)
                     })
                 }
             } else {
@@ -183,9 +220,27 @@ extension RetroAchievementListView: UICollectionViewDataSource {
             self.game.updateExtra(key: ExtraKey.alwaysShowProgress.rawValue, value: value)
             if !value {
                 //关闭了进度常驻 则需要发送通知
-                NotificationCenter.default.post(name: Constants.NotificationName.TurnOffAlwaysShowProgress, object: nil)
+                NotificationCenter.default.post(name: R.NotificationName.TurnOffAlwaysShowProgress, object: nil)
             }
         }
         return cell
+    }
+}
+
+extension RetroAchievementListView: ShowableView {
+    static func show(game: Game, didClose: (() -> Void)? = nil) {
+        let view = Self.show(parameters: game)
+        view?.didClose = didClose
+    }
+    
+    func dataForShow(_ defaultData: ASSheet) -> ASSheet {
+        var sheet = defaultData
+        sheet.enableBackgroundDecoration = false
+        sheet.fullScreenForLandscape = true
+        return sheet
+    }
+    
+    func didHide() {
+        didClose?()
     }
 }

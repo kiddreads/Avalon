@@ -8,43 +8,98 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ChromaColorPicker
-import IQKeyboardManagerSwift
 
-class ColorPickerView: UIView {
-    private let colorPicker = ChromaColorPicker()
+class ColorPickerView: BaseView {
+    private static var colorPickerSize: CGSize {
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            return CGSize(150)
+        }
+        return CGSize(290)
+    }
+    private let colorPicker = ChromaColorPicker(frame: CGRect(origin: .zero, size: ColorPickerView.colorPickerSize))
     private let brightnessSlider = ChromaBrightnessSlider()
     private let colorView = ThemeColorCollectionViewCell.ColorView()
     private var textField: UITextField = {
         let view = UITextField()
-        view.textColor = Constants.Color.LabelPrimary
-        view.font = Constants.Font.body(size: .l)
+        view.textColor = R.Color.LabelPrimary
+        view.font = R.Font.Body()
         view.clearButtonMode = .whileEditing
-        view.attributedPlaceholder = NSAttributedString(string: Constants.Color.Main.hexString, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
+        view.attributedPlaceholder = NSAttributedString(string: R.Color.Main.hexString, attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelSecondary])
         return view
     }()
-    private var addButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.title()), enableGlass: true)
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.enableRoundCorner = true
+    private var addButton: ASButtonView = {
+        let view = ASButtonView(.iconOnly(icon: .symbol(.plus),
+                                          iconSize: CGSize(48),
+                                          background: R.Color.BackgroundSecondary,
+                                          insets: .init(inset: R.Size.ContentSpaceExtraSmall)))
         return view
     }()
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
-        return view
-    }()
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
+    
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(.defaultNavigation())
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            self.hide()
         }
         return view
     }()
-    private lazy var saveButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.saveTitle(), enableGlass: true) { [weak self] in
-            guard let self = self else { return }
+    
+    private lazy var colorPickerContainerView: UIView = {
+       let view = UIView()
+        
+        view.addSubview(colorPicker)
+        colorPicker.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.size.equalTo(ColorPickerView.colorPickerSize)
+        }
+        
+        view.addSubview(brightnessSlider)
+        brightnessSlider.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(70)
+            make.height.equalTo(28)
+            make.top.equalTo(colorPicker.snp.bottom).offset(R.Size.ContentSpaceLarge)
+        }
+        
+        view.addSubview(colorView)
+        colorView.snp.makeConstraints { make in
+            make.size.equalTo(48)
+            make.leading.equalTo(brightnessSlider)
+            make.top.equalTo(brightnessSlider.snp.bottom).offset(R.Size.ContentSpaceLarge)
+        }
+        
+        let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium)
+        textFieldContainer.backgroundColor = R.Color.InputBox
+        view.addSubview(textFieldContainer)
+        textFieldContainer.snp.makeConstraints { make in
+            make.centerY.equalTo(colorView)
+            make.leading.equalTo(colorView.snp.trailing).offset(R.Size.ContentSpaceLarge)
+            make.height.equalTo(R.Size.ItemHeightSmall)
+        }
+        
+        textFieldContainer.addSubview(textField)
+        textField.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+        }
+        
+        view.addSubview(addButton)
+        addButton.snp.makeConstraints { make in
+            make.centerY.equalTo(colorView)
+            make.leading.equalTo(textFieldContainer.snp.trailing).offset(R.Size.ContentSpaceLarge)
+            make.trailing.equalTo(brightnessSlider)
+        }
+        
+        return view
+    }()
+    
+    private lazy var saveButton: ASButtonView = {
+        let view = ASButtonView(.large(title: R.string.localizable.saveTitle(),
+                                       titleColor: R.Color.LabelPrimary.forceStyle(.dark),
+                                       titleAlignment: .center,
+                                       background: R.Color.Main))
+        view.didTapButton = { [weak self] in
+            guard let self else { return }
             if var themeColor = self.themeColor {
                 //编辑
                 themeColor.colors = self.colorPicker.handles.map({ $0.color.hexString })
@@ -54,68 +109,44 @@ class ColorPickerView: UIView {
                 let themeColor = ThemeColor(timestamp: Date.now.timeIntervalSince1970ms, colors: self.colorPicker.handles.map({ $0.color.hexString }), isSelect: false, system: false)
                 self.didSaveAction?(themeColor)
             }
-            self.didTapClose?()
+            self.hide()
         }
         return view
     }()
-
     
-    ///点击关闭按钮回调
-    var didTapClose: (()->Void)? = nil
     //点击保存回调
     var didSaveAction: ((ThemeColor)->Void)? = nil
     
     private var themeColor: ThemeColor? = nil
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-        Task {
-            await MainActor.run {
-                IQKeyboardManager.shared.isEnabled = false
-            }
-        }
-    }
-    
-    init(color: ThemeColor? = nil) {
+    required init?(parameters: Any...) {
         super.init(frame: .zero)
         
-        themeColor = color
+        themeColor = parameters.compactMap({ $0 as? ThemeColor }).first
         
-        Log.debug("\(String(describing: Self.self)) init")
         colorPicker.delegate = self
-        colorPicker.borderColor = Constants.Color.BackgroundPrimary
-        addSubview(colorPicker)
-        colorPicker.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-Constants.Size.ItemHeightHuge)
-            make.size.equalTo(320)
-        }
+        colorPicker.borderColor = R.Color.BackgroundSecondary
         
-        brightnessSlider.handle.borderColor = Constants.Color.BackgroundPrimary
-        brightnessSlider.borderColor = Constants.Color.BackgroundPrimary
-        brightnessSlider.trackColor = Constants.Color.Main
+        
+        brightnessSlider.handle.borderColor = R.Color.BackgroundSecondary
+        brightnessSlider.borderColor = R.Color.BackgroundSecondary
+        brightnessSlider.trackColor = R.Color.Main
         brightnessSlider.handle.borderWidth = 2.0
-        addSubview(brightnessSlider)
-        brightnessSlider.snp.makeConstraints { make in
-            make.width.equalTo(colorPicker).multipliedBy(0.9)
-            make.height.equalTo(brightnessSlider.snp.width).multipliedBy(0.1)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(colorPicker.snp.bottom).offset(Constants.Size.ItemHeightTiny)
-        }
+        
         
         //添加两个颜色
         if let colors = themeColor?.colors.compactMap({ UIColor(hexString: $0) }), colors.count > 0 {
             for (index, color) in colors.enumerated() {
                 if index == 0 {
                     let homeHandle = colorPicker.addHandle(at: color)
-                    homeHandle.accessoryView = UIImageView(image: .init(symbol: .house, font: Constants.Font.title(), color: .white))
+                    homeHandle.accessoryView = UIImageView(image: .init(symbol: .house, font: R.Font.LargeTitle(emphasis: true), color: .white))
                 } else {
                     colorPicker.addHandle(at: color)
                 }
             }
         } else {
-            let homeHandle = colorPicker.addHandle(at: Constants.Color.Main)
-            homeHandle.accessoryView = UIImageView(image: .init(symbol: .house, font: Constants.Font.title(), color: .white))
+            let homeHandle = colorPicker.addHandle(at: R.Color.Main)
+            homeHandle.accessoryView = UIImageView(image: .init(symbol: .house, font: R.Font.LargeTitle(emphasis: true), color: .white))
             colorPicker.addHandle(at: UIColor.random)
         }
         
@@ -123,27 +154,8 @@ class ColorPickerView: UIView {
         
         colorView.selectView.isHidden = true
         colorView.animatedGradientView.setColors(colorPicker.handles.map({ $0.color }))
-        addSubview(colorView)
-        colorView.snp.makeConstraints { make in
-            make.size.equalTo(48)
-            make.leading.equalTo(brightnessSlider)
-            make.top.equalTo(brightnessSlider.snp.bottom).offset(Constants.Size.ItemHeightTiny)
-        }
+
         
-        let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        textFieldContainer.backgroundColor = Constants.Color.InputBackground
-        addSubview(textFieldContainer)
-        textFieldContainer.snp.makeConstraints { make in
-            make.centerY.equalTo(colorView)
-            make.leading.equalTo(colorView.snp.trailing).offset(Constants.Size.ContentSpaceMax)
-            make.height.equalTo(Constants.Size.ItemHeightMin)
-        }
-        
-        textFieldContainer.addSubview(textField)
-        textField.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-        }
         textField.onReturnKeyPress { [weak self] in
             guard let self = self else { return }
             self.textField.resignFirstResponder()
@@ -155,16 +167,9 @@ class ColorPickerView: UIView {
             }
         }
         
-        addSubview(addButton)
-        addButton.snp.makeConstraints { make in
-            make.size.equalTo(48)
-            make.centerY.equalTo(colorView)
-            make.leading.equalTo(textFieldContainer.snp.trailing).offset(Constants.Size.ContentSpaceMax)
-            make.trailing.equalTo(brightnessSlider)
-        }
-        addButton.addTapGesture { [weak self] gesture in
+        addButton.didTapButton = { [weak self] in
             guard let self = self else { return }
-            guard self.colorPicker.handles.count < Constants.Numbers.ThemeColorMaxCount else {
+            guard self.colorPicker.handles.count < R.Numbers.ThemeColorMaxCount else {
                 UIView.makeToast(message: R.string.localizable.themeColorLimitToast())
                 return
             }
@@ -172,28 +177,31 @@ class ColorPickerView: UIView {
             self.colorView.animatedGradientView.setColors(self.colorPicker.handles.map({ $0.color }))
         }
         
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(R.Size.NavigationHeight)
         }
         
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        addSubview(colorPickerContainerView)
+        colorPickerContainerView.snp.makeConstraints { make in
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(R.Size.ContentInsetBottom + R.Size.ButtonExtraLarge + R.Size.ContentSpaceLarge)
         }
         
-        navigationBlurView.addSubview(saveButton)
+        addSubview(saveButton)
         saveButton.snp.makeConstraints { make in
-            make.leading.equalTo(Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+            if UIDevice.isPad || (UIDevice.isPhone && UIDevice.isLandscape) {
+                make.width.equalTo(R.Size.ButtonMaxWidth)
+                make.centerX.equalToSuperview()
+            } else {
+                make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(R.Size.ContentSpaceHuge)
+            }
+            make.bottom.equalToSuperview().inset(R.Size.ContentInsetBottom)
+            make.height.equalTo(R.Size.ButtonExtraLarge)
         }
-        
-        IQKeyboardManager.shared.isEnabled = true
     }
     
     required init?(coder: NSCoder) {
@@ -211,4 +219,42 @@ extension ColorPickerView: ChromaColorPickerDelegate {
         colorView.animatedGradientView.setColors(colorPicker.handles.map({ $0.color }))
     }
     
+}
+
+extension ColorPickerView: ShowableView {
+    static func show(themeColor: ThemeColor?, didSaveAction: ((ThemeColor)->Void)? = nil) {
+        if let themeColor {
+            Self.show(parameters: themeColor)?.didSaveAction = didSaveAction
+        } else {
+            Self.show()?.didSaveAction = didSaveAction
+        }
+    }
+    
+    var prefferdConstraintHeight: CGFloat? {
+        if UIDevice.isPhone, UIDevice.isPortrait {
+            return 582
+        }
+        return R.Size.SheetWindowMaxSize.height
+    }
+    
+    func dataForShow(_ defaultData: ASSheet) -> ASSheet {
+        var sheetData = defaultData
+        sheetData.enableGrabber = false
+        return sheetData
+    }
+}
+
+extension ColorPickerView: ViewTransition {
+    func viewAlongsideTransition() {
+        if UIDevice.isPhone {
+            colorPicker.snp.updateConstraints { make in
+                make.size.equalTo(ColorPickerView.colorPickerSize)
+            }
+            
+            saveButton.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().inset(R.Size.ContentInsetBottom)
+            }
+        }
+        
+    }
 }

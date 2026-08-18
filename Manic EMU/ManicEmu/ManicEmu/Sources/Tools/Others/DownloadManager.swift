@@ -24,8 +24,8 @@ class DownloadManager {
     var sessionManager: SessionManager = {
         var config = SessionConfiguration()
         config.allowsCellularAccess = true
-        let cache = Cache("DownloadManager", downloadPath: Constants.Path.DownloadWorkSpace)
-        let manager = SessionManager(Constants.Config.AppIdentifier, configuration: config, cache: cache)
+        let cache = Cache("DownloadManager", downloadPath: R.Path.DownloadWorkSpace)
+        let manager = SessionManager(R.Config.AppIdentifier, configuration: config, cache: cache)
         let runningTasks = manager.tasks.filter({ $0.status == .running })
         if runningTasks.count > 0 {
             DispatchQueue.main.asyncAfter(delay: 0.35) {
@@ -56,7 +56,7 @@ class DownloadManager {
                 }
             }
             if manager.tasks.filter({ $0.status == .running }).count == 0 {
-                NotificationCenter.default.post(name: Constants.NotificationName.StopDownload, object: nil)
+                NotificationCenter.default.post(name: R.NotificationName.StopDownload, object: nil)
             }
         }.success { manager in
             Log.debug("下载完成")
@@ -65,27 +65,28 @@ class DownloadManager {
             var succeededTasks = manager.succeededTasks
             
             let shaders = succeededTasks.filter({
-                $0.filePath.lastPathComponent == Constants.Strings.SlangShader || $0.filePath.lastPathComponent == Constants.Strings.GLSLShader
+                $0.filePath.lastPathComponent == R.Strings.SlangShader || $0.filePath.lastPathComponent == R.Strings.GLSLShader
             })
             if shaders.count > 0 {
                 //处理RetroArch的shaders
                 
                 DispatchQueue.global().async {
                     for shader in shaders {
-                        let desPath = shader.filePath.lastPathComponent == Constants.Strings.SlangShader ? Constants.Path.ShaderRetroArchSlang : Constants.Path.ShaderRetroArchGLSL
+                        let desPath = shader.filePath.lastPathComponent == R.Strings.SlangShader ? R.Path.ShaderRetroArchSlang : R.Path.ShaderRetroArchGLSL
                         SSZipArchive.unzipFile(atPath: shader.filePath, toDestination: desPath, overwrite: true, password: nil, progressHandler: nil) { _, isSuccess, error in
                             DispatchQueue.main.async {
                                 if isSuccess {
-                                    NotificationCenter.default.post(name: Constants.NotificationName.RetroArchShadersDownloadSuccess, object: nil)
+                                    NotificationCenter.default.post(name: R.NotificationName.RetroArchShadersDownloadSuccess, object: nil)
                                 } else {
                                     UIView.makeToast(message: R.string.localizable.retroArchShaderUnzipFailed(shader.filePath.lastPathComponent))
                                 }
                             }
                         }
                     }
+                    shaders.forEach({ manager.remove($0.url) })
                 }
                 succeededTasks = succeededTasks.filter({
-                    $0.filePath.lastPathComponent != Constants.Strings.SlangShader && $0.filePath.lastPathComponent != Constants.Strings.GLSLShader
+                    $0.filePath.lastPathComponent != R.Strings.SlangShader && $0.filePath.lastPathComponent != R.Strings.GLSLShader
                 })
             }
             
@@ -95,13 +96,13 @@ class DownloadManager {
                 }
             }
             
-            NotificationCenter.default.post(name: Constants.NotificationName.StopDownload, object: nil)
+            NotificationCenter.default.post(name: R.NotificationName.StopDownload, object: nil)
         }
         return manager
     }()
     
     func downloads(urls: [URL], fileNames: [String], headers: [String: String]? = nil) {
-        NotificationCenter.default.post(name: Constants.NotificationName.BeginDownload, object: nil)
+        NotificationCenter.default.post(name: R.NotificationName.BeginDownload, object: nil)
         DispatchQueue.global().async {
             self.sessionManager.multiDownload(urls, headersArray: headers == nil ? nil : urls.map({ _ in headers! }), fileNames: fileNames)
 //            for task in tasks {

@@ -11,7 +11,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Υπηρεσίες Cloud";
 "ImportAddLanServiceTitle" = "Υπηρεσίες Τοπικού Δικτύου";
-"ImportAddDiscoverServiceTitle" = "Υπηρεσία Ανακαλύψεων";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -32,7 +31,6 @@
 "LandServiceEditConnect" = "Σύνδεση";
 "AddLandServiceSuccess" = "Επιτυχής προσθήκη %@";
 "AddLandServiceFailed" = "Αποτυχία προσθήκης %@\nΕλέγξτε τη σύνδεση δικτύου, την κατάσταση της υπηρεσίας ή τα στοιχεία που εισάγατε";
-"AddLandServiceTimeout" = "Υπέρβαση χρονικού ορίου σύνδεσης";
 "FilesImporterErrorFileExist" = "\"%@\" υπάρχει ήδη, δεν απαιτείται εισαγωγή";
 "FilesImporterErrorBadCopy" = "Αποτυχία εισαγωγής \"%@\", σφάλμα κατά την αντιγραφή αρχείου";
 "FilesImporterErrorBadExtension" = "Αποτυχία εισαγωγής \"%@\", μη αναγνωρίσιμη επέκταση αρχείου";
@@ -78,7 +76,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nΧρήση προγράμματος περιήγησης για μεταφορά αρχείων";
 "ImportServiceListPasteTitle" = "Ανάγνωση Προχείρου";
 "ImportServiceListPasteDetail" = "Υποστηρίζει αντιγραφή αρχείων από macOS και την εφαρμογή Αρχεία";
-"ImportHowTo" = "Πώς να Εισαγάγετε";
 "ImportTopHintTitle" = "Μια ιστορία γεμάτη όνειρα και περιπέτειες θα ξεκινήσει από εδώ!";
 "ImportDragAndDropTips" = "Σύρετε και αφήστε αρχεία σε οποιαδήποτε διεπαφή του Manic EMU για μεταφορά";
 "ImportChannelTips" = "Για οποιαδήποτε απορία, συμμετέχετε στο %@ για βοήθεια";
@@ -112,7 +109,6 @@
 "TimeDurationMinuteFormat" = "%d λεπτά";
 "FatalErrorTitle" = "Κρίσιμο Σφάλμα";
 "FatalErrorDesc" = "Αποτυχία φόρτωσης πόρων συστήματος, το Manic EMU μπορεί να αντιμετωπίσει σοβαρά προβλήματα κατά τη λειτουργία";
-"LodingFailedTitle" = "Αποτυχία Φόρτωσης";
 "AirPlayDesc" = "Ξεκινήστε την περιπέτεια σας τώρα!";
 "ToastSuccess" = "Επιτυχής Αποθήκευση";
 "ToastFailed" = "Αποτυχία Αποθήκευσης";
@@ -128,25 +124,22 @@
 "GamesImportSave" = "Εισαγωγή Αποθηκευμένου Παιχνιδιού";
 "GamesShareSave" = "Εξαγωγή Αποθηκευμένου Παιχνιδιού";
 "GamesDelete" = "Αφαίρεση Παιχνιδιού";
-"GamesRandom" = "Δεν ξέρω τι να παίξω, ας το αποφασίσει η τύχη";
 "LoadGameErrorRomNotExist" = "Σφάλμα φόρτωσης παιχνιδιού, το ROM δεν υπάρχει";
 "GamesListEmptyGuideLeft" = "Πατήστε στο παρακάτω";
 "GamesListEmptyGuideRight" = "για εισαγωγή παιχνιδιών";
 "GamesListEmptyWelcomeLeft" = "Καλώς ήλθατε στον κόσμο του";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Βεβαιωθείτε ότι αποκτάτε αρχεία ROM παιχνιδιών μέσω νόμιμων καναλιών";
+"LandscapeEmptyAddGame" = "Προσθήκη παιχνιδιού";
 "DeleteGameAlertDetail" = "Το ROM του παιχνιδιού, τα αποθηκευμένα παιχνίδια και τα cheat codes θα διαγραφούν οριστικά!";
 "DeleteSkinAlertDetail" = "Το skin θα αφαιρεθεί οριστικά!";
-"DeleteGameGameStateAlertTitle" = "Αφαίρεση Αποθηκευμένης Κατάστασης";
 "DeleteGameGameStateAlertDetail" = "Η αποθηκευμένη κατάσταση θα αφαιρεθεί οριστικά!";
 "confirmDelte" = "Επιβεβαίωση Αφαίρεσης";
 
 //Controllers
 "ControllersTouchName" = "Οθόνη Ελέγχου";
-"ControllersHeaderTitle" = "Ελεγκτές";
 "ControllersPlayerIndex" = "Παίκτης %d";
 "ControllersPlayerUnset" = "Μη Ορισμένος";
-"ControllersHowToConnect" = "Πώς να Συνδεθείτε";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ παιχνίδι · Σύνολο %@";
@@ -158,7 +151,6 @@
 "ReadySegmentManualSave" = "Χειροκίνητη Αποθηκευμένη Κατάσταση";
 "ReadySegmentAutoSave" = "Αυτόματη Αποθηκευμένη Κατάσταση";
 "ReadyEditTitleFailed" = "Αποτυχία μετονομασίας, το όνομα παιχνιδιού δεν μπορεί να είναι κενό";
-"ReadyEditTitleSuccess" = "Επιτυχής Μετονομασία";
 "ReadyGameSaveStatesEmpty" = "Δεν υπάρχουν αποθηκευμένες καταστάσεις";
 "GameSaveGuideBecomTitle" = "Γίνετε";
 "GameSaveGuideMemberTitle" = "Μέλος";
@@ -170,12 +162,10 @@
 "GameSaveTitle" = "Αποθηκευμένη Κατάσταση %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Το Manic EMU υποστηρίζει τέλεια skin σε μορφή .deltaskin .gammaskin";
 "SkinNavigationSubTitleSpecifiedGame" = "Ορισμός Skin μόνο για %@";
 "SkinSegmentPortraitTitle" = "Κατακόρυφα";
 "SkinSegmentLandscapeTitle" = "Οριζόντια";
 "SkinAddTitle" = "Προσθήκη Skin";
-"HowToFetch" = "Πώς να αποκτήσετε";
 "SkinDelete" = "Αφαίρεση Skin";
 "DefaultSkinCannotEdit" = "Το προεπιλεγμένο skin δεν μπορεί να επεξεργαστεί";
 
@@ -187,16 +177,11 @@
 "HistoryEmptyStartGame" = "Άμεση Εκκίνηση";
 
 //Settings
-"LeftHandTitle" = "Λειτουργία Αριστερού Χεριού";
-"LeftHandDetail" = "Καθρέπτιση ελέγχων (joystick, DPad, κουμπιά) για αριστερόχειρες";
 "QuickGameTitle" = "Γρήγορη Έναρξη";
 "QuickGameDetail" = "Πατήστε σε παιχνίδι για άμεση εκκίνηση χωρίς σελίδα προετοιμασίας";
 "AirPlayTitle" = "Λειτουργία AirPlay Πλήρους Οθόνης";
 "AirPlayDetail" = "Ενεργοποιήστε για προβολή παιχνιδιού σε πλήρη οθόνη";
 "iCloudTitle" = "Συγχρονισμός iCloud";
-"iCloudDetail" = "Συγχρονισμός παιχνιδιών, skin, αποθηκευμένων παιχνιδιών και ρυθμίσεων σε συσκευές με το ίδιο Apple ID";
-"AppIconTitle" = "Εικονίδιο Εφαρμογής";
-"WidgetTitle" = "Widgets";
 "QATitle" = "Συχνές Ερωτήσεις";
 "FeedbackTitle" = "Ανατροφοδότηση";
 "ShareAppTitle" = "Κοινοποίηση του «Manic EMU» με φίλους";
@@ -210,13 +195,9 @@
 "AdvanceSettingTitle" = "Προηγμένες Ρυθμίσεις";
 "SupportSettingTitle" = "Επικοινωνία με Υποστήριξη";
 "OthersSettingTitle" = "Άλλα";
-"RatingTitleLeft" = "Αξιολόγηση του";
-"RatingTitleRight" = "";
-"RatingDetail" = "Αν πιστεύετε ότι το προϊόν μας έχει αξία, παρακαλούμε αφήστε μια θετική κριτική. Η γνώμη σας είναι πολύ σημαντική για εμάς :)";
 "iCloudDisableTitle" = "Το iCloud δεν είναι διαθέσιμο";
 "iCloudDisableDetail" = "Προσπαθήσαμε να ενεργοποιήσουμε τον συγχρονισμό iCloud. Για να ξεκινήσει ο συγχρονισμός, πρέπει να συνδεθείτε και να εξουσιοδοτήσετε το iCloud. Μεταβείτε στις «Ρυθμίσεις» > «Apple ID» > «iCloud» και βεβαιωθείτε ότι το iCloud Drive είναι ενεργοποιημένο και ότι το Manic EMU έχει άδεια πρόσβασης.";
 "iCloudSyncConfilictTitle" = "Σύγκρουση Συγχρονισμού iCloud";
-"iCloudSyncConfilictDetail" = "Αρχείο Cloud:\n%@\n\nΤοπικό Αρχείο:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Διατήρηση Cloud";
 "iCloudSyncConfilictSaveLocal" = "Διατήρηση Τοπικού";
 "SettingsNonMemberDesc" = "Θα γίνετε ο κύριος χαρακτήρας αυτής της ιστορίας";
@@ -224,7 +205,6 @@
 "ThanksCommingDesc" = "Ευχαριστούμε που ήρθατε να παίξετε στο";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Δεν έχετε ορίσει email";
-"IDCopy" = "Το ID σας αντιγράφηκε";
 "SendEmailSuccess" = "Επιτυχής αποστολή email";
 "SendEmailFailed" = "Αποτυχία αποστολής email %@";
 "iCloudTipsTitle" = "Ενεργοποίηση Συγχρονισμού iCloud";
@@ -239,9 +219,6 @@
 "GameSettingVolume" = "Ένταση";
 "GameSettingFastForwardResume" = "Κανονική Ταχύτητα";
 "GameSettingFastForward" = "Γρήγορη Προώθηση %@";
-"GameSettingStateList" = "Λίστα Αποθηκευμένων Καταστάσεων";
-"GameSettingSkins" = "Ορισμός Skin";
-"GameSettingFilter" = "Φίλτρο";
 "GameSettingScreenShot" = "Στιγμιότυπο Παιχνιδιού";
 "GameSettingHapticOff" = "Απενεργοποιημένη Δόνηση";
 "GameSettingHapticSoft" = "Ασθενής Δόνηση";
@@ -260,17 +237,13 @@
 "GameSettingReload" = "Επανεκκίνηση";
 "GameSettingQuit" = "Έξοδος";
 "GameSaveStateSuccess" = "Επιτυχής Αποθήκευση Κατάστασης";
-"GameSaveStateLoadFailed" = "Αποτυχία φόρτωσης αποθηκευμένης κατάστασης, το αρχείο είναι κατεστραμμένο ή μη συμβατό";
 "GameSaveStateLoadSuccess" = "Επιτυχής Φόρτωση Αποθηκευμένης Κατάστασης";
 "GameSaveStateQuickLoadFailed" = "Δεν υπάρχει χειροκίνητη αποθηκευμένη κατάσταση. Για αυτόματη φόρτωση, χρησιμοποιήστε τη «Λίστα Αποθηκευμένων Καταστάσεων»";
 "GameSaveListTitle" = "Αποθηκευμένες Καταστάσεις";
-"GameCheatActivateFailed" = "%@\nΑποτυχία Ενεργοποίησης, το cheat code δεν είναι έγκυρο";
 "GameCheatActivateSuccess" = "%@\nΕπιτυχής Ενεργοποίηση";
 "AirPlayingTitle" = "Η οθόνη του παιχνιδιού προβάλλεται";
 "VolumeOff" = "Ένταση: Κλειστά";
 "VolumeOn" = "Ένταση: Ανοικτά";
-"FunctionSortDesc1" = "Οι παραπάνω λειτουργίες θα εμφανίζονται ως γρήγορες επιλογές στο προεπιλεγμένο skin";
-"FunctionSortDesc2" = "Κρατήστε πατημένο για να αλλάξετε τη σειρά";
 "ManualGameSaveCountLimit" = "Έχετε υπερβεί το όριο αποθηκευμένων καταστάσεων! Για απεριόριστες αποθηκευμένες καταστάσεις, κάντε αναβάθμιση σε μέλος ή διαγράψτε μερικές από την λίστα";
 "FastForwardSpeedLimit" = "Η μέγιστη ταχύτητα είναι x2! Κάντε αναβάθμιση σε μέλος για x5 ταχύτητα";
 "ResetSpeed" = "Επαναφορά Ταχύτητας";
@@ -284,13 +257,10 @@
 "AutoDetectFormat" = "Εισαγωγή κωδικού για αυτόματη ανίχνευση μορφής";
 "CheatCodeFormatError" = "Μη έγκυρη μορφή cheat code";
 "CheatCodeEmptyTitle" = "Δεν υπάρχουν cheat codes";
-"CheatCodeEmptyGuideLeft" = "Πατήστε στο πάνω αριστερό";
-"CheatCodeEmptyGuideRight" = "για προσθήκη cheat code";
 "EnableCheatCodeAlertTitle" = "Ενεργοποίηση Cheat Code";
 "EnableCheatCodeAlertDetail" = "Τα cheat codes εξαρτώνται από την έκδοση του παιχνιδιού και πρέπει να είναι συμβατά για να λειτουργήσουν. Η χρήση τους μπορεί να προκαλέσει σφάλματα ή αστάθεια στο παιχνίδι. Χρησιμοποιήστε τα με δική σας ευθύνη.";
 
 //Φίλτρα
-"FilterSectionHeaderTitle" = "Φίλτρα Βίντεο";
 "FilterOriginTitle" = "Πρωτότυπο";
 
 //Εσωτερικές Αγορές
@@ -357,7 +327,6 @@
 "PurchasePending" = "Η πληρωμή σας είναι σε εκκρεμότητα. Μετά την ολοκλήρωση, θα ενεργοποιηθεί η συνδρομή σας.";
 "PurchaseUnknown" = "Άγνωστη κατάσταση πληρωμής";
 "PurchaseErrorDesc" = "Αδυναμία ολοκλήρωσης πληρωμής. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.";
-"PurchaseFailedTitle" = "Αποτυχία Πληρωμής";
 "RestoreSuccessDesc" = "Επιτυχής επαναφορά αγορών!";
 "RestoreEndDesc" = "Η επαναφορά ολοκληρώθηκε, δεν βρέθηκαν διαθέσιμες αγορές!";
 "TrialDesc" = "Δωρεάν κατά τη διάρκεια δοκιμής, ακύρωση ανά πάσα στιγμή";
@@ -398,23 +367,12 @@
 "ShareAppSubtitle" = "Καλέστε τους φίλους σας για μια κοινή περιπέτεια!";
 "ShareRomFilesFailed" = "Αποτυχία κοινοποίησης ROM, δεν ήταν δυνατή η λήψη του αρχείου";
 "ShareSaveFilesFailed" = "Αποτυχία κοινοποίησης αποθηκευμένου παιχνιδιού, δεν υπάρχουν αποθηκευμένα παιχνίδια";
-"ShareFilesCopyFailed" = "Αποτυχία κοινοποίησης αρχείου, σφάλμα κατά την αντιγραφή";
-"ShareFilesCompressFailed" = "Αποτυχία κοινοποίησης αρχείου, σφάλμα κατά τη συμπίεση";
 
 "TurnOnAirPlayAsk" = "Η σύνδεση AirPlay είναι ενεργή. Ενεργοποίηση πλήρους οθόνης τώρα;";
 
 "ThreeDSModePerformance" = "Λειτουργία Απόδοσης";
 "ThreeDSModeCompatibility" = "Λειτουργία Συμβατότητας";
 "ThreeDSModeQuality" = "Προτεραιότητα Γραφικών";
-"ThreeDSNotSupportImportSave" = "Τα παιχνίδια 3DS δεν υποστηρίζουν εισαγωγή αποθηκεύσεων";
-"ThreeDSNotSupportShareSave" = "Τα παιχνίδια 3DS δεν υποστηρίζουν κοινή χρήση αποθηκεύσεων";
-"ThreeDSBetaAlertTitle" = "Πειραματική Έκδοση 3DS";
-"ThreeDSBetaAlertDetail" = "Για να σας δώσουμε τη δυνατότητα να απολαύσετε νωρίτερα τα παιχνίδια 3DS, το Manic EMU έχει κυκλοφορήσει υποστήριξη για 3DS, αλλά βρίσκεται ακόμη σε πειραματικό στάδιο. Ορισμένες λειτουργίες απαιτούν περαιτέρω βελτιστοποίηση.
-Οι ακόλουθες λειτουργίες απουσιάζουν προσωρινά:
-❌ Λειτουργία AirPlay σε πλήρη οθόνη
-❌ Αυτόματη αποθήκευση
-❌ Λειτουργία Ταχύτητας
-Εάν αντιμετωπίσετε αστάθεια στο 3DS, παρακαλούμε ανατρέξτε στο «Συχνές Ερωτήσεις» ή επισκεφτείτε το κανάλι μας για βοήθεια. Συνεχίζουμε να βελτιώνουμε την απόδοση του εξομοιωτή και η κατανόηση και η υποστήριξή σας θα μας βοηθήσουν να δημιουργήσουμε μια ακόμα καλύτερη εμπειρία. Δουλεύουμε συνεχώς για ένα καλύτερο περιβάλλον παιχνιδιού.";
 "ThreeDSNoSupportDeviceTitle" = "Ανεπαρκής απόδοση συσκευής";
 "ThreeDSNoSupportDeviceDetail" = "Η συσκευή ενδέχεται να μην υποστηρίζει εξομοίωση 3DS. Η συνέχεια μπορεί να προκαλέσει απρόβλεπτα σφάλματα";
 
@@ -433,8 +391,6 @@
 "FullScreenWhenConnectControllerTitle" = "Αυτόματη πλήρης οθόνη";
 "FullScreenWhenConnectControllerDetail" = "Ενεργοποιείται όταν συνδέεται χειριστήριο";
 "JoinDiscordTitle" = "Σύνδεση στο Discord";
-"JoinDiscordAlertMessage" = "Ευχαριστούμε τον παίκτη %@ για το κανάλι. Συνέχεια;";
-"FlexSkinGuideTitle" = "Σύρετε ή ζουμάρετε για ρύθμιση";
 "DownloadFailed" = "Αποτυχία λήψης";
 "RemoveDownloadTask" = "Ακύρωση λήψης \"%@\";";
 "GameSettingResolution" = "Ανάλυση %@";
@@ -484,9 +440,6 @@
 "RenderRightEyeDesc" = "Η απενεργοποίηση βελτιώνει την απόδοση σε ορισμένα παιχνίδια, αλλά μπορεί να προκαλέσει τρεμόπαιγμα";
 "DisableTitle" = "Απενεργοποίηση";
 "EnableTitle" = "Ενεργοποίηση";
-"NoSaveStateToast" = "Δεν υπάρχει διαθέσιμο %@";
-"DeleteSelectedSaveStateAlert" = "Διαγραφή επιλεγμένου «%@»;\nΔεν ανακτάται!";
-"DeleteAllSaveStateAlert" = "Δεν υπάρχει επιλογή. Διαγραφή όλων των «%@»;\nΔεν ανακτάται!";
 "AICoverSearchDesc" = "Εντοπίστηκε μη αγγλική αναζήτηση. Αναβάθμιση σε Premium για πολυγλωσσική αναζήτηση με ΤΝ";
 "MaxTextSizeAllowDesc" = "Υποστηρίζει έως %@ χαρακτήρες";
 
@@ -514,29 +467,21 @@
 "BiosAddTitle" = "Προσθήκη BIOS";
 "StartGameWithoutBiosTitle" = "Εκκίνηση χωρίς BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Σύνθετη Λειτουργία";
 "ThreeDSAdvanceSettingTitle" = "Σύνθετες Ρυθμίσεις";
-"ThreeDSBasicSettingMode" = "Βασική Λειτουργία";
 "ShareConfigButtonTitle" = "Κοινοποίηση Διαμόρφωσης";
 "ImportConfigButtonTitle" = "Εισαγωγή Διαμόρφωσης";
 "ShareFileFailedMissing" = "Αποτυχία κοινοποίησης: το αρχείο δεν υπάρχει";
 "ReadConfigFileFailed" = "Δεν είναι δυνατή η ανάγνωση του αρχείου διαμόρφωσης";
 "SwitchEmulationCore" = "Αλλαγή Πυρήνα";
 "SwitchEmulationCoreDetail" = "Αλλαγή πυρήνα εξομοίωσης για %@\nΗ αλλαγή πυρήνα θα καταστήσει τις αποθηκεύσεις από τον προηγούμενο πυρήνα ανάγνωστες. Για πρόσβαση, επιστρέψτε στον αρχικό πυρήνα";
-"BeetleSaturnNoSupportCheat" = "Ο πυρήνας Beetle Saturn δεν υποστηρίζει κωδικούς απάτης αυτήν τη στιγμή. Εάν χρειάζεστε, αλλάξτε στον πυρήνα Yabause";
-"CurrentTitle" = "τρέχων";
 "NewSkinDesc" = "Το Manic EMU υποστηρίζει skins σε μορφές .manicskin και .deltaskin .gammaskin. Σημείωση: Το εισαγόμενο skin πρέπει να ταιριάζει με την τρέχουσα πλατφόρμα, διαφορετικά δεν θα εμφανιστεί στη λίστα.\nΕπίσης παρέχουμε πρόσβαση σε κοινότητες τρίτων για skins. Αυτές δεν συνδέονται επίσημα με το Manic EMU. Κατά τη λήψη, ακολουθήστε αυστηρά τους όρους υπηρεσίας κάθε ιστότοπου";
 "VisitSite" = "Επίσκεψη %@";
 "OpenFile" = "Άνοιγμα Αρχείου";
 "WebViewDownloadBegin" = "Η λήψη ξεκίνησε";
 "RespectSilentMode" = "Σεβασμός Αθόρυβης Λειτουργίας";
 "RespectSilentModeDesc" = "Όταν ενεργοποιηθεί, το Manic EMU θα παίζει ήχο μόνο εκτός αθόρυβης λειτουργίας";
-"SaturnISONoSwitchCore" = "Τα παιχνίδια Sega Saturn .iso δεν υποστηρίζουν αλλαγή πυρήνα";
-"EnableFullScreenTitle" = "Ενεργοποίηση Πλήρους Οθόνης";
-"DisableFullScreenTitle" = "Απενεργοποίηση Πλήρους Οθόνης";
 "SimulateBlowingTitle" = "Προσομοίωση Φυσήματος";
 "PaletteTitle" = "Παλέτα";
-"SkinRestDesc" = "Η επαναφορά του skin θα επαναφέρει επίσης τα skins που έχουν ανατεθεί από παιχνίδια στις προεπιλεγμένες εκδόσεις";
 "SkinResetForAll" = "Επαναφορά Όλων των Skins Πλατφόρμας";
 "SkinResetForPlatform" = "Επαναφορά Skin %@";
 "SkinDebug" = "Περιοχή Δοκιμής Skins";
@@ -553,7 +498,6 @@
 "MultiDiscCloseAlert" = ".m3u δημιουργήθηκε. Κλείστε μετά την εισαγωγή";
 "MultiDiscContinueClose" = "Κλείσιμο";
 "SwapDisk" = "Αλλαγή δίσκου";
-"NotSupportSwapDisk" = "Δεν υποστηρίζει πολλαπλούς δίσκους";
 "TransferPakDesc" = "Το Transfer Pak συγχρονίζει δεδομένα GB/GBC με N64. Για ενεργοποίηση: εισάγετε ROM (.gb/.gbc) και αρχείο αποθήκευσης (.sav)";
 "TransferPakFromLibrary" = "Εισαγωγή από βιβλιοθήκη";
 "TransferPakFromLibraryDesc" = "Εμφανίζονται μόνο παιχνίδια με αποθηκευμένα αρχεία.\nΤα επιλεγμένα παιχνίδια GB/GBC πρέπει να ταιριάζουν με το ROM N64";
@@ -562,7 +506,6 @@
 "TransferPakOn" = "Ενεργό";
 "TransferPakOff" = "Ανενεργό";
 "TransferPakImportError" = "Σφάλμα: Εισάγετε και τα δύο αρχεία (ROM και αποθήκευση, απαιτούνται 2)";
-"ShowControlsTitle" = "Εμφάνιση ελέγχων";
 "HideControlsTitle" = "Απόκρυψη ελέγχων";
 
 "DesignedFor" = "Σχεδιάστηκε για %@";
@@ -585,7 +528,6 @@
 "WfcConnectDesc" = "Σύνδεση με Nintendo WFC...\nΑπενεργοποιημένη γρήγορη προώθηση και cheat";
 "WfcDisconnectDesc" = "Αποσύνδεση από Nintendo WFC";
 "NotAllowOnlineGame" = "Αυτή η λειτουργία απενεργοποιείται στο online";
-"QuitGameAlert" = "Τερματισμός παιχνιδιού; Η μη αποθηκευμένη πρόοδος θα χαθεί";
 
 "SkinIdentifierExist" = "Αναγνωριστικό: %@ υπάρχει ήδη. Παρακαλώ τροποποιήστε και εισάγετε ξανά.";
 "AnalogModeChange" = "Εναλλαγή σε λειτουργία %@";
@@ -619,7 +561,6 @@
 "LastActivity" = "Τελευταία Δραστηριότητα: %@";
 "MemberSince" = "Μέλος από: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Πρόοδος Ολοκλήρωσης";
 "AchievementsList" = "Επιτεύγματα";
 "TotalAchievements" = "Σύνολο %d Επιτευγμάτων";
@@ -642,7 +583,6 @@
 "DisableAchievementsAlert" = "Απενεργοποίηση RetroAchievements;";
 "SaveStateCoreUnCompatible" = "Το save state δημιουργήθηκε σε %@ (τρέχον: %@). Η φόρτωση μπορεί να προκαλέσει προβλήματα!";
 "LatestSaveStateUnCompatible" = "Το τελευταίο save state δεν μπορεί να φορτωθεί λόγω ασυμβατότητας πυρήνα";
-"Snes9xAlert" = "Λόγω θεμάτων αδειοδότησης, ο πυρήνας Snes9x θα αφαιρεθεί σε μελλοντικές ενημερώσεις. Μεταβείτε στο bsnes και μεταφέρετε τα save states, ή δεν θα λειτουργήσουν.";
 "GotIt" = "Το πήρα";
 "Rumble" = "Δόνηση";
 "RumbleDetail" = "Η συσκευή δονείται κατά τη διάρκεια ορισμένων γεγονότων";
@@ -658,7 +598,6 @@
 "JumpTips" = "Άνοιγμα τρίτης σελίδας";
 "ThirdPartGameInfoTips" = "Οι πληροφορίες παιχνιδιών παρέχονται από τρίτους. Χρησιμοποιήστε την κρίση σας και ακολουθήστε τους κανόνες πλατφόρμας. Αν το Manic EMU δεν αντιστοιχίσει ένα παιχνίδι, χρησιμοποιήστε την αναζήτηση για να το βρείτε χειροκίνητα.";
 "NotSupportHardcore" = "Η λειτουργία Hardcore είναι απενεργοποιημένη για αυτό το παιχνίδι. Ίσως το Manic EMU δεν είναι εξουσιοδοτημένο από τα RetroAchievements, ή το παιχνίδι απλά δεν υποστηρίζει hardcore mode.";
-"ChooseOne" = "Επιλέξτε Ένα";
 "FilesImporterErrorBadCue" = "Αποτυχία εισαγωγής %@. Το αρχείο μπορεί να είναι μη έγκυρο ή δεν είναι κωδικοποιημένο σε UTF-8. Ελέγξτε τη μορφή.";
 "Leaderboard" = "Πίνακας Βαθμολογίας";
 "LeaderboardStart" = "Έναρξη Πίνακα Βαθμολογίας: ";
@@ -674,10 +613,8 @@
 "AlwaysShowProgressDesc" = "Διατήρηση προόδου επιτευγμάτων ορατής στην οθόνη.";
 "Progress" = "Πρόοδος";
 
-"DCGameNoSupportGameSave" = "Το Dreamcast δεν υποστηρίζει εισαγωγή/εξαγωγή αποθηκεύσεων. Χρησιμοποιήστε το VMU Explorer για επεξεργασία αρχείων μνήμης στον φάκελο Manic EMU-Flycast-dc.";
 
 "Challenge" = "Πρόκληση";
-"GameTypeLicensingError" = "Λυπούμαστε! Λόγω περιορισμών άδειας με τον πυρήνα %@, αυτή η πλατφόρμα δεν είναι προσωρινά διαθέσιμη. Μπορείτε να περιμένετε μια μελλοντική ενημέρωση ή να χρησιμοποιήσετε την έκδοση sideload.";
 "DCJITLessVer" = "Η Προεπιλεγμένη έκδοση προσφέρει γρήγορη και ακριβή εξομοίωση αλλά δεν μπορεί να τρέξει παιχνίδια WinCE. Για να παίξετε παιχνίδια WinCE, επιλέξτε τον πυρήνα WinCE.";
 "TVStandard" = "Εάν το τηλεοπτικό πρότυπο του παιχνιδιού δεν ταιριάζει με την περιοχή, μπορεί να επηρεαστεί η ταχύτητα. Οι περιοχές PAL περιλαμβάνουν κυρίως την Ευρώπη, την Αυστραλία και τη Νέα Ζηλανδία.";
 "SNESVRAMEnable" = "Ορισμένα modified ROM απαιτούν αυτή την επιλογή για σωστή απόδοση γραφικών, αλλά η ενεργοποίησή της θα απενεργοποιήσει την υποστήριξη RetroAchievements.";
@@ -700,7 +637,6 @@
 "LayoutEmbeddedBottomRight" = "Ενσωματωμένο (Κάτω-Δεξιά)";
 "LayoutSingleScreen" = "Μονή οθόνη";
 "AirPlayLayoutTips" = "Συνδυάστε Διάταξη AirPlay με Εναλλαγή Οθόνης για περισσότερες επιλογές. Σημ.: Η χρήση Εναλλαγής Οθόνης με ενσωματωμένη διάταξη μπορεί να προκαλέσει επικάλυψη, δεν συνιστάται";
-"ToggleAnolog" = "Εναλλαγή αναλογικού";
 "EnableGlobalAchievements" = "Ενεργοποίηση Παγκόσμιων RetroAchievements";
 "GlobalHardcoreMode" = "Παγκόσμια λειτουργία Hardcore";
 "GlobalHardcoreAlert" = "Παρακαλώ ενεργοποιήστε πρώτα τα Παγκόσμια RetroAchievements";
@@ -716,7 +652,6 @@
 "AppearanceLight" = "Φωτεινή Λειτουργία";
 "AppearanceDark" = "Σκούρη Λειτουργία";
 "AppearanceAuto" = "Ακολούθηση Συστήματος";
-"GameListBackground" = "Εικόνα Φόντου";
 "GameListBackgroundUpload" = "Μεταφόρτωση";
 "GameplayManuals" = "Εγχειρίδια Παιχνιδιών";
 "GameplayManualsNoExists" = "Δεν υπάρχει διαθέσιμο εγχειρίδιο για αυτό το παιχνίδι.";
@@ -726,7 +661,6 @@
 "UnsupportSkinsDesc" = "Τα ακόλουθα skin δεν υποστηρίζονται σε αυτήν τη συσκευή:\n%@Σημείωση: Η αφαίρεση θα διαγράψει επίσης αυτά τα skin από άλλες συσκευές συγχρονισμένες μέσω iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Τα μη υποστηριζόμενα skin αφαιρέθηκαν με επιτυχία";
 "ForbitPKSM" = "Για να διασφαλιστεί μια δίκαιη εμπειρία RetroAchievements, το PKSM δεν μπορεί να χρησιμοποιηθεί ενώ το Global RetroAchievements είναι ενεργοποιημένο.";
-"FDSAlert" = "Αυτή η επιλογή είναι διαθέσιμη μόνο για παιχνίδια FDS.";
 "DiskSideChange" = "Αναστροφή Δίσκου";
 "EjectDisk" = "Απέκτωση Δίσκου";
 
@@ -759,7 +693,6 @@
 "TriggerProName" = "Όνομα TriggerPro";
 "Position" = "Θέση";
 "ButtonInfo" = "Πληροφορίες κουμπιού";
-"NoTriggerPro" = "Δεν βρέθηκε διαμόρφωση TriggerPro. Μπορείτε να μεταβείτε στις Ρυθμίσεις ή να κρατήσετε πατημένη την επιλογή TriggerPro στο Μενού Παιχνιδιού για δημιουργία";
 "ManageTriggerPro" = "Διαχείριση TriggerPro";
 "EnableTriggerPro" = "Ενεργοποίηση TriggerPro";
 "DisableTriggerPro" = "Απενεργοποίηση TriggerPro";
@@ -800,7 +733,6 @@
 "Default" = "Προεπιλογή";
 "Imported" = "Εισαγμένο";
 "DownloadRetroArchSahders" = "Λήψη shaders από το RetroArch";
-"ImportShaders" = "Εισαγωγή shaders";
 "Shaders" = "Shaders";
 "DownloadRetroArchShaders" = "Θέλετε να κατεβάσετε shaders από το RetroArch; Μόλις ολοκληρωθεί, η κατηγορία shader του RetroArch θα ανανεωθεί αυτόματα. Μπορείτε να ακυρώσετε αυτή τη διαδικασία ανά πάσα στιγμή από τον διαχειριστή λήψεων.";
 "RetroArchShaderUnzipFailed" = "Δεν ήταν δυνατή η εξαγωγή του %@. Το αρχείο ίσως καταστράφηκε κατά τη λήψη. Παρακαλώ δοκιμάστε ξανά.";
@@ -833,7 +765,6 @@
 "JGenesisAlert" = "Συγγνώμη, ο πυρήνας JGenesis υποστηρίζει μόνο αρχεία ROM .chd.";
 "RedeemOfferCode" = "Εξαργύρωση Προσφοράς";
 "CheatImportFailed" = "Αποτυχία εισαγωγής. Δεν ήταν δυνατή η ανάλυση του αρχείου ή δεν βρέθηκαν αντίστοιχοι κωδικοί cheat.";
-"RemoveAllCheats" = "Αφαίρεση Όλων των Cheat";
 "RemoveAllCheatsAlert" = "Είστε σίγουροι ότι θέλετε να αφαιρέσετε όλους τους κωδικούς cheat; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "CheatCodeStatus" = "Ενεργοποιημένο";
 "Background" = "Φόντο";
@@ -846,13 +777,8 @@
 "RemoveBackgroundForGame" = "Αφαίρεση Φόντο Παιχνιδιού";
 "RemoveBackgroundForConsole" = "Αφαίρεση Φόντο Πλατφόρμας %@";
 "RemoveBackgroundForGlobal" = "Αφαίρεση Παγκόσμιου Φόντο";
-"ShaderConfigAlert" = "Ορίστηκε για %@.";
-"Global" = "Παγκόσμιο";
-"RemoveShaderForGlobal" = "Αφαίρεση Παγκόσμιου Shader";
 "FeaturedItems" = "Προτεινόμενα Αντικείμενα";
-"ReUpload" = "Επαναφόρτωση";
 
-"Service" = "Υπηρεσίες";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "Δίκτυο PSP";
 "Networking" = "Δίκτυο";
@@ -891,16 +817,11 @@
 "LoadingCheerpJ" = "Φόρτωση CheerpJ";
 "ZipHandlerTitle" = "Χειρισμός αρχείων ZIP";
 "ZipHandlerDetail" = "Ορισμένες πλατφόρμες (όπως DOS και Arcade) μπορούν να φορτώσουν ROM απευθείας από αρχεία .zip. Για άλλες πλατφόρμες, οι ROM μέσα σε ένα .zip πρέπει να εξαχθούν πριν από την εισαγωγή.\n\nΤα επιλεγμένα αρχεία θα εξαχθούν και θα εισαχθούν μεμονωμένα, ενώ τα μη επιλεγμένα αρχεία θα εισαχθούν ως ενιαία ROM ZIP.";
-"ConfigsResetCore" = "Επαναφορά στις προεπιλογές πυρήνα";
-"ConfigsResetBefore" = "Επαναφορά σε προηγούμενες ρυθμίσεις";
 "InsertDisc" = "Εισαγωγή δίσκου";
 "InsertDiscAlert" = "Μπορείτε να εισαγάγετε έναν δίσκο επιλέγοντας ένα άλλο παιχνίδι από την ίδια πλατφόρμα στη βιβλιοθήκη σας ή επιλέγοντας ένα αρχείο δίσκου από τα Αρχεία. Λόγω περιορισμών του συστήματος αρχείων iOS, τα αρχεία δίσκου που επιλέγονται από τα Αρχεία θα αντιγραφούν στην προσωρινή μνήμη του Manic EMU.";
 "InsertDiscFailed" = "Απέτυχε η εισαγωγή δίσκου";
 "GenerateHomeMenu" = "Δημιουργία αρχικού μενού";
 "SkinSoundEffects" = "Ηχητικά εφέ θέματος";
-"FirstAnniversary" = "ΕΥΧΑΡΙΣΤΟΥΜΕ ΠΟΥ ΕΙΣΑΙ ΕΔΩ,\nΣΟΥ ΓΡΑΨΑΜΕ ΚΑΤΙ";
-"ApirlFoolsDayTitle" = "Ωχ, μήπως χάλασε το Manic EMU;";
-"ApirlFoolsDayDetail" = "Μην ανησυχείτε!\nΑπλά αστειευόμαστε—Καλή Πρωταπριλιά!\n\nΌλα θα επανέλθουν στο φυσιολογικό μόλις το κλείσετε.";
 "JITType" = "Τύπος JIT";
 "JITTypeDesc" = "Το τυπικό JIT προσφέρει την καλύτερη απόδοση, ενώ το IR JIT προσφέρει μέτρια απόδοση.";
 "Pretendo" = "Δίκτυο Pretendo";
@@ -915,7 +836,6 @@
 "HomeMenuDesc" = "Χρησιμοποιήστε το παρακάτω κουμπί για να ανοίξετε την Αρχική Οθόνη. Στη συνέχεια, μεταβείτε στις Ρυθμίσεις Nimbus, αλλάξτε στο δίκτυο Pretendo και ανοίξτε τις Ρυθμίσεις για να επιλέξετε \"Αναγνωριστικό Nintendo Network\" και συνδεθείτε με τον λογαριασμό σας Pretendo.\n\nΜετά από αυτό, οποιοδήποτε παιχνίδι εκκινηθεί από την Αρχική Οθόνη ή εκτελείται με τον πυρήνα Azahar θα χρησιμοποιεί το δίκτυο Pretendo.\n\nΕάν λείπει η καταχώρηση Αρχικής Οθόνης, αυτή η λειτουργία θα προσπαθήσει να την αναδημιουργήσει αυτόματα.";
 "OpenHomeMenu" = "Άνοιγμα Αρχικής Οθόνης";
 "ChooseRegion" = "Επιλογή περιοχής";
-"ChooseRegionDesc" = "Επιλέξτε τη σωστή περιοχή της συσκευής 3DS που εκτελεί το εργαλείο Artic Setup. Η επιλογή λανθασμένης περιοχής θα αποτρέψει την επιτυχή μεταφορά δεδομένων.";
 "HomeMenuNotFound" = "Η Αρχική Οθόνη δεν βρέθηκε. Ολοκληρώστε πρώτα τη μεταφορά δεδομένων Artic Base.";
 "SystemUpdateAsk" = "Ολοκληρώθηκε επιτυχώς η ενημέρωση συστήματος;";
 "SystemUpdateDesc" = "Εάν η ενημέρωση συστήματος απέτυχε λόγω προβλημάτων δικτύου, δοκιμάστε ξανά τη μεταφορά δεδομένων. Διαφορετικά, η Αρχική Οθόνη 3DS ενδέχεται να μην λειτουργεί σωστά.";

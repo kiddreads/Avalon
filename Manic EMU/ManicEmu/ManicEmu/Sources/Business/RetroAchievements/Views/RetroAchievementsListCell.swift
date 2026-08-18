@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import Kingfisher
 import MarqueeLabel
-import BetterSegmentedControl
 
 class RetroAchievementsListCell: UICollectionViewCell {
     
@@ -22,7 +21,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             }()
             
             private let missableImageView: SymbolButton = {
-                let view = SymbolButton(image: UIImage(symbol: .exclamationmarkCircle, font: Constants.Font.caption(size: .l), color: .white))
+                let view = SymbolButton(image: UIImage(symbol: .exclamationmarkCircle, font: R.Font.Caption(), color: .white))
                 view.enableRoundCorner = true
                 view.backgroundColor = .black
                 view.isHidden = true
@@ -30,7 +29,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             }()
             
             private let progressionImageView: SymbolButton = {
-                let view = SymbolButton(image: UIImage(symbol: .clockBadgeCheckmark, font: Constants.Font.caption(size: .l), color: .white))
+                let view = SymbolButton(image: UIImage(symbol: .clockBadgeCheckmark, font: R.Font.Caption(), color: .white))
                 view.enableRoundCorner = true
                 view.backgroundColor = .black
                 view.isHidden = true
@@ -38,7 +37,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             }()
             
             private let winImageView: SymbolButton = {
-                let view = SymbolButton(image: UIImage(symbol: .starCircle, font: Constants.Font.caption(size: .l), color: .white))
+                let view = SymbolButton(image: UIImage(symbol: .starCircle, font: R.Font.Caption(), color: .white))
                 view.enableRoundCorner = true
                 view.backgroundColor = .black
                 view.isHidden = true
@@ -54,19 +53,19 @@ class RetroAchievementsListCell: UICollectionViewCell {
                 
                 imageView.addSubview(missableImageView)
                 missableImageView.snp.makeConstraints { make in
-                    make.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                    make.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceTiny)
                     make.size.equalTo(15)
                 }
                 
                 imageView.addSubview(progressionImageView)
                 progressionImageView.snp.makeConstraints { make in
-                    make.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                    make.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceTiny)
                     make.size.equalTo(15)
                 }
                 
                 imageView.addSubview(winImageView)
                 winImageView.snp.makeConstraints { make in
-                    make.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceUltraTiny)
+                    make.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceTiny)
                     make.size.equalTo(15)
                 }
             }
@@ -123,25 +122,13 @@ class RetroAchievementsListCell: UICollectionViewCell {
         
         var didTapAchievement: ((CheevosAchievement)->Void)? = nil
         
-        private lazy var segmentView: BetterSegmentedControl = {
-            let titles = [R.string.localizable.hardcore(), R.string.localizable.softcore()]
-            let segments = LabelSegment.segments(withTitles: titles,
-                                                 normalFont: Constants.Font.body(),
-                                                 normalTextColor: Constants.Color.LabelSecondary,
-                                                selectedTextColor: Constants.Color.LabelPrimary)
-            let options: [BetterSegmentedControl.Option] = [
-                .backgroundColor(Constants.Color.Background),
-                .indicatorViewInset(5),
-                .indicatorViewBackgroundColor(Constants.Color.BackgroundPrimary),
-                .cornerRadius(16)
-            ]
-            let view = BetterSegmentedControl(frame: .zero,
-                                              segments: segments,
-                                              options: options)
-            
-            view.on(.valueChanged) { [weak self] sender, forEvent in
-                guard let self = self, let index = (sender as? BetterSegmentedControl)?.index else { return }
-                UIDevice.generateHaptic()
+        private lazy var segmentView: ASSegmentView = {
+            let view = ASSegmentView(.textSegment(titles: [
+                R.string.localizable.hardcore(),
+                R.string.localizable.softcore()
+            ]))
+            view.didSelectIndex = { [weak self] index in
+                guard let self = self else { return }
                 self.isHardcoreList = index == 0
                 self.datas = self.datas.sorted(by: {
                     if self.isHardcoreList {
@@ -173,20 +160,21 @@ class RetroAchievementsListCell: UICollectionViewCell {
             view.showsHorizontalScrollIndicator = false
             view.dataSource = self
             view.delegate = self
+            view.isFocusable = true
             return view
         }()
         
         override init(frame: CGRect) {
             super.init(frame: frame)
-            backgroundColor = Constants.Color.BackgroundPrimary
-            layerCornerRadius = Constants.Size.CornerRadiusMax
+            backgroundColor = R.Color.BackgroundSecondary
+            layerCornerRadius = R.Size.CornerRadiusLarge
             
             addSubview(segmentView)
             segmentView.snp.makeConstraints { make in
-                make.top.equalTo(Constants.Size.ContentSpaceMid)
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-                make.leading.equalTo(Constants.Size.ContentSpaceHuge)
-                make.trailing.equalTo(-Constants.Size.ContentSpaceHuge)
+                make.top.equalTo(R.Size.ContentSpaceMedium)
+                make.height.equalTo(R.Size.ItemHeightExtraSmall)
+                make.leading.equalTo(R.Size.ContentSpaceHuge)
+                make.trailing.equalTo(-R.Size.ContentSpaceHuge)
             }
             
             addSubview(collectionView)
@@ -208,17 +196,17 @@ class RetroAchievementsListCell: UICollectionViewCell {
                 } else if UIDevice.isPad && UIDevice.isLandscape {
                     column = 6.0
                 }
-                let cellSize = (env.container.contentSize.width - Constants.Size.ContentSpaceHuge*2 - Constants.Size.ContentSpaceMin*(column-1))/column
+                let cellSize = (env.container.contentSize.width - R.Size.ContentSpaceHuge*2 - R.Size.ContentSpaceSmall*(column-1))/column
                 
                 //item布局
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(cellSize),
                                                                                      heightDimension: .absolute(cellSize)))
                 //group布局
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(cellSize)), subitem: item, count: Int(column))
-                group.interItemSpacing = NSCollectionLayoutSpacing.fixed(Constants.Size.ContentSpaceMin)
+                group.interItemSpacing = NSCollectionLayoutSpacing.fixed(R.Size.ContentSpaceSmall)
                 //section布局
                 let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = Constants.Size.ContentSpaceMin
+                section.interGroupSpacing = R.Size.ContentSpaceSmall
                 section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 24, bottom: 24, trailing: 24)
                 return section
             }
@@ -238,10 +226,10 @@ class RetroAchievementsListCell: UICollectionViewCell {
         }
     }
     
-    class AchievementsProgressView: UIView {
+    class AchievementsProgressView: BaseView {
         let indicatorView: UIView = {
             let view = UIView()
-            view.backgroundColor = Constants.Color.Yellow
+            view.backgroundColor = R.Color.Yellow
             view.layerCornerRadius = 1
             return view
         }()
@@ -260,7 +248,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
-            backgroundColor = Constants.Color.BackgroundSecondary
+            backgroundColor = R.Color.BackgroundTertiary
             layerCornerRadius = 1
             addSubview(indicatorView)
             indicatorView.snp.makeConstraints { make in
@@ -278,14 +266,14 @@ class RetroAchievementsListCell: UICollectionViewCell {
     private let coverImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
         return view
     }()
     
     private let progressLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.body()
-        view.textColor = Constants.Color.Yellow
+        view.font = R.Font.Footnote()
+        view.textColor = R.Color.Yellow
         return view
     }()
     
@@ -297,43 +285,43 @@ class RetroAchievementsListCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let view = MarqueeLabel()
         view.textAlignment = .left
-        view.font = Constants.Font.title(size: .l, weight: .semibold)
-        view.textColor = Constants.Color.LabelPrimary
+        view.font = R.Font.LargeTitle(emphasis: true)
+        view.textColor = R.Color.LabelPrimary
         return view
     }()
     
     private let lastActivityIcon: UIImageView = {
         let view = UIImageView()
         view.contentMode = .center
-        view.image = .symbolImage(.starCircleFill).applySymbolConfig(color: Constants.Color.LabelSecondary)
+        view.image = .symbolImage(.starCircleFill).applySymbolConfig(color: R.Color.LabelSecondary)
         return view
     }()
     
     private let lastActivityLabel: UILabel = {
         let view = UILabel()
-        view.textColor = Constants.Color.LabelSecondary
-        view.font = Constants.Font.body()
+        view.textColor = R.Color.LabelSecondary
+        view.font = R.Font.Footnote()
         return view
     }()
     
     let enableSwitchButton: DisabledTapSwitch = {
         let view = DisabledTapSwitch()
-        view.onTintColor = Constants.Color.Main
-        view.tintColor = Constants.Color.BackgroundSecondary
+        view.onTintColor = R.Color.Main
+        view.tintColor = R.Color.BackgroundTertiary
         return view
     }()
     
     let hardcoreSwitchButton: DisabledTapSwitch = {
         let view = DisabledTapSwitch()
-        view.onTintColor = Constants.Color.Main
-        view.tintColor = Constants.Color.BackgroundSecondary
+        view.onTintColor = R.Color.Main
+        view.tintColor = R.Color.BackgroundTertiary
         return view
     }()
     
     let alwaysShowProgressButton: DisabledTapSwitch = {
         let view = DisabledTapSwitch()
-        view.onTintColor = Constants.Color.Main
-        view.tintColor = Constants.Color.BackgroundSecondary
+        view.onTintColor = R.Color.Main
+        view.tintColor = R.Color.BackgroundTertiary
         return view
     }()
     
@@ -360,20 +348,21 @@ class RetroAchievementsListCell: UICollectionViewCell {
                 achievement.measuredPercent = achievementProgress.measuredPercent
                 achievement.measuredProgress = achievementProgress.measuredProgress
             }
-            topViewController()?.present(RetroAchievementsDetailViewController(achievement: achievement), animated: true)
+            RetroAchievementsDetailView.show(achievement: achievement)
         }
         return view
     }()
     
     private lazy var bottomButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setAttributedTitle(NSAttributedString(string: "RetroAchievements", attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.Indigo]).underlined, for: .normal)
+        view.setAttributedTitle(NSAttributedString(string: "RetroAchievements", attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.Indigo]).underlined, for: .normal)
+        view.isFocusable = true
         view.onTap { [weak self] in
             guard let self else { return }
             if let username = self.username {
-                UIApplication.shared.open(Constants.URLs.RetroProfile(username: username))
+                UIApplication.shared.open(R.URLs.RetroProfile(username: username))
             } else {
-                UIApplication.shared.open(Constants.URLs.Retro)
+                UIApplication.shared.open(R.URLs.Retro)
             }
         }
         return view
@@ -389,30 +378,30 @@ class RetroAchievementsListCell: UICollectionViewCell {
         addSubview(coverImageView)
         coverImageView.snp.makeConstraints { make in
             make.size.equalTo(80)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceHuge)
             make.top.equalToSuperview()
         }
         
         let retroAchievementLabel = UILabel()
-        retroAchievementLabel.attributedText = NSAttributedString(string: R.string.localizable.retroAchievements(), attributes: [.font: Constants.Font.title(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
+        retroAchievementLabel.attributedText = NSAttributedString(string: R.string.localizable.retroAchievements(), attributes: [.font: R.Font.Headline(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
         addSubview(retroAchievementLabel)
         retroAchievementLabel.snp.makeConstraints { make in
-            make.leading.equalTo(coverImageView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.top.equalTo(coverImageView).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(coverImageView.snp.trailing).offset(R.Size.ContentSpaceSmall)
+            make.top.equalTo(coverImageView).offset(R.Size.ContentSpaceSmall)
         }
         
         let completionProgressLabel = UILabel()
-        completionProgressLabel.attributedText = NSAttributedString(string: R.string.localizable.completionProgress(), attributes: [.font: Constants.Font.body(), .foregroundColor: Constants.Color.LabelSecondary])
+        completionProgressLabel.attributedText = NSAttributedString(string: R.string.localizable.completionProgress(), attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelSecondary])
         addSubview(completionProgressLabel)
         completionProgressLabel.snp.makeConstraints { make in
             make.leading.equalTo(retroAchievementLabel)
-            make.top.equalTo(retroAchievementLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny/2)
+            make.top.equalTo(retroAchievementLabel.snp.bottom).offset(R.Size.ContentSpaceTiny/2)
         }
         
         addSubview(progressLabel)
         progressLabel.snp.makeConstraints { make in
             make.centerY.equalTo(completionProgressLabel)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceHuge)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceHuge)
         }
         
         addSubview(progressView)
@@ -420,21 +409,21 @@ class RetroAchievementsListCell: UICollectionViewCell {
             make.height.equalTo(2)
             make.leading.equalTo(retroAchievementLabel)
             make.trailing.equalTo(progressLabel)
-            make.top.equalTo(completionProgressLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.top.equalTo(completionProgressLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
         }
         
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(coverImageView)
             make.trailing.equalTo(progressLabel)
-            make.top.equalTo(coverImageView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(coverImageView.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         addSubview(lastActivityIcon)
         lastActivityIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
             make.leading.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
         }
         
         addSubview(lastActivityLabel)
@@ -445,197 +434,197 @@ class RetroAchievementsListCell: UICollectionViewCell {
         }
         
         let container = UIView()
-        container.layerCornerRadius = Constants.Size.CornerRadiusMax
-        container.backgroundColor = Constants.Color.BackgroundPrimary
+        container.layerCornerRadius = R.Size.CornerRadiusLarge
+        container.backgroundColor = R.Color.BackgroundSecondary
         addSubview(container)
         container.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMax * 3)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(lastActivityIcon.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.height.equalTo(R.Size.ItemHeightLarge * 3)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(lastActivityIcon.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         let enableContainer = UIView()
         container.addSubview(enableContainer)
         enableContainer.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.height.equalTo(R.Size.ItemHeightLarge)
             make.leading.top.trailing.equalToSuperview()
         }
-        let enableIcon = UIImageView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
+        let enableIcon = UIImageView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 19, color: R.Color.LabelPrimary))
         enableIcon.contentMode = .center
         enableContainer.addSubview(enableIcon)
         enableIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
         }
         let enableLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 2
-            let matt = NSMutableAttributedString(string: R.string.localizable.enableAchievements(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
+            let matt = NSMutableAttributedString(string: R.string.localizable.enableAchievements(), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
             return view
         }()
         enableContainer.addSubview(enableLabel)
         enableLabel.snp.makeConstraints { make in
             make.centerY.equalTo(enableIcon)
-            make.leading.equalTo(enableIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(enableIcon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
         }
         enableContainer.addSubview(enableSwitchButton)
         enableSwitchButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.leading.equalTo(enableLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            if #available(iOS 26.0, *) {
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
+            make.leading.equalTo(enableLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 make.size.equalTo(CGSize(width: 63, height: 28))
             } else {
                 make.size.equalTo(CGSize(width: 51, height: 31))
             }
         }
-        if #available(iOS 26.0, *) {} else {
+        if #available(iOS 26.0, tvOS 26.0, *) {} else {
             enableSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         
         let hardcoreContainer = UIView()
         container.addSubview(hardcoreContainer)
         hardcoreContainer.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.height.equalTo(R.Size.ItemHeightLarge)
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(enableContainer.snp.bottom)
         }
-        let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
+        let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: R.Color.LabelPrimary))
         hardcoreIcon.contentMode = .center
         hardcoreContainer.addSubview(hardcoreIcon)
         hardcoreIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
         }
         let hardcoreScoreLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 2
-            let matt = NSMutableAttributedString(string: R.string.localizable.hardcoreMode(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
-            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcoreDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
+            let matt = NSMutableAttributedString(string: R.string.localizable.hardcoreMode(), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcoreDesc(), attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
             return view
         }()
         hardcoreContainer.addSubview(hardcoreScoreLabel)
         hardcoreScoreLabel.snp.makeConstraints { make in
             make.centerY.equalTo(hardcoreIcon)
-            make.leading.equalTo(hardcoreIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(hardcoreIcon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
         }
         hardcoreContainer.addSubview(hardcoreSwitchButton)
         hardcoreSwitchButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.leading.equalTo(hardcoreScoreLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            if #available(iOS 26.0, *) {
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
+            make.leading.equalTo(hardcoreScoreLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 make.size.equalTo(CGSize(width: 63, height: 28))
             } else {
                 make.size.equalTo(CGSize(width: 51, height: 31))
             }
         }
-        if #available(iOS 26.0, *) {} else {
+        if #available(iOS 26.0, tvOS 26.0, *) {} else {
             hardcoreSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         
         let alwaysShowProgressContainer = UIView()
         container.addSubview(alwaysShowProgressContainer)
         alwaysShowProgressContainer.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.height.equalTo(R.Size.ItemHeightLarge)
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(hardcoreContainer.snp.bottom)
         }
-        let alwaysShowProgressIcon = UIImageView(image: .symbolImage(.squareTextSquareFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
+        let alwaysShowProgressIcon = UIImageView(image: .symbolImage(.squareTextSquareFill).applySymbolConfig(size: 19, color: R.Color.LabelPrimary))
         alwaysShowProgressIcon.contentMode = .center
         alwaysShowProgressContainer.addSubview(alwaysShowProgressIcon)
         alwaysShowProgressIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
         }
         let alwaysShowProgressLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 2
-            let matt = NSMutableAttributedString(string: R.string.localizable.alwaysShowProgress(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
-            matt.append(NSAttributedString(string: "\n" + R.string.localizable.alwaysShowProgressDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
+            let matt = NSMutableAttributedString(string: R.string.localizable.alwaysShowProgress(), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.alwaysShowProgressDesc(), attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
             return view
         }()
         alwaysShowProgressContainer.addSubview(alwaysShowProgressLabel)
         alwaysShowProgressLabel.snp.makeConstraints { make in
             make.centerY.equalTo(alwaysShowProgressIcon)
-            make.leading.equalTo(alwaysShowProgressIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(alwaysShowProgressIcon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
         }
         alwaysShowProgressContainer.addSubview(alwaysShowProgressButton)
         alwaysShowProgressButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.leading.equalTo(alwaysShowProgressLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            if #available(iOS 26.0, *) {
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
+            make.leading.equalTo(alwaysShowProgressLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            if #available(iOS 26.0, tvOS 26.0, *) {
                 make.size.equalTo(CGSize(width: 63, height: 28))
             } else {
                 make.size.equalTo(CGSize(width: 51, height: 31))
             }
         }
-        if #available(iOS 26.0, *) {} else {
+        if #available(iOS 26.0, tvOS 26.0, *) {} else {
             alwaysShowProgressButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         
         
         let achievementInfoContainer = UIView()
-        achievementInfoContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
-        achievementInfoContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        achievementInfoContainer.layerCornerRadius = R.Size.CornerRadiusLarge
+        achievementInfoContainer.backgroundColor = R.Color.BackgroundSecondary
         addSubview(achievementInfoContainer)
         achievementInfoContainer.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightMax*2)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(alwaysShowProgressContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.height.equalTo(R.Size.ItemHeightLarge*2)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(alwaysShowProgressContainer.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         let achievementCountIcon = SymbolButton(image: R.image.customTrophyFill()?.applySymbolConfig())
         achievementInfoContainer.addSubview(achievementCountIcon)
         achievementCountIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.top.equalTo(18)
         }
         achievementInfoContainer.addSubview(achievementsCountLabel)
         achievementsCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(achievementCountIcon)
-            make.leading.equalTo(achievementCountIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(achievementCountIcon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
             make.trailing.equalToSuperview()
         }
         let pointIcon = SymbolButton(image: R.image.customFlagPatternCheckered()?.applySymbolConfig())
         achievementInfoContainer.addSubview(pointIcon)
         pointIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.top.equalTo(achievementCountIcon.snp.bottom).offset(36)
         }
         achievementInfoContainer.addSubview(pointLabel)
         pointLabel.snp.makeConstraints { make in
             make.centerY.equalTo(pointIcon)
-            make.leading.equalTo(pointIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(pointIcon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
             make.trailing.equalToSuperview()
         }
         
         let achievementListLabel = UILabel()
-        achievementListLabel.attributedText = NSAttributedString(string: R.string.localizable.achievementsList(), attributes: [.font: Constants.Font.body(weight: .semibold), .foregroundColor: Constants.Color.LabelSecondary])
+        achievementListLabel.attributedText = NSAttributedString(string: R.string.localizable.achievementsList(), attributes: [.font: R.Font.Footnote(emphasis: true), .foregroundColor: R.Color.LabelSecondary])
         addSubview(achievementListLabel)
         achievementListLabel.snp.makeConstraints { make in
             make.leading.equalTo(coverImageView)
-            make.top.equalTo(achievementInfoContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(achievementInfoContainer.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         addSubview(listView)
         listView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(achievementListLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(achievementListLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
             make.height.equalTo(16+(24*2)+50+(64*4)+(16*3))
         }
         
@@ -643,17 +632,17 @@ class RetroAchievementsListCell: UICollectionViewCell {
         addSubview(bottomLabelContainer)
         bottomLabelContainer.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(listView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(listView.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         let bottomLabel = UILabel()
-        bottomLabel.attributedText = NSAttributedString(string: R.string.localizable.achievementsMoreDetail(), attributes: [.font : Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.Indigo])
+        bottomLabel.attributedText = NSAttributedString(string: R.string.localizable.achievementsMoreDetail(), attributes: [.font : R.Font.Caption(), .foregroundColor: R.Color.Indigo])
         bottomLabelContainer.addSubview(bottomLabel)
         bottomLabel.snp.makeConstraints { make in
             make.leading.centerY.equalToSuperview()
         }
         bottomLabelContainer.addSubview(bottomButton)
         bottomButton.snp.makeConstraints { make in
-            make.leading.equalTo(bottomLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(bottomLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.top.bottom.trailing.equalToSuperview()
         }
     }
@@ -710,7 +699,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
         
         
         
-        titleLabel.text = retroGame.title ?? game.aliasName ?? game.name
+        titleLabel.text = retroGame.title ?? game.displayName
         
         if let timeAgo = game.latestPlayDate?.timeAgo() {
             lastActivityLabel.text = R.string.localizable.readyGameInfoSubTitle(timeAgo, Date.timeDuration(milliseconds: Int(game.totalPlayDuration)))
@@ -720,23 +709,23 @@ class RetroAchievementsListCell: UICollectionViewCell {
         
         
         achievementsCountLabel.attributedText = {
-            let matt = NSMutableAttributedString(string: R.string.localizable.totalAchievements(achievementCount), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
-            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(hardcoreUnlockCount)    ", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
-            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(softcoreUnlockCount)", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
+            let matt = NSMutableAttributedString(string: R.string.localizable.totalAchievements(achievementCount), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(hardcoreUnlockCount)    ", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
+            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(softcoreUnlockCount)", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             return matt.applying(attributes: [.paragraphStyle: style])
         }()
         pointLabel.attributedText = {
-            let matt = NSMutableAttributedString(string: R.string.localizable.totalPoints(totalPoints), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
-            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(hardcorePoints)    ", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
-            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(softcorePoints)", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
+            let matt = NSMutableAttributedString(string: R.string.localizable.totalPoints(totalPoints), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(hardcorePoints)    ", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
+            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(softcorePoints)", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             return matt.applying(attributes: [.paragraphStyle: style])
         }()
         

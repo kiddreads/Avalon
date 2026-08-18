@@ -19,32 +19,65 @@ extension UIImage {
     /// 生成SFSymbol
     /// - Parameters:
     ///   - symbol: symbol
-    ///   - size: 尺寸 默认:Constants.Size.SymbolSize
+    ///   - size: 尺寸 默认:R.Size.SymbolSize
     ///   - weight: 字重 默认:regular
     ///   - font: 字体大小，如果设置了font，则size、weight无效 默认:nil
-    ///   - color: 颜色 默认:Constants.Color.LabelPrimary
+    ///   - color: 颜色 默认:R.Color.LabelPrimary
     ///   - colors: 调色盘 如果设置了colors，则color无效 默认:nil
     convenience init(symbol: SFSymbol,
-                     size: CGFloat = Constants.Size.SymbolSize,
+                     size: CGFloat = R.Size.SymbolSize,
                      weight: UIFont.Weight = .regular,
                      font: UIFont? = nil,
-                     color: UIColor = Constants.Color.LabelPrimary,
+                     color: UIColor = R.Color.LabelPrimary,
                      colors: [UIColor]? = nil) {
         let sizeConfig = UIImage.SymbolConfiguration(font: font ?? UIFont.systemFont(ofSize: size))
         let colorConfig = UIImage.SymbolConfiguration(paletteColors: colors ?? [color])
         self.init(systemSymbol: symbol, withConfiguration: sizeConfig.applying(colorConfig))
     }
     
+//    static func symbolImage()
+    
+    
+//    convenience init(symbol: SFSymbol,
+//                     font: UIFont? = nil,
+//                     colors: [UIColor]? = nil) {
+//        var sizeConfig: UIImage.SymbolConfiguration? = nil
+//        var colorConfig: UIImage.SymbolConfiguration? = nil
+//        if let font {
+//            sizeConfig = UIImage.SymbolConfiguration(font: font)
+//        }
+//        if let colors, colors.count > 0 {
+//            colorConfig = UIImage.SymbolConfiguration(paletteColors: colors)
+//        }
+//        
+//        var symbolConfig: UIImage.SymbolConfiguration? = nil
+//        if let sizeConfig {
+//            symbolConfig = sizeConfig
+//        }
+//        if let colorConfig {
+//            if symbolConfig != nil {
+//                symbolConfig = symbolConfig?.applying(colorConfig)
+//            } else {
+//                symbolConfig = colorConfig
+//            }
+//        }
+//        
+//        if let symbolConfig {
+//            self.init(systemSymbol: symbol, withConfiguration: symbolConfig)
+//        } else {
+//            self.init(systemSymbol: symbol)
+//        }
+//    }
     
     /// 生成一个可以设定背景大小的SFSymbol
     /// - Parameters:
     ///   - backgroundColor: 背景颜色
     ///   - imageSize: 整个图片大小
     convenience init(symbol: SFSymbol,
-                     size: CGFloat = Constants.Size.SymbolSize,
+                     size: CGFloat = R.Size.SymbolSize,
                      weight: UIFont.Weight = .regular,
                      font: UIFont? = nil,
-                     color: UIColor = Constants.Color.LabelPrimary,
+                     color: UIColor = R.Color.LabelPrimary,
                      colors: [UIColor]? = nil,
                      backgroundColor: UIColor,
                      imageSize: CGSize) {
@@ -64,15 +97,15 @@ extension UIImage {
     /// 自定义SFSymbol配置
     /// - Parameters:
     ///   - symbol: symbol
-    ///   - size: 尺寸 默认:Constants.Size.SymbolSize
+    ///   - size: 尺寸 默认:R.Size.SymbolSize
     ///   - weight: 字重 默认:regular
     ///   - font: 字体大小，如果设置了font，则size、weight无效 默认:nil
-    ///   - color: 颜色 默认:Constants.Color.LabelPrimary
+    ///   - color: 颜色 默认:R.Color.LabelPrimary
     ///   - colors: 调色盘 如果设置了colors，则color无效 默认:nil
-    func applySymbolConfig(size: CGFloat = Constants.Size.SymbolSize,
+    func applySymbolConfig(size: CGFloat = R.Size.SymbolSize,
                            weight: UIFont.Weight = .regular,
                            font: UIFont? = nil,
-                           color: UIColor = Constants.Color.LabelPrimary,
+                           color: UIColor = R.Color.LabelPrimary,
                            colors: [UIColor]? = nil) -> UIImage {
         let sizeConfig = UIImage.SymbolConfiguration(font: font ?? UIFont.systemFont(ofSize: size))
         let colorConfig = UIImage.SymbolConfiguration(paletteColors: colors ?? [color])
@@ -82,13 +115,41 @@ extension UIImage {
     /// 获取缺省图
     /// - Parameter preferenceSize: 调整大小
     /// - Returns: 图片
-    static func placeHolder(preferenceSize: CGSize? = nil) -> UIImage {
-        let lightImage = R.image.place_holder(compatibleWith: UITraitCollection(userInterfaceStyle: .light))!
-        let darkImage = R.image.place_holder(compatibleWith: UITraitCollection(userInterfaceStyle: .dark))!
-        if let preferenceSize = preferenceSize {
-            return UIImage(.dm, light: lightImage.scaled(toSize: preferenceSize) ?? lightImage, dark: darkImage.scaled(toSize: preferenceSize) ?? darkImage)
+    static var placeHolderImageCaches = [String: UIImage]()
+    static func placeHolder(preferenceSize: CGSize? = nil,
+                            color: UIColor? = nil) -> UIImage {
+        let logoImage = R.image.logo_iconSymbols() ?? UIImage(systemSymbol: .photo)
+        let contentSize = preferenceSize ?? CGSize(100)
+        let fontSize = contentSize.minDimension*0.6
+        
+        let sizeHash = "\(contentSize.width)_\(contentSize.height)"
+        if let cacheImage = placeHolderImageCaches[sizeHash] {
+            return cacheImage
         }
-        return R.image.place_holder()!
+        
+        let lightImage = logoImage.applySymbolConfig(size: fontSize,
+                                                     color: (color ?? R.Color.BackgroundTertiary).forceStyle(.light))
+        let darkImage = logoImage.applySymbolConfig(size: fontSize,
+                                                    color: (color ?? R.Color.BackgroundTertiary).forceStyle(.dark))
+        
+        let lightContentCgImage = UIGraphicsImageRenderer(size: contentSize, format: UIGraphicsImageRendererFormat()).image(actions: { context in
+            lightImage.draw(in: CGRect(center: CGPoint(x: contentSize.width/2, y: contentSize.height/2), size: lightImage.size))
+        }).cgImage
+        
+        let darkContentCgImage = UIGraphicsImageRenderer(size: contentSize, format: UIGraphicsImageRendererFormat()).image(actions: { context in
+            darkImage.draw(in: CGRect(center: CGPoint(x: contentSize.width/2, y: contentSize.height/2), size: darkImage.size))
+        }).cgImage
+        
+        let resultImage: UIImage
+        if let lightContentCgImage, let darkContentCgImage {
+            let lightContentImage = UIImage(cgImage: lightContentCgImage, scale: UIWindow.applicationWindow?.screen.scale ?? 1, orientation: .up)
+            let darkContentImage = UIImage(cgImage: darkContentCgImage, scale: UIWindow.applicationWindow?.screen.scale ?? 1, orientation: .up)
+            resultImage = UIImage(.dm, light: lightContentImage, dark: darkContentImage)
+        } else {
+            resultImage = UIImage(.dm, light: lightImage, dark: darkImage)
+        }
+        placeHolderImageCaches[sizeHash] = resultImage
+        return resultImage
     }
     
     /// 根据尺寸缩放图片 如果传入的尺寸比例和原图不一致还会进行居中裁剪
@@ -139,7 +200,7 @@ extension UIImage {
     
     /// 为image生成主背景
     var dominantBackground: UIColor {
-        return dominantColors().background ?? Constants.Color.BackgroundPrimary
+        return dominantColors().background ?? R.Color.BackgroundSecondary
     }
     
     func dominantColors() -> (background: UIColor?, primary: UIColor?, secondary: UIColor?) {
@@ -154,7 +215,7 @@ extension UIImage {
     func processGameSnapshop() -> Data {
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
-        let imageScale = Constants.Numbers.GameSnapshotScaleRatio
+        let imageScale = R.Numbers.GameSnapshotScaleRatio
         let imageSize = CGSize(width: self.size.width * imageScale, height: self.size.height * imageScale)
         
         let renderer = UIGraphicsImageRenderer(size: imageSize, format: format)
@@ -165,7 +226,7 @@ extension UIImage {
         return screenshotData
     }
     
-    static func radialGradientImage(size: CGSize,
+    static func  radialGradientImage(size: CGSize,
                                     colors: [UIColor],
                                     completion: ((UIImage?)->Void)? = nil) {
         DispatchQueue.global().async {
@@ -188,7 +249,7 @@ extension UIImage {
                                       locations: locations)
             
             // 渐变中心：底部中点 (0.5, 1.0)
-            let center = CGPoint(x: size.width / 2 - 50, y: size.height)
+            let center = CGPoint(x: size.width*0.5 - 50, y: size.height*1.0)
             let radius = size.height - 10
             
             context.drawRadialGradient(
@@ -197,6 +258,57 @@ extension UIImage {
                 startRadius: 0,
                 endCenter: CGPoint(x: center.x + 50, y: center.y),
                 endRadius: radius,
+                options: [.drawsBeforeStartLocation, .drawsAfterEndLocation]
+            )
+            
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            DispatchQueue.main.async {
+                completion?(image)
+            }
+        }
+    }
+    
+    
+    static func radialGradientImage(size: CGSize,
+                                    colors: [UIColor],
+                                    startCenter: CGPoint = .init(x: 0.5, y: 0.5),
+                                    endCenter: CGPoint? = nil,
+                                    startRadius: CGFloat? = nil,
+                                    endRadius: CGFloat? = nil,
+                                    completion: ((UIImage?)->Void)? = nil) {
+        DispatchQueue.global().async {
+            let scale = UIScreen.main.scale
+            
+            let locations = colors.gradientLocations()
+            
+            UIGraphicsBeginImageContextWithOptions(size, false, scale)
+            guard let context = UIGraphicsGetCurrentContext() else {
+                DispatchQueue.main.async {
+                    completion?(nil)
+                }
+                return
+            }
+            
+            let cgColors = colors.map { $0.cgColor } as CFArray
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let gradient = CGGradient(colorsSpace: colorSpace,
+                                      colors: cgColors,
+                                      locations: locations)
+            
+            let sCenter = CGPoint(x: size.width*startCenter.x, y: size.height*startCenter.y)
+            var eCenter = sCenter
+            if let endCenter {
+                eCenter = CGPoint(x: size.width*endCenter.x, y: size.height*endCenter.y)
+            }
+            
+            
+            context.drawRadialGradient(
+                gradient!,
+                startCenter: sCenter,
+                startRadius: startRadius ?? 0,
+                endCenter: eCenter,
+                endRadius: endRadius ?? size.height,
                 options: [.drawsBeforeStartLocation, .drawsAfterEndLocation]
             )
             

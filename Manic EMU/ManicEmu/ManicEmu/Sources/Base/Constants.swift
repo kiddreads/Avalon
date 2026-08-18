@@ -10,76 +10,45 @@
 import UIKit
 import RealmSwift
 
-struct Constants {
-    struct Size {
+extension _R {
+    var Size: _Size.Type { _Size.self }
+    var Color: _Color.Type { _Color.self }
+    var Path: _Path.Type { _Path.self }
+    var DefaultKey: _DefaultKey.Type { _DefaultKey.self }
+    var Font: _Font.Type { _Font.self }
+    var Strings: _Strings.Type { _Strings.self }
+    var Config: _Config.Type { _Config.self }
+    var Numbers: _Numbers.Type { _Numbers.self }
+    var NotificationName: _NotificationName.Type { _NotificationName.self }
+    var URLs: _URLs.Type { _URLs.self }
+    var BIOS: _BIOS.Type { _BIOS.self }
+    var Style: _Style.Type { _Style.self }
+    var Cipher: _Cipher.Type { _Cipher.self }
+}
+
+extension _R {
+    struct _Size {
         //系统常用尺寸
         static var WindowSize: CGSize { UIWindow.applicationWindow?.bounds.size ?? .zero }
         static var WindowWidth: CGFloat { WindowSize.width }
         static var WindowHeight: CGFloat { WindowSize.height }
-        static var SafeAera: UIEdgeInsets { UIWindow.applicationWindow?.safeAreaInsets ?? .zero}
+        static var SafeArea: UIEdgeInsets { UIWindow.applicationWindow?.safeAreaInsets ?? .zero}
+        static var TopWindowSafeArea: UIEdgeInsets { UIWindow.topWindow?.safeAreaInsets ?? .zero}
+        static var PresentationTop: CGFloat { UIDevice.isPhone ? (UIDevice.hasNotch ? 69 : 40) : 0 }
         
-        //布局
-        ///间距 24
-        static let ContentSpaceHuge = 24.0
-        ///间距 20
-        static let ContentSpaceMax = 20.0
-        ///间距 16
-        static let ContentSpaceMid = 16.0
-        ///间距 12
-        static let ContentSpaceMin = 12.0
-        ///间距 8
-        static let ContentSpaceTiny = 8.0
-        ///间距 4
-        static let ContentSpaceUltraTiny = 4.0
-        
-        ///图标尺寸 76x76
-        static let IconSizeHuge = CGSize(width: 76, height: 76)
-        ///图标尺寸 36x36
-        static let IconSizeMax = CGSize(width: 36, height: 36)
-        ///图标尺寸 30x30
-        static let IconSizeMid = CGSize(width: 30, height: 30)
-        ///图标尺寸 24x24
-        static let IconSizeMin = CGSize(width: 24, height: 24)
-        ///图标尺寸 18x18
-        static let IconSizeTiny = CGSize(width: 18, height: 18)
-        
-        /// 圆角半径 20
-        static let CornerRadiusMax = 20.0
-        /// 圆角半径 16
-        static let CornerRadiusMid = 16.0
-        /// 圆角半径 12
-        static let CornerRadiusMin = 12.0
-        /// 圆角半径 8
-        static let CornerRadiusTiny = 8.0
-        
-        /// 条目高度 76
-        static let ItemHeightHuge = 76.0
-        /// 条目高度 60
-        static let ItemHeightMax = 60.0
-        /// 条目高度 50
-        static let ItemHeightMid = 50.0
-        /// 条目高度 44
-        static let ItemHeightMin = 44.0
-        /// 条目高度 36
-        static let ItemHeightTiny = 36.0
-        /// 条目高度 30
-        static let ItemHeightUltraTiny = 30.0
-        
-        ///符号图标size 16
+        ///符号图标size 18
         static let SymbolSize = 18.0
         
         ///HomeTabBarSize 300x60
-        static let HomeTabBarSize = CGSize(width: 300, height: ItemHeightMax)
+        static let HomeTabBarSize = CGSize(width: 300, height: ItemHeightLarge)
         /// 侧边视图宽度
         static let SideMenuWidth = UIDevice.isPhone ? WindowSize.minDimension * 0.874 : 300
-        ///分割线高度
-        static let BorderLineHeight = 1.0
         /// 游戏封面宽高比 默认1:1
-        static func GameCoverRatio(gameType: GameType) -> CGFloat {
-            if GameCoverForceSquare {
+        static func GameCoverRatio(gameType: GameType, ignoreForceSquare: Bool = false) -> CGFloat {
+            if R.Style.GameCoverForceSquare && !ignoreForceSquare {
                 return 1.0
             }
-            switch GameCoverStyle {
+            switch R.Style.GameCoverStyle {
             case .style1:
                 switch gameType {
                 case ._3ds, .ds: return 1.13
@@ -104,6 +73,7 @@ struct Constants {
                 case .j2me: return 0.75
                 case .dos, .win95, .win98: return 0.8
                 case .chm: return 0.7908
+                case .xbox: return 0.714
                 default: return 1.0
                 }
             case .style2:
@@ -121,140 +91,334 @@ struct Constants {
         
         ///CollectionView的top缩进
         static var ContentInsetTop: CGFloat {
-            let safeArea = Constants.Size.SafeAera
-            return safeArea.top > 0 ? safeArea.top : Constants.Size.ContentSpaceMax
+            let safeArea = R.Size.SafeArea
+            return safeArea.top > 0 ? safeArea.top : R.Size.ContentSpaceLarge
         }
         
         ///CollectionView的bottom缩进
         static var ContentInsetBottom: CGFloat {
-            let safeArea = Constants.Size.SafeAera
-            return safeArea.bottom > 0 ? safeArea.bottom : Constants.Size.ContentSpaceMax
+            let safeArea = R.Size.SafeArea
+            return safeArea.bottom > 0 ? safeArea.bottom : R.Size.ContentSpaceLarge
         }
         
-        ///游戏封面圆角样式
-        static var GameCoverStyle = CoverStyle.style1
-        static var GameCoverCornerRatio = GameCoverStyle.defaultCornerRadius()
-        static var GameCoverForceSquare = false
         ///苹果图标默认尺寸
         static func AppleIconCornerRadius(height: CGFloat) -> CGFloat {
             return 10/57 * height
         }
         
-        static var GamesPerRow = 2.0
-        static var GamesHideScrollIndicator = false
-        static var GamesHideTitle = false
-        static var GamesHideGroupTitle = false
-        static var GamesGroupTitleStyle: GroupTitleStyle = .abbr
         static var GamesToolViewHeight: CGFloat {
             let enableFilter = Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false
-            return Constants.Size.ItemHeightHuge + (enableFilter ? Constants.Size.ItemHeightUltraTiny + Constants.Size.ContentSpaceMid : 0)
+            return R.Size.ContentSpaceExtraSmall +
+            R.Size.ItemHeightTiny +
+            R.Size.ContentSpaceExtraSmall +
+            (enableFilter ? R.Size.ContentSpaceTiny + R.Size.ItemHeightMicro + R.Size.ContentSpaceMedium : 0)
+        }
+        
+        //MARK Spacing
+        ///24.0
+        static let ContentSpaceHuge = 24.0
+        ///20.0
+        static let ContentSpaceLarge = 20.0
+        ///16.0
+        static let ContentSpaceMedium = 16.0
+        ///12.0
+        static let ContentSpaceSmall = 12.0
+        ///8.0
+        static let ContentSpaceExtraSmall = 8.0
+        ///6.0
+        static let ContentSpaceExtraExtraSmall = 6.0
+        ///4.0
+        static let ContentSpaceTiny = 4.0
+        ///2.0
+        static let ContentSpaceMicro = 2.0
+        
+        //MARK: - Padding Size
+        ///12.0
+        static let PaddingLarge = 12.0
+        ///8.0
+        static let PaddingMedium = 8.0
+        ///4.0
+        static let PaddingSmall = 4.0
+        ///2.0
+        static let PaddingExtraSmall = 2.0
+        
+        //MARK: - Button Size
+        ///50.0
+        static let ButtonExtraLarge = 50.0
+        ///44.0
+        static let ButtonLarge = 44.0
+        ///40.0
+        static let ButtonMedium = 40.0
+        ///36.0
+        static let ButtonSmall = 36.0
+        ///30.0
+        static let ButtonExtraSmall = 30.0
+        ///24.0
+        static let ButtonExtraExtraSmall = 24.0
+        ///32x24
+        static let ButtonSizeExtraExtraSmall = CGSize(width: 32, height: 24)
+        ///20x20 CheckButton RadioButton
+        static let ButtonSizeAccessory = CGSize(width: 20, height: 20)
+        ///horizontal: 8 vertical: 4
+        static let ButtonInsets = UIEdgeInsets(horizontal: R.Size.ContentSpaceExtraSmall*2, vertical: R.Size.ContentSpaceTiny*2)
+        ///327.0
+        static let ButtonMaxWidth = 327.0
+        
+        //MARK: - Icon Size
+        ///图标尺寸 76x76
+        static let IconSizeHuge = CGSize(76)
+        ///图标尺寸 36x36
+        static let IconSizeExtraLarge = CGSize(36)
+        ///图标尺寸 30x30
+        static let IconSizeLarge = CGSize(30)
+        ///24x24
+        static let IconSizeMedium = CGSize(24)
+        ///图标尺寸 18x18
+        static let IconSizeSmall = CGSize(18)
+        ///16x16
+        static let IconSizeExtraSmall = CGSize(16)
+        
+        //MARK: - Border Size
+        ///2.0
+        static let Border = 1.0
+        
+        //MARK: - Progress Size
+        ///24.0
+        static let ProgressLarge = 24.0
+        ///4.0
+        static let ProgressMedium = 4.0
+        ///2.0
+        static let ProgressSmall = 2.0
+        
+        //MARK: - Icon Size
+        ///20.0
+        static let IconMedium = 20.0
+        static let LabelIconSizeToFontSizeRatio = 0.8
+        static let ButtonIconSizeToFontSizeRatio = 0.725
+        static let IconOffsetRatioInLabel = 0.125
+        
+        //MARK: - Min Touch Size
+        static let MinTouchAreaSize = 44.0
+        
+        //MARK: - Keyboard
+        ///150.0
+        static let KeyboardDistance = 150.0
+        
+        //MARK: Header & Footer
+        ///44.0
+        static let SupplementaryItemHeight = 44.0
+        ///32.0
+        static let SupplementaryButtonHeight = 32.0
+        
+        //MARK: - Navigation
+        ///50.0
+        static let NavigationHeight = 50.0
+        
+        //MARK: - Cell
+        ///60.0
+        static let CellHeight = 60.0
+        
+        //MARK: - Card
+        ///154.0
+        static let CardHeight = 154.0
+        
+        //MARK: - Sheet
+        static var SheetWindowMaxSize: CGSize {
+            if UIDevice.isPhone {
+                if UIDevice.isLandscape {
+                    return CGSize(width: WindowHeight, height: WindowHeight - SafeArea.vertical)
+                } else {
+                    return CGSize(width: WindowWidth, height: WindowHeight - PresentationTop)
+                }
+            } else if UIDevice.isPad {
+                if UIDevice.isLandscape {
+                    let height = WindowHeight * 0.9
+                    return CGSize(width: height*9/16, height: height)
+                } else {
+                    let width = WindowWidth*0.5
+                    return CGSize(width: width, height: width*16/9)
+                }
+            }
+            return R.Size.WindowSize
+        }
+        
+        static var SheetWindowMinSize: CGSize {
+            let size = SheetWindowMaxSize
+            return CGSize(width: size.width, height: 200)
+        }
+        
+        static var SheetFullScreenForIpadLandscape: CGSize {
+            let width = WindowWidth*0.8
+            return CGSize(width: width, height: width*9/16)
+        }
+        
+        ///12.0
+        static var SheetGrabberTopInset = 12.0
+        
+        //MARK: - CornerRadius
+        ///20.0
+        static let CornerRadiusLarge = 20.0
+        ///16.0
+        static let CornerRadiusMedium = 16.0
+        ///12.0
+        static let CornerRadiusSmall = 12.0
+        ///8.0
+        static let CornerRadiusTiny = 8.0
+        ///6.0
+        static let CornerRadiusMicro = 6.0
+        
+        ///76.0
+        static let ItemHeightExtraLarge = 76.0
+        ///60.0
+        static let ItemHeightLarge = 60.0
+        ///50.0
+        static let ItemHeightMedium = 50.0
+        ///44.0
+        static let ItemHeightSmall = 44.0
+        ///40.0
+        static let ItemHeightExtraSmall = 44.0
+        ///36.0
+        static let ItemHeightTiny = 36.0
+        ///30.0
+        static let ItemHeightMicro = 30.0
+        
+        //MARK: Others
+        static var PageBackgroundMaskHeight: CGFloat { ContentInsetTop + ItemHeightMedium }
+        
+        static let GameInfoGameOptionsTopInsets = 380.0
+        
+        static let LabelLineSpacing = 2.0
+        
+        static var PreferredContentSize: CGSize {
+            var sheetSize = SheetWindowMaxSize
+            if UIDevice.isLandscape {
+                sheetSize.height = WindowHeight * 0.79
+            }
+            return sheetSize
         }
     }
     
-    struct Color {
-        //文本
+    struct _Color {
+        //MARK: - Label Color
+        /// dark: #ffffff light: #323443
         static let LabelPrimary = UIColor(.dm,
                                           light: UIColor(hexString: "#323443")!,
                                           dark: UIColor(hexString: "#ffffff")!)
+        /// dark: #8F8F92 light: #90929F
         static let LabelSecondary = UIColor(.dm,
                                             light: UIColor(hexString: "#90929F")!,
                                             dark: UIColor(hexString: "#8F8F92")!)
+        /// dark: #403E46 light: #C7C6CC
         static let LabelTertiary = UIColor(.dm,
-                                           light: UIColor(hexString: "#C1C0C6")!,
+                                           light: UIColor(hexString: "#C7C6CC")!,
                                            dark: UIColor(hexString: "#403E46")!)
         
-        //分割线
+        //MARK: - Border Color
+        /// dark: #FFFFFF 5% light: #000000 5%
         static let Border = UIColor(.dm,
                                     light: .black.withAlphaComponent(0.05),
                                     dark: .white.withAlphaComponent(0.05))
         
-        //侧边栏
+        //MARK: - Side Menu Color
+        /// dark: #121212 light: #C7C6CC
         static let SideList = UIColor(.dm,
-                                      light: UIColor(hexString: "#F7F8FC")!,
-                                      dark: UIColor(hexString: "#17171D")!)
+                                      light: UIColor(hexString: "#C7C6CC")!,
+                                      dark: UIColor(hexString: "#121212")!)
         
-        //背景
-        static let Background = UIColor(.dm,
-                                              light: UIColor(hexString: "#F1F4FE")!,
-                                              dark: UIColor(hexString: "#17171D")!)
+        static let Switch = UIColor(.dm,
+                                    light: UIColor(hexString: "#E0E0E0")!,
+                                    dark: UIColor(hexString: "#35353D")!)
         
+        //MARK: - Background
+        /// dark: #121212 light: #F2F2F6
         static let BackgroundPrimary = UIColor(.dm,
-                                              light: UIColor(hexString: "#FAFCFF")!,
-                                              dark: UIColor(hexString: "#222229")!)
-        
+                                               light: UIColor(hexString: "#F2F2F6")!,
+                                               dark: UIColor(hexString: "#121212")!)
+        /// dark: #1B1B20 light: #FFFFFF
         static let BackgroundSecondary = UIColor(.dm,
-                                           light: UIColor(hexString: "#E1E2E5")!,
-                                           dark: UIColor(hexString: "#464651")!)
-        //Input
-        static let InputBackground = UIColor(.dm,
-                                           light: UIColor(hexString: "#E8EBF2")!,
-                                           dark: UIColor(hexString: "#121217")!)
+                                                 light: UIColor(hexString: "#FFFFFF")!,
+                                                 dark: UIColor(hexString: "#1B1B20")!)
+        /// dark: #27272E light: #EEEEEE
+        static let BackgroundTertiary = UIColor(.dm,
+                                                light: UIColor(hexString: "#EEEEEE")!,
+                                                dark: UIColor(hexString: "#27272E")!)
+        /// dark: #464651 light: #FFFFFF
+        static let BackgroundQuaternary = UIColor(.dm,
+                                                  light: UIColor(hexString: "#FFFFFF")!,
+                                                  dark: UIColor(hexString: "#464651")!)
+        /// dark: #1B1B20 70% light: #FFFFFF 70%
+        static let BackgroundQuinary = UIColor(.dm,
+                                               light: UIColor(hexString: "#FFFFFF", transparency: 0.7)!,
+                                               dark: UIColor(hexString: "#464651", transparency: 0.7)!)
         
-        //Segment
-        static let SegmentBackground = UIColor(.dm,
-                                               light: UIColor(hexString: "#E8EBF2")!,
-                                               dark: UIColor(hexString: "#222229")!)
+        //MARK: - Input Box Color
+        /// dark: #101010 light: #E9E9ED
+        static let InputBox = UIColor(.dm,
+                                      light: UIColor(hexString: "#E9E9ED")!,
+                                      dark: UIColor(hexString: "#101010")!)
         
-        static let SegmentHighlight = UIColor(.dm,
-                                              light: UIColor(hexString: "#FAFCFF")!,
-                                              dark: UIColor(hexString: "#464651")!)
+        //MARK: - Vibrant colors
+        static var Gradient = [R.Color.Red, R.Color.Orange, R.Color.Purple, R.Color.Indigo]
         
-        static let AppearanceSegmentHighlight = UIColor(.dm,
-                                                        light: UIColor(hexString: "#FFFFFF")!,
-                                                        dark: UIColor(hexString: "#464651")!)
-        
-        //阴影
-        static let Shadow = BackgroundPrimary
-        
-        //颜色
-        static var Gradient = [UIColor(hexString: "#FF2442")!, UIColor(hexString: "#EB7500")!, UIColor(hexString: "#BB64FF")!, UIColor(hexString: "#0096FF")!]
-        
-        static var MainDynamicColor = UIColor(hexString: "#FF2442")!
-        
-        static let Main = UIColor(.dm) { traitCollection in
-            return MainDynamicColor
+        static var Main: UIColor {
+            UIColor { _ in
+                ThemeManager.shared.mainColor
+            }
         }
-        
+        ///#FF2442
         static let Red = UIColor(.dm,
                                  light: UIColor(hexString: "#FF2442")!,
-                                 dark: UIColor(hexString: "#FF2442")!)
-        
+                                 dark: UIColor(hexString: "#FF2442")!.darken(by: 0.1))
+        ///#06D58F
         static let Green = UIColor(.dm,
                                    light: UIColor(hexString: "#06D58F")!,
-                                   dark: UIColor(hexString: "#06D58F")!)
-        
-        static let Blue = UIColor(.dm,
-                                  light: UIColor(hexString: "#7984FF")!,
-                                  dark: UIColor(hexString: "#7984FF")!)
-        
+                                   dark: UIColor(hexString: "#06D58F")!.darken(by: 0.1))
+        ///#4BE1E5
+        static let Cyan = UIColor(.dm,
+                                  light: UIColor(hexString: "#4BE1E5")!,
+                                  dark: UIColor(hexString: "#4BE1E5")!.darken(by: 0.1))
+        ///#33A9FF
         static let Indigo = UIColor(.dm,
                                     light: UIColor(hexString: "#33A9FF")!,
-                                    dark: UIColor(hexString: "#33A9FF")!)
-        
+                                    dark: UIColor(hexString: "#33A9FF")!.darken(by: 0.1))
+        ///#7984FF
         static let Purple = UIColor(.dm,
-                                    light: UIColor(hexString: "#9390FF")!,
-                                    dark: UIColor(hexString: "#9390FF")!)
-        
+                                    light: UIColor(hexString: "#7984FF")!,
+                                    dark: UIColor(hexString: "#7984FF")!.darken(by: 0.1))
+        ///#FFBC40
         static let Yellow = UIColor(.dm,
-                                    light: UIColor(hexString: "#FEC458")!,
-                                    dark: UIColor(hexString: "#FEC458")!)
-
-        
+                                    light: UIColor(hexString: "#FFBC40")!,
+                                    dark: UIColor(hexString: "#FFBC40")!.darken(by: 0.1))
+        ///#FF7A71
         static let Magenta = UIColor(.dm,
-                                     light: UIColor(hexString: "#FF7B7F")!,
-                                     dark: UIColor(hexString: "#FF7B7F")!)
-
-        
+                                     light: UIColor(hexString: "#FF7A71")!,
+                                     dark: UIColor(hexString: "#FF7A71")!.darken(by: 0.1))
+        ///#FF9762
         static let Orange = UIColor(.dm,
-                                    light: UIColor(hexString: "#FF7A71")!,
-                                    dark: UIColor(hexString: "#FF7A71")!)
-        
+                                    light: UIColor(hexString: "#FF9762")!,
+                                    dark: UIColor(hexString: "#FF9762")!.darken(by: 0.1))
+        ///#FB89DE
         static let Pink = UIColor(.dm,
-                                    light: UIColor(hexString: "#FB89DE")!,
-                                    dark: UIColor(hexString: "#FB89DE")!)
+                                  light: UIColor(hexString: "#FB89DE")!,
+                                  dark: UIColor(hexString: "#FB89DE")!.darken(by: 0.1))
+        
+        //MARK: Other colors
+        static let Shadow = BackgroundPrimary
+        
+        static let PressOverlay = UIColor(.dm,
+                                          light: .black.withAlphaComponent(0.04),
+                                          dark: .white.withAlphaComponent(0.04))
+        
+        static let CoverSide = UIColor(.dm,
+                                       light: UIColor(hexString: "#FFFFFF")!,
+                                       dark: UIColor(hexString: "#202026")!)
+        
+        static let CoverEmpty = UIColor(.dm,
+                                        light: UIColor(hexString: "#FAFAFA")!,
+                                        dark: UIColor(hexString: "#1B1B20")!)
     }
     
-    struct Path {
+    struct _Path {
         static let Document = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         static var Data: String {
             let path = Document.appendingPathComponent("Datas")
@@ -328,16 +492,8 @@ struct Constants {
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
         static let MAMEDB = Resource.appendingPathComponent("MAME.db")
+        static let ExtrasDB = Resource.appendingPathComponent("Extras.db")
         static let Assets = Document.appendingPathComponent("Assets")
-        static var GameListBackground: String = {
-            var backgroundImageName = ""
-            if UIDevice.isPhone {
-                backgroundImageName = "iphone"
-            } else if UIDevice.isPad {
-                backgroundImageName = "ipad"
-            }
-            return Assets.appendingPathComponent(backgroundImageName + "_background.png")
-        }()
         static let GameplayManuals = Document.appendingPathComponent("Manuals")
         static let NESPalettes = Resource.appendingPathComponent("NESPalettes")
         static let CustomPalettes = Document.appendingPathComponent("Palettes")
@@ -358,7 +514,7 @@ struct Constants {
         static let NimbusCiaPath = NimbusPath.appendingPathComponent("cias/nimbus.cia")
     }
     
-    struct DefaultKey {
+    struct _DefaultKey {
         static let HasShowPrivacyAlert = "HasShowPrivacyAlert"
         static let AppGroupName = "group.aoshuang.ManicEmu"
         static let AppGroupIsPremiumKey = "AppGroupIsPremiumKey"
@@ -368,7 +524,6 @@ struct Constants {
         static let SystemCoreVersion = "SystemCoreVersion"
         static let SystemCoreBuildVersion = "SystemCoreBuildVersion"
         static let HasShow3DSNotSupportAlert = "HasShow3DSNotSupportAlert"
-        static let FlexSkinFirstTimeGuide = "FlexSkinFirstTimeGuide"
         static let HasShowSSPlayAlert = "HasShowSSPlayAlert"
         static let HasShowPS1PlayAlert = "HasShowPS1PlayAlert"
         static let HasShowJumpGameInfoAlert = "HasShowJumpGameInfoAlert"
@@ -380,59 +535,27 @@ struct Constants {
         static let FoolsDayTrickCount = "FoolsDayTrickCount"
     }
     
-    struct Font {
-        enum Size { case s, m, l}
+    struct _Font {
+        ///24
+        static func LargeTitle(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 24, weight: emphasis ? .bold : .regular) }
+        ///17
+        static func Headline(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 17, weight: emphasis ? .semibold : .regular) }
+        ///15
+        static func Body(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 15, weight: emphasis ? .medium : .regular) }
+        ///14
+        static func Body2(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 14, weight: emphasis ? .bold : .regular) }
+        ///13
+        static func Subheadline(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 13, weight: emphasis ? .medium : .regular) }
+        ///12
+        static func Footnote(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 12, weight: emphasis ? .medium : .regular) }
+        ///11
+        static func Caption(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 11, weight: emphasis ? .medium : .regular) }
+        ///8
+        static func Caption2(emphasis: Bool = false) -> UIFont { UIFont.systemFont(ofSize: 8, weight: emphasis ? .medium : .regular) }
         
-        /// title
-        /// - Parameters:
-        ///   - size: s: 17 m: 18 l: 24
-        ///   - weight: 默认medium
-        /// - Returns: UIFont
-        static func title(size: Size = .l, weight: UIFont.Weight = .bold) -> UIFont {
-            switch size {
-            case .s:
-                UIFont.systemFont(ofSize: 17, weight: weight)
-            case .m:
-                UIFont.systemFont(ofSize: 18, weight: weight)
-            case .l:
-                UIFont.systemFont(ofSize: 24, weight: weight)
-            }
-        }
-        
-        /// body
-        /// - Parameters:
-        ///   - size: s: 13 m: 14 l: 15
-        ///   - weight: 默认regular
-        /// - Returns: UIFont
-        static func body(size: Size = .s, weight: UIFont.Weight = .regular) -> UIFont {
-            switch size {
-            case .s:
-                UIFont.systemFont(ofSize: 13, weight: weight)
-            case .m:
-                UIFont.systemFont(ofSize: 14, weight: weight)
-            case .l:
-                UIFont.systemFont(ofSize: 15, weight: weight)
-            }
-        }
-        
-        /// caption
-        /// - Parameters:
-        ///   - size: s: 8 m: 10 l: 11
-        ///   - weight: 默认regular
-        /// - Returns: UIFont
-        static func caption(size: Size = .m, weight: UIFont.Weight = .regular) -> UIFont {
-            switch size {
-            case .s:
-                UIFont.systemFont(ofSize: 8, weight: weight)
-            case .m:
-                UIFont.systemFont(ofSize: 10, weight: weight)
-            case .l:
-                UIFont.systemFont(ofSize: 11, weight: weight)
-            }
-        }
     }
     
-    struct Strings {
+    struct _Strings {
         static let SupportEmail = "support@manicemu.site"
         static let MemberKeyChainKey = "MemberKeyChainKey"
         static let OAuthCallbackHost = "manicemu-oauth"
@@ -457,12 +580,13 @@ struct Constants {
         static let ShaderForceBase = "MANIC_EMU_FORCE_BASE"
         static let MeloNXScheme = "atariemulator"
         static let XeniOSScheme = "xenios"
+        static let DukeXScheme = "dukex"
         static let J2MEScreenSizes = ["96x65", "96x96", "104x80", "128x128", "132x176", "128x160", "176x208", "176x220", "208x208", "240x320", "320x240", "240x400", "352x416", "360x640", "640x360", "480x800", "800x480"]
         static let DOSKeyboardSkinID = "public.aoshuang.game.dos.standard.keyboard"
         static let AzaharArticBaseGameID = "AzaharArticBase"
     }
     
-    enum Config {
+    enum _Config {
         static let AppName: String = value(forKey: "CFBundleDisplayName")
         static let AppVersion: String = value(forKey: "CFBundleShortVersionString")
         static let AppBuildVersion: String = value(forKey: "CFBundleVersion")
@@ -479,7 +603,7 @@ struct Constants {
         }
     }
     
-    struct Numbers {
+    struct _Numbers {
         /// 游戏页面功能按钮个数
         static let GameFunctionButtonCount = 4
         /// 游戏截图发大倍数
@@ -506,13 +630,19 @@ struct Constants {
         static let ThreeDSHomeMenuIdentifiers: [UInt64] = [1126106065306114, 1126106065309442, 1126106065311746, 1126106065314050, 1126106065316098, 1126106065318146]
         
         static let PKSMIdentifier: UInt64 = 1125900154372096
+        
+        static let WebLoadingViewTimeout = 10.0
     }
     
-    struct NotificationName {
+    struct _NotificationName {
         ///购买成功
         static let PurchaseSuccess = NSNotification.Name(rawValue: "PurchaseSuccess")
         ///切换homeBar object是BarSelection
         static let HomeSelectionChange = NSNotification.Name(rawValue: "HomeSelectionChange")
+        ///横屏动态背景变更 object是LandscapeBackgroundView.Background? nil表示默认Shader背景
+        static let LandscapeBackgroundChange = NSNotification.Name(rawValue: "LandscapeBackgroundChange")
+        ///iPhone横屏下全屏Sheet遮挡动态背景 object是Bool true盖住 false离开
+        static let LandscapeBackgroundFullscreenSheet = NSNotification.Name(rawValue: "LandscapeBackgroundFullscreenSheet")
         ///会员资格变化
         static let MembershipChange = NSNotification.Name(rawValue: "MembershipChange")
         ///商品更新成功
@@ -547,8 +677,6 @@ struct Constants {
         static let GameSortChange = NSNotification.Name(rawValue: "GameSortChange")
         ///成就解锁进度常驻关闭
         static let TurnOffAlwaysShowProgress = NSNotification.Name(rawValue: "TurnOffAlwaysShowProgress")
-        //游戏库背景变更
-        static let GameListBackgroundChange = NSNotification.Name(rawValue: "GameListBackgroundChange")
         //iCloud同步状态变更
         static let iCloudDriveSyncChange = NSNotification.Name(rawValue: "iCloudDriveSyncChange")
         //iCloud开关变更
@@ -561,16 +689,35 @@ struct Constants {
         static let ResetImmediately = NSNotification.Name(rawValue: "ResetImmediately")
         // manufacturer order update
         static let ManufacturerOrderUpdate = NSNotification.Name(rawValue: "ManufacturerOrderUpdate")
-        //platform visable change object = platform
-        static let PlatformVisableChange = NSNotification.Name(rawValue: "PlatformVisableChange")
+        //platform visible change object = platform
+        static let PlatformVisibleChange = NSNotification.Name(rawValue: "PlatformVisibleChange")
+        //Game category change
+        static let GameCategoryChange = NSNotification.Name(rawValue: "GameCategoryChange")
+        //KeyboardEvent
+        static let KeyboardEvent = NSNotification.Name(rawValue: "KeyboardEvent")
+        //SkinChange
+        static let SkinChange = NSNotification.Name(rawValue: "SkinChange")
+        //Transition
+        static let ViewWillTransition = NSNotification.Name(rawValue: "ViewWillTransition")
+        static let ViewAlongsideTransition = NSNotification.Name(rawValue: "ViewAlongsideTransition")
+        static let ViewDidTransition = NSNotification.Name(rawValue: "ViewDidTransition")
+        // GameOptionsSortChange
+        static let GameOptionsSortChange = NSNotification.Name(rawValue: "GameOptionsSortChange")
+        //Shortcuts
+        static let ShortcutsChange = NSNotification.Name(rawValue: "ShortcutsChange")
+        //HideGameRating
+        static let HideGameRating = NSNotification.Name(rawValue: "HideGameRating")
+        //GameMetadataChange
+        static let GameMetadataChange = NSNotification.Name(rawValue: "GameMetadataChange")
     }
     
-    struct URLs {
-        #if DEBUG
+    struct _URLs {
+#if DEBUG
         static let ManicEMU = "http://10.10.10.2:4000/"
-        #else
+#else
         static let ManicEMU = "https://manicemu.site/"
-        #endif
+#endif
+        static let ManicHome = URL(string: ManicEMU)!
         static let AppReview = URL(string: "itms-apps://itunes.apple.com/app/id6743335790?action=write-review")!
         static let AppStoreUrl = URL(string: "https://apps.apple.com/app/id6743335790")!
         static let TermsOfUse = URL(string: ManicEMU + "terms-of-use")!
@@ -600,9 +747,9 @@ struct Constants {
         static var JoinQQ: URL {
             URL(string: "https://pd.qq.com/s/7i1g6jf5k")!
         }
-//        static var JoinTelegram: URL {
-//            URL(string: "https://t.me/+R56rb3Sa9hM0YjEx")!
-//        }
+        //        static var JoinTelegram: URL {
+        //            URL(string: "https://t.me/+R56rb3Sa9hM0YjEx")!
+        //        }
         static var JoinDiscord: URL {
             URL(string: "https://discord.gg/qsaTHzknAZ")!
         }
@@ -637,9 +784,9 @@ struct Constants {
             return URL(string: ManicEMU + "History-" + (gameType == .gb ? GameType.gbc.localizedShortName : gameType.localizedShortName) + "-EN")!
         }
         static let WFC = URL(string: "https://cdn.altstore.io/file/deltaemulator/delta/wfc-servers.json")!
-        #if SIDE_LOAD
+#if SIDE_LOAD
         static let Donate = URL(string: "https://ko-fi.com/maftymanicemu")!
-        #endif
+#endif
         static let AboutUS = URL(string: ManicEMU + "About-US")!
         static let RetroSignUp = URL(string: "https://retroachievements.org/createaccount.php")!
         static func RetroProfile(username: String) -> URL {
@@ -652,16 +799,28 @@ struct Constants {
         static let GLSLShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip")!
         static let SlangShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_slang.zip")!
         static let PlayCasePromo = URL(string: "https://playcase.gg/playmanic")!
-        static let FetchMeloNXGames = URL(string: "\(Constants.Strings.MeloNXScheme)://gameInfo?scheme=manicemu")!
-        static func MeloNXGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.MeloNXScheme)://game?id=\(gameId)")! }
-        static let FetchXeniOSGames = URL(string: "\(Constants.Strings.XeniOSScheme)://gameInfo?scheme=manicemu")!
-        static func XeniOSGameLaunch(gameId: String) -> URL { URL(string: "\(Constants.Strings.XeniOSScheme)://launch?title-id=\(gameId)")! }
+        static let FetchMeloNXGames = URL(string: "\(R.Strings.MeloNXScheme)://gameInfo?scheme=manicemu")!
+        static func MeloNXGameLaunch(gameId: String) -> URL { URL(string: "\(R.Strings.MeloNXScheme)://game?id=\(gameId)")! }
+        static let FetchXeniOSGames = URL(string: "\(R.Strings.XeniOSScheme)://gameInfo?scheme=manicemu")!
+        static func XeniOSGameLaunch(gameId: String) -> URL { URL(string: "\(R.Strings.XeniOSScheme)://launch?title-id=\(gameId)")! }
+        static let FetchDukeXGames = URL(string: "\(R.Strings.DukeXScheme)://gameInfo?scheme=manicemu")!
+        static func DukeXGameLaunch(gameId: String) -> URL { URL(string: "\(R.Strings.DukeXScheme)://launch?titleid=\(gameId)")! }
 #if SIDE_LOAD
         static let EnableJITUrl = URL(string: "stikjit://enable-jit?bundle-id=com.aoshuang.manicemu&script-name=universal.js")!
 #endif
+        static let Gamehacking = URL(string: "https://gamehacking.org/")!
+        static func GamehackingSearch(gameType: GameType, gameName: String) -> URL? {
+            guard let searchSystem = gameType.gamehackingSystem else { return nil }
+            
+            guard gameName.isEnglishLanguage() else {
+                return Gamehacking.appendingPathComponent("system/\(searchSystem)")
+            }
+            
+            return Gamehacking.appendingPathComponent("system/\(searchSystem)/\(gameName)")
+        }
     }
     
-    struct BIOS {
+    struct _BIOS {
         static let MegaCDBios = [
             BIOSItem(fileName: "bios_CD_E.bin", imported: false, desc: "MegaCD EU BIOS", required: true),
             BIOSItem(fileName: "bios_CD_U.bin", imported: false, desc: "SegaCD US BIOS", required: true),
@@ -709,7 +868,7 @@ struct Constants {
         static let GBABios = [
             BIOSItem(fileName: "gba_bios.bin", imported: false, desc: "Game Boy Advance BIOS", required: false)
         ]
-            
+        
         static let FDSBios = [
             BIOSItem(fileName: "disksys.rom", imported: false, desc: "Family Computer Disk System BIOS", required: false)
         ]
@@ -723,7 +882,7 @@ struct Constants {
         ]
         
         static let ArcadeDSBios = [
-            BIOSItem(fileName: Strings.MAMEBiosTitle, imported: false, desc: R.string.localizable.mameBiosDesc(), required: false)
+            BIOSItem(fileName: R.Strings.MAMEBiosTitle, imported: false, desc: R.string.localizable.mameBiosDesc(), required: false)
         ]
         
         static var MAMEBiosMap: [String: String] {
@@ -821,5 +980,17 @@ struct Constants {
         static let LynxBios = [
             BIOSItem(fileName: "lynxboot.img", imported: false, desc: "Lynx Boot Image", required: false)
         ]
+    }
+    
+    struct _Style {
+        static var GameCoverStyle = CoverStyle.style1
+        static var GameCoverCornerRatio = GameCoverStyle.defaultCornerRadius()
+        static var GameCoverForceSquare = false
+        static var GamesPerRow = 3.0
+        static var GamesHideScrollIndicator = false
+        static var GamesHideTitle = false
+        static var GamesHideGroupTitle = false
+        static var GamesGroupTitleStyle: GroupTitleStyle = .abbr
+        static var GameHideRating = false
     }
 }

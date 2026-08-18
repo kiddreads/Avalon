@@ -7,41 +7,19 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import UIKit
-
-import VisualEffectView
-import ProHUD
-
 class ControllersSettingView: BaseView {
-    private let asSideMenu: Bool
-    private let initGameType: GameType
-    
-    var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        if UIDevice.isPad {
-            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-        } else {
-            view.makeBlur(blurColor: UIColor(.dm, light: .white, dark: .black))
-        }
-        return view
-    }()
-    
     private var iconImageView: UIImageView = {
         let view = UIImageView()
         view.image = R.image.controller_background()
         return view
     }()
     
-    private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        view.backgroundColor = .clear
-        view.contentInsetAdjustmentBehavior = .never
-        view.register(cellWithClass: ControllersCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: LowestHaderReusableView.self)
-        view.showsVerticalScrollIndicator = false
-        view.dataSource = self
-        view.delegate = self
-        view.contentInset = UIEdgeInsets(top: asSideMenu ? Constants.Size.ContentInsetTop : 0, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+    private lazy var listPageView: ASListPageView = {
+        let view = ASListPageView(getListPage())
+        view.didActionOccurred = { [weak self] action in
+            guard let self else { return }
+            self.handleAction(action)
+        }
         return view
     }()
     
@@ -58,13 +36,17 @@ class ControllersSettingView: BaseView {
         return controllers
     }()
     
+    private let asSideMenu: Bool
+    private let games: [Game]
+    private let gameType: GameType
+    private var hideCompletion: (()->Void)? = nil
+    
     private var gameControllerDidConnectNotification: Any? = nil
     private var gameControllerDidDisConnectNotification: Any? = nil
     private var keyboardDidConnectNotification: Any? = nil
     private var keyboardDidDisConnectNotification: Any? = nil
     
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
         if let gameControllerDidConnectNotification = gameControllerDidConnectNotification {
             NotificationCenter.default.removeObserver(gameControllerDidConnectNotification)
         }
@@ -79,37 +61,32 @@ class ControllersSettingView: BaseView {
         }
     }
     
-    init(asSideMenu: Bool = true, gameType: GameType? = nil) {
-        self.asSideMenu = asSideMenu
-        if let gameType {
-            self.initGameType = gameType
-        } else if let gameTypeName = Theme.defalut.platformOrder.first,
-                    let gameType = GameType(shortName: gameTypeName) {
-            self.initGameType = gameType
+    required init?(parameters: Any...) {
+        self.asSideMenu = parameters.compactMap({ $0 as? Bool}).first ?? false
+        if let games = parameters.compactMap({ $0 as? [Game] }).first {
+            self.games = games
         } else {
-            self.initGameType = System.allCases.last!.gameType
+            self.games = []
+        }
+        if let gameType = parameters.compactMap({ $0 as? GameType }).first {
+            self.gameType = gameType
+        } else if self.games.count > 0 {
+            self.gameType = self.games.first!.gameType
+        } else {
+            self.gameType = System.allGameTypes.first!
         }
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
+        
         addSubview(iconImageView)
         iconImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
         
-        addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
+        addSubview(listPageView)
+        listPageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        if asSideMenu {
-            addSubview(navigationBlurView)
-            navigationBlurView.snp.makeConstraints { make in
-                make.top.equalToSuperview()
-                make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-                make.height.equalTo(Constants.Size.ContentInsetTop)
-            }
-        }
-
         gameControllerDidConnectNotification = NotificationCenter.default.addObserver(forName: .externalGameControllerDidConnect, object: nil, queue: .main) { [weak self] notification in
             //手柄连接
             self?.updateExtenalControllers()
@@ -128,229 +105,154 @@ class ControllersSettingView: BaseView {
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    convenience init(asSideMenu: Bool, gameType: GameType? = nil) {
+        if let gameType {
+            self.init(parameters: asSideMenu, gameType)!
+        } else {
+            self.init(parameters: asSideMenu)!
+        }
     }
     
-    private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout  { [weak self] sectionIndex, env in
-            guard let self = self else { return nil }
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                 heightDimension: .absolute(Constants.Size.ItemHeightMax)))
-            //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                              heightDimension: .absolute(Constants.Size.ItemHeightMax)),
-                                                           subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.Size.ContentSpaceMax, bottom: 0, trailing: Constants.Size.ContentSpaceMax)
-            //section布局
-            let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = Constants.Size.ContentSpaceMax
-            section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMin,
-                                                            leading: 0,
-                                                            bottom: 0,
-                                                            trailing: 0)
-            if self.asSideMenu {
-                //header布局
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                                                heightDimension: .estimated(Constants.Size.ItemHeightMid)),
-                                                                             elementKind: UICollectionView.elementKindSectionHeader,
-                                                                             alignment: .top)
-                headerItem.pinToVisibleBounds = true
-                section.boundarySupplementaryItems = [headerItem]
-            }
-            
-            return section
-            
-        }
-        return layout
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func updateExtenalControllers() {
         controllers.removeAll { $0.inputType != .controllerSkin }
         controllers.append(contentsOf: ExternalGameControllerManager.shared.connectedControllers)
-        collectionView.reloadData()
+        updateContents()
     }
     
-    private func showPlayerIndexSelection(at view: ContextMenuButton?, controller: GameController) {
-        var actions: [UIMenuElement] = []
-        for playerIndex in PlayerIndex.playerCases {
-            var image: UIImage? = nil
-            if let currentPlayerIndex = controller.playerIndex, currentPlayerIndex == playerIndex.rawValue {
-                image = .symbolImage(.checkmarkCircleFill)
-            }
-            let action = UIAction(title: R.string.localizable.controllersPlayerIndex(playerIndex.rawValue+1),
-                                  image: image) { [weak self] _ in
-                guard let self = self else { return }
+    private func handleAction(_ action: ASListPage.Action) {
+        if let navigationValue = action.navigationValue {
+            if navigationValue.isTapClose {
+                //close
+                self.hide()
                 
-                if !PurchaseManager.isMember {
-                    topViewController()?.present(PurchaseViewController(featuresType: .controler), animated: true)
-                    return
-                }
-                
-                if controller.playerIndex != playerIndex.rawValue {
-                    if controller.inputType != .controllerSkin {
-                        self.controllers.forEach {
-                            if $0.playerIndex == playerIndex.rawValue && $0.inputType != .controllerSkin {
-                                $0.playerIndex = nil
-                            }
+            } else if let index = navigationValue.tapToolsValue {
+                if index == 0 {
+                    //faq
+                    ASWebView.show(url: R.URLs.ControllerUsageGuide)
+                    
+                } else if index == 1 {
+                    //more
+                    ChevronSheetView.show(stringOptions: [R.string.localizable.deadZoneSetting()],
+                                          completion: { index in
+                        if let _ = index {
+                            DeadZoneControl.show()
                         }
-                    }
-                    controller.playerIndex = playerIndex.rawValue
-                    self.collectionView.reloadData()
-                    if controller.inputType == .controllerSkin {
-                        PlayViewController.skinControllerPlayerIndex = playerIndex.rawValue
-                    }
-                }
-            }
-            actions.append(action)
-        }
-        view?.menu = UIMenu(children: actions)
-        view?.triggerTapGesture()
-    }
-}
-
-extension ControllersSettingView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        controllers.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withClass: ControllersCollectionViewCell.self, for: indexPath)
-        let controller = controllers[indexPath.row]
-        cell.setData(controller: controller)
-        cell.selectButton.addTapGesture { [weak self, weak cell] gesture in
-            self?.showPlayerIndexSelection(at: cell?.contextMenuButton, controller: controller)
-        }
-        if !asSideMenu {
-            cell.backgroundColor = Constants.Color.BackgroundPrimary
-        }
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: LowestHaderReusableView.self, for: indexPath)
-        header.titleLabel.text = R.string.localizable.controllersHeaderTitle()
-        if !header.subviews.contains(where: { $0 is SymbolButton }) {
-            let moreContextMenuButton: ContextMenuButton = {
-                var actions: [UIMenuElement] = []
-                actions.append((UIAction(title: R.string.localizable.controllersHowToConnect()) { _ in
-                    topViewController()?.present(WebViewController(url: Constants.URLs.ControllerUsageGuide), animated: true)
-                }))
-                actions.append(UIAction(title: R.string.localizable.deadZoneSetting()) { _ in
-                    DeadZoneControl.show()
-                })
-                let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
-                return view
-            }()
-            
-            let moreButton: SymbolButton = {
-                let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
-                view.enableRoundCorner = true
-                return view
-            }()
-            moreButton.addTapGesture { [weak moreContextMenuButton] gesture in
-                moreContextMenuButton?.triggerTapGesture()
-            }
-            header.addSubview(moreContextMenuButton)
-            header.addSubview(moreButton)
-            moreButton.snp.makeConstraints { make in
-                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-                make.centerY.equalToSuperview()
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            }
-            moreContextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(moreButton)
-            }
-        }
-        if !asSideMenu {
-            if let blurView = header.subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-                blurView.colorTint = Constants.Color.BackgroundPrimary
-            }
-        }
-        if UIDevice.isPad {
-            header.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-        }
-        return header
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let controller = controllers[indexPath.row]
-        guard controller.inputType != .controllerSkin else {
-            return
-        }
-        topViewController()?.present(ControllerMappingViewController(gameType: initGameType, controller: controller), animated: true)
-    }
-}
-
-extension ControllersSettingView: UICollectionViewDelegate {
-
-}
-
-extension ControllersSettingView {
-    static var isShow: Bool {
-        Sheet.find(identifier: String(describing: ControllersSettingView.self)).count > 0 ? true : false
-    }
-    
-    static func show(gameType: GameType, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
-        Sheet.lazyPush(identifier: String(describing: ControllersSettingView.self)) { sheet in
-            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
-            
-            let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.Background
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-                if let maxHeight = sheet.config.cardMaxHeight {
-                    make.height.equalTo(maxHeight)
-                }
-            }
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        // 达到移除的速度
-                        sheet.pop()
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
                     })
                 }
             }
-            
-            let topView = UIView()
-            containerView.addSubview(topView)
-            topView.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-            }
-            
-            let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
-            closeButton.addTapGesture { [weak sheet] gesture in
-                sheet?.pop()
-                didTapClose?()
-            }
-            closeButton.enableRoundCorner = true
-            topView.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeMid)
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            }
-            
-            let settingView = ControllersSettingView(asSideMenu: false, gameType: gameType)
-            containerView.addSubview(settingView)
-            settingView.snp.makeConstraints { make in
-                make.leading.bottom.trailing.equalToSuperview()
-                make.top.equalTo(topView.snp.bottom)
-            }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+        } else if let normalItemValue = action.normalItemValue {
+            let index = normalItemValue.indexPath.section
+            let controller = controllers[index]
+            if let _ = normalItemValue.subActions {
+                //show player index
+                OptionsSheetView.show(icon: .symbolImage(R.image.controller_iconSymbols()),
+                                      title: R.string.localizable.playerIndexChange(),
+                                      detail: R.string.localizable.playerIndexDesc(),
+                                      options: PlayerIndex.playerCases.map({
+                    R.string.localizable.controllersPlayerIndex($0.rawValue+1)
+                }), selectedIndex: PlayerIndex.playerCases.firstIndex(where: {
+                    if let controllerPlayerIndex = controller.playerIndex,
+                       controllerPlayerIndex == $0.rawValue {
+                        return true
+                    }
+                    return false
+                }), completion: { [weak self] selectedPlayerIndex in
+                    guard let self else { return }
+                    if let selectedPlayerIndex,
+                       controller.playerIndex != selectedPlayerIndex  {
+                        //change player index
+                        
+                        if !PurchaseManager.isMember {
+                            topViewController()?.present(PurchaseViewController(featuresType: .controler), animated: true)
+                            return
+                        }
+                        
+                        if controller.inputType == .controllerSkin {
+                            PlayViewController.skinControllerPlayerIndex = selectedPlayerIndex
+                        } else {
+                            self.controllers.forEach {
+                                if $0.playerIndex == selectedPlayerIndex &&
+                                    $0.inputType != .controllerSkin {
+                                    $0.playerIndex = nil
+                                }
+                            }
+                        }
+                        controller.playerIndex = selectedPlayerIndex
+                        self.updateContents()
+                    }
+                })
+            } else {
+                let vc: ControllerMappingViewController
+                if games.count > 0 {
+                    vc = .init(games: games, controller: controller)
+                } else {
+                    vc = .init(gameType: gameType, controller: controller)
+                }
+                topViewController()?.present(vc, animated: true)
             }
         }
+    }
+    
+    private func getListPage() -> ASListPage {
+        var navigation = ASListPage.Navigation.defaultNavigation(title: GameOption.controllerSetting.title,
+                                                                 titleIcon: GameOption.controllerSetting.icon,
+                                                                 tools: [
+                                                                    .symbolImage(R.image.faq_iconSymbols()),
+                                                                    .symbolImage(R.image.ellipsis_iconSymbols())
+                                                                 ])
+        navigation.enableClose = !asSideMenu
+        navigation.toolsBackground = asSideMenu ? R.Color.BackgroundPrimary : R.Color.BackgroundSecondary
+        
+        return ASListPage(navigation: navigation,
+                          sections: getSections(),
+                          backgroundColor: .clear,
+                          pageInsets: .insets(top: asSideMenu ? R.Size.ContentInsetTop : R.Size.SheetGrabberTopInset),
+                          enableSafeAreaLeftInsets: true,
+                          enableSafeAreaRightInsets: true)
+    }
+    
+    private func getSections() -> [ASListPage.Section] {
+        return controllers.map({
+            var styles = [ASListPage.Cell.Style]()
+            styles.append(.icon($0.icon))
+            styles.append(.title(.largeText($0.name)))
+            let playerIndexString: String
+            if let playerIndex = $0.playerIndex {
+                playerIndexString = R.string.localizable.controllersPlayerIndex(playerIndex+1)
+            } else {
+                playerIndexString = R.string.localizable.controllersPlayerUnset()
+            }
+            styles.append(.button(.medium(icon: .symbolImage(R.image.chevronUpdown_iconSymbols()),
+                                          title: playerIndexString,
+                                          titlePosition: .left,
+                                          background: asSideMenu ? R.Color.BackgroundSecondary : R.Color.BackgroundTertiary,
+                                          sizeStyle: .fixHeight(R.Size.ButtonSmall)).enableGlass(true)))
+            if $0.inputType != .controllerSkin {
+                styles.append(.chevron(.init()))
+            }
+            return ASListPage.Section(cells: [ASListPage.Cell.normal(styles, enablePressEffect: $0.inputType != .controllerSkin)],
+                                      decoration: .init(enable: true, style: asSideMenu ? .primary : .secondary))
+        })
+    }
+    
+    private func updateContents() {
+        listPageView.sections = getSections()
+    }
+    
+    func updateTopInsets() {
+        guard asSideMenu else { return }
+        guard listPageView.pageInsets.top != R.Size.ContentInsetTop else { return }
+        listPageView.pageInsets = .insets(top: R.Size.ContentInsetTop)
+    }
+}
+
+extension ControllersSettingView: ShowableView {
+    static func show(games: [Game], hideCompletion: (()->Void)? = nil) {
+        let asSideMenu = false
+        Self.show(parameters: asSideMenu, games)?.hideCompletion = hideCompletion
     }
 }

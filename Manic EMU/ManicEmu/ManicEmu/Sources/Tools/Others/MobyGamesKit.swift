@@ -22,8 +22,8 @@ struct MobyGamesKit {
         let searchPattern = name
         DispatchQueue.global().async {
             do {
-                let db = try Connection(Constants.Path.GamesDB)
-                try db.key(Constants.Cipher.ManicKey)
+                let db = try Connection(R.Path.GamesDB)
+                try db.key(R.Cipher.ManicKey)
                 let table = Table(gameTypeName)
                 let id = SQLite.Expression<Int>("id")
                 let url = SQLite.Expression<String>("url")
@@ -32,7 +32,7 @@ struct MobyGamesKit {
                 let fuse = Fuse()
                 let pattern = fuse.createPattern(from: searchPattern)
                 let matchList = allGameInfos.map({
-                    let url = Constants.URLs.MobyGames.absoluteString.appendingPathComponent("game").appendingPathComponent("\($0[id])").appendingPathComponent($0[url])
+                    let url = R.URLs.MobyGames.absoluteString.appendingPathComponent("game").appendingPathComponent("\($0[id])").appendingPathComponent($0[url])
                     return Result(name: $0[name], url: url)
                 })
                 if let result = matchList.min(by: {
@@ -51,29 +51,29 @@ struct MobyGamesKit {
                     if let score = fuse.search(pattern, in: result.name)?.score, score < 0.35 {
                         //匹配结果OK
                         DispatchQueue.main.async {
-                            completion?(URL(string: result.url) ?? Constants.URLs.MobyGames)
+                            completion?(URL(string: result.url) ?? R.URLs.MobyGames)
                         }
                     } else {
                         //匹配结果的相似度太低 放弃
                         DispatchQueue.main.async {
-                            completion?(Constants.URLs.MobyGames)
+                            completion?(R.URLs.MobyGames)
                         }
                     }
                 } else {
                     //无法匹配
                     DispatchQueue.main.async {
-                        completion?(Constants.URLs.MobyGames)
+                        completion?(R.URLs.MobyGames)
                     }
                 }
             } catch {
                 DispatchQueue.main.async {
-                    completion?(Constants.URLs.MobyGames)
+                    completion?(R.URLs.MobyGames)
                 }
             }
         }
     }
     
     static func getGameInfoUrl(game: Game, completion: ((URL)->Void)? = nil) {
-        self.getGameInfoUrl(gameType: game.gameType, name: game.translatedName ?? game.aliasName ?? game.name, completion: completion)
+        self.getGameInfoUrl(gameType: game.gameType, name: game.translatedName ?? game.displayName, completion: completion)
     }
 }

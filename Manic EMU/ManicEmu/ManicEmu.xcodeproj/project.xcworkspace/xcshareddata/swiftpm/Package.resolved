@@ -1,6 +1,15 @@
 {
-  "originHash" : "0652b206a4070f6c624ce085214a596a42b0def3a29e8629f99b8da80a31256f",
+  "originHash" : "a5f02b2a5812d5fa1b6bcbff54266d2e580a007e23b5ee1d2fd99d2df0ff00b8",
   "pins" : [
+    {
+      "identity" : "attributedstring",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lixiang1994/AttributedString.git",
+      "state" : {
+        "revision" : "d8a72a7e29e8699979b052b59659720087bc2ea0",
+        "version" : "3.4.2"
+      }
+    },
     {
       "identity" : "bettersegmentedcontrol",
       "kind" : "remoteSourceControl",
@@ -65,15 +74,6 @@
       }
     },
     {
-      "identity" : "collectionviewpaginglayout",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Daiuno/CollectionViewPagingLayout.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "f4002d0570dc5f46c8f08dbc9188367ce1120910"
-      }
-    },
-    {
       "identity" : "colorfulx",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/ColorfulX.git",
@@ -100,30 +100,12 @@
       }
     },
     {
-      "identity" : "deltacore",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Daiuno/DeltaCore.git",
-      "state" : {
-        "branch" : "manicemu",
-        "revision" : "d85bcf3e37ea9249db8b0b758e64d2bf1f1b7920"
-      }
-    },
-    {
       "identity" : "device",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Ekhoo/Device.git",
       "state" : {
         "branch" : "master",
         "revision" : "71e601c9b2ad1ca413b69cdab52009f78625060f"
-      }
-    },
-    {
-      "identity" : "dnspageview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Daiuno/DNSPageView.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "fad16f52170b584a56b84e970153bc01862412c3"
       }
     },
     {
@@ -214,15 +196,6 @@
       "state" : {
         "revision" : "bb14e10ef4d8c4e30d509dad13278e9495e37bfa",
         "version" : "5.0.5"
-      }
-    },
-    {
-      "identity" : "icecream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Daiuno/IceCream.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "6602046fd565d8ad49e625050ec4438dfc1dba28"
       }
     },
     {
@@ -415,15 +388,6 @@
       }
     },
     {
-      "identity" : "prohud",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Daiuno/ProHUD.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "0b5b16239e50c47a355bc18de1cf0d76d71a79ad"
-      }
-    },
-    {
       "identity" : "r.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mac-cain13/R.swift",
@@ -600,15 +564,6 @@
       "state" : {
         "revision" : "bba848db50462894e7fc0891d018dfecad4ef11e",
         "version" : "2.8.7"
-      }
-    },
-    {
-      "identity" : "swipecellkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Daiuno/SwipeCellKit.git",
-      "state" : {
-        "branch" : "develop",
-        "revision" : "cc822c1bf2611f3b1b1ed3567e99acc63e5da903"
       }
     },
     {

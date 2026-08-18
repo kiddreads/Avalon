@@ -21,8 +21,8 @@ class ArticBaseCollectionCell: UICollectionViewCell {
         let attr = NSMutableAttributedString(
             string: text,
             attributes: [
-                .font: Constants.Font.body(size: .s),
-                .foregroundColor: Constants.Color.LabelSecondary
+                .font: R.Font.Footnote(),
+                .foregroundColor: R.Color.LabelSecondary
             ]
         )
 
@@ -36,13 +36,13 @@ class ArticBaseCollectionCell: UICollectionViewCell {
         }
 
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = Constants.Size.ContentSpaceUltraTiny
+        style.lineSpacing = R.Size.ContentSpaceTiny
         attr.addAttribute(.paragraphStyle, value: style, range: NSRange(location: 0, length: attr.length))
 
         tv.attributedText = attr
 
         tv.linkTextAttributes = [
-            .foregroundColor: Constants.Color.Main,
+            .foregroundColor: R.Color.Main,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
 
@@ -51,9 +51,10 @@ class ArticBaseCollectionCell: UICollectionViewCell {
     
     private lazy var ipAddressTitleTextField: UITextField = {
         let textField = UITextField()
-        textField.textColor = Constants.Color.LabelSecondary
-        textField.font = Constants.Font.body(size: .s)
-        textField.placeholder = "192.168.0.1:5543"
+        textField.textColor = R.Color.LabelSecondary
+        textField.font = R.Font.Footnote()
+        textField.attributedPlaceholder = NSAttributedString(string: "192.168.0.1:5543",
+                                                             attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelTertiary])
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.textAlignment = .right
@@ -68,13 +69,13 @@ class ArticBaseCollectionCell: UICollectionViewCell {
         textField.didEndEditing { [weak self] in
             guard let self else { return }
             if let _ = self.ipAddressTitleTextField.text?.parseIPv4String() {
-                self.button.titleLabel.textColor = Constants.Color.LabelPrimary
-                self.button.backgroundColor = Constants.Color.Main
+                self.button.titleLabel.textColor = R.Color.LabelPrimary
+                self.button.backgroundColor = R.Color.Main
                 self.button.isUserInteractionEnabled = true
                 self.didIPAddressChange?(self.ipAddressTitleTextField.text!)
             } else {
-                self.button.titleLabel.textColor = Constants.Color.LabelSecondary
-                self.button.backgroundColor = Constants.Color.BackgroundSecondary
+                self.button.titleLabel.textColor = R.Color.LabelSecondary
+                self.button.backgroundColor = R.Color.BackgroundTertiary
                 self.button.isUserInteractionEnabled = false
                 UIView.makeToast(message: R.string.localizable.badIpAddress())
             }
@@ -84,35 +85,35 @@ class ArticBaseCollectionCell: UICollectionViewCell {
     
     private lazy var ipAddressInputView: UIView = {
         let view = UIView()
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
-        view.backgroundColor = Constants.Color.Background
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
+        view.backgroundColor = R.Color.BackgroundTertiary
         
         let iconView = UIImageView()
         iconView.contentMode = .center
         iconView.layerCornerRadius = 6
-        iconView.image = UIImage(symbol: .globe, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        iconView.backgroundColor = Constants.Color.Red
+        iconView.image = UIImage(symbol: .globe, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+        iconView.backgroundColor = R.Color.Red
         view.addSubview(iconView)
         iconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+            make.size.equalTo(R.Size.IconSizeLarge)
             make.centerY.equalToSuperview()
         }
         
         let titleLabel = UILabel()
         titleLabel.text = R.string.localizable.ipAddress()
-        titleLabel.textColor = Constants.Color.LabelPrimary
-        titleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+        titleLabel.textColor = R.Color.LabelPrimary
+        titleLabel.font = R.Font.Body(emphasis: true)
         view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
-            make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
         }
         
         view.addSubview(ipAddressTitleTextField)
         ipAddressTitleTextField.snp.makeConstraints { make in
-            make.trailing.equalTo(titleLabel.snp.trailing).inset(Constants.Size.ContentSpaceMin)
-            make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceSmall)
+            make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
         }
         
@@ -120,8 +121,8 @@ class ArticBaseCollectionCell: UICollectionViewCell {
     }()
     
     private lazy var button: SymbolButton = {
-        let view = SymbolButton(image: nil, title: R.string.localizable.startTransfer(), titleFont: Constants.Font.body(size: .m), titleColor: Constants.Color.LabelSecondary, titleAlignment: .right, horizontalContian: true)
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        let view = SymbolButton(image: nil, title: R.string.localizable.startTransfer(), titleFont: R.Font.Body2(), titleColor: R.Color.LabelSecondary, titleAlignment: .right, horizontalContian: true)
+        view.backgroundColor = R.Color.BackgroundTertiary
         view.isUserInteractionEnabled = false
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
@@ -130,7 +131,7 @@ class ArticBaseCollectionCell: UICollectionViewCell {
                                  detail: R.string.localizable.articBaseHeadsUp(),
                                  confirmTitle: R.string.localizable.confirmTitle(), confirmAction: {
                     let realm = Database.realm
-                    let gameHash = Constants.Strings.AzaharArticBaseGameID
+                    let gameHash = R.Strings.AzaharArticBaseGameID
                     if let game = realm.object(ofType: Game.self, forPrimaryKey: gameHash) {
                         try? realm.write {
                             realm.delete(game)
@@ -138,12 +139,17 @@ class ArticBaseCollectionCell: UICollectionViewCell {
                     }
                     
                     //Choose 3DS Region
-                    ArticBaseRegionChooseView.show { region in
-                        if let region {
+                    ChevronSheetView.show(icon: .symbolImage(R.image.language_iconSymbols()),
+                                          title: R.string.localizable.platformSelectionTitle(),
+                                          detail: R.string.localizable.chooseRegion(),
+                                          stringOptions: R.Strings.ThreeDSHomeMenuRegions,
+                                          completion: { index in
+                        if let index {
+                            let region = R.Strings.ThreeDSHomeMenuRegions[index]
                             self.didRegionChange?(region)
-                            let regionOptions = Constants.Strings.ThreeDSConsoleLanguage.filter({ $0 != "Automatic" })
+                            let regionOptions = R.Strings.ThreeDSConsoleLanguage.filter({ $0 != "Automatic" })
                             var regionValue = regionOptions.first!
-                            if let index = Constants.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }), index < regionOptions.count {
+                            if let index = R.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }), index < regionOptions.count {
                                 regionValue = regionOptions[index]
                             }
                             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name, configs: ["citra_region_value": regionValue], reload: false)
@@ -157,7 +163,7 @@ class ArticBaseCollectionCell: UICollectionViewCell {
                             try? realm.write { realm.add(game) }
                             PlayViewController.startGame(game: game)
                         }
-                    }
+                    })
                 })
             } else {
                 UIView.makeToast(message: R.string.localizable.badIpAddress())
@@ -174,8 +180,8 @@ class ArticBaseCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         
         let containerView = UIView()
-        containerView.layerCornerRadius = Constants.Size.CornerRadiusMax
-        containerView.backgroundColor = Constants.Color.BackgroundPrimary
+        containerView.layerCornerRadius = R.Size.CornerRadiusLarge
+        containerView.backgroundColor = R.Color.BackgroundSecondary
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -183,21 +189,21 @@ class ArticBaseCollectionCell: UICollectionViewCell {
         
         containerView.addSubview(descTextView)
         descTextView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.leading.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
         
         containerView.addSubview(ipAddressInputView)
         ipAddressInputView.snp.makeConstraints { make in
-            make.top.equalTo(descTextView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.top.equalTo(descTextView.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.height.equalTo(R.Size.ItemHeightLarge)
         }
         
         containerView.addSubview(button)
         button.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(ipAddressInputView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+            make.leading.bottom.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(ipAddressInputView.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.height.equalTo(R.Size.ItemHeightMedium)
         }
     }
     
@@ -208,12 +214,12 @@ class ArticBaseCollectionCell: UICollectionViewCell {
     func setData(config: PretendoNetworkingConfig) {
         ipAddressTitleTextField.text = config.articBaseIpAddress
         if let _ = config.articBaseIpAddress?.parseIPv4String() {
-            button.titleLabel.textColor = Constants.Color.LabelPrimary
-            button.backgroundColor = Constants.Color.Main
+            button.titleLabel.textColor = R.Color.LabelPrimary
+            button.backgroundColor = R.Color.Main
             button.isUserInteractionEnabled = true
         } else {
-            button.titleLabel.textColor = Constants.Color.LabelSecondary
-            button.backgroundColor = Constants.Color.BackgroundSecondary
+            button.titleLabel.textColor = R.Color.LabelSecondary
+            button.backgroundColor = R.Color.BackgroundTertiary
             button.isUserInteractionEnabled = false
         }
     }

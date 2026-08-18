@@ -20,19 +20,14 @@ class SettingsViewController: BaseViewController {
         let view = TransparentHoleView()
         return view
     }()
-
-    private var settingsListView: SettingsListView = {
-        let view = SettingsListView()
-        return view
-    }()
+    
+    private let settingsListView = SettingsListView()
     
     private lazy var detailContentView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
+        view.backgroundColor = R.Color.BackgroundPrimary
         return view
     }()
-    
-    private var detailContentViewController: UIViewController? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,24 +35,24 @@ class SettingsViewController: BaseViewController {
         if UIDevice.isPhone {
             view.addSubview(settingsListView)
             settingsListView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.top.bottom.equalToSuperview()
+                make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             }
         } else {
             view.addSubview(settingsListView)
             view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-            settingsListView.backgroundColor = Constants.Color.Background
-            settingsListView.didTapDetail = { [weak self] vc in
+            settingsListView.backgroundColor = R.Color.BackgroundPrimary
+            settingsListView.didTapDetailView = { [weak self] view in
                 guard let self = self else { return }
-                self.detailContentViewController = vc
                 self.detailContentView.subviews.forEach { $0.removeFromSuperview() }
-                self.detailContentView.addSubview(vc.view)
-                vc.view.snp.makeConstraints { make in
+                self.detailContentView.addSubview(view)
+                view.snp.makeConstraints { make in
                     make.edges.equalToSuperview()
                 }
             }
             settingsListView.snp.makeConstraints { make in
                 make.leading.top.bottom.equalToSuperview()
-                make.width.equalTo(Constants.Size.SideMenuWidth*1.15)
+                make.width.equalTo(R.Size.SideMenuWidth*1.2)
             }
             
             view.addSubview(cornerMaskViewForiPad)
@@ -68,7 +63,7 @@ class SettingsViewController: BaseViewController {
             view.addSubview(detailContentView)
             detailContentView.snp.makeConstraints { make in
                 make.top.trailing.bottom.equalToSuperview()
-                make.leading.equalTo(settingsListView.snp.trailing).offset(Constants.Size.ContentSpaceMid)
+                make.leading.equalTo(settingsListView.snp.trailing).offset(R.Size.ContentSpaceMedium)
             }
             
             view.addSubview(detailMaskViewForiPad)
@@ -76,32 +71,10 @@ class SettingsViewController: BaseViewController {
                 make.edges.equalTo(detailContentView)
             }
             
-            let vc = ThemeViewController()
-            detailContentViewController = vc
-            detailContentView.addSubview(vc.view)
-            vc.view.snp.makeConstraints { make in
+            let themeView = ThemeSettingView(showClose: false)
+            detailContentView.addSubview(themeView)
+            themeView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
-            }
-        }
-    }
-    
-    @discardableResult
-    override func becomeFirstResponder() -> Bool {
-        Log.debug("settingsListView becomeFirstResponder")
-        return settingsListView.collectionView.becomeFirstResponder()
-    }
-    
-    @discardableResult
-    override func resignFirstResponder() -> Bool {
-        Log.debug("settingsListView resignFirstResponder")
-        return settingsListView.collectionView.resignFirstResponder()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        if UIDevice.isPhone {
-            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
-                self?.settingsListView.updateViews()
             }
         }
     }

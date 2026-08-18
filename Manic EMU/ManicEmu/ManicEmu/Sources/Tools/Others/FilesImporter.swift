@@ -9,7 +9,6 @@
 
 import UniformTypeIdentifiers
 import RealmSwift
-
 import ZipArchive
 import ZIPFoundation
 import IceCream
@@ -21,16 +20,22 @@ class FilesImporter: NSObject {
     static let shared = FilesImporter()
     private override init() {}
     private var manualHandle: (([URL])->Void)? = nil
+    private var cancelHandle: (() -> Void)? = nil
     
-    func presentImportController(supportedTypes: [UTType] = UTType.allTypes, allowsMultipleSelection: Bool = true, manualHandle: (([URL])->Void)? = nil, appControllerPresent: Bool = false) {
+    func presentImportController(supportedTypes: [UTType] = UTType.allTypes,
+                                 allowsMultipleSelection: Bool = true,
+                                 manualHandle: (([URL])->Void)? = nil,
+                                 cancelHandle: (() -> Void)? = nil,
+                                 appControllerPresent: Bool = false) {
         let documentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes, asCopy: true)
         documentPickerViewController.delegate = self
         documentPickerViewController.overrideUserInterfaceStyle = UIDevice.isDarkMode ? .dark : .light
         documentPickerViewController.allowsMultipleSelection = allowsMultipleSelection
         documentPickerViewController.modalPresentationStyle = .formSheet
-        documentPickerViewController.sheetPresentationController?.preferredCornerRadius = Constants.Size.CornerRadiusMax
+        documentPickerViewController.sheetPresentationController?.preferredCornerRadius = R.Size.CornerRadiusLarge
         topViewController(appController: appControllerPresent)?.present(documentPickerViewController, animated: true)
         self.manualHandle = manualHandle
+        self.cancelHandle = cancelHandle
     }
 }
 
@@ -43,13 +48,47 @@ extension FilesImporter: UIDocumentPickerDelegate {
             FilesImporter.importFiles(urls: urls)
         }
     }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        cancelHandle?()
+        cancelHandle = nil
+    }
 }
 
 extension FilesImporter {
+    //Pre-processed information specifically for PSP games
     static var importGameInfos = [String: Any]()
+    //Prevent crashes during concurrent database inserts when the same content is imported simultaneously.
+    static var processingHashes = Set<String>()
+    private static let stateLock = NSLock()
+    
+    private static func tryBeginProcessing(_ hash: String) -> Bool {
+        stateLock.lock()
+        defer { stateLock.unlock() }
+        return processingHashes.insert(hash).inserted
+    }
+    
+    private static func clearProcessingState() {
+        stateLock.lock()
+        processingHashes.removeAll()
+        importGameInfos.removeAll()
+        stateLock.unlock()
+    }
+    
+    private static func setPSPImportGameInfo(_ game: LibretroPSPGame, for path: String) {
+        stateLock.lock()
+        importGameInfos[path] = game
+        stateLock.unlock()
+    }
+    
+    private static func pspImportGameInfo(for path: String) -> LibretroPSPGame? {
+        stateLock.lock()
+        defer { stateLock.unlock() }
+        return importGameInfos[path] as? LibretroPSPGame
+    }
     
     static func importFiles(urls: [URL],
-                            preErrors: [Error] = [],
+                            preErrors: [ImportError] = [],
                             silentMode: Bool = PlayViewController.isGaming,
                             importCompletion: (()->Void)? = nil) {
         if urls.isEmpty {
@@ -67,27 +106,27 @@ extension FilesImporter {
             UIView.makeLoading()
         }
         
-        //处理zip包
+        //Process the zip file.
         handleZip(urls: urls, silentMode: silentMode) { unzipUrls in
             var urls = urls.filter({ !FileType.zip.extensions.contains($0.pathExtension.lowercased()) }) + unzipUrls
-            //先处理cue和m3u
+            //First, handle the cue and m3u.
             let (multiFileResultUrls, multiFileResultError, multiFileResultItems) = handleMultiFiles(urls: urls)
             let (m3uResultUrls, m3uResultError, m3uResultM3uItems, m3uResultMultiFileItems) = handleM3uFiles(urls: multiFileResultUrls, multiFileItems: multiFileResultItems)
             
             urls = m3uResultUrls
             let group = DispatchGroup()
-            var errors: [ImportError] = []
+            var errors: [ImportError] = preErrors
             var gameErrors = [ImportError]()
             gameErrors.append(contentsOf: m3uResultError)
             gameErrors.append(contentsOf: multiFileResultError)
             var skinErrors: [ImportError] = []
             var gameSaveErrors: [ImportError] = []
-            var importGames: [String] = []
+            var importGames: [(id: String, name: String)] = []
             var importSkins: [String] = []
-            var importGameSaves: [String] = []
+            var importGameSaves: [(id: String, name: String)] = []
             for url in urls {
                 if let fileType = FileType(fileExtension: url.pathExtension) {
-                    //通过后缀名识别到了文件类型
+                    //The file type was identified by its extension.
                     switch fileType {
                     case .game:
                         group.enter()
@@ -95,49 +134,59 @@ extension FilesImporter {
                         let isMultiFiles = isCueOrGdi || (url.pathExtension.lowercased() == "m3u")
                         let multiFileRoms = (isCueOrGdi ? m3uResultMultiFileItems : m3uResultM3uItems)
                         let items = multiFileRoms.first(where: { $0.url == url })?.files ?? []
-                        importGame(url: url, items: isMultiFiles ? items : []) { gameName, error in
-                            if let error = error {
-                                gameErrors.append(error)
+                        importGame(url: url, items: isMultiFiles ? items : []) { gameId, gameName, error in
+                            DispatchQueue.main.async {
+                                if let error = error {
+                                    gameErrors.append(error)
+                                }
+                                if let gameId, let gameName {
+                                    importGames.append((gameId, gameName))
+                                }
+                                group.leave()
                             }
-                            if let gameName = gameName {
-                                importGames.append(gameName)
-                            }
-                            group.leave()
                         }
+                        
                     case .gameSave:
-                        //处理存档文件
                         group.enter()
-                        importSave(url: url) { gameSaveName, error in
-                            if let error = error {
-                                gameSaveErrors.append(error)
+                        importSave(url: url) { gameId, gameSaveName, error in
+                            DispatchQueue.main.async {
+                                if let error = error {
+                                    gameSaveErrors.append(error)
+                                }
+                                if let gameId, let gameSaveName {
+                                    importGameSaves.append((gameId, gameSaveName))
+                                }
+                                group.leave()
                             }
-                            if let gameSaveName = gameSaveName {
-                                importGameSaves.append(gameSaveName)
-                            }
-                            group.leave()
                         }
+                        
                     case .skin:
                         group.enter()
                         importSkin(url: url) { skinName, error in
-                            if let error = error {
-                                skinErrors.append(error)
+                            DispatchQueue.main.async {
+                                if let error = error {
+                                    skinErrors.append(error)
+                                }
+                                if let skinName = skinName {
+                                    importSkins.append(skinName)
+                                }
+                                group.leave()
                             }
-                            if let skinName = skinName {
-                                importSkins.append(skinName)
-                            }
-                            group.leave()
                         }
+                        
                     default:
                         break
                     }
                 } else {
-                    //无法识别文件类型 基本不会发生，除非UIDocumentPickerViewController有bug
+                    //File type cannot be recognized. This basically never happens unless there's a bug in UIDocumentPickerViewController.
                     group.enter()
                     errors.append(.noPermission(fileUrl: url))
                     group.leave()
                 }
             }
             group.notify(queue: .main) {
+                clearProcessingState()
+                
                 UIView.hideLoading()
                 if silentMode {
                     importCompletion?()
@@ -166,13 +215,13 @@ extension FilesImporter {
                     } else {
                         switch error {
                         case .saveNoMatchGames(let url):
-
-                            GameSaveMatchGameView.show(gameSaveUrl: url,
-                                                       title: R.string.localizable.gameSaveMatchTitle(),
-                                                       detail: error.localizedDescription,
-                                                       cancelTitle: R.string.localizable.cancelTitle()) {
+                            GamesSelectionView.showSaveMatch(title: R.string.localizable.gameSaveMatchTitle(),
+                                                             detail: error.localizedDescription,
+                                                             gameSaveUrl: url,
+                                                             completion: {
                                 actionCompletion()
-                            }
+                            })
+
                         case .saveAlreadyExist(let url, let game):
                             UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
                                              detail: error.localizedDescription,
@@ -190,13 +239,13 @@ extension FilesImporter {
                                 actionCompletion()
                             })
                         case .saveMatchToMuch(let url, let games):
-                            GameSaveMatchGameView.show(gameSaveUrl: url,
-                                                       showGames: games,
-                                                       title: R.string.localizable.gameSaveMathToMuchTitle(),
-                                                       detail: error.localizedDescription,
-                                                       cancelTitle: R.string.localizable.cancelTitle()) {
+                            GamesSelectionView.showSaveMatch(title: R.string.localizable.gameSaveMathToMuchTitle(),
+                                                             detail: error.localizedDescription,
+                                                             gameSaveUrl: url,
+                                                             showGames: games,
+                                                             completion: {
                                 actionCompletion()
-                            }
+                            })
                         default:
                             actionCompletion()
                         }
@@ -206,12 +255,13 @@ extension FilesImporter {
                         if importGames.count > 0 && importSkins.count == 0 && importGameSaves.count == 0 {
                             //判断一下gameType是否是未知
                             let realm = Database.realm
+                            realm.refresh()
                             let group = DispatchGroup()
                             for importGame in importGames {
-                                if let game = realm.objects(Game.self).first(where: { ($0.aliasName == importGame || $0.name == importGame) && $0.gameType == .unknown }) {
+                                if let game = realm.object(ofType: Game.self, forPrimaryKey: importGame.id), game.gameType == .unknown {
                                     //弹窗要求用户进行平台选择
                                     group.enter()
-                                    PlatformSelectionView.show(game: game, cancelEnable: false) {
+                                    PlatformSelectionView.show(games: [game], cancelEnable: false) {
                                         group.leave()
                                     }
                                 }
@@ -219,16 +269,17 @@ extension FilesImporter {
                             
                             group.notify(queue: .main) {
                                 //导入游戏成功
-                                if let home = topViewController(appController: true) as? HomeViewController, home.homeTabBar.currentSelection == .games {
+                                if let home = topViewController(appController: true) as? HomeViewController,
+                                    home.homeTabBar.currentSelection == .games {
                                     UIView.makeToast(message: R.string.localizable.importGameSuccessTitle())
                                 } else {
                                     let detail: String
                                     let confirmTitle: String
                                     if importGames.count == 1 {
-                                        detail = R.string.localizable.importGameSuccessDetailForOne(String.successMessage(from: importGames))
+                                        detail = R.string.localizable.importGameSuccessDetailForOne(String.successMessage(from: importGames.map({ $0.name })))
                                         confirmTitle = R.string.localizable.startGameTitle()
                                     } else {
-                                        detail = R.string.localizable.importGameSuccessDetail(String.successMessage(from: importGames))
+                                        detail = R.string.localizable.importGameSuccessDetail(String.successMessage(from: importGames.map({ $0.name })))
                                         confirmTitle =  R.string.localizable.checkTitle()
                                     }
                                     
@@ -238,9 +289,9 @@ extension FilesImporter {
                                                      confirmAction: {
                                         UIView.hideAllAlert {
                                             if importGames.count == 1 {
-                                                startGame(gameName: importGames.first!)
+                                                startGame(gameId: importGames.first!.id)
                                             } else {
-                                                NotificationCenter.default.post(name: Constants.NotificationName.HomeSelectionChange, object: HomeTabBar.BarSelection.games)
+                                                NotificationCenter.default.post(name: R.NotificationName.HomeSelectionChange, object: HomeTabBar.BarSelection.games)
                                             }
                                         }
                                     })
@@ -249,7 +300,7 @@ extension FilesImporter {
 
                             
                         } else if importSkins.count > 0 && importGames.count == 0 && importGameSaves.count == 0 {
-                            if let topVC = topViewController(appController: true), (topVC is SkinSettingsViewController || topVC is WebViewController) {
+                            if SkinSettingsView.hasShownInstance {
                                 UIView.makeToast(message: R.string.localizable.importSkinSuccessTitle())
                             } else {
                                 //导入皮肤成功
@@ -258,20 +309,15 @@ extension FilesImporter {
                                                  confirmTitle: R.string.localizable.checkTitle(),
                                                  confirmAction: {
                                     UIView.hideAllAlert {
-                                        let vc: SkinSettingsViewController
                                         if importSkins.count == 1 {
                                             let skinName = importSkins.first!
                                             if let gameType = Database.realm.objects(Skin.self).first(where: { $0.name == skinName })?.gameType {
-                                                vc = SkinSettingsViewController(gameType: gameType)
+                                                SkinSettingsView.show(gameType: gameType)
                                             } else {
-                                                vc = SkinSettingsViewController()
+                                                SkinSettingsView.show()
                                             }
                                         } else {
-                                            vc = SkinSettingsViewController()
-                                        }
-                                        //可能alert还没完全隐藏 会导致异常
-                                        DispatchQueue.main.asyncAfter(delay: 0.15) {
-                                            topViewController()?.present(vc, animated: true)
+                                            SkinSettingsView.show()
                                         }
                                     }
                                 })
@@ -281,17 +327,17 @@ extension FilesImporter {
                             let detail: String
                             var confirmTitle: String? = nil
                             if importGameSaves.count == 1 {
-                                detail = R.string.localizable.importGameSaveSuccessForOne(String.successMessage(from: importGameSaves))
+                                detail = R.string.localizable.importGameSaveSuccessForOne(String.successMessage(from: importGameSaves.map({ $0.name })))
                                 confirmTitle = R.string.localizable.startGameTitle()
                             } else {
-                                detail = R.string.localizable.importGameSaveSuccessDetail(String.successMessage(from: importGameSaves))
+                                detail = R.string.localizable.importGameSaveSuccessDetail(String.successMessage(from: importGameSaves.map({ $0.name })))
                             }
                             UIView.makeAlert(title: R.string.localizable.importGameSaveSuccessTitle(),
                                              detail: detail,
                                              confirmTitle: confirmTitle,
                                              confirmAction: {
                                 UIView.hideAllAlert {
-                                    startGame(gameName: importGameSaves.first!)
+                                    startGame(gameId: importGameSaves.first!.id)
                                 }
                             })
                         } else if importGameSaves.count > 0 || importGames.count > 0 || importSkins.count > 0 {
@@ -319,19 +365,13 @@ extension FilesImporter {
         }
     }
     
-    private static func startGame(gameName: String) {
+    private static func startGame(gameId: String) {
         let realm = Database.realm
-        if let game = realm.objects(Game.self).first(where: {
-            if $0.gameType == ._3ds {
-                return $0.aliasName == gameName
-            } else {
-                return $0.name == gameName
-            }
-        }) {
+        if let game = realm.object(ofType: Game.self, forPrimaryKey: gameId) {
             if Settings.defalut.quickGame {
                 PlayViewController.startGame(game: game)
             } else {
-                topViewController(appController: true)?.present(GameInfoViewController(game: game), animated: true)
+                GameInfoView.show(readyAction: .default, game: game)
             }
         }
     }
@@ -373,14 +413,14 @@ extension FilesImporter {
         }
     }
     
-    private static func importGame(url: URL, items: [URL] = [], completion: ((_ gameName: String?, _ error: ImportError?)->Void)?) {
+    private static func importGame(url: URL, items: [URL] = [], completion: ((_ gameId: String?, _ gameName: String?, _ error: ImportError?)->Void)?) {
         DispatchQueue.global(qos: .userInitiated).async {
             let realm = Database.realm
             var ciaTitleUrl: URL? = nil
             let originalUrl = url
             var url = url
             var threeDSGameInfo: CitraGameInformation? = nil
-            if FileType.get3DSExtensions().contains([url.pathExtension]) {
+            if FileType.get3DSExtensions().contains([url.pathExtension.lowercased()]) {
                 if url.pathExtension.lowercased() == "cia" {
                     Log.debug("开始安装")
                     let status = CitraCore.shared().importGame(at: url)
@@ -391,7 +431,7 @@ extension FilesImporter {
                     guard let ciaPath = ciaInfo.contentPath else {
                         Log.debug("安装CIA出错，无法获取CIA的安装路径")
                         Self.removeCIA(ciaTitleUrl: ciaTitleUrl)
-                        completion?(nil, .badFile(fileName: url.lastPathComponent.deletingPathExtension))
+                        completion?(nil, nil, .badFile(fileName: url.lastPathComponent.deletingPathExtension))
                         return
                     }
                     
@@ -402,19 +442,21 @@ extension FilesImporter {
                             //游戏本体
                             url = URL(fileURLWithPath: ciaPath)
                         } else {
-                            UIView.makeToast(message: R.string.localizable.threeDSUpdateInstallSuccess(), identifier: "threeDSUpdateInstallSuccess")
-                            completion?(nil, nil)
+                            DispatchQueue.main.async {
+                                UIView.makeToast(message: R.string.localizable.threeDSUpdateInstallSuccess(), identifier: "threeDSUpdateInstallSuccess")
+                            }
+                            completion?(nil, nil, nil)
                             return
                         }
                     case .errorEncrypted:
                         Log.debug("CIA加密了")
                         Self.removeCIA(ciaTitleUrl: ciaTitleUrl)
-                        completion?(nil, .decryptFailed(fileName: url.lastPathComponent))
+                        completion?(nil, nil, .decryptFailed(fileName: url.lastPathComponent))
                         return
                     default:
                         Log.debug("CIA安装失败")
                         Self.removeCIA(ciaTitleUrl: ciaTitleUrl)
-                        completion?(nil, .badFile(fileName: url.lastPathComponent))
+                        completion?(nil, nil, .badFile(fileName: url.lastPathComponent))
                         return
                     }
                 }
@@ -424,18 +466,39 @@ extension FilesImporter {
                 } else {
                     Log.debug("无法获取3DS ROM信息")
                     Self.removeCIA(ciaTitleUrl: ciaTitleUrl)
-                    completion?(nil, .badFile(fileName: url.lastPathComponent))
+                    completion?(nil, nil, .badFile(fileName: url.lastPathComponent))
                     return
                 }
             }
             
             if let hash = FileHashUtil.truncatedHash(url: url) {
+                guard tryBeginProcessing(hash) else {
+                    completion?(nil, nil, .fileExist(fileName: url.lastPathComponent))
+                    return
+                }
+                
+                func recoverDeletedGame(_ game: Game, realm: Realm, recoverFaile: (() -> Void)? = nil) {
+                    guard game.isDeleted else {
+                        recoverFaile?()
+                        return
+                    }
+                    do {
+                        try realm.write { game.isDeleted = false }
+                        completion?(game.id, game.gameType == ._3ds ? (game.displayName) : game.name, nil)
+                    } catch {
+                        Log.debug("导入游戏失败，写入数据库失败:\(error)")
+                        completion?(nil, nil, .writeDatabase(fileName: game.name))
+                    }
+                }
+                
                 if let game = realm.object(ofType: Game.self, forPrimaryKey: hash) {
                     //游戏已经存在于数据库中
                     if game.isRomExtsts {
                         //游戏文件也存在
                         Log.debug("导入游戏失败，游戏已经存在数据库")
-                        completion?(nil, .fileExist(fileName: url.lastPathComponent))
+                        recoverDeletedGame(game, realm: realm, recoverFaile: {
+                            completion?(nil, nil, .fileExist(fileName: url.lastPathComponent))
+                        })
                         return
                     } else {
                         do {
@@ -452,16 +515,23 @@ extension FilesImporter {
                                 for item in items {
                                     SyncManager.upload(localFilePath: romParentPath.appendingPathComponent(item.lastPathComponent))
                                 }
+                                recoverDeletedGame(game, realm: realm, recoverFaile: {
+                                    completion?(game.id, game.name, nil)
+                                })
+                                return
+                                
                             } else {
                                 try FileManager.safeCopyItem(at: url, to: game.romUrl, shouldReplace: true)
                                 //文件复制成功
-                                completion?(game.name, nil)
+                                recoverDeletedGame(game, realm: realm, recoverFaile: {
+                                    completion?(game.id, game.name, nil)
+                                })
                                 return
                             }
                         } catch {
                             //复制文件出错
                             Log.debug("导入游戏失败，数据库存在 但是文件不存在 复制失败:\(error)")
-                            completion?(nil, .badCopy(fileName: game.name))
+                            completion?(nil, nil, .badCopy(fileName: game.name))
                             return
                         }
                     }
@@ -484,10 +554,10 @@ extension FilesImporter {
                             game.aliasName = threeDSGameInfo.title
                         }
                         
-                        for (index, identifier) in Constants.Numbers.ThreeDSHomeMenuIdentifiers.enumerated() {
+                        for (index, identifier) in R.Numbers.ThreeDSHomeMenuIdentifiers.enumerated() {
                             if identifier == threeDSGameInfo.identifier {
                                 //这是一个home menu app 进行自定义别名
-                                game.aliasName = "Home Menu (\(Constants.Strings.ThreeDSHomeMenuRegions[index]))"
+                                game.aliasName = "Home Menu (\(R.Strings.ThreeDSHomeMenuRegions[index]))"
                                 break
                             }
                         }
@@ -495,7 +565,7 @@ extension FilesImporter {
                     
                     //handle psp pbp game
                     let isPSPPBP = isPSPPBPGame(url: url)
-                    if isPSPPBP, let pspPBPGame = importGameInfos[url.path] as? LibretroPSPGame {
+                    if isPSPPBP, let pspPBPGame = pspImportGameInfo(for: url.path) {
                         game.name = pspPBPGame.title
                         if let icon = pspPBPGame.icon,
                            let iconData = icon.jpegData(compressionQuality: 0.7) {
@@ -511,7 +581,12 @@ extension FilesImporter {
                         game.extras = extras.jsonData()
                     }
                     
-                    let gameType = isPSPPBP ? .psp : GameType(fileExtension: game.fileExtension)
+                    var gameType = isPSPPBP ? .psp : GameType(fileExtension: game.fileExtension)
+                    
+                    if game.fileExtension.lowercased() == "zip" && MAMEKit.isSupportTitle(fileName: game.name) {
+                        gameType = .arcade
+                    }
+                    
                     if gameType != .notSupport {
                         game.gameType = gameType
                         ///Handling game info for specific game types.
@@ -541,7 +616,7 @@ extension FilesImporter {
                         }
                         
                         //Obtain the game code for PSP.
-                        if gameType == .psp, !isPSPPBP, let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
+                        if gameType == .psp, !isPSPPBP, let gameCode = LibretroCore.getPSPGameID(withRomPath: url.path) {
                             game.extras = [ExtraKey.PSPGameCode.rawValue: gameCode].jsonData()
                         }
                         
@@ -572,7 +647,7 @@ extension FilesImporter {
                                     }
                                 }
                                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
-                                completion?(game.gameType == ._3ds ? (game.aliasName ?? game.name) : game.name, nil)
+                                completion?(game.id, game.gameType == ._3ds ? (game.displayName) : game.name, nil)
                                 
                                 return
                             } catch {
@@ -581,7 +656,7 @@ extension FilesImporter {
                                 if let ciaTitleUrl {
                                     try? FileManager.safeRemoveItem(at: ciaTitleUrl)
                                 }
-                                completion?(nil, .writeDatabase(fileName: game.name))
+                                completion?(nil, nil, .writeDatabase(fileName: game.name))
                                 return
                             }
                         } catch {
@@ -590,14 +665,14 @@ extension FilesImporter {
                             if let ciaTitleUrl {
                                 try? FileManager.safeRemoveItem(at: ciaTitleUrl)
                             }
-                            completion?(nil, .badCopy(fileName: game.name))
+                            completion?(nil, nil, .badCopy(fileName: game.name))
                             return
                         }
                     } else {
                         //无法识别文件类型
                         Log.debug("导入游戏失败，后缀不正确\(game.fileName)")
                         Self.removeCIA(ciaTitleUrl: ciaTitleUrl)
-                        completion?(nil, .badExtension(fileName: game.name))
+                        completion?(nil, nil, .badExtension(fileName: game.name))
                         return
                     }
                 }
@@ -605,7 +680,7 @@ extension FilesImporter {
                 //无法计算文件哈希
                 Log.debug("导入游戏失败，无法计算文件哈希")
                 Self.removeCIA(ciaTitleUrl: ciaTitleUrl)
-                completion?(nil, .badFile(fileName: url.lastPathComponent))
+                completion?(nil, nil, .unableToHash(fileName: url.lastPathComponent))
                 return
             }
         }
@@ -617,16 +692,20 @@ extension FilesImporter {
         }
     }
     
-    private static func importSave(url: URL, completion: ((_ gameName: String?, _ error: ImportError?)->Void)?) {
+    private static func importSave(url: URL, completion: ((_ gameId: String?, _ gameName: String?, _ error: ImportError?)->Void)?) {
         DispatchQueue.global().async {
             var url = url
             if url.path.contains(".3ds.sav") {
-                handle3DSGameSave(url: url, completion: completion)
+                handle3DSGameSave(url: url, completion: {
+                    completion?(nil, nil, nil)
+                })
                 return
             }
             
             if url.path.contains(".psp.sav") {
-                handlePSPGameSave(url: url, completion: completion)
+                handlePSPGameSave(url: url, completion: {
+                    completion?(nil, nil, nil)
+                })
                 return
             }
             
@@ -641,7 +720,7 @@ extension FilesImporter {
             }
             if games.count == 0 {
                 //该存档没有匹配到游戏
-                completion?(nil, .saveNoMatchGames(gameSaveUrl: url))
+                completion?(nil, nil, .saveNoMatchGames(gameSaveUrl: url))
                 return
             } else if games.count == 1 {
                 //匹配到游戏了
@@ -651,10 +730,13 @@ extension FilesImporter {
                     //匹配的游戏的存档也存在了 不再复制
                     //要将realm对象传输出去 最好搞到主线程上
                     let ref = ThreadSafeReference(to: game)
+                    let gameName = game.displayName
                     DispatchQueue.main.async {
                         let realm = Database.realm
                         if let game = realm.resolve(ref) {
-                            completion?(nil, .saveAlreadyExist(gameSaveUrl: url, game: game))
+                            completion?(nil, nil, .saveAlreadyExist(gameSaveUrl: url, game: game))
+                        } else {
+                            completion?(nil, nil, .writeDatabase(fileName: gameName))
                         }
                     }
                     return
@@ -668,10 +750,10 @@ extension FilesImporter {
                         }
                         try FileManager.safeCopyItem(at: url, to: game.gameSaveUrl)
                         SyncManager.upload(localFilePath: game.gameSaveUrl.path)
-                        completion?(game.name, nil)
+                        completion?(game.id, game.name, nil)
                         return
                     } catch {
-                        completion?(nil, .badCopy(fileName: "\(url.lastPathComponent)"))
+                        completion?(nil, nil, .badCopy(fileName: "\(url.lastPathComponent)"))
                         return
                     }
                 }
@@ -681,7 +763,9 @@ extension FilesImporter {
                 DispatchQueue.main.async {
                     let realm = Database.realm
                     if let games = realm.resolve(ref) {
-                        completion?(nil, .saveMatchToMuch(gameSaveUrl: url, games: games.map { $0 }))
+                        completion?(nil, nil, .saveMatchToMuch(gameSaveUrl: url, games: games.map { $0 }))
+                    } else {
+                        completion?(nil, nil, .saveMatchToMuch(gameSaveUrl: url, games: []))
                     }
                 }
                 return
@@ -693,6 +777,10 @@ extension FilesImporter {
         DispatchQueue.global().async {
             if let controllerSkin = ControllerSkin(fileURL: url) {
                 if let hash = FileHashUtil.truncatedHash(url: url) {
+                    guard tryBeginProcessing(hash) else {
+                        completion?(nil, .fileExist(fileName: url.lastPathComponent))
+                        return
+                    }
                     let realm = Database.realm
                     if let skin = realm.object(ofType: Skin.self, forPrimaryKey: hash) {
                         //skin数据库已经存在
@@ -789,7 +877,7 @@ extension FilesImporter {
                             } else {
                                 continue
                             }
-                            let dstPath = Constants.Path.ZipWorkSpace.appendingPathComponent(path)
+                            let dstPath = R.Path.ZipWorkSpace.appendingPathComponent(path)
                             Log.debug("构建路径:\(dstPath)")
                             let destUrl = URL(fileURLWithPath: dstPath)
                             if FileManager.default.fileExists(atPath: dstPath) {
@@ -798,7 +886,7 @@ extension FilesImporter {
                             if !FileManager.default.fileExists(atPath: dstPath.deletingLastPathComponent) {
                                 try FileManager.default.createDirectory(at: URL(fileURLWithPath: dstPath.deletingLastPathComponent), withIntermediateDirectories: true)
                             }
-                            let _ = try decoder.extract(items: itemArray, to: Path(Constants.Path.ZipWorkSpace))
+                            let _ = try decoder.extract(items: itemArray, to: Path(R.Path.ZipWorkSpace))
                             Log.debug("解压成功!")
                             sevenZipSnnerResults.append(destUrl)
                         }
@@ -850,7 +938,9 @@ extension FilesImporter {
                                             if SSZipArchive.isFilePasswordProtected(atPath: url.path) {
                                                 //加密文件先不处理
                                                 if !silentMode {
-                                                    UIView.makeToast(message: R.string.localizable.notSupportPasswordZip(url.lastPathComponent))
+                                                    DispatchQueue.main.async {
+                                                        UIView.makeToast(message: R.string.localizable.notSupportPasswordZip(url.lastPathComponent))
+                                                    }
                                                 }
                                                 continue
                                             } else {
@@ -863,7 +953,7 @@ extension FilesImporter {
                                                                 continue
                                                             }
                                                             do {
-                                                                let dstPath = Constants.Path.ZipWorkSpace.appendingPathComponent(entry.decodedPath)
+                                                                let dstPath = R.Path.ZipWorkSpace.appendingPathComponent(entry.decodedPath)
                                                                 let destUrl = URL(fileURLWithPath: dstPath)
                                                                 if FileManager.default.fileExists(atPath: dstPath) {
                                                                     try FileManager.safeRemoveItem(at: destUrl)
@@ -917,7 +1007,7 @@ extension FilesImporter {
         }
     }
     
-    static func handle3DSGameSave(url: URL, completion: ((_ gameName: String?, _ error: ImportError?)->Void)?) {
+    static func handle3DSGameSave(url: URL, completion: (()->Void)?) {
         if let archive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
             var isValid = false
             for entry in archive {
@@ -928,15 +1018,17 @@ extension FilesImporter {
             }
 
             guard isValid else {
-                UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
-                completion?(nil, nil)
+                DispatchQueue.main.async {
+                    UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
+                }
+                completion?()
                 return
             }
 
             var isSaveExist = false
             for entry in archive {
                 if entry.type == .file {
-                    let savePath = Constants.Path.ThreeDS.appendingPathComponent(entry.path)
+                    let savePath = R.Path.ThreeDS.appendingPathComponent(entry.path)
                     if FileManager.default.fileExists(atPath: savePath) {
                         isSaveExist = true
                         break
@@ -944,10 +1036,10 @@ extension FilesImporter {
                 }
             }
             
-            func extractSaveFiles() {
+            func extractSaveFiles(archive: Archive) {
                 for entry in archive {
                     if entry.type == .file && entry.path.hasPrefix("sdmc") {
-                        let savePath = Constants.Path.ThreeDS.appendingPathComponent(entry.path)
+                        let savePath = R.Path.ThreeDS.appendingPathComponent(entry.path)
                         if FileManager.default.fileExists(atPath: savePath) {
                             try? FileManager.default.removeItem(atPath: savePath)
                         }
@@ -958,34 +1050,45 @@ extension FilesImporter {
             
             if isSaveExist {
                 //询问是否覆盖
-                UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
-                                 detail: R.string.localizable.filesImporterErrorSaveAlreadyExist(url.lastPathComponent),
-                                 confirmTitle: R.string.localizable.confirmTitle(),
-                                 enableForceHide: false,
-                                 confirmAction: {
-                    extractSaveFiles()
-                    UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
-                })
-                completion?(nil, nil)
+                DispatchQueue.main.async {
+                    UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
+                                     detail: R.string.localizable.filesImporterErrorSaveAlreadyExist(url.lastPathComponent),
+                                     confirmTitle: R.string.localizable.confirmTitle(),
+                                     enableForceHide: false,
+                                     confirmAction: {
+                        if let archive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
+                            extractSaveFiles(archive: archive)
+                            UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
+                        } else {
+                            UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
+                        }
+                    }, hideAction: {
+                        completion?()
+                    })
+                }
             } else {
                 //直接解压
-                extractSaveFiles()
-                UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
-                completion?(nil, nil)
+                extractSaveFiles(archive: archive)
+                DispatchQueue.main.async {
+                    UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
+                }
+                completion?()
             }
         } else {
-            UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
-            completion?(nil, nil)
+            DispatchQueue.main.async {
+                UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
+            }
+            completion?()
         }
     }
     
-    static func handlePSPGameSave(url: URL, completion: ((_ gameName: String?, _ error: ImportError?)->Void)?) {
+    static func handlePSPGameSave(url: URL, completion: (()->Void)?) {
         if let archive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
             var isSaveExist = false
             for entry in archive {
                 if entry.type == .file {
                     let realPath = entry.path.components(separatedBy: "/")[1...].reduce("") { $0 + "/" + $1 }
-                    let savePath = Constants.Path.PSPSave.appendingPathComponent(realPath)
+                    let savePath = R.Path.PSPSave.appendingPathComponent(realPath)
                     if FileManager.default.fileExists(atPath: savePath) {
                         isSaveExist = true
                         break
@@ -993,11 +1096,11 @@ extension FilesImporter {
                 }
             }
             
-            func extractSaveFiles() {
+            func extractSaveFiles(archive: Archive) {
                 for entry in archive {
                     if entry.type == .file {
                         let realPath = entry.path.components(separatedBy: "/")[1...].reduce("") { $0 + "/" + $1 }
-                        let savePath = Constants.Path.PSPSave.appendingPathComponent(realPath)
+                        let savePath = R.Path.PSPSave.appendingPathComponent(realPath)
                         if FileManager.default.fileExists(atPath: savePath) {
                             try? FileManager.default.removeItem(atPath: savePath)
                         }
@@ -1008,24 +1111,35 @@ extension FilesImporter {
             
             if isSaveExist {
                 //询问是否覆盖
-                UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
-                                 detail: R.string.localizable.filesImporterErrorSaveAlreadyExist(url.lastPathComponent),
-                                 confirmTitle: R.string.localizable.confirmTitle(),
-                                 enableForceHide: false,
-                                 confirmAction: {
-                    extractSaveFiles()
-                    UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
-                })
-                completion?(nil, nil)
+                DispatchQueue.main.async {
+                    UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
+                                     detail: R.string.localizable.filesImporterErrorSaveAlreadyExist(url.lastPathComponent),
+                                     confirmTitle: R.string.localizable.confirmTitle(),
+                                     enableForceHide: false,
+                                     confirmAction: {
+                        if let newArchive = try? Archive(url: url, accessMode: .read, pathEncoding: nil) {
+                            extractSaveFiles(archive: newArchive)
+                            UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
+                        } else {
+                            UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
+                        }
+                    }, hideAction: {
+                        completion?()
+                    })
+                }
             } else {
                 //直接解压
-                extractSaveFiles()
-                UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
-                completion?(nil, nil)
+                extractSaveFiles(archive: archive)
+                DispatchQueue.main.async {
+                    UIView.makeToast(message: R.string.localizable.importGameSaveSuccessTitle(), identifier: "importGameSaveSuccessTitle")
+                }
+                completion?()
             }
         } else {
-            UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
-            completion?(nil, nil)
+            DispatchQueue.main.async {
+                UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
+            }
+            completion?()
         }
     }
     
@@ -1041,8 +1155,8 @@ extension FilesImporter {
             }
             
             if isPSPPSPGame {
-                if let game = LibretroCore.installPSPGame(withZipPath: url.path, destDir: Constants.Path.PSPGame) {
-                    importGameInfos[game.gamePath] = game
+                if let game = LibretroCore.installPSPGame(withZipPath: url.path, destDir: R.Path.PSPGame) {
+                    setPSPImportGameInfo(game, for: game.gamePath)
                     return URL(fileURLWithPath: game.gamePath)
                 }
             }
@@ -1144,13 +1258,18 @@ extension FilesImporter {
     }
     
     fileprivate static func extractCueFilenames(from cueContent: String) -> [String] {
-        let pattern = #"FILE\s+"([^"]+)""#
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let pattern = #"FILE\s+(?:"([^"]+)"|'([^']+)'|(\S+))"#
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
         let nsString = cueContent as NSString
         let matches = regex.matches(in: cueContent, options: [], range: NSRange(location: 0, length: nsString.length))
-        
-        return matches.map { match in
-            nsString.substring(with: match.range(at: 1))
+        return matches.compactMap { match in
+            for group in 1...3 {
+                let range = match.range(at: group)
+                if range.location != NSNotFound {
+                    return nsString.substring(with: range)
+                }
+            }
+            return nil
         }
     }
     
@@ -1178,6 +1297,11 @@ extension FilesImporter {
                 continue
             }
             
+            if let quoted = extractQuotedFilename(from: line) {
+                filenames.append(quoted)
+                continue
+            }
+            
             let components = line.split(separator: " ", omittingEmptySubsequences: true)
             
             // GDI 标准格式应该有 6 个字段
@@ -1185,7 +1309,6 @@ extension FilesImporter {
             if components.count >= 5 {
                 // 文件名在倒数第二列（第5列，索引为4）
                 let filename = String(components[components.count - 2])
-                    .trimmingCharacters(in: CharacterSet(charactersIn: "\"")) // 移除可能的引号
                 
                 if !filename.isEmpty {
                     filenames.append(filename)
@@ -1194,6 +1317,23 @@ extension FilesImporter {
         }
         
         return filenames
+    }
+    
+    fileprivate static func extractQuotedFilename(from line: String) -> String? {
+        let pattern = #""([^"]+)"|'([^']+)'"#
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let nsString = line as NSString
+        guard let match = regex.firstMatch(in: line, options: [], range: NSRange(location: 0, length: nsString.length)) else {
+            return nil
+        }
+        for group in 1...2 {
+            let range = match.range(at: group)
+            if range.location != NSNotFound {
+                let name = nsString.substring(with: range)
+                return name.isEmpty ? nil : name
+            }
+        }
+        return nil
     }
     
     static func handleMultiFiles(urls: [URL]) -> (results: [URL], errors: [ImportError], cueItems: [MultiFileRom]) {

@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Servicii cloud";
 "ImportAddLanServiceTitle" = "Servicii de rețea locală";
-"ImportAddDiscoverServiceTitle" = "Servicii de descoperire";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Conectare";
 "AddLandServiceSuccess" = "Adăugare %@ reușită";
 "AddLandServiceFailed" = "Adăugare %@ eșuată\nVerificați conexiunea la internet, starea serviciului sau informațiile introduse";
-"AddLandServiceTimeout" = "Conexiunea la serviciu a expirat";
 "FilesImporterErrorFileExist" = "\"%@\" există deja, nu este necesară importarea";
 "FilesImporterErrorBadCopy" = "Import \"%@\" eșuat, eroare la copierea fișierului";
 "FilesImporterErrorBadExtension" = "Import \"%@\" eșuat, extensia fișierului nu este recunoscută";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nUtilizați browserul pentru transfer de fișiere";
 "ImportServiceListPasteTitle" = "Citește clipboard";
 "ImportServiceListPasteDetail" = "Suportă copierea fișierelor din macOS sau aplicația Fișiere";
-"ImportHowTo" = "Cum se importă";
 "ImportTopHintTitle" = "O poveste plină de visuri și aventuri începe aici!";
 "ImportDragAndDropTips" = "Trageți fișierele pe orice interfață Manic EMU pentru transfer";
 "ImportChannelTips" = "Dacă aveți întrebări, alăturați-vă %@ pentru ajutor";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d minute";
 "FatalErrorTitle" = "Eroare fatală";
 "FatalErrorDesc" = "Încărcarea resurselor de sistem a eșuat, Manic EMU poate avea deficiențe majore în funcționare";
-"LodingFailedTitle" = "Încărcare eșuată";
 "AirPlayDesc" = "Începe aventura acum!";
 "ToastSuccess" = "Salvare reușită";
 "ToastFailed" = "Salvare eșuată";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Importă salvare joc";
 "GamesShareSave" = "Exportă salvare joc";
 "GamesDelete" = "Elimină joc";
-"GamesRandom" = "Nu știu ce să joc, alege aleatoriu";
 "LoadGameErrorRomNotExist" = "Eroare la încărcare, ROM-ul nu există";
 "GamesListEmptyGuideLeft" = "Apasă pe";
 "GamesListEmptyGuideRight" = "pentru a importa jocuri";
 "GamesListEmptyWelcomeLeft" = "Bun venit în lumea";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Asigurați-vă că obțineți fișierele ROM din surse legale";
+"LandscapeEmptyAddGame" = "Adaugă joc";
 "DeleteGameAlertDetail" = "ROM-ul jocului, salvările și cheat code-urile vor fi șterse permanent!";
 "DeleteSkinAlertDetail" = "Skin-ul eliminat nu poate fi recuperat!";
-"DeleteGameGameStateAlertTitle" = "Elimină salvare instant";
 "DeleteGameGameStateAlertDetail" = "Salvarea instant eliminată nu poate fi recuperată!";
 "confirmDelte" = "Confirmă eliminarea";
 
 //Controllers
 "ControllersTouchName" = "Controler pe ecran";
-"ControllersHeaderTitle" = "Controlere";
 "ControllersPlayerIndex" = "Jucător %d";
 "ControllersPlayerUnset" = "Nesetat";
-"ControllersHowToConnect" = "Cum se conectează";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "Jucat %@ · Total %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Salvare instant manuală";
 "ReadySegmentAutoSave" = "Salvare instant automată";
 "ReadyEditTitleFailed" = "Redenumire eșuată, numele jocului nu poate fi gol";
-"ReadyEditTitleSuccess" = "Redenumire reușită";
 "ReadyGameSaveStatesEmpty" = "Nicio salvare";
 "GameSaveGuideBecomTitle" = "Devino";
 "GameSaveGuideMemberTitle" = "membru";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Salvare %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU suportă perfect skin-uri în format .deltaskin .gammaskin";
 "SkinNavigationSubTitleSpecifiedGame" = "Skin personalizat doar pentru %@";
 "SkinSegmentPortraitTitle" = "Portret";
 "SkinSegmentLandscapeTitle" = "Peisaj";
 "SkinAddTitle" = "Adaugă skin";
-"HowToFetch" = "Cum se obține";
 "SkinDelete" = "Elimină skin";
 "DefaultSkinCannotEdit" = "Skin-ul implicit nu poate fi editat";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Începe joc";
 
 //Settings
-"LeftHandTitle" = "Mod stângaci";
-"LeftHandDetail" = "Oglindire stânga-dreapta pentru joystick, DPad și butoane";
 "QuickGameTitle" = "Pornire rapidă joc";
 "QuickGameDetail" = "Apăsarea pe joc afișează direct ecranul de joc";
 "AirPlayTitle" = "Mod ecran complet AirPlay";
 "AirPlayDetail" = "Afișează imaginea jocului pe ecran complet la redirecționare";
 "iCloudTitle" = "Sincronizare iCloud";
-"iCloudDetail" = "Sincronizează jocuri, skin-uri, salvări și setări pe dispozitive cu același Apple ID";
-"AppIconTitle" = "Pictogramă aplicație";
-"WidgetTitle" = "Widget-uri pe ecranul de start";
 "QATitle" = "Întrebări frecvente";
 "FeedbackTitle" = "Feedback";
 "ShareAppTitle" = "Partajează «Manic EMU» cu prietenii";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Setări avansate";
 "SupportSettingTitle" = "Suport";
 "OthersSettingTitle" = "Altele";
-"RatingTitleLeft" = "Evaluează";
-"RatingTitleRight" = "";
-"RatingDetail" = "Dacă considerați că produsul nostru are valoare, vă rugăm să ne acordați o evaluare cu 5 stele, feedback-ul dumneavoastră este foarte important pentru noi : )";
 "iCloudDisableTitle" = "iCloud indisponibil";
 "iCloudDisableDetail" = "Sincronizarea iCloud a fost încercată, dar va funcționa doar după autentificarea și autorizarea iCloud. Accesați «Setări» > «Apple ID» > «iCloud» pe iPhone și asigurați-vă că iCloud Drive este activat și Manic EMU are acces";
 "iCloudSyncConfilictTitle" = "Conflict sincronizare iCloud";
-"iCloudSyncConfilictDetail" = "Fișier cloud:\n%@\n\nFișier local:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Păstrează iCloud";
 "iCloudSyncConfilictSaveLocal" = "Păstrează local";
 "SettingsNonMemberDesc" = "Vei fi protagonistul acestei povești";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Mulțumim că ai venit să joci";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Nu ai configurat e-mailul";
-"IDCopy" = "ID copiat";
 "SendEmailSuccess" = "E-mail trimis cu succes";
 "SendEmailFailed" = "Trimitere e-mail eșuată %@";
 "iCloudTipsTitle" = "Activează sincronizarea iCloud";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Volum";
 "GameSettingFastForwardResume" = "Viteză normală";
 "GameSettingFastForward" = "Derulare rapidă %@";
-"GameSettingStateList" = "Listă salvări";
-"GameSettingSkins" = "Setează skin";
-"GameSettingFilter" = "Filtru";
 "GameSettingScreenShot" = "Captură ecran";
 "GameSettingHapticOff" = "Feedback tactil dezactivat";
 "GameSettingHapticSoft" = "Feedback tactil slab";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Repornire";
 "GameSettingQuit" = "Ieșire";
 "GameSaveStateSuccess" = "Salvare instant reușită";
-"GameSaveStateLoadFailed" = "Încărcare salvare instant eșuată, salvare incompatibilă sau coruptă";
 "GameSaveStateLoadSuccess" = "Încărcare salvare instant reușită";
 "GameSaveStateQuickLoadFailed" = "Nicio salvare manuală, utilizați «Listă salvări» pentru încărcare automată";
 "GameSaveListTitle" = "Salvare instant";
-"GameCheatActivateFailed" = "%@\nActivare eșuată, cheat code invalid";
 "GameCheatActivateSuccess" = "%@\nActivare reușită";
 "AirPlayingTitle" = "Imaginea jocului este redirecționată";
 "VolumeOff" = "Volum oprit";
 "VolumeOn" = "Volum pornit";
-"FunctionSortDesc1" = "Aceste funcții vor fi afișate ca acces rapid în skin-urile oficiale";
-"FunctionSortDesc2" = "Țineți apăsat pentru a reordona";
 "ManualGameSaveCountLimit" = "Ai depășit numărul de salvări instant! Devino membru pentru a debloca salvări instant nelimitate sau șterge salvări existente";
 "FastForwardSpeedLimit" = "Viteza maximă este x2! Devino membru pentru a debloca viteza x5";
 "ResetSpeed" = "Revenire la viteză normală";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Introduceți cod pentru detectare automată a formatului";
 "CheatCodeFormatError" = "Format cheat code invalid";
 "CheatCodeEmptyTitle" = "Niciun cheat code";
-"CheatCodeEmptyGuideLeft" = "Apasă pe";
-"CheatCodeEmptyGuideRight" = "pentru a adăuga cheat code";
 "EnableCheatCodeAlertTitle" = "Activează cheat code";
 "EnableCheatCodeAlertDetail" = "Cheat code-urile depind de versiunea jocului și trebuie să corespundă pentru a funcționa! Utilizarea cheat code-urilor modifică datele de joc și poate cauza erori sau instabilitate, folosiți cu discernământ.";
 
 //滤镜
-"FilterSectionHeaderTitle" = "Filtre video";
 "FilterOriginTitle" = "Original";
 
 //内购
@@ -356,7 +326,6 @@
 "PurchasePending" = "Plata este în așteptare, funcțiile vor fi activate după finalizare";
 "PurchaseUnknown" = "Stare plată necunoscută";
 "PurchaseErrorDesc" = "Plata nu poate fi procesată, verificați conexiunea la internet";
-"PurchaseFailedTitle" = "Plată eșuată";
 "RestoreSuccessDesc" = "Restaurare achiziție reușită!";
 "RestoreEndDesc" = "Restaurare finalizată, nu s-au găsit achiziții!";
 "TrialDesc" = "Perioada de probă este gratuită, anulați oricând";
@@ -397,23 +366,12 @@
 "ShareAppSubtitle" = "Hai să începi aventura împreună cu prietenii tăi!";
 "ShareRomFilesFailed" = "Partajare ROM eșuată, nu s-a putut obține fișierul";
 "ShareSaveFilesFailed" = "Partajare salvare joc eșuată, nu există salvări";
-"ShareFilesCopyFailed" = "Partajare fișier eșuată, eroare la copiere";
-"ShareFilesCompressFailed" = "Partajare fișier eșuată, eroare la compresie";
 
 "TurnOnAirPlayAsk" = "AirPlay este conectat. Activezi modul ecran complet acum?";
 
 "ThreeDSModePerformance" = "Mod Performanță";
 "ThreeDSModeCompatibility" = "Mod Compatibilitate";
 "ThreeDSModeQuality" = "Prioritate Grafică";
-"ThreeDSNotSupportImportSave" = "Jocurile 3DS nu acceptă încă importul salvarilor";
-"ThreeDSNotSupportShareSave" = "Jocurile 3DS nu acceptă încă partajarea salvarilor";
-"ThreeDSBetaAlertTitle" = "Versiunea Beta 3DS";
-"ThreeDSBetaAlertDetail" = "Pentru a vă permite să vă bucurați mai devreme de jocurile 3DS, Manic EMU a lansat suportul pentru 3DS, dar acesta se află încă în stadiu experimental. Unele funcții necesită optimizări suplimentare.
-Următoarele funcții sunt temporar indisponibile:
-❌ Modul AirPlay pe tot ecranul
-❌ Salvare automată
-❌ Funcția de accelerare
-Dacă întâmpinați instabilitate la 3DS, vă rugăm să consultați «Întrebări Frecvente» sau să ne alăturați canalului pentru asistență. Continuăm să îmbunătățim performanța emulatorului, iar înțelegerea și sprijinul vostru ne vor ajuta să creăm o experiență de joc perfectă. Lucrăm neîncetat pentru un mediu de joc mai bun.";
 "ThreeDSNoSupportDeviceTitle" = "Performanța dispozitivului insuficientă";
 "ThreeDSNoSupportDeviceDetail" = "Acest dispozitiv poate nu suportă emularea 3DS. Continuarea poate cauza erori imprevizibile";
 
@@ -432,8 +390,6 @@ Apasă butonul controlerului...";
 "FullScreenWhenConnectControllerTitle" = "Ecran complet automat";
 "FullScreenWhenConnectControllerDetail" = "Activează ecranul complet la conectarea controlerului";
 "JoinDiscordTitle" = "Alătură-te Discord";
-"JoinDiscordAlertMessage" = "Mulțumim jucătorului %@ pentru canal. Continuați?";
-"FlexSkinGuideTitle" = "Glisează sau zoom pentru ajustare";
 "DownloadFailed" = "Descărcare eșuată";
 "RemoveDownloadTask" = "Anulează descărcarea \"%@\"?";
 "GameSettingResolution" = "Rezoluție %@";
@@ -483,9 +439,6 @@ Apasă butonul controlerului...";
 "RenderRightEyeDesc" = "Dezactivarea îmbunătățește performanța la unele jocuri, dar poate cauza pâlpâire";
 "DisableTitle" = "Dezactivează";
 "EnableTitle" = "Activează";
-"NoSaveStateToast" = "Niciun %@ disponibil";
-"DeleteSelectedSaveStateAlert" = "Ștergeți «%@» selectat?\nNu poate fi recuperat!";
-"DeleteAllSaveStateAlert" = "Nicio selecție. Ștergeți toate «%@»?\nNu poate fi recuperat!";
 "AICoverSearchDesc" = "Detectată căutare non-engleză. Faceți upgrade la Premium pentru căutare multilingvă cu AI";
 "MaxTextSizeAllowDesc" = "Suportă până la %@ caractere";
 
@@ -513,29 +466,21 @@ Apasă butonul controlerului...";
 "BiosAddTitle" = "Adaugă BIOS";
 "StartGameWithoutBiosTitle" = "Pornește fără BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Mod Avansat";
 "ThreeDSAdvanceSettingTitle" = "Setări Avansate";
-"ThreeDSBasicSettingMode" = "Mod de Bază";
 "ShareConfigButtonTitle" = "Partajează Configurația";
 "ImportConfigButtonTitle" = "Importă Configurația";
 "ShareFileFailedMissing" = "Partajare eșuată: fișier inexistent";
 "ReadConfigFileFailed" = "Nu se poate citi fișierul de configurare";
 "SwitchEmulationCore" = "Schimbă Nucleu";
 "SwitchEmulationCoreDetail" = "Schimbă nucleul de emulare pentru %@\nSchimbarea nucleului va face salvările de pe nucleul anterior inaccesibile. Pentru acces, reveniți la nucleul original";
-"BeetleSaturnNoSupportCheat" = "Nucleul Beetle Saturn nu suportă coduri cheat momentan. Dacă este necesar, comutați la nucleul Yabause";
-"CurrentTitle" = "curent";
 "NewSkinDesc" = "Manic EMU suportă skin-uri în formate .manicskin și .deltaskin .gammaskin. Notă: Skin-ul importat trebuie să se potrivească cu platforma curentă, altfel nu va apărea în listă.\nOferim și acces la comunități de skin-uri terță. Acestea nu sunt afiliate oficial cu Manic EMU. La descărcare, respectați termenii de serviciu ai fiecărui site";
 "VisitSite" = "Vizitează %@";
 "OpenFile" = "Deschide Fișier";
 "WebViewDownloadBegin" = "Descărcarea a început";
 "RespectSilentMode" = "Respectă Modul Silențios";
 "RespectSilentModeDesc" = "Când este activat, Manic EMU va reda audio doar în afara modului silențios";
-"SaturnISONoSwitchCore" = "Jocurile Sega Saturn în format .iso nu suportă schimbarea nucleului";
-"EnableFullScreenTitle" = "Activează Ecran Complet";
-"DisableFullScreenTitle" = "Dezactivează Ecran Complet";
 "SimulateBlowingTitle" = "Simulează Suflare";
 "PaletteTitle" = "Paletă";
-"SkinRestDesc" = "Resetarea skin-ului va restabili și skin-urile atribuite de jocuri la versiunile implicite";
 "SkinResetForAll" = "Resetează Toate Skin-urile Platformei";
 "SkinResetForPlatform" = "Resetează Skin-ul %@";
 "SkinDebug" = "Zonă de Testare Skin-uri";
@@ -552,7 +497,6 @@ Apasă butonul controlerului...";
 "MultiDiscCloseAlert" = ".m3u generat. Închide după import";
 "MultiDiscContinueClose" = "Închide";
 "SwapDisk" = "Schimbă disc";
-"NotSupportSwapDisk" = "Nu este joc multi-disc";
 "TransferPakDesc" = "Transfer Pak sincronizează date GB/GBC cu N64. Pentru activare: importă ROM (.gb/.gbc) și salvare (.sav)";
 "TransferPakFromLibrary" = "Importă din colecție";
 "TransferPakFromLibraryDesc" = "Doar jocuri cu salăvări.\nJocurile GB/GBC selectate trebuie să corespundă ROM-ului N64";
@@ -561,7 +505,6 @@ Apasă butonul controlerului...";
 "TransferPakOn" = "Activat";
 "TransferPakOff" = "Dezactivat";
 "TransferPakImportError" = "Eroare: Importă atât ROM cât și salvare (2 fișiere)";
-"ShowControlsTitle" = "Afișează comenzi";
 "HideControlsTitle" = "Ascunde comenzi";
 
 "DesignedFor" = "Proiectat pentru %@";
@@ -584,7 +527,6 @@ Apasă butonul controlerului...";
 "WfcConnectDesc" = "Conectare la Nintendo WFC...\nAccelerație și cheat-uri dezactivate";
 "WfcDisconnectDesc" = "Deconectare de la Nintendo WFC";
 "NotAllowOnlineGame" = "Această funcție este dezactivată în joc online";
-"QuitGameAlert" = "Ieși din joc? Progresul nesalvat se va pierde";
 
 "SkinIdentifierExist" = "Identificatorul %@ există deja. Modificați și reimportați.";
 "AnalogModeChange" = "Comută la modul %@";
@@ -618,7 +560,6 @@ Apasă butonul controlerului...";
 "LastActivity" = "Ultima activitate: %@";
 "MemberSince" = "Membru din: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Progres completare";
 "AchievementsList" = "Achievements";
 "TotalAchievements" = "Total %d achievements";
@@ -641,7 +582,6 @@ Apasă butonul controlerului...";
 "DisableAchievementsAlert" = "Dezactivezi RetroAchievements?";
 "SaveStateCoreUnCompatible" = "Save state-ul a fost creat în %@ (curent: %@). Încărcarea poate cauza probleme!";
 "LatestSaveStateUnCompatible" = "Ultimul save state nu poate fi încărcat din cauza incompatibilității nucleu";
-"Snes9xAlert" = "Din cauza problemelor de licențiere, nucleul Snes9x va fi eliminat în viitoarele actualizări. Schimbă la bsnes și migrează save state-urile, altfel nu vor funcționa.";
 "GotIt" = "Am înțeles";
 "Rumble" = "Vibrație";
 "RumbleDetail" = "Dispozitivul vibrează în timpul anumitor evenimente";
@@ -657,7 +597,6 @@ Apasă butonul controlerului...";
 "JumpTips" = "Deschidere pagină terță";
 "ThirdPartGameInfoTips" = "Informațiile despre joc sunt furnizate de terți. Folosește-ți judecata și respectă regulile platformei. Dacă Manic EMU nu găsește un joc, folosește căutarea pentru a-l găsi manual.";
 "NotSupportHardcore" = "Modul Hardcore este dezactivat pentru acest joc. Poate Manic EMU nu este autorizat de RetroAchievements, sau jocul pur și simplu nu suportă modul hardcore.";
-"ChooseOne" = "Alege unul";
 "FilesImporterErrorBadCue" = "Import %@ eșuat. Fișierul poate fi invalid sau nu este codificat UTF-8. Verifică formatul.";
 "Leaderboard" = "Clasament";
 "LeaderboardStart" = "Început clasament: ";
@@ -673,10 +612,8 @@ Apasă butonul controlerului...";
 "AlwaysShowProgressDesc" = "Păstrează progresul realizărilor vizibil pe ecran.";
 "Progress" = "Progres";
 
-"DCGameNoSupportGameSave" = "Dreamcast nu suportă importul/exportul salvărilor. Utilizați VMU Explorer pentru a edita fișierele de memorie din folderul Manic EMU-Flycast-dc.";
 
 "Challenge" = "Provocare";
-"GameTypeLicensingError" = "Ne pare rău! Din cauza restricțiilor de licență cu nucleul %@, această platformă nu este disponibilă temporar. Puteți aștepta o actualizare viitoare sau să folosiți versiunea sideload.";
 "DCJITLessVer" = "Versiunea Implicită oferă emulare rapidă și precisă, dar nu poate rula jocuri WinCE. Pentru a juca titluri WinCE, selectați nucleul WinCE.";
 "TVStandard" = "Dacă standardul TV al jocului nu corespunde regiunii, viteza poate fi afectată. Regiunile PAL includ în principal Europa, Australia și Noua Zeelandă.";
 "SNESVRAMEnable" = "Unele ROM-uri modificate necesită această opțiune pentru a afișa corect grafica, dar activarea va dezactiva suportul pentru RetroAchievements.";
@@ -699,7 +636,6 @@ Apasă butonul controlerului...";
 "LayoutEmbeddedBottomRight" = "Încorporat (Jos-Dreapta)";
 "LayoutSingleScreen" = "Ecran unic";
 "AirPlayLayoutTips" = "Combină Aranjament AirPlay cu Schimbare Ecran pentru mai multe opțiuni. Notă: Folosirea Schimbare Ecran cu aranjament încorporat poate causa suprapunere, nerecomandat";
-"ToggleAnolog" = "Comutare analog";
 "EnableGlobalAchievements" = "Activează RetroAchievements globale";
 "GlobalHardcoreMode" = "Mod hardcore global";
 "GlobalHardcoreAlert" = "Vă rugăm să activați mai întâi RetroAchievements globale";
@@ -715,7 +651,6 @@ Apasă butonul controlerului...";
 "AppearanceLight" = "Mod Deschis";
 "AppearanceDark" = "Mod Întunecat";
 "AppearanceAuto" = "Urmează Sistemul";
-"GameListBackground" = "Imagine de Fundal";
 "GameListBackgroundUpload" = "Încarcă";
 "GameplayManuals" = "Manuale de Joc";
 "GameplayManualsNoExists" = "Nu există manual disponibil pentru acest joc.";
@@ -725,7 +660,6 @@ Apasă butonul controlerului...";
 "UnsupportSkinsDesc" = "Următoarele skin-uri nu sunt suportate pe acest dispozitiv:\n%@Notă: Eliminarea lor va șterge și aceste skin-uri de pe alte dispozitive sincronizate via iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Skin-uri nesuportate eliminate cu succes";
 "ForbitPKSM" = "Pentru a asigura o experiență corectă RetroAchievements, PKSM nu poate fi utilizat cât timp RetroAchievements Global este activat.";
-"FDSAlert" = "Această opțiune este disponibilă doar pentru jocurile FDS.";
 "DiskSideChange" = "Întoarce Discul";
 "EjectDisk" = "Scoate Discul";
 
@@ -758,7 +692,6 @@ Apasă butonul controlerului...";
 "TriggerProName" = "Nume TriggerPro";
 "Position" = "Poziție";
 "ButtonInfo" = "Informații buton";
-"NoTriggerPro" = "Nu s-a găsit nicio configurație TriggerPro. Poți merge la Setări sau ține apăsat opțiunea TriggerPro în Meniul Joc pentru a crea una";
 "ManageTriggerPro" = "Gestionează TriggerPro";
 "EnableTriggerPro" = "Activează TriggerPro";
 "DisableTriggerPro" = "Dezactivează TriggerPro";
@@ -799,7 +732,6 @@ Apasă butonul controlerului...";
 "Default" = "Implicit";
 "Imported" = "Importat";
 "DownloadRetroArchSahders" = "Descarcă shadere de la RetroArch";
-"ImportShaders" = "Importă shadere";
 "Shaders" = "Shadere";
 "DownloadRetroArchShaders" = "Vrei să descarci shadere de la RetroArch? La finalizare, categoria de shadere RetroArch se va reîmprospăta automat. Poți anula acest proces oricând în managerul de descărcări.";
 "RetroArchShaderUnzipFailed" = "Nu s-a putut extrage %@. Fișierul poate fi fost corupt în timpul descărcării. Te rugăm să încerci să-l descarci din nou.";
@@ -832,7 +764,6 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "JGenesisAlert" = "Ne pare rău, nucleul JGenesis suportă doar fișiere ROM .chd.";
 "RedeemOfferCode" = "Răscumpărare Ofertă";
 "CheatImportFailed" = "Import eșuat. Fișierul nu a putut fi analizat sau nu au fost găsite coduri de cheat potrivite.";
-"RemoveAllCheats" = "Elimină Toate Cheat-urile";
 "RemoveAllCheatsAlert" = "Sigur doriți să eliminați toate codurile de cheat? Această acțiune nu poate fi anulată.";
 "CheatCodeStatus" = "Activat";
 "Background" = "Fundal";
@@ -845,13 +776,8 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "RemoveBackgroundForGame" = "Elimină Fundalul Jocului";
 "RemoveBackgroundForConsole" = "Elimină Fundalul Platformei %@";
 "RemoveBackgroundForGlobal" = "Elimină Fundalul Global";
-"ShaderConfigAlert" = "Setat pentru %@.";
-"Global" = "Global";
-"RemoveShaderForGlobal" = "Elimină Shader Global";
 "FeaturedItems" = "Articole Recomandate";
-"ReUpload" = "Reîncărcare";
 
-"Service" = "Servicii";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "Rețea PSP";
 "Networking" = "Rețea";
@@ -890,16 +816,11 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "LoadingCheerpJ" = "Se încarcă CheerpJ";
 "ZipHandlerTitle" = "Gestionarea fișierelor ZIP";
 "ZipHandlerDetail" = "Unele platforme (cum ar fi DOS și Arcade) pot încărca ROM-uri direct din fișiere .zip. Pentru alte platforme, ROM-urile dintr-un .zip trebuie extrase înainte de import.\n\nFișierele selectate vor fi extrase și importate individual, în timp ce fișierele neselectate vor fi importate ca un singur ROM ZIP.";
-"ConfigsResetCore" = "Resetează la valorile implicite ale nucleului";
-"ConfigsResetBefore" = "Revino la setările anterioare";
 "InsertDisc" = "Introduceți discul";
 "InsertDiscAlert" = "Puteți introduce un disc selectând un alt joc de pe aceeași platformă din biblioteca dvs. sau alegând un fișier disc din Fișiere. Din cauza limitărilor sistemului de fișiere iOS, fișierele disc selectate din Fișiere vor fi copiate în memoria cache a Manic EMU.";
 "InsertDiscFailed" = "Nu s-a putut introduce discul";
 "GenerateHomeMenu" = "Creează meniul principal";
 "SkinSoundEffects" = "Efecte sonore temă";
-"FirstAnniversary" = "MULȚUMIM CĂ EȘTI AICI,\NȚI-AM SCRIS CEVA";
-"ApirlFoolsDayTitle" = "Hopa, s-a stricat Manic EMU?";
-"ApirlFoolsDayDetail" = "Nu vă faceți griji!\nDoar o glumă—1 aprilie fericit!\n\nTotul va reveni la normal după ce închideți asta.";
 "JITType" = "Tip JIT";
 "JITTypeDesc" = "JIT standard oferă cea mai bună performanță, în timp ce JIT IR oferă performanță moderată.";
 "Pretendo" = "Rețeaua Pretendo";
@@ -914,7 +835,6 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "HomeMenuDesc" = "Folosiți butonul de mai jos pentru a deschide Meniul Principal. Apoi accesați Setările Nimbus, comutați la rețeaua Pretendo și deschideți Setările pentru a selecta „ID Rețea Nintendo” și conectați-vă cu contul dvs. Pretendo.\n\nDupă aceea, orice joc lansat din Meniul Principal sau care rulează cu nucleul Azahar va folosi rețeaua Pretendo.\n\nDacă intrarea din Meniul Principal lipsește, această funcție va încerca să o recreeze automat.";
 "OpenHomeMenu" = "Deschideți Meniul Principal";
 "ChooseRegion" = "Selectați regiunea";
-"ChooseRegionDesc" = "Selectați regiunea corectă a dispozitivului 3DS care rulează Instrumentul Artic Setup. Alegerea regiunii greșite va împiedica transferul cu succes al datelor.";
 "HomeMenuNotFound" = "Meniul Principal nu a fost găsit. Finalizați mai întâi transferul de date Artic Base.";
 "SystemUpdateAsk" = "Actualizarea sistemului s-a finalizat cu succes?";
 "SystemUpdateDesc" = "Dacă actualizarea sistemului a eșuat din cauza problemelor de rețea, încercați din nou să transferați datele. În caz contrar, Meniul Principal 3DS poate să nu funcționeze corect.";

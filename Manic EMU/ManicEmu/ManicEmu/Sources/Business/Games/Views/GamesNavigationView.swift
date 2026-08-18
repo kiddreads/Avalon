@@ -9,44 +9,45 @@
 
 import UIKit
 
-class GamesNavigationView: UIView {
-    private var appTitle: UIImageView = {
-        let view = UIImageView(image: UIImage(.dm, light: R.image.app_title_light()!, dark: R.image.app_title()!))
+class GamesNavigationView: BaseView {
+    private var appTitle: ASIconView = {
+        let view = ASIconView(.image(R.image.app_title()!))
         return view
     }()
     
-    var controllerButton: SymbolButton = {
-        let view = SymbolButton(image: R.image.customArcadeStickConsoleFill()?.applySymbolConfig(), enableGlass: true)
-        view.enableRoundCorner = true
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+    var controllerButton: ASButtonView = {
+        let view = ASButtonView(.iconOnlyWithSmallSize(icon: .symbolImage(R.image.controller_iconSymbols())))
         return view
     }()
     
-    var historyButton: SymbolButton = {
-        let view = SymbolButton(image: R.image.customFlagPatternCheckered()?.applySymbolConfig(), enableGlass: true)
-        view.enableRoundCorner = true
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+    var historyButton: ASButtonView = {
+        let view = ASButtonView(.iconOnlyWithSmallSize(icon: .symbolImage(R.image.history_iconSymbols())))
         return view
     }()
+    
+    var scrollToTopView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubviews([controllerButton, appTitle, historyButton])
+        addSubviews([scrollToTopView, controllerButton, appTitle, historyButton])
+        scrollToTopView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalToSuperview().dividedBy(2)
+        }
+        
         appTitle.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
         
         controllerButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeMax)
         }
         
         historyButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeMax)
         }
     }
     

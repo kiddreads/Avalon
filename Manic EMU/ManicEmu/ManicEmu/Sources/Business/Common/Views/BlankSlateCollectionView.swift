@@ -9,9 +9,8 @@
 
 import UIKit
 import BlankSlate
-import KeyboardKit
 
-class BlankSlateEmptyView: UIView {
+class BlankSlateEmptyView: BaseView {
     let imageView = UIImageView()
     
     let label = UILabel()
@@ -24,20 +23,20 @@ class BlankSlateEmptyView: UIView {
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-Constants.Size.ItemHeightMin)
+            make.centerY.equalToSuperview().offset(-R.Size.ItemHeightSmall)
         }
         
-        label.font = Constants.Font.body(size: .l)
-        label.textColor = Constants.Color.LabelSecondary
+        label.font = R.Font.Body()
+        label.textColor = R.Color.LabelSecondary
         label.text = title
         label.numberOfLines = 0
         label.textAlignment = .center
         addSubview(label)
         label.snp.makeConstraints { make in
-            make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            make.leading.greaterThanOrEqualToSuperview().offset(R.Size.ContentSpaceLarge)
+            make.trailing.lessThanOrEqualToSuperview().offset(-R.Size.ContentSpaceLarge)
             make.centerX.equalToSuperview()
-            make.top.equalTo(imageView.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(imageView.snp.bottom).offset(R.Size.ContentSpaceMedium)
         }
     }
     
@@ -46,18 +45,16 @@ class BlankSlateEmptyView: UIView {
     }
 }
 
-class BlankSlateCollectionView: KeyboardCollectionView {
+class BlankSlateCollectionView: UICollectionView {
     
     var blankSlateView: UIView? = nil
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
+    var layoutInsets: UIEdgeInsets = .zero
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
-        Log.debug("\(String(describing: Self.self)) init")
         self.bs.setDataSourceAndDelegate(self)
+        isFocusable = true
     }
     
     required init?(coder: NSCoder) {
@@ -71,7 +68,7 @@ extension BlankSlateCollectionView: BlankSlate.DataSource {
     }
     
     func layout(forBlankSlate view: UIView, for element: BlankSlate.Element) -> BlankSlate.Layout {
-        return .init(edgeInsets: .zero)
+        return .init(edgeInsets: layoutInsets)
     }
     
 }

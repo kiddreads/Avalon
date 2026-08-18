@@ -13,54 +13,54 @@ import ZipArchive
 
 class BIOSCollectionViewCell: UICollectionViewCell {
     
-    class ItemView: UIView {
+    class ItemView: BaseView {
         var titleLabel: UILabel = {
             let view = UILabel()
-            view.font = Constants.Font.body(size: .l)
-            view.textColor = Constants.Color.LabelPrimary
+            view.font = R.Font.Body()
+            view.textColor = R.Color.LabelPrimary
             return view
         }()
         
         var detailLabel: UILabel = {
             let view = UILabel()
-            view.font = Constants.Font.caption(size: .l)
-            view.textColor = Constants.Color.LabelSecondary
+            view.font = R.Font.Caption()
+            view.textColor = R.Color.LabelSecondary
             view.numberOfLines = 0
             return view
         }()
         
         var optionButton: UIButton = {
             let view = UIButton(type: .custom)
-            view.titleLabel?.font = Constants.Font.caption(size: .l)
+            view.titleLabel?.font = R.Font.Caption()
             view.setTitle("(\(R.string.localizable.optionTitleOptional()))", for: .normal)
             view.setTitle("(\(R.string.localizable.optionTitleRequired()))", for: .selected)
-            view.setTitleColor(Constants.Color.LabelSecondary, for: .normal)
-            view.setTitleColor(Constants.Color.Red, for: .selected)
+            view.setTitleColor(R.Color.LabelSecondary, for: .normal)
+            view.setTitleColor(R.Color.Red, for: .selected)
             return view
         }()
         
         var button: UIButton = {
             let view = UIButton(type: .custom)
-            view.titleLabel?.font = Constants.Font.body(size: .l, weight: .semibold)
+            view.titleLabel?.font = R.Font.Body(emphasis: true)
             view.setTitle(R.string.localizable.tabbarTitleImport(), for: .normal)
             view.setTitle(R.string.localizable.biosImported(), for: .selected)
-            view.setTitleColor(Constants.Color.Red, for: .normal)
-            view.setTitleColor(Constants.Color.Green, for: .selected)
+            view.setTitleColor(R.Color.Red, for: .normal)
+            view.setTitleColor(R.Color.Green, for: .selected)
             return view
         }()
         
         init(enableButton: Bool = true, enableOptionButton: Bool = true) {
             super.init(frame: .zero)
-            layerCornerRadius = Constants.Size.CornerRadiusMid
-            backgroundColor = Constants.Color.Background
+            layerCornerRadius = R.Size.CornerRadiusMedium
+            backgroundColor = R.Color.BackgroundTertiary
             
             let titleContainer = UIView()
             addSubview(titleContainer)
             titleContainer.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
                 if !enableButton {
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
                 }
             }
             
@@ -77,17 +77,19 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 optionButton.snp.makeConstraints { make in
                     make.trailing.lessThanOrEqualToSuperview()
                     make.centerY.equalTo(titleLabel)
-                    make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                    make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
                 }
             }
             
             titleContainer.addSubview(detailLabel)
             detailLabel.snp.makeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceTiny)
                 make.leading.bottom.equalToSuperview()
                 make.trailing.lessThanOrEqualToSuperview()
             }
             
+            button.isFocusable = true
+            optionButton.isFocusable = true
             if enableButton {
                 addSubview(button)
                 titleContainer.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -96,8 +98,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 button.setContentCompressionResistancePriority(.required, for: .horizontal)
                 button.snp.makeConstraints { make in
                     make.centerY.equalToSuperview()
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-                    make.leading.equalTo(titleContainer.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
+                    make.leading.equalTo(titleContainer.snp.trailing).offset(R.Size.ContentSpaceSmall)
                 }
             }
         }
@@ -112,52 +114,52 @@ class BIOSCollectionViewCell: UICollectionViewCell {
         DispatchQueue.global().async {
             var biosItems = [BIOSItem]()
             if gameType == .mcd {
-                biosItems = Constants.BIOS.MegaCDBios
+                biosItems = R.BIOS.MegaCDBios
             } else if gameType == .ss {
-                biosItems = Constants.BIOS.SaturnBios
+                biosItems = R.BIOS.SaturnBios
             } else if gameType == .ds {
-                biosItems = Constants.BIOS.DSBios
+                biosItems = R.BIOS.DSBios
             } else if gameType == .ps1 {
-                biosItems = Constants.BIOS.PS1Bios
+                biosItems = R.BIOS.PS1Bios
             } else if gameType == .dc {
-                biosItems = Constants.BIOS.DCBios
+                biosItems = R.BIOS.DCBios
             }  else if gameType == .gb {
-                biosItems = Constants.BIOS.GBBios
+                biosItems = R.BIOS.GBBios
             }  else if gameType == .gbc {
-                biosItems = Constants.BIOS.GBCBios
+                biosItems = R.BIOS.GBCBios
             }  else if gameType == .gba {
-                biosItems = Constants.BIOS.GBABios
+                biosItems = R.BIOS.GBABios
             }  else if gameType == .fds {
-                biosItems = Constants.BIOS.FDSBios
+                biosItems = R.BIOS.FDSBios
             }  else if gameType == .pm {
-                biosItems = Constants.BIOS.PMBios
+                biosItems = R.BIOS.PMBios
             } else if gameType == ._3ds {
-                biosItems = Constants.BIOS.ThreeDSBios
+                biosItems = R.BIOS.ThreeDSBios
             } else if gameType == .arcade {
-                biosItems = Constants.BIOS.ArcadeDSBios
+                biosItems = R.BIOS.ArcadeDSBios
             } else if gameType == .a5200 {
-                biosItems = Constants.BIOS.A5200Bios
+                biosItems = R.BIOS.A5200Bios
             } else if gameType == .a7800 {
-                biosItems = Constants.BIOS.A7800Bios
+                biosItems = R.BIOS.A7800Bios
             } else if gameType == .lynx {
-                biosItems = Constants.BIOS.LynxBios
+                biosItems = R.BIOS.LynxBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
-                var biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
+                var biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
                 if gameType == .dc {
-                    biosInLib = Constants.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
+                    biosInLib = R.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
                 }
                 let isBiosExists: Bool
                 if gameType == .arcade {
-                    isBiosExists = Constants.BIOS.MAMEBiosMap.keys.allSatisfy({ FileManager.default.fileExists(atPath: Constants.Path.Data.appendingPathComponent($0)) })
+                    isBiosExists = R.BIOS.MAMEBiosMap.keys.allSatisfy({ FileManager.default.fileExists(atPath: R.Path.Data.appendingPathComponent($0)) })
                 } else {
                     isBiosExists = fileManager.fileExists(atPath: biosInLib)
                 }
                 if isBiosExists {
                     biosItems[index].imported = true
                 } else {
-                    let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
+                    let biosInDoc = R.Path.BIOS.appendingPathComponent(bios.fileName)
                     if fileManager.fileExists(atPath: biosInDoc) {
                         try? FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc), to: URL(fileURLWithPath: biosInLib))
                         biosItems[index].imported = true
@@ -183,18 +185,18 @@ class BIOSCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundPrimary
+        layerCornerRadius = R.Size.CornerRadiusLarge
+        backgroundColor = R.Color.BackgroundSecondary
         
         addSubviews(itemViews)
         for (index, view) in itemViews.enumerated() {
             view.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+                make.height.equalTo(R.Size.ItemHeightLarge)
                 if index == 0 {
-                    make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                    make.top.equalToSuperview().offset(R.Size.ContentSpaceMedium)
                 } else {
-                    make.top.equalTo(itemViews[index-1].snp.bottom).offset(Constants.Size.ContentSpaceMid)
+                    make.top.equalTo(itemViews[index-1].snp.bottom).offset(R.Size.ContentSpaceMedium)
                 }
             }
         }
@@ -226,8 +228,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                         biosItems.forEach({ bios in
                                             if url.lastPathComponent.lowercased() == bios.fileName.lowercased() {
                                                 matchs.append((url, bios.fileName))
-                                            } else if bios.fileName == Constants.Strings.MAMEBiosTitle,
-                                                      let _ = Constants.BIOS.MAMEBiosMap[url.lastPathComponent.lowercased()] {
+                                            } else if bios.fileName == R.Strings.MAMEBiosTitle,
+                                                      let _ = R.BIOS.MAMEBiosMap[url.lastPathComponent.lowercased()] {
                                                 //MAME Bios特殊匹配
                                                 mameMatchs.append((url, url.lastPathComponent.lowercased()))
                                             }
@@ -240,10 +242,10 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                             if match.fileName.lowercased() == "nand.zip" {
                                                 import3DSNandSuccess = self.import3DSNand(url: match.url)
                                             } else {
-                                                try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
-                                                var matchFilePath = Constants.Path.System.appendingPathComponent(match.fileName)
+                                                try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: R.Path.BIOS.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                                var matchFilePath = R.Path.System.appendingPathComponent(match.fileName)
                                                 if gameType == .dc {
-                                                    matchFilePath = Constants.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                                    matchFilePath = R.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
                                                 }
                                                 try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
                                             }
@@ -255,7 +257,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                     
                                     if mameMatchs.count > 0 {
                                         for match in mameMatchs {
-                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent(match.fileName)), shouldReplace: true)
+                                            try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: R.Path.Data.appendingPathComponent(match.fileName)), shouldReplace: true)
                                         }
                                     }
                                     DispatchQueue.main.async {
@@ -285,7 +287,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                 importFromFiles()
                             }, confirmAction: {
                                 DispatchQueue.main.asyncAfter(delay: 0.35) {
-                                    topViewController()?.present(PretendoNetworkingViewController(), animated: true)
+                                    PretendoNetworkingView.show()
                                 }
                             })
                         } else {
@@ -304,7 +306,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
         if SSZipArchive.isFilePasswordProtected(atPath: url.path) {
             return false
         } else {
-            let unZipPath = Constants.Path.Cache.appendingPathComponent("nand")
+            let unZipPath = R.Path.Cache.appendingPathComponent("nand")
             if FileManager.default.fileExists(atPath: unZipPath) {
                 try? FileManager.default.removeItem(atPath: unZipPath)
             }
@@ -316,7 +318,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 tempNandPath = unZipPath.appendingPathComponent("nand")
             }
             
-            let nandPath = Constants.Path.ThreeDS.appendingPathComponent("nand")
+            let nandPath = R.Path.ThreeDS.appendingPathComponent("nand")
             try? FileManager.safeReplaceDirectory(at: URL(fileURLWithPath: tempNandPath), to: URL(fileURLWithPath: nandPath))
             
             try? FileManager.default.removeItem(atPath: unZipPath)
@@ -334,7 +336,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
         guard fileManager.fileExists(atPath: path, isDirectory: &isDirectory) else { return }
         
         if path.pathExtension.lowercased() == "app", let tid = pathToTid(path) {
-            if Constants.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == tid }) {
+            if R.Numbers.ThreeDSHomeMenuIdentifiers.contains(where: { $0 == tid }) {
                 //识别到了3dS的home menu
                 FilesImporter.importFiles(urls: [URL(fileURLWithPath: path)], silentMode: true)
             }
@@ -381,36 +383,36 @@ class BIOSCollectionViewCell: UICollectionViewCell {
     static func CellHeight(gameType: GameType) -> Double {
         var itemCount = 0
         if gameType == .mcd {
-            itemCount = Constants.BIOS.MegaCDBios.count
+            itemCount = R.BIOS.MegaCDBios.count
         } else if gameType == .ss {
-            itemCount = Constants.BIOS.SaturnBios.count
+            itemCount = R.BIOS.SaturnBios.count
         } else if gameType == .ds {
-            itemCount = Constants.BIOS.DSBios.count
+            itemCount = R.BIOS.DSBios.count
         } else if gameType == .ps1 {
-            itemCount = Constants.BIOS.PS1Bios.count
+            itemCount = R.BIOS.PS1Bios.count
         } else if gameType == .dc {
-            itemCount = Constants.BIOS.DCBios.count
+            itemCount = R.BIOS.DCBios.count
         }  else if gameType == .gb {
-            itemCount = Constants.BIOS.GBBios.count
+            itemCount = R.BIOS.GBBios.count
         }  else if gameType == .gbc {
-            itemCount = Constants.BIOS.GBCBios.count
+            itemCount = R.BIOS.GBCBios.count
         }  else if gameType == .gba {
-            itemCount = Constants.BIOS.GBABios.count
+            itemCount = R.BIOS.GBABios.count
         }  else if gameType == .fds {
-            itemCount = Constants.BIOS.FDSBios.count
+            itemCount = R.BIOS.FDSBios.count
         }  else if gameType == .pm {
-            itemCount = Constants.BIOS.PMBios.count
+            itemCount = R.BIOS.PMBios.count
         } else if gameType == ._3ds {
-            itemCount = Constants.BIOS.ThreeDSBios.count
+            itemCount = R.BIOS.ThreeDSBios.count
         } else if gameType == .arcade {
-            itemCount = Constants.BIOS.ArcadeDSBios.count
+            itemCount = R.BIOS.ArcadeDSBios.count
         } else if gameType == .a5200 {
-            itemCount = Constants.BIOS.A5200Bios.count
+            itemCount = R.BIOS.A5200Bios.count
         } else if gameType == .a7800 {
-            itemCount = Constants.BIOS.A7800Bios.count
+            itemCount = R.BIOS.A7800Bios.count
         } else if gameType == .lynx {
-            itemCount = Constants.BIOS.LynxBios.count
+            itemCount = R.BIOS.LynxBios.count
         }
-        return (Double(itemCount) * Constants.Size.ItemHeightMax) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid)
+        return (Double(itemCount) * R.Size.ItemHeightLarge) + (Double(itemCount + 1) * R.Size.ContentSpaceMedium)
     }
 }

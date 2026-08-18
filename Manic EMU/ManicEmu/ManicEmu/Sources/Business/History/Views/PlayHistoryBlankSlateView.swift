@@ -9,19 +9,14 @@
 
 import RealmSwift
 
-class PlayHistoryBlankSlateView: UIView {
+class PlayHistoryBlankSlateView: BaseView {
     
     enum TapType {
         case importGame, startGame
     }
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
     init(tapAction: ((TapType)->Void)? = nil) {
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
         let containerView = UIView()
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
@@ -37,35 +32,32 @@ class PlayHistoryBlankSlateView: UIView {
         }
         
         let titleLabel = UILabel()
-        titleLabel.textColor = Constants.Color.LabelPrimary
-        titleLabel.font = Constants.Font.title(size: .s, weight: .semibold)
+        titleLabel.textColor = R.Color.LabelPrimary
+        titleLabel.font = R.Font.Headline(emphasis: true)
         titleLabel.text = R.string.localizable.historyEmptyTitle()
         containerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(iconImageView.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
+            make.top.equalTo(iconImageView.snp.bottom).offset(R.Size.ContentSpaceHuge)
             make.leading.trailing.equalToSuperview()
         }
         
         //功能按钮
         let gameCount = Database.realm.objects(Game.self).where({ !$0.isDeleted }).count
-        let actionButton = HowToButton(title: gameCount > 0 ? R.string.localizable.historyEmptyStartGame() : R.string.localizable.historyEmptyImportGame()) {}
-        actionButton.label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-        actionButton.backgroundColor = Constants.Color.Main
+        let buttonTitle = gameCount > 0 ? R.string.localizable.historyEmptyStartGame() : R.string.localizable.historyEmptyImportGame()
+        let button = ASButton.extraExtraSmall(title: buttonTitle,
+                                              titleColor: R.Color.LabelPrimary.forceStyle(.dark),
+                                              background: R.Color.Main).enableGlass(true, ignoreBackground: false)
+        let actionButton = ASButtonView(button)
+        actionButton.didTapButton = {
+            tapAction?(gameCount > 0 ? .startGame : .importGame)
+        }
         containerView.addSubview(actionButton)
         actionButton.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceHuge)
+            make.height.equalTo(R.Size.ItemHeightMicro)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
-        }
-        let button = UIButton()
-        containerView.addSubview(button)
-        button.snp.makeConstraints { make in
-            make.edges.equalTo(actionButton)
-        }
-        button.onTap {
-            tapAction?(gameCount > 0 ? .startGame : .importGame)
         }
     }
     

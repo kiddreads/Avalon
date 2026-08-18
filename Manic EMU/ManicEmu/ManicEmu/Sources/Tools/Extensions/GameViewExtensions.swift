@@ -36,20 +36,20 @@ extension GameView {
         let placeholderView = UIView(frame: .zero)
         placeholderView.backgroundColor = .black
         
-        let iconImageView = UIImageView(image: UIImage(symbol: .airplayvideo, size: Constants.Size.ItemHeightMid, color: Constants.Color.LabelSecondary))
+        let iconImageView = UIImageView(image: UIImage(symbol: .airplayvideo, size: R.Size.ItemHeightMedium, color: R.Color.LabelSecondary))
         placeholderView.addSubview(iconImageView)
         iconImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
         
         let textLabel = UILabel()
-        textLabel.font = Constants.Font.body()
-        textLabel.textColor = Constants.Color.LabelSecondary
+        textLabel.font = R.Font.Footnote()
+        textLabel.textColor = R.Color.LabelSecondary
         textLabel.text = R.string.localizable.airPlayingTitle()
         placeholderView.addSubview(textLabel)
         textLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(iconImageView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(iconImageView.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         self.addSubview(placeholderView)

@@ -9,29 +9,29 @@
 
 import UIKit
 
-class LeaderboardDetailView: UIView {
+class LeaderboardDetailView: BaseView {
     private let titleLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-        view.textColor = Constants.Color.LabelPrimary
+        view.textColor = R.Color.LabelPrimary
         view.minimumScaleFactor = 0.5
         return view
     }()
     
     let seperator: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.Color.Border
+        view.backgroundColor = R.Color.Border
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let icon = UIImageView(image: R.image.customFlagPatternCheckered()?.applySymbolConfig(font: Constants.Font.caption(size: .s, weight: .bold)))
+        let icon = UIImageView(image: R.image.customFlagPatternCheckered()?.applySymbolConfig(font: R.Font.Caption2(emphasis: true)))
         addSubview(icon)
         icon.snp.makeConstraints { make in
             make.size.equalTo(12)
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
             make.centerY.equalToSuperview()
         }
         
@@ -65,10 +65,10 @@ class LeaderboardView: RoundAndBorderView {
     private let containerView = UIView()
     
     init() {
-        super.init(roundCorner: .allCorners, radius: 12, borderColor: Constants.Color.Border, borderWidth: 1)
+        super.init(roundCorner: .allCorners, radius: 12, borderColor: R.Color.Border, borderWidth: 1)
         makeBlur(blurRadius: 2.5, blurAlpha: 0.4)
         
-        enableInteractive = true
+        enablePressEffect = true
         
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
@@ -81,7 +81,7 @@ class LeaderboardView: RoundAndBorderView {
         addSubview(icon)
         icon.snp.makeConstraints { make in
             make.size.equalTo(10)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceTiny)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceExtraSmall)
             make.centerY.equalToSuperview()
         }
     }

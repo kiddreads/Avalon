@@ -12,32 +12,16 @@ import UIKit
 import VisualEffectView
 
 class GamesCollectionReusableView: UICollectionReusableView {
-    private var titleLabel: UILabel = {
-        let view = UILabel()
-        view.isHidden = true
-        return view
-    }()
-    
-    private var brandImageView: UIImageView = {
-        let view = UIImageView()
-        view.isHidden = true
-        return view
-    }()
-    
-    var gamesCountButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .chevronUp,
-                                               font: Constants.Font.caption(size: .l, weight: .bold),
-                                               color: Constants.Color.LabelSecondary),
-                                title: "",
-                                titleFont: Constants.Font.body(size: .s, weight: .semibold),
-                                titleColor: Constants.Color.LabelSecondary,
-                                edgeInsets: .zero,
-                                titlePosition: .left,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
-        view.layerCornerRadius = 0
-        view.backgroundColor = .clear
-        return view
-    }()
+    private let titleContainer = UIView()
+    private var titleLabel = UILabel()
+    private let brandImageContainer = UIView()
+    private var brandImageView = UIImageView()
+    private var gamesCountButton = ASButtonView(.extraSmall(icon: .symbol(.chevronUp, colors: [R.Color.LabelSecondary]),
+                                                            title: "",
+                                                            titleColor: R.Color.LabelSecondary,
+                                                            titlePosition: .left,
+                                                            background: .clear,
+                                                            sizeStyle: .fixHeight(16, insets: .zero)))
     
     var didTapPlatform: (()->Void)? = nil
     
@@ -47,210 +31,104 @@ class GamesCollectionReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        if UIDevice.isPad {
-            backgroundColor = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light).withAlphaComponent(0.965)
-        } else {
-            makeBlur(blurColor: Constants.Color.Background)
+        
+        func genInfoIcon() -> ASButtonView {
+            ASButtonView(.iconOnly(icon: .symbolImage(R.image.introduction_iconSymbols(),
+                                                      colors: [R.Color.LabelSecondary]),
+                                   iconSize: R.Size.ButtonSizeAccessory,
+                                   background: R.Color.BackgroundTertiary,
+                                   insets: .init(inset: R.Size.ContentSpaceTiny)))
         }
         
         
-        addSubviews([titleLabel, brandImageView, gamesCountButton])
-        
+        titleContainer.isHidden = true
+        addSubview(titleContainer)
+        titleContainer.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+        }
+        titleContainer.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.leading.top.bottom.equalToSuperview()
         }
-        
-        brandImageView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-        }
-        
-        gamesCountButton.snp.makeConstraints { make in
+        let titleIcon = genInfoIcon()
+        titleContainer.addSubview(titleIcon)
+        titleIcon.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.centerY.equalTo(titleLabel)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax-Constants.Size.ContentSpaceTiny)
+            make.trailing.equalToSuperview()
         }
-        
-        titleLabel.isUserInteractionEnabled = true
-        titleLabel.addTapGesture { [weak self] gesture in
+        titleContainer.enablePressEffect = true
+        titleContainer.addTapGesture { [weak self] gesture in
             guard let self else { return }
             self.didTapPlatform?()
         }
         
-        brandImageView.isUserInteractionEnabled = true
-        brandImageView.addTapGesture { [weak self] gesture in
+        
+        brandImageContainer.isHidden = true
+        addSubview(brandImageContainer)
+        brandImageContainer.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+        }
+        brandImageContainer.addSubview(brandImageView)
+        brandImageView.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview()
+        }
+        let brandImageIcon = genInfoIcon()
+        brandImageContainer.addSubview(brandImageIcon)
+        brandImageIcon.snp.makeConstraints { make in
+            make.leading.equalTo(brandImageView.snp.trailing).offset(R.Size.ContentSpaceTiny)
+            make.centerY.equalTo(brandImageView)
+            make.trailing.equalToSuperview()
+        }
+        brandImageContainer.enablePressEffect = true
+        brandImageContainer.addTapGesture { [weak self] gesture in
             guard let self else { return }
             self.didTapPlatform?()
+        }
+        
+        addSubview(gamesCountButton)
+        gamesCountButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+        }
+        gamesCountButton.didTapButton = { [weak self] in
+            self?.didTapGameCount?()
         }
     }
     
-    func setData(gameType: GameType, highlightString: String? = nil, contentInsets: UIEdgeInsets = .zero, forceHideBlur: Bool = false, gamesCount: Int = 0, isFolded: Bool = false) {
-        if Constants.Size.GamesGroupTitleStyle == .brand && gameType != .unknown {
-            titleLabel.isHidden = true
-            brandImageView.isHidden = false
-            brandImageView.image = Self.getBrandImage(gameType: gameType)
+    func setData(gameType: GameType, highlightString: String? = nil, gamesCount: Int = 0, isFolded: Bool = false) {
+        if R.Style.GamesGroupTitleStyle == .brand && gameType != .unknown {
+            titleContainer.isHidden = true
+            brandImageContainer.isHidden = false
+            brandImageView.image = gameType.brandImage
         } else {
-            titleLabel.isHidden = false
-            brandImageView.isHidden = true
+            titleContainer.isHidden = false
+            brandImageContainer.isHidden = true
             var title: String = ""
-            if Constants.Size.GamesGroupTitleStyle == .abbr {
+            if R.Style.GamesGroupTitleStyle == .abbr {
                 title = gameType.localizedShortName
-            } else if Constants.Size.GamesGroupTitleStyle == .fullName {
+            } else if R.Style.GamesGroupTitleStyle == .fullName {
                 title = gameType.localizedName
             } else {
                 title = gameType.localizedShortName
             }
-            titleLabel.attributedText = NSAttributedString(string: title, attributes: [.font: Constants.Font.title(), .foregroundColor: Constants.Color.LabelPrimary]).highlightString(highlightString)
+            titleLabel.attributedText = NSAttributedString(string: title, attributes: [.font: R.Font.LargeTitle(emphasis: true), .foregroundColor: R.Color.LabelPrimary]).highlightString(highlightString)
         }
-        gamesCountButton.titleLabel.text = "\(gamesCount) \(R.string.localizable.tabbarTitleGames())"
+        
+        gamesCountButton.setTitleString("\(gamesCount) \(R.string.localizable.tabbarTitleGames())")
         if UIDevice.isPhone, UIDevice.isLandscape {
-            gamesCountButton.imageView.image = nil
+            gamesCountButton.setIcon(nil)
         } else {
-            gamesCountButton.imageView.image = UIImage(symbol: isFolded ? .chevronDown : .chevronUp,
-                                                       font: Constants.Font.caption(size: .l, weight: .bold),
-                                                       color: Constants.Color.LabelSecondary)
+            gamesCountButton.setIcon(.symbol(isFolded ? .chevronDown : .chevronUp, colors: [R.Color.LabelSecondary]))
         }
         self.highlightString = highlightString
-        if (UIDevice.isPhone && UIDevice.isLandscape) || forceHideBlur {
-            //隐藏模糊
-            if UIDevice.isPhone {
-                if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-                    blurView.isHidden = true
-                }
-            } else {
-                backgroundColor = .clear
-            }
-        } else {
-            if UIDevice.isPhone {
-                if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-                    blurView.isHidden = false
-                }
-            } else {
-                backgroundColor = Constants.Color.Background.withAlphaComponent(0.965)
-            }
-        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private static var brandImageCaches = [String: UIImage?]()
-    static func getBrandImage(gameType: GameType) -> UIImage? {
-        let traitCollection = ApplicationSceneDelegate.applicationWindow?.traitCollection
-        let key = {
-            if let userInterfaceStyle = traitCollection?.userInterfaceStyle {
-                return "\(userInterfaceStyle.rawValue)"
-            } else {
-                return ""
-            }
-        }()
-        if let image = Self.brandImageCaches[key] {
-            return image
-        } else {
-            var image: UIImage? = nil
-            if gameType == ._3ds {
-                image = R.image.sds_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .ds {
-                image = R.image.ds_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .gba {
-                image = R.image.gba_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .gbc {
-                image = R.image.gbc_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .gb {
-                image = R.image.gb_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .nes {
-                image = R.image.nes_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .fds {
-                image = R.image.fds_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .snes {
-                image = R.image.snes_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .psp {
-                image = R.image.psp_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .md {
-                if Locale.prefersUS {
-                    image = R.image.md_group_brand_us(compatibleWith: traitCollection)
-                } else {
-                    image = R.image.md_group_brand(compatibleWith: traitCollection)
-                }
-            } else if gameType == .mcd {
-                if Locale.prefersUS {
-                    image = R.image.mcd_group_brand_us(compatibleWith: traitCollection)
-                } else {
-                    image = R.image.mcd_group_brand(compatibleWith: traitCollection)
-                }
-            } else if gameType == ._32x {
-                if Locale.prefersUS {
-                    image = R.image.s2x_group_brand_us(compatibleWith: traitCollection)
-                } else {
-                    image = R.image.s2x_group_brand(compatibleWith: traitCollection)
-                }
-            } else if gameType == .ss {
-                image = R.image.ss_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .sg1000 {
-                image = R.image.sg1000_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .gg {
-                image = R.image.gg_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .ms {
-                image = R.image.ms_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .n64 {
-                image = R.image.n64_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .vb {
-                image = R.image.vb_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .pm {
-                image = R.image.pm_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .ps1 {
-                image = R.image.ps1_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .dc {
-                image = R.image.dc_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .arcade {
-                image = R.image.arcade_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .ns {
-                image = R.image.ns_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .a2600 {
-                image = R.image.a2600_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .a5200 {
-                image = R.image.a5200_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .a7800 {
-                image = R.image.a7800_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .jaguar {
-                image = R.image.jaguar_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .lynx {
-                image = R.image.lynx_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .xbox360 {
-                image = R.image.xbox360_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .j2me {
-                image = R.image.j2me_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .doom {
-                image = R.image.doom_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .dos {
-                image = R.image.dos_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .chm {
-                image = R.image.chm_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .win95 {
-                image = R.image.win95_group_brand(compatibleWith: traitCollection)
-            } else if gameType == .win98 {
-                image = R.image.win98_group_brand(compatibleWith: traitCollection)
-            }
-            Self.brandImageCaches[key] = image
-            return image
-        }
-    }
-        
-    //完全搞不懂为什么UICollectionView的滚动会导致UIColor的dynamicColor错乱，只能这样处理了
-    //发现了仅仅在iOS26上会出现 当系统是darkmode 应用设置为lightmode的时候会发生
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.userInterfaceStyle.rawValue != previousTraitCollection?.userInterfaceStyle.rawValue {
-            if UIDevice.isPad {
-                backgroundColor = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light).withAlphaComponent(0.965)
-            } else {
-                if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
-                    blurView.colorTint = Constants.Color.Background.forceStyle(UIDevice.isDarkMode ? .dark : .light)
-                    blurView.colorTintAlpha = 0.9
-                }
-            }
-        }
-    }
 }
 

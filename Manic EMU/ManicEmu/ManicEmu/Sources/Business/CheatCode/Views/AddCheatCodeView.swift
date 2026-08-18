@@ -7,15 +7,24 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import IQKeyboardManagerSwift
-
 import ProHUD
 
 class AddCheatCodeView: BaseView {
 
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
+    private lazy var navigationView: ASNavigationView = {
+        let title = editGameCheat == nil ? R.string.localizable.addCheatCodes() : R.string.localizable.editCheatCodes()
+        let view = ASNavigationView(.defaultNavigation(title: title,
+                                                       titleIcon: .symbolImage(R.image.cheat_iconSymbols()),
+                                                       tools: [.symbolImage(R.image.faq_iconSymbols())]))
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            self.hide()
+        }
+        
+        view.didTapTools = { _ in
+            ASWebView.show(url: R.URLs.CheatCodesGuide)
+        }
+        
         return view
     }()
     
@@ -23,16 +32,47 @@ class AddCheatCodeView: BaseView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
-        view.register(cellWithClass: AddCheatCodeTitleCell.self)
+        view.register(cellWithClass: TitleInputCollectionViewCell.self)
         view.register(cellWithClass: AddCheatCodeContentCell.self)
+        view.register(cellWithClass: ASListCustomCollectionCell.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ContentSpaceMax + Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        view.delegate = self
+        view.isFocusable = true
+        view.contentInset = .insets(bottom: R.Size.ContentInsetBottom + R.Size.ButtonExtraLarge + R.Size.ContentSpaceMedium)
         return view
     }()
     
-    private lazy var confirmButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.saveTitle(), enableGlass: true) { [weak self] in
+    private lazy var saveButtonContainerView: UIView = {
+        let view = UIView()
+        view.addSubview(saveButton)
+        saveButton.snp.makeConstraints { make in
+            if UIDevice.isPad || (UIDevice.isPhone && UIDevice.isLandscape) {
+                make.width.equalTo(R.Size.ButtonMaxWidth)
+                make.centerX.equalToSuperview()
+            } else {
+                make.leading.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                make.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                make.centerY.equalToSuperview()
+            }
+            make.height.equalTo(R.Size.ButtonExtraLarge)
+        }
+        return view
+    }()
+    
+    private lazy var saveButton: ASButtonView = {
+        var button = ASButton.large(title: R.string.localizable.saveTitle(),
+                                    titleColor: R.Color.LabelPrimary.forceStyle(.dark),
+                                    titleAlignment: .center,
+                                    background: R.Color.Main)
+        var disableAttributes = button.allAttributes[.normal]!
+        disableAttributes.background = R.Color.BackgroundSecondary
+        disableAttributes.title?.attributes?.color = R.Color.LabelTertiary
+        button.allAttributes[.disabled] = disableAttributes
+        
+        let view = ASButtonView(button)
+        
+        view.didTapButton = { [weak self] in
             guard let self = self else { return }
             self.collectionView.endEditing(true)
             if let editGameCheat = self.editGameCheat,
@@ -40,7 +80,7 @@ class AddCheatCodeView: BaseView {
                self.cheatCodeName == editGameCheat.name,
                self.cheatCodeType == editGameCheat.type {
                 //尝试编辑，但是没有任何改动
-                self.didTapClose?()
+                self.hide()
                 return
             }
             
@@ -79,28 +119,12 @@ class AddCheatCodeView: BaseView {
                         self.game.gameCheats.append(gameCheat)
                     }
                 }
-                didTapClose?()
+                self.hide()
             } else {
                 UIView.makeToast(message: R.string.localizable.cheatCodeFormatError())
             }
         }
-        return view
-    }()
-    
-    private var howToButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.howToFetch(), enableGlass: true) {
-            topViewController()?.present(WebViewController(url: Constants.URLs.CheatCodesGuide), animated: true)
-        }
-        return view
-    }()
-    
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
-        }
+        
         return view
     }()
     
@@ -125,14 +149,13 @@ class AddCheatCodeView: BaseView {
     private var cheatCode: String = ""
     private var editGameCheat: GameCheat? ///如果不传入则是新增 传入则是编辑
     
-    var didTapClose: (()->Void)? = nil
-    
-    init(game: Game, editGameCheat: GameCheat? = nil) {
+    required init?(parameters: Any...) {
+        guard let game = parameters.compactMap({ $0 as? Game }).first else { return nil }
         self.game = game
-        self.editGameCheat = editGameCheat
-        currentCheatFormat = autoDetectCheatFormat
+        self.editGameCheat = parameters.compactMap({ $0 as? GameCheat }).first
+        self.currentCheatFormat = autoDetectCheatFormat
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
+        
         if let editGameCheat = editGameCheat {
             cheatCodeName = editGameCheat.name
             cheatCodeType = editGameCheat.type
@@ -144,41 +167,19 @@ class AddCheatCodeView: BaseView {
             cheatCodeType = autoDetectCheatFormat.type.rawValue
         }
         
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(navigationView.snp.bottom)
+            make.bottom.equalToSuperview()
         }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        navigationBlurView.addSubview(confirmButton)
-        confirmButton.snp.makeConstraints { make in
-            make.leading.equalTo(Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(howToButton)
-        howToButton.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceTiny)
-            make.centerY.equalTo(closeButton)
-        }
-        
-        IQKeyboardManager.shared.isEnabled = true
         
         validateInput()
     }
@@ -187,42 +188,48 @@ class AddCheatCodeView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-        Task {
-            await MainActor.run {
-                IQKeyboardManager.shared.isEnabled = false
-            }
-        }
-    }
-    
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
             //item布局
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                  heightDimension: .fractionalHeight(1)))
             //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(sectionIndex == 0 ? 84 : 154)), subitems: [item])
+            let height: CGFloat
+            if sectionIndex == 0 {
+                height = TitleInputCollectionViewCell.CellHeight
+            } else if sectionIndex == 1 {
+                height = 154
+            } else {
+                height = R.Size.ButtonExtraLarge
+            }
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                              heightDimension: .absolute(height)),
+                                                           subitems: [item])
            
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? 0 : Constants.Size.ContentSpaceHuge, leading: Constants.Size.ContentSpaceMid, bottom: 0, trailing: Constants.Size.ContentSpaceMid)
+            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 2 ? R.Size.ContentSpaceHuge : 0,
+                                                            leading: R.Size.ContentSpaceMedium,
+                                                            bottom: 0,
+                                                            trailing: R.Size.ContentSpaceMedium)
             return section
         }
         return layout
     }
     
     private func validateInput() {
-        var isValid = true
+        var isValid = false
         if cheatCodeName.trimmed.isEmpty || cheatCodeType.trimmed.isEmpty || cheatCode.trimmed.isEmpty  {
-            //验证名称 不能为空
             isValid = false
         } else {
             let cheatType = CheatType(rawValue: cheatCodeType)
-            if cheatType != .autoDetect {
+            if cheatType == .autoDetect {
+              isValid = true
+            } else {
                 if let result = Self.checkCheat(cheatCode: cheatCode, currentCheatFormat: currentCheatFormat) {
                     cheatCode = result.formatString
                     cheatCodeType = result.cheatFormat.type.rawValue
+                    isValid = true
                 }
             }
         }
@@ -273,28 +280,7 @@ class AddCheatCodeView: BaseView {
     }
     
     private func updateConfirmButton(enable: Bool) {
-        if #available(iOS 26.0, *) {
-            if enable {
-                confirmButton.label.font = Constants.Font.caption(size: .l, weight: .semibold)
-                confirmButton.label.textColor = Constants.Color.LabelPrimary
-                confirmButton.isUserInteractionEnabled = true
-            } else {
-                confirmButton.label.font = Constants.Font.caption(size: .l, weight: .regular)
-                confirmButton.label.textColor = Constants.Color.LabelTertiary
-                confirmButton.isUserInteractionEnabled = false
-            }
-        } else {
-            if enable {
-                confirmButton.backgroundColor = Constants.Color.Main
-                confirmButton.label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-                confirmButton.isUserInteractionEnabled = true
-            } else {
-                confirmButton.backgroundColor = Constants.Color.BackgroundPrimary
-                confirmButton.label.textColor = Constants.Color.LabelTertiary
-                confirmButton.isUserInteractionEnabled = false
-            }
-        }
-        
+        saveButton.state = enable ? .normal : .disabled
     }
     
     static func checkCheat(cheatCode: String,
@@ -347,11 +333,13 @@ class AddCheatCodeView: BaseView {
         }
         return nil
     }
+    
+    
 }
 
 extension AddCheatCodeView: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -360,22 +348,25 @@ extension AddCheatCodeView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
-            let cell = collectionView.dequeueReusableCell(withClass: AddCheatCodeTitleCell.self, for: indexPath)
-            cell.editTextField.text = cheatCodeName
+            let cell = collectionView.dequeueReusableCell(withClass: TitleInputCollectionViewCell.self, for: indexPath)
+            cell.setData(title: R.string.localizable.nameTitle(),
+                         text: cheatCodeName,
+                         placeholder: R.string.localizable.cheatCodeNamePlaceHolder(),
+                         returnKeyType: .next)
             cell.shouldGoNext = { [weak self] in
                 guard let self = self else { return }
-                if let cell = self.collectionView.cellForItem(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? AddCheatCodeContentCell {
+                if let cell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: indexPath.section + 1)) as? AddCheatCodeContentCell {
                     cell.editTextView.becomeFirstResponder()
                 }
             }
-            cell.editTextField.onChange { [weak self] string in
-                guard let self = self else { return }
+            cell.editTextField.didInputChange = { [weak self] string in
+                guard let self, let string else { return }
                 self.cheatCodeName = string
                 self.validateInput()
             }
             
             return cell
-        } else {
+        } else if indexPath.section == 1 {
             let cell = collectionView.dequeueReusableCell(withClass: AddCheatCodeContentCell.self, for: indexPath)
             cell.didTextChange = { [weak self] string in
                 guard let self = self else { return }
@@ -388,54 +379,25 @@ extension AddCheatCodeView: UICollectionViewDataSource {
                 self?.validateInput()
             }
             return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withClass: ASListCustomCollectionCell.self, for: indexPath)
+            cell.setData(customView: saveButtonContainerView)
+            return cell
         }
         
     }
 }
 
-extension AddCheatCodeView {
-    static func show(game: Game, gameCheat: GameCheat? = nil, hideCompletion: (()->Void)? = nil) {
-        Sheet { sheet in
-            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
-            
-            let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.Background
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-                if let maxHeight = sheet.config.cardMaxHeight {
-                    make.height.equalTo(maxHeight)
-                }
-            }
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        // 达到移除的速度
-                        sheet.pop()
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
-                    })
-                }
-            }
-            
-            let listView = AddCheatCodeView(game: game, editGameCheat: gameCheat)
-            listView.didTapClose = { [weak sheet] in
-                sheet?.pop()
-            }
-            containerView.addSubview(listView)
-            listView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+extension AddCheatCodeView: UICollectionViewDelegate {
+    
+}
+
+extension AddCheatCodeView: ShowableView {
+    static func show(game: Game, editGameCheat: GameCheat? = nil) {
+        if let editGameCheat {
+            Self.show(parameters: game, editGameCheat)
+        } else {
+            Self.show(parameters: game)
         }
     }
 }

@@ -10,57 +10,72 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-    
-    lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        return view
-    }()
-
     fileprivate var orientationNotification: Any? = nil
     
     private var fullScreen: Bool = false
     
     /// present的时候 是否需要隐藏背景的阴影视图
-    var hideDimmingViewWhenPresent = PlayViewController.isGaming ? true : false
+    var hideDimmingViewWhenPresent: Bool {
+        if PlayViewController.isGaming {
+            return true
+        }
+        
+        if let presentingViewController, String(describing: type(of: presentingViewController)) == "SheetTarget" {
+            return true
+        }
+        
+        return false
+    }
+    
+    var enableBackgroundMask: Bool = true {
+        didSet {
+            backgroundMaskView?.isHidden = !enableBackgroundMask
+        }
+    }
+    
+    var backgroundMaskView: PageBackgroundMaskView? = nil
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        configStyle()
+        Log.verbose("⚠️ \(objectInfo(self)) init")
+        initConfigs()
     }
     
     init(fullScreen: Bool) {
         super.init(nibName: nil, bundle: nil)
+        Log.verbose("⚠️ \(objectInfo(self)) init")
         self.fullScreen = fullScreen
-        configStyle()
+        initConfigs()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        configStyle()
+        Log.verbose("⚠️ \(objectInfo(self)) init")
+        initConfigs()
     }
     
-    func configStyle() {
+    func initConfigs() {
         if UIDevice.isPad {
-            self.modalPresentationStyle = .formSheet
+            modalPresentationStyle = .formSheet
+            preferredContentSize = R.Size.PreferredContentSize
         }
         if fullScreen {
-            self.modalPresentationStyle = .overFullScreen
-        } else if let sheetPresentationController = self.sheetPresentationController {
-            sheetPresentationController.preferredCornerRadius = Constants.Size.CornerRadiusMax
+            modalPresentationStyle = .overFullScreen
+        } else if let sheetPresentationController {
+            sheetPresentationController.preferredCornerRadius = R.Size.CornerRadiusLarge
         }
+        
+        setupScreenEdgePanGestures()
     }
     
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
+        Log.verbose("✅ \(objectInfo(self)) deinit")
     }
     
     override func viewDidLoad() {
-        Log.debug("\(String(describing: Self.self)) viewDidLoad")
         super.viewDidLoad()
-        let backgroundColor = Constants.Color.Background
+        let backgroundColor = R.Color.BackgroundPrimary
         view.backgroundColor = backgroundColor
-        setPreferredContentSize()
         if let navigationBar = self.navigationController?.navigationBar {
             navigationBar.isTranslucent = false
             let appearance = UINavigationBarAppearance()
@@ -70,6 +85,17 @@ class BaseViewController: UIViewController {
             navigationBar.standardAppearance = appearance
             navigationBar.scrollEdgeAppearance = appearance
             navigationBar.compactAppearance = appearance
+        }
+        
+        if UIDevice.isPhone {
+            let maskView = PageBackgroundMaskView()
+            view.insertSubview(maskView, at: 0)
+            maskView.snp.makeConstraints { make in
+                make.leading.top.trailing.equalToSuperview()
+                make.height.equalTo(R.Size.PageBackgroundMaskHeight)
+            }
+            maskView.isHidden = !enableBackgroundMask
+            backgroundMaskView = maskView
         }
     }
     
@@ -82,6 +108,7 @@ class BaseViewController: UIViewController {
                 }
             })
         }
+        setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
     }
     
     override var presentingViewController: UIViewController? {
@@ -93,33 +120,79 @@ class BaseViewController: UIViewController {
         return nil
     }
     
+    /// Presented pages own a FocusKit context. Home tabs are sibling roots activated by HomeViewController.
+    /// PlayViewController disables FocusKit while gaming and must not push a competing context.
+    var shouldManageFocusContext: Bool {
+        presentingViewController != nil && !PlayViewController.isGaming
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if shouldManageFocusContext {
+            pushOverlayFocusContext()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if shouldManageFocusContext {
+            popFocusContext()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        setPreferredContentSize(windowSize: CGSize(width: Constants.Size.WindowSize.height, height: Constants.Size.WindowSize.width))//这个常量的反应会比较慢 所以获取反向值
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.setPreferredContentSize()
+            self?.backgroundMaskView?.snp.updateConstraints { make in
+                make.height.equalTo(R.Size.PageBackgroundMaskHeight)
+            }
+        })
     }
     
-    fileprivate func setPreferredContentSize(windowSize: CGSize = Constants.Size.WindowSize) {
+    override var prefersStatusBarHidden: Bool {
+        if UIDevice.isPad {
+            return UIDevice.isLandscape
+        }
+        return super.prefersStatusBarHidden
+    }
+    
+    fileprivate func setPreferredContentSize() {
         if UIDevice.isPad {
             if let _ = self.presentingViewController { //如果自己是被present出来的话 就执行
-                let finalSize: CGSize
-                if UIDevice.isLandscape {
-                    let h = windowSize.height*0.9
-                    finalSize = CGSize(width: h*9/16, height: h)
-                } else {
-                    let w = windowSize.width*0.6
-                    finalSize = CGSize(width: w, height: w*16/9)
-                }
-                if self.preferredContentSize != finalSize {
-                    self.preferredContentSize = finalSize
+                let size = R.Size.PreferredContentSize
+                if self.preferredContentSize != size {
+                    self.preferredContentSize = size
                 }
             }
         }
     }
     
-    func handleScreenPanGesture(edges: UIRectEdge) {}
+    fileprivate func setupScreenEdgePanGestures() {
+        let delegate = (self as? UIGestureRecognizerDelegate) ?? nil
+        view.addScreenEdgePanGesture(edges: .left, handler: { [weak self] gesture in
+            if gesture.state == .began {
+                guard let self = self else { return }
+                self.handleScreenPanGesture(edges: .left, gesture: gesture)
+            }
+        }).delegate = delegate
+        
+        view.addScreenEdgePanGesture(edges: .right, handler: { [weak self] gesture in
+            if gesture.state == .began {
+                guard let self = self else { return }
+                self.handleScreenPanGesture(edges: .right, gesture: gesture)
+            }
+        }).delegate = delegate
+    }
+    
+    func handleScreenPanGesture(edges: UIRectEdge, gesture: UIScreenEdgePanGestureRecognizer) { }
+    
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+        return [.left, .right]
+    }
     
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 
-class IconView: UIView {
+class IconView: BaseView {
     var image: UIImage? = nil {
         didSet {
             imageView.image = image
@@ -19,9 +19,11 @@ class IconView: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(image: UIImage? = nil) {
+        self.image = image
+        super.init(frame: .zero)
         masksToBounds = true
+        imageView.image = image
         addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

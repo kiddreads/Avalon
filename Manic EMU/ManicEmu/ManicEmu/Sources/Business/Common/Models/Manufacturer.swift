@@ -52,7 +52,7 @@ enum Manufacturer: Int, CaseIterable {
         if self == .modRetro {
             return [.chm]
         }
-        return System.allCases.map({ $0.gameType }).filter({ $0.manufacturer == self })
+        return System.allGameTypes.filter({ $0.manufacturer == self })
     }
     
     var normalImage: UIImage {

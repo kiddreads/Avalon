@@ -10,32 +10,27 @@
 import UIKit
 import SideMenu
 import RealmSwift
-import KeyboardKit
 
 class GamesViewController: BaseViewController {
-    private var cornerMaskViewForiPad: TransparentHoleView = {
-        let view = TransparentHoleView()
-        return view
-    }()
-    
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
-        return view
-    }()
     
     private lazy var gamesNavigationView: GamesNavigationView = {
         let view = GamesNavigationView()
-        view.controllerButton.addTapGesture { [weak self] gesture in
+        view.controllerButton.didTapButton = { [weak self] in
             guard let self = self else { return }
             self.showSideMenu(leftSide: true)
         }
         
-        view.historyButton.addTapGesture { [weak self] gesture in
+        view.historyButton.didTapButton = { [weak self] in
             guard let self = self else { return }
             self.showSideMenu(leftSide: false)
         }
-
+        
+        view.scrollToTopView.addTapGesture { [weak self] gesture in
+            if UIDevice.isPhone && UIDevice.isLandscape {
+                self?.gamesListView?.scrollToTop()
+            }
+        }
+        
         return view
     }()
     ///顶部工具条 搜索 选择
@@ -44,47 +39,30 @@ class GamesViewController: BaseViewController {
         view.isHidden = true
         ///搜索变更
         view.didSearchChange = { [weak self] string in
-            guard let self = self else { return }
+            guard let self = self  else { return }
             if let s = string, !s.isEmpty {
-                if !view.selectIcon.isSelected, (self.gamesListView.collectionView.indexPathsForSelectedItems ?? []).count > 0 {
-                    self.gamesListView.collectionView.selectItem(at: nil, animated: false, scrollPosition: [])
+                if !view.selectIcon.isSelected, (self.gamesListView?.collectionView.indexPathsForSelectedItems ?? []).count > 0 {
+                    self.gamesListView?.collectionView.selectItem(at: nil, animated: false, scrollPosition: [])
                 }
-                self.gamesListView.searchDatas(string: s)
+                self.gamesListView?.searchDatas(string: s)
             } else {
-                self.gamesListView.stopSearch()
+                self.gamesListView?.stopSearch()
             }
-            self.updateTopBlurView()
         }
         ///选择变更
         view.didToolViewSelectionChange = { [weak self] mode in
             guard let self = self else { return }
-            UIDevice.generateHaptic()
-            self.gamesListView.selectionMode = mode
+            self.gamesListView?.selectionMode = mode
             self.gamesToolView.foldKeyboard()
-            switch mode {
-            case .normalMode:
-                //隐藏editBar
-                self.setEditToolBar(show: false)
-            case .selectionMode:
-                break
-            case .selectAll:
-                let totalGamesCountForCurrentMode = self.gamesListView.totalGamesCountForCurrentMode
-                self.setEditToolBar(show: totalGamesCountForCurrentMode > 0, singleSelect: totalGamesCountForCurrentMode == 1)
-            case .deSelectAll:
-                self.setEditToolBar(show: false)
-            }
-            self.updateTopBlurView()
-        }
-        view.didSearchTextResignFirstResponder = { [weak self] in
-            self?.gamesListView.collectionView.becomeFirstResponder()
         }
         view.manufacturerCategoryView.didManufacturerChange = { [weak self] manufacturer in
             guard let self else { return false }
-            if let manufacturer, !self.gamesListView.isGameExist(for: manufacturer) {
+            if let manufacturer,
+                !(self.gamesListView?.isGameExist(for: manufacturer) ?? false) {
                 UIView.makeToast(message: R.string.localizable.noGamesForManufacturer())
                 return false
             }
-            self.gamesListView.filteredManufacturer = manufacturer
+            self.gamesListView?.filteredManufacturer = manufacturer
             if let manufacturer {
                 return true
             }
@@ -93,46 +71,45 @@ class GamesViewController: BaseViewController {
         view.didFilterVisibleChange = { [weak self] in
             guard let self else { return }
             self.gamesToolView.snp.updateConstraints { make in
-                make.height.equalTo(Constants.Size.GamesToolViewHeight)
+                make.height.equalTo(R.Size.GamesToolViewHeight)
             }
-            self.gamesListView.updateFilterChange()
         }
         return view
     }()
-    ///游戏列表
-    private lazy var gamesListView: GameListView = {
+    
+    private let gamesSeperatorView = UIImageView(image: R.image.gamelist_separator())
+    
+    private var gamesListView: GameListView?
+    private func ensureGameListView() -> GameListView {
+        if let gamesListView {
+            return gamesListView
+        }
         let view = GameListView()
         ///选择变更
         view.didListViewSelectionChange = { [weak self] selectionType in
             guard let self = self else { return }
             UIDevice.generateHaptic()
             self.gamesToolView.updateSelectIconLabel(selectionType: selectionType)
-            switch selectionType {
-            case .selectAll:
-                self.setEditToolBar(show: true, singleSelect: false)
-            case .selectSome(onlyOne: let onlyOne):
-                self.setEditToolBar(show: true, singleSelect: onlyOne)
-            case .selectNone:
-                self.setEditToolBar(show: false)
-            }
         }
-        view.didUpdateToolView = { [weak self] show, showCorner in
-            guard let self = self else { return }
-            if show {
-                UIView.normalAnimate {
-                    self.gamesToolView.alpha = 1
-                }
-            } else {
-                UIView.springAnimate {
-                    self.gamesToolView.alpha = 0
-                }
+        view.needsUpdateToolViewVisible = { [weak self] show in
+            guard let self = self,
+                  UIDevice.isPhone,
+                  !UIDevice.isLandscape,
+                  self.gamesToolView.isHidden != !show else { return }
+            
+            self.gamesListView?.snp.updateConstraints { make in
+                make.top.equalTo(self.gamesNavigationView.snp.bottom).offset(show ? R.Size.GamesToolViewHeight : 0)
             }
             UIView.springAnimate {
-                if !self.enableBackground {
-                    self.gamesToolView.backgroundGradientView.isHidden = !showCorner
-                }
+                self.gamesToolView.isHidden = !show
+                self.view.layoutIfNeeded()
             }
-            
+        }
+        view.needsUpdateToolViewSelection = { [weak self] in
+            guard let self else { return }
+            self.gamesToolView.selectIcon.isSelected = false
+            self.gamesToolView.updateSelectIconLabel(selectionType: .selectNone)
+            self.gamesToolView.didToolViewSelectionChange?(.normalMode)
         }
         view.didScroll = { [weak self] in
             guard let self = self else { return }
@@ -147,97 +124,37 @@ class GamesViewController: BaseViewController {
                 self.gamesToolView.isHidden = true
             } else {
                 self.gamesToolView.isHidden = empty
+                DispatchQueue.main.asyncAfter(delay: 0.5) {
+                    self.gamesListView?.snp.updateConstraints { make in
+                        make.top.equalTo(self.gamesNavigationView.snp.bottom).offset(empty ? 0 : R.Size.GamesToolViewHeight)
+                    }
+                }
             }
         }
         view.needToStopManufacturerFilter = { [weak self] in
             guard let self = self else { return }
             self.gamesToolView.stopFilterManufacturer()
         }
+        gamesListView = view
         return view
-    }()
+    }
     
-    ///选择模式的时候会触发底部弹起的工具条
-    private lazy var gamesEditToolBar: GameEditToolBar = {
-        let view = GameEditToolBar()
-        view.didSelectItem = { [weak self] item in
-            guard let self = self else { return }
-            self.gamesListView.editGame(item: item)
-            self.setEditToolBar(show: false)
-            self.gamesToolView.selectIcon.isSelected = false
-            self.gamesToolView.updateSelectIconLabel(selectionType: .selectNone)
-            self.gamesToolView.didToolViewSelectionChange?(.normalMode)
+    private var gameListLandscapeView: GameListLandscapeView?
+    private func ensureGameListLandscapeView() -> GameListLandscapeView {
+        if let gameListLandscapeView {
+            return gameListLandscapeView
         }
+        
+        let view = GameListLandscapeView()
+        gameListLandscapeView = view
         return view
-    }()
-    
-    private lazy var playHistoryView: PlayHistoryView = {
-        let view = PlayHistoryView()
-        view.needToHideSideMenu = { [weak self] in
-            guard let self = self else { return }
-            self.hideSideMenu()
-        }
-        view.didTapGame = { [weak self] game in
-            guard let self = self else { return }
-            self.hideSideMenu {
-                if Settings.defalut.quickGame {
-                    PlayViewController.startGame(game: game)
-                } else {
-                    topViewController()?.present(GameInfoViewController(game: game), animated: true)
-                }
-            }
-        }
-        view.didTapGameRetro = { [weak self] game in
-            guard let self = self else { return }
-            self.hideSideMenu {
-                if let _ = AchievementsUser.getUser() {
-                    topViewController()?.present(RetroAchievementsListViewController(game: game), animated: true)
-                } else {
-                    //先进行登录
-                    let vc = RetroAchievementsViewController()
-                    vc.dismissAfterLoginSuccess = { [weak self] in
-                        topViewController()?.present(RetroAchievementsListViewController(game: game), animated: true)
-                    }
-                    topViewController()?.present(vc, animated: true)
-                }
-            }
-        }
-        return view
-    }()
-    
-    private var controllersSettingView: ControllersSettingView = {
-        let view = ControllersSettingView()
-        return view
-    }()
-    
-    private var enableBackground: Bool = false
-    private var backgroundChangeNotification: Any? = nil
-    private lazy var backgroundImageView: UIImageView = {
-        let view = UIImageView()
-        if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground),
-            let image = UIImage(contentsOfFile: Constants.Path.GameListBackground) {
-            self.enableBackground = true
-            view.image = image
-        }
-        view.contentMode = .scaleAspectFill
-        return view
-    }()
-    
-    var setHomeTabBar: ((_ show: Bool)->Void)?
+    }
     
     private weak var sideMenu: UIViewController?
     
-    private let GameEditToolBarHeightMax = 205.0
-    private let GameEditToolBarHeightMin = 116.0
-    
-    deinit {
-        if let backgroundChangeNotification {
-            NotificationCenter.default.removeObserver(backgroundChangeNotification)
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupViews()
+        self.updateViews()
         //处理Launch Link
         if let launchGameID = ApplicationSceneDelegate.launchGameID {
             ApplicationSceneDelegate.launchGameID = nil
@@ -246,240 +163,85 @@ class GamesViewController: BaseViewController {
                 PlayViewController.startGame(game: game)
             }
         }
-        
-        //背景变更
-        backgroundChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GameListBackgroundChange, object: nil, queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            if FileManager.default.fileExists(atPath: Constants.Path.GameListBackground),
-                let image = UIImage(contentsOfFile: Constants.Path.GameListBackground) {
-                self.backgroundImageView.image = image
-                self.enableBackground = true
-                self.navigationBlurView.setBlurVisble(false)
-                self.gamesListView.enableBackground = self.enableBackground
-                self.gamesToolView.enableBackground = self.enableBackground
-            } else {
-                //移除了背景
-                self.backgroundImageView.image = nil
-                self.enableBackground = false
-                self.navigationBlurView.setBlurVisble(true)
-                self.gamesListView.enableBackground = self.enableBackground
-                self.gamesToolView.enableBackground = self.enableBackground
-            }
-        }
-    }
-    
-    @discardableResult
-    override func becomeFirstResponder() -> Bool {
-        Log.debug("gamesListView becomeFirstResponder")
-        return gamesListView.collectionView.becomeFirstResponder()
-    }
-    
-    @discardableResult
-    override func resignFirstResponder() -> Bool {
-        Log.debug("gamesListView resignFirstResponder")
-        return gamesListView.collectionView.resignFirstResponder()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        if UIDevice.isPad {
-            DispatchQueue.main.asyncAfter(delay: UIDevice.isIOS15 ? 0.35 : 0, execute: { [weak self] in
-                self?.hideSideMenu { [weak self] in
-                    self?.updateViews()
-                }
+        //侧栏关闭不阻塞视图交接 否则横屏视图会先被压到竖屏宽度再卸载
+        hideSideMenu()
+        
+        let isTargetLandscape = size.width > size.height
+        if isTargetLandscape {
+            //竖→横：等父容器已经是横屏尺寸后再挂上横屏视图 避免导航栏在430宽度下约束冲突
+            coordinator.animate(alongsideTransition: { [weak self] _ in
+                self?.updateViews(isLandscape: true)
             })
-        } else if UIDevice.isPhone {
-            self.gamesToolView.stopSearch()
-            self.gamesToolView.stopSelect()
-            self.gamesToolView.stopFilterManufacturer()
-            self.gamesListView.filteredManufacturer = nil
-            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
-                self?.hideSideMenu { [weak self] in
-                    self?.updateViews()
-                }
-            }
-        }
-    }
-    
-    private func setupViews() {
-        view.addSubview(backgroundImageView)
-        
-        if UIDevice.isPhone {
-            //iPhone布局
-            view.addSubview(gamesListView)
-            gamesListView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-
-            view.addSubview(navigationBlurView)
-            
-            view.addSubview(gamesNavigationView)
-            gamesNavigationView.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-            }
-            
-            view.addSubview(gamesToolView)
-            gamesToolView.snp.makeConstraints { make in
-                make.top.equalTo(gamesNavigationView.snp.bottom)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.GamesToolViewHeight)
-            }
-            
-            
-            navigationBlurView.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
-                make.bottom.equalTo(gamesNavigationView)
-            }
-            
-            view.addSubview(gamesEditToolBar)
-            gamesEditToolBar.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(GameEditToolBarHeightMax)
-                make.bottom.equalToSuperview().offset(GameEditToolBarHeightMax)
-            }
-            
-            if UIDevice.isLandscape {
-                updateViews()
-            }
-            
         } else {
-            //iPad布局
-            view.addSubview(gamesListView)
-            gamesListView.snp.makeConstraints { make in
-                if UIDevice.isLandscape {
-                    //横屏的时候左右都有菜单
-                    make.top.bottom.equalToSuperview()
-                    make.center.equalToSuperview()
-                    make.width.equalTo(Constants.Size.WindowSize.maxDimension - Constants.Size.SideMenuWidth*2)
-                } else {
-                    //竖屏的时候只有右边有菜单
-                    make.edges.equalToSuperview()
-                }
-            }
-            
-            view.addSubview(navigationBlurView)
-            
-            view.addSubview(gamesNavigationView)
-            
-            if UIDevice.isLandscape {
-                gamesNavigationView.controllerButton.isHidden = true
-                gamesNavigationView.historyButton.isHidden = true
-            }
-            gamesNavigationView.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
-                make.leading.trailing.equalTo(gamesListView)
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-            }
-            
-            view.addSubview(gamesToolView)
-            gamesToolView.snp.makeConstraints { make in
-                make.top.equalTo(gamesNavigationView.snp.bottom)
-                make.leading.trailing.equalTo(gamesListView)
-                make.height.equalTo(Constants.Size.GamesToolViewHeight)
-            }
-            
-            
-            navigationBlurView.snp.makeConstraints { make in
-                make.leading.top.trailing.equalTo(gamesListView)
-                make.bottom.equalTo(gamesNavigationView)
-            }
-            
-            view.addSubview(gamesEditToolBar)
-            gamesEditToolBar.snp.makeConstraints { make in
-                make.leading.trailing.equalTo(gamesListView)
-                make.height.equalTo(GameEditToolBarHeightMax)
-                make.bottom.equalToSuperview().offset(GameEditToolBarHeightMax)
-            }
-            
-            view.addSubview(cornerMaskViewForiPad)
-            cornerMaskViewForiPad.snp.makeConstraints { make in
-                make.edges.equalTo(gamesListView)
-            }
-            
-            if UIDevice.isLandscape {
-                view.addSubview(controllersSettingView)
-                controllersSettingView.snp.makeConstraints { make in
-                    make.leading.top.bottom.equalToSuperview()
-                    make.trailing.equalTo(gamesListView.snp.leading)
-                }
-                
-                view.addSubview(playHistoryView)
-                playHistoryView.snp.makeConstraints { make in
-                    make.top.trailing.bottom.equalToSuperview()
-                    make.leading.equalTo(gamesListView.snp.trailing)
-                }
-                controllersSettingView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-                playHistoryView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-                cornerMaskViewForiPad.isHidden = false
-            } else {
-                view.addSubview(controllersSettingView)
-                controllersSettingView.snp.makeConstraints { make in
-                    make.top.bottom.equalToSuperview()
-                    make.trailing.equalTo(gamesListView.snp.leading)
-                    make.width.equalTo(Constants.Size.SideMenuWidth)
-                }
-                
-                view.addSubview(playHistoryView)
-                playHistoryView.snp.makeConstraints { make in
-                    make.top.bottom.equalToSuperview()
-                    make.leading.equalTo(gamesListView.snp.trailing)
-                    make.width.equalTo(Constants.Size.SideMenuWidth)
-                }
-                cornerMaskViewForiPad.isHidden = true
-            }
+            //横→竖：必须在旋转布局把宽度压到竖屏之前卸掉横屏视图
+            removeLandscapeListIfNeeded()
+            coordinator.animate(alongsideTransition: { [weak self] _ in
+                //必须在alongsideTransition中进行更新，因为这个时候window size才是正确的，否则可能布局错误
+                self?.updateViews(isLandscape: false)
+            })
         }
-        
-        backgroundImageView.snp.makeConstraints { make in
-            if UIDevice.isPad {
-                make.edges.equalTo(gamesListView)
-            } else {
-                make.top.bottom.equalTo(gamesListView)
-                make.leading.trailing.equalTo(gamesListView).inset(-59)
-            }
-            
-        }
-        navigationBlurView.setBlurVisble(!enableBackground)
-        gamesListView.enableBackground = enableBackground
-        gamesToolView.enableBackground = enableBackground
     }
     
-    private func setEditToolBar(show: Bool, singleSelect: Bool = true) {
-        
-        let show = gamesToolView.selectIcon.isSelected ? show : false
-        
-        gamesEditToolBar.isSingleGame = singleSelect
-        gamesEditToolBar.snp.updateConstraints { make in
-            if show {
-                make.bottom.equalToSuperview()
-                make.height.equalTo(singleSelect ? GameEditToolBarHeightMax : GameEditToolBarHeightMin)
-            } else {
-                make.bottom.equalToSuperview().offset(singleSelect ? GameEditToolBarHeightMax : GameEditToolBarHeightMin)
+    override func handleScreenPanGesture(edges: UIRectEdge, gesture: UIScreenEdgePanGestureRecognizer) {
+        if UIDevice.isPhone || (UIDevice.isPad && !UIDevice.isLandscape) {
+            if edges == .left {
+                showSideMenu(leftSide: true)
+            } else if edges == .right {
+                showSideMenu(leftSide: false)
             }
         }
-        UIView.springAnimate { [weak self] in
-            self?.view.layoutIfNeeded()
-        }
-        setHomeTabBar?(!show)
     }
     
     private func showSideMenu(leftSide: Bool) {
         var leftSide = leftSide
-        let vc: UIViewController
         if Locale.isRTLLanguage {
             leftSide = !leftSide
-            vc = leftSide ? PlayHistoryViewController(playHistoryView: playHistoryView) : ControllersSettingViewController(controllersSettingView: controllersSettingView)
-        } else {
-            vc = leftSide ? ControllersSettingViewController(controllersSettingView: controllersSettingView) : PlayHistoryViewController(playHistoryView: playHistoryView)
         }
+        
+        let containerVC = BaseViewController()
+        containerVC.enableBackgroundMask = false
+        containerVC.view.backgroundColor = .clear
+        if leftSide {
+            let view = ControllersSettingView(asSideMenu: true)
+            containerVC.view.addSubview(view)
+            view.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            view.updateTopInsets()
+        } else {
+            let view = PlayHistoryView(asSideMenu: true)
+            view.needToHideSideMenu = { [weak self] in
+                guard let self = self else { return }
+                self.hideSideMenu()
+            }
+            view.didTapGame = { [weak self] game in
+                guard let self = self else { return }
+                if Settings.defalut.quickGame {
+                    self.hideSideMenu(completion: {
+                        PlayViewController.startGame(game: game)
+                    })
+                } else {
+                    self.hideSideMenu()
+                    GameInfoView.show(readyAction: .default, game: game)
+                }
+            }
+            containerVC.view.addSubview(view)
+            view.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }
+        
         UIDevice.generateHaptic()
-        let menu = ControllableSideMenu(rootViewController: vc)
+        let menu = SideMenuNavigationController(rootViewController: containerVC)
         menu.navigationBar.isHidden = true
-        menu.presentDuration = Constants.Numbers.LongAnimationDuration
-        menu.dismissDuration = Constants.Numbers.LongAnimationDuration
+        menu.presentDuration = R.Numbers.LongAnimationDuration
+        menu.dismissDuration = R.Numbers.LongAnimationDuration
         menu.leftSide = leftSide
-        menu.menuWidth = Constants.Size.SideMenuWidth
+        menu.menuWidth = R.Size.SideMenuWidth
         menu.presentationStyle = SideMenuShowStyle()
         sideMenu = menu
         topViewController()?.present(menu, animated: true)
@@ -493,136 +255,90 @@ class GamesViewController: BaseViewController {
         }
     }
     
-    ///更新顶部的模糊视图 如果编辑模式 则toolView不会隐藏 所以需要将blurView加大 反之则需要减小
-    private func updateTopBlurView() {
-        navigationBlurView.snp.updateConstraints { make in
-            make.bottom.equalTo(self.gamesNavigationView).offset((gamesListView.isSelectionMode || gamesListView.isSearchMode) ? Constants.Size.GamesToolViewHeight : 0)
-        }
-    }
-    
-    private func updateViews() {
-        if UIDevice.isPad {
-            gamesListView.snp.remakeConstraints { make in
-                if UIDevice.isLandscape {
-                    //横屏的时候左右都有菜单
-                    make.top.bottom.equalToSuperview()
-                    make.centerX.equalToSuperview()
-                    make.width.equalTo(Constants.Size.WindowSize.maxDimension - Constants.Size.SideMenuWidth*2)
-                } else {
-                    //竖屏的时候只有右边有菜单
-                    make.edges.equalToSuperview()
-                }
+    ///按目标方向交接横竖屏列表 先挂上新视图再卸掉旧视图 避免露出底层背景
+    private func updateViews(isLandscape: Bool = UIDevice.isLandscape) {
+        if isLandscape {
+            if gameListLandscapeView?.superview != nil { return }
+            
+            let landscapeListView = ensureGameListLandscapeView()
+            view.addSubview(landscapeListView)
+            landscapeListView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            //仅在替换已有竖屏列表时强制布局；首次启动不要 layoutIfNeeded
+            //否则 collectionView 会在最终尺寸前创建/复用 cell，异步封面回调会把缺省图盖成其他游戏封面
+            if gamesListView != nil {
+                view.layoutIfNeeded()
+            }
+            removePortraitListIfNeeded()
+        } else {
+            if gamesListView?.superview != nil {
+                removeLandscapeListIfNeeded()
+                return
             }
             
-            if UIDevice.isLandscape {
-                gamesNavigationView.controllerButton.isHidden = true
-                gamesNavigationView.historyButton.isHidden = true
-                if !view.subviews.contains(where: { $0 == controllersSettingView }) {
-                    view.addSubview(controllersSettingView)
-                    controllersSettingView.snp.makeConstraints { make in
-                        make.leading.top.bottom.equalToSuperview()
-                        make.trailing.equalTo(gamesListView.snp.leading)
-                    }
-                } else {
-                    controllersSettingView.snp.remakeConstraints { make in
-                        make.leading.top.bottom.equalToSuperview()
-                        make.trailing.equalTo(gamesListView.snp.leading)
-                    }
-                }
-                
-                if !view.subviews.contains(where: { $0 == playHistoryView }) {
-                    view.addSubview(playHistoryView)
-                    playHistoryView.snp.makeConstraints { make in
-                        make.trailing.top.bottom.equalToSuperview()
-                        make.leading.equalTo(gamesListView.snp.trailing)
-                    }
-                } else {
-                    playHistoryView.snp.remakeConstraints { make in
-                        make.trailing.top.bottom.equalToSuperview()
-                        make.leading.equalTo(gamesListView.snp.trailing)
-                    }
-                }
-                controllersSettingView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-                playHistoryView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
-                cornerMaskViewForiPad.isHidden = false
-            } else {
-                gamesNavigationView.controllerButton.isHidden = false
-                gamesNavigationView.historyButton.isHidden = false
-                controllersSettingView.removeFromSuperview()
-                playHistoryView.removeFromSuperview()
-                controllersSettingView.backgroundColor = .clear
-                playHistoryView.backgroundColor = .clear
-                cornerMaskViewForiPad.isHidden = true
+            gamesNavigationView.isHidden = false
+            if gamesNavigationView.superview == nil {
+                view.addSubview(gamesNavigationView)
             }
-            DispatchQueue.main.asyncAfter(delay: 0.35) {
-                self.gamesListView.collectionView.reloadData()
+            gamesNavigationView.snp.remakeConstraints { make in
+                make.top.equalToSuperview().offset(R.Size.ContentInsetTop)
+                make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+                make.height.equalTo(R.Size.ItemHeightMedium)
             }
-        } else if UIDevice.isPhone {
-            if UIDevice.isLandscape {
-                gamesNavigationView.snp.updateConstraints { make in
-                    make.top.equalToSuperview().offset(0)
-                }
-                gamesToolView.isHidden = true
-                navigationBlurView.snp.updateConstraints { make in
-                    make.leading.equalToSuperview().inset(-Constants.Size.SafeAera.left)
-                    make.trailing.equalToSuperview().inset(-Constants.Size.SafeAera.right)
-                }
-            } else {
-                gamesNavigationView.snp.updateConstraints { make in
-                    make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
-                }
-                gamesToolView.isHidden = false
-                navigationBlurView.snp.updateConstraints { make in
-                    make.leading.equalToSuperview()
-                    make.trailing.equalToSuperview()
-                }
+            
+            gamesToolView.isHidden = false
+            if gamesToolView.superview == nil {
+                view.addSubview(gamesToolView)
             }
-            gamesListView.updateRotation()
+            gamesToolView.snp.remakeConstraints { make in
+                make.top.equalTo(gamesNavigationView.snp.bottom)
+                make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+                make.height.equalTo(R.Size.GamesToolViewHeight)
+            }
+            
+            let portraitListView = ensureGameListView()
+            let gamesToolViewIsHidden = !portraitListView.isGamesExist
+            if portraitListView.superview == nil {
+                view.addSubview(portraitListView)
+            }
+            portraitListView.snp.remakeConstraints { make in
+                make.top.equalTo(gamesNavigationView.snp.bottom).offset(gamesToolViewIsHidden ? 0 : R.Size.GamesToolViewHeight)
+                make.leading.bottom.trailing.equalToSuperview()
+            }
+            
+            gamesSeperatorView.isHidden = gamesToolViewIsHidden
+            if gamesSeperatorView.superview == nil {
+                view.addSubview(gamesSeperatorView)
+            }
+            gamesSeperatorView.snp.remakeConstraints { make in
+                make.leading.trailing.equalTo(portraitListView)
+                make.bottom.equalTo(portraitListView.snp.top).offset(5)
+                make.height.equalTo(10)
+            }
+            if gameListLandscapeView != nil {
+                view.layoutIfNeeded()
+            }
+            removeLandscapeListIfNeeded()
         }
     }
     
-    override func handleScreenPanGesture(edges: UIRectEdge) {
-        if UIDevice.isPhone || (UIDevice.isPad && !UIDevice.isLandscape) {
-            if edges == .left {
-                showSideMenu(leftSide: true)
-            } else if edges == .right {
-                showSideMenu(leftSide: false)
-            }
-        }
-    }
-}
-
-extension GamesViewController: UIControllerPressable {
-    override var keyCommands: [UIKeyCommand]? {
-        var commands = super.keyCommands ?? []
-        commands.append(UIKeyCommand(input: "[", modifierFlags: [], action: #selector(didGamesViewKeyboardPress)))
-        commands.append(UIKeyCommand(input: "]", modifierFlags: [], action: #selector(didGamesViewKeyboardPress)))
-        return commands
-    }
-    
-    
-    func didControllerPress(key: KeyboardKit.UIControllerKey) {
-        if !(UIDevice.isPad && UIDevice.isLandscape) {
-            if key == .l2 {
-                showSideMenu(leftSide: true)
-            } else if key == .r2 {
-                showSideMenu(leftSide: false)
-            }
+    private func removePortraitListIfNeeded() {
+        gamesNavigationView.isHidden = true
+        gamesToolView.isHidden = true
+        gamesSeperatorView.isHidden = true
+        if let gamesListView {
+            gamesListView.removeFromSuperview()
+            self.gamesListView = nil
         }
     }
     
-    @objc func didGamesViewKeyboardPress(_ sender: UIKeyCommand) {
-        if let topViewController = topViewController(),
-            topViewController is ControllerMappingViewController {
-            return
-        }
-        if let inputString = sender.input, !(UIDevice.isPad && UIDevice.isLandscape) {
-            if inputString == "[" {
-                showSideMenu(leftSide: true)
-            } else if inputString == "]" {
-                showSideMenu(leftSide: false)
-            }
-        }
+    private func removeLandscapeListIfNeeded() {
+        guard let gameListLandscapeView else { return }
+        //先断开 dataSource，避免旋转 bounds 动画期间 CollectionViewPagingLayout
+        //异步 performBatchUpdates 读到 nil dataSource 导致闪退
+        gameListLandscapeView.prepareForRemoval()
+        gameListLandscapeView.removeFromSuperview()
+        self.gameListLandscapeView = nil
     }
-    
 }

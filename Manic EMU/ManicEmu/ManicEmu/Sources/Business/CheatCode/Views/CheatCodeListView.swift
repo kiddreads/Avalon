@@ -7,245 +7,381 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import SwipeCellKit
 import RealmSwift
-import ProHUD
 import UniformTypeIdentifiers
 
-
 class CheatCodeListView: BaseView {
-    /// 充当导航条
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
-        return view
-    }()
-    
-    private lazy var addButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.body(size: .m, weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            if !PurchaseManager.isMember, self.gameCheats.count >= Constants.Numbers.NonMemberCheatCodeCount {
-                topViewController()?.present(PurchaseViewController(), animated: true)
-                return
-            }
-            self.didTapAdd?()
+    private let game: Game
+    private let isFBNeoGame: Bool
+    private let gameCheats: Results<GameCheat>?
+    private var fbNeoCheats = [GameCheat]()
+    private var datas: [GameCheat] {
+        if isFBNeoGame {
+            return sortCheats(fbNeoCheats)
+        } else if let gameCheats {
+            return sortCheats(Array(gameCheats))
+        } else {
+            return []
         }
-        return view
-    }()
-    
-    private lazy var moreContextMenuButton: ContextMenuButton = {
-        var actions: [UIMenuElement] = []
-        actions.append(UIMenu(title: R.string.localizable.gameSortType(),
-                              image: UIImage(symbol: .arrowUpArrowDown),
-                              options: .singleSelection,
-                              children: GameCheatSortType.allCases.map({ type in
-            let currentType = GameCheatSortType(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.cheatSort.rawValue) ?? 0) ?? .dateAscending
-            return UIAction(title: type.title,
-                            state: currentType == type ? .on : .off,
-                            handler: { [weak self] _ in
-                guard let self = self else { return }
-                Settings.defalut.updateExtra(key: ExtraKey.cheatSort.rawValue, value: type.rawValue)
-                self.reloadCheats()
-                self.tableView.reloadData()
-            })
-        })))
-        actions.append((UIAction(title: R.string.localizable.removeAllCheats(), image: UIImage(symbol: .trash)) { [weak self] _ in
-            guard let self = self else { return }
-            //移除所有作弊码
-            UIView.makeAlert(detail: R.string.localizable.removeAllCheatsAlert(),
-                             confirmTitle: R.string.localizable.removeTitle(),
-                             confirmAction: {
-                Game.change { realm in
-                    if Settings.defalut.iCloudSyncEnable {
-                        self.gameCheatsResults.forEach({ $0.isDeleted = true })
-                    } else {
-                        realm.delete(self.gameCheatsResults)
-                    }
-                }
-                self.reloadCheats()
-                self.tableView.reloadData()
-            })
-            
-        }))
-        actions.append((UIAction(title: R.string.localizable.howToFetch(), image: UIImage(symbol: .book)) { [weak self] _ in
-            guard let self = self else { return }
-            //如何获取
-            topViewController()?.present(WebViewController(url: Constants.URLs.CheatCodesGuide), animated: true)
-        }))
-        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
-        return view
-    }()
-    
-    private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            self?.moreContextMenuButton.triggerTapGesture()
-        }
-        return view
-    }()
-    
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
-        }
-        return view
-    }()
-    
-    private lazy var deleteImage = UIImage(symbol: .trash, color: Constants.Color.LabelPrimary.forceStyle(.dark), backgroundColor: Constants.Color.Red, imageSize: .init(Constants.Size.ItemHeightMin)).withRoundedCorners()
-    
-    private lazy var editImage = UIImage(symbol: .squareAndPencil, color: Constants.Color.LabelPrimary.forceStyle(.dark), backgroundColor: Constants.Color.Yellow, imageSize: .init(Constants.Size.ItemHeightMin)).withRoundedCorners()
-    
-    private lazy var tableView: UITableView = {
-        let view = BlankSlateTableView()
-        view.backgroundColor = .clear
-        view.contentInsetAdjustmentBehavior = .never
-        view.delegate = self
-        view.dataSource = self
-        view.separatorStyle = .none
-        view.showsVerticalScrollIndicator = false
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
-        view.register(cellWithClass: CheatCodeCollectionViewCell.self)
-        view.blankSlateView = CheatCodeBlankSlateView()
-        return view
-    }()
-    
-    private lazy var appendButton: SymbolButton = {
-        var cheatFileExtension = ""
-        var supportFileExtensions: [UTType] = []
-        if game.gameType == ._3ds {
-            cheatFileExtension = ".txt"
-            supportFileExtensions.append(UTType(filenameExtension: "txt")!)
-        } else if game.gameType == .psp {
-            cheatFileExtension = ".db .ini"
-            supportFileExtensions.append(UTType(filenameExtension: "db")!)
-            supportFileExtensions.append(UTType(filenameExtension: "ini")!)
-        }
-        let view = SymbolButton(image: nil, title: R.string.localizable.tabbarTitleImport() + " \(cheatFileExtension)", titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
-        view.enableRoundCorner = true
-        view.backgroundColor = Constants.Color.Red
-        view.addTapGesture { [weak self] gesture in
-            guard let self else { return }
-            FilesImporter.shared.presentImportController(supportedTypes: supportFileExtensions) { [weak self] urls in
-                guard let self else { return }
-                self.parseImportCheatFiles(urls: urls)
-            }
-        }
-        return view
-    }()
-    
-    ///游戏
-    private var gameCheatsResults: Results<GameCheat>
-    private var gameCheats: [GameCheat] = []
-    private var game: Game
-    
-    var didTapAdd: (()->Void)? = nil
-    var didTapClose: (()->Void)? = nil
-    var didTapEdt: ((GameCheat)->Void)? = nil
-    
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
     }
+    private var isEditMode: Bool = false {
+        didSet {
+            if isEditMode {
+                updateContents()
+                updateNavigation()
+            } else {
+                isSelectedAll = false
+            }
+        }
+    }
+    private var isSelectedAll: Bool {
+        get {
+            if datas.count > 0 {
+                return selectedItems.count == datas.count
+            }
+            return false
+        }
+        set {
+            if newValue {
+                selectedItems = Set(datas.map({ $0.id }))
+            } else {
+                selectedItems.removeAll()
+            }
+        }
+    }
+    private var selectedItems = Set<Int>() {
+        didSet {
+            updateContents()
+            updateTool()
+            updateNavigation()
+        }
+    }
+    private var selectedDatas: [GameCheat] {
+        return datas.filter({
+            selectedItems.contains($0.id)
+        })
+    }
+    
+    private var hideCompletion: (() -> Void)? = nil
+    
+    private var listPageView: ASListPageView? = nil
     
     private var gamesCheatsUpdateToken: NotificationToken? = nil
-    init(game: Game) {
+    
+    required init?(parameters: Any...) {
+        guard let game = parameters.compactMap({ $0 as? Game }).first else { return nil }
         self.game = game
-        self.gameCheatsResults = game.gameCheats.where({ !$0.isDeleted })
-        super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
-        
-        gamesCheatsUpdateToken = gameCheatsResults.observe { [weak self] changes in
-            guard let self = self else { return }
-            switch changes {
-            case .update(_, let deletions, let insertions, let modifications):
-                if !deletions.isEmpty || !insertions.isEmpty || !modifications.isEmpty {
-                    Log.debug("作弊码列表更新")
-                    reloadCheats()
-                    DispatchQueue.main.asyncAfter(delay: 0.4) {
-                        self.tableView.reloadData()
+        let isFBNeo = game.gameType == .arcade && game.defaultCore == 1
+        if isFBNeo {
+            if let configs = LibretroCore.sharedInstance().getConfigs(LibretroCore.Cores.FinalBurnNeo.name),
+               PlayViewController.isGaming {
+                var tuples = [(key: String, enable: Bool, name: String)]()
+                configs.enumerateLines { line, stop in
+                    if line.hasPrefix("fbneo-cheat-") {
+                        let parts = line.split(separator: "=", maxSplits: 1).map { $0.trimmingCharacters(in: .whitespaces) }
+                        if parts.count == 2 {
+                            let key = parts[0]
+                            let value = parts[1].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                            let keyComponents = key.split(separator: "-")
+                            if keyComponents.count >= 4 {
+                                tuples.append((key: key, enable: value != "0 - Disabled", name: String(keyComponents[4])))
+                            }
+                        }
                     }
                 }
-            default:
-                break
+                
+                self.fbNeoCheats = tuples.map({
+                    let cheatCode = GameCheat()
+                    cheatCode.name = $0.name
+                    cheatCode.code = $0.key
+                    cheatCode.activate = $0.enable
+                    return cheatCode
+                })
+            }
+            self.gameCheats = nil
+        } else {
+            self.gameCheats = game.gameCheats.where({ !$0.isDeleted })
+        }
+        self.isFBNeoGame = isFBNeo
+        super.init(frame: .zero)
+        
+        if !isFBNeoGame {
+            gamesCheatsUpdateToken = gameCheats?.observe { [weak self] changes in
+                guard let self = self else { return }
+                switch changes {
+                case .update(_, let deletions, let insertions, let modifications):
+                    if !deletions.isEmpty || !insertions.isEmpty || !modifications.isEmpty {
+                        self.updateNavigation()
+                        self.updateContents()
+                    }
+                default:
+                    break
+                }
             }
         }
         
-        reloadCheats()
         
-        addSubview(tableView)
-        tableView.snp.makeConstraints { make in
+        let listView = ASListPageView(getListPage())
+        listView.didActionOccurred = { [weak self] action in
+            guard let self else { return }
+            self.handleAction(action)
+        }
+        
+        addSubview(listView)
+        listView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        navigationBlurView.addSubview(addButton)
-        addButton.snp.makeConstraints { make in
-            make.leading.equalTo(Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        let titleLabel = UILabel()
-        titleLabel.font = Constants.Font.title(size: .s)
-        titleLabel.textColor = Constants.Color.LabelPrimary
-        titleLabel.text = R.string.localizable.gamesCheatCode()
-        navigationBlurView.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(addButton.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.centerY.equalToSuperview()
-        }
-        
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        navigationBlurView.addSubview(moreContextMenuButton)
-        navigationBlurView.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
-            make.centerY.equalTo(closeButton)
-        }
-        moreContextMenuButton.snp.makeConstraints { make in
-            make.edges.equalTo(moreButton)
-        }
-        
-        if game.gameType == ._3ds || game.gameType == .psp {
-            //table底部缩进
-            var tableContentInset = tableView.contentInset
-            tableContentInset.bottom = tableContentInset.bottom + Constants.Size.ItemHeightMid + Constants.Size.ContentSpaceMid
-            tableView.contentInset = tableContentInset
-            
-            addSubview(appendButton)
-            appendButton.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.bottom.equalToSuperview().inset(Constants.Size.ContentInsetBottom)
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-            }
-        }
+        listPageView = listView
     }
     
-    required init?(coder: NSCoder) {
+    convenience init(game: Game) {
+        self.init(parameters: game)!
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func reloadCheats() {
+    deinit {
+        if let gamesCheatsUpdateToken = gamesCheatsUpdateToken {
+            NotificationCenter.default.removeObserver(gamesCheatsUpdateToken)
+        }
+    }
+    
+    private func handleAction(_ action: ASListPage.Action) {
+        if let navigationValue = action.navigationValue {
+            //navigation action
+            if navigationValue.isTapClose {
+                //close
+                if showAsSheet {
+                    hide()
+                }
+            } else if let index =  navigationValue.tapToolsValue {
+                if index == 0 {
+                    //edit mode
+                    isEditMode = true
+                } else if index == 1 {
+                    //sort
+                    var selectedIndex: Int? = nil
+                    let options = GameCheatSortType.allCases.enumerated().map({ index, type in
+                        let currentType = GameCheatSortType(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.cheatSort.rawValue) ?? 0) ?? .dateAscending
+                        if currentType == type {
+                            selectedIndex = index
+                        }
+                        return type.title
+                    })
+                    
+                    OptionsSheetView.show(icon: .symbolImage(R.image.sort_iocnSymbols()),
+                                          title: R.string.localizable.gameSortType(),
+                                          options: options,
+                                          selectedIndex: selectedIndex, completion: { [weak self] optionIndex in
+                        guard let self, let optionIndex else { return }
+                        Settings.defalut.updateExtra(key: ExtraKey.cheatSort.rawValue, value: optionIndex)
+                        self.updateContents()
+                    })
+                } else if index == 2 {
+                    //search
+                    UIView.makeAlert(title: R.string.localizable.searchCheatCodes(),
+                                     detail: R.string.localizable.jumpThirdPartAlert(),
+                                     cancelTitle: R.string.localizable.gotIt(),
+                                     cancelAction: { [weak self] in
+                        guard let self else { return }
+                        GamehackingView.show(game: self.game)
+                    })
+                    
+                } else if index == 3 {
+                    //more...
+                    var cheatFileExtension = ""
+                    var supportFileExtensions: [UTType] = []
+                    if game.gameType == ._3ds {
+                        cheatFileExtension = ".txt"
+                        supportFileExtensions.append(UTType(filenameExtension: "txt")!)
+                    } else if game.gameType == .psp {
+                        cheatFileExtension = ".db .ini"
+                        supportFileExtensions.append(UTType(filenameExtension: "db")!)
+                        supportFileExtensions.append(UTType(filenameExtension: "ini")!)
+                    }
+                    ChevronSheetView.show(stringOptions: [R.string.localizable.tabbarTitleImport() + " \(cheatFileExtension)"], completion: { [weak self] optionIndex in
+                        guard let self, optionIndex != nil else { return }
+                        FilesImporter.shared.presentImportController(supportedTypes: supportFileExtensions) { [weak self] urls in
+                            guard let self else { return }
+                            self.parseImportCheatFiles(urls: urls)
+                        }
+                    })
+                }
+            } else if navigationValue.isTapEdit {
+                //selected/deselected all
+                isSelectedAll.toggle()
+            } else if navigationValue.isTapCancel {
+                //leave edit mode
+                isEditMode = false
+            }
+        } else if let toolValue = action.toolValue {
+            if toolValue.isTapMain {
+                ChevronSheetView.show(stringOptions: [
+                    R.string.localizable.enableSelectedCheatCodes(),
+                    R.string.localizable.disableSelectedCheatCodes(),
+                ], completion: { [weak self] index in
+                    guard let self, let index else { return }
+                    self.setCheats(self.selectedDatas, activate: index == 0)
+                    self.isEditMode = false
+                })
+                
+            } else if let index = toolValue.tapOthersValue {
+                if index == 0 {
+                    //delete
+                    if selectedItems.count == datas.count {
+                        //delete all
+                        UIView.makeAlert(detail: R.string.localizable.removeAllCheatsAlert(),
+                                         confirmTitle: R.string.localizable.removeTitle(),
+                                         confirmAction: { [weak self] in
+                            guard let self else { return }
+                            self.deleteSelectedCheats()
+                        })
+                        
+                    } else {
+                        //delete some
+                        deleteSelectedCheats()
+                    }
+                } else if index == 1 {
+                    //edit
+                    guard let cheat = selectedDatas.first else { return }
+                    AddCheatCodeView.show(game: game, editGameCheat: cheat)
+                }
+            }
+            
+        } else if let index = action.normalItemValue?.indexPath.section {
+            let cheat = datas[index]
+            if let switchState = action.normalItemValue?.subActions?.itemStyle.switchValue?.state {
+                setCheats([cheat], activate: switchState == .on ? true : false, notifying: false)
+            } else if action.normalItemValue?.subActions == nil {
+                if isEditMode {
+                    if selectedItems.contains(cheat.id) {
+                        //deselected save state
+                        selectedItems.remove(cheat.id)
+                    } else {
+                        //selected save state
+                        selectedItems.insert(cheat.id)
+                    }
+                } else {
+                    AddCheatCodeView.show(game: game, editGameCheat: cheat)
+                }
+            }
+        } else  if action.isBottom {
+            if !PurchaseManager.isMember, datas.count >= R.Numbers.NonMemberCheatCodeCount {
+                topViewController()?.present(PurchaseViewController(), animated: true)
+                return
+            }
+            AddCheatCodeView.show(game: game)
+        } else if let index = action.longPressValue?.section {
+            guard !isEditMode else { return }
+            let cheat = datas[index]
+            isEditMode = true
+            selectedItems.insert(cheat.id)
+        }
+    }
+    
+    private func getSections() -> [ASListPage.Section] {
+        if isEditMode {
+            return datas.map({
+                ASListPage.Section(cells: [
+                    .iconTitleDetailRadioCell(title: $0.name,
+                                              isSelected: selectedItems.contains($0.id))
+                ])
+            })
+        } else {
+            return datas.map({
+                ASListPage.Section(cells: [
+                    .iconTitleDetailSwitchCell(title: $0.name,
+                                               state: $0.activate ? .on : .off)
+                ])
+            })
+        }
+    }
+    
+    private func getToolView() -> ASListPage.Tool? {
+        if selectedItems.count > 0 {
+            if selectedItems.count == 1 {
+                return ASListPage.Tool.defaultTool(otherIcons: [
+                    .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red]),
+                    .symbolImage(R.image.edit_iconSymbols())
+                ])
+            } else {
+                return ASListPage.Tool.defaultTool(otherIcons: [
+                    .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red])
+                ])
+            }
+        }
+        return nil
+    }
+    
+    private func getBlankSlate() -> ASListPage.BlankSlate? {
+        guard datas.count == 0 else { return nil }
+        
+        if isFBNeoGame {
+            return .init(icon: .image(R.image.cheatcode_empty_icon()),
+                         title: R.string.localizable.fbNeoNoCheats())
+            
+        } else {
+            return .init(icon: .image(R.image.cheatcode_empty_icon()),
+                         title: R.string.localizable.cheatCodeEmptyTitle(),
+                         detail: R.string.localizable.addCheatCodesDesc(),
+                         layoutInsets: .insets(bottom: R.Size.ContentInsetBottom + R.Size.ButtonExtraLarge))
+        }
+    }
+    
+    private func getNavigation() -> ASListPage.Navigation {
+        var tools: [ASIcon] = (isFBNeoGame || datas.count == 0) ? [] : [
+            .symbolImage(R.image.selectedit_iconSymbols()),
+            .symbolImage(R.image.sort_iocnSymbols()),
+            .symbolImage(R.image.searchRegular_iconSymbols()),
+        ]
+        if game.gameType == ._3ds || game.gameType == .psp {
+            tools.append(.symbolImage(R.image.ellipsis_iconSymbols()))
+        }
+        let navigation = ASListPage.Navigation.defaultNavigation(title: R.string.localizable.gamesCheatCode(),
+                                                                 titleIcon: .symbolImage(R.image.cheat_iconSymbols()),
+                                                                 tools: tools,
+                                                                 edit: isFBNeoGame ? nil : R.string.localizable.selectAll())
+        return navigation
+    }
+    
+    private func getListPage() -> ASListPage {
+        return ASListPage(navigation: getNavigation(),
+                          sections: getSections(),
+                          bottom: isFBNeoGame ? nil : .large(title: R.string.localizable.addCheatCodes(),
+                                                             titleColor: R.Color.LabelPrimary.forceStyle(.dark),
+                                                             titleAlignment: .center,
+                                                             background: R.Color.Main),
+                          blankSlate: getBlankSlate(),
+                          backgroundColor: .clear,
+                          pageInsets: .insets(top: R.Size.SheetGrabberTopInset),
+                          enableLongPress: true)
+    }
+    
+    private func updateContents() {
+        guard let listPageView else { return }
+        listPageView.sections = getSections()
+        listPageView.blankSlate = getBlankSlate()
+    }
+    
+    private func updateTool() {
+        guard let listPageView else { return }
+        listPageView.tool = getToolView()
+    }
+    
+    private func updateNavigation() {
+        guard let listPageView else { return }
+        
+        var navigation = getNavigation()
+        navigation.state = isEditMode ? .edit : .normal
+        navigation.edit = isSelectedAll ? R.string.localizable.deSelectAll() : R.string.localizable.selectAll()
+        listPageView.navigation = navigation
+    }
+    
+    private func sortCheats(_ cheats: [GameCheat]) -> [GameCheat] {
         let sortType = GameCheatSortType(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.cheatSort.rawValue) ?? 0) ?? .dateAscending
-        gameCheats = gameCheatsResults.sorted(by: {
+        return  cheats.sorted(by: {
             switch sortType {
             case .nameAscending:
                 return $0.name <= $1.name
@@ -265,7 +401,52 @@ class CheatCodeListView: BaseView {
         })
     }
     
+    private func deleteSelectedCheats() {
+        Game.change { realm in
+            if Settings.defalut.iCloudSyncEnable {
+                selectedDatas.forEach({ $0.isDeleted = true })
+            } else {
+                realm.delete(selectedDatas)
+            }
+        }
+        if datas.count == 0, isEditMode {
+            isEditMode = false
+        }
+    }
+    
+    private func setCheats(_ cheats: [GameCheat], activate: Bool, notifying: Bool = true) {
+        func updateGameCheat() {
+            if notifying {
+                Game.change { realm in
+                    cheats.forEach({
+                        $0.activate = activate
+                    })
+                }
+            } else if let token = gamesCheatsUpdateToken {
+                let realm = Database.realm
+                try? realm.write(withoutNotifying: [token], {
+                    cheats.forEach({
+                        $0.activate = activate
+                    })
+                })
+            }
+        }
+        
+        if !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowCheatCodeWarning), activate {
+            UIView.makeAlert(title: R.string.localizable.enableCheatCodeAlertTitle(),
+                             detail: R.string.localizable.enableCheatCodeAlertDetail(),
+                             cancelTitle: R.string.localizable.confirmTitle(),
+                             hideAction: {
+                UserDefaults.standard.setValue(true, forKey: R.DefaultKey.HasShowCheatCodeWarning)
+                updateGameCheat()
+            })
+        } else {
+            updateGameCheat()
+        }
+    }
+    
     private func parseImportCheatFiles(urls: [URL]) {
+        guard let gameCheats = gameCheats else { return }
         if game.gameType == ._3ds {
             UIView.makeLoading()
             //解析txt
@@ -349,154 +530,17 @@ class CheatCodeListView: BaseView {
             }
         }
     }
+    
 }
 
-extension CheatCodeListView: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        let cheatCode = gameCheats[indexPath.row]
-        UIDevice.generateHaptic()
-        if orientation == .right {
-            let delete = SwipeAction(style: .default, title: nil) { action, indexPath in
-                UIDevice.generateHaptic()
-                action.fulfill(with: .reset)
-                Game.change { realm in
-                    if Settings.defalut.iCloudSyncEnable {
-                        cheatCode.isDeleted = true
-                    } else {
-                        realm.delete(cheatCode)
-                    }
-                }
-            }
-            delete.backgroundColor = .clear
-            delete.image = deleteImage
-            let edit = SwipeAction(style: .default, title: nil) { [weak self] action, indexPath in
-                guard let self = self else { return }
-                self.didTapEdt?(cheatCode)
-            }
-            edit.hidesWhenSelected = true
-            edit.backgroundColor = .clear
-            edit.image = editImage
-            return [delete, edit]
-        } else {
-            return nil
-        }
+extension CheatCodeListView: ShowableView {
+    static func show(game: Game, hideCompletion: (() -> Void)? = nil) {
+        let view = Self.show(parameters: game)
+        view?.hideCompletion = hideCompletion
+        
     }
     
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeOptions()
-        options.expansionStyle = SwipeExpansionStyle(target: .percentage(0.6),
-                                                     elasticOverscroll: true,
-                                                     completionAnimation: .fill(.manual(timing: .with)))
-        options.expansionDelegate = self
-        options.transitionStyle = .border
-        options.backgroundColor = Constants.Color.Background
-        options.maximumButtonWidth = Constants.Size.ItemHeightMin + Constants.Size.ContentSpaceTiny*2
-        return options
-    }
-}
-
-extension CheatCodeListView: SwipeExpanding {
-    func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeCellKit.SwipeExpansionAnimationTimingParameters {
-        ScaleAndAlphaExpansion.default.animationTimingParameters(buttons: buttons, expanding: expanding)
-    }
-    
-    func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
-        ScaleAndAlphaExpansion.default.actionButton(button, didChange: expanding, otherActionButtons: otherActionButtons)
-        if expanding {
-            UIDevice.generateHaptic()
-        }
-    }
-}
-
-extension CheatCodeListView: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        gameCheats.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cheatCode = gameCheats[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withClass: CheatCodeCollectionViewCell.self)
-        cell.setData(cheatCode: cheatCode)
-        cell.switchButton.onChange { value in
-            if !UserDefaults.standard.bool(forKey: Constants.DefaultKey.HasShowCheatCodeWarning) {
-                UIView.makeAlert(title: R.string.localizable.enableCheatCodeAlertTitle(),
-                                 detail: R.string.localizable.enableCheatCodeAlertDetail(),
-                                 cancelTitle: R.string.localizable.confirmTitle(),
-                                 hideAction: {
-                    UserDefaults.standard.setValue(true, forKey: Constants.DefaultKey.HasShowCheatCodeWarning)
-                    Game.change { _ in
-                        cheatCode.activate = value
-                    }
-                })
-            } else {
-                Game.change { _ in
-                    cheatCode.activate = value
-                }
-            }
-        }
-        cell.delegate = self
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
-}
-
-extension CheatCodeListView {
-    static var isShow: Bool {
-        Sheet.find(identifier: String(describing: CheatCodeListView.self)).count > 0 ? true : false
-    }
-    
-    static func show(game: Game, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
-        Sheet.lazyPush(identifier: String(describing: CheatCodeListView.self)) { sheet in
-            sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
-            
-            let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.Background
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-                if let maxHeight = sheet.config.cardMaxHeight {
-                    make.height.equalTo(maxHeight)
-                }
-            }
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        // 达到移除的速度
-                        sheet.pop()
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
-                    })
-                }
-            }
-            
-            let listView = CheatCodeListView(game: game)
-            listView.didTapAdd = {
-                AddCheatCodeView.show(game: game)
-            }
-            listView.didTapEdt = { gameCheat in
-                AddCheatCodeView.show(game: game, gameCheat: gameCheat)
-            }
-            listView.didTapClose = { [weak sheet] in
-                sheet?.pop()
-                didTapClose?()
-            }
-            containerView.addSubview(listView)
-            listView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        }
+    func didHide() {
+        hideCompletion?()
     }
 }

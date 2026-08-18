@@ -12,75 +12,74 @@ import Tiercel
 
 class DownloadManageView: BaseView {
     
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
+    private lazy var listPageView: ASListPageView = {
+        let view = ASListPageView(getListPage())
+        view.didActionOccurred = { [weak self] action in
+            guard let self else { return }
+            if let navigationValue = action.navigationValue,
+               navigationValue.isTapClose {
+                self.hide()
+            } else if let normalItemValue = action.normalItemValue {
+                let task = self.tasks[normalItemValue.indexPath.row]
+                if let button = normalItemValue.subActions?.itemStyle.buttonValue {
+                    if button.tag == 0 {
+                        //pause or continue task
+                        if task.status == .suspended {
+                            //继续下载
+                            DownloadManager.shared.sessionManager.start(task)
+                            NotificationCenter.default.post(name: R.NotificationName.BeginDownload, object: nil)
+                            self.listPageView.updateCellData(self.getCell(task: task),
+                                                             indexPath: normalItemValue.indexPath)
+                        } else {
+                            //暂停下载
+                            DownloadManager.shared.sessionManager.suspend(task)
+                            self.listPageView.updateCellData(self.getCell(task: task),
+                                                             indexPath: normalItemValue.indexPath)
+                        }
+                        
+                    } else if button.tag == 1 {
+                        //remove task
+                        UIView.makeAlert(detail: R.string.localizable.removeDownloadTask(task.fileName),
+                                         confirmTitle: R.string.localizable.confirmTitle(),
+                                         confirmAction: {
+                            DownloadManager.shared.sessionManager.remove(task)
+                        })
+                    }
+                }
+                
+            }
+        }
         return view
     }()
     
-    private lazy var collectionView: UICollectionView = {
-        let view = BlankSlateCollectionView(frame: .zero, collectionViewLayout: createLayout())
-        view.blankSlateView = BlankSlateEmptyView(title: R.string.localizable.noDownloadTask())
-        view.backgroundColor = .clear
-        view.contentInsetAdjustmentBehavior = .never
-        view.register(cellWithClass: DownloadItemCollectionViewCell.self)
-        view.showsVerticalScrollIndicator = false
-        view.dataSource = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
-        return view
-    }()
+    private var tasks: [DownloadTask]
     
-    private lazy var tasks: [DownloadTask] = { getTasks() }()
-    
-    var didTapClose: (()->Void)? = nil
-
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
+    required init?(parameters: Any...) {
+        self.tasks = DownloadManager.shared.sessionManager.tasks.filter {
+            $0.status == .running || $0.status == .waiting || $0.status == .suspended || $0.status == .failed
+        }
+        super.init(frame: .zero)
         
-        addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
+        for (index, task) in tasks.enumerated() {
+            task.completion { [weak self] insideTask in
+                guard let self = self else { return }
+                if insideTask.status == .removed || insideTask.status == .succeeded {
+                    self.tasks.removeFirst(where: { $0.url == insideTask.url })
+                    self.updateContents()
+                }
+            }
+            
+            task.progress { [weak self] insideTask in
+                guard let self = self else { return }
+                self.listPageView.updateCellData(self.getCell(task: insideTask),
+                                                 indexPath: IndexPath(row: index, section: 0))
+            }
+        }
+        
+        
+        addSubview(listPageView)
+        listPageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let icon = UIImageView(image: UIImage(symbol: .arrowDownCircle))
-        navigationBlurView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.centerY.equalToSuperview()
-        }
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.cloudDriveBrowserDownload()
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        navigationBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(icon)
-        }
-        
-        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        closeButton.enableRoundCorner = true
-        navigationBlurView.addSubview(closeButton)
-        closeButton.addTapGesture { [weak self] gesture in
-            self?.didTapClose?()
-        }
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         }
     }
     
@@ -88,51 +87,60 @@ class DownloadManageView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
-            //item布局
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                 heightDimension: .fractionalHeight(1)))
-            //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(82)), subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: Constants.Size.ContentSpaceMid,
-                                                            bottom: 0,
-                                                            trailing: Constants.Size.ContentSpaceMid)
-            //section布局
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            
-            return section
-        }
-        return layout
+    private func getListPage() -> ASListPage {
+        let navigation = ASListPage.Navigation.defaultNavigation(title: R.string.localizable.cloudDriveBrowserDownload(),
+                                                                 titleIcon: .symbolImage(R.image.cloudDownload_iconSymbols()))
+        
+        let blankSlate = ASListPage.BlankSlate(title: R.string.localizable.noDownloadTask())
+        
+        return ASListPage(navigation: navigation,
+                          sections: getSections(),
+                          blankSlate: blankSlate,
+                          backgroundColor: .clear,
+                          pageInsets: .insets(top: R.Size.SheetGrabberTopInset))
     }
     
-    private func getTasks() -> [DownloadTask] {
-        let tasks = DownloadManager.shared.sessionManager.tasks.filter { $0.status == .running || $0.status == .waiting || $0.status == .suspended || $0.status == .failed }
-        for task in tasks {
-            task.completion { [weak self] insideTask in
-                Log.debug("下载任务回调 \(insideTask.fileName) 状态:\(insideTask.status)")
-                guard let self = self else { return }
-                if insideTask.status == .removed || insideTask.status == .succeeded {
-                    self.tasks = self.getTasks()
-                    self.collectionView.reloadData()
-                }
+    private func updateContents() {
+        listPageView.sections = getSections()
+    }
+    
+    private func getSections() -> [ASListPage.Section] {
+        return [.init(cells: tasks.map({ getCell(task: $0) }))]
+    }
+    
+    private func getCell(task: DownloadTask) -> ASListPage.Cell {
+        var styles = [ASListPage.Cell.Style]()
+        styles.append(.icon(.image(R.image.file_browser_document()),
+                            iconSize: R.Size.IconSizeExtraLarge.height))
+        styles.append(.title(.largeText(task.fileName)))
+        if task.status == .failed {
+            styles.append(.detail(.extraSmallText(R.string.localizable.downloadFailed())))
+        } else {
+            let detail = "\(FileType.humanReadableFileSize(UInt64(task.progress.completedUnitCount)) ?? "0.0 KB")/\(FileType.humanReadableFileSize(UInt64(task.progress.totalUnitCount)) ?? "0.0 KB")"
+            styles.append(.detail(.extraSmallText(detail)))
+            if task.status == .suspended {
+                styles.append(.button(.iconOnly(icon: .symbolImage(R.image.playCircle_iconSymbols()),
+                                                iconSize: R.Size.IconSizeExtraLarge,
+                                                background: .clear,
+                                                insets: .init(inset: R.Size.ContentSpaceTiny))))
+            } else {
+                styles.append(.button(.iconOnly(icon: .symbolImage(R.image.pauseCircle_iconSymbols()),
+                                                iconSize: R.Size.IconSizeExtraLarge,
+                                                background: .clear,
+                                                insets: .init(inset: R.Size.ContentSpaceTiny))))
             }
         }
-        return tasks
+        var button = ASButton.iconOnly(icon: .symbolImage(R.image.selectX_iconSymbols()),
+                                       iconSize: R.Size.IconSizeExtraLarge,
+                                       background: .clear,
+                                       insets: .init(inset: R.Size.ContentSpaceTiny))
+        button.tag = 1
+        styles.append(.button(button))
+        styles.append(.progress(ASProgress(value: Float(task.progress.fractionCompleted))))
+        return ASListPage.Cell.normal(styles, enablePressEffect: false)
     }
 }
 
-extension DownloadManageView: UICollectionViewDataSource {
+extension DownloadManageView: ShowableView {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        tasks.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withClass: DownloadItemCollectionViewCell.self, for: indexPath)
-        cell.setData(task: tasks[indexPath.row])
-        return cell
-    }
 }

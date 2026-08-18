@@ -24,11 +24,11 @@ enum PurchaseProductType: String, CaseIterable {
 struct PurchaseManager {
     
 #if SIDE_LOAD || DEBUG
-    private(set) static var isMember: Bool = true
+    static var isMember: Bool = true
 #else
     private(set) static var isMember: Bool = {
-        let keychain = Keychain(service: Constants.Config.AppIdentifier)
-        if let isMemberString = keychain[Constants.Strings.MemberKeyChainKey], !isMemberString.isEmpty {
+        let keychain = Keychain(service: R.Config.AppIdentifier)
+        if let isMemberString = keychain[R.Strings.MemberKeyChainKey], !isMemberString.isEmpty {
             return true
         }
         return false
@@ -36,14 +36,14 @@ struct PurchaseManager {
         didSet {
             //无变化不操作
             guard oldValue != isMember else { return }
-            let userDefaults = UserDefaults(suiteName: Constants.DefaultKey.AppGroupName)
-            userDefaults?.set(isMember, forKey: Constants.DefaultKey.AppGroupIsPremiumKey)
+            let userDefaults = UserDefaults(suiteName: R.DefaultKey.AppGroupName)
+            userDefaults?.set(isMember, forKey: R.DefaultKey.AppGroupIsPremiumKey)
             userDefaults?.synchronize()
             WidgetCenter.shared.reloadAllTimelines()
             //变更Keychain
-            let keychain = Keychain(service: Constants.Config.AppIdentifier)
-            keychain[Constants.Strings.MemberKeyChainKey] = isMember ? Constants.Strings.MemberKeyChainKey : ""
-            NotificationCenter.default.post(name: Constants.NotificationName.MembershipChange, object: nil)
+            let keychain = Keychain(service: R.Config.AppIdentifier)
+            keychain[R.Strings.MemberKeyChainKey] = isMember ? R.Strings.MemberKeyChainKey : ""
+            NotificationCenter.default.post(name: R.NotificationName.MembershipChange, object: nil)
             if !isMember && Settings.defalut.iCloudSyncEnable {
                 Settings.defalut.iCloudSyncEnable = false
             }
@@ -111,7 +111,7 @@ struct PurchaseManager {
                     }
                 }
                 DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Constants.NotificationName.ProductsUpdate, object: nil)
+                    NotificationCenter.default.post(name: R.NotificationName.ProductsUpdate, object: nil)
                     completion?(products)
                 }
             } catch {
@@ -234,7 +234,7 @@ struct PurchaseManager {
             return
         }
         PurchaseManager.isMember = true
-        NotificationCenter.default.post(name: Constants.NotificationName.PurchaseSuccess, object: nil)
+        NotificationCenter.default.post(name: R.NotificationName.PurchaseSuccess, object: nil)
     }
     
     static func setup() {

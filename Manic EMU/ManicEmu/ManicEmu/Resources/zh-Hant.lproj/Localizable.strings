@@ -11,7 +11,6 @@
 //匯入
 "ImportAddCloudServiceTitle" = "雲端服務";
 "ImportAddLanServiceTitle" = "區域網路服務";
-"ImportAddDiscoverServiceTitle" = "探索服務";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -32,7 +31,6 @@
 "LandServiceEditConnect" = "連線";
 "AddLandServiceSuccess" = "成功新增%@";
 "AddLandServiceFailed" = "新增%@失敗\n請檢查網路連線、服務狀態或填寫資訊是否正確";
-"AddLandServiceTimeout" = "連線服務逾時";
 "FilesImporterErrorFileExist" = "\"%@\"已存在，無需匯入";
 "FilesImporterErrorBadCopy" = "匯入\"%@\"失敗，檔案複製過程中發生錯誤";
 "FilesImporterErrorBadExtension" = "匯入\"%@\"失敗，無法識別該副檔名";
@@ -78,7 +76,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\n使用瀏覽器傳輸檔案";
 "ImportServiceListPasteTitle" = "讀取剪貼簿";
 "ImportServiceListPasteDetail" = "支援從macOS及檔案應用程式拷貝檔案";
-"ImportHowTo" = "如何匯入";
 "ImportTopHintTitle" = "一個充滿夢想與冒險的故事將從這裡開始！";
 "ImportDragAndDropTips" = "將檔案拖曳至Manic EMU的任意介面實現傳輸";
 "ImportChannelTips" = "如有疑問，加入%@獲取幫助";
@@ -112,7 +109,6 @@
 "TimeDurationMinuteFormat" = "%d分鐘";
 "FatalErrorTitle" = "嚴重錯誤";
 "FatalErrorDesc" = "系統資源載入失敗，Manic EMU運行中可能會出現重大缺陷";
-"LodingFailedTitle" = "載入失敗";
 "AirPlayDesc" = "馬上開始冒險吧！";
 "ToastSuccess" = "儲存成功";
 "ToastFailed" = "儲存失敗";
@@ -128,25 +124,22 @@
 "GamesImportSave" = "匯入遊戲存檔";
 "GamesShareSave" = "匯出遊戲存檔";
 "GamesDelete" = "移除遊戲";
-"GamesRandom" = "不知道玩什麼，隨機一下";
 "LoadGameErrorRomNotExist" = "遊戲載入錯誤，ROM不存在";
 "GamesListEmptyGuideLeft" = "快去點選下方";
 "GamesListEmptyGuideRight" = "匯入遊戲吧";
 "GamesListEmptyWelcomeLeft" = "歡迎來到";
 "GamesListEmptyWelcomeRight" = "的世界";
 "GamesListEmptyWarnning" = "請確保透過合法管道取得遊戲ROM檔案";
+"LandscapeEmptyAddGame" = "新增遊戲";
 "DeleteGameAlertDetail" = "遊戲ROM、存檔和金手指等資料將一併刪除，此操作不可逆！";
 "DeleteSkinAlertDetail" = "皮膚移除後將無法恢復！";
-"DeleteGameGameStateAlertTitle" = "移除即時存檔";
 "DeleteGameGameStateAlertDetail" = "即時存檔移除後將無法恢復！";
 "confirmDelte" = "確認移除";
 
 //控制器
 "ControllersTouchName" = "螢幕控制器";
-"ControllersHeaderTitle" = "控制器";
 "ControllersPlayerIndex" = "玩家%d";
 "ControllersPlayerUnset" = "未指定";
-"ControllersHowToConnect" = "如何連接";
 
 //遊戲資訊
 "ReadyGameInfoSubTitle" = "%@遊玩 · 總共%@";
@@ -158,7 +151,6 @@
 "ReadySegmentManualSave" = "玩家即時存檔";
 "ReadySegmentAutoSave" = "自動即時存檔";
 "ReadyEditTitleFailed" = "重新命名失敗，遊戲名稱不能為空";
-"ReadyEditTitleSuccess" = "重新命名成功";
 "ReadyGameSaveStatesEmpty" = "暫無存檔";
 "GameSaveGuideBecomTitle" = "成為";
 "GameSaveGuideMemberTitle" = "會員";
@@ -170,12 +162,10 @@
 "GameSaveTitle" = "存檔%d";
 
 //皮膚
-"SkinNavigationSubTitleCommon" = "Manic EMU完美相容.deltaskin .gammaskin格式皮膚";
 "SkinNavigationSubTitleSpecifiedGame" = "僅為%@設定皮膚";
 "SkinSegmentPortraitTitle" = "直向";
 "SkinSegmentLandscapeTitle" = "橫向";
 "SkinAddTitle" = "新增皮膚";
-"HowToFetch" = "如何取得";
 "SkinDelete" = "移除皮膚";
 "DefaultSkinCannotEdit" = "預設皮膚不允許編輯";
 
@@ -187,16 +177,11 @@
 "HistoryEmptyStartGame" = "立即遊戲";
 
 //設定
-"LeftHandTitle" = "左手模式";
-"LeftHandDetail" = "搖桿、方向鍵、按鍵左右鏡像翻轉";
 "QuickGameTitle" = "快速開始遊戲";
 "QuickGameDetail" = "點選遊戲後直接進入遊戲畫面";
 "AirPlayTitle" = "AirPlay全螢幕模式";
 "AirPlayDetail" = "開啟後遊戲畫面將進行全螢幕投放";
 "iCloudTitle" = "iCloud同步";
-"iCloudDetail" = "相同Apple ID的裝置同步遊戲、皮膚、存檔、設定等";
-"AppIconTitle" = "應用程式圖示";
-"WidgetTitle" = "桌面小工具";
 "QATitle" = "常見問題";
 "FeedbackTitle" = "意見回饋";
 "ShareAppTitle" = "分享「Manic EMU」給好友";
@@ -210,13 +195,9 @@
 "AdvanceSettingTitle" = "進階設定";
 "SupportSettingTitle" = "聯繫支援";
 "OthersSettingTitle" = "其他";
-"RatingTitleLeft" = "評分";
-"RatingTitleRight" = "";
-"RatingDetail" = "如果您認為我們的產品對您有價值，請幫我們寫個五星好評，您的好評對我們非常重要 : )";
 "iCloudDisableTitle" = "iCloud暫不可用";
 "iCloudDisableDetail" = "已嘗試開啟iCloud同步服務，只有當您完成iCloud登入及授權才會真正開始同步，請前往 iPhone 的「設定」>「Apple ID」>「iCloud」，確保已開啟 iCloud 雲碟並允許 Manic EMU 存取";
 "iCloudSyncConfilictTitle" = "iCloud同步檔案衝突";
-"iCloudSyncConfilictDetail" = "雲端檔案:\n%@\n\n本地檔案:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "保留iCloud";
 "iCloudSyncConfilictSaveLocal" = "保留本地";
 "SettingsNonMemberDesc" = "您將成為這個故事的主角";
@@ -224,7 +205,6 @@
 "ThanksCommingDesc" = "謝謝您來";
 "PlayGameDesc" = "玩遊戲";
 "NoEmailSetting" = "您尚未設定電子郵件";
-"IDCopy" = "已複製您的ID";
 "SendEmailSuccess" = "傳送郵件成功";
 "SendEmailFailed" = "傳送郵件失敗%@";
 "iCloudTipsTitle" = "開啟iCloud同步";
@@ -239,9 +219,6 @@
 "GameSettingVolume" = "音量";
 "GameSettingFastForwardResume" = "正常速度";
 "GameSettingFastForward" = "快進%@";
-"GameSettingStateList" = "存檔列表";
-"GameSettingSkins" = "設定皮膚";
-"GameSettingFilter" = "濾鏡";
 "GameSettingScreenShot" = "遊戲截圖";
 "GameSettingHapticOff" = "觸覺回饋 關閉";
 "GameSettingHapticSoft" = "觸覺回饋 弱";
@@ -260,17 +237,13 @@
 "GameSettingReload" = "重新啟動";
 "GameSettingQuit" = "結束";
 "GameSaveStateSuccess" = "即時存檔成功";
-"GameSaveStateLoadFailed" = "即時存檔載入失敗，該存檔已損毀或不相容";
 "GameSaveStateLoadSuccess" = "即時存檔載入成功";
 "GameSaveStateQuickLoadFailed" = "暫無手動存檔，如果想載入自動存檔，請使用「存檔列表」";
 "GameSaveListTitle" = "即時存檔";
-"GameCheatActivateFailed" = "%@\n啟動失敗 作弊碼無效";
 "GameCheatActivateSuccess" = "%@\n啟動成功";
 "AirPlayingTitle" = "遊戲畫面已輸出至投放畫面中";
 "VolumeOff" = "音量 關";
 "VolumeOn" = "音量 開";
-"FunctionSortDesc1" = "以上功能將作為官方預設皮膚的快捷功能";
-"FunctionSortDesc2" = "長按可拖曳調整順序";
 "ManualGameSaveCountLimit" = "你的即時存檔數量已達上限！請升級會員解鎖無限即時存檔，或前往存檔列表刪減存檔數量";
 "FastForwardSpeedLimit" = "你的最高加速僅限2倍！升級會員即可解鎖最高5倍速";
 "ResetSpeed" = "恢復正常速度";
@@ -284,13 +257,10 @@
 "AutoDetectFormat" = "輸入代碼自動偵測格式";
 "CheatCodeFormatError" = "金手指格式不正確";
 "CheatCodeEmptyTitle" = "暫無金手指";
-"CheatCodeEmptyGuideLeft" = "點擊左上角";
-"CheatCodeEmptyGuideRight" = "新增金手指";
 "EnableCheatCodeAlertTitle" = "啟用金手指";
 "EnableCheatCodeAlertDetail" = "金手指代碼需與遊戲版本匹配才能生效！使用金手指會修改遊戲運行數據，可能導致運行錯誤或不穩定，請謹慎使用。";
 
 //濾鏡
-"FilterSectionHeaderTitle" = "視訊濾鏡";
 "FilterOriginTitle" = "原始畫面";
 
 //內購
@@ -358,7 +328,6 @@
 "PurchasePending" = "支付處理中，完成後將為你開通會員權限";
 "PurchaseUnknown" = "支付狀態不明";
 "PurchaseErrorDesc" = "暫時無法完成支付，請檢查網路連線後重試";
-"PurchaseFailedTitle" = "支付失敗";
 "RestoreSuccessDesc" = "內購恢復成功!";
 "RestoreEndDesc" = "內購恢復完成，未找到可用購買記錄！";
 "TrialDesc" = "試用期間完全免費，可隨時取消";
@@ -399,25 +368,12 @@
 "ShareAppSubtitle" = "快邀請好友一起加入冒險吧!";
 "ShareRomFilesFailed" = "分享ROM檔案失敗，無法取得檔案";
 "ShareSaveFilesFailed" = "分享遊戲存檔失敗，暫無存檔檔案";
-"ShareFilesCopyFailed" = "分享檔案失敗，複製檔案時發生錯誤";
-"ShareFilesCompressFailed" = "分享檔案失敗，壓縮檔案時發生錯誤";
 
 "TurnOnAirPlayAsk" = "已連線AirPlay，是否立即開啟全螢幕模式？";
 
 "ThreeDSModePerformance" = "效能模式";
 "ThreeDSModeCompatibility" = "相容模式";
 "ThreeDSModeQuality" = "畫質優先";
-"ThreeDSNotSupportImportSave" = "3DS 遊戲暫不支援匯入存檔";
-"ThreeDSNotSupportShareSave" = "3DS 遊戲暫不支援分享存檔";
-"ThreeDSBetaAlertTitle" = "3DS 實驗性版本";
-"ThreeDSBetaAlertDetail" = "為了讓您更早體驗3DS遊戲，Manic EMU已發布3DS功能，但目前處於實驗性階段，部分效能有待進一步優化。
-
-以下功能暫時缺失：
-❌ AirPlay全螢幕模式
-❌ 自動即時存檔
-❌ 加速功能
-
-若3DS出現不穩定現象，請參閱「常見問題」或加入我們的頻道尋求協助。我們持續優化模擬器效能，您的理解與支持將幫助我們打造更完美的遊戲體驗。我們一直努力為您創造更好的遊戲環境。";
 "ThreeDSNoSupportDeviceTitle" = "裝置效能不足";
 "ThreeDSNoSupportDeviceDetail" = "目前裝置的效能可能無法執行3DS模擬，繼續運作可能導致無法預期的異常";
 
@@ -436,8 +392,6 @@
 "FullScreenWhenConnectControllerTitle" = "自動全螢幕";
 "FullScreenWhenConnectControllerDetail" = "連接控制器時自動進入全螢幕模式";
 "JoinDiscordTitle" = "加入 Discord";
-"JoinDiscordAlertMessage" = "感謝玩家 %@ 建立此 Discord 頻道，是否繼續加入？";
-"FlexSkinGuideTitle" = "拖曳或雙指縮放調整畫面";
 "DownloadFailed" = "下載失敗";
 "RemoveDownloadTask" = "是否停止下載並移除「%@」？";
 "GameSettingResolution" = "解析度 %@";
@@ -488,9 +442,6 @@
 "RenderRightEyeDesc" = "停用右眼渲染可提升部分遊戲執行效率，但可能造成畫面閃爍等問題";
 "DisableTitle" = "停用";
 "EnableTitle" = "啟用";
-"NoSaveStateToast" = "暫無%@";
-"DeleteSelectedSaveStateAlert" = "是否刪除選取的「%@」？\n刪除後無法復原！";
-"DeleteAllSaveStateAlert" = "未選取任何項目，是否刪除所有「%@」？\n刪除後無法復原！";
 "AICoverSearchDesc" = "偵測到您使用非英文搜尋，升級高級會員後Manic EMU將運用AI技術實現多語言搜尋";
 "MaxTextSizeAllowDesc" = "此選項最多支援%@個字元";
 
@@ -518,29 +469,21 @@
 "BiosAddTitle" = "新增BIOS";
 "StartGameWithoutBiosTitle" = "無BIOS啟動";
 
-"ThreeDSAdvanceSettingMode" = "進階模式";
 "ThreeDSAdvanceSettingTitle" = "進階設定";
-"ThreeDSBasicSettingMode" = "基本模式";
 "ShareConfigButtonTitle" = "分享設定";
 "ImportConfigButtonTitle" = "匯入設定";
 "ShareFileFailedMissing" = "分享失敗：檔案不存在";
 "ReadConfigFileFailed" = "無法讀取設定檔";
 "SwitchEmulationCore" = "切換核心";
 "SwitchEmulationCoreDetail" = "切換 %@ 的模擬核心\n切換核心將導致原核心產生的存檔無法讀取。欲存取存檔，請切換回原核心";
-"BeetleSaturnNoSupportCheat" = "Beetle Saturn 核心目前不支援金手指設定。如需設定金手指，請切換至 Yabause 核心";
-"CurrentTitle" = "當前";
 "NewSkinDesc" = "Manic EMU 支援 .manicskin 與 .deltaskin .gammaskin 格式的皮膚。請注意：匯入皮膚的規格需與當前平台相符，否則不會顯示於皮膚清單中。\n此外，我們提供第三方皮膚社群入口。這些社群非 Manic EMU 官方營運，下載皮膚時請嚴格遵守各網站服務條款";
 "VisitSite" = "造訪 %@";
 "OpenFile" = "開啟檔案";
 "WebViewDownloadBegin" = "下載已開始";
 "RespectSilentMode" = "遵循靜音模式";
 "RespectSilentModeDesc" = "啟用後，Manic EMU 僅在非靜音模式下播放音訊";
-"SaturnISONoSwitchCore" = "Sega Saturn .iso 格式遊戲不支援切換核心";
-"EnableFullScreenTitle" = "啟用全螢幕";
-"DisableFullScreenTitle" = "停用全螢幕";
 "SimulateBlowingTitle" = "模擬吹氣";
 "PaletteTitle" = "調色盤";
-"SkinRestDesc" = "重設皮膚後，遊戲指派的皮膚亦將恢復為預設皮膚";
 "SkinResetForAll" = "重設所有平台皮膚";
 "SkinResetForPlatform" = "重設 %@ 皮膚";
 "SkinDebug" = "皮膚測試區";
@@ -557,7 +500,6 @@
 "MultiDiscCloseAlert" = "已產生.m3u檔案，匯入遊戲庫後可關閉此頁面";
 "MultiDiscContinueClose" = "繼續關閉";
 "SwapDisk" = "更換光碟";
-"NotSupportSwapDisk" = "非多光碟遊戲";
 "TransferPakDesc" = "Transfer Pak 可同步 GB/GBC 資料至 N64。啟用需同時匯入 ROM 檔(.gb/.gbc)及存檔(.sav)";
 "TransferPakFromLibrary" = "從遊戲庫匯入";
 "TransferPakFromLibraryDesc" = "僅顯示具存檔的遊戲\n選擇的 GB/GBC 遊戲必須與 N64 ROM 相符，否則可能失敗";
@@ -566,7 +508,6 @@
 "TransferPakOn" = "已啟用";
 "TransferPakOff" = "已停用";
 "TransferPakImportError" = "錯誤：需同時匯入 ROM 及存檔（需 2 個檔案）";
-"ShowControlsTitle" = "顯示控制項";
 "HideControlsTitle" = "隱藏控制項";
 
 "DesignedFor" = "為 %@ 設計";
@@ -589,7 +530,6 @@
 "WfcConnectDesc" = "連線至Nintendo WFC中...\n加速及金手指功能已停用";
 "WfcDisconnectDesc" = "中斷Nintendo WFC連線";
 "NotAllowOnlineGame" = "此功能於線上遊玩時停用";
-"QuitGameAlert" = "結束遊戲？未儲存的進度將遺失";
 
 "SkinIdentifierExist" = "識別碼:%@ 已存在，請修改後重新匯入。";
 "AnalogModeChange" = "切換至 %@ 模式";
@@ -623,7 +563,6 @@
 "LastActivity" = "最近活動: %@";
 "MemberSince" = "會員 since: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "完成進度";
 "AchievementsList" = "成就";
 "TotalAchievements" = "共 %d 項成就";
@@ -646,7 +585,6 @@
 "DisableAchievementsAlert" = "停用 RetroAchievements？";
 "SaveStateCoreUnCompatible" = "即時存檔建立於 %@（目前：%@）。載入可能會導致問題！";
 "LatestSaveStateUnCompatible" = "核心不相容，無法載入最新即時存檔";
-"Snes9xAlert" = "由於授權問題，Snes9x 核心將在未來更新中移除。請切換至 bsnes 並遷移你的即時存檔，否則它們將無法使用。";
 "GotIt" = "瞭解";
 "Rumble" = "震動";
 "RumbleDetail" = "特定事件中裝置會震動";
@@ -662,7 +600,6 @@
 "JumpTips" = "正在開啟第三方頁面";
 "ThirdPartGameInfoTips" = "遊戲資訊由第三方提供。請自行判斷並遵循平台規則。如果 Manic EMU 無法匹配遊戲，請使用搜尋功能手動尋找。";
 "NotSupportHardcore" = "此遊戲已停用硬核模式。可能 Manic EMU 未獲 RetroAchievements 授權，或此遊戲不支援硬核模式。";
-"ChooseOne" = "選擇一項";
 "FilesImporterErrorBadCue" = "匯入「%@」失敗。檔案可能無效或非 UTF-8 編碼。請檢查格式。";
 "Leaderboard" = "排行榜";
 "LeaderboardStart" = "排行榜開始: ";
@@ -679,10 +616,8 @@
 "AlwaysShowProgressDesc" = "持續在畫面上顯示成就進度。";
 "Progress" = "進度";
 
-"DCGameNoSupportGameSave" = "Dreamcast 不支援存檔匯入/匯出。請使用 VMU Explorer 編輯 Manic EMU-Flycast-dc 資料夾中的記憶卡檔案。";
 
 "Challenge" = "挑戰";
-"GameTypeLicensingError" = "抱歉！由於%@核心存在授權限制，此平台暫時無法使用。您可以等待之後的更新，或先行使用側載版本。";
 "DCJITLessVer" = "Default版本提供快速且精準的模擬，但無法執行WinCE遊戲。如需執行WinCE遊戲，請選擇WinCE版本核心。";
 "TVStandard" = "若遊戲與地區的電視制式不符，可能會影響速度。PAL地區包含歐洲、澳洲與紐西蘭。";
 "SNESVRAMEnable" = "部分修改版ROM需開啟此選項才能正確渲染圖形，但啟用後將無法支援RetroAchievements成就系統。";
@@ -705,7 +640,6 @@
 "LayoutEmbeddedBottomRight" = "畫中畫 (右下)";
 "LayoutSingleScreen" = "單一螢幕";
 "AirPlayLayoutTips" = "結合交換螢幕功能可獲得更多佈局選項。注意：嵌入式佈局使用交換螢幕可能導致重疊，不建議使用";
-"ToggleAnolog" = "切換類比搖桿";
 "EnableGlobalAchievements" = "啟用全域 RetroAchievements";
 "GlobalHardcoreMode" = "全域硬核模式";
 "GlobalHardcoreAlert" = "請先啟用全域 RetroAchievements";
@@ -721,7 +655,6 @@
 "AppearanceLight" = "淺色模式";
 "AppearanceDark" = "深色模式";
 "AppearanceAuto" = "跟隨系統";
-"GameListBackground" = "背景圖片";
 "GameListBackgroundUpload" = "上傳";
 "GameplayManuals" = "遊戲說明書";
 "GameplayManualsNoExists" = "此遊戲沒有可用的說明書。";
@@ -731,7 +664,6 @@
 "UnsupportSkinsDesc" = "以下皮膚在此裝置上不支援：\n%@注意：移除它們也會從透過iCloud同步的其他裝置中刪除這些皮膚。";
 "UnsupportSkinsRemoveSuccess" = "不支援的皮膚已成功移除";
 "ForbitPKSM" = "為確保公平的RetroAchievements體驗，當全域RetroAchievements啟用時，無法使用PKSM。";
-"FDSAlert" = "此選項僅適用於FDS遊戲。";
 "DiskSideChange" = "翻轉磁碟";
 "EjectDisk" = "退出磁碟";
 
@@ -764,7 +696,6 @@
 "TriggerProName" = "TriggerPro名稱";
 "Position" = "位置";
 "ButtonInfo" = "按鈕資訊";
-"NoTriggerPro" = "未找到TriggerPro設定。您可以前往設定，或在遊戲選單中長按TriggerPro選項以建立新設定";
 "ManageTriggerPro" = "管理TriggerPro";
 "EnableTriggerPro" = "啟用TriggerPro";
 "DisableTriggerPro" = "停用TriggerPro";
@@ -805,7 +736,6 @@
 "Default" = "預設";
 "Imported" = "已匯入";
 "DownloadRetroArchSahders" = "從 RetroArch 下載著色器";
-"ImportShaders" = "匯入著色器";
 "Shaders" = "著色器";
 "DownloadRetroArchShaders" = "是否要從 RetroArch 下載著色器？完成後，RetroArch 著色器類別將自動更新。您可以隨時在下載管理器中取消此程序。";
 "RetroArchShaderUnzipFailed" = "無法解壓縮 %@。檔案可能在下載過程中損毀。請重新下載後再試一次。";
@@ -838,7 +768,6 @@ PlayCase 專注於高品質 iPhone 保護殼，設計時充分考慮了配件與
 "JGenesisAlert" = "抱歉，JGenesis 核心僅支援 .chd 格式的 ROM 檔案。";
 "RedeemOfferCode" = "兌換優惠";
 "CheatImportFailed" = "導入失敗，檔案解析出錯或未找到匹配的作弊碼。";
-"RemoveAllCheats" = "清空作弊碼";
 "RemoveAllCheatsAlert" = "確定要移除所有作弊碼嗎？此操作無法恢復。";
 "CheatCodeStatus" = "啟用狀態";
 "Background" = "背景";
@@ -851,13 +780,8 @@ PlayCase 專注於高品質 iPhone 保護殼，設計時充分考慮了配件與
 "RemoveBackgroundForGame" = "移除當前遊戲背景";
 "RemoveBackgroundForConsole" = "移除 %@ 平台背景";
 "RemoveBackgroundForGlobal" = "移除全局背景";
-"ShaderConfigAlert" = "該著色器已為 %@ 設定。";
-"Global" = "全局";
-"RemoveShaderForGlobal" = "移除全局著色器";
 "FeaturedItems" = "精選周邊";
-"ReUpload" = "重新上傳";
 
-"Service" = "服務";
 "NintendoWFC" = "任天堂 WFC";
 "PSPNetworking" = "PSP 網路";
 "Networking" = "網路";
@@ -897,16 +821,11 @@ PlayCase 專注於高品質 iPhone 保護殼，設計時充分考慮了配件與
 "LoadingCheerpJ" = "正在載入 CheerpJ";
 "ZipHandlerTitle" = "ZIP 檔案處理";
 "ZipHandlerDetail" = "部分平台（如 DOS、Arcade）支援直接載入 .zip 格式的 ROM。對於其他平台，.zip 內的 ROM 需要解壓縮後才能匯入。\n\n已勾選的檔案將會被解壓縮並分別匯入，未勾選的檔案將作為完整的 ZIP ROM 匯入。";
-"ConfigsResetCore" = "重置為核心預設值";
-"ConfigsResetBefore" = "還原為之前設定";
 "InsertDisc" = "插入光碟";
 "InsertDiscAlert" = "您可以在遊戲庫中選擇同一平台的遊戲光碟進行插入，或從「檔案」App 中選擇一個光碟檔案。由於 iOS 檔案系統的限制，從檔案中選擇的光碟檔案會被複製到 Manic EMU 的快取中。";
 "InsertDiscFailed" = "插入光碟失敗";
 "GenerateHomeMenu" = "建立 Home Menu";
 "SkinSoundEffects" = "面板音效";
-"FirstAnniversary" = "謝謝你一直在這裡\n我們寫了一些話，想給你。";
-"ApirlFoolsDayTitle" = "咦，Manic EMU 出問題了嗎？";
-"ApirlFoolsDayDetail" = "別擔心！\n只是開個小玩笑——愚人節快樂！\n\n關閉彈窗後就會恢復正常。";
 "JITType" = "JIT類型";
 "JITTypeDesc" = "標準JIT提供最佳效能，而IR JIT提供中等效能表現。";
 "Pretendo" = "Pretendo網路";
@@ -921,7 +840,6 @@ PlayCase 專注於高品質 iPhone 保護殼，設計時充分考慮了配件與
 "HomeMenuDesc" = "透過下方按鈕開啟Home Menu，然後進入Nimbus設定，切換至Pretendo網路；接著開啟「設定」，選擇「任天堂網路ID」，並使用Pretendo帳號登入。\n\n完成後，從Home Menu啟動的遊戲，或使用Azahar核心執行的遊戲，均將連接至Pretendo網路。\n\n如果Home Menu入口缺失，此功能會嘗試自動重新產生。";
 "OpenHomeMenu" = "開啟Home Menu";
 "ChooseRegion" = "選擇區域";
-"ChooseRegionDesc" = "請選擇執行Artic Setup Tool的3DS掌機區域。若選擇錯誤，將導致資料無法正確傳輸。";
 "HomeMenuNotFound" = "未找到Home Menu，請先完成Artic Base資料傳輸。";
 "SystemUpdateAsk" = "系統更新是否成功？";
 "SystemUpdateDesc" = "如果因網路問題導致更新失敗，請重新進行資料傳輸，否則3DS的Home Menu可能無法正常使用。";

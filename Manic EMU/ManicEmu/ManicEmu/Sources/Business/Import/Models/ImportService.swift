@@ -136,10 +136,8 @@ class ImportService: Object, ObjectUpdatable {
     
     var iconCornerRadius: Double {
         switch type {
-        case .files:
-            Constants.Size.CornerRadiusMin
-        case .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
-            Constants.Size.CornerRadiusTiny
+        case .files, .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
+            R.Size.CornerRadiusSmall
         case .samba, .webdav:
             0
         }
@@ -147,8 +145,18 @@ class ImportService: Object, ObjectUpdatable {
     
     var iconBackgroundColor: UIColor {
         switch type {
-        case .files, .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
-            Constants.Color.BackgroundPrimary
+        case .files:
+            UIColor(hexString: "#33A9FF", transparency: 0.1)!
+        case .wifi:
+            UIColor(hexString: "#06D58F", transparency: 0.1)!
+        case .paste:
+            R.Color.Indigo.withAlphaComponent(0.1)
+        case .multiDisc:
+            R.Color.Pink.withAlphaComponent(0.1)
+        case .romPatcher:
+            R.Color.Cyan.withAlphaComponent(0.1)
+        case .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun:
+            R.Color.BackgroundSecondary
         case .samba, .webdav:
             UIColor.clear
         }
@@ -157,7 +165,7 @@ class ImportService: Object, ObjectUpdatable {
     var iconBorderColor: UIColor {
         switch type {
         case .files, .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
-            Constants.Color.Border
+            R.Color.Border
         case .samba, .webdav:
             UIColor.clear
         }

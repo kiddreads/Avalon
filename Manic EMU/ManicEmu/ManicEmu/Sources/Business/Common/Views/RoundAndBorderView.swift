@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class RoundAndBorderView: UIView {
+class RoundAndBorderView: BaseView {
     var roundCorner: UIRectCorner {
         didSet {
             self.layoutSubviews()
@@ -28,17 +28,25 @@ class RoundAndBorderView: UIView {
             self.layoutSubviews()
         }
     }
+    var dashPattern: [NSNumber]? {
+        didSet {
+            self.layoutSubviews()
+        }
+    }
     
     init(roundCorner: UIRectCorner = [],
-         radius: CGFloat = Constants.Size.CornerRadiusMax,
-         borderColor: UIColor = Constants.Color.Border,
-         borderWidth: CGFloat = 1) {
+         radius: CGFloat = R.Size.CornerRadiusLarge,
+         borderColor: UIColor = R.Color.Border,
+         borderWidth: CGFloat = 1,
+         dashPattern: [NSNumber]? = nil) {
         self.roundCorner = roundCorner
         self.radius = radius
         self.borderColor = borderColor
         self.borderWidth = borderWidth
+        self.dashPattern = dashPattern
         super.init(frame: .zero)
         borderLayer.fillColor = nil
+        borderLayer.zPosition = .greatestFiniteMagnitude
         layer.addSublayer(borderLayer)
     }
     
@@ -57,6 +65,7 @@ class RoundAndBorderView: UIView {
         borderLayer.path = roundMaskPath
         borderLayer.lineWidth = borderWidth
         borderLayer.strokeColor = borderColor.cgColor
+        borderLayer.lineDashPattern = dashPattern
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

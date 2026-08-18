@@ -9,17 +9,18 @@
 
 class RetroLoginFooterReusableView: UICollectionReusableView {
     let button: SymbolButton = {
-        let view = SymbolButton(image: nil, title: "", titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
+        let view = SymbolButton(image: nil, title: "", titleFont: R.Font.Body(emphasis: true), titleColor: R.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
         view.enableRoundCorner = true
-        view.backgroundColor = Constants.Color.Red
+        view.backgroundColor = R.Color.Red
         return view
     }()
     
     let register: UIButton = {
         let view = UIButton(type: .custom)
-        let att = NSAttributedString(string: R.string.localizable.achievementsRegisterTitle(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
+        let att = NSAttributedString(string: R.string.localizable.achievementsRegisterTitle(), attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelSecondary])
+        view.isFocusable = true
         view.onTap {
-            UIApplication.shared.open(Constants.URLs.RetroSignUp)
+            UIApplication.shared.open(R.URLs.RetroSignUp)
         }
         view.setAttributedTitle(att.underlined, for: .normal)
         return view
@@ -29,26 +30,26 @@ class RetroLoginFooterReusableView: UICollectionReusableView {
         super.init(frame: frame)
         addSubview(button)
         button.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-            make.top.equalToSuperview().offset(Constants.Size.ItemHeightMin)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+            make.height.equalTo(R.Size.ItemHeightMedium)
+            make.top.equalToSuperview().offset(R.Size.ItemHeightSmall)
         }
         
         let labelContainer = UIView()
         addSubview(labelContainer)
         labelContainer.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.top.equalTo(button.snp.bottom).offset(R.Size.ContentSpaceLarge)
             make.centerX.equalToSuperview()
         }
         
         let notMemberLabel = UILabel()
         notMemberLabel.text = R.string.localizable.achievementsNotMember()
-        notMemberLabel.font = Constants.Font.body(size: .l)
-        notMemberLabel.textColor = Constants.Color.LabelSecondary
+        notMemberLabel.font = R.Font.Body()
+        notMemberLabel.textColor = R.Color.LabelSecondary
         
         labelContainer.addSubviews([notMemberLabel, register])
         register.snp.makeConstraints { make in
-            make.leading.equalTo(notMemberLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(notMemberLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.top.bottom.trailing.equalToSuperview()
         }
         notMemberLabel.snp.makeConstraints { make in
@@ -60,11 +61,11 @@ class RetroLoginFooterReusableView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
 }
 
 class RetroAchievementsLoginView: BaseView {
-    private var editItems: [LanServiceEditViewController.EditItem] = []
+    private var editItems: [LanServiceEditView.EditItem] = []
     private var username: String? = nil
     private var password: String? = nil
     
@@ -72,12 +73,14 @@ class RetroAchievementsLoginView: BaseView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
-        view.register(cellWithClass: LanServiceEditCollectionViewCell.self)
+        view.register(cellWithClass: TitleInputCollectionViewCell.self)
         view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withClass: RetroLoginFooterReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = UIEdgeInsets(top: 90, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        view.isFocusable = true
+        view.contentInset = .insets(top: 90,
+                                    bottom: R.Size.ContentInsetBottom)
         return view
     }()
     
@@ -94,18 +97,18 @@ class RetroAchievementsLoginView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        let user = LanServiceEditViewController.EditItem(title: R.string.localizable.landServiceEditUserName(),
-                            placeholderString: "",
-                            keyboardType: .default,
-                            requiredField: false,
-                            type: .user,
-                            returnKeyType: .next)
-        let password = LanServiceEditViewController.EditItem(title: R.string.localizable.landServiceEditPassword(),
-                                placeholderString: "",
-                                keyboardType: .default,
-                                requiredField: false,
-                                type: .password,
-                                returnKeyType: .done)
+        let user = LanServiceEditView.EditItem(title: R.string.localizable.landServiceEditUserName(),
+                                               placeholderString: "",
+                                               keyboardType: .default,
+                                               requiredField: false,
+                                               type: .user,
+                                               returnKeyType: .next)
+        let password = LanServiceEditView.EditItem(title: R.string.localizable.landServiceEditPassword(),
+                                                   placeholderString: "",
+                                                   keyboardType: .default,
+                                                   requiredField: false,
+                                                   type: .password,
+                                                   returnKeyType: .done)
         editItems.append(contentsOf: [user, password])
     }
     
@@ -119,14 +122,14 @@ class RetroAchievementsLoginView: BaseView {
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                  heightDimension: .fractionalHeight(1)))
             //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(84)), subitems: [item])
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(TitleInputCollectionViewCell.CellHeight)), subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: Constants.Size.ContentSpaceMid,
-                                                            bottom: 0,
-                                                            trailing: Constants.Size.ContentSpaceMid)
+                                                          leading: R.Size.ContentSpaceMedium,
+                                                          bottom: 0,
+                                                          trailing: R.Size.ContentSpaceMedium)
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = Constants.Size.ContentSpaceHuge
+            section.interGroupSpacing = R.Size.ContentSpaceHuge
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
             
             let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -143,12 +146,12 @@ class RetroAchievementsLoginView: BaseView {
     private func updateButton() {
         guard let button else { return }
         if let username = self.username, !username.trimmed.isEmpty, let password = self.password, !password.isEmpty {
-            button.backgroundColor = Constants.Color.Main
-            button.titleLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+            button.backgroundColor = R.Color.Main
+            button.titleLabel.textColor = R.Color.LabelPrimary.forceStyle(.dark)
             button.isUserInteractionEnabled = true
         } else {
-            button.backgroundColor = Constants.Color.BackgroundSecondary
-            button.titleLabel.textColor = Constants.Color.LabelSecondary
+            button.backgroundColor = R.Color.BackgroundTertiary
+            button.titleLabel.textColor = R.Color.LabelSecondary
             button.isUserInteractionEnabled = false
         }
     }
@@ -160,21 +163,22 @@ extension RetroAchievementsLoginView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withClass: LanServiceEditCollectionViewCell.self, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withClass: TitleInputCollectionViewCell.self, for: indexPath)
         let item =  editItems[indexPath.row]
-        if item.type == .password {
-            cell.editTextField.isSecureTextEntry = true
-        } else {
-            cell.editTextField.isSecureTextEntry = false
-        }
-        cell.setData(item:item)
+        var input = cell.editTextField.input
+        input.isSecureTextEntry = item.type == .password
+        cell.editTextField.input = input
+        cell.setData(title: item.title,
+                     placeholder: item.placeholderString,
+                     keyboardType: item.keyboardType,
+                     returnKeyType: item.returnKeyType)
         cell.shouldGoNext = { [weak self] in
             guard let self = self else { return }
-            if let cell = self.collectionView.cellForItem(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? LanServiceEditCollectionViewCell {
+            if let cell = self.collectionView.cellForItem(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? TitleInputCollectionViewCell {
                 cell.editTextField.becomeFirstResponder()
             }
         }
-        cell.editTextField.onChange { [weak self] string in
+        cell.editTextField.didInputChange = { [weak self] string in
             guard let self = self else { return }
             if item.type == .user {
                 self.username = string
@@ -227,14 +231,5 @@ extension RetroAchievementsLoginView: UICollectionViewDataSource {
 }
 
 extension RetroAchievementsLoginView: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? LanServiceEditCollectionViewCell {
-                if cell.editTextField.isFirstResponder {
-                    cell.editTextField.resignFirstResponder()
-                    break
-                }
-            }
-        }
-    }
+    
 }

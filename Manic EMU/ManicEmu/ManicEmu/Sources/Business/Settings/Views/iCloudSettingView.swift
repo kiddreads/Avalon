@@ -19,22 +19,22 @@ class ICloudSettingView: BaseView {
         
         private let enableContainer: UIView = {
             let view = UIView()
-            view.backgroundColor = Constants.Color.BackgroundPrimary
-            view.layerCornerRadius = Constants.Size.CornerRadiusMid
+            view.backgroundColor = R.Color.BackgroundSecondary
+            view.layerCornerRadius = R.Size.CornerRadiusMedium
             return view
         }()
         
         var enableSwitchButton: DisabledTapSwitch = {
             let view = DisabledTapSwitch()
-            view.onTintColor = Constants.Color.Main
-            view.tintColor = Constants.Color.BackgroundSecondary
+            view.onTintColor = R.Color.Main
+            view.tintColor = R.Color.BackgroundTertiary
             return view
         }()
         
         private let storageLabel: UILabel = {
             let view = UILabel()
-            view.font = Constants.Font.caption(size: .l)
-            view.textColor = Constants.Color.LabelSecondary
+            view.font = R.Font.Caption()
+            view.textColor = R.Color.LabelSecondary
             return view
         }()
         
@@ -44,56 +44,56 @@ class ICloudSettingView: BaseView {
             let titleContainerView = UIView()
             view.addSubview(titleContainerView)
             titleContainerView.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceUltraTiny)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceTiny)
                 make.leading.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMin)
+                make.height.equalTo(R.Size.ItemHeightSmall)
             }
             
             let titleLabel = UILabel()
             titleLabel.text = R.string.localizable.iCloudUsage()
-            titleLabel.font = Constants.Font.body(size: .s, weight: .semibold)
-            titleLabel.textColor = Constants.Color.LabelSecondary
+            titleLabel.font = R.Font.Footnote(emphasis: true)
+            titleLabel.textColor = R.Color.LabelSecondary
             titleContainerView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             
             let storageContainer = UIView()
-            storageContainer.backgroundColor = Constants.Color.BackgroundPrimary
-            storageContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
+            storageContainer.backgroundColor = R.Color.BackgroundSecondary
+            storageContainer.layerCornerRadius = R.Size.CornerRadiusMedium
             view.addSubview(storageContainer)
             storageContainer.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(titleContainerView.snp.bottom)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             let storageIconView = UIImageView()
             storageIconView.contentMode = .center
             storageIconView.layerCornerRadius = 6
-            storageIconView.image = UIImage(symbol: .opticaldiscdriveFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            storageIconView.backgroundColor = Constants.Color.BackgroundSecondary.forceStyle(.dark)
+            storageIconView.image = UIImage(symbol: .opticaldiscdriveFill, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+            storageIconView.backgroundColor = R.Color.BackgroundTertiary.forceStyle(.dark)
             storageContainer.addSubview(storageIconView)
             storageIconView.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.size.equalTo(Constants.Size.IconSizeMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.size.equalTo(R.Size.IconSizeLarge)
                 make.centerY.equalToSuperview()
             }
             
             let storageTitleLabel = UILabel()
             storageTitleLabel.text = R.string.localizable.usage()
-            storageTitleLabel.textColor = Constants.Color.LabelPrimary
-            storageTitleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+            storageTitleLabel.textColor = R.Color.LabelPrimary
+            storageTitleLabel.font = R.Font.Body(emphasis: true)
             storageContainer.addSubview(storageTitleLabel)
             storageTitleLabel.snp.makeConstraints { make in
                 make.centerY.equalTo(storageIconView)
-                make.leading.equalTo(storageIconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(storageIconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
             }
             
             storageContainer.addSubview(storageLabel)
             storageLabel.snp.makeConstraints { make in
                 make.centerY.equalTo(storageIconView)
-                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             }
             
             view.isHidden = true
@@ -104,8 +104,8 @@ class ICloudSettingView: BaseView {
             let view = UILabel()
             view.numberOfLines = 0
             view.text = R.string.localizable.iCloudDesc()
-            view.font = Constants.Font.caption(size: .l)
-            view.textColor = Constants.Color.LabelSecondary
+            view.font = R.Font.Caption()
+            view.textColor = R.Color.LabelSecondary
             return view
         }()
         
@@ -116,7 +116,7 @@ class ICloudSettingView: BaseView {
             addSubview(titleContainerView)
             titleContainerView.snp.makeConstraints { make in
                 make.leading.top.trailing.equalToSuperview()
-                make.height.equalTo(Constants.Size.ItemHeightMin)
+                make.height.equalTo(R.Size.ItemHeightSmall)
             }
             titleContainerView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
@@ -127,7 +127,7 @@ class ICloudSettingView: BaseView {
             enableContainer.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.top.equalTo(titleContainerView.snp.bottom)
-                make.height.equalTo(Constants.Size.ItemHeightMax)
+                make.height.equalTo(R.Size.ItemHeightLarge)
             }
             
             let enableIconView = UIImageView()
@@ -139,36 +139,36 @@ class ICloudSettingView: BaseView {
             } else {
                 symbol = .cloudFill
             }
-            enableIconView.image = UIImage(symbol: symbol, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-            enableIconView.backgroundColor = Constants.Color.Blue
+            enableIconView.image = UIImage(symbol: symbol, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+            enableIconView.backgroundColor = R.Color.Indigo
             enableContainer.addSubview(enableIconView)
             enableIconView.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.size.equalTo(Constants.Size.IconSizeMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.size.equalTo(R.Size.IconSizeLarge)
                 make.centerY.equalToSuperview()
             }
             
             let enableTitleLabel = UILabel()
             enableTitleLabel.text = R.string.localizable.iCloudTitle()
-            enableTitleLabel.textColor = Constants.Color.LabelPrimary
-            enableTitleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+            enableTitleLabel.textColor = R.Color.LabelPrimary
+            enableTitleLabel.font = R.Font.Body(emphasis: true)
             enableContainer.addSubview(enableTitleLabel)
             enableTitleLabel.snp.makeConstraints { make in
                 make.centerY.equalTo(enableIconView)
-                make.leading.equalTo(enableIconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(enableIconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
             }
             
             enableContainer.addSubview(enableSwitchButton)
             enableSwitchButton.snp.makeConstraints { make in
                 make.centerY.equalTo(enableIconView)
-                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                if #available(iOS 26.0, *) {
+                make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+                if #available(iOS 26.0, tvOS 26.0, *) {
                     make.size.equalTo(CGSize(width: 63, height: 28))
                 } else {
                     make.size.equalTo(CGSize(width: 51, height: 31))
                 }
             }
-            if #available(iOS 26.0, *) {} else {
+            if #available(iOS 26.0, tvOS 26.0, *) {} else {
                 enableSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
             }
             
@@ -182,7 +182,7 @@ class ICloudSettingView: BaseView {
             addSubview(detailLabel)
             detailLabel.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.top.equalTo(enableContainer.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+                make.top.equalTo(enableContainer.snp.bottom).offset(R.Size.ContentSpaceSmall)
             }
             
         }
@@ -194,14 +194,14 @@ class ICloudSettingView: BaseView {
         func setDatas() {
             var matt = NSMutableAttributedString(string: "")
             var detail = R.string.localizable.iCloudNotEnable()
-            var color = Constants.Color.LabelSecondary
+            var color = R.Color.LabelSecondary
             if Settings.defalut.iCloudSyncEnable && PurchaseManager.isMember {
                 if SyncManager.shared.syncState == .idle {
                     detail = R.string.localizable.iCloudSynced()
-                    color = Constants.Color.Green
+                    color = R.Color.Green
                 } else if SyncManager.shared.syncState == .syncing {
                     detail = R.string.localizable.iCloudSyncing()
-                    color = Constants.Color.Yellow
+                    color = R.Color.Yellow
                 }
                 
                 enableSwitchButton.setOn(true, animated: true)
@@ -221,24 +221,30 @@ class ICloudSettingView: BaseView {
                 enableSwitchButton.setOn(false, animated: true)
                 storageView.isHidden = true
                 detailLabel.snp.updateConstraints { make in
-                    make.top.equalTo(enableContainer.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+                    make.top.equalTo(enableContainer.snp.bottom).offset(R.Size.ContentSpaceSmall)
                 }
             }
             
             enableSwitchButton.isEnabled = PurchaseManager.isMember
             
-            matt.append(NSAttributedString(string: "●", attributes: [.font: Constants.Font.caption(size: .m), .foregroundColor: color, .baselineOffset: 1]))
-            matt.append(NSAttributedString(string: " " + detail, attributes: [.font: Constants.Font.body(size: .s, weight: .semibold), .foregroundColor: color]))
+            matt.append(NSAttributedString(string: "●", attributes: [.font: R.Font.Caption(), .foregroundColor: color, .baselineOffset: 1]))
+            matt.append(NSAttributedString(string: " " + detail, attributes: [.font: R.Font.Footnote(emphasis: true), .foregroundColor: color]))
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
             titleLabel.attributedText = matt
         }
     }
     
-    private let topBlurView: UIView = {
-        let view = UIView()
-        view.makeBlur()
+    private lazy var navigationView: ASNavigationView = {
+        var navigation = ASListPage.Navigation.defaultNavigation(title: R.string.localizable.iCloudTitle(),
+                                                                 titleIcon: .symbolImage(R.image.icloudsync_iconSymbols()))
+        navigation.enableClose = showClose
+        let view = ASNavigationView(navigation)
+        view.didTapClose = { [weak self] in
+            guard let self = self else { return }
+            self.hide()
+        }
         return view
     }()
     
@@ -250,85 +256,49 @@ class ICloudSettingView: BaseView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: UIDevice.isPad ? (Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax) : Constants.Size.ContentInsetBottom, right: 0)
+        view.isFocusable = true
+        view.contentInset = .insets(bottom: UIDevice.isPad ? (R.Size.ContentInsetBottom + R.Size.HomeTabBarSize.height + R.Size.ContentSpaceLarge) : R.Size.ContentInsetBottom)
         return view
     }()
     
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
-        }
-        return view
-    }()
-    
-    ///点击关闭按钮回调
-    var didTapClose: (()->Void)? = nil
-    
+    private let showClose: Bool
     private var iCloudDriveSyncChangeNotification: Any? = nil
     
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
         if let iCloudDriveSyncChangeNotification {
             NotificationCenter.default.removeObserver(iCloudDriveSyncChangeNotification)
         }
     }
     
-    init(showClose: Bool = true) {
+    required init?(parameters: Any...) {
+        self.showClose = parameters.compactMap({ $0 as? Bool }).first ?? true
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.Background
+        
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            if showClose {
+                make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            } else {
+                make.top.equalToSuperview().offset(R.Size.ContentInsetTop)
+            }
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let symbol: SFSymbol
-        if #available(iOS 17.0, *) {
-            symbol = .arrowTriangle2CirclepathIcloudFill
-        } else {
-            symbol = .cloudFill
-        }
-        let icon = UIImageView(image: UIImage(symbol: symbol, font: Constants.Font.body(weight: .bold)))
-        icon.contentMode = .scaleAspectFit
-        topBlurView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.centerY.equalToSuperview()
-        }
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.iCloudTitle()
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(icon)
-        }
-        
-        if showClose {
-            topBlurView.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            }
-        }
-        
-        iCloudDriveSyncChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.iCloudDriveSyncChange, object: nil, queue: .main) { [weak self] _ in
+        iCloudDriveSyncChangeNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.iCloudDriveSyncChange, object: nil, queue: .main) { [weak self] _ in
             guard let self else { return }
             self.collectionView.reloadData()
         }
+    }
+    
+    convenience init(showClose: Bool = true) {
+        self.init(parameters: showClose)!
     }
     
     required init?(coder: NSCoder) {
@@ -344,13 +314,13 @@ class ICloudSettingView: BaseView {
             //group布局
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(280)), subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: Constants.Size.ContentSpaceMid,
+                                                            leading: R.Size.ContentSpaceMedium,
                                                             bottom: 0,
-                                                            trailing: Constants.Size.ContentSpaceMid)
+                                                            trailing: R.Size.ContentSpaceMedium)
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: R.Size.ContentSpaceSmall, trailing: 0)
             
             return section
         }
@@ -402,3 +372,6 @@ extension ICloudSettingView: UICollectionViewDelegate {
     
 }
 
+extension ICloudSettingView: ShowableView {
+    
+}

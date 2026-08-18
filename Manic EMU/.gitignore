@@ -106,5 +106,11 @@ SKILL.md
 #cursor
 .cursor
 
+# localize working patches
+Scripts/localize
+Scripts/find_unused_resources.py
+Scripts/find_unused_types.py
+
+
 #vscode
 .vscode

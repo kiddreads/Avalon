@@ -11,50 +11,49 @@ import Kingfisher
 
 class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
     private let headerTitleLabel: SymbolButton = {
-        let view = SymbolButton(image: .symbolImage(.handThumbsupFill).applySymbolConfig(color: Constants.Color.LabelSecondary),
+        let view = SymbolButton(image: .symbolImage(.handThumbsupFill).applySymbolConfig(color: R.Color.LabelSecondary),
                                 title: R.string.localizable.historyFavouriteTitle(),
-                                titleFont: Constants.Font.caption(size: .l),
-                                titleColor: Constants.Color.LabelSecondary,
+                                titleFont: R.Font.Caption(),
+                                titleColor: R.Color.LabelSecondary,
                                 titleAlignment: .left,
                                 edgeInsets: UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12),
                                 titlePosition: .right,
                                 imageAndTitlePadding: 4,
                                 enableGlass: true)
         view.enableRoundCorner = true
-        view.backgroundColor = Constants.Color.SideList
+        view.backgroundColor = R.Color.SideList
         return view
     }()
     
     private let infoContainerView: UIView = {
         let view = GradientView()
         view.setupGradient(colors: [.clear, .black.withAlphaComponent(0.4)], locations: [0.0, 1.0], direction: .topToBottom)
-        view.backgroundColor = Constants.Color.Background
-        view.layerCornerRadius = Constants.Size.CornerRadiusMax
-        view.enableInteractive = true
-        view.delayInteractiveTouchEnd = true
+        view.backgroundColor = R.Color.BackgroundPrimary
+        view.layerCornerRadius = R.Size.CornerRadiusLarge
+        view.enablePressEffect = true
         return view
     }()
     
     private let iconViewContainerView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = Constants.Size.CornerRadiusMin
-        view.makeShadow(ofColor: Constants.Color.BackgroundPrimary.forceStyle(.dark), radius: 10)
+        view.layer.cornerRadius = R.Size.CornerRadiusSmall
+        view.makeShadow(ofColor: R.Color.BackgroundSecondary.forceStyle(.dark), radius: 10)
         return view
     }()
     
     private let iconView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
-        view.layerCornerRadius = Constants.Size.CornerRadiusMin
+        view.layerCornerRadius = R.Size.CornerRadiusSmall
         return view
     }()
     
     private let titleLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.body(size: .l)
-        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        view.font = R.Font.Body()
+        view.textColor = R.Color.LabelPrimary.forceStyle(.dark)
         view.numberOfLines = 2
-        view.layer.shadowColor = Constants.Color.Background.cgColor
+        view.layer.shadowColor = R.Color.BackgroundPrimary.cgColor
         view.layer.shadowOpacity = 0.5
         view.layer.shadowOffset = .init(width: 0, height: 2)
         view.layer.shadowRadius = 2
@@ -64,8 +63,8 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            titleLabel.layer.shadowColor = Constants.Color.Background.cgColor
-            iconViewContainerView.makeShadow(ofColor: Constants.Color.BackgroundPrimary.forceStyle(.dark), radius: 10)
+            titleLabel.layer.shadowColor = R.Color.BackgroundPrimary.cgColor
+            iconViewContainerView.makeShadow(ofColor: R.Color.BackgroundSecondary.forceStyle(.dark), radius: 10)
         }
     }
     
@@ -77,7 +76,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
     
     private let subTitleLabel: UILabel = {
         let view = UILabel()
-        view.font = UIDevice.isPad ? Constants.Font.caption(size: .m) : Constants.Font.caption(size: .l)
+        view.font = UIDevice.isPad ? R.Font.Caption() : R.Font.Caption()
         view.lineBreakMode = .byCharWrapping
         view.textColor = .white.withAlphaComponent(0.5)
         view.numberOfLines = 2
@@ -97,18 +96,18 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.height.equalTo(R.Size.ItemHeightMicro)
         }
         
         addSubview(infoContainerView)
         infoContainerView.snp.makeConstraints { make in
-            make.top.equalTo(headerTitleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.top.equalTo(headerTitleLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
             make.leading.trailing.equalToSuperview()
         }
         
         infoContainerView.addSubview(iconViewContainerView)
         iconViewContainerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
             make.size.equalTo(106 * (UIDevice.isPad ? 0.8 : 1))
         }
@@ -123,8 +122,8 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         infoContainerView.addSubview(titleContainerView)
         titleContainerView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(iconViewContainerView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(iconViewContainerView.snp.trailing).offset(R.Size.ContentSpaceSmall)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
         }
         
         titleContainerView.addSubviews([titleLabel, subtitleIcon, subTitleLabel])
@@ -134,23 +133,23 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         }
         
         subtitleIcon.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.IconSizeTiny)
+            make.size.equalTo(R.Size.IconSizeSmall)
             make.leading.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceTiny)
         }
         
         subTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(subtitleIcon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(subtitleIcon.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.bottom.equalToSuperview()
             make.trailing.lessThanOrEqualToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceTiny)
         }
         
         infoContainerView.addSubview(retroView)
         retroView.snp.makeConstraints { make in
             make.height.equalTo(24)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
+            make.top.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
         }
         
         let seperator = SparkleSeperatorView()
@@ -158,8 +157,8 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         seperator.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(16)
-            make.top.equalTo(infoContainerView.snp.bottom).offset(Constants.Size.ContentSpaceHuge)
-            make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceUltraTiny)
+            make.top.equalTo(infoContainerView.snp.bottom).offset(R.Size.ContentSpaceHuge)
+            make.bottom.equalToSuperview().offset(-R.Size.ContentSpaceTiny)
         }
     }
     
@@ -167,17 +166,17 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setData(game: Game, didTapRetro: (()->Void)? = nil) {
+    func setData(game: Game) {
         let estimated = iconView.size == .zero ? .init((UIDevice.isPad ? 85 : 106)) : iconView.size
         iconView.setGameCover(game: game, size: estimated) { [weak self] image in
             self?.infoContainerView.backgroundColor = image.dominantBackground
         }
-        if Constants.Size.GameCoverRatio(gameType: game.gameType) != 1.0 {
+        if R.Size.GameCoverRatio(gameType: game.gameType) != 1.0 {
             iconView.contentMode = .scaleAspectFill
         } else {
             iconView.contentMode = .scaleToFill
         }
-        titleLabel.text = game.aliasName ?? game.name
+        titleLabel.text = game.displayName
         if let timeAgo = game.latestPlayDate?.timeAgo() {
             subTitleLabel.text = R.string.localizable.readyGameInfoSubTitle(timeAgo, Date.timeDuration(milliseconds: Int(game.totalPlayDuration))).replacingOccurrences(of: " · ", with: "\n")
         } else {
@@ -188,7 +187,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
             retroView.countLabel.text = ""
             retroView.removeGestureRecognizers()
             retroView.addTapGesture { gesture in
-                didTapRetro?()
+                RetroAchievementsLaunchView.show(loginedAction: .jumpList(game: game))
             }
         } else {
             retroView.isHidden = true

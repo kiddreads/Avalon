@@ -24,7 +24,7 @@ class ExternalSceneDelegate: UIResponder, UIWindowSceneDelegate {
             ExternalSceneDelegate.isAirPlaying = true
             window = UIWindow(windowScene: windowScene)
             ExternalSceneDelegate.externalWindow = window
-            window?.tintColor = Constants.Color.Main
+            window?.tintColor = R.Color.Main
             let airPlayViewController = AirPlayViewController()
             window?.rootViewController = airPlayViewController
             ExternalSceneDelegate.airPlayViewController = airPlayViewController
@@ -43,15 +43,15 @@ class ExternalSceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             
             //监听会员资格变化
-            membershipNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MembershipChange, object: nil, queue: .main) { [weak self] notification in
+            membershipNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.MembershipChange, object: nil, queue: .main) { [weak self] notification in
                 self?.updateScene()
             }
             //监听开始游戏
-            startPlayGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StartPlayGame, object: nil, queue: .main) { [weak self] notification in
+            startPlayGameNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.StartPlayGame, object: nil, queue: .main) { [weak self] notification in
                 self?.updateScene()
             }
             //监听结束游戏
-            stopPlayGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StopPlayGame, object: nil, queue: .main) { [weak self] notification in
+            stopPlayGameNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.StopPlayGame, object: nil, queue: .main) { [weak self] notification in
                 self?.updateScene()
             }
         }

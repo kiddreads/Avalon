@@ -184,6 +184,8 @@ extension GameType {
             self = .j2me
         } else if shortName.uppercased() == "DOS" {
             self = .dos
+        } else if shortName.uppercased() == "XBOX" {
+            self = .xbox
         } else {
             return nil
         }
@@ -192,9 +194,9 @@ extension GameType {
     var localizedName: String {
         switch self
         {
-        case .nes: return "Nintendo"
+        case .nes: return Locale.prefersUS ? "Nintendo Entertainment System" : "Family Computer"
         case .fds: return "Famicom Disk System"
-        case .snes: return "Super Nintendo"
+        case .snes: return "Super Nintendo Entertainment System"
         case ._3ds: return "Nintendo 3DS"
         case .gbc: return "Game Boy Color"
         case .gb: return "Game Boy"
@@ -227,6 +229,7 @@ extension GameType {
         case .dos: return "MS-DOS"
         case .win95: return "Windows 95"
         case .win98: return "Windows 98"
+        case .xbox: return "Xbox"
         default: return ""
         }
     }
@@ -269,6 +272,7 @@ extension GameType {
         case .dos: return  NSLocalizedString("DOS", comment: "")
         case .win95: return  NSLocalizedString("WIN95", comment: "")
         case .win98: return  NSLocalizedString("WIN98", comment: "")
+        case .xbox: return  NSLocalizedString("XBOX", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -312,6 +316,7 @@ extension GameType {
         case .dos: return 1981
         case .win95: return 1995
         case .win98: return 1998
+        case .xbox: return 2001
         default: return 0
         }
     }
@@ -350,6 +355,76 @@ extension GameType {
         case .j2me: return J2ME.core
         case .dos: return DOS.core
         default: return nil
+        }
+    }
+    
+    /**
+     "/system/a26" 2600
+     "/system/jag" Jaguar
+     "/system/lnx" Lynx
+     "/system/3do" 3DO Interactive
+     "/system/pcd" PC Engine CD/TurboGrafx16
+     "/system/pce" PC Engine/TurboGrafx16
+     "/system/cdi" Philips CD-i
+     "/system/gam" Tiger Game.com
+     "/system/ws" WonderSwan
+     "/system/wsc" WonderSwan Color
+     "/system/dc" Dreamcast
+     "/system/gg" Game Gear
+     "/system/32x" Genesis 32X
+     "/system/gen" Genesis/Mega Drive
+     "/system/sms" Master System
+     "/system/sat" Saturn
+     "/system/scd" Sega CD
+     "/system/fds" Famicom Disk System
+     "/system/gb" Game Boy
+     "/system/gba" Game Boy Advance
+     "/system/gbc" Game Boy Color
+     "/system/ngc" Gamecube
+     "/system/3ds" Nintendo 3DS
+     "/system/3dsd" Nintendo 3DS (DLC)
+     "/system/n64" Nintendo 64
+     "/system/nds" Nintendo DS
+     "/system/nes" Nintendo Entertainment System
+     "/system/nsw" Nintendo Switch
+     "/system/snes" Super Nintendo
+     "/system/nvb" Virtual Boy
+     "/system/wii" Wii
+     "/system/wdl" Wii (DLC)
+     "/system/msx" MSX
+     "/system/psx" Playstation
+     "/system/ps2" Playstation 2
+     "/system/ps3" Playstation 3
+     "/system/ps3n" Playstation 3 (PSN)
+     "/system/psp" Playstation Portable
+     "/system/pspn" Playstation Portable (PSN)
+     "/system/psv" Playstation Vita
+     "/system/psvn" Playstation Vita (PSN)
+     "/system/neo" SNK Neo Geo
+     "/system/ngp" SNK Neo Geo Pocket
+     "/system/ngpc" SNK Neo Geo Pocket Color
+     "/system/pc" PC
+     */
+    var gamehackingSystem: String? {
+        switch self {
+        case .md: return "gen"
+        case .mcd: return "scd"
+        case .sg1000: return nil
+        case .ms: return "sms"
+        case .ss: return "sat"
+        case .vb: return "nvb"
+        case .pm: return nil
+        case .ps1: return "psx"
+        case .doom: return nil
+        case .arcade: return nil
+        case .a2600: return "a26"
+        case .a5200: return nil
+        case .a7800: return nil
+        case .jaguar: return "jag"
+        case .lynx: return "lnx"
+        case .j2me: return nil
+        case .dos: return nil
+        default: return localizedShortName.lowercased()
         }
     }
     
@@ -426,15 +501,15 @@ extension GameType {
     
     func isNDSBiosComplete() -> (isDSComplete: Bool, isDsiComplete: Bool) {
         guard self == .ds else { return (false, false) }
-        let dsBiosItems = Constants.BIOS.DSBios.filter({ !$0.fileName.hasPrefix("dsi_") })
-        let dsiBiosItems = Constants.BIOS.DSBios.filter({ $0.fileName.hasPrefix("dsi_") })
+        let dsBiosItems = R.BIOS.DSBios.filter({ !$0.fileName.hasPrefix("dsi_") })
+        let dsiBiosItems = R.BIOS.DSBios.filter({ $0.fileName.hasPrefix("dsi_") })
         
         func isComplete(biosItems: [BIOSItem]) -> Bool {
             var isComplete = true
             let fileManager = FileManager.default
             for bios in biosItems {
-                let biosInLib = Constants.Path.System.appendingPathComponent(bios.fileName)
-                let biosInDoc = Constants.Path.BIOS.appendingPathComponent(bios.fileName)
+                let biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
+                let biosInDoc = R.Path.BIOS.appendingPathComponent(bios.fileName)
                 if fileManager.fileExists(atPath: biosInLib) {
                     continue
                 } else if fileManager.fileExists(atPath: biosInDoc) {
@@ -465,7 +540,7 @@ extension GameType {
             return .atari
         case .j2me:
             return .sun
-        case .xbox360, .dos, .win95, .win98:
+        case .xbox360, .dos, .win95, .win98, .xbox:
             return .microsoft
         case .chm:
             return .modRetro
@@ -482,19 +557,168 @@ extension GameType {
         }
     }
     
-    var coreConfigIcon: UIImage? {
+    var coreConfigIcon: ASIcon {
         switch self {
         case .dos:
-            return R.image.customDos()
+            return .symbolImage(R.image.customDos())
         case .j2me:
-            return R.image.customJava()
+            return .symbolImage(R.image.j2mesettings_iconSymbols())
         default:
-            return nil
+            return .symbol(.sliderHorizontal3)
         }
     }
     
     var coreConfigTitle: String {
         localizedShortName + R.string.localizable.tabbarTitleSettings()
+    }
+    
+    private static var brandImageCaches = [String: UIImage?]()
+    var brandImage: UIImage? {
+        let key = "\(localizedShortName)_\(Settings.appearance.rawValue)"
+        if let image = Self.brandImageCaches[key] {
+            return image
+        } else {
+            var image: UIImage? = nil
+            if self == ._3ds {
+                image = R.image.sds_group_brand()
+            } else if self == .ds {
+                image = R.image.ds_group_brand()
+            } else if self == .gba {
+                image = R.image.gba_group_brand()
+            } else if self == .gbc {
+                image = R.image.gbc_group_brand()
+            } else if self == .gb {
+                image = R.image.gb_group_brand()
+            } else if self == .nes {
+                image = R.image.nes_group_brand()
+            } else if self == .fds {
+                image = R.image.fds_group_brand()
+            } else if self == .snes {
+                image = R.image.snes_group_brand()
+            } else if self == .psp {
+                image = R.image.psp_group_brand()
+            } else if self == .md {
+                if Locale.prefersUS {
+                    image = R.image.md_group_brand_us()
+                } else {
+                    image = R.image.md_group_brand()
+                }
+            } else if self == .mcd {
+                if Locale.prefersUS {
+                    image = R.image.mcd_group_brand_us()
+                } else {
+                    image = R.image.mcd_group_brand()
+                }
+            } else if self == ._32x {
+                if Locale.prefersUS {
+                    image = R.image.s2x_group_brand_us()
+                } else {
+                    image = R.image.s2x_group_brand()
+                }
+            } else if self == .ss {
+                image = R.image.ss_group_brand()
+            } else if self == .sg1000 {
+                image = R.image.sg1000_group_brand()
+            } else if self == .gg {
+                image = R.image.gg_group_brand()
+            } else if self == .ms {
+                image = R.image.ms_group_brand()
+            } else if self == .n64 {
+                image = R.image.n64_group_brand()
+            } else if self == .vb {
+                image = R.image.vb_group_brand()
+            } else if self == .pm {
+                image = R.image.pm_group_brand()
+            } else if self == .ps1 {
+                image = R.image.ps1_group_brand()
+            } else if self == .dc {
+                image = R.image.dc_group_brand()
+            } else if self == .arcade {
+                image = R.image.arcade_group_brand()
+            } else if self == .ns {
+                image = R.image.ns_group_brand()
+            } else if self == .a2600 {
+                image = R.image.a2600_group_brand()
+            } else if self == .a5200 {
+                image = R.image.a5200_group_brand()
+            } else if self == .a7800 {
+                image = R.image.a7800_group_brand()
+            } else if self == .jaguar {
+                image = R.image.jaguar_group_brand()
+            } else if self == .lynx {
+                image = R.image.lynx_group_brand()
+            } else if self == .xbox360 {
+                image = R.image.xbox360_group_brand()
+            } else if self == .j2me {
+                image = R.image.j2me_group_brand()
+            } else if self == .doom {
+                image = R.image.doom_group_brand()
+            } else if self == .dos {
+                image = R.image.dos_group_brand()
+            } else if self == .chm {
+                image = R.image.chm_group_brand()
+            } else if self == .win95 {
+                image = R.image.win95_group_brand()
+            } else if self == .win98 {
+                image = R.image.win98_group_brand()
+            } else if self == .xbox {
+                image = R.image.xbox_group_brand()
+            }
+            Self.brandImageCaches[key] = image
+            return image
+        }
+    }
+    
+    var externalType: Bool {
+        if self == .ns ||
+            self == .xbox360 ||
+            self == .xbox {
+            return true
+        }
+        return false
+    }
+    
+    var supportShaders: Bool {
+        if self == .j2me ||
+            externalType {
+            return false
+        }
+        return true
+    }
+    
+    var biosItems: [BIOSItem] {
+        if self == .mcd {
+            return R.BIOS.MegaCDBios
+        } else if self == .ss {
+            return R.BIOS.SaturnBios
+        } else if self == .ds {
+            return R.BIOS.DSBios
+        } else if self == .ps1 {
+            return R.BIOS.PS1Bios
+        } else if self == .dc {
+            return R.BIOS.DCBios
+        }  else if self == .gb {
+            return R.BIOS.GBBios
+        }  else if self == .gbc {
+            return R.BIOS.GBCBios
+        }  else if self == .gba {
+            return R.BIOS.GBABios
+        }  else if self == .fds {
+            return R.BIOS.FDSBios
+        }  else if self == .pm {
+            return R.BIOS.PMBios
+        } else if self == ._3ds {
+            return R.BIOS.ThreeDSBios
+        } else if self == .arcade {
+            return R.BIOS.ArcadeDSBios
+        } else if self == .a5200 {
+            return R.BIOS.A5200Bios
+        } else if self == .a7800 {
+            return R.BIOS.A7800Bios
+        } else if self == .lynx {
+            return R.BIOS.LynxBios
+        }
+        return []
     }
 }
 

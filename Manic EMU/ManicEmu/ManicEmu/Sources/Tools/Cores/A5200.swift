@@ -117,7 +117,7 @@ class A5200EmulatorBridge : EmulatorBridgeBase {
         guard playerIndex >= 0 else { return }
         if let gameInput = A5200GameInput(rawValue: input) {
 #if DEBUG
-                Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+                Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
             if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))

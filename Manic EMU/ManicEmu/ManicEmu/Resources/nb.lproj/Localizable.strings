@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Skytjenester";
 "ImportAddLanServiceTitle" = "Lokalt nettverk";
-"ImportAddDiscoverServiceTitle" = "Oppdagelsestjenester";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Koble til";
 "AddLandServiceSuccess" = "%@ ble lagt til";
 "AddLandServiceFailed" = "Kunne ikke legge til %@\nSjekk nettverk, serverstatus eller opplysninger";
-"AddLandServiceTimeout" = "Tidsavbrudd ved tilkobling";
 "FilesImporterErrorFileExist" = "\"%@\" eksisterer allerede";
 "FilesImporterErrorBadCopy" = "Kunne ikke importere \"%@\" – feil under kopiering";
 "FilesImporterErrorBadExtension" = "Kunne ikke importere \"%@\" – filtypen støttes ikke";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nBruk nettleser for filoverføring";
 "ImportServiceListPasteTitle" = "Les utklippstavle";
 "ImportServiceListPasteDetail" = "Støtter filer kopiert fra macOS eller Filer-appen";
-"ImportHowTo" = "Hvordan importere";
 "ImportTopHintTitle" = "Et eventyr fylt av drømmer venter!";
 "ImportDragAndDropTips" = "Dra filer til Manic EMU for rask overføring";
 "ImportChannelTips" = "Besøk %@ for hjelp";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d minutter";
 "FatalErrorTitle" = "Kritisk feil";
 "FatalErrorDesc" = "Systemressurser kunne ikke lastes – appen kan fungere ustabilt";
-"LodingFailedTitle" = "Feil ved lasting";
 "AirPlayDesc" = "Start eventyret nå!";
 "ToastSuccess" = "Lagret";
 "ToastFailed" = "Lagring mislyktes";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Importer lagring";
 "GamesShareSave" = "Eksporter lagring";
 "GamesDelete" = "Fjern spill";
-"GamesRandom" = "Tilfeldig spillvalg";
 "LoadGameErrorRomNotExist" = "ROM-filen eksisterer ikke";
 "GamesListEmptyGuideLeft" = "Trykk på";
 "GamesListEmptyGuideRight" = "nedenfor for å importere";
 "GamesListEmptyWelcomeLeft" = "Velkommen til";
 "GamesListEmptyWelcomeRight" = "s verden";
 "GamesListEmptyWarnning" = "Sørg for at ROM-filer er lovlig anskaffet";
+"LandscapeEmptyAddGame" = "Legg til spill";
 "DeleteGameAlertDetail" = "ROM, lagringer og cheat codes vil bli slettet – handlingen kan ikke angres!";
 "DeleteSkinAlertDetail" = "Skin vil bli fjernet permanent!";
-"DeleteGameGameStateAlertTitle" = "Fjern lagringstilstand";
 "DeleteGameGameStateAlertDetail" = "Lagringstilstander vil bli slettet permanent!";
 "confirmDelte" = "Bekreft fjerning";
 
 //Controllers
 "ControllersTouchName" = "Skjermkontroller";
-"ControllersHeaderTitle" = "Kontroller";
 "ControllersPlayerIndex" = "Spiller %d";
 "ControllersPlayerUnset" = "Ikke tildelt";
-"ControllersHowToConnect" = "Tilkoblingsveiledning";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ spilt · Totalt %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Manuelle lagringstilstander";
 "ReadySegmentAutoSave" = "Automatiske lagringstilstander";
 "ReadyEditTitleFailed" = "Navnendring feilet – navn kan ikke være tomt";
-"ReadyEditTitleSuccess" = "Navn endret";
 "ReadyGameSaveStatesEmpty" = "Ingen lagringstilstander";
 "GameSaveGuideBecomTitle" = "Bli";
 "GameSaveGuideMemberTitle" = "medlem";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Lagring %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU støtter .deltaskin .gammaskin-filer";
 "SkinNavigationSubTitleSpecifiedGame" = "Skin for %@";
 "SkinSegmentPortraitTitle" = "Portrett";
 "SkinSegmentLandscapeTitle" = "Landskap";
 "SkinAddTitle" = "Ny skin";
-"HowToFetch" = "Hvordan få";
 "SkinDelete" = "Fjern skin";
 "DefaultSkinCannotEdit" = "Standard-skin kan ikke redigeres";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Start spill";
 
 //Settings
-"LeftHandTitle" = "Venstrehendt modus";
-"LeftHandDetail" = "Speilvend kontroller";
 "QuickGameTitle" = "Hurtigstart";
 "QuickGameDetail" = "Hopp over forberedelsessiden";
 "AirPlayTitle" = "AirPlay-fullskjerm";
 "AirPlayDetail" = "Spill vises i fullskjerm på ekstern skjerm";
 "iCloudTitle" = "iCloud-synkronisering";
-"iCloudDetail" = "Synkroniser spilldata på tvers av enheter";
-"AppIconTitle" = "App-ikon";
-"WidgetTitle" = "Hjemmeskerm-widget";
 "QATitle" = "Ofte stilte spørsmål";
 "FeedbackTitle" = "Tilbakemelding";
 "ShareAppTitle" = "Del Manic EMU";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Avanserte innstillinger";
 "SupportSettingTitle" = "Brukerstøtte";
 "OthersSettingTitle" = "Annet";
-"RatingTitleLeft" = "Vurder";
-"RatingTitleRight" = "";
-"RatingDetail" = "Gi oss en 5-stjerners vurdering hvis du liker appen!";
 "iCloudDisableTitle" = "iCloud utilgjengelig";
 "iCloudDisableDetail" = "Aktiver iCloud i iPhone-innstillinger > Apple ID > iCloud";
 "iCloudSyncConfilictTitle" = "Synkroniseringskonflikt";
-"iCloudSyncConfilictDetail" = "Skyfil:\n%@\n\nLokal fil:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Behold iCloud";
 "iCloudSyncConfilictSaveLocal" = "Behold lokal";
 "SettingsNonMemberDesc" = "Du er hovedpersonen i dette eventyret";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Takk for at du bruker";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Ingen e-post konfigurert";
-"IDCopy" = "ID kopiert";
 "SendEmailSuccess" = "E-post sendt";
 "SendEmailFailed" = "Kunne ikke sende e-post%@";
 "iCloudTipsTitle" = "Aktiver iCloud-synkronisering";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Lyd";
 "GameSettingFastForwardResume" = "Normal hastighet";
 "GameSettingFastForward" = "Spol frem %@";
-"GameSettingStateList" = "Lagringsliste";
-"GameSettingSkins" = "Skins";
-"GameSettingFilter" = "Filter";
 "GameSettingScreenShot" = "Skjermbilde";
 "GameSettingHapticOff" = "Ingen vibrasjon";
 "GameSettingHapticSoft" = "Svak vibrasjon";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Start på nytt";
 "GameSettingQuit" = "Avslutt";
 "GameSaveStateSuccess" = "Lagringstilstand lagret";
-"GameSaveStateLoadFailed" = "Kunne ikke laste – ugyldig lagring";
 "GameSaveStateLoadSuccess" = "Lagringstilstand lastet";
 "GameSaveStateQuickLoadFailed" = "Ingen manuelle lagringer – bruk lagringslisten";
 "GameSaveListTitle" = "Lagringstilstander";
-"GameCheatActivateFailed" = "%@\nAktivering feilet – ugyldig cheat code";
 "GameCheatActivateSuccess" = "%@\nAktivert";
 "AirPlayingTitle" = "AirPlay aktivert";
 "VolumeOff" = "Lyd av";
 "VolumeOn" = "Lyd på";
-"FunctionSortDesc1" = "Standard hurtigfunksjoner for skins";
-"FunctionSortDesc2" = "Dra for å endre rekkefølge";
 "ManualGameSaveCountLimit" = "Maks antall lagringer nådd – oppgrader for ubegrenset";
 "FastForwardSpeedLimit" = "Maks hastighet x2 – oppgrader for x5";
 "ResetSpeed" = "Tilbakestill hastighet";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Cheat code vil automatisk gjenkjennes";
 "CheatCodeFormatError" = "Ugyldig format";
 "CheatCodeEmptyTitle" = "Ingen cheat codes";
-"CheatCodeEmptyGuideLeft" = "Trykk på";
-"CheatCodeEmptyGuideRight" = "for å legge til";
 "EnableCheatCodeAlertTitle" = "Aktiver cheat code";
 "EnableCheatCodeAlertDetail" = "Cheat codes kan forårsake ustabilitet – bruk med forsiktighet";
 
 //滤镜
-"FilterSectionHeaderTitle" = "Bildefilter";
 "FilterOriginTitle" = "Original";
 
 //内购
@@ -346,7 +316,6 @@
 "PurchasePending" = "Betaling venter";
 "PurchaseUnknown" = "Ukjent status";
 "PurchaseErrorDesc" = "Nettverksfeil – prøv igjen";
-"PurchaseFailedTitle" = "Betaling mislyktes";
 "RestoreSuccessDesc" = "Gjenopprettet!";
 "RestoreEndDesc" = "Ingen kjøp funnet";
 "TrialDesc" = "Gratis prøveperiode – avbryt når som helst";
@@ -387,25 +356,12 @@
 "ShareAppSubtitle" = "Inviter venner til eventyret!";
 "ShareRomFilesFailed" = "Kunne ikke dele ROM";
 "ShareSaveFilesFailed" = "Ingen lagringer å dele";
-"ShareFilesCopyFailed" = "Feil under kopiering";
-"ShareFilesCompressFailed" = "Feil under komprimering";
 
 "TurnOnAirPlayAsk" = "AirPlay er tilkoblet. Vil du aktivere fullskjermmodus nå?";
 
 "ThreeDSModePerformance" = "Ytelsesmodus";
 "ThreeDSModeCompatibility" = "Kompatibilitetsmodus";
 "ThreeDSModeQuality" = "Grafikkprioritet";
-"ThreeDSNotSupportImportSave" = "3DS-spill støtter ikke import av lagrede filer foreløpig";
-"ThreeDSNotSupportShareSave" = "3DS-spill støtter ikke deling av lagrede filer foreløpig";
-"ThreeDSBetaAlertTitle" = "Eksperimentell 3DS-versjon";
-"ThreeDSBetaAlertDetail" = "For å la deg oppleve 3DS-spill tidligere har Manic EMU utgitt 3DS-funksjonen i eksperimentell tilstand. Noen optimaliseringer mangler fortsatt.
-
-Midlertidig utilgjengelige funksjoner:
-❌ AirPlay Fullskjermmodus
-❌ Automatisk lagring
-❌ Hastighetsøkning
-
-Ved ustabilitet, se vår FAQ eller bli med i hjelpekanalen. Vi optimaliserer emulatoren kontinuerlig. Din støtte hjelper oss skape en bedre opplevelse. Vi jobber for deg!";
 "ThreeDSNoSupportDeviceTitle" = "Utilstrekkelig enhetsytelse";
 "ThreeDSNoSupportDeviceDetail" = "Denne enheten kan ikke håndtere 3DS-emulering. Å fortsette kan føre til uforutsigbare feil";
 
@@ -424,8 +380,6 @@ Trykk på kontrollerknappen...";
 "FullScreenWhenConnectControllerTitle" = "Auto-fullskjerm";
 "FullScreenWhenConnectControllerDetail" = "Aktiver fullskjerm ved kontrollerkobling";
 "JoinDiscordTitle" = "Bli med i Discord";
-"JoinDiscordAlertMessage" = "Takk til spiller %@ for kanalen. Fortsette?";
-"FlexSkinGuideTitle" = "Dra eller zoom for å justere";
 "DownloadFailed" = "Nedlasting mislyktes";
 "RemoveDownloadTask" = "Avbryt nedlasting av \"%@\"?";
 "GameSettingResolution" = "Oppløsning %@";
@@ -475,9 +429,6 @@ Trykk på kontrollerknappen...";
 "RenderRightEyeDesc" = "Deaktivering forbedrer ytelse i enkelte spill, men kan forårsake skjermflimmer";
 "DisableTitle" = "Deaktiver";
 "EnableTitle" = "Aktiver";
-"NoSaveStateToast" = "Ingen %@ tilgjengelig";
-"DeleteSelectedSaveStateAlert" = "Slett valgt «%@»?\nKan ikke gjenopprettes!";
-"DeleteAllSaveStateAlert" = "Ingen valg. Slett alle «%@»?\nKan ikke gjenopprettes!";
 "AICoverSearchDesc" = "Ikke-engelsk søk oppdaget. Oppgrader til Premium for flerspråklig AI-søk";
 "MaxTextSizeAllowDesc" = "Støtter opp til %@ tegn";
 
@@ -505,29 +456,21 @@ Trykk på kontrollerknappen...";
 "BiosAddTitle" = "Legg til BIOS";
 "StartGameWithoutBiosTitle" = "Start uten BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Avansert Modus";
 "ThreeDSAdvanceSettingTitle" = "Avanserte Innstillinger";
-"ThreeDSBasicSettingMode" = "Grunnleggende Modus";
 "ShareConfigButtonTitle" = "Del Konfigurasjon";
 "ImportConfigButtonTitle" = "Importer Konfigurasjon";
 "ShareFileFailedMissing" = "Deling mislyktes: fil finnes ikke";
 "ReadConfigFileFailed" = "Kan ikke lese konfigurasjonsfil";
 "SwitchEmulationCore" = "Bytt Kjerne";
 "SwitchEmulationCoreDetail" = "Bytt emuleringskjerne for %@\nKjernebytte vil gjøre lagrede spill fra forrige kjerne uleselige. Bytt tilbake til original kjernen for tilgang";
-"BeetleSaturnNoSupportCheat" = "Beetle Saturn-kjernen støtter ikke juksekoder for øyeblikket. Bytt til Yabause-kjernen om nødvendig";
-"CurrentTitle" = "nåværende";
 "NewSkinDesc" = "Manic EMU støtter skall i .manicskin og .deltaskin .gammaskin-format. Merk: Importert skal må samsvare med nåværende plattform, ellers vises det ikke i listen.\nVi gir også tilgang til tredjeparts skall-fellesskap. Disse er ikke offisielt tilknyttet Manic EMU. Følg hjemmesiders tjenestevilkår ved nedlasting";
 "VisitSite" = "Besøk %@";
 "OpenFile" = "Åpne Fil";
 "WebViewDownloadBegin" = "Nedlasting startet";
 "RespectSilentMode" = "Respekter Lydløs Modus";
 "RespectSilentModeDesc" = "Når aktivert, spiller Manic EMU kun lyd utenfor lydløs modus";
-"SaturnISONoSwitchCore" = "Sega Saturn .iso-spill støtter ikke kjernebytte";
-"EnableFullScreenTitle" = "Aktiver Fullskjerm";
-"DisableFullScreenTitle" = "Deaktiver Fullskjerm";
 "SimulateBlowingTitle" = "Simuler Blåsing";
 "PaletteTitle" = "Palett";
-"SkinRestDesc" = "Tilbakestilling av skal vil også gjenopprette spilltildelte skal til standardversjoner";
 "SkinResetForAll" = "Tilbakestill Alle Plattformskall";
 "SkinResetForPlatform" = "Tilbakestill %@ Skall";
 "SkinDebug" = "Skall Testområde";
@@ -544,7 +487,6 @@ Trykk på kontrollerknappen...";
 "MultiDiscCloseAlert" = ".m3u opprettet. Lukk etter import";
 "MultiDiscContinueClose" = "Lukk";
 "SwapDisk" = "Bytt plate";
-"NotSupportSwapDisk" = "Ikke et multiplatespill";
 "TransferPakDesc" = "Transfer Pak synkroniserer GB/GBC-data med N64. For å aktivere: importer både ROM (.gb/.gbc) og lagringsfil (.sav)";
 "TransferPakFromLibrary" = "Importer fra bibliotek";
 "TransferPakFromLibraryDesc" = "Bare spill med lagringsfiler vises.\nValgte GB/GBC-spill må matche N64-ROM";
@@ -553,7 +495,6 @@ Trykk på kontrollerknappen...";
 "TransferPakOn" = "På";
 "TransferPakOff" = "Av";
 "TransferPakImportError" = "Feil: Importer både ROM og lagring (2 filer)";
-"ShowControlsTitle" = "Vis kontroller";
 "HideControlsTitle" = "Skjul kontroller";
 
 "DesignedFor" = "Designet for %@";
@@ -576,7 +517,6 @@ Trykk på kontrollerknappen...";
 "WfcConnectDesc" = "Kobler til Nintendo WFC...\nHurtigframspilling og juks deaktivert";
 "WfcDisconnectDesc" = "Koble fra Nintendo WFC";
 "NotAllowOnlineGame" = "Denne funksjonen er deaktivert under online spill";
-"QuitGameAlert" = "Avslutte spillet? Ulagret framgang vil gå tapt";
 
 "SkinIdentifierExist" = "Identifikator %@ finnes allerede. Endre og importer på nytt.";
 "AnalogModeChange" = "Bytt til %@-modus";
@@ -610,7 +550,6 @@ Trykk på kontrollerknappen...";
 "LastActivity" = "Siste aktivitet: %@";
 "MemberSince" = "Medlem since: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Framdrift";
 "AchievementsList" = "Prestasjoner";
 "TotalAchievements" = "Totalt %d prestasjoner";
@@ -633,7 +572,6 @@ Trykk på kontrollerknappen...";
 "DisableAchievementsAlert" = "Deaktiver RetroAchievements?";
 "SaveStateCoreUnCompatible" = "Lagret tilstand ble opprettet i %@ (nåværende: %@). lasting kan forårsake problemer!";
 "LatestSaveStateUnCompatible" = "Kan ikke laste siste lagrede tilstand på grunn av inkompatibilitet";
-"Snes9xAlert" = "På grunn av lisensproblemer vil Snes9x-kjernen fjernes i fremtidige oppdateringer. Bytt til bsnes og overfør lagrede tilstander, ellers fungerer de ikke.";
 "GotIt" = "Forstått";
 "Rumble" = "Vibrasjon";
 "RumbleDetail" = "Enheten vibrerer under visse hendelser";
@@ -649,7 +587,6 @@ Trykk på kontrollerknappen...";
 "JumpTips" = "Åpner tredjepartsside";
 "ThirdPartGameInfoTips" = "Spillinfo leveres av tredjeparter. Bruk din dømmekraft. Hvis Manic EMU ikke finner et spill, bruk manuelt søk.";
 "NotSupportHardcore" = "Hardcore-modus er deaktivert for dette spillet. Kanskje Manic EMU ikke er autorisert av RetroAchievements, eller spillet støtter det bare ikke.";
-"ChooseOne" = "Velg en";
 "FilesImporterErrorBadCue" = "Import av %@ mislyktes. filen may be invalid or not UTF-8 encoded. Sjekk formatet.";
 "Leaderboard" = "Ledertavle";
 "LeaderboardStart" = "Ledertavle start: ";
@@ -665,10 +602,8 @@ Trykk på kontrollerknappen...";
 "AlwaysShowProgressDesc" = "Hold prestasjonsfremdrift synlig på skjermen.";
 "Progress" = "Fremdrift";
 
-"DCGameNoSupportGameSave" = "Dreamcast støtter ikke import/eksport av lagringer. Bruk VMU Explorer for å redigere minnefiler i mappen Manic EMU-Flycast-dc.";
 
 "Challenge" = "Utfordring";
-"GameTypeLicensingError" = "Beklager! På grunn av lisensbegrensninger med %@-kjernen er denne plattformen midlertidig utilgjengelig. Du kan vente på en fremtidig oppdatering eller bruke sideload-versjonen.";
 "DCJITLessVer" = "Standardversjonen gir rask og presis emulering, men kan ikke kjøre WinCE-spill. For å spille WinCE-spill, velg WinCE-kjernen.";
 "TVStandard" = "Hvis spillets TV-standard ikke samsvarer med regionen, kan hastigheten bli påvirket. PAL-regioner inkluderer hovedsakelig Europa, Australia og New Zealand.";
 "SNESVRAMEnable" = "Noen hackede ROM krever dette alternativet for korrekt grafikkgjengivelse, men aktivering vil deaktivere RetroAchievements-støtte.";
@@ -691,7 +626,6 @@ Trykk på kontrollerknappen...";
 "LayoutEmbeddedBottomRight" = "Innebygd (Nederst-Høyre)";
 "LayoutSingleScreen" = "Enkelt skjerm";
 "AirPlayLayoutTips" = "Kombiner AirPlay-oppsett med Bytt skjerm for flere alternativer. Merk: Bruk av Bytt skjerm med innebygd oppsett kan forårsake overlapping, anbefales ikke";
-"ToggleAnolog" = "Veksle analog";
 "EnableGlobalAchievements" = "Aktiver globale RetroAchievements";
 "GlobalHardcoreMode" = "Global hardcore-modus";
 "GlobalHardcoreAlert" = "Vennligst aktiver globale RetroAchievements først";
@@ -707,7 +641,6 @@ Trykk på kontrollerknappen...";
 "AppearanceLight" = "Lys Modus";
 "AppearanceDark" = "Mørk Modus";
 "AppearanceAuto" = "Følg System";
-"GameListBackground" = "Bakgrunnsbilde";
 "GameListBackgroundUpload" = "Last opp";
 "GameplayManuals" = "Spillmanualer";
 "GameplayManualsNoExists" = "Ingen manual tilgjengelig for dette spillet.";
@@ -717,7 +650,6 @@ Trykk på kontrollerknappen...";
 "UnsupportSkinsDesc" = "Følgende skins støttes ikke på denne enheten:\n%@Merk: Fjerning vil også slette disse skinene fra andre enheter synkronisert via iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Ikke-støttede skins fjernet vellykket";
 "ForbitPKSM" = "For å sikre en rettferdig RetroAchievements-opplevelse, kan ikke PKSM brukes mens Global RetroAchievements er aktivert.";
-"FDSAlert" = "Dette alternativet er kun tilgjengelig for FDS-spill.";
 "DiskSideChange" = "Vend Disk";
 "EjectDisk" = "Støt Ut Disk";
 
@@ -750,7 +682,6 @@ Trykk på kontrollerknappen...";
 "TriggerProName" = "TriggerPro-navn";
 "Position" = "Posisjon";
 "ButtonInfo" = "Knappeinformasjon";
-"NoTriggerPro" = "Ingen TriggerPro-konfigurasjon funnet. Du kan gå til Innstillinger eller holde nede på TriggerPro-alternativet i Spillmenyen for å opprette en";
 "ManageTriggerPro" = "Administrer TriggerPro";
 "EnableTriggerPro" = "Aktiver TriggerPro";
 "DisableTriggerPro" = "Deaktiver TriggerPro";
@@ -791,7 +722,6 @@ Trykk på kontrollerknappen...";
 "Default" = "Standard";
 "Imported" = "Importert";
 "DownloadRetroArchSahders" = "Last ned shadere fra RetroArch";
-"ImportShaders" = "Importer shadere";
 "Shaders" = "Shadere";
 "DownloadRetroArchShaders" = "Vil du laste ned shadere fra RetroArch? Når fullført, vil RetroArchs shaderkategori automatisk bli oppdatert. Du kan avbryte denne prosessen når som helst i nedlastingsbehandleren.";
 "RetroArchShaderUnzipFailed" = "Kunne ikke pakke ut %@. Filen kan ha blitt skadet under nedlastingen. Prøv å laste den ned på nytt.";
@@ -824,7 +754,6 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "JGenesisAlert" = "Beklager, JGenesis-kjernen støtter kun .chd ROM-filer.";
 "RedeemOfferCode" = "Løs Inn Tilbud";
 "CheatImportFailed" = "Import mislyktes. Filen kunne ikke analyseres eller ingen matchende jukkekoder ble funnet.";
-"RemoveAllCheats" = "Fjern Alle Jukkekoder";
 "RemoveAllCheatsAlert" = "Er du sikker på at du vil fjerne alle jukkekoder? Denne handlingen kan ikke angres.";
 "CheatCodeStatus" = "Aktivert";
 "Background" = "Bakgrunn";
@@ -837,13 +766,8 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "RemoveBackgroundForGame" = "Fjern Spillbakgrunn";
 "RemoveBackgroundForConsole" = "Fjern %@ Plattformbakgrunn";
 "RemoveBackgroundForGlobal" = "Fjern Global Bakgrunn";
-"ShaderConfigAlert" = "Satt for %@.";
-"Global" = "Global";
-"RemoveShaderForGlobal" = "Fjern Global Shader";
 "FeaturedItems" = "Utvalgte Gjenstander";
-"ReUpload" = "Last Opp På Nytt";
 
-"Service" = "Tjenester";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "PSP-nettverk";
 "Networking" = "Nettverk";
@@ -882,16 +806,11 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "LoadingCheerpJ" = "Laster CheerpJ";
 "ZipHandlerTitle" = "Håndtering av ZIP-filer";
 "ZipHandlerDetail" = "Noen plattformer (som DOS og Arcade) kan laste ROM direkte fra .zip-filer. For andre plattformer må ROM i en .zip pakkes ut før import.\n\nValgte filer vil bli pakket ut og importert individuelt, mens ikke-valgte filer vil bli importert som en enkelt ZIP-ROM.";
-"ConfigsResetCore" = "Tilbakestill til kjerne-standard";
-"ConfigsResetBefore" = "Gå tilbake til tidligere innstillinger";
 "InsertDisc" = "Sett inn plate";
 "InsertDiscAlert" = "Du kan sette inn en plate ved å velge et annet spill fra samme plattform i biblioteket ditt, eller ved å velge en platefil fra Filer. På grunn av begrensninger i iOS-filsystemet, vil platefiler valgt fra Filer bli kopiert til Manic EMU sin cache.";
 "InsertDiscFailed" = "Kunne ikke sette inn plate";
 "GenerateHomeMenu" = "Opprett startmeny";
 "SkinSoundEffects" = "Skin-lydeffekter";
-"FirstAnniversary" = "TAKK FOR AT DU ER HER,\nVI SKREV NOE TIL DEG";
-"ApirlFoolsDayTitle" = "Oops, er Manic EMU ødelagt?";
-"ApirlFoolsDayDetail" = "Ikke vær redd!\nBare en spøk—Gledelig aprilsnarr!\n\nAlt går tilbake til det normale når du lukker dette.";
 "JITType" = "JIT-type";
 "JITTypeDesc" = "Standard JIT gir best ytelse, mens IR JIT gir moderat ytelse.";
 "Pretendo" = "Pretendo-nettverk";
@@ -906,7 +825,6 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "HomeMenuDesc" = "Bruk knappen nedenfor for å åpne Hjem-menyen. Gå deretter til Nimbus-innstillinger, bytt til Pretendo-nettverket, og åpne Innstillinger for å velge \"Nintendo Network ID\" og logg på med Pretendo-kontoen din.\n\nEtter det vil alle spill som startes fra Hjem-menyen eller kjører med Azahar-kjernen bruke Pretendo-nettverket.\n\nHvis Hjem-menyoppføringen mangler, vil denne funksjonen forsøke å gjenopprette den automatisk.";
 "OpenHomeMenu" = "Åpne Hjem-meny";
 "ChooseRegion" = "Velg region";
-"ChooseRegionDesc" = "Velg riktig region for 3DS-enheten som kjører Artic Setup-verktøyet. Å velge feil region vil forhindre vellykket dataoverføring.";
 "HomeMenuNotFound" = "Hjem-meny ikke funnet. Fullfør Artic Base-dataoverføringen først.";
 "SystemUpdateAsk" = "Ble systemoppdateringen fullført?";
 "SystemUpdateDesc" = "Hvis systemoppdateringen mislyktes på grunn av nettverksproblemer, prøv å overføre dataene på nytt. Ellers kan 3DS Hjem-menyen fungere feil.";

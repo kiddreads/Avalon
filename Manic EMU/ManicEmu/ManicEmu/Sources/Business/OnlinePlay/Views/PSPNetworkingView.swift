@@ -8,15 +8,20 @@
 
 import UIKit
 
-import IQKeyboardManagerSwift
-
 class PSPNetworkingView: BaseView {
     
     private var pspConfig: PSPNetworkingConfig = .getConfig()
     
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
+    private lazy var navigationView: ASNavigationView = {
+        let view = ASNavigationView(.defaultNavigation(title: R.string.localizable.pspNetworking(),
+                                                       titleIcon: .symbolImage(R.image.online_iconSymbols())))
+        view.didTapClose = { [weak self] in
+            guard let self = self else { return }
+            if PSPNetworkingConfig.getConfig() != self.pspConfig {
+                PSPNetworkingConfig.updateConfig(self.pspConfig)
+            }
+            self.hide()
+        }
         return view
     }()
     
@@ -31,76 +36,24 @@ class PSPNetworkingView: BaseView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: UIDevice.isPad ? (Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax) : Constants.Size.ContentInsetBottom, right: 0)
+        view.isFocusable = true
+        view.contentInset = .insets(bottom: R.Size.ContentInsetBottom)
         return view
     }()
     
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            if PSPNetworkingConfig.getConfig() != self.pspConfig {
-                PSPNetworkingConfig.updateConfig(self.pspConfig)
-            }
-            self.didTapClose?()
-        }
-        return view
-    }()
-    
-    ///点击关闭按钮回调
-    var didTapClose: (()->Void)? = nil
-    
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-        Task { @MainActor in
-            IQKeyboardManager.shared.isEnabled = false
-        }
-    }
-    
-    init() {
+    required init?(parameters: Any...) {
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.Background
-        
-        IQKeyboardManager.shared.isEnabled = true
-        IQKeyboardManager.shared.keyboardDistance = Constants.Size.ContentSpaceHuge
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let icon = UIImageView(image: UIImage(symbol: .person2Wave2, font: Constants.Font.body(weight: .bold)))
-        icon.contentMode = .scaleAspectFit
-        navigationBlurView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.centerY.equalToSuperview()
-        }
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.pspNetworking()
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        navigationBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(icon)
-        }
-        
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         
         if pspConfig.enable, pspConfig.type == .local {
@@ -120,7 +73,7 @@ class PSPNetworkingView: BaseView {
                                                                                  heightDimension: .fractionalHeight(1)))
             let itemHeight: CGFloat
             if sectionIndex == 0 {
-                itemHeight = Constants.Size.ItemHeightMax
+                itemHeight = R.Size.ItemHeightLarge
             } else {
                 itemHeight = PSPNetworkingConfigCell.CellHeight(config: self.pspConfig)
             }
@@ -128,20 +81,19 @@ class PSPNetworkingView: BaseView {
             //group布局
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemHeight)), subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: Constants.Size.ContentSpaceMid,
+                                                            leading: R.Size.ContentSpaceMedium,
                                                             bottom: 0,
-                                                            trailing: Constants.Size.ContentSpaceMid)
+                                                            trailing: R.Size.ContentSpaceMedium)
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: R.Size.ContentSpaceSmall, trailing: 0)
             
             //header布局
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                                             heightDimension: .absolute(44)),
                                                                          elementKind: UICollectionView.elementKindSectionHeader,
                                                                          alignment: .top)
-            headerItem.pinToVisibleBounds = true
             section.boundarySupplementaryItems = [headerItem]
             
             if sectionIndex != 0 {
@@ -250,5 +202,9 @@ extension PSPNetworkingView: UICollectionViewDataSource {
 }
 
 extension PSPNetworkingView: UICollectionViewDelegate {
+    
+}
+
+extension PSPNetworkingView: ShowableView {
     
 }

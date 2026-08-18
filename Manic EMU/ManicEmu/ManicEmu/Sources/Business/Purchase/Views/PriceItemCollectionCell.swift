@@ -21,27 +21,27 @@ class PriceItemCollectionCell: UICollectionViewCell {
     
     private var promptContainer: UIView = {
         let view = UIView()
-        view.layerCornerRadius = Constants.Size.IconSizeMin.height/2
+        view.layerCornerRadius = R.Size.IconSizeMedium.height/2
         return view
     }()
     
     private var promptLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .center
-        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-        view.font = Constants.Font.caption(weight: .bold)
+        view.textColor = R.Color.LabelPrimary.forceStyle(.dark)
+        view.font = R.Font.Caption(emphasis: true)
         return view
     }()
     
     private var roundAndBorderView: RoundAndBorderView = {
-        let view = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMax, borderWidth: 2)
-        view.enableInteractive = true
-        view.delayInteractiveTouchEnd = true
+        let view = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusLarge, borderWidth: 2)
+        view.enablePressEffect = true
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isFocusable = true
         addSubview(roundAndBorderView)
         roundAndBorderView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -49,22 +49,22 @@ class PriceItemCollectionCell: UICollectionViewCell {
         
         roundAndBorderView.addSubview(infoLabel)
         infoLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
         }
         
         roundAndBorderView.addSubview(promptContainer)
         promptContainer.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.height.equalTo(Constants.Size.IconSizeMin.height)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
+            make.height.equalTo(R.Size.IconSizeMedium.height)
             make.width.greaterThanOrEqualTo(56)
-            make.leading.greaterThanOrEqualTo(infoLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.greaterThanOrEqualTo(infoLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
         }
         
         promptContainer.addSubview(promptLabel)
         promptLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
             make.top.bottom.equalToSuperview()
         }
     }
@@ -84,11 +84,11 @@ class PriceItemCollectionCell: UICollectionViewCell {
             self.product = product
             
             //字体颜色
-            let labelColor =  isSelected ? Constants.Color.LabelPrimary : Constants.Color.LabelSecondary
+            let labelColor =  isSelected ? R.Color.LabelPrimary : R.Color.LabelSecondary
             //小号字体
-            let smallFontAttributes: [NSAttributedString.Key : Any] = [.font: Constants.Font.caption(size: .l, weight: .semibold), .foregroundColor: labelColor]
+            let smallFontAttributes: [NSAttributedString.Key : Any] = [.font: R.Font.Caption(emphasis: true), .foregroundColor: labelColor]
             //大号字体
-            let bigFontAttributes: [NSAttributedString.Key : Any] = [.font: Constants.Font.title(size: .l, weight: .bold), .foregroundColor: labelColor]
+            let bigFontAttributes: [NSAttributedString.Key : Any] = [.font: R.Font.LargeTitle(emphasis: true), .foregroundColor: labelColor]
             //货币符号
             let currencySymbol = product.priceFormatStyle.locale.currencySymbol ?? product.priceFormatStyle.currencyCode
             //价格AttributedString
@@ -110,7 +110,7 @@ class PriceItemCollectionCell: UICollectionViewCell {
                 }
                 priceString.append(NSAttributedString(string: " " + R.string.localizable.purchasePricePerYear() + " (\(currencySymbol)\(String(format: "%.2f", (product.price/12 as NSDecimalNumber).doubleValue))\(R.string.localizable.purchasePricePerMonth()))", attributes: smallFontAttributes))
                 promptLabel.text = R.string.localizable.promptLabelForYear()
-                promptContainer.backgroundColor = Constants.Color.Main.lighten()
+                promptContainer.backgroundColor = R.Color.Main.lighten()
             case .monthly:
                 //按月订阅
                 description += R.string.localizable.monthlyDescription()
@@ -119,7 +119,7 @@ class PriceItemCollectionCell: UICollectionViewCell {
                 }
                 priceString.append(NSAttributedString(string: " " + R.string.localizable.purchasePricePerMonth(), attributes: smallFontAttributes))
                 promptLabel.text = R.string.localizable.promptLabelForMonth()
-                promptContainer.backgroundColor = Constants.Color.Green
+                promptContainer.backgroundColor = R.Color.Green
             case .forever:
                 //永久会员
                 description += R.string.localizable.foreverDescription()
@@ -128,7 +128,7 @@ class PriceItemCollectionCell: UICollectionViewCell {
                 newSmallFontAttributes[.strikethroughStyle] = NSNumber(value: NSUnderlineStyle.single.rawValue as Int)
                 priceString.append(NSAttributedString(string:"\(currencySymbol)" + "\(product.price*2)", attributes: newSmallFontAttributes))
                 promptLabel.text = R.string.localizable.promptLabelForForever()
-                promptContainer.backgroundColor = Constants.Color.Yellow
+                promptContainer.backgroundColor = R.Color.Yellow
             }
             
             //描述AttributedString
@@ -140,8 +140,8 @@ class PriceItemCollectionCell: UICollectionViewCell {
             }
             
             
-            roundAndBorderView.borderColor = isSelected ? Constants.Color.Main : Constants.Color.Border
-            roundAndBorderView.backgroundColor = isSelected ? Constants.Color.Main.withAlphaComponent(0.1) : Constants.Color.BackgroundPrimary
+            roundAndBorderView.borderColor = isSelected ? R.Color.Main : R.Color.Border
+            roundAndBorderView.backgroundColor = isSelected ? R.Color.Main.withAlphaComponent(0.1) : R.Color.BackgroundSecondary
         }
     }
 }

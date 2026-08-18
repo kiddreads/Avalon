@@ -30,11 +30,33 @@ class DisabledTapSwitch: UISwitch {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupOverlayView()
+        isFocusable = true
+        onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            if self.isEnabled {
+                self.setOn(!self.isOn, animated: true)
+                self.sendActions(for: .valueChanged)
+            } else {
+                self.disabledTapAction?()
+            }
+            return true
+        }
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupOverlayView()
+        isFocusable = true
+        onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            if self.isEnabled {
+                self.setOn(!self.isOn, animated: true)
+                self.sendActions(for: .valueChanged)
+            } else {
+                self.disabledTapAction?()
+            }
+            return true
+        }
     }
     
     private func setupOverlayView() {

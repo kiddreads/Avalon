@@ -9,23 +9,19 @@
 
 class ThemeColorCollectionViewCell: UICollectionViewCell {
     
-    class ColorView: UIView {
-        var contentMenuButton: ContextMenuButton = {
-            let view = ContextMenuButton()
-            return view
-        }()
-        
+    class ColorView: BaseView {
         var animatedGradientView: AnimatedGradientView = {
             let view = AnimatedGradientView(colors: [])
             view.layerCornerRadius = 48/2
+            view.frameLimit = 24
             return view
         }()
         
-        class SelectView: UIView {
+        class SelectView: BaseView {
             private let outerLayer = CAShapeLayer()
             private let innerLayer = CAShapeLayer()
-            private let outerColor = UIColor(.dm, light: Constants.Color.LabelPrimary.forceStyle(.light), dark: .white)
-            private let innerColor = Constants.Color.BackgroundPrimary
+            private let outerColor = UIColor(.dm, light: R.Color.LabelPrimary.forceStyle(.light), dark: .white)
+            private let innerColor = R.Color.BackgroundSecondary
             
             override init(frame: CGRect) {
                 super.init(frame: frame)
@@ -74,14 +70,7 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
-            enableInteractive = true
-            delayInteractiveTouchEnd = true
-            
-            addSubview(contentMenuButton)
-            contentMenuButton.snp.makeConstraints { make in
-                make.size.equalTo(1)
-                make.leading.bottom.equalToSuperview()
-            }
+            enablePressEffect = true
             
             addSubview(animatedGradientView)
             animatedGradientView.snp.makeConstraints { make in
@@ -101,15 +90,16 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
     
     private var roundContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMax
+        view.backgroundColor = R.Color.BackgroundSecondary
+        view.layerCornerRadius = R.Size.CornerRadiusLarge
         return view
     }()
     
-    private var addButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.title()), enableGlass: true)
-        view.backgroundColor = Constants.Color.Background
-        view.enableRoundCorner = true
+    private var addButton: ASButtonView = {
+        let view = ASButtonView(.iconOnly(icon: .symbol(.plus),
+                                          iconSize: .init(48),
+                                          background: R.Color.BackgroundTertiary,
+                                          insets: .init(inset: R.Size.ContentSpaceSmall)).enableGlass(true))
         return view
     }()
     
@@ -133,9 +123,9 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
         addButton.snp.makeConstraints { make in
             make.size.equalTo(48)
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
         }
-        addButton.addTapGesture { [weak self] gesture in
+        addButton.didTapButton = { [weak self] in
             guard let self = self else { return }
             //添加主题颜色
             self.showThemeColorEditor()
@@ -175,12 +165,12 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
                 make.centerY.equalToSuperview()
                 make.size.equalTo(48)
                 if index == 0 {
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
                 } else {
-                    make.leading.equalTo(scrollView.subviews[index-1].snp.trailing).offset(Constants.Size.ContentSpaceMid)
+                    make.leading.equalTo(scrollView.subviews[index-1].snp.trailing).offset(R.Size.ContentSpaceMedium)
                 }
                 if index == colors.count - 1 {
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
                 }
             }
             
@@ -217,22 +207,22 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
                         return
                     }
                     
-                    if index < self.scrollView.subviews.count, let view = self.scrollView.subviews[index] as? ColorView {
-                        view.contentMenuButton.menu = UIMenu(children: [
-                            UIAction(title: R.string.localizable.editTitle(), handler: { [weak self] _ in
-                                //编辑
-                                self?.showThemeColorEditor(themeColor: color)
-                                
-                            }),
-                            UIAction(title: R.string.localizable.removeTitle(), attributes: .destructive, handler: { [weak self] _ in
-                                //删除
-                                Theme.defalut.deleteThemeColor(color)
-                                self?.reloadColorViews()
-                            })
-                        ])
-                        view.contentMenuButton.triggerTapGesture()
-                    }
                     UIDevice.generateHaptic()
+                    ChevronSheetView.show(stringOptions: [
+                        R.string.localizable.editTitle(),
+                        R.string.localizable.removeTitle()
+                    ], completion: { [weak self] index in
+                        guard let self, let index else { return }
+                        if index == 0 {
+                            //edit
+                            self.showThemeColorEditor(themeColor: color)
+                        } else if index == 1 {
+                            //delete
+                            Theme.defalut.deleteThemeColor(color)
+                            self.reloadColorViews()
+                        }
+                    })
+                    
                 default:
                     break
                 }
@@ -241,9 +231,8 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
     }
     
     private func showThemeColorEditor(themeColor: ThemeColor? = nil) {
-        let vc = ColorPickerViewController(themeColor: themeColor) { [weak self] themeColor in
+        ColorPickerView.show(themeColor: themeColor, didSaveAction: { [weak self] themeColor in
             self?.updateThemeColor(themeColor)
-        }
-        topViewController()?.present(vc, animated: true)
+        })
     }
 }

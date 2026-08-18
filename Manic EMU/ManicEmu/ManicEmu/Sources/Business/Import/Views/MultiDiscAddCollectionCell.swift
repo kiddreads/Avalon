@@ -10,17 +10,17 @@ class MultiDiscAddCollectionCell: UICollectionViewCell {
     
     var titleLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.body(size: .l, weight: .semibold)
-        view.textColor = Constants.Color.LabelPrimary
+        view.font = R.Font.Body(emphasis: true)
+        view.textColor = R.Color.LabelPrimary
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
-        layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundPrimary
+        enablePressEffect = true
+        
+        layerCornerRadius = R.Size.CornerRadiusLarge
+        backgroundColor = R.Color.BackgroundSecondary
         
         let containerView = UIView()
         addSubview(containerView)
@@ -29,7 +29,7 @@ class MultiDiscAddCollectionCell: UICollectionViewCell {
         }
         
         let icon = IconView()
-        icon.image = UIImage(systemSymbol: .plusCircleFill).applySymbolConfig(size: 22, weight: .medium, color: Constants.Color.LabelPrimary)
+        icon.image = UIImage(systemSymbol: .plusCircleFill).applySymbolConfig(size: 22, weight: .medium, color: R.Color.LabelPrimary)
         containerView.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.size.equalTo(24)
@@ -38,7 +38,7 @@ class MultiDiscAddCollectionCell: UICollectionViewCell {
         
         containerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(icon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview()
         }

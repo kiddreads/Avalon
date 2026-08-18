@@ -12,7 +12,7 @@ import ProHUD
 extension SheetTarget {
     func pop(completon: (()->Void)? = nil) {
         self.pop()
-        self.onViewDidDisappear { _ in
+        self.onWindowHide { _ in
             completon?()
         }
     }
@@ -21,7 +21,7 @@ extension SheetTarget {
 extension AlertTarget {
     func pop(completon: (()->Void)? = nil) {
         self.pop()
-        self.onViewDidDisappear { _ in
+        self.onWindowHide { _ in
             completon?()
         }
     }

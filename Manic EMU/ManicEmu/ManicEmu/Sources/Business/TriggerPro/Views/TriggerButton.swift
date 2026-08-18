@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 
-class TriggerButton: UIView {
+class TriggerButton: BaseView {
     // MARK: - Properties
     var style: TriggerItem.Style = .classic {
         didSet {
@@ -85,7 +85,7 @@ class TriggerButton: UIView {
         super.init(frame: CGRect(origin: .zero, size: buttonSize))
         setupViews()
         if isEditMode {
-            enableInteractive = true
+            enablePressEffect = true
             isUserInteractionEnabled = false
         }
         reload()
@@ -150,7 +150,7 @@ class TriggerButton: UIView {
                 backgroundImageView.backgroundColor = .clear
             } else {
                 backgroundImageView.contentMode = .center
-                backgroundImageView.backgroundColor = Constants.Color.BackgroundPrimary
+                backgroundImageView.backgroundColor = R.Color.BackgroundTertiary
             }
             
             shadowLabel.isHidden = true

@@ -8,186 +8,222 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ProHUD
-import IQKeyboardManagerSwift
 
 struct LimitedTextInputView {
     enum LimitedType {
         case integer(min: Int, max: Int)
         case decimal(min: Double, max: Double)
-        case normal(textSize: Int)
+        case normal(textSize: Int, emptyEnable: Bool = false)
     }
     
-    static func show(title: String?, detail: String?, text: String?, limitedType: LimitedType, keyboadType: UIKeyboardType = .default, confirmAction: ((_ result: Any)->Void)? = nil) {
-        
-        Task { @MainActor in
-            IQKeyboardManager.shared.isEnabled = true
-            IQKeyboardManager.shared.keyboardDistance = 150
-        }
+    static func show(icon: ASIcon? = nil,
+                     title: String? = nil,
+                     detail: String? = nil,
+                     text: String? = nil,
+                     placeholder: String? = nil,
+                     limitedType: LimitedType,
+                     keyboadType: UIKeyboardType = .default,
+                     confirmAction: ((_ result: Any)->Void)? = nil,
+                     cancelAction: (()->Void)? = nil) {
         
         Alert { alert in
             alert.config.cardCornerRadius = 0
             alert.contentMaskView.alpha = 0
-            alert.config.backgroundViewMask { mask in
-                mask.backgroundColor = .clear
-            }
-            
-            let textfiledWidth = UIDevice.isPhone ? 300 : 380
 
             let containerView = RoundAndBorderView(roundCorner: .allCorners)
-            containerView.backgroundColor = Constants.Color.Background
+            containerView.backgroundColor = R.Color.BackgroundPrimary
+            
+            let backgroundView = ASSheetView.BackgroundView()
+            containerView.addSubview(backgroundView)
+            backgroundView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
             
             //标题
-            let titleLabel = UILabel()
-            titleLabel.textAlignment = .center
-            titleLabel.text = title
-            titleLabel.font = Constants.Font.title(size: .s)
-            titleLabel.textColor = Constants.Color.LabelPrimary
-            containerView.addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.leading.trailing.greaterThanOrEqualToSuperview().inset(Constants.Size.ContentSpaceMid)
+            var navigation = ASListPage.Navigation.defaultNavigation(title: title,
+                                                                     titleIcon: icon)
+            navigation.enableClose = false
+            let navigationView = ASNavigationView(navigation)
+            containerView.addSubview(navigationView)
+            navigationView.snp.makeConstraints { make in
+                make.leading.top.trailing.equalToSuperview()
+                make.height.equalTo(R.Size.NavigationHeight)
             }
             
-            //输入框
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
-            textFieldContainer.backgroundColor = Constants.Color.InputBackground
-            containerView.addSubview(textFieldContainer)
-            textFieldContainer.snp.makeConstraints { make in
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                make.width.equalTo(textfiledWidth)
+            var detailView: ASLabelView? = nil
+            if let detail {
+                let labelView = ASLabelView(text: .smallText(detail, numberOfLines: 0))
+                containerView.addSubview(labelView)
+                labelView.snp.makeConstraints { make in
+                    make.top.equalTo(navigationView.snp.bottom).offset(R.Size.ContentSpaceSmall)
+                    make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                }
+                detailView = labelView
             }
             
-            let textField = UITextField()
+            var input: ASInput = .large(text: text,
+                                        placeholder: placeholder,
+                                        icon: .symbolImage(R.image.renameRegular_iconSymbols()))
             switch limitedType {
             case .integer(_, _):
-                textField.keyboardType = .numberPad
+                input.keyboardType = .numberPad
             case .decimal(_, _):
-                textField.keyboardType = .decimalPad
-            case .normal(_):
+                input.keyboardType = .decimalPad
+            case .normal(_, _):
                 break
             }
             if keyboadType != .default {
-                textField.keyboardType = keyboadType
+                input.keyboardType = keyboadType
             }
-            textField.text = text
-            textField.tintColor = Constants.Color.Main
-            textField.textColor = Constants.Color.LabelPrimary
-            textField.font = Constants.Font.body()
-            textField.clearButtonMode = .whileEditing
-            textFieldContainer.addSubview(textField)
-            textField.snp.makeConstraints { make in
-                make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+            let inputView = ASListInputView(input)
+            containerView.addSubview(inputView)
+            inputView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                make.top.equalTo((detailView ?? navigationView).snp.bottom).offset(R.Size.ContentSpaceSmall)
+                make.height.equalTo(R.Size.ItemHeightMedium)
             }
-            textField.becomeFirstResponder()
-            textField.onChange { text in
-                Log.debug(text)
-            }
-            
-            let detailLabel = UILabel()
-            detailLabel.numberOfLines = 0
-            detailLabel.text = detail
-            detailLabel.font = Constants.Font.caption()
-            detailLabel.textColor = Constants.Color.LabelSecondary
-            containerView.addSubview(detailLabel)
-            detailLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(textFieldContainer.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+            DispatchQueue.main.asyncAfter(delay: 0.35) {
+                inputView.becomeFirstResponder()
             }
             
             let line = UIView()
-            line.backgroundColor = Constants.Color.Border
+            line.backgroundColor = R.Color.Border
             containerView.addSubview(line)
             line.snp.makeConstraints { make in
                 make.height.equalTo(1)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(detailLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                make.top.equalTo(inputView.snp.bottom).offset(R.Size.ContentSpaceMedium)
             }
             
             func closeKeyboard(input: Any? = nil) {
                 alert.pop()
-                Task { @MainActor in
-                    IQKeyboardManager.shared.isEnabled = false
-                }
                 if let input {
                     confirmAction?(input)
+                } else {
+                    cancelAction?()
                 }
             }
             
-            let okButton = UILabel()
-            okButton.isUserInteractionEnabled = true
-            okButton.enableInteractive = true
-            okButton.text = R.string.localizable.confirmTitle()
-            okButton.textAlignment = .center
-            okButton.font = Constants.Font.title(size: .s, weight: .regular)
-            okButton.textColor = Constants.Color.LabelPrimary
-            okButton.addTapGesture { gesture in
-                if let text = textField.text?.trimmed, !text.isEmpty {
+            //cancelButton
+            let cancelButton = ASButtonView(.quickButton(title: R.string.localizable.cancelTitle(),
+                                                         titleColor: R.Color.LabelSecondary,
+                                                         titleFont: R.Font.Headline(),
+                                                         titleAlignment: .center,
+                                                         background: .clear,
+                                                         sizeStyle: .fixHeight(R.Size.ButtonExtraLarge)))
+            cancelButton.didTapButton = {
+                closeKeyboard()
+            }
+            
+            //verticalLine
+            let verticalLine = UIView()
+            verticalLine.backgroundColor = R.Color.Border
+            
+            //confrim button
+            let button = ASButtonView(.quickButton(title: R.string.localizable.confirmTitle(),
+                                                   titleColor: R.Color.Main,
+                                                   titleFont: R.Font.Headline(emphasis: true),
+                                                   titleAlignment: .center,
+                                                   background: .clear,
+                                                   sizeStyle: .fixHeight(R.Size.ButtonExtraLarge)))
+            button.didTapButton = {
+                if let text = inputView.text?.trimmed {
+                    var emptyEnable = false
+                    if case .normal(_, let e) = limitedType {
+                        emptyEnable = e
+                    }
+                    
+                    if text.isEmpty && !emptyEnable {
+                        inputView.shake()
+                        return
+                    }
+                    
                     switch limitedType {
                     case .integer(let min, let max):
                         if let int = Int(text), int >= min, int <= max {
                             closeKeyboard(input: int)
                         } else {
-                            textFieldContainer.shake()
+                            inputView.shake()
                         }
                     case .decimal(let min, let max):
                         if let double = Double(text), double >= min, double <= max {
                             closeKeyboard(input: double)
                         } else {
-                            textFieldContainer.shake()
+                            inputView.shake()
                         }
-                    case .normal(let textSize):
+                    case .normal(let textSize, _):
                         if text.count <= textSize {
                             closeKeyboard(input: text)
                         } else {
-                            textFieldContainer.shake()
+                            inputView.shake()
                         }
                     }
                 } else {
-                    textFieldContainer.shake()
+                    inputView.shake()
+                }
+            }
+
+            containerView.addSubviews([cancelButton, verticalLine, button])
+            
+            cancelButton.snp.makeConstraints { make in
+                make.top.equalTo(line.snp.bottom)
+                make.leading.equalToSuperview()
+                make.trailing.equalTo(verticalLine.snp.leading)
+                make.bottom.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+                make.height.equalTo(R.Size.ButtonExtraLarge)
+            }
+            
+            button.snp.makeConstraints { make in
+                make.trailing.equalToSuperview()
+                make.top.equalTo(line.snp.bottom)
+                make.leading.equalTo(verticalLine.snp.trailing)
+                make.height.equalTo(cancelButton)
+            }
+            
+            verticalLine.snp.makeConstraints { make in
+                make.centerY.equalTo(button)
+                make.size.equalTo(CGSize(width: R.Size.Border, height: R.Size.ItemHeightMicro))
+                make.centerX.equalToSuperview()
+            }
+            
+            alert.config.backgroundViewMask { mask in
+                mask.backgroundColor = .black.withAlphaComponent(0.5)
+            }
+            
+            alert.onTappedBackground { alert in
+                if inputView.isFirstResponder {
+                    inputView.resignFirstResponder()
+                } else {
+                    closeKeyboard()
                 }
             }
             
-            let cancelButton = UILabel()
-            cancelButton.isUserInteractionEnabled = true
-            cancelButton.enableInteractive = true
-            cancelButton.text = R.string.localizable.cancelTitle()
-            cancelButton.textAlignment = .center
-            cancelButton.font = Constants.Font.title(size: .s, weight: .regular)
-            cancelButton.textColor = Constants.Color.LabelSecondary
-            cancelButton.addTapGesture { gesture in
-                closeKeyboard()
+            alert.onViewDidAppear { alert in
+                alert.pushOverlayFocusContext { context in
+                    context.cancelHandler = { [weak inputView] in
+                        if inputView?.isFirstResponder == true {
+                            inputView?.resignFirstResponder()
+                            return true
+                        }
+                        return false
+                    }
+                }
             }
-            
-            //有取消 和 确定
-            containerView.addSubview(cancelButton)
-            containerView.addSubview(okButton)
-
-            let verticalLine = UIView()
-            verticalLine.backgroundColor = Constants.Color.Border
-            containerView.addSubview(verticalLine)
-            verticalLine.snp.makeConstraints { make in
-                make.size.equalTo(CGSize(width: 1, height: 26))
-                make.centerX.equalToSuperview()
-                make.centerY.equalTo(cancelButton)
-            }
-
-            cancelButton.snp.makeConstraints { make in
-                make.top.equalTo(line.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-                make.leading.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
-                make.trailing.equalTo(verticalLine.snp.leading)
-            }
-            okButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                make.leading.equalTo(verticalLine.snp.trailing)
-                make.centerY.equalTo(cancelButton)
+            alert.onViewDidDisappear { alert in
+                alert.popFocusContext()
             }
             
             alert.set(customView: containerView).snp.makeConstraints { make in
+                var width = 0.0
+                if UIDevice.isPad {
+                    width = 375
+                } else {
+                    width = R.Size.SheetWindowMinSize.width
+                    if UIDevice.isPortrait {
+                        width -= R.Size.ContentSpaceHuge*2
+                    }
+                }
+                make.width.equalTo(width)
                 make.edges.equalToSuperview()
             }
         }

@@ -10,36 +10,35 @@
 class PurchaseButtonReusableView: UICollectionReusableView {
     var descriptionLabel: UILabel = {
         let view = UILabel()
-        view.textColor = Constants.Color.LabelSecondary
-        view.font = Constants.Font.caption(size: .l, weight: .semibold)
+        view.textColor = R.Color.LabelSecondary
+        view.font = R.Font.Caption(emphasis: true)
         return view
     }()
     
     var buttonContainer: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
-        view.enableInteractive = false
-        view.delayInteractiveTouchEnd = true
-        view.layerCornerRadius = Constants.Size.ItemHeightMid/2
+        view.enablePressEffect = false
+        view.layerCornerRadius = R.Size.ItemHeightMedium/2
         return view
     }()
     
     private var buttonLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .center
-        view.font = Constants.Font.body(size: .l, weight: .medium)
+        view.font = R.Font.Body(emphasis: true)
         return view
     }()
     
     private var termsOfServiceLabel: UILabel = {
         let view = UILabel()
         view.text = R.string.localizable.termOfServiceTitle()
-        view.textColor = Constants.Color.LabelSecondary
-        view.font = Constants.Font.caption(weight: .regular)
+        view.textColor = R.Color.LabelSecondary
+        view.font = R.Font.Caption()
         view.isUserInteractionEnabled = true
         view.adjustsFontSizeToFitWidth = true
         view.addTapGesture { gesture in
-            topViewController()?.present(WebViewController(url: Constants.URLs.PaymentTerms), animated: true)
+            ASWebView.show(url: R.URLs.PaymentTerms)
         }
         return view
     }()
@@ -47,12 +46,12 @@ class PurchaseButtonReusableView: UICollectionReusableView {
     private var privacyLabel: UILabel = {
         let view = UILabel()
         view.text = R.string.localizable.privacyPolicyTitle()
-        view.textColor = Constants.Color.LabelSecondary
-        view.font = Constants.Font.caption(weight: .regular)
+        view.textColor = R.Color.LabelSecondary
+        view.font = R.Font.Caption()
         view.isUserInteractionEnabled = true
         view.adjustsFontSizeToFitWidth = true
         view.addTapGesture { gesture in
-            topViewController()?.present(WebViewController(url: Constants.URLs.PrivacyPolicy), animated: true)
+            ASWebView.show(url: R.URLs.PrivacyPolicy)
         }
         return view
     }()
@@ -60,12 +59,12 @@ class PurchaseButtonReusableView: UICollectionReusableView {
     private var userProtocolLabel: UILabel = {
         let view = UILabel()
         view.text = R.string.localizable.userAgreementTitle()
-        view.textColor = Constants.Color.LabelSecondary
-        view.font = Constants.Font.caption(weight: .regular)
+        view.textColor = R.Color.LabelSecondary
+        view.font = R.Font.Caption()
         view.isUserInteractionEnabled = true
         view.adjustsFontSizeToFitWidth = true
         view.addTapGesture { gesture in
-            topViewController()?.present(WebViewController(url: Constants.URLs.TermsOfUse), animated: true)
+            ASWebView.show(url: R.URLs.TermsOfUse)
         }
         return view
     }()
@@ -76,14 +75,14 @@ class PurchaseButtonReusableView: UICollectionReusableView {
         addSubview(descriptionLabel)
         descriptionLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
+            make.top.equalToSuperview().offset(R.Size.ContentSpaceHuge)
         }
         
         addSubview(buttonContainer)
         buttonContainer.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
+            make.height.equalTo(R.Size.ItemHeightMedium)
         }
         
         buttonContainer.addSubview(buttonLabel)
@@ -94,24 +93,24 @@ class PurchaseButtonReusableView: UICollectionReusableView {
         addSubview(privacyLabel)
         privacyLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(buttonContainer.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+            make.top.equalTo(buttonContainer.snp.bottom).offset(R.Size.ContentSpaceSmall)
         }
         
         let leftLine = UIView()
-        leftLine.backgroundColor = Constants.Color.LabelSecondary
+        leftLine.backgroundColor = R.Color.LabelSecondary
         addSubview(leftLine)
         leftLine.snp.makeConstraints { make in
-            make.trailing.equalTo(privacyLabel.snp.leading).offset(-Constants.Size.ContentSpaceUltraTiny)
+            make.trailing.equalTo(privacyLabel.snp.leading).offset(-R.Size.ContentSpaceTiny)
             make.centerY.equalTo(privacyLabel)
             make.height.equalTo(privacyLabel).inset(2)
             make.width.equalTo(1)
         }
         
         let rightLine = UIView()
-        rightLine.backgroundColor = Constants.Color.LabelSecondary
+        rightLine.backgroundColor = R.Color.LabelSecondary
         addSubview(rightLine)
         rightLine.snp.makeConstraints { make in
-            make.leading.equalTo(privacyLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(privacyLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.centerY.equalTo(privacyLabel)
             make.height.equalTo(privacyLabel).inset(2)
             make.width.equalTo(1)
@@ -120,17 +119,17 @@ class PurchaseButtonReusableView: UICollectionReusableView {
         //左边 服务条款
         addSubview(termsOfServiceLabel)
         termsOfServiceLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(leftLine.snp.leading).offset(-Constants.Size.ContentSpaceUltraTiny)
+            make.trailing.equalTo(leftLine.snp.leading).offset(-R.Size.ContentSpaceTiny)
             make.centerY.equalTo(leftLine)
-            make.leading.greaterThanOrEqualTo(Constants.Size.ContentSpaceHuge)
+            make.leading.greaterThanOrEqualTo(R.Size.ContentSpaceHuge)
         }
         
         //右边 用户协议
         addSubview(userProtocolLabel)
         userProtocolLabel.snp.makeConstraints { make in
-            make.leading.equalTo(rightLine.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(rightLine.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.centerY.equalTo(rightLine)
-            make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceHuge)
+            make.trailing.lessThanOrEqualToSuperview().offset(-R.Size.ContentSpaceHuge)
         }
     }
     
@@ -140,11 +139,11 @@ class PurchaseButtonReusableView: UICollectionReusableView {
     
     func setData(title: String, descripton: String, enable: Bool) {
         descriptionLabel.text = descripton
-        buttonContainer.backgroundColor = enable ? Constants.Color.Main : Constants.Color.Main.darken(by: UIDevice.isDarkMode ? 0.7 : 0.35)
+        buttonContainer.backgroundColor = enable ? R.Color.Main : R.Color.Main.darken(by: UIDevice.isDarkMode ? 0.7 : 0.35)
         buttonContainer.isUserInteractionEnabled = enable
-        buttonContainer.enableInteractive = false
+        buttonContainer.enablePressEffect = false
         buttonLabel.text = title
-        buttonLabel.textColor = enable ? Constants.Color.LabelPrimary.forceStyle(.dark) : Constants.Color.LabelPrimary.forceStyle(.dark).darken(by: UIDevice.isDarkMode ? 0.7 : 0.35)
+        buttonLabel.textColor = enable ? R.Color.LabelPrimary.forceStyle(.dark) : R.Color.LabelPrimary.forceStyle(.dark).darken(by: UIDevice.isDarkMode ? 0.7 : 0.35)
     }
     
     

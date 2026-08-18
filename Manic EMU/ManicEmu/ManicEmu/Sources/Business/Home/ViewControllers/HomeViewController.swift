@@ -11,32 +11,16 @@ import UIKit
 import SideMenu
 import DNSPageView
 import ColorfulX
-
 import UniformTypeIdentifiers
 import BlurUIKit
-import KeyboardKit
 
 class HomeViewController: BaseViewController {
-    private lazy var gamesViewController: GamesViewController = {
-        let controller = GamesViewController()
-        controller.setHomeTabBar = { [weak self] show in
-            UIView.springAnimate(enable: show) { 
-                self?.homeTabBar.alpha = show ? 1 : 0
-                self?.homeTabBarBlurView.isHidden = !show
-            }
-        }
-        return controller
-    }()
     
-    private var importViewController: ImportViewController = {
-        let controller = ImportViewController()
-        return controller
-    }()
+    private let gamesViewController = GamesViewController()
     
-    private var settingsViewController: SettingsViewController = {
-        let controller = SettingsViewController()
-        return controller
-    }()
+    private let importViewController = ImportViewController()
+    
+    private let settingsViewController = SettingsViewController()
     
     private lazy var childControllers: [BaseViewController] = {
         if Locale.isRTLLanguage {
@@ -49,13 +33,15 @@ class HomeViewController: BaseViewController {
     
     private lazy var pageViewManager: PageViewManager = {
         let style = PageStyle()
-        style.contentViewBackgroundColor = UIDevice.isPad ? UIColor(.dm, light: .white, dark: .black) : Constants.Color.Background
+        style.contentViewBackgroundColor = UIDevice.isPad ? UIColor(.dm, light: .white, dark: .black) : .clear
         let manager = PageViewManager(style: style, titles: HomeTabBar.BarSelection.allCases.map { String($0.rawValue) }, childViewControllers: childControllers)
-        manager.contentView.getContentEdgeInsets = {
-            if UIDevice.isPhone, UIDevice.isLandscape {
-                return .init(top: 0, left: Constants.Size.SafeAera.left, bottom: 0, right: Constants.Size.SafeAera.right)
-            } else {
-                return .zero
+        if UIDevice.isPhone {
+            manager.contentView.backgroundColor = R.Color.BackgroundPrimary
+            let backgroundMask = PageBackgroundMaskView()
+            manager.contentView.insertSubview(backgroundMask, at: 0)
+            backgroundMask.snp.makeConstraints { make in
+                make.leading.top.trailing.equalToSuperview()
+                make.height.equalTo(R.Size.PageBackgroundMaskHeight)
             }
         }
         childControllers.forEach {
@@ -67,6 +53,7 @@ class HomeViewController: BaseViewController {
     
     lazy var homeTabBar: HomeTabBar = {
         let view = HomeTabBar()
+        view.isFocusable = false
         view.selectionChange = { [weak self] selection in
             var selection = selection
             if Locale.isRTLLanguage {
@@ -83,18 +70,20 @@ class HomeViewController: BaseViewController {
                 if UIDevice.isPhone, UIDevice.isLandscape {
                     self?.gamesViewController.view.masksToBounds = false
                 }
-                self?.gamesViewController.becomeFirstResponder()
+                
             case .imports:
                 Log.debug("切换到导入")
                 if UIDevice.isPhone, UIDevice.isLandscape {
                     self?.gamesViewController.view.masksToBounds = true
                 }
-                self?.importViewController.becomeFirstResponder()
+                
             case .settings:
                 Log.debug("切换到设置")
-                self?.settingsViewController.becomeFirstResponder()
             }
+            self?.updateLandscapeBackgroundVisible()
+            self?.activateCurrentTabFocusContext()
         }
+        view.isHidden = UIDevice.isPhone && UIDevice.isLandscape
         return view
     }()
     
@@ -103,11 +92,25 @@ class HomeViewController: BaseViewController {
         view.direction = .up
         view.maximumBlurRadius = 1
         view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.05, darkModeAlpha: 0.05)
-        view.dimmingTintColor = Constants.Color.Background
+        view.dimmingTintColor = R.Color.BackgroundPrimary
+        view.isHidden = UIDevice.isLandscape
+        return view
+    }()
+    
+    ///横屏动态背景 所有tab横屏时可见 层级高于BaseViewController的PageBackgroundMaskView
+    private lazy var landscapeBackgroundView: LandscapeBackgroundView = {
+        let view = LandscapeBackgroundView()
+        view.isHidden = true
+        view.pauseRendering()
         return view
     }()
     
     private var homeSelectionChangeNotification: Any? = nil
+    
+    private var landscapeBackgroundNotification: Any? = nil
+    
+    /// D-pad ran off a tab edge; the following selection change should restore focus in the new tab.
+    private var shouldHandoffTabFocus = false
     
     private var currentChildViewController: BaseViewController {
         switch homeTabBar.currentSelection {
@@ -124,6 +127,9 @@ class HomeViewController: BaseViewController {
         if let homeSelectionChangeNotification = homeSelectionChangeNotification {
             NotificationCenter.default.removeObserver(homeSelectionChangeNotification)
         }
+        if let landscapeBackgroundNotification = landscapeBackgroundNotification {
+            NotificationCenter.default.removeObserver(landscapeBackgroundNotification)
+        }
     }
     
     override func viewDidLoad() {
@@ -132,7 +138,17 @@ class HomeViewController: BaseViewController {
         
         self.setupViews()
         
-        homeSelectionChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.HomeSelectionChange, object: nil, queue: .main) { [weak self] notification in
+        //GameListLandscapeView上报的背景变更 只有横屏可见时才实时应用 否则先记录待横屏时应用
+        landscapeBackgroundNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.LandscapeBackgroundChange, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let background = notification.object as? LandscapeBackgroundView.Background {
+                self.landscapeBackgroundView.setBackground(background)
+            }
+        }
+        
+        updateLandscapeBackgroundVisible()
+        
+        homeSelectionChangeNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.HomeSelectionChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             if let selection = notification.object as? HomeTabBar.BarSelection {
                 if self.presentedViewController == nil {
@@ -144,9 +160,22 @@ class HomeViewController: BaseViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        landscapeBackgroundView.setHomeVisible(true)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.becomeFirstResponder()
+        activateCurrentTabFocusContext()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if currentChildViewController.hasFocusContext {
+            currentChildViewController.popFocusContext()
+        }
+        landscapeBackgroundView.setHomeVisible(false)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -161,37 +190,39 @@ class HomeViewController: BaseViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        if UIDevice.isPhone {
-            coordinator.animate(alongsideTransition: nil) { [weak self] _ in
-                self?.pageViewManager.contentView.updateContentEdgeInsets()
+        NotificationCenter.default.post(name: R.NotificationName.ViewWillTransition, object: nil)
+        homeTabBarBlurView.isHidden = UIDevice.isLandscape
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self else { return }
+            if UIDevice.isPhone {
+                if let pageBackgroundMaskView = self.pageViewManager.contentView.subviews.first(where: { $0.isKind(of: PageBackgroundMaskView.self) }) {
+                    pageBackgroundMaskView.snp.updateConstraints { make in
+                        make.height.equalTo(R.Size.PageBackgroundMaskHeight)
+                    }
+                }
             }
-        }
+            self.updateLandscapeBackgroundVisible()
+            NotificationCenter.default.post(name: R.NotificationName.ViewAlongsideTransition, object: nil)
+            self.homeTabBar.isHidden = UIDevice.isPhone && UIDevice.isLandscape
+        }, completion: { _ in
+            NotificationCenter.default.post(name: R.NotificationName.ViewDidTransition, object: nil)
+        })
     }
     
-    @discardableResult
-    override func becomeFirstResponder() -> Bool {
-        currentChildViewController.becomeFirstResponder()
-    }
-    
-    @discardableResult
-    override func resignFirstResponder() -> Bool {
-        currentChildViewController.resignFirstResponder()
+    override func handleScreenPanGesture(edges: UIRectEdge, gesture: UIScreenEdgePanGestureRecognizer) {
+        childControllers[self.pageViewManager.currentIndex].handleScreenPanGesture(edges: edges, gesture: gesture)
     }
     
     private func setupViews() {
-        view.addScreenEdgePanGesture(edges: .left, handler: { [weak self] gesture in
-            if gesture.state == .began {
-                guard let self = self else { return }
-                self.childControllers[self.pageViewManager.currentIndex].handleScreenPanGesture(edges: .left)
-            }
-        }).delegate = self
-        
-        view.addScreenEdgePanGesture(edges: .right, handler: { [weak self] gesture in
-            if gesture.state == .began {
-                guard let self = self else { return }
-                self.childControllers[self.pageViewManager.currentIndex].handleScreenPanGesture(edges: .right)
-            }
-        }).delegate = self
+        //横屏动态背景 插在自身PageBackgroundMaskView之上 分页内容之下
+        if let backgroundMaskView {
+            view.insertSubview(landscapeBackgroundView, aboveSubview: backgroundMaskView)
+        } else {
+            view.insertSubview(landscapeBackgroundView, at: 0)
+        }
+        landscapeBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         view.addSubview(pageViewManager.contentView)
         pageViewManager.contentView.delegate = self
@@ -208,15 +239,111 @@ class HomeViewController: BaseViewController {
         view.addSubview(homeTabBar)
         homeTabBarBlurView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(homeTabBar).offset(-20)
+            make.top.equalTo(homeTabBar).offset(-R.Size.ContentSpaceLarge)
         }
         
         homeTabBar.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.HomeTabBarSize)
+            make.size.equalTo(R.Size.HomeTabBarSize)
             make.centerX.equalTo(self.view)
-            let safeAeraBottom = Constants.Size.SafeAera.bottom
-            make.bottom.equalTo(safeAeraBottom > 0 ? -safeAeraBottom: -Constants.Size.ContentSpaceMax)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    ///根据横竖屏更新动态背景显隐 横屏时透明化分页容器与子页面使背景透出
+    private func updateLandscapeBackgroundVisible() {
+        let landscape = UIDevice.isLandscape
+        if landscape {
+            if UIDevice.isPhone {
+                if landscapeBackgroundView.isHidden {
+                    landscapeBackgroundView.isHidden = false
+                }
+                
+                if getSelection() != .games, !landscapeBackgroundView.isShaderMode {
+                    landscapeBackgroundView.setBackground(LandscapeBackgroundView.Background.shader(reload: false), animated: false)
+                }
+                
+                landscapeBackgroundView.resumeRendering()
+            } else if UIDevice.isPad {
+                if getSelection() == .games, landscapeBackgroundView.isHidden {
+                    landscapeBackgroundView.isHidden = false
+                    landscapeBackgroundView.resumeRendering()
+                } else if getSelection() != .games, !landscapeBackgroundView.isHidden {
+                    landscapeBackgroundView.isHidden = true
+                    landscapeBackgroundView.pauseRendering()
+                }
+            }
+        } else {
+            landscapeBackgroundView.isHidden = true
+            landscapeBackgroundView.pauseRendering()
+        }
+        
+        //横屏时分页容器与已加载的子页面透明化 并隐藏各自的PageBackgroundMaskView 使动态背景透出
+        if UIDevice.isPad {
+            pageViewManager.contentView.collectionView.backgroundColor = landscape ? .clear : UIColor(.dm, light: .white, dark: .black)
+        } else {
+            pageViewManager.contentView.backgroundColor = landscape ? .clear : R.Color.BackgroundPrimary
+            if let pageMaskView = pageViewManager.contentView.subviews.first(where: { $0.isKind(of: PageBackgroundMaskView.self) }) {
+                pageMaskView.isHidden = landscape
+            }
+        }
+        childControllers.filter { $0.isViewLoaded }.forEach {
+            if UIDevice.isPad {
+                if $0 is GamesViewController {
+                    $0.view.backgroundColor = landscape ? .clear : R.Color.BackgroundPrimary
+                }
+            } else {
+                $0.view.backgroundColor = landscape ? .clear : R.Color.BackgroundPrimary
+                $0.backgroundMaskView?.isHidden = landscape ? true : !$0.enableBackgroundMask
+            }
+        }
+    }
+    
+    // MARK: - Tab FocusKit
+    
+    /// Make the selected child VC the focus root so search stays inside that tab.
+    private func activateCurrentTabFocusContext() {
+        let viewController = currentChildViewController
+        let handoff = shouldHandoffTabFocus
+        shouldHandoffTabFocus = false
+        viewController.activateFocusRoot { [weak self] context in
+            guard let self else { return }
+            context.addCommands([
+                FocusCommand(key: FocusKey("control+1"), title: R.string.localizable.tabbarTitleGames(), action: { [weak self] in
+                    self?.homeTabBar.currentSelection = .games
+                }),
+                FocusCommand(key: FocusKey("control+2"), title: R.string.localizable.tabbarTitleImport(), action: { [weak self] in
+                    self?.homeTabBar.currentSelection = .imports
+                }),
+                FocusCommand(key: FocusKey("control+3"), title: R.string.localizable.tabbarTitleSettings(), action: { [weak self] in
+                    self?.homeTabBar.currentSelection = .settings
+                })
+            ])
+            context.onFocusChange = { [weak self] focusView, attemptedDirection in
+                guard let self, focusView == nil, let attemptedDirection else { return }
+                self.handleTabFocusExit(attemptedDirection)
+            }
+        }
+        if handoff, FocusSystem.shared.hasExternalInput {
+            let context = viewController.focusContext
+            DispatchQueue.main.async {
+                guard FocusSystem.shared.currentContext === context else { return }
+                FocusSystem.shared.updateFocusIfNeeded()
+            }
+        }
+    }
+    
+    /// Horizontal search found no target in this tab: move to the adjacent sibling tab.
+    private func handleTabFocusExit(_ direction: FocusDirection) {
+        guard direction.isHorizontal else { return }
+        var offset = direction == .right ? 1 : -1
+        if Locale.isRTLLanguage {
+            offset = -offset
+        }
+        guard let newSelection = HomeTabBar.BarSelection(rawValue: homeTabBar.currentSelection.rawValue + offset) else {
+            return
+        }
+        shouldHandoffTabFocus = true
+        homeTabBar.currentSelection = newSelection
     }
 }
 
@@ -234,51 +361,36 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 
 extension HomeViewController: PageContentViewDelegate {
     func contentView(_ contentView: DNSPageView.PageContentView, didEndScrollAt index: Int) {
-        var index = index
-        if Locale.isRTLLanguage {
-            if index == HomeTabBar.BarSelection.games.rawValue {
-                index = HomeTabBar.BarSelection.settings.rawValue
-            } else if index == HomeTabBar.BarSelection.settings.rawValue {
-                index = HomeTabBar.BarSelection.games.rawValue
-            }
-        }
-        if let selection = HomeTabBar.BarSelection(rawValue: index) {
+        if let selection = getSelection(for: index) {
             homeTabBar.currentSelection = selection
         }
     }
     
     func contentView(_ contentView: DNSPageView.PageContentView, scrollingWith sourceIndex: Int, targetIndex: Int, progress: CGFloat) {
-        
-    }
-}
-
-extension HomeViewController: UIControllerPressable {
-    override var keyCommands: [UIKeyCommand]? {
-        var commands = super.keyCommands ?? []
-        commands.append(UIKeyCommand(input: "1", modifierFlags: .control, action: #selector(didHomeViewKeyboardPress)))
-        commands.append(UIKeyCommand(input: "2", modifierFlags: .control, action: #selector(didHomeViewKeyboardPress)))
-        commands.append(UIKeyCommand(input: "3", modifierFlags: .control, action: #selector(didHomeViewKeyboardPress)))
-        return commands
-    }
-    
-    func didControllerPress(key: KeyboardKit.UIControllerKey) {
-        if key == .l1 {
-            homeTabBar.currentSelection = homeTabBar.currentSelection.previous()
-        } else if key == .r1 {
-            homeTabBar.currentSelection = homeTabBar.currentSelection.next()
-        }
-    }
-    
-    @objc func didHomeViewKeyboardPress(_ sender: UIKeyCommand) {
-        if let inputString = sender.input, sender.modifierFlags == .control {
-            if inputString == "1" {
-                homeTabBar.currentSelection = .games
-            } else if inputString == "2" {
-                homeTabBar.currentSelection = .imports
-            } else if inputString == "3" {
-                homeTabBar.currentSelection = .settings
+        guard UIDevice.isPad else { return }
+        if let sourceSelection = getSelection(for: sourceIndex), let targetSelection = getSelection(for: targetIndex) {
+            if sourceSelection == .imports,
+               targetSelection == .games,
+               landscapeBackgroundView.isHidden {
+                landscapeBackgroundView.isHidden = false
+                landscapeBackgroundView.resumeRendering()
             }
         }
     }
     
+    private func getSelection(for index: Int? = nil) -> HomeTabBar.BarSelection? {
+        if let index {
+            var realIndex = index
+            if Locale.isRTLLanguage {
+                if index == HomeTabBar.BarSelection.games.rawValue {
+                    realIndex = HomeTabBar.BarSelection.settings.rawValue
+                } else if index == HomeTabBar.BarSelection.settings.rawValue {
+                    realIndex = HomeTabBar.BarSelection.games.rawValue
+                }
+            }
+            return HomeTabBar.BarSelection(rawValue: realIndex)
+        } else {
+            return homeTabBar.currentSelection
+        }
+    }
 }

@@ -44,7 +44,7 @@ enum FeaturesType: Int, CaseIterable {
     }
 }
 
-class FeaturesView: UIView {
+class FeaturesView: BaseView {
     private lazy var banner: JXBanner = {
         let banner = JXBanner()
         banner.backgroundColor = UIColor.black
@@ -56,13 +56,8 @@ class FeaturesView: UIView {
     
     var featuresType: FeaturesType? = nil
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
         addSubview(banner)
         banner.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -113,16 +108,16 @@ extension FeaturesView: JXBannerDataSource {
         let pageControl = JXPageControlJump()
         pageControl.contentMode = .center
         pageControl.isAnimation = true
-        pageControl.activeColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-        pageControl.inactiveColor = Constants.Color.LabelPrimary.forceStyle(.dark).withAlphaComponent(0.15)
+        pageControl.activeColor = R.Color.LabelPrimary.forceStyle(.dark)
+        pageControl.inactiveColor = R.Color.LabelPrimary.forceStyle(.dark).withAlphaComponent(0.15)
         pageControl.indicatorSize = .init(6)
-        pageControl.columnSpacing = Constants.Size.ContentSpaceUltraTiny
+        pageControl.columnSpacing = R.Size.ContentSpaceTiny
         pageControl.contentAlignment = JXPageControlAlignment(.center, .bottom)
         builder.pageControl = pageControl
         builder.layout = {
             pageControl.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+                make.bottom.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
                 make.height.equalTo(6)
             }
         }

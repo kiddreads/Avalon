@@ -10,9 +10,13 @@
 class ImportFooterCollectionReusableView: UICollectionReusableView {
     var channelButton: UIView = {
         let view = UIView()
-        view.enableInteractive = true
-        view.delayInteractiveTouchEnd = true
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        if #available(iOS 26.0, tvOS 26.0, *) {
+            view.makeGlass()
+            view.isFocusable = true
+        } else {
+            view.enablePressEffect = true
+            view.backgroundColor = R.Color.BackgroundSecondary
+        }
         view.layerCornerRadius = 15
         return view
     }()
@@ -20,71 +24,73 @@ class ImportFooterCollectionReusableView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let containerView = UIView()
+        let containerView = RoundAndBorderView(roundCorner: .allCorners,
+                                               radius: R.Size.CornerRadiusMedium,
+                                               dashPattern: [8, 4])
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-            make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)
+            make.height.equalTo(R.Size.ItemHeightLarge)
+            make.leading.trailing.equalToSuperview()
         }
         
-        let tipsIcon = UIImageView(image: UIImage(symbol: .lightbulb, size: 11, weight: .medium))
-        tipsIcon.contentMode = .center
-        tipsIcon.layerCornerRadius = Constants.Size.IconSizeMin.height/2
-        tipsIcon.backgroundColor = UIColor(hexString: "#FFC546")
+        var button = ASButton.iconOnly(icon: .symbol(.handDrawFill, colors: [R.Color.Yellow]),
+                                       iconSize: CGSize(R.Size.ButtonExtraExtraSmall),
+                                       background: R.Color.Yellow.withAlphaComponent(0.1),
+                                       insets: .init(inset: R.Size.ContentSpaceMicro))
+        var attributes = button.allAttributes[.normal]
+        attributes?.border = ASBorderStyle()
+        button = button.setAttributes(attributes, state: .normal)
+        button.cornerStyle = .radius(R.Size.CornerRadiusMicro)
+        let tipsIcon = ASButtonView(button)
         containerView.addSubview(tipsIcon)
         tipsIcon.snp.makeConstraints { make in
-            make.leading.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall)
+            make.centerY.equalToSuperview()
         }
         
         let descLabel = UILabel()
         descLabel.numberOfLines = 0
-        var matt = NSMutableAttributedString(string: "Drag & Drop", attributes: [.font: Constants.Font.title(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
-        matt.append(NSAttributedString(string: "\n" + R.string.localizable.importDragAndDropTips(), attributes: [.font: Constants.Font.body(), .foregroundColor: Constants.Color.LabelSecondary]))
+        var matt = NSMutableAttributedString(string: "Drag & Drop", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+        matt.append(NSAttributedString(string: "\n" + R.string.localizable.importDragAndDropTips(), attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+        style.lineSpacing = R.Size.ContentSpaceTiny/2
         matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
         descLabel.attributedText = matt
         
         containerView.addSubview(descLabel)
         descLabel.snp.makeConstraints { make in
             make.centerY.equalTo(tipsIcon)
-            make.leading.equalTo(tipsIcon.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(tipsIcon.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            make.trailing.equalToSuperview().inset(R.Size.ContentSpaceSmall)
         }
         
         let seperator = SparkleSeperatorView()
         addSubview(seperator)
         seperator.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(containerView).inset(Constants.Size.ContentSpaceMax)
+            make.leading.trailing.equalTo(containerView).inset(R.Size.ContentSpaceLarge)
             make.height.equalTo(16)
-            make.top.lessThanOrEqualTo(containerView.snp.bottom).offset(40)
+            make.top.equalTo(containerView.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         addSubview(channelButton)
         channelButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.height.equalTo(30)
-            make.top.lessThanOrEqualTo(seperator.snp.bottom).offset(40)
+            make.height.equalTo(R.Size.ItemHeightMicro)
             make.bottom.equalToSuperview()
-            make.leading.greaterThanOrEqualToSuperview()
-            make.trailing.lessThanOrEqualToSuperview()
         }
         let channelLinkLabel = UILabel()
-        channelLinkLabel.isUserInteractionEnabled = true
         channelLinkLabel.textAlignment = .center
         channelLinkLabel.adjustsFontSizeToFitWidth = true
         channelButton.addSubview(channelLinkLabel)
         channelLinkLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
         }
         let channelName = Locale.prefersCN ? R.string.localizable.qqChannelName() : "Discord"
-        let matt2 = NSMutableAttributedString(string: R.string.localizable.importChannelTips(" \(channelName) "), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
-        channelLinkLabel.attributedText = matt2.applying(attributes: [.foregroundColor: Constants.Color.Main], toOccurrencesOf: channelName)
+        let matt2 = NSMutableAttributedString(string: R.string.localizable.importChannelTips(" \(channelName) "), attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelPrimary])
+        channelLinkLabel.attributedText = matt2.applying(attributes: [.foregroundColor: R.Color.Purple], toOccurrencesOf: channelName)
     }
     
     required init?(coder: NSCoder) {

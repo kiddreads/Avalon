@@ -11,3 +11,6 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 #include "ManicEmu/Resources/Config-Base.xcconfig"
 
+APP_BUILD_CONDITIONS = DEBUG
+//Debug Side Load Vers
+//APP_BUILD_CONDITIONS = DEBUG SIDE_LOAD

@@ -12,14 +12,13 @@ import Device
 class FeaturesCell: UICollectionViewCell {
     private var titleLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.title(size: .s, weight: .semibold)
-        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        view.font = R.Font.Headline(emphasis: true)
+        view.textColor = R.Color.LabelPrimary.forceStyle(.dark)
         return view
     }()
     
     var questionButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .questionmarkCircleFill, size: 12, color: Constants.Color.LabelPrimary.forceStyle(.dark)))
-        view.delayInteractiveTouchEnd = true
+        let view = SymbolButton(image: UIImage(symbol: .questionmarkCircleFill, size: 12, color: R.Color.LabelPrimary.forceStyle(.dark)))
         view.backgroundColor = .clear
         return view
     }()
@@ -39,8 +38,8 @@ class FeaturesCell: UICollectionViewCell {
         func makeLabel(string: String, x: CGFloat, y: CGFloat) {
             let label = UILabel()
             label.text = string
-            label.font = Constants.Font.caption(size: .l)
-            label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+            label.font = R.Font.Caption()
+            label.textColor = R.Color.LabelPrimary.forceStyle(.dark)
             label.adjustsFontSizeToFitWidth = true
             view.addSubview(label)
             label.snp.makeConstraints { make in
@@ -89,10 +88,10 @@ class FeaturesCell: UICollectionViewCell {
         titleContainer.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.height.equalTo(Constants.Size.IconSizeMin.height)
+            make.height.equalTo(R.Size.IconSizeMedium.height)
         }
         
-        let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
+        let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: R.Color.LabelPrimary.forceStyle(.dark)))
         if Locale.isRTLLanguage {
             titleLeftView.transform = CGAffineTransform(scaleX: -1, y: 1)
         }
@@ -104,11 +103,11 @@ class FeaturesCell: UICollectionViewCell {
         
         titleContainer.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(titleLeftView.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(titleLeftView.snp.trailing).offset(R.Size.ContentSpaceTiny)
             make.centerY.equalToSuperview()
         }
         
-        let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
+        let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: R.Color.LabelPrimary.forceStyle(.dark)))
         titleRightView.semanticContentAttribute = .forceLeftToRight
         if !Locale.isRTLLanguage {
             titleRightView.transform = CGAffineTransform(scaleX: -1, y: 1)
@@ -117,14 +116,14 @@ class FeaturesCell: UICollectionViewCell {
         titleContainer.addSubview(titleRightView)
         titleRightView.snp.makeConstraints { make in
             make.trailing.top.bottom.equalToSuperview()
-            make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
         }
         
         addSubview(questionButton)
         questionButton.snp.makeConstraints { make in
             make.leading.equalTo(titleContainer.snp.trailing)
             make.centerY.equalTo(titleContainer)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.size.equalTo(R.Size.IconSizeLarge)
         }
         
         addSubview(iconImageView)
@@ -140,7 +139,7 @@ class FeaturesCell: UICollectionViewCell {
         addSubview(serviceListView)
         serviceListView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-Constants.Size.ItemHeightUltraTiny)
+            make.bottom.equalToSuperview().offset(-R.Size.ItemHeightMicro)
         }
         
     }
@@ -157,7 +156,7 @@ class FeaturesCell: UICollectionViewCell {
             enableAnimation = true
             if Device.size().rawValue < Size.screen5_8Inch.rawValue {
                 iconImageView.snp.updateConstraints { make in
-                    make.centerY.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+                    make.centerY.equalToSuperview().offset(R.Size.ContentSpaceSmall)
                 }
             }
         } else {
@@ -214,9 +213,9 @@ class FeaturesCell: UICollectionViewCell {
         var offset: CGFloat
         let animation = CABasicAnimation(keyPath: "position.x")
         if UIDevice.isPad {
-            offset = (UIDevice.isLandscape ? Constants.Size.WindowHeight * 0.9 * 9 / 16 : Constants.Size.WindowWidth * 0.6)  - iconImageView.width
+            offset = (UIDevice.isLandscape ? R.Size.WindowHeight * 0.9 * 9 / 16 : R.Size.WindowWidth * 0.6)  - iconImageView.width
         } else {
-            offset = Constants.Size.WindowWidth - iconImageView.width
+            offset = R.Size.WindowWidth - iconImageView.width
         }
         
         let defaultDistance = Device.size().rawValue < Size.screen5_8Inch.rawValue ? 80.0 : 50.0

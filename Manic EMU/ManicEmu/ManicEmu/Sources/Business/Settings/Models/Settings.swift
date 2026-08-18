@@ -27,6 +27,7 @@ class Settings: Object, ObjectUpdatable {
     @Persisted(primaryKey: true) var name: String = Settings.defaultName
     
     ///皮肤配置 平台对应的默认皮肤 json格式 key是GameType value是Skin的id
+    @available(*, deprecated)
     @Persisted var skinConfig: String
     
     ///快速开始游戏
@@ -38,9 +39,12 @@ class Settings: Object, ObjectUpdatable {
     ///语言
     @Persisted var language: String?
     ///游戏功能排序
+    @available(*, deprecated)
     @Persisted var gameFunctionList: List<Int>
+    
     /// 展示在默认皮肤上的功能数量
-    @Persisted var displayGamesFunctionCount: Int = Constants.Numbers.GameFunctionButtonCount
+    @available(*, deprecated)
+    @Persisted var displayGamesFunctionCount: Int = R.Numbers.GameFunctionButtonCount
     ///iCloud同步 只会在本地进行存储，意味着一个新设备安装的时候 默认都是false
 #if SIDE_LOAD
     var iCloudSyncEnable: Bool = false
@@ -55,7 +59,7 @@ class Settings: Object, ObjectUpdatable {
                 //关闭iCloud同步
                 SyncManager.shared.stopSync()
             }
-            NotificationCenter.default.post(name: Constants.NotificationName.iCloudEnableChange, object: nil)
+            NotificationCenter.default.post(name: R.NotificationName.iCloudEnableChange, object: nil)
         }
         get {
             UserDefaults.standard.bool(forKey: "iCloudSyncEnable")
@@ -77,6 +81,8 @@ class Settings: Object, ObjectUpdatable {
     ///额外数据备用
     @Persisted var extras: Data?
     
+    @Persisted var avatar: CreamAsset?
+    
     enum Appearance: Int {
         case dark, light, auto
         var desc: String {
@@ -92,10 +98,10 @@ class Settings: Object, ObjectUpdatable {
     }
     static var appearance: Appearance {
         get {
-            return Appearance(rawValue: UserDefaults.standard.integer(forKey: Constants.DefaultKey.Appearance)) ?? .dark
+            return Appearance(rawValue: UserDefaults.standard.integer(forKey: R.DefaultKey.Appearance)) ?? .dark
         }
         set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: Constants.DefaultKey.Appearance)
+            UserDefaults.standard.set(newValue.rawValue, forKey: R.DefaultKey.Appearance)
             ThemeManager.shared.updateAppearance()
         }
     }
@@ -119,87 +125,47 @@ class Settings: Object, ObjectUpdatable {
         }
     }
     
-    var airPlayScaling: GameSetting.AirPlayScaling {
-        GameSetting.AirPlayScaling(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayScaling.rawValue) ?? 0) ?? .coreProvided
+    var airPlayScaling: GameOption.AirPlayScaling {
+        GameOption.AirPlayScaling(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayScaling.rawValue) ?? 0) ?? .coreProvided
     }
     
-    var airPlayLayout: GameSetting.AirPlayLayout {
-        GameSetting.AirPlayLayout(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayLayout.rawValue) ?? 0) ?? .embeddedTopLeft
+    var airPlayLayout: GameOption.AirPlayLayout {
+        GameOption.AirPlayLayout(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.airPlayLayout.rawValue) ?? 0) ?? .embeddedTopLeft
     }
     
-    func getPlatformVisable(platform: String) -> Bool {
+    func getPlatformVisible(platform: String) -> Bool {
         var realPlatform = platform
         if GameType.chm.localizedShortName == platform {
             realPlatform = GameType.gb.localizedName
         } else if GameType.win95.localizedShortName == platform || GameType.win98.localizedShortName == platform {
             realPlatform = GameType.dos.localizedName
         }
-        return getExtraBool(key: realPlatform + "Visable") ?? true
+        return getExtraBool(key: realPlatform + "Visible") ?? true
     }
     
-    func setPlatformVisable(platform: String, visable: Bool) {
-        updateExtra(key: platform + "Visable", value: visable ? nil : false)
-        NotificationCenter.default.post(name: Constants.NotificationName.PlatformVisableChange, object: platform)
+    func setPlatformVisible(platform: String, visible: Bool) {
+        updateExtra(key: platform + "Visible", value: visible ? nil : false)
+        NotificationCenter.default.post(name: R.NotificationName.PlatformVisibleChange, object: platform)
     }
+    
+    var SteamGridDBAPIKey: String? {
+        Settings.defalut.getExtraString(key: ExtraKey.steamGridDBAPIKey.rawValue)
+    }
+    
+    static var nickname: String {
+        let nickname = Settings.defalut.getExtraString(key: ExtraKey.nickname.rawValue)?.trimmed
+        if let nickname, !nickname.isEmpty {
+            return nickname
+        }
+        return defaultNickname
+    }
+    
+    static let defaultNickname = R.string.localizable.adventurer()
 }
 
 struct SkinConfig: SmartCodable {
     var portraitSkins = [String: String]()
     var landscapeSkins = [String: String]()
-    
-    static func preferredPortraitSkin(gameType: GameType) -> Skin? {
-        preferredSkin(gameType: gameType, isLandscape: false)
-    }
-    
-    static func preferredLandscapeSkin(gameType: GameType) -> Skin? {
-        preferredSkin(gameType: gameType, isLandscape: true)
-    }
-    
-    static func preferredSkin(gameType: GameType, isLandscape: Bool) -> Skin? {
-        if let config = SkinConfig.deserialize(from: Settings.defalut.skinConfig),
-           let skinId = isLandscape ? config.landscapeSkins[gameType.rawValue] : config.portraitSkins[gameType.rawValue],
-            let skin = Database.realm.object(ofType: Skin.self, forPrimaryKey: skinId) {
-            return skin
-        } else {
-            return Database.realm.objects(Skin.self).first { $0.gameType == gameType && $0.skinType == .default }
-        }
-    }
-    
-    static func setDefaultSkin(_ skin: Skin, isLandscape: Bool) {
-        if var config = SkinConfig.deserialize(from: Settings.defalut.skinConfig) {
-            if isLandscape {
-                config.landscapeSkins[skin.gameType.rawValue] = skin.id
-            } else {
-                config.portraitSkins[skin.gameType.rawValue] = skin.id
-            }
-            if let jsonString = config.toJSONString() {
-                Settings.change { _ in
-                    Settings.defalut.skinConfig = jsonString
-                }
-            }
-        }
-    }
-    
-    static func resetDefaultSkin(gameType: GameType? = nil) {
-        if var config = SkinConfig.deserialize(from: Settings.defalut.skinConfig) {
-            let realm = Database.realm
-            let skins: Results<Skin>
-            if let gameType {
-                skins = realm.objects(Skin.self).where({ !$0.isDeleted && $0.skinType == .default && $0.gameType == gameType })
-            } else {
-                skins = realm.objects(Skin.self).where({ !$0.isDeleted && $0.skinType == .default })
-            }
-            for skin in skins {
-                config.landscapeSkins[skin.gameType.rawValue] = skin.id
-                config.portraitSkins[skin.gameType.rawValue] = skin.id
-            }
-            if let jsonString = config.toJSONString() {
-                Settings.change { _ in
-                    Settings.defalut.skinConfig = jsonString
-                }
-            }
-        }
-    }
     
     var jsonString: String? {
         self.toJSONString()

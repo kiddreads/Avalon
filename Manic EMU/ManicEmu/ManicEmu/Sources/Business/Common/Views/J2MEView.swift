@@ -6,7 +6,6 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 import WebKit
-
 import ZIPFoundation
 
 /// J2ME button mapping for emulator input
@@ -17,7 +16,7 @@ enum J2MEButton: String, CaseIterable {
     case left
     case right
     case fire
-
+    
     // Number keys
     case num0
     case num1
@@ -31,11 +30,11 @@ enum J2MEButton: String, CaseIterable {
     case num9
     case star
     case pound
-
+    
     // Function keys
     case softkeyLeft
     case softkeyRight
-
+    
     /// Returns the key code used by the JavaScript layer
     var keyCode: String {
         switch self {
@@ -134,9 +133,9 @@ struct J2MEManifest {
     
     var screenSize: J2MESize {
         let sizeStr = raw["Nokia-MIDlet-Canvas-Size"]
-                   ?? raw["MIDlet-ScreenSize"]
-                   ?? raw["Nokia-MIDlet-Original-Display-Size"]
-                   ?? raw["MIDlet-Display-Size"]
+        ?? raw["MIDlet-ScreenSize"]
+        ?? raw["Nokia-MIDlet-Original-Display-Size"]
+        ?? raw["MIDlet-Display-Size"]
         if let str = sizeStr {
             let parts = str.components(separatedBy: CharacterSet(charactersIn: "x,*"))
             if parts.count == 2,
@@ -160,7 +159,7 @@ struct J2MEManifest {
         
         return J2MESize.defaultSize
     }
-
+    
     private static func containsBytes(_ pattern: [UInt8], in target: [UInt8]) -> Bool {
         guard !pattern.isEmpty, target.count >= pattern.count else { return false }
         let limit = target.count - pattern.count
@@ -227,20 +226,20 @@ struct J2MEManifest {
         for entry in archive {
             guard phoneType == nil else { break }
             let name = entry.path
-
+            
             var data = Data()
             guard (try? archive.extract(entry) { data.append($0) }) != nil else { continue }
             let bytes = Array(data)
-
+            
             if name == "META-INF/MANIFEST.MF" {
                 if let text = String(data: data, encoding: .utf8), text.contains(nokiaCatStr) {
                     phoneType = "Nokia"
                 }
                 continue
             }
-
+            
             guard name.hasSuffix(".class") else { continue }
-
+            
             if !name.hasPrefix("com/siemens/") && containsBytes(siemensSig, in: bytes) {
                 phoneType = "Siemens"
             } else if containsBytes(mc3Sig, in: bytes) {
@@ -271,34 +270,34 @@ struct J2MEManifest {
 
 /// J2ME Emulator View - WebView based implementation
 class J2MEView: BaseView {
-
+    
     /// ROM path
     var romPath: String? = nil
     var savePath: String? = nil
     var screenSize = J2MESize.defaultSize
     var rotation = false
-
+    
     /// Core type (J2meJS or Freej2meWeb)
     private let coreType: J2MECoreType
-
+    
     /// Local server for serving web assets
     private let localServer: LocalWebServer
-
+    
     /// Export save state complete callback
     private var onExportSaveStateComplete: ((_ data: Data?, _ success: Bool) -> Void)?
-
+    
     /// Import save state complete callback
     private var onImportSaveStateComplete: ((_ success: Bool, _ error: String?) -> Void)?
-
+    
     /// Initialization complete callback
     var didFinishedInit: (() -> Void)? = nil
-
+    
     /// MIDlet exit callback (game requested to quit)
     var onExit: (() -> Void)? = nil
-
+    
     /// Save data written callback (for auto-save)
     private var onSaveDataWritten: ((_ data: Data) -> Void)?
-
+    
     /// Pending save request (path + completion) for getSaveDataResult message
     private var pendingSavePath: String?
     private var pendingSaveCompletion: ((Bool) -> Void)?
@@ -309,15 +308,17 @@ class J2MEView: BaseView {
     
     private var pressingButtons: [J2MEButton] = []
     private var lastKnownBounds: CGRect = .zero
-
+    
     /// Network bridge for evalNative HTTP/socket operations (J2meJS only)
     private var networkBridge: J2MENetworkBridge?
-
+    
+    private(set) var isPaused: Bool = false
+    
     // MARK: - Initialization
-
+    
     init(coreType: J2MECoreType) {
         self.coreType = coreType
-
+        
         // Determine server type
         let serverType: LocalWebServer.ServerType
         switch coreType {
@@ -326,48 +327,47 @@ class J2MEView: BaseView {
         case .freej2meWeb:
             serverType = .freej2meWeb
         }
-
+        
         self.localServer = LocalWebServer()
         super.init(frame: .zero)
-
+        
         // Start local server
         try? localServer.start(serverType: serverType)
-
+        
         setupWebView()
-
+        
         // Initialize network bridge for J2meJS (freej2meWeb has its own network handling)
         if coreType == .j2meJS {
             networkBridge = J2MENetworkBridge(webView: webView)
         }
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
         localServer.stop()
     }
-
+    
     // MARK: - WebView Setup
-
+    
     lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
         configuration.mediaTypesRequiringUserActionForPlayback = []
-
+        
         // Use non-persistent data store for local files, persistent for CheerpJ caching
         let dataStore = WKWebsiteDataStore.default()
         configuration.websiteDataStore = dataStore
-
+        
         // Add message handlers
         let contentController = WKUserContentController()
         let proxy = WeakScriptMessageHandler(target: self)
         contentController.add(proxy, name: "console")
         contentController.add(proxy, name: "j2me")
         configuration.userContentController = contentController
-
+        
         let view = WKWebView(frame: .zero, configuration: configuration)
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.navigationDelegate = self
@@ -377,7 +377,7 @@ class J2MEView: BaseView {
         view.scrollView.bounces = false
         view.isOpaque = false
         view.backgroundColor = .black
-
+        
         // Console hook
         let consoleHookJS = """
         (function () {
@@ -391,9 +391,9 @@ class J2MEView: BaseView {
                     original.apply(console, arguments);
                 };
             }
-
+        
             ['log', 'warn', 'error', 'info', 'debug'].forEach(wrap);
-
+        
             // Intercept fetch to log all network requests (JS, WASM, assets, etc.)
             const _originalFetch = window.fetch;
             window.fetch = function(input, init) {
@@ -408,7 +408,7 @@ class J2MEView: BaseView {
                     throw err;
                 });
             };
-
+        
             // Intercept XHR
             const _XHROpen = XMLHttpRequest.prototype.open;
             const _XHRSend = XMLHttpRequest.prototype.send;
@@ -433,10 +433,10 @@ class J2MEView: BaseView {
             forMainFrameOnly: false
         )
         view.configuration.userContentController.addUserScript(script)
-
+        
         return view
     }()
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         guard bounds != lastKnownBounds else { return }
@@ -450,39 +450,39 @@ class J2MEView: BaseView {
         }
         webView.evaluateJavaScript(script)
     }
-
+    
     private func setupWebView() {
         addSubview(webView)
         webView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
+        
         if let url = localServer.getURL() {
             webView.load(URLRequest(url: url, cachePolicy: coreType == .freej2meWeb ? .useProtocolCachePolicy : .reloadIgnoringCacheData))
         }
     }
-
+    
     // MARK: - Public API
-
+    
     /// Open a JAR file for emulation
     func openJar(filePath: String, savePath: String?, screenSize: J2MESize, rotation: Bool, completion: ((Bool)->Void)? = nil) {
         openJarCompletion = completion
-
+        
         // Setup WebView if not already done
         if webView.superview == nil {
             setupWebView()
         }
-
+        
         romPath = filePath
         self.savePath = savePath
         self.screenSize = screenSize
         self.rotation = rotation
-
+        
         // Register file to local server
         let fileId = localServer.registerFile(filePath: filePath)
         let jarURL = "http://localhost:\(localServer.port)/file/\(fileId)"
         let fileName = filePath.lastPathComponent
-
+        
         // Build the JavaScript to load the JAR
         let script: String
         switch coreType {
@@ -502,7 +502,7 @@ class J2MEView: BaseView {
             }
             script = buildFreej2meLoadScript(jarURL: jarURL, fileName: fileName, saveBase64: saveBase64, screenSize: screenSize, rotation: rotation)
         }
-
+        
         webView.evaluateJavaScript(script) { [weak self] _, error in
             if let error = error {
                 Log.debug("❌ Execute JavaScript failed: \(error)")
@@ -512,7 +512,7 @@ class J2MEView: BaseView {
             _ = self // Capture self
         }
     }
-
+    
     /// Reset the emulator (reload WebView and re-open the current JAR)
     func reset(screenSize: J2MESize, rotation: Bool, completion: ((Bool)->Void)? = nil) {
         guard let currentRomPath = romPath else {
@@ -521,21 +521,21 @@ class J2MEView: BaseView {
         }
         self.screenSize = screenSize
         self.rotation = rotation
-
+        
         let previousInitCallback = didFinishedInit
         didFinishedInit = { [weak self] in
             guard let self = self else { return }
             self.didFinishedInit = previousInitCallback
             self.openJar(filePath: currentRomPath, savePath: savePath, screenSize: screenSize, rotation: rotation, completion: completion)
         }
-
+        
         if let url = localServer.getURL() {
             webView.load(URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData))
         }
     }
-
+    
     // MARK: - Save/Load
-
+    
     /// Save SRAM to file (uses message handler so result is delivered after _getSaveData Promise resolves)
     func save(to path: String, completion: ((_ isSucess: Bool) -> Void)? = nil) {
         let apiObj: String
@@ -543,11 +543,11 @@ class J2MEView: BaseView {
         case .j2meJS: apiObj = "j2meAPI"
         case .freej2meWeb: apiObj = "freej2meAPI"
         }
-
+        
         pendingSaveWorkItem?.cancel()
         pendingSavePath = path
         pendingSaveCompletion = completion
-
+        
         let timeout = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
             if self.pendingSavePath != nil {
@@ -560,7 +560,7 @@ class J2MEView: BaseView {
         }
         pendingSaveWorkItem = timeout
         DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: timeout)
-
+        
         let script = """
         (function(){
           var api = window.\(apiObj);
@@ -577,7 +577,7 @@ class J2MEView: BaseView {
           });
         })();
         """
-
+        
         webView.evaluateJavaScript(script) { [weak self] _, error in
             if let error = error {
                 Log.debug("❌ Get save data script failed: \(error)")
@@ -588,25 +588,25 @@ class J2MEView: BaseView {
             }
         }
     }
-
+    
     /// Load SRAM from file
     func loadSave(path: String) {
         guard FileManager.default.fileExists(atPath: path) else {
             Log.debug("❌ Save file not found: \(path)")
             return
         }
-
+        
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: path))
             let base64 = data.base64EncodedString()
-
+            
             let apiObj: String
             switch coreType {
             case .j2meJS: apiObj = "j2meAPI"
             case .freej2meWeb: apiObj = "freej2meAPI"
             }
             let script = "if (window.\(apiObj)) window.\(apiObj).loadSaveData('\(base64)');"
-
+            
             webView.evaluateJavaScript(script) { _, error in
                 if let error = error {
                     Log.debug("❌ Load save failed: \(error)")
@@ -618,33 +618,33 @@ class J2MEView: BaseView {
             Log.debug("❌ Read save file failed: \(error)")
         }
     }
-
+    
     // MARK: - Save State (Instant Save)
-
+    
     /// Save instant save state to file
     func saveState(completion: ((_ data: Data?) -> Void)? = nil) {
         let previousCallback = onExportSaveStateComplete
-
+        
         onExportSaveStateComplete = { [weak self] data, success in
             self?.onExportSaveStateComplete = previousCallback
-
+            
             guard success, let data = data else {
                 Log.debug("❌ Export save state failed")
                 completion?(nil)
                 return
             }
-
+            
             Log.debug("✅ Save state generated")
             completion?(data)
         }
-
+        
         let apiObj: String
         switch coreType {
         case .j2meJS: apiObj = "j2meAPI"
         case .freej2meWeb: apiObj = "freej2meAPI"
         }
         let script = "if (window.\(apiObj) && window.\(apiObj).exportSaveState) window.\(apiObj).exportSaveState();"
-
+        
         webView.evaluateJavaScript(script) { [weak self] _, error in
             if let error = error {
                 Log.debug("❌ Export save state call failed: \(error)")
@@ -653,7 +653,7 @@ class J2MEView: BaseView {
             }
         }
     }
-
+    
     /// Load instant save state from file
     func loadSaveState(path: String, completion: ((_ isSuccess: Bool) -> Void)? = nil) {
         guard FileManager.default.fileExists(atPath: path) else {
@@ -661,16 +661,16 @@ class J2MEView: BaseView {
             completion?(false)
             return
         }
-
+        
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: path))
             let base64String = data.base64EncodedString()
-
+            
             let previousCallback = onImportSaveStateComplete
             onImportSaveStateComplete = { [weak self] success, error in
                 guard let self else { return }
                 self.onImportSaveStateComplete = previousCallback
-
+                
                 if success {
                     Log.debug("✅ Save state imported, resetting game...")
                     // For j2meJS: RecordStore is now in IndexedDB; reset so the game
@@ -683,14 +683,14 @@ class J2MEView: BaseView {
                 }
                 completion?(success)
             }
-
+            
             let apiObj: String
             switch coreType {
             case .j2meJS: apiObj = "j2meAPI"
             case .freej2meWeb: apiObj = "freej2meAPI"
             }
             let script = "if (window.\(apiObj) && window.\(apiObj).importSaveState) window.\(apiObj).importSaveState('\(base64String)');"
-
+            
             webView.evaluateJavaScript(script) { [weak self] _, error in
                 if let error = error {
                     Log.debug("❌ Import save state failed: \(error)")
@@ -703,9 +703,9 @@ class J2MEView: BaseView {
             completion?(false)
         }
     }
-
+    
     // MARK: - Screen Settings
-
+    
     /// Set screen size
     func setAspect(width: Int, height: Int) {
         let script: String
@@ -717,9 +717,9 @@ class J2MEView: BaseView {
         }
         webView.evaluateJavaScript(script)
     }
-
+    
     // MARK: - Input Control
-
+    
     /// Press a button
     /// - Parameters:
     ///   - button: The button to press
@@ -739,9 +739,9 @@ class J2MEView: BaseView {
         let script = "if (window.Input) window.Input.\(action)('\(button.keyCode)');"
         webView.evaluateJavaScript(script)
     }
-
+    
     // MARK: - Audio
-
+    
     /// Set mute state
     func setMute(_ mute: Bool) {
         let script: String
@@ -753,9 +753,9 @@ class J2MEView: BaseView {
         }
         webView.evaluateJavaScript(script)
     }
-
+    
     // MARK: - Screenshot
-
+    
     /// Get screenshot
     func snapShot() -> UIImage? {
         let renderer = UIGraphicsImageRenderer(bounds: webView.bounds)
@@ -764,9 +764,9 @@ class J2MEView: BaseView {
         }
         return image
     }
-
+    
     // MARK: - Fast Forward
-
+    
     /// Set emulation speed (1.0 = normal, 2.0 = 2x, etc.)
     func fastForward(speed: Float) {
         let script: String
@@ -778,9 +778,9 @@ class J2MEView: BaseView {
         }
         webView.evaluateJavaScript(script)
     }
-
+    
     // MARK: - Pause/Resume
-
+    
     /// Pause the emulator
     func pause() {
         let script: String
@@ -791,8 +791,9 @@ class J2MEView: BaseView {
             script = "if (window.freej2meAPI && window.freej2meAPI.pause) window.freej2meAPI.pause();"
         }
         webView.evaluateJavaScript(script)
+        isPaused = true
     }
-
+    
     /// Resume the emulator
     func resume() {
         let script: String
@@ -803,10 +804,11 @@ class J2MEView: BaseView {
             script = "if (window.freej2meAPI && window.freej2meAPI.resume) window.freej2meAPI.resume();"
         }
         webView.evaluateJavaScript(script)
+        isPaused = false
     }
-
+    
     /// Set scale mode ('stretch' or 'fit')
-    func setScaleMode(_ scale: GameSetting.ScreenScaling) {
+    func setScaleMode(_ scale: GameOption.ScreenScaling) {
         let script: String
         let mode = scale == .stretch ? "stretch" : "fit"
         switch coreType {
@@ -817,9 +819,9 @@ class J2MEView: BaseView {
         }
         webView.evaluateJavaScript(script)
     }
-
+    
     // MARK: - Private Helpers
-
+    
     private func buildJ2meJSLoadScript(jarURL: String, fileName: String, screenSize: J2MESize, rotation: Bool) -> String {
         // Pass screen size as third arg to _openJar so canvas is sized before startApp() runs.
         // JS accepts "WxH" string or null.
@@ -829,7 +831,7 @@ class J2MEView: BaseView {
         (async () => {
             try {
                 console.log('🔄 Loading JAR: \(fileName)');
-
+        
                 const response = await fetch('\(jarURL)');
                 if (!response.ok) {
                     console.log('Download error:' + response.status);
@@ -837,9 +839,9 @@ class J2MEView: BaseView {
                 }
                 const buffer = await response.arrayBuffer();
                 const bytes = new Uint8Array(buffer);
-
+        
                 console.log('📦 JAR size:', bytes.length, 'bytes');
-
+        
                 if (window.j2me && window.j2me.openJar) {
                     window.j2me.openJar(bytes, '\(fileName)', \(sizeArg), \(rotationArg));
                     console.log('✅ JAR loaded successfully');
@@ -856,13 +858,13 @@ class J2MEView: BaseView {
         null;
         """
     }
-
+    
     private func buildFreej2meLoadScript(jarURL: String, fileName: String, saveBase64: String? = nil, screenSize: J2MESize, rotation: Bool) -> String {
         // Pass saveBase64 as a JS string literal (null if none). The openJar function
         // will call LauncherUtil.importData() BEFORE starting FreeJ2ME.main() so that
         // CheerpJ has no running Java code when the import happens.
         let saveArg = saveBase64.map { "'\($0)'" } ?? "null"
-
+        
         // Pass device locale so freej2me sets microedition.locale to match the system
         // language (same behavior as J2meJS which reads navigator.language).
         // Converts iOS locale format (e.g. "zh-Hans-CN") to BCP-47 short form ("zh-CN").
@@ -878,12 +880,12 @@ class J2MEView: BaseView {
         
         let sizeArg = "'\(screenSize.width)x\(screenSize.height)'"
         let rotationArg = rotation ? "true" : "false"
-
+        
         return """
         (async () => {
             try {
                 console.log('🔄 Loading JAR: \(fileName)');
-
+        
                 const response = await fetch('\(jarURL)');
                 if (!response.ok) {
                     console.log('Download error:' + response.status);
@@ -891,9 +893,9 @@ class J2MEView: BaseView {
                 }
                 const buffer = await response.arrayBuffer();
                 const bytes = new Uint8Array(buffer);
-
+        
                 console.log('📦 JAR size:', bytes.length, 'bytes');
-
+        
                 if (window.freej2meAPI && window.freej2meAPI.openJar) {
                     await window.freej2meAPI.openJar(bytes, '\(fileName)', \(saveArg), '\(shortLocale)', \(sizeArg), \(rotationArg));
                     console.log('✅ freej2me JAR loaded successfully');
@@ -914,7 +916,7 @@ class J2MEView: BaseView {
 
 // MARK: - WKScriptMessageHandler
 extension J2MEView: WKScriptMessageHandler {
-
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "console" {
             if let body = message.body as? [String: String],
@@ -924,13 +926,13 @@ extension J2MEView: WKScriptMessageHandler {
             }
             return
         }
-
+        
         guard message.name == "j2me",
               let body = message.body as? [String: Any],
               let type = body["type"] as? String else {
             return
         }
-
+        
         switch type {
         case "openJarCompletion":
             if let success = body["success"] as? Bool {
@@ -962,7 +964,7 @@ extension J2MEView: WKScriptMessageHandler {
                 Log.debug("❌ No save data available")
                 comp?(false)
             }
-
+            
         case "saveDataWritten":
             // Auto-save triggered by game
             if let base64Data = body["data"] as? String,
@@ -971,7 +973,7 @@ extension J2MEView: WKScriptMessageHandler {
                 try? data.write(to: URL(fileURLWithPath: savePath))
                 Log.debug("✅ Auto-save updated")
             }
-
+            
         case "exportSaveStateComplete":
             let success = body["success"] as? Bool ?? false
             if success, let base64Data = body["data"] as? String,
@@ -980,20 +982,20 @@ extension J2MEView: WKScriptMessageHandler {
             } else {
                 onExportSaveStateComplete?(nil, false)
             }
-
+            
         case "importSaveStateComplete":
             let success = body["success"] as? Bool ?? false
             let error = body["error"] as? String
             onImportSaveStateComplete?(success, error)
-
+            
         case "ready":
             Log.debug("✅ J2ME core ready")
             didFinishedInit?()
-
+            
         case "exit":
             Log.debug("🚪 MIDlet requested exit")
             onExit?()
-
+            
         case "evalNative":
             // Handle network commands from JavaScript evalNative bridge
             guard let networkBridge = networkBridge,
@@ -1006,7 +1008,7 @@ extension J2MEView: WKScriptMessageHandler {
                 // Callback is handled by injectCallback in networkBridge
                 // The result is already injected into JavaScript by the bridge
             } : nil)
-
+            
         default:
             break
         }
@@ -1019,7 +1021,7 @@ extension J2MEView: WKNavigationDelegate {
         Log.debug("✅ WebView loaded")
         checkInitStatus()
     }
-
+    
     func checkInitStatus() {
         let script: String
         switch coreType {
@@ -1028,7 +1030,7 @@ extension J2MEView: WKNavigationDelegate {
         case .freej2meWeb:
             script = "window.freej2meReady === true"
         }
-
+        
         webView.evaluateJavaScript(script) { [weak self] result, error in
             guard let self = self else { return }
             if let isAvailable = result as? Bool, isAvailable {

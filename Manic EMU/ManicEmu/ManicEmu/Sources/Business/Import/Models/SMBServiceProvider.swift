@@ -55,11 +55,9 @@ class SMBServiceProvider: CloudServiceProvider {
             }
             //暂时不支持path
         }
-        Log.debug("\(String(describing: Self.self)) init")
     }
     
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
         if let smbClient = smbClient {
             Task {
                 try await smbClient.logoff()
@@ -157,14 +155,14 @@ class SMBServiceProvider: CloudServiceProvider {
         var urls: [URL] = []
         var falures: [String] = []
         let group = DispatchGroup()
-        if !FileManager.default.fileExists(atPath: Constants.Path.SMBWorkSpace) {
-            try? FileManager.default.createDirectory(atPath: Constants.Path.SMBWorkSpace, withIntermediateDirectories: true)
+        if !FileManager.default.fileExists(atPath: R.Path.SMBWorkSpace) {
+            try? FileManager.default.createDirectory(atPath: R.Path.SMBWorkSpace, withIntermediateDirectories: true)
         }
         for path in paths {
             group.enter()
             Task {
                 do {
-                    let url = URL(fileURLWithPath: Constants.Path.SMBWorkSpace.appendingPathComponent(path.lastPathComponent))
+                    let url = URL(fileURLWithPath: R.Path.SMBWorkSpace.appendingPathComponent(path.lastPathComponent))
                     Log.debug("开始下载:\(path.lastPathComponent)")
                     try await smbClient.download(path: path, localPath: url, overwrite: true)
                     urls.append(url)

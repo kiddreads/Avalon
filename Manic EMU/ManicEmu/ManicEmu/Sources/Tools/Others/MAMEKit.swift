@@ -11,8 +11,8 @@ import SQLite
 struct MAMEKit {
     static func isSupportTitle(fileName: String) -> Bool {
         do {
-            let db = try Connection(Constants.Path.MAMEDB)
-            try db.key(Constants.Cipher.ManicKey)
+            let db = try Connection(R.Path.MAMEDB)
+            try db.key(R.Cipher.ManicKey)
             let table = Table("Title")
             let title = SQLite.Expression<String>("title")
             let allTitles = try db.prepare(table)
@@ -24,8 +24,8 @@ struct MAMEKit {
     
     static func getMAMEInfo(fileName: String) -> (title: String, name: String)? {
         do {
-            let db = try Connection(Constants.Path.MAMEDB)
-            try db.key(Constants.Cipher.ManicKey)
+            let db = try Connection(R.Path.MAMEDB)
+            try db.key(R.Cipher.ManicKey)
             let table = Table("Title")
             let title = SQLite.Expression<String>("title")
             let name = SQLite.Expression<String>("name")

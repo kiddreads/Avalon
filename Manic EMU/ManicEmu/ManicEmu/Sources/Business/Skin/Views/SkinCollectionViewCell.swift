@@ -12,12 +12,12 @@ import UIKit
 
 class SkinCollectionViewCell: UICollectionViewCell {
     
-    class SubscriptView: UIView {
+    class SubscriptView: BaseView {
         var titleLabel: UILabel = {
             let view = UILabel()
-            view.textColor = Constants.Color.LabelPrimary
-            view.font = Constants.Font.caption(weight: .semibold)
-            view.layer.shadowColor = Constants.Color.Background.cgColor
+            view.textColor = R.Color.LabelPrimary
+            view.font = R.Font.Caption(emphasis: true)
+            view.layer.shadowColor = R.Color.BackgroundPrimary.cgColor
             view.layer.shadowOpacity = 0.5
             view.layer.shadowOffset = .init(width: 0, height: 2)
             view.layer.shadowRadius = 2
@@ -26,7 +26,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
-            backgroundColor = Constants.Color.BackgroundPrimary.withAlphaComponent(0.4)
+            backgroundColor = R.Color.BackgroundSecondary.withAlphaComponent(0.4)
             addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.center.equalToSuperview()
@@ -41,20 +41,22 @@ class SkinCollectionViewCell: UICollectionViewCell {
     var controllerView: ControllerView = {
         let view = ControllerView()
         view.backgroundColor = .black
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
         view.isUserInteractionEnabled = false
         return view
     }()
     
-    private var selectImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .center
-        view.layerCornerRadius = Constants.Size.IconSizeMin.height/2
-        view.layer.shadowColor = Constants.Color.Shadow.forceStyle(.dark).cgColor
-        view.layer.shadowOpacity = 0.5
-        view.layer.shadowRadius = 2
-        view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
-        view.alpha = 0
+    //When editing
+    private var checkView: ASCheckView = {
+        let view = ASCheckView(.init(isSelected: false))
+        view.isHidden = true
+        return view
+    }()
+    
+    //Show the current options in use
+    private var radioView: ASRadioView = {
+        let view = ASRadioView(.init(isSelected: true))
+        view.isHidden = true
         return view
     }()
     
@@ -66,7 +68,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
     
     var playcaseButton: UIImageView = {
         let view = UIImageView(image: R.image.playcase_footnote())
-        view.enableInteractive = true
+        view.enablePressEffect = true
         view.isHidden = true
         view.isUserInteractionEnabled = true
         return view
@@ -75,44 +77,50 @@ class SkinCollectionViewCell: UICollectionViewCell {
     var previewButton: SymbolButton = {
         let view = SymbolButton(image: R.image.customArrowDownLeftAndArrowUpRight()?.applySymbolConfig(),
                                 title: R.string.localizable.skinPreviewTitle(),
-                                titleFont: Constants.Font.body(),
-                                edgeInsets: UIEdgeInsets(top: Constants.Size.ContentSpaceTiny, left: Constants.Size.ContentSpaceMin, bottom: Constants.Size.ContentSpaceTiny, right: Constants.Size.ContentSpaceMin),
+                                titleFont: R.Font.Footnote(),
+                                edgeInsets: UIEdgeInsets(top: R.Size.ContentSpaceExtraSmall,
+                                                         left: R.Size.ContentSpaceSmall,
+                                                         bottom: R.Size.ContentSpaceExtraSmall,
+                                                         right: R.Size.ContentSpaceSmall),
                                 titlePosition: .right,
                                 enableGlass: true)
         view.enableRoundCorner = true
+        view.isHidden = true
         return view
     }()
     
     override var isSelected: Bool {
         willSet {
-            UIView.springAnimate {
-                self.selectImageView.alpha = newValue ? 1 : 0
-            }
+            self.checkView.isSelected = newValue
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
-        layerCornerRadius = Constants.Size.CornerRadiusMid
-        backgroundColor = Constants.Color.Background
+        enablePressEffect = true
+        
+        layerCornerRadius = R.Size.CornerRadiusMedium
+        backgroundColor = R.Color.BackgroundPrimary
         addSubview(controllerView)
         controllerView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalToSuperview()
         }
         
-        addSubview(selectImageView)
-        selectImageView.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
-            make.size.equalTo(Constants.Size.IconSizeMin)
+        addSubview(checkView)
+        checkView.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
+        }
+        
+        addSubview(radioView)
+        radioView.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
         }
         
         addSubview(subscriptView)
         subscriptView.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.height.equalTo(R.Size.ItemHeightMicro)
         }
         
         addSubview(previewButton)
@@ -137,14 +145,19 @@ class SkinCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setData(controllerSkin: ControllerSkin, traits: ControllerSkin.Traits, subscriptTitle: String? = nil) {
+    func setData(controllerSkin: ControllerSkin?,
+                 traits: ControllerSkin.Traits,
+                 subscriptTitle: String? = nil,
+                 isEditMode: Bool,
+                 isUsing: Bool,
+                 isEditable: Bool) {
         let screenAspectRatio: CGFloat
         if traits.orientation == .portrait {
-            screenAspectRatio = Constants.Size.WindowSize.aspectRatio
+            screenAspectRatio = R.Size.WindowSize.aspectRatio
         } else {
-            screenAspectRatio = Constants.Size.WindowSize.height/Constants.Size.WindowSize.width
+            screenAspectRatio = R.Size.WindowSize.height/R.Size.WindowSize.width
         }
-        if let aspectRatio = controllerSkin.aspectRatio(for: traits), abs(aspectRatio.aspectRatio - screenAspectRatio) > 0.1 {
+        if let aspectRatio = controllerSkin?.aspectRatio(for: traits), abs(aspectRatio.aspectRatio - screenAspectRatio) > 0.1 {
             controllerView.snp.updateConstraints { make in
                 make.height.equalToSuperview().offset(-(height - (width/aspectRatio.aspectRatio)))
             }
@@ -162,6 +175,10 @@ class SkinCollectionViewCell: UICollectionViewCell {
             subscriptView.isHidden = true
         }
         
-        playcaseButton.isHidden = !controllerSkin.isPlayCase
+        playcaseButton.isHidden = !(controllerSkin?.isPlayCase ?? false)
+        
+        checkView.isHidden = !isEditMode || !isEditable
+        radioView.isHidden = isEditMode || !isUsing
+        previewButton.isHidden = isEditMode
     }
 }

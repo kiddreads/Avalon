@@ -14,22 +14,22 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
     private let iconView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
-        view.layerCornerRadius = Constants.Size.CornerRadiusTiny
+        view.layerCornerRadius = R.Size.CornerRadiusTiny
         return view
     }()
     
     private let titleLabel: UILabel = {
         let view = MarqueeLabel()
-        view.font = Constants.Font.body()
-        view.textColor = Constants.Color.LabelPrimary
+        view.font = R.Font.Footnote()
+        view.textColor = R.Color.LabelPrimary
         view.type = .leftRight
         return view
     }()
     
     private let subTitleLabel: UILabel = {
         let view = MarqueeLabel()
-        view.font = Constants.Font.caption()
-        view.textColor = Constants.Color.LabelSecondary
+        view.font = R.Font.Caption()
+        view.textColor = R.Color.LabelSecondary
         view.type = .leftRight
         return view
     }()
@@ -43,14 +43,14 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = Constants.Color.SideList
-        layerCornerRadius = Constants.Size.CornerRadiusMid
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
+        backgroundColor = R.Color.SideList
+        layerCornerRadius = R.Size.CornerRadiusMedium
+        enablePressEffect = true
+        
 
         addSubview(iconView)
         iconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall)
             make.centerY.equalToSuperview()
             make.size.equalTo(50)
         }
@@ -59,15 +59,15 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
         retroView.snp.makeConstraints { make in
             make.height.equalTo(24)
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
         }
         
         let titleContainerView = UIView()
         addSubview(titleContainerView)
         titleContainerView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.trailing.equalTo(retroView.snp.leading).offset(-Constants.Size.ContentSpaceTiny)
+            make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            make.trailing.equalTo(retroView.snp.leading).offset(-R.Size.ContentSpaceExtraSmall)
         }
         
         titleContainerView.addSubviews([titleLabel, subTitleLabel])
@@ -78,7 +78,7 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
         subTitleLabel.snp.makeConstraints { make in
             make.leading.bottom.equalToSuperview()
             make.trailing.lessThanOrEqualToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceTiny)
         }
         
         retroView.countLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -91,15 +91,15 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setData(game: Game, didTapRetro: (()->Void)? = nil) {
+    func setData(game: Game) {
         let estimated = iconView.size == .zero ? .init(40) : iconView.size
         iconView.setGameCover(game: game, size: estimated)
-        if Constants.Size.GameCoverRatio(gameType: game.gameType) != 1.0 {
+        if R.Size.GameCoverRatio(gameType: game.gameType) != 1.0 {
             iconView.contentMode = .scaleAspectFill
         } else {
             iconView.contentMode = .scaleToFill
         }
-        titleLabel.text = game.aliasName ?? game.name
+        titleLabel.text = game.displayName
         if let timeAgo = game.latestPlayDate?.timeAgo() {
             subTitleLabel.text = R.string.localizable.readyGameInfoSubTitle(timeAgo, Date.timeDuration(milliseconds: Int(game.totalPlayDuration)))
         } else {
@@ -111,7 +111,7 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
             retroView.countLabel.text = ""
             retroView.removeGestureRecognizers()
             retroView.addTapGesture { gesture in
-                didTapRetro?()
+                RetroAchievementsLaunchView.show(loginedAction: .jumpList(game: game))
             }
         } else {
             retroView.isHidden = true

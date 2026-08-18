@@ -9,23 +9,24 @@
 
 struct ShaderManager {
     
-    static func fetchShaders(source: ShadersListView.ShaderSource? = nil, isGlsl: Bool, selectedShader: Shader?, includeOriginal: Bool, shaderConfig: ShaderConfig?, ignoreShaderConfig: Bool, currentCoreName: String?) -> ShadersListData {
-        var result = ShadersListData()
+    static func getShaders(source: ShaderListView.ShaderSource? = nil,
+                           isGlsl: Bool,
+                           includeOriginal: Bool) -> ShaderListData {
+        var result = ShaderListData()
         let sourceCase = {
             if let source {
                 return [source]
             } else {
-                return ShadersListView.ShaderSource.allCases
+                return ShaderListView.ShaderSource.allCases
             }
         }()
-        var hasSelectedShader = false
         for source in sourceCase {
             if source == .imported {
-                if FileManager.default.fileExists(atPath: Constants.Path.ShaderImportedInDocument) {
+                if FileManager.default.fileExists(atPath: R.Path.ShaderImportedInDocument) {
                     //复制到shader的工作区
-                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: Constants.Path.ShaderImportedInDocument), to: URL(fileURLWithPath: Constants.Path.ShaderImported), shouldReplace: true)
+                    try? FileManager.safeCopyItem(at: URL(fileURLWithPath: R.Path.ShaderImportedInDocument), to: URL(fileURLWithPath: R.Path.ShaderImported), shouldReplace: true)
                 } else {
-                    try? FileManager.default.createDirectory(atPath: Constants.Path.ShaderImportedInDocument, withIntermediateDirectories: true)
+                    try? FileManager.default.createDirectory(atPath: R.Path.ShaderImportedInDocument, withIntermediateDirectories: true)
                 }
             }
             let isRecursive = source != .custom
@@ -33,16 +34,14 @@ struct ShaderManager {
             switch source {
             case .default, .custom:
                 var shaders = shadersRelativePathes.map({
-                    let shader = genShader($0, selectedShader: selectedShader, shaderConfig: shaderConfig, ignoreShaderConfig: ignoreShaderConfig, currentCoreName: currentCoreName)
-                    if shader.isSelected {
-                        hasSelectedShader = true
-                    }
-                    return shader
+                    Shader(title: $0.deletingPathExtension.lastPathComponent,
+                           relativePath: $0)
                 })
                 if source == .default, includeOriginal {
                     shaders.insert(ShaderManager.genOriginalShader(), at: 0)
                 }
-                result[source] = [("", shaders)]
+                result[source] = shaders.count > 0 ? [("", shaders)] : []
+                
             case .retroarch, .imported:
                 var subResult = [String: [Shader]]()
                 for path in shadersRelativePathes {
@@ -50,10 +49,8 @@ struct ShaderManager {
                     let components = path.pathComponents
                     if components.count > sectionTitleIndex + 1 {
                         let sectionTitle = components[sectionTitleIndex]
-                        let shader = genShader(path, selectedShader: selectedShader, shaderConfig: shaderConfig, ignoreShaderConfig: ignoreShaderConfig, currentCoreName: currentCoreName)
-                        if shader.isSelected {
-                            hasSelectedShader = true
-                        }
+                        let shader = Shader(title: path.deletingPathExtension.lastPathComponent,
+                                            relativePath: path)
                         if var shaderArray = subResult[sectionTitle] {
                             shaderArray.append(shader)
                             subResult[sectionTitle] = shaderArray.sorted(by: {
@@ -67,46 +64,6 @@ struct ShaderManager {
                 result[source] = subResult.sorted(by: \.key).map({ ($0, $1) })
             }
         }
-        
-        if !hasSelectedShader, let _ = result[.default] {
-            //需要把"原始"设置为选中
-            result[.default]![0].shaders[0].isSelected = true
-        }
-        
-        //将多个选中的shader选出一个值得选中的
-        var selectedShaders = [(source: ShadersListView.ShaderSource, section: Int, index: Int, shader: Shader)]()
-        for source in result.keys {
-            if let shadersInSouce = result[source] {
-                for (section, shadersInSection) in shadersInSouce.enumerated() {
-                    for (index, shader) in shadersInSection.shaders.enumerated() {
-                        if shader.isSelected {
-                            selectedShaders.append((source, section, index, shader))
-                        }
-                    }
-                }
-            }
-        }
-        if selectedShaders.count > 1 {
-            selectedShaders = selectedShaders.sorted(by: { left, _ in
-                if left.shader.isOriginal {
-                    return true
-                }
-                if let selectedShader, left.shader.relativePath == selectedShader.relativePath {
-                    return true
-                }
-                if let currentCoreName, left.shader.coreConfigs.contains(currentCoreName) {
-                    return true
-                }
-                if left.shader.isGlobalConfig {
-                    return true
-                }
-                return false
-            })
-            selectedShaders[1...].forEach({
-                result[$0.source]![$0.section].shaders[$0.index].isSelected = false
-            })
-        }
-        
         return result
     }
     
@@ -145,36 +102,8 @@ struct ShaderManager {
         return nil
     }
     
-    static func genShader(_ relativePath: String, selectedShader: Shader?, shaderConfig: ShaderConfig?, ignoreShaderConfig: Bool, currentCoreName: String?) -> Shader {
-        var isSelected = false
-        if let selectedShader {
-            isSelected = (selectedShader.relativePath == relativePath)
-        }
-        var shader = Shader(title: relativePath.deletingPathExtension.lastPathComponent, isSelected: isSelected, relativePath: relativePath)
-        var isCoreConfig = false
-        if let shaderConfig {
-            shaderConfig.coreConfigs.forEach { core, shaderName in
-                if shader.relativePath == shaderName {
-                    shader.coreConfigs.append(core)
-                    if let currentCoreName, core == currentCoreName {
-                        isCoreConfig = true
-                    }
-                }
-            }
-            if let globalConfig = shaderConfig.globalConfig, shader.relativePath == globalConfig {
-                shader.isGlobalConfig = true
-            }
-        }
-        if selectedShader == nil && (isCoreConfig || shader.isGlobalConfig) && !ignoreShaderConfig {
-            shader.isSelected = true
-        }
-        return shader
-    }
-    
     static func genOriginalShader() -> Shader {
-        var shader = Shader(title: R.string.localizable.filterOriginTitle(), isSelected: false, relativePath: "")
-        shader.isOriginal = true
-        return shader
+        return Shader(title: R.string.localizable.filterOriginTitle(), relativePath: "")
     }
     
 }

@@ -32,9 +32,19 @@ class ThemeSettingView: BaseView {
         }
     }
     
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
+    private lazy var navigationView: ASNavigationView = {
+        var navigation = ASListPage.Navigation.defaultNavigation(title: R.string.localizable.themeSettingTitle(),
+                                                                 titleIcon: .symbolImage(R.image.themeRegular_iconSymbols()))
+        navigation.enableClose = showClose
+        let view = ASNavigationView(navigation)
+        view.didTapClose = { [weak self] in
+            guard let self else { return }
+            if self.showAsSheet {
+                self.hide()
+            } else {
+                self.didTapClose?()
+            }
+        }
         return view
     }()
     
@@ -48,24 +58,16 @@ class ThemeSettingView: BaseView {
         view.register(cellWithClass: GameListStyleCollectionViewCell.self)
         view.register(cellWithClass: PlatformSortCollectionViewCell.self)
         view.register(cellWithClass: TitleSortCollectionCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundColorHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: TitleHaderCollectionReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
+        view.isFocusable = true
         view.dragInteractionEnabled = true
         view.dragDelegate = self
         view.dropDelegate = self
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: UIDevice.isPad ? (Constants.Size.ContentInsetBottom + Constants.Size.HomeTabBarSize.height + Constants.Size.ContentSpaceMax) : Constants.Size.ContentInsetBottom, right: 0)
-        return view
-    }()
-    
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
-        }
+        view.contentInset = .insets(top: R.Size.ContentSpaceSmall,
+                                    bottom: UIDevice.isPad ? (R.Size.ContentInsetBottom + R.Size.HomeTabBarSize.height + R.Size.ContentSpaceLarge) : R.Size.ContentInsetBottom)
         return view
     }()
     
@@ -77,55 +79,35 @@ class ThemeSettingView: BaseView {
         return Theme.defalut.manufacturerOrder.map { $0.title }
     }()
     
+    private var showClose: Bool
+    
     ///点击关闭按钮回调
     var didTapClose: (()->Void)? = nil
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.Background
+    required init?(parameters: Any...) {
+        self.showClose = parameters.compactMap({ $0 as? Bool }).first ?? true
+        super.init(frame: .zero)
+        
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            if showClose {
+                make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            } else {
+                make.top.equalToSuperview().offset(R.Size.ContentInsetTop)
+            }
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.bottom.trailing.equalToSuperview()
         }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let icon = UIImageView(image: UIImage(symbol: .paintpaletteFill))
-        navigationBlurView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.centerY.equalToSuperview()
-        }
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.themeSettingTitle()
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        navigationBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(icon)
-        }
-        
-        if UIDevice.isPhone {
-            navigationBlurView.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-            }
-        }
+    }
+    
+    convenience init(showClose: Bool) {
+        self.init(parameters: showClose)!
     }
     
     required init?(coder: NSCoder) {
@@ -144,9 +126,9 @@ class ThemeSettingView: BaseView {
             } else if sectionIndex == SectionIndex.themeColor.rawValue {
                 itemHeight = 100
             } else if sectionIndex == SectionIndex.coverStyle.rawValue {
-                itemHeight = 444
+                itemHeight = 498
             }  else if sectionIndex == SectionIndex.gameList.rawValue {
-                itemHeight = 845
+                itemHeight = 633
             }  else if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
                 itemHeight = 50
             }
@@ -155,23 +137,23 @@ class ThemeSettingView: BaseView {
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemHeight)), subitems: [item])
             if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: Constants.Size.ContentSpaceMid * 2,
+                                                                leading: R.Size.ContentSpaceMedium * 2,
                                                                 bottom: 0,
-                                                                trailing: Constants.Size.ContentSpaceMid * 2)
+                                                                trailing: R.Size.ContentSpaceMedium * 2)
             } else {
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: Constants.Size.ContentSpaceMid,
+                                                                leading: R.Size.ContentSpaceMedium,
                                                                 bottom: 0,
-                                                                trailing: Constants.Size.ContentSpaceMid)
+                                                                trailing: R.Size.ContentSpaceMedium)
             }
             
             //section布局
             let section = NSCollectionLayoutSection(group: group)
             if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
-                section.interGroupSpacing = Constants.Size.ContentSpaceMax
-                section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMax + Constants.Size.ContentSpaceHuge, leading: 0, bottom: Constants.Size.ContentSpaceMax, trailing: 0)
+                section.interGroupSpacing = R.Size.ContentSpaceLarge
+                section.contentInsets = NSDirectionalEdgeInsets(top: R.Size.ContentSpaceLarge + R.Size.ContentSpaceHuge, leading: 0, bottom: R.Size.ContentSpaceLarge, trailing: 0)
             } else {
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: R.Size.ContentSpaceSmall, trailing: 0)
             }
             
             //header布局
@@ -179,7 +161,6 @@ class ThemeSettingView: BaseView {
                                                                                                             heightDimension: .absolute(44)),
                                                                          elementKind: UICollectionView.elementKindSectionHeader,
                                                                          alignment: .top)
-            headerItem.pinToVisibleBounds = true
             section.boundarySupplementaryItems = [headerItem]
             
             if sectionIndex == SectionIndex.platformOrder.rawValue || sectionIndex == SectionIndex.manufacturerOrder.rawValue {
@@ -196,16 +177,16 @@ class ThemeSettingView: BaseView {
     class PlatformOrderCollectionReusableView: UICollectionReusableView {
         var descLabel: UILabel = {
             let label = UILabel()
-            label.font = Constants.Font.caption()
-            label.textColor = Constants.Color.LabelSecondary
+            label.font = R.Font.Caption()
+            label.textColor = R.Color.LabelSecondary
             label.text = R.string.localizable.themePlatformOrderDetail()
             return label
         }()
         
         var backgroundView: UIView = {
             let view = UIView()
-            view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.BackgroundPrimary
+            view.layerCornerRadius = R.Size.CornerRadiusLarge
+            view.backgroundColor = R.Color.BackgroundSecondary
             return view
         }()
         
@@ -214,15 +195,15 @@ class ThemeSettingView: BaseView {
             
             addSubview(descLabel)
             descLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
-                make.top.equalToSuperview().offset(Constants.Size.ItemHeightMin)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceLarge)
+                make.top.equalToSuperview().offset(R.Size.ItemHeightSmall)
             }
             
             addSubview(backgroundView)
             backgroundView.snp.makeConstraints { make in
-                make.top.equalTo(descLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
+                make.top.equalTo(descLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
                 make.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             }
         }
         
@@ -267,12 +248,12 @@ extension ThemeSettingView: UICollectionViewDataSource {
             let platform = platformOrder[indexPath.row]
             let cell = collectionView.dequeueReusableCell(withClass: PlatformSortCollectionViewCell.self, for: indexPath)
             cell.setData(platform: platform)
-            cell.didTapVisableButton = { [weak self] in
+            cell.didTapVisibleButton = { [weak self] in
                 guard let self else { return }
                 let settings = Settings.defalut
-                let visable = settings.getPlatformVisable(platform: platform)
-                settings.setPlatformVisable(platform: platform, visable: !visable)
-                UIView.makeToast(message: !visable ? R.string.localizable.showPlatform(platform) : R.string.localizable.hidePlatform(platform))
+                let visible = settings.getPlatformVisible(platform: platform)
+                settings.setPlatformVisible(platform: platform, visible: !visible)
+                UIView.makeToast(message: !visible ? R.string.localizable.showPlatform(platform) : R.string.localizable.hidePlatform(platform))
                 self.collectionView.reloadItems(at: [indexPath])
             }
             return cell
@@ -285,7 +266,7 @@ extension ThemeSettingView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundColorHaderReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: TitleHaderCollectionReusableView.self, for: indexPath)
         let section = SectionIndex(rawValue: indexPath.section)!
         header.titleLabel.text = section.title
         return header
@@ -399,4 +380,8 @@ extension ThemeSettingView: UICollectionViewDragDelegate, UICollectionViewDropDe
             Theme.defalut.updateManufacturerOrder(manufacturerOrder)
         }
     }
+}
+
+extension ThemeSettingView: ShowableView {
+    
 }

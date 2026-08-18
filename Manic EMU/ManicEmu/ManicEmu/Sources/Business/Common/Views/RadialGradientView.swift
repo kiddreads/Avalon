@@ -9,7 +9,7 @@
 
 import BlurUIKit
 
-class RadialGradientView: UIView {
+class RadialGradientView: BaseView {
     private var lastSize: CGSize? = nil
     private let imageView = UIImageView()
     private var gradientColorChangeNotification: Any? = nil
@@ -34,15 +34,15 @@ class RadialGradientView: UIView {
         
         let view = BlurUIKit.VariableBlurView()
         view.maximumBlurRadius = 20
-        view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.5, darkModeAlpha: 0.6)
-        view.dimmingTintColor = Constants.Color.BackgroundPrimary
+        view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.25, darkModeAlpha: 0.3)
+        view.dimmingTintColor = R.Color.BackgroundSecondary
         addSubview(view)
         view.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(2)
         }
         
-        gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in
+        gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             self.updateImage()
         }
@@ -54,16 +54,29 @@ class RadialGradientView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard size != .zero else { return }
         if let lastSize, lastSize == size { return }
+        guard lastSize != .zero else { return }
         updateImage()
         lastSize = size
     }
     
     private func updateImage() {
-        let size = self.size
-        UIImage.radialGradientImage(size: size, colors: Constants.Color.Gradient + [Constants.Color.BackgroundPrimary.forceStyle(.dark)]) { [weak self] darkImage in
-            UIImage.radialGradientImage(size: size, colors: Constants.Color.Gradient + [Constants.Color.BackgroundPrimary.forceStyle(.light)]) { [weak self] lightImage in
+        let size = CGSize(width: size.width*2/3, height: size.height)
+        guard size != .zero else { return }
+        let colors = R.Color.Gradient
+        let startCenter = CGPoint(x: 0.5, y: 1)
+        let startRadius = size.height/3
+        let endRadius = size.height
+        UIImage.radialGradientImage(size: size,
+                                    colors: colors + [R.Color.BackgroundSecondary.forceStyle(.dark)],
+                                    startCenter: startCenter,
+                                    startRadius: startRadius,
+                                    endRadius: endRadius) { [weak self] darkImage in
+            UIImage.radialGradientImage(size: size,
+                                        colors: colors + [R.Color.BackgroundSecondary.forceStyle(.light)],
+                                        startCenter: startCenter,
+                                        startRadius: startRadius,
+                                        endRadius: endRadius) { [weak self] lightImage in
                 if let darkImage, let lightImage {
                     self?.imageView.image = UIImage(.dm, light: lightImage, dark: darkImage)
                 }

@@ -6,62 +6,67 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 
-class PSPNetworkingConfigLocalView: UIView {
+class PSPNetworkingConfigLocalView: BaseView {
     private var asHost: Bool = false
     
     private let setAsHostSelectImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.layerCornerRadius = Constants.Size.IconSizeMin.height/2
-        view.layer.shadowColor = Constants.Color.Shadow.cgColor
+        view.layerCornerRadius = R.Size.IconSizeMedium.height/2
+        view.layer.shadowColor = R.Color.Shadow.cgColor
         view.layer.shadowOpacity = 0.5
         view.layer.shadowRadius = 2
         view.image = UIImage(symbol: .circle,
-                             size: Constants.Size.IconSizeMin.height,
+                             size: R.Size.IconSizeMedium.height,
                              weight: .regular,
-                             color: Constants.Color.LabelTertiary)
+                             color: R.Color.LabelSecondary)
         return view
     }()
     
     private let setAsHostTitleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.attributedText = NSAttributedString(string: R.string.localizable.setAsHost(), attributes: [.foregroundColor: Constants.Color.LabelPrimary, .font: Constants.Font.body(size: .l, weight: .semibold)])
+        titleLabel.attributedText = NSAttributedString(string: R.string.localizable.setAsHost(),
+                                                       attributes: [
+                                                        .foregroundColor: R.Color.LabelPrimary,
+                                                        .font: R.Font.Body(emphasis: true)
+                                                       ])
         titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
     private lazy var setAsHostView: UIView = {
         let view = UIView()
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
-        view.backgroundColor = Constants.Color.Background
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
+        view.backgroundColor = R.Color.BackgroundTertiary
         
         let iconView = UIImageView()
         iconView.contentMode = .center
         iconView.layerCornerRadius = 6
-        iconView.image = UIImage(symbol: .person2Wave2Fill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        iconView.backgroundColor = Constants.Color.Red
+        iconView.image = UIImage(symbol: .person2Wave2Fill, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+        iconView.backgroundColor = R.Color.Red
         view.addSubview(iconView)
         iconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+            make.size.equalTo(R.Size.IconSizeLarge)
             make.centerY.equalToSuperview()
         }
         
         view.addSubview(setAsHostTitleLabel)
         setAsHostTitleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
-            make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
         }
         
         view.addSubview(setAsHostSelectImageView)
         setAsHostSelectImageView.snp.makeConstraints { make in
-            make.leading.equalTo(setAsHostTitleLabel.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(setAsHostTitleLabel.snp.trailing).offset(R.Size.ContentSpaceSmall)
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
+            make.size.equalTo(R.Size.IconSizeMedium)
         }
         
         let button = UIButton(type: .custom)
+        button.isFocusable = true
         view.addSubview(button)
         button.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -78,9 +83,10 @@ class PSPNetworkingConfigLocalView: UIView {
     
     private lazy var ipAddressTitleTextField: UITextField = {
         let textField = UITextField()
-        textField.textColor = Constants.Color.LabelSecondary
-        textField.font = Constants.Font.caption(size: .l)
-        textField.placeholder = "192.168.1.1"
+        textField.textColor = R.Color.LabelSecondary
+        textField.font = R.Font.Footnote()
+        textField.attributedPlaceholder = NSAttributedString(string: "192.168.1.1",
+                                                             attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelTertiary])
         textField.clearButtonMode = .never
         textField.returnKeyType = .done
         textField.textAlignment = .right
@@ -95,45 +101,51 @@ class PSPNetworkingConfigLocalView: UIView {
             guard let self else { return }
             self.didConnectedIPChange?(self.ipAddressTitleTextField.text)
         }
+        textField.isFocusable = true
+        textField.onFocusConfirm = { [weak textField] in
+            textField?.becomeFirstResponder() ?? false
+        }
         return textField
     }()
     
     private lazy var ipAddressInputView: UIView = {
         let view = UIView()
-        view.layerCornerRadius = Constants.Size.CornerRadiusMid
-        view.backgroundColor = Constants.Color.Background
+        view.layerCornerRadius = R.Size.CornerRadiusMedium
+        view.backgroundColor = R.Color.BackgroundTertiary
         
         let iconView = UIImageView()
         iconView.contentMode = .center
         iconView.layerCornerRadius = 6
-        iconView.image = UIImage(symbol: .globe, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
-        iconView.backgroundColor = Constants.Color.Red
+        iconView.image = UIImage(symbol: .globe, font: R.Font.Footnote(emphasis: true), color: R.Color.LabelPrimary.forceStyle(.dark))
+        iconView.backgroundColor = R.Color.Red
         view.addSubview(iconView)
         iconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            make.size.equalTo(Constants.Size.IconSizeMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+            make.size.equalTo(R.Size.IconSizeLarge)
             make.centerY.equalToSuperview()
         }
         
         let titleLabel = UILabel()
         titleLabel.text = R.string.localizable.ipAddress()
-        titleLabel.textColor = Constants.Color.LabelPrimary
-        titleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
+        titleLabel.textColor = R.Color.LabelPrimary
+        titleLabel.font = R.Font.Body(emphasis: true)
         view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
-            make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
         }
         
         view.addSubview(ipAddressTitleTextField)
         ipAddressTitleTextField.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceSmall)
             make.centerY.equalToSuperview()
         }
         
         var chevronIconView: UIImageView = {
             let view = UIImageView()
-            view.image = UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary)
+            view.image = UIImage(symbol: .chevronRight,
+                                 font: R.Font.Caption(emphasis: true),
+                                 color: R.Color.LabelTertiary)
             if Locale.isRTLLanguage {
                 view.transform = CGAffineTransform(scaleX: -1, y: 1)
             }
@@ -143,16 +155,16 @@ class PSPNetworkingConfigLocalView: UIView {
         view.addSubview(chevronIconView)
         chevronIconView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(ipAddressTitleTextField.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.leading.equalTo(ipAddressTitleTextField.snp.trailing).offset(R.Size.ContentSpaceTiny)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
             make.size.equalTo(CGSize(width: 10, height: 14))
         }
         
         return view
     }()
     
-    private lazy var portOffsetView: AddTriggerButtonStyleCell.SliderView = {
-        let view = AddTriggerButtonStyleCell.SliderView(title: R.string.localizable.portOffset(), valueSufix: nil, minimumValue: 1000, maximumValue: 65000, numberOfDecimalPlaces: -1)
+    private lazy var portOffsetView: AddTriggerButtonStyleView.SliderView = {
+        let view = AddTriggerButtonStyleView.SliderView(title: R.string.localizable.portOffset(), valueSufix: nil, minimumValue: 1000, maximumValue: 65000, numberOfDecimalPlaces: -1)
         view.didChangeEnd = { [weak self ] port in
             guard let self else { return }
             self.didPortChange?(Int32(port))
@@ -162,23 +174,23 @@ class PSPNetworkingConfigLocalView: UIView {
     
     private let hostIPLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.Font.body(size: .s)
-        label.textColor = Constants.Color.LabelSecondary
+        label.font = R.Font.Footnote()
+        label.textColor = R.Color.LabelSecondary
         label.text = R.string.localizable.hostAddress()
         return label
     }()
     
     private let serviceFoundLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.Font.body(size: .s)
-        label.textColor = Constants.Color.LabelSecondary
+        label.font = R.Font.Footnote()
+        label.textColor = R.Color.LabelSecondary
         label.text = R.string.localizable.serviceFound()
         return label
     }()
     
     private let loadingView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
-        view.color = Constants.Color.LabelSecondary
+        view.color = R.Color.LabelSecondary
         view.startAnimating()
         return view
     }()
@@ -197,49 +209,49 @@ class PSPNetworkingConfigLocalView: UIView {
         
         addSubview(setAsHostView)
         setAsHostView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
             make.top.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.height.equalTo(R.Size.ItemHeightLarge)
         }
         
         portOffsetView.isHidden = true
         addSubview(portOffsetView)
         portOffsetView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(setAsHostView.snp.bottom).offset(-Constants.Size.ItemHeightMax)
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(setAsHostView.snp.bottom).offset(-R.Size.ItemHeightLarge)
+            make.height.equalTo(R.Size.ItemHeightLarge)
         }
         
         addSubview(hostIPLabel)
         hostIPLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
-            make.top.equalTo(portOffsetView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceHuge)
+            make.top.equalTo(portOffsetView.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         addSubview(ipAddressInputView)
         ipAddressInputView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(hostIPLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            make.height.equalTo(Constants.Size.ItemHeightMax)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(hostIPLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
+            make.height.equalTo(R.Size.ItemHeightLarge)
         }
         
         addSubview(serviceFoundLabel)
         serviceFoundLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceHuge)
-            make.top.equalTo(ipAddressInputView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceHuge)
+            make.top.equalTo(ipAddressInputView.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         addSubview(loadingView)
         loadingView.snp.makeConstraints { make in
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.leading.equalTo(serviceFoundLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
+            make.size.equalTo(R.Size.IconSizeMedium)
+            make.leading.equalTo(serviceFoundLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
             make.centerY.equalTo(serviceFoundLabel)
         }
         
         addSubview(serviceListView)
         serviceListView.snp.makeConstraints { make in
-            make.top.equalTo(serviceFoundLabel.snp.bottom).offset(Constants.Size.ContentSpaceMin)
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.top.equalTo(serviceFoundLabel.snp.bottom).offset(R.Size.ContentSpaceSmall)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
     }
     
@@ -247,39 +259,40 @@ class PSPNetworkingConfigLocalView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    class ServiceItemView: UIView {
+    class ServiceItemView: BaseView {
         var titleLabel: UILabel = {
             let title = UILabel()
-            title.textColor = Constants.Color.LabelPrimary
-            title.font = Constants.Font.body(size: .l)
+            title.textColor = R.Color.LabelPrimary
+            title.font = R.Font.Body()
             return title
         }()
         
         var button: UIButton = {
             let button = UIButton(type: .custom)
-            button.titleLabel?.font = Constants.Font.body(size: .m, weight: .semibold)
+            button.titleLabel?.font = R.Font.Body2(emphasis: true)
             button.setTitle( R.string.localizable.connect(), for: .normal)
             button.setTitle( R.string.localizable.connected(), for: .selected)
-            button.setTitleColor(Constants.Color.Red, for: .normal)
-            button.setTitleColor(Constants.Color.Green, for: .selected)
+            button.setTitleColor(R.Color.Red, for: .normal)
+            button.setTitleColor(R.Color.Green, for: .selected)
+            button.isFocusable = true
             return button
         }()
         
         override init(frame: CGRect) {
             super.init(frame: frame)
             
-            layerCornerRadius = Constants.Size.CornerRadiusMid
-            backgroundColor = Constants.Color.Background
+            layerCornerRadius = R.Size.CornerRadiusMedium
+            backgroundColor = R.Color.BackgroundTertiary
             
             addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
                 make.centerY.equalToSuperview()
             }
             
             addSubview(button)
             button.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
                 make.centerY.equalToSuperview()
             }
         }
@@ -292,14 +305,14 @@ class PSPNetworkingConfigLocalView: UIView {
     private func updateSelectImageView() {
         if asHost {
             setAsHostSelectImageView.image = UIImage(symbol: .checkmarkCircleFill,
-                                                     size: Constants.Size.IconSizeMin.height,
+                                                     size: R.Size.IconSizeMedium.height,
                                                      weight: .bold,
-                                                     colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
+                                                     colors: [R.Color.LabelPrimary.forceStyle(.dark), R.Color.Main])
         } else {
             setAsHostSelectImageView.image = UIImage(symbol: .circle,
-                                                     size: Constants.Size.IconSizeMin.height,
+                                                     size: R.Size.IconSizeMedium.height,
                                                      weight: .regular,
-                                                     color: Constants.Color.LabelTertiary)
+                                                     color: R.Color.LabelSecondary)
         }
         
     }
@@ -311,11 +324,11 @@ class PSPNetworkingConfigLocalView: UIView {
         updateSelectImageView()
         
         if asHost {
-            let matt = NSMutableAttributedString(string: R.string.localizable.setAsHost(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
+            let matt = NSMutableAttributedString(string: R.string.localizable.setAsHost(), attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelPrimary])
             if let ipAddress = BonjourKit.shared.currentIPAddress {
-                matt.append(NSAttributedString(string: "\n\(ipAddress)", attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.LabelSecondary]))
+                matt.append(NSAttributedString(string: "\n\(ipAddress)", attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelSecondary]))
                 let style = NSMutableParagraphStyle()
-                style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+                style.lineSpacing = R.Size.ContentSpaceTiny/2
                 style.alignment = .left
                 setAsHostTitleLabel.attributedText = matt.applying(attributes: [.paragraphStyle: style])
             } else {
@@ -325,7 +338,7 @@ class PSPNetworkingConfigLocalView: UIView {
             portOffsetView.value = Float(config.asHostPort)
             portOffsetView.isHidden = false
             portOffsetView.snp.updateConstraints { make in
-                make.top.equalTo(setAsHostView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+                make.top.equalTo(setAsHostView.snp.bottom).offset(R.Size.ContentSpaceLarge)
             }
             
             hostIPLabel.isHidden = true
@@ -336,11 +349,11 @@ class PSPNetworkingConfigLocalView: UIView {
             serviceListView.isHidden = true
             
         } else {
-            setAsHostTitleLabel.attributedText = NSMutableAttributedString(string: R.string.localizable.setAsHost(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
+            setAsHostTitleLabel.attributedText = NSMutableAttributedString(string: R.string.localizable.setAsHost(), attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelPrimary])
             
             portOffsetView.isHidden = true
             portOffsetView.snp.updateConstraints { make in
-                make.top.equalTo(setAsHostView.snp.bottom).offset(-Constants.Size.ItemHeightMax)
+                make.top.equalTo(setAsHostView.snp.bottom).offset(-R.Size.ItemHeightLarge)
             }
             
             hostIPLabel.isHidden = false
@@ -373,9 +386,9 @@ class PSPNetworkingConfigLocalView: UIView {
                     if index == 0 {
                         make.top.equalToSuperview()
                     } else {
-                        make.top.equalTo(serviceListView.subviews[index-1].snp.bottom).offset(Constants.Size.ContentSpaceMax)
+                        make.top.equalTo(serviceListView.subviews[index-1].snp.bottom).offset(R.Size.ContentSpaceLarge)
                     }
-                    make.height.equalTo(Constants.Size.ItemHeightMid)
+                    make.height.equalTo(R.Size.ItemHeightLarge)
                     if index == config.hostList.count - 1 {
                         make.bottom.equalToSuperview()
                     }

@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Felhőszolgáltatások";
 "ImportAddLanServiceTitle" = "Helyi hálózati szolgáltatások";
-"ImportAddDiscoverServiceTitle" = "Felfedezési szolgáltatások";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Csatlakozás";
 "AddLandServiceSuccess" = "A %@ sikeresen hozzáadva";
 "AddLandServiceFailed" = "A %@ hozzáadása sikertelen\nKérjük, ellenőrizze a hálózati kapcsolatot, a szolgáltatás állapotát vagy a megadott adatokat";
-"AddLandServiceTimeout" = "A szolgáltatáshoz való csatlakozás túllépte az időkorlátot";
 "FilesImporterErrorFileExist" = "\"%@\" már létezik, nincs szükség importálásra";
 "FilesImporterErrorBadCopy" = "A \"%@\" importálása sikertelen, hiba történt a fájl másolása során";
 "FilesImporterErrorBadExtension" = "A \"%@\" importálása sikertelen, a fájl kiterjesztése nem ismerhető fel";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nFájlok átvitele böngészővel";
 "ImportServiceListPasteTitle" = "Vágólap olvasása";
 "ImportServiceListPasteDetail" = "Támogatja a fájlok másolását macOS-ről és a Fájlok alkalmazásból";
-"ImportHowTo" = "Hogyan importáljunk";
 "ImportTopHintTitle" = "Egy álmokkal és kalandokkal teli történet itt kezdődik!";
 "ImportDragAndDropTips" = "Húzza át a fájlokat a Manic EMU bármely felületére az átvitelhez";
 "ImportChannelTips" = "Ha kérdése van, csatlakozzon a %@ csatornához segítségért";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d perc";
 "FatalErrorTitle" = "Végzetes hiba";
 "FatalErrorDesc" = "A rendszererőforrások betöltése sikertelen, a Manic EMU működése során komoly hibák léphetnek fel";
-"LodingFailedTitle" = "Betöltés sikertelen";
 "AirPlayDesc" = "Kezdje el a kalandot most!";
 "ToastSuccess" = "Sikeres mentés";
 "ToastFailed" = "Sikertelen mentés";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Játékmentés importálása";
 "GamesShareSave" = "Játékmentés exportálása";
 "GamesDelete" = "Játék eltávolítása";
-"GamesRandom" = "Nem tudod, mit játssz? Véletlenszerű választás";
 "LoadGameErrorRomNotExist" = "Játék betöltési hiba, a ROM nem létezik";
 "GamesListEmptyGuideLeft" = "Kattints a lenti";
 "GamesListEmptyGuideRight" = "gombra játék importálásához";
 "GamesListEmptyWelcomeLeft" = "Üdvözöl a";
 "GamesListEmptyWelcomeRight" = " világa";
 "GamesListEmptyWarnning" = "Győződjön meg arról, hogy a játék ROM fájlokat legális forrásból szerzi be";
+"LandscapeEmptyAddGame" = "Játék hozzáadása";
 "DeleteGameAlertDetail" = "A játék ROM, mentések és cheat kódok véglegesen törlődnek!";
 "DeleteSkinAlertDetail" = "A skin eltávolítása után nem állítható vissza!";
-"DeleteGameGameStateAlertTitle" = "Azonnali mentés eltávolítása";
 "DeleteGameGameStateAlertDetail" = "Az azonnali mentés eltávolítása után nem állítható vissza!";
 "confirmDelte" = "Törlés megerősítése";
 
 //Controllers
 "ControllersTouchName" = "Érintőképernyős vezérlő";
-"ControllersHeaderTitle" = "Vezérlők";
 "ControllersPlayerIndex" = "%d. játékos";
 "ControllersPlayerUnset" = "Nincs kiválasztva";
-"ControllersHowToConnect" = "Hogyan csatlakozzon";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ játszott · Összesen %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Játékos azonnali mentése";
 "ReadySegmentAutoSave" = "Automatikus azonnali mentés";
 "ReadyEditTitleFailed" = "Átnevezés sikertelen, a játék neve nem lehet üres";
-"ReadyEditTitleSuccess" = "Átnevezés sikeres";
 "ReadyGameSaveStatesEmpty" = "Nincsenek mentések";
 "GameSaveGuideBecomTitle" = "Válj";
 "GameSaveGuideMemberTitle" = "taggá";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Mentés %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "A Manic EMU tökéletesen kompatibilis a .deltaskin .gammaskin formátumú skinekkel";
 "SkinNavigationSubTitleSpecifiedGame" = "Csak a %@ számára skin beállítása";
 "SkinSegmentPortraitTitle" = "Álló mód";
 "SkinSegmentLandscapeTitle" = "Fekvő mód";
 "SkinAddTitle" = "Új skin hozzáadása";
-"HowToFetch" = "Hogyan szerezhető";
 "SkinDelete" = "Skin eltávolítása";
 "DefaultSkinCannotEdit" = "Az alapértelmezett skin nem szerkeszthető";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Azonnali játék";
 
 //Settings
-"LeftHandTitle" = "Bal kezes mód";
-"LeftHandDetail" = "A joystick, DPad és gombok tükrözése balra";
 "QuickGameTitle" = "Gyors játékindítás";
 "QuickGameDetail" = "A játékra kattintva nem jelenik meg az előkészítő oldal";
 "AirPlayTitle" = "AirPlay teljes képernyős mód";
 "AirPlayDetail" = "Bekapcsolva a játék képe teljes képernyőn lesz megjelenítve";
 "iCloudTitle" = "iCloud szinkronizálás";
-"iCloudDetail" = "Azonos Apple ID-val rendelkező eszközökön szinkronizálja a játékokat, skineket, mentéseket és beállításokat";
-"AppIconTitle" = "Alkalmazás ikon";
-"WidgetTitle" = "Kezdőlap widget";
 "QATitle" = "Gyakori kérdések";
 "FeedbackTitle" = "Visszajelzés";
 "ShareAppTitle" = "Oszd meg a \"Manic EMU\"-t barátaiddal";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Haladó beállítások";
 "SupportSettingTitle" = "Kapcsolatfelvétel";
 "OthersSettingTitle" = "Egyéb";
-"RatingTitleLeft" = "Értékeld a";
-"RatingTitleRight" = "-t";
-"RatingDetail" = "Ha úgy gondolja, hogy termékünk értékes, kérjük, adjon ötcsillagos értékelést, a véleménye nagyon fontos számunkra : )";
 "iCloudDisableTitle" = "Az iCloud jelenleg nem elérhető";
 "iCloudDisableDetail" = "Az iCloud szinkronizálási szolgáltatás bekapcsolása megtörtént, de csak akkor lesz aktív, ha bejelentkezett és engedélyezte az iCloud használatát. Lépjen az iPhone \"Beállítások\" > \"Apple ID\" > \"iCloud\" menüpontjára, és győződjön meg arról, hogy az iCloud Drive engedélyezve van, és a Manic EMU hozzáférhet";
 "iCloudSyncConfilictTitle" = "iCloud szinkronizálási ütközés";
-"iCloudSyncConfilictDetail" = "Felhőbeli fájl:\n%@\n\nHelyi fájl:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Felhőbeli mentés";
 "iCloudSyncConfilictSaveLocal" = "Helyi mentés";
 "SettingsNonMemberDesc" = "Ön lesz a történet főszereplője";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Köszönjük, hogy eljöttél a";
 "PlayGameDesc" = "játékhoz";
 "NoEmailSetting" = "Nincs beállított e-mail címe";
-"IDCopy" = "Az azonosítója másolva";
 "SendEmailSuccess" = "E-mail sikeresen elküldve";
 "SendEmailFailed" = "E-mail küldése sikertelen: %@";
 "iCloudTipsTitle" = "iCloud szinkronizálás bekapcsolása";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Hangerő";
 "GameSettingFastForwardResume" = "Normál sebesség";
 "GameSettingFastForward" = "Előretekerés %@";
-"GameSettingStateList" = "Mentések listája";
-"GameSettingSkins" = "Skin beállítása";
-"GameSettingFilter" = "Szűrő";
 "GameSettingScreenShot" = "Játék képernyőkép";
 "GameSettingHapticOff" = "Vibráció kikapcsolva";
 "GameSettingHapticSoft" = "Vibráció: gyenge";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Újraindítás";
 "GameSettingQuit" = "Kilépés";
 "GameSaveStateSuccess" = "Azonnali mentés sikeres";
-"GameSaveStateLoadFailed" = "Azonnali mentés betöltése sikertelen, a mentés sérült vagy inkompatibilis";
 "GameSaveStateLoadSuccess" = "Azonnali mentés sikeresen betöltve";
 "GameSaveStateQuickLoadFailed" = "Nincs kézi mentés, ha az automatikus mentést szeretné betölteni, használja a \"Mentések listája\" lehetőséget";
 "GameSaveListTitle" = "Azonnali mentések";
-"GameCheatActivateFailed" = "%@\nAktiválás sikertelen, a cheat kód érvénytelen";
 "GameCheatActivateSuccess" = "%@\nAktiválás sikeres";
 "AirPlayingTitle" = "A játék képe a kivetítőn jelenik meg";
 "VolumeOff" = "Hang némítva";
 "VolumeOn" = "Hang bekapcsolva";
-"FunctionSortDesc1" = "A fenti funkciók az alapértelmezett skin gyorsfunkcióiként lesznek használva";
-"FunctionSortDesc2" = "Hosszan nyomva tartva átrendezheti a sorrendet";
 "ManualGameSaveCountLimit" = "Az azonnali mentések száma túllépte a korlátot! Frissítsen prémium tagságra a korlátlan azonnali mentésért, vagy töröljön mentéseket a listából";
 "FastForwardSpeedLimit" = "A maximális gyorsítás x2! Frissítsen prémium tagságra az x5 gyorsításért";
 "ResetSpeed" = "Sebesség visszaállítása";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "A kód automatikus formátumfelismerése";
 "CheatCodeFormatError" = "A cheat kód formátuma helytelen";
 "CheatCodeEmptyTitle" = "Nincsenek cheat kódok";
-"CheatCodeEmptyGuideLeft" = "Kattintson a bal felső";
-"CheatCodeEmptyGuideRight" = "gombra cheat kód hozzáadásához";
 "EnableCheatCodeAlertTitle" = "Cheat kódok engedélyezése";
 "EnableCheatCodeAlertDetail" = "A cheat kódok a játék verziójától függenek, és csak akkor működnek, ha megfelelnek a játék verziójának. A cheat kódok használata módosítja a játék működését, ami hibákhoz vagy instabilitáshoz vezethet, ezért körültekintően használja!";
 
 //Filter
-"FilterSectionHeaderTitle" = "Videó szűrők";
 "FilterOriginTitle" = "Eredeti";
 
 //In-App Purchase
@@ -356,7 +326,6 @@
 "PurchasePending" = "A fizetés függőben van, a tagság a későbbiekben aktiválódik";
 "PurchaseUnknown" = "Ismeretlen fizetési állapot";
 "PurchaseErrorDesc" = "A fizetés sikertelen, győződjön meg a hálózati kapcsolatról, és próbálja újra";
-"PurchaseFailedTitle" = "Fizetés sikertelen";
 "RestoreSuccessDesc" = "A vásárlás visszaállítva!";
 "RestoreEndDesc" = "A visszaállítás befejeződött, nem található érvényes vásárlás!";
 "TrialDesc" = "A próbaidőszak alatt nem számítunk fel díjat, bármikor lemondható";
@@ -397,23 +366,12 @@
 "ShareAppSubtitle" = "Hívjátok meg a barátaitokat is a kalandra!";
 "ShareRomFilesFailed" = "A ROM megosztása sikertelen, a fájl nem érhető el";
 "ShareSaveFilesFailed" = "A játékmentés megosztása sikertelen, nincsenek mentések";
-"ShareFilesCopyFailed" = "A fájl megosztása sikertelen, hiba történt a másolás során";
-"ShareFilesCompressFailed" = "A fájl megosztása sikertelen, hiba történt a tömörítés során";
 
 "TurnOnAirPlayAsk" = "AirPlay csatlakoztatva. Azonnal vált teljes képernyős módra?";
 
 "ThreeDSModePerformance" = "Teljesítmény mód";
 "ThreeDSModeCompatibility" = "Kompatibilitási mód";
 "ThreeDSModeQuality" = "Minőség elsőbbsége";
-"ThreeDSNotSupportImportSave" = "A 3DS játékok jelenleg nem támogatják a mentések importálását";
-"ThreeDSNotSupportShareSave" = "A 3DS játékok jelenleg nem támogatják a mentések megosztását";
-"ThreeDSBetaAlertTitle" = "3DS kísérleti verzió";
-"ThreeDSBetaAlertDetail" = "Hogy hamarabb élvezhesd a 3DS játékokat, a Manic EMU már támogatja a 3DS-t, de jelenleg kísérleti állapotban van. Egyes funkciók további optimalizálást igényelnek.
-A következő funkciók átmenetileg hiányoznak:
-❌ AirPlay teljes képernyős mód
-❌ Automatikus mentés
-❌ Gyorsítási funkció
-Ha instabilitást tapasztalsz a 3DS-ben, kérjük, olvasd el a «GYIK» részt vagy csatlakozz csatornánkhoz segítségért. Folyamatosan javítjuk az emulátor teljesítményét, és megértésed támogatása segít tökéletes játékélményt teremteni. Szüntelenül dolgozunk egy jobb játékkörnyezetért.";
 "ThreeDSNoSupportDeviceTitle" = "Eszközteljesítmény elégtelen";
 "ThreeDSNoSupportDeviceDetail" = "Az eszköz teljesítménye nem elegendő a 3DS emulációhoz. Folytatás előre nem látható hibákhoz vezethet";
 
@@ -432,8 +390,6 @@ Nyomja meg a kontroller gombját...";
 "FullScreenWhenConnectControllerTitle" = "Automatikus teljes képernyő";
 "FullScreenWhenConnectControllerDetail" = "Teljes képernyő kontroller csatlakoztatásakor";
 "JoinDiscordTitle" = "Csatlakozás a Discordhoz";
-"JoinDiscordAlertMessage" = "Köszönjük %@ játékosnak a csatorna létrehozásáért. Folytatja?";
-"FlexSkinGuideTitle" = "Húzz vagy zoomolj a képernyő beállításához";
 "DownloadFailed" = "Letöltés sikertelen";
 "RemoveDownloadTask" = "Megszakítja a \"%@\" letöltését?";
 "GameSettingResolution" = "Felbontás %@";
@@ -483,9 +439,6 @@ Nyomja meg a kontroller gombját...";
 "RenderRightEyeDesc" = "Letiltás javítja néhány játék teljesítményét, de képernyővillogást okozhat";
 "DisableTitle" = "Letiltás";
 "EnableTitle" = "Engedélyezés";
-"NoSaveStateToast" = "Nincs elérhető %@";
-"DeleteSelectedSaveStateAlert" = "Törli a kiválasztott «%@»-t?\nNem visszavonható!";
-"DeleteAllSaveStateAlert" = "Nincs kiválasztva. Az összes «%@» törlése?\nNem visszavonható!";
 "AICoverSearchDesc" = "Nem angol keresés észlelve. Frissítsen Premiumra többnyelvű AI keresésért";
 "MaxTextSizeAllowDesc" = "Legfeljebb %@ karaktert támogat";
 
@@ -513,29 +466,21 @@ Nyomja meg a kontroller gombját...";
 "BiosAddTitle" = "BIOS hozzáadása";
 "StartGameWithoutBiosTitle" = "Indítás BIOS nélkül";
 
-"ThreeDSAdvanceSettingMode" = "Haladó Mód";
 "ThreeDSAdvanceSettingTitle" = "Haladó Beállítások";
-"ThreeDSBasicSettingMode" = "Alap Mód";
 "ShareConfigButtonTitle" = "Konfiguráció Megosztása";
 "ImportConfigButtonTitle" = "Konfiguráció Importálása";
 "ShareFileFailedMissing" = "Megosztás sikertelen: fájl nem létezik";
 "ReadConfigFileFailed" = "Konfigurációs fájl olvasása sikertelen";
 "SwitchEmulationCore" = "Mag Váltása";
 "SwitchEmulationCoreDetail" = "Váltás emulációs magra ehhez: %@\nA magváltás a korábbi mag mentéseit olvashatatlanná teszi. Vissza kell váltani az eredeti magra a hozzáféréshez";
-"BeetleSaturnNoSupportCheat" = "A Beetle Saturn mag jelenleg nem támogatja a csalókódokat. Szükség esetén váltson Yabause magra";
-"CurrentTitle" = "jelenlegi";
 "NewSkinDesc" = "A Manic EMU támogatja a .manicskin és .deltaskin .gammaskin formátumú skineket. Megjegyzés: Az importált skinnek meg kell egyeznie a jelenlegi platformmal, különben nem jelenik meg a listában.\nHarmadik féltől származó skin közösségekhez is biztosítunk hozzáférést. Ezek nem hivatalosan kapcsolódnak a Manic EMU-hoz. Töltéskor kövesse az egyes webhelyek szolgáltatási feltételeit";
 "VisitSite" = "Látogasson el ide: %@";
 "OpenFile" = "Fájl Megnyitása";
 "WebViewDownloadBegin" = "Letöltés elindult";
 "RespectSilentMode" = "Néma Mód Tiszteletben Tartása";
 "RespectSilentModeDesc" = "Bekapcsoláskor a Manic EMU csak némamódon kívül játszik le hangot";
-"SaturnISONoSwitchCore" = "A Sega Saturn .iso formátumú játékok nem támogatják a magváltást";
-"EnableFullScreenTitle" = "Teljes Képernyő Be";
-"DisableFullScreenTitle" = "Teljes Képernyő Ki";
 "SimulateBlowingTitle" = "Fújás Szimulálása";
 "PaletteTitle" = "Paletta";
-"SkinRestDesc" = "A skin visszaállítása a játék által hozzárendelt skineket is alapértelmezettre állítja";
 "SkinResetForAll" = "Összes Platform Skin Visszaállítása";
 "SkinResetForPlatform" = "%@ Skin Visszaállítása";
 "SkinDebug" = "Skin Teszt Terület";
@@ -552,7 +497,6 @@ Nyomja meg a kontroller gombját...";
 "MultiDiscCloseAlert" = ".m3u elkészült. Zárja be az importálás után";
 "MultiDiscContinueClose" = "Bezárás";
 "SwapDisk" = "Lemezcsere";
-"NotSupportSwapDisk" = "Nem többlemezes játék";
 "TransferPakDesc" = "A Transfer Pak szinkronizálja a GB/GBC adatokat N64-re. Aktiváláshoz: importálj ROM-ot (.gb/.gbc) és mentést (.sav)";
 "TransferPakFromLibrary" = "Importálás gyűjteményből";
 "TransferPakFromLibraryDesc" = "Csak mentéssel rendelkező játékok jelennek meg.\nA kiválasztott GB/GBC játékoknak meg kell egyezniük az N64 ROM-mal";
@@ -561,7 +505,6 @@ Nyomja meg a kontroller gombját...";
 "TransferPakOn" = "Bekapcsolva";
 "TransferPakOff" = "Kikapcsolva";
 "TransferPakImportError" = "Hiba: Importálj ROM-ot és mentést (2 fájl szükséges)";
-"ShowControlsTitle" = "Vezérlők mutatása";
 "HideControlsTitle" = "Vezérlők elrejtése";
 
 "DesignedFor" = "%@ számára tervezve";
@@ -584,7 +527,6 @@ Nyomja meg a kontroller gombját...";
 "WfcConnectDesc" = "Kapcsolódás Nintendo WFC-hez...\nGyorsítás és csalók kikapcsolva";
 "WfcDisconnectDesc" = "Kapcsolat bontása a Nintendo WFC-vel";
 "NotAllowOnlineGame" = "Ez a funkció online játék közben ki van kapcsolva";
-"QuitGameAlert" = "Kilépés a játékból? A nem mentett előrehaladás elvész";
 
 "SkinIdentifierExist" = "A(z) %@ azonosító már létezik. Módosítsd és importáld újra.";
 "AnalogModeChange" = "Váltás %@ módra";
@@ -618,7 +560,6 @@ Nyomja meg a kontroller gombját...";
 "LastActivity" = "Utolsó tevékenység: %@";
 "MemberSince" = "Tag since: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Teljesítési állapot";
 "AchievementsList" = "Achievement-ek";
 "TotalAchievements" = "Összesen %d achievement";
@@ -641,7 +582,6 @@ Nyomja meg a kontroller gombját...";
 "DisableAchievementsAlert" = "Letiltod a RetroAchievements-t?";
 "SaveStateCoreUnCompatible" = "A mentést ebben készítették: %@ (jelenlegi: %@). A betöltés problémákat okozhat!";
 "LatestSaveStateUnCompatible" = "A legutóbbi mentés nem tölthető be mag inkompatibilitás miatt";
-"Snes9xAlert" = "Licenc problémák miatt az Snes9x mag eltávolításra kerül a jövőbeli frissítésekben. Válts bsnes-re és migráld a mentéseidet, különben nem fognak működni.";
 "GotIt" = "Értem";
 "Rumble" = "Rezgés";
 "RumbleDetail" = "Az eszköz rezeg bizonyos események alatt";
@@ -657,7 +597,6 @@ Nyomja meg a kontroller gombját...";
 "JumpTips" = "Harmadik fél oldalának megnyitása";
 "ThirdPartGameInfoTips" = "A játék információkat harmadik felek szolgáltatják. Használd a saját ítélőképességed és kövessed a platform szabályait. Ha a Manic EMU nem találja a játékot, használj keresést a manuális megtaláláshoz.";
 "NotSupportHardcore" = "A Hardcore mód ki van kapcsolva ehhez a játékhoz. Lehet, hogy a Manic EMU nincs autorizálva a RetroAchievements által, vagy a játék egyszerűen nem támogatja a hardcore módot.";
-"ChooseOne" = "Válassz egyet";
 "FilesImporterErrorBadCue" = "%@ importálása sikertelen. A fájl érvénytelen vagy nem UTF-8 kódolású. Ellenőrizd a formátumot.";
 "Leaderboard" = "Ranglista";
 "LeaderboardStart" = "Ranglista kezdete: ";
@@ -673,10 +612,8 @@ Nyomja meg a kontroller gombját...";
 "AlwaysShowProgressDesc" = "Tartsd az achievementek előrehaladását láthatóvá a képernyőn.";
 "Progress" = "Előrehaladás";
 
-"DCGameNoSupportGameSave" = "A Dreamcast nem támogatja a mentések importálását/exportálását. Használd a VMU Explorer-t a Manic EMU-Flycast-dc mappában található memóriafájlok szerkesztéséhez.";
 
 "Challenge" = "Kihívás";
-"GameTypeLicensingError" = "Sajnáljuk! A %@ mag licenc korlátozásai miatt ez a platform átmenetileg nem érhető el. Várhat egy jövőbeli frissítésre, vagy használhatja a sideload verziót.";
 "DCJITLessVer" = "Az Alapértelmezett verzió gyors és pontos emulációt kínál, de nem futtat WinCE játékokat. WinCE játékokhoz válassza a WinCE magot.";
 "TVStandard" = "Ha a játék TV szabványa nem egyezik a régióval, az befolyásolhatja a sebességet. A PAL régiók főként Európát, Ausztráliát és Új-Zélandot foglalják magukba.";
 "SNESVRAMEnable" = "Néhány hackelt ROM megköveteli ezt az opciót a helyes grafikai megjelenítéshez, de engedélyezése letiltja a RetroAchievements támogatást.";
@@ -699,7 +636,6 @@ Nyomja meg a kontroller gombját...";
 "LayoutEmbeddedBottomRight" = "Beágyazott (Lent-Jobb)";
 "LayoutSingleScreen" = "Egyetlen képernyő";
 "AirPlayLayoutTips" = "Kombináld az AirPlay elrendezést Képernyő Csere funkcióval több opcióért. Megj.: Beágyazott elrendezésnél Képernyő Csere használata átfedést okozhat, nem ajánlott";
-"ToggleAnolog" = "Analóg váltás";
 "EnableGlobalAchievements" = "Globális RetroAchievements engedélyezése";
 "GlobalHardcoreMode" = "Globális hardcore mód";
 "GlobalHardcoreAlert" = "Kérjük, először engedélyezze a globális RetroAchievements-t";
@@ -715,7 +651,6 @@ Nyomja meg a kontroller gombját...";
 "AppearanceLight" = "Világos mód";
 "AppearanceDark" = "Sötét mód";
 "AppearanceAuto" = "Követi a Rendszert";
-"GameListBackground" = "Háttérkép";
 "GameListBackgroundUpload" = "Feltöltés";
 "GameplayManuals" = "Játék Kézikönyvek";
 "GameplayManualsNoExists" = "Ehhez a játékhoz nincs elérhető kézikönyv.";
@@ -725,7 +660,6 @@ Nyomja meg a kontroller gombját...";
 "UnsupportSkinsDesc" = "A következő skin-ek nem támogatottak ezen az eszközön:\n%@Megjegyzés: Eltávolításuk ezeket a skin-eket más iCloud-on keresztül szinkronizált eszközökről is törli.";
 "UnsupportSkinsRemoveSuccess" = "Nem támogatott skin-ek sikeresen eltávolítva";
 "ForbitPKSM" = "A fair RetroAchievements élmény biztosításához a PKSM nem használható, amikor a Globális RetroAchievements engedélyezve van.";
-"FDSAlert" = "Ez a lehetőség csak FDS játékoknál érhető el.";
 "DiskSideChange" = "Lemez Megfordítása";
 "EjectDisk" = "Lemez Kiadása";
 
@@ -758,7 +692,6 @@ Nyomja meg a kontroller gombját...";
 "TriggerProName" = "TriggerPro név";
 "Position" = "Pozíció";
 "ButtonInfo" = "Gomb információ";
-"NoTriggerPro" = "Nem található TriggerPro konfiguráció. Lépj a Beállításokba, vagy nyomd hosszan a TriggerPro opciót a Játékmenüben létrehozásához";
 "ManageTriggerPro" = "TriggerPro kezelése";
 "EnableTriggerPro" = "TriggerPro engedélyezése";
 "DisableTriggerPro" = "TriggerPro letiltása";
@@ -799,7 +732,6 @@ Nyomja meg a kontroller gombját...";
 "Default" = "Alapértelmezett";
 "Imported" = "Importálva";
 "DownloadRetroArchSahders" = "Shader letöltése a RetroArch-ból";
-"ImportShaders" = "Shaderek importálása";
 "Shaders" = "Shaderek";
 "DownloadRetroArchShaders" = "Letöltöd a shadereket a RetroArch-ból? Amint kész, a RetroArch shader kategória automatikusan frissül. Bármikor megszakíthatod ezt a folyamatot a letöltéskezelőben.";
 "RetroArchShaderUnzipFailed" = "Nem sikerült kicsomagolni: %@. A fájl sérülhetett a letöltés során. Kérjük, töltsd le újra.";
@@ -832,7 +764,6 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "JGenesisAlert" = "Sajnáljuk, a JGenesis mag csak .chd ROM fájlokat támogat.";
 "RedeemOfferCode" = "Ajánlat Beváltása";
 "CheatImportFailed" = "Importálás sikertelen. A fájl nem elemezhető, vagy nem találhatók megfelelő csaláskódok.";
-"RemoveAllCheats" = "Összes Csalás Eltávolítása";
 "RemoveAllCheatsAlert" = "Biztosan el szeretné távolítani az összes csaláskódot? Ez a művelet nem visszavonható.";
 "CheatCodeStatus" = "Engedélyezve";
 "Background" = "Háttér";
@@ -845,13 +776,8 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "RemoveBackgroundForGame" = "Játék Háttér Eltávolítása";
 "RemoveBackgroundForConsole" = "%@ Platform Háttér Eltávolítása";
 "RemoveBackgroundForGlobal" = "Globális Háttér Eltávolítása";
-"ShaderConfigAlert" = "Beállítva a(z) %@ számára.";
-"Global" = "Globális";
-"RemoveShaderForGlobal" = "Globális Shader Eltávolítása";
 "FeaturedItems" = "Kiemelt Tételek";
-"ReUpload" = "Újrafeltöltés";
 
-"Service" = "Szolgáltatások";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "PSP hálózat";
 "Networking" = "Hálózat";
@@ -890,16 +816,11 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "LoadingCheerpJ" = "CheerpJ betöltése";
 "ZipHandlerTitle" = "ZIP-fájlok kezelése";
 "ZipHandlerDetail" = "Egyes platformok (például DOS és Arcade) közvetlenül .zip fájlokból tölthetik be a ROM-okat. Más platformok esetében a .zip fájlon belüli ROM-okat importálás előtt ki kell csomagolni.\n\nA kijelölt fájlok kicsomagolásra és egyenkénti importálásra kerülnek, míg a nem kijelölt fájlok egyetlen ZIP ROM-ként lesznek importálva.";
-"ConfigsResetCore" = "Visszaállítás a mag alapértelmezettjeire";
-"ConfigsResetBefore" = "Visszatérés az előző beállításokhoz";
 "InsertDisc" = "Lemez behelyezése";
 "InsertDiscAlert" = "Behelyezhet egy lemezt, ha kiválaszt egy másik játékot ugyanabból a platformról a könyvtárában, vagy ha kiválaszt egy lemezfájlt a Fájlok alkalmazásból. Az iOS fájlrendszer korlátai miatt a Fájlok alkalmazásból kiválasztott lemezfájlok a Manic EMU gyorsítótárába másolódnak.";
 "InsertDiscFailed" = "Lemez behelyezése sikertelen";
 "GenerateHomeMenu" = "Kezdőképernyő menü létrehozása";
 "SkinSoundEffects" = "Skin hangeffektek";
-"FirstAnniversary" = "KÖSZÖNJÜK, HOGY ITT VAGY,\nÍRTUNK NEKED VALAMIT";
-"ApirlFoolsDayTitle" = "Hoppá, elromlott a Manic EMU?";
-"ApirlFoolsDayDetail" = "Ne aggódjon!\nCsak egy tréfa—Boldog Április bolondját!\n\nMiután bezárja ezt, minden visszatér a normál állapotba.";
 "JITType" = "JIT típus";
 "JITTypeDesc" = "A szabványos JIT kínálja a legjobb teljesítményt, míg az IR JIT közepes teljesítményt nyújt.";
 "Pretendo" = "Pretendo hálózat";
@@ -914,7 +835,6 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "HomeMenuDesc" = "Az alábbi gombbal nyissa meg a Kezdőképernyőt. Ezután lépjen a Nimbus beállításokhoz, váltson a Pretendo hálózatra, nyissa meg a Beállításokat, válassza a „Nintendo Network ID” lehetőséget, és jelentkezzen be a Pretendo fiókjával.\n\nEzt követően minden, a Kezdőképernyőről indított vagy az Azahar maggal futó játék a Pretendo hálózatot fogja használni.\n\nHa a Kezdőképernyő-bejegyzés hiányzik, ez a funkció megpróbálja automatikusan újra létrehozni.";
 "OpenHomeMenu" = "Kezdőképernyő megnyitása";
 "ChooseRegion" = "Régió kiválasztása";
-"ChooseRegionDesc" = "Válassza ki az Artic Setup eszközt futtató 3DS-eszköz helyes régióját. A rossz régió kiválasztása megakadályozza az adatok sikeres átvitelét.";
 "HomeMenuNotFound" = "A Kezdőképernyő nem található. Először fejezze be az Artic Base adatátvitelt.";
 "SystemUpdateAsk" = "Sikeresen befejeződött a rendszerfrissítés?";
 "SystemUpdateDesc" = "Ha a rendszerfrissítés hálózati problémák miatt meghiúsult, próbálkozzon újra az adatátvitellel. Ellenkező esetben a 3DS Kezdőképernyő nem működhet megfelelően.";

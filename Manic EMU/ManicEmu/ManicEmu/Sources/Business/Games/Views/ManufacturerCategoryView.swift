@@ -8,35 +8,27 @@
 
 class ManufacturerCategoryView: BaseView {
     class ManufacturerCategoryCell: UICollectionViewCell {
-        let normalImageView: UIImageView = {
-            let view = UIImageView()
-            view.contentMode = .center
-            return view
-        }()
-        
-        let selectedImageView: UIImageView = {
-            let view = UIImageView()
-            view.contentMode = .center
-            view.isHidden = true
-            return view
-        }()
+        let normalImageView = ASIconView()
+        let selectedImageView = ASIconView()
         
         var onLongPress: (()->Void)? = nil
         
         override init(frame: CGRect) {
             super.init(frame: frame)
             backgroundColor = .clear
-            enableInteractive = true
-            delayInteractiveTouchEnd = true
+            enablePressEffect = true
+            
             
             addSubview(normalImageView)
             normalImageView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.leading.trailing.equalToSuperview()
+                make.centerY.equalToSuperview()
             }
             
             addSubview(selectedImageView)
+            selectedImageView.isHidden = true
             selectedImageView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.edges.equalTo(normalImageView)
             }
             
             let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
@@ -65,8 +57,8 @@ class ManufacturerCategoryView: BaseView {
         }
         
         func setDatas(normalImage: UIImage, highlightImage: UIImage) {
-            normalImageView.image = normalImage
-            selectedImageView.image = highlightImage
+            normalImageView.icon = .image(normalImage)
+            selectedImageView.icon = .image(highlightImage)
         }
     }
     
@@ -87,6 +79,7 @@ class ManufacturerCategoryView: BaseView {
         view.showsHorizontalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
+        view.isFocusable = true
         view.alwaysBounceHorizontal = false
         view.alwaysBounceVertical = false
         view.allowsSelection = true
@@ -107,7 +100,7 @@ class ManufacturerCategoryView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        manufacturerOrderUpdateNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ManufacturerOrderUpdate, object: nil, queue: .main, using: { [weak self] _ in
+        manufacturerOrderUpdateNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.ManufacturerOrderUpdate, object: nil, queue: .main, using: { [weak self] _ in
             self?.updateDatas()
         })
     }
@@ -119,16 +112,23 @@ class ManufacturerCategoryView: BaseView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
             //item布局
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(80),
                                                                                  heightDimension: .fractionalHeight(1)))
             
 
             
             //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(UIDevice.isPhone ? 1/4 : 1/5), heightDimension: .fractionalHeight(1)), subitem: item, count: 1)
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(80),
+                                                                                              heightDimension: .fractionalHeight(1)),
+                                                           subitems: [item])
             //section布局
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .continuous
+            section.interGroupSpacing = R.Size.ContentSpaceLarge
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                            leading: R.Size.ContentSpaceMedium,
+                                                            bottom: 0,
+                                                            trailing: R.Size.ContentSpaceMedium)
             
             return section
         }
@@ -161,7 +161,7 @@ extension ManufacturerCategoryView: UICollectionViewDataSource {
         let manufacturer = manufacturers[indexPath.row]
         cell.setDatas(normalImage: manufacturer.normalImage, highlightImage: manufacturer.highlightImage)
         cell.onLongPress = {
-            topViewController()?.present(WebViewController(url: Constants.URLs.manufacturer(manufacturer)), animated: true)
+            ASWebView.show(url: R.URLs.manufacturer(manufacturer))
         }
         return cell
     }

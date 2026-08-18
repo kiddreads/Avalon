@@ -9,7 +9,10 @@
 
 class DesktopIconCollectionViewCell: UICollectionViewCell {
     
-    class IconView: UIView {
+    class IconView: BaseView {
+        
+        private var mainColorChangeNotification: Any? = nil
+        
         var imageView: UIImageView = {
             let view = UIImageView()
             view.contentMode = .scaleAspectFill
@@ -19,20 +22,25 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
         var selectImageView: UIImageView = {
             let view = UIImageView()
             view.contentMode = .center
-            view.layerCornerRadius = Constants.Size.IconSizeMin.height/2
-            view.layer.shadowColor = Constants.Color.Shadow.cgColor
+            view.layerCornerRadius = R.Size.IconSizeMedium.height/2
+            view.layer.shadowColor = R.Color.Shadow.cgColor
             view.layer.shadowOpacity = 0.5
             view.layer.shadowRadius = 2
-            view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
+            view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [R.Color.LabelPrimary.forceStyle(.dark), R.Color.Main])
             view.isHidden = true
             return view
         }()
         
+        deinit {
+            if let mainColorChangeNotification {
+                NotificationCenter.default.removeObserver(mainColorChangeNotification)
+            }
+        }
+        
         override init(frame: CGRect) {
             super.init(frame: frame)
             
-            enableInteractive = true
-            delayInteractiveTouchEnd = true
+            enablePressEffect = true
             
             addSubview(imageView)
             imageView.snp.makeConstraints { make in
@@ -41,15 +49,20 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
             
             addSubview(selectImageView)
             selectImageView.snp.makeConstraints { make in
-                make.size.equalTo(Constants.Size.IconSizeMin)
-                make.trailing.equalToSuperview().offset(Constants.Size.ContentSpaceTiny)
-                make.top.equalToSuperview().offset(-Constants.Size.ContentSpaceTiny)
+                make.size.equalTo(R.Size.IconSizeMedium)
+                make.trailing.equalToSuperview().offset(R.Size.ContentSpaceExtraSmall)
+                make.top.equalToSuperview().offset(-R.Size.ContentSpaceExtraSmall)
+            }
+            
+            mainColorChangeNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in
+                guard let self = self else { return }
+                self.selectImageView.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [R.Color.LabelPrimary.forceStyle(.dark), R.Color.Main])
             }
         }
         
         override func layoutSubviews() {
             super.layoutSubviews()
-            imageView.image = imageView.image?.withRoundedCorners(radius: Constants.Size.AppleIconCornerRadius(height: height)) 
+            imageView.image = imageView.image?.withRoundedCorners(radius: R.Size.AppleIconCornerRadius(height: height)) 
         }
         
         required init?(coder: NSCoder) {
@@ -59,7 +72,7 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
         override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
             super.traitCollectionDidChange(previousTraitCollection)
             if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+                selectImageView.layer.shadowColor = R.Color.Shadow.cgColor
             }
         }
     }
@@ -67,8 +80,8 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
     
     private var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMax
+        view.backgroundColor = R.Color.BackgroundSecondary
+        view.layerCornerRadius = R.Size.CornerRadiusLarge
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.alwaysBounceHorizontal = true
@@ -78,8 +91,8 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
     
     private var descLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.Font.caption()
-        label.textColor = Constants.Color.LabelSecondary
+        label.font = R.Font.Caption()
+        label.textColor = R.Color.LabelSecondary
         label.text = R.string.localizable.themeDesktopIconDetail()
         return label
     }()
@@ -109,7 +122,7 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
         let theme = Theme.defalut
         for (index, icon) in icons.enumerated() {
             let iconView = IconView()
-            iconView.imageView.image = UIImage(named: icon.lowercased())?.scaled(toSize: Constants.Size.IconSizeHuge)
+            iconView.imageView.image = UIImage(named: icon.lowercased())?.scaled(toSize: R.Size.IconSizeHuge)
             if theme.icon == icon {
                 iconView.selectImageView.isHidden = false
             } else {
@@ -118,15 +131,15 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
             scrollView.addSubview(iconView)
             iconView.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
-                make.top.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.top.bottom.equalToSuperview().inset(R.Size.ContentSpaceMedium)
                 make.height.equalTo(iconView.snp.width)
                 if index == 0 {
-                    make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+                    make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
                 } else {
-                    make.leading.equalTo(scrollView.subviews[index-1].snp.trailing).offset(Constants.Size.ContentSpaceMid)
+                    make.leading.equalTo(scrollView.subviews[index-1].snp.trailing).offset(R.Size.ContentSpaceMedium)
                 }
                 if index == icons.count - 1 {
-                    make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                    make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
                 }
             }
             
@@ -157,7 +170,7 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
         addSubview(descLabel)
         descLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(scrollView.snp.bottom).offset(Constants.Size.ContentSpaceTiny)
+            make.top.equalTo(scrollView.snp.bottom).offset(R.Size.ContentSpaceExtraSmall)
         }
     }
     

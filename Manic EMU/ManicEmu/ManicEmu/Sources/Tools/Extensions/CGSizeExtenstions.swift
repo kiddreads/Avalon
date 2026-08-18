@@ -11,4 +11,12 @@ extension CGSize {
     init(_ size: CGFloat) {
         self.init(width: size, height: size)
     }
+    
+    func insetBy(dx: CGFloat, dy: CGFloat) -> CGSize {
+        return CGSize(width: width - (dx * 2), height: height - (dy * 2))
+    }
+    
+    func scaleBy(_ scale: CGFloat) -> CGSize {
+        return CGSize(width: width * scale, height: height * scale)
+    }
 }

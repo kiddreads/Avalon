@@ -11,8 +11,8 @@ class PSXSBIDescCollectionCell: UICollectionViewCell {
     private let descLabel: UILabel = {
         let desc = UILabel()
         desc.numberOfLines = 0
-        desc.textColor = Constants.Color.LabelSecondary
-        desc.font = Constants.Font.body()
+        desc.textColor = R.Color.LabelSecondary
+        desc.font = R.Font.Footnote()
         desc.text = R.string.localizable.sbiImportDesc()
         return desc
     }()
@@ -21,7 +21,7 @@ class PSXSBIDescCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         addSubview(descLabel)
         descLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.edges.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
     }
     

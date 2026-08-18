@@ -47,4 +47,18 @@ extension UIColor {
         gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
         return gradient
     }
+    
+    func blended(with foreground: UIColor, fraction: CGFloat) -> UIColor {
+        var br: CGFloat = 0, bg: CGFloat = 0, bb: CGFloat = 0, ba: CGFloat = 0
+        var fr: CGFloat = 0, fg: CGFloat = 0, fb: CGFloat = 0, fa: CGFloat = 0
+        getRed(&br, green: &bg, blue: &bb, alpha: &ba)
+        foreground.getRed(&fr, green: &fg, blue: &fb, alpha: &fa)
+        let a = fraction * fa
+        return UIColor(
+            red: br * (1 - a) + fr * a,
+            green: bg * (1 - a) + fg * a,
+            blue: bb * (1 - a) + fb * a,
+            alpha: 1
+        )
+    }
 }

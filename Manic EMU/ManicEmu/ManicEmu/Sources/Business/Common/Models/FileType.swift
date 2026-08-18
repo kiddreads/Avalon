@@ -39,7 +39,7 @@ enum FileType {
     
     private static func getFileExtensions(for fileType: FileType) -> [String] {
         var results: [String] = []
-        if let declarations: [[String: Any]] = Constants.Config.value(forKey: "UTExportedTypeDeclarations") {
+        if let declarations: [[String: Any]] = R.Config.value(forKey: "UTExportedTypeDeclarations") {
             for declaration in declarations {
                 let prefixItem: String
                 switch fileType {
@@ -65,7 +65,7 @@ enum FileType {
     
     static func get3DSExtensions() -> [String] {
         var results: [String] = []
-        if let declarations: [[String: Any]] = Constants.Config.value(forKey: "UTExportedTypeDeclarations") {
+        if let declarations: [[String: Any]] = R.Config.value(forKey: "UTExportedTypeDeclarations") {
             for declaration in declarations {
                 if let identifier = declaration["UTTypeIdentifier"] as? String,
                    identifier.contains("public.aoshuang.game.3ds") {

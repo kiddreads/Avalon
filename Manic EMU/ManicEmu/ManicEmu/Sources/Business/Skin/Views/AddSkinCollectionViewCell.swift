@@ -11,26 +11,25 @@ import UIKit
 
 class AddSkinCollectionViewCell: UICollectionViewCell {
     var iconView: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plusCircleFill, color: Constants.Color.LabelSecondary),
+        let view = SymbolButton(image: UIImage(symbol: .plusCircleFill, color: R.Color.LabelSecondary),
                                 title: R.string.localizable.skinAddTitle(),
-                                titleFont: Constants.Font.caption(size: .l),
-                                titleColor: Constants.Color.LabelSecondary,
+                                titleFont: R.Font.Caption(),
+                                titleColor: R.Color.LabelSecondary,
                                 edgeInsets: .zero,
                                 titlePosition: .down,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceTiny)
+                                imageAndTitlePadding: R.Size.ContentSpaceExtraSmall)
         view.layerCornerRadius = 0
         view.backgroundColor = .clear
-        view.enableInteractive = false
-        view.delayInteractiveTouchEnd = true
+        view.enablePressEffect = false
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
-        layerCornerRadius = Constants.Size.CornerRadiusMid
-        backgroundColor = Constants.Color.Background
+        enablePressEffect = true
+        
+        layerCornerRadius = R.Size.CornerRadiusMedium
+        backgroundColor = R.Color.BackgroundPrimary
         addSubview(iconView)
         iconView.snp.makeConstraints { make in
             make.center.equalToSuperview()

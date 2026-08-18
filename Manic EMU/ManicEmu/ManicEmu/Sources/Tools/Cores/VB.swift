@@ -19,7 +19,9 @@ extension GameType
     case a
     case b
     case l
+    case l1
     case r
+    case r1
     case start
     case select
     case up
@@ -42,7 +44,9 @@ extension GameType
         if stringValue == "a" { self = .a }
         else if stringValue == "b" { self = .b }
         else if stringValue == "l" { self = .l }
+        else if stringValue == "l1" { self = .l1 }
         else if stringValue == "r" { self = .r }
+        else if stringValue == "r1" { self = .r1 }
         else if stringValue == "start" { self = .start }
         else if stringValue == "select" { self = .select }
         else if stringValue == "up" { self = .up }
@@ -95,7 +99,7 @@ class VBEmulatorBridge : EmulatorBridgeBase {
         if let gameInput = VBGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
             LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
         }
@@ -105,7 +109,9 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         if gameInput == .a { return .A }
         else if gameInput == .b { return .B }
         else if gameInput == .l { return .L1 }
+        else if gameInput == .l1 { return .L1 }
         else if gameInput == .r { return .R1 }
+        else if gameInput == .r1 { return .R1 }
         else if gameInput == .start { return .start }
         else if gameInput == .select { return .select }
         else if gameInput == .up { return .up }

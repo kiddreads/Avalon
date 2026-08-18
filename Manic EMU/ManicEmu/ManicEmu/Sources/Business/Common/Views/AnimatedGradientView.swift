@@ -27,7 +27,7 @@ class AnimatedGradientView: AnimatedMulticolorGradientView {
         }
     }
     
-    init(colors: [UIColor] = Constants.Color.Gradient, notifiedUpadate: Bool = false, alphaComponent: CGFloat = 1) {
+    init(colors: [UIColor] = R.Color.Gradient, notifiedUpadate: Bool = false, alphaComponent: CGFloat = 1) {
         super.init(animationDirector: SpeckleAnimationRandomDirector())
         if alphaComponent > 0 && alphaComponent < 1 {
             self.setColors(colors.map({ $0.withAlphaComponent(alphaComponent) }), animated: false)
@@ -41,22 +41,22 @@ class AnimatedGradientView: AnimatedMulticolorGradientView {
         self.frameLimit = 5
         
         if notifiedUpadate {
-            gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in
+            gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in
                 guard let self = self else { return }
                 if alphaComponent > 0 && alphaComponent < 1 {
-                    self.setColors(Constants.Color.Gradient.map({ $0.withAlphaComponent(alphaComponent) }), animated: false)
+                    self.setColors(R.Color.Gradient.map({ $0.withAlphaComponent(alphaComponent) }), animated: false)
                 } else {
-                    self.setColors(Constants.Color.Gradient, animated: false)
+                    self.setColors(R.Color.Gradient, animated: false)
                 }
             }
         }
         
-        startGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StartPlayGame, object: nil, queue: .main) { [weak self] notification in
+        startGameNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.StartPlayGame, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             self.speed = 0
         }
         
-        stopGameNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.StopPlayGame, object: nil, queue: .main) { [weak self] notification in
+        stopGameNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.StopPlayGame, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             self.speed = 1
         }

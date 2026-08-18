@@ -23,7 +23,9 @@ extension GameType
     case y
     case z
     case l
+    case l1
     case r
+    case r1
     case start
     case select
     case up
@@ -44,7 +46,9 @@ extension GameType
         else if stringValue == "x" { self = .x }
         else if stringValue == "y" { self = .y }
         else if stringValue == "l" { self = .l }
+        else if stringValue == "l1" { self = .l1 }
         else if stringValue == "r" { self = .r }
+        else if stringValue == "r1" { self = .r1 }
         else if stringValue == "start" { self = .start }
         else if stringValue == "select" { self = .select }
         else if stringValue == "menu" { self = .menu }
@@ -96,7 +100,7 @@ class SSEmulatorBridge : EmulatorBridgeBase {
         if let gameInput = SSGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
             LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
         }
@@ -110,7 +114,9 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         else if gameInput == .y { return .X }
         else if gameInput == .z { return .L1 }
         else if gameInput == .l { return .L2 }
+        else if gameInput == .l1 { return .L2 }
         else if gameInput == .r { return .R2 }
+        else if gameInput == .r1 { return .R2 }
         else if gameInput == .start { return .start }
         else if gameInput == .select { return .select }
         else if gameInput == .up { return .up }

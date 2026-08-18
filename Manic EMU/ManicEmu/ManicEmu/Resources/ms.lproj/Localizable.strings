@@ -10,7 +10,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Perkhidmatan Awan";
 "ImportAddLanServiceTitle" = "Perkhidmatan Rangkaian Tempatan";
-"ImportAddDiscoverServiceTitle" = "Perkhidmatan Penemuan";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Sambung";
 "AddLandServiceSuccess" = "Berjaya tambah %@";
 "AddLandServiceFailed" = "Gagal tambah %@\nSila semak sambungan rangkaian, status perkhidmatan atau maklumat yang dimasukkan";
-"AddLandServiceTimeout" = "Sambungan ke perkhidmatan melebihi masa";
 "FilesImporterErrorFileExist" = "\"%@\" sudah wujud, tidak perlu diimport";
 "FilesImporterErrorBadCopy" = "Gagal import \"%@\", ralat semasa menyalin fail";
 "FilesImporterErrorBadExtension" = "Gagal import \"%@\", sambungan fail tidak dikenali";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nGunakan pelayar untuk hantar fail";
 "ImportServiceListPasteTitle" = "Baca Papan Klip";
 "ImportServiceListPasteDetail" = "Sokongan salinan fail dari macOS atau aplikasi Fail";
-"ImportHowTo" = "Cara Import";
 "ImportTopHintTitle" = "Sebuah cerita penuh impian dan pengembaraan akan bermula di sini!";
 "ImportDragAndDropTips" = "Seret fail ke mana-mana antaramuka Manic EMU untuk pemindahan";
 "ImportChannelTips" = "Sertai %@ untuk bantuan sekiranya ada pertanyaan";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d minit";
 "FatalErrorTitle" = "Ralat Kritikal";
 "FatalErrorDesc" = "Sistem gagal memuat sumber, Manic EMU mungkin tidak berfungsi dengan baik";
-"LodingFailedTitle" = "Gagal Muat";
 "AirPlayDesc" = "Mari mulakan pengembaraan!";
 "ToastSuccess" = "Simpan Berjaya";
 "ToastFailed" = "Simpan Gagal";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Import Simpanan";
 "GamesShareSave" = "Eksport Simpanan";
 "GamesDelete" = "Padam Permainan";
-"GamesRandom" = "Pilih permainan secara rawak";
 "LoadGameErrorRomNotExist" = "Gagal muat permainan, ROM tidak wujud";
 "GamesListEmptyGuideLeft" = "Klik";
 "GamesListEmptyGuideRight" = "di bawah untuk import permainan";
 "GamesListEmptyWelcomeLeft" = "Selamat datang ke dunia";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Pastikan anda mendapatkan ROM secara sah";
+"LandscapeEmptyAddGame" = "Tambah Permainan";
 "DeleteGameAlertDetail" = "ROM, simpanan dan data cheat code akan dipadam selama-lamanya!";
 "DeleteSkinAlertDetail" = "Kulit yang dipadam tidak boleh dipulihkan!";
-"DeleteGameGameStateAlertTitle" = "Padam Simpanan Segera";
 "DeleteGameGameStateAlertDetail" = "Simpanan segera akan dipadam selama-lamanya!";
 "confirmDelte" = "Sahkan Padam";
 
 //Controllers
 "ControllersTouchName" = "Kawalan Sentuh";
-"ControllersHeaderTitle" = "Pengawal";
 "ControllersPlayerIndex" = "Pemain %d";
 "ControllersPlayerUnset" = "Belum Ditentukan";
-"ControllersHowToConnect" = "Cara Sambung";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ lalu · Jumlah %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Simpanan Manual Segera";
 "ReadySegmentAutoSave" = "Simpanan Auto Segera";
 "ReadyEditTitleFailed" = "Gagal tukar nama, nama tidak boleh kosong";
-"ReadyEditTitleSuccess" = "Tukar nama berjaya";
 "ReadyGameSaveStatesEmpty" = "Tiada simpanan";
 "GameSaveGuideBecomTitle" = "Jadi";
 "GameSaveGuideMemberTitle" = "Ahli";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Simpanan %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU menyokong format kulit .deltaskin .gammaskin";
 "SkinNavigationSubTitleSpecifiedGame" = "Khusus untuk %@";
 "SkinSegmentPortraitTitle" = "Mod Potret";
 "SkinSegmentLandscapeTitle" = "Mod Landskap";
 "SkinAddTitle" = "Tambah Kulit";
-"HowToFetch" = "Cara Dapatkan";
 "SkinDelete" = "Padam Kulit";
 "DefaultSkinCannotEdit" = "Kulit asal tidak boleh diubah";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Main Sekarang";
 
 //Settings
-"LeftHandTitle" = "Mod Tangan Kiri";
-"LeftHandDetail" = "Pantulkan kedudukan joystick, DPad dan butang";
 "QuickGameTitle" = "Permainan Pantas";
 "QuickGameDetail" = "Langkau halaman persediaan apabila klik permainan";
 "AirPlayTitle" = "Mod Skrin Penuh AirPlay";
 "AirPlayDetail" = "Paparkan permainan pada skrin penuh semasa AirPlay";
 "iCloudTitle" = "Sync iCloud";
-"iCloudDetail" = "Sync permainan, kulit, simpanan dan tetapan antara peranti dengan Apple ID sama";
-"AppIconTitle" = "Ikon Aplikasi";
-"WidgetTitle" = "Widget Desktop";
 "QATitle" = "Soalan Lazim";
 "FeedbackTitle" = "Maklum Balas";
 "ShareAppTitle" = "Kongsi Manic EMU";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Tetapan Lanjutan";
 "SupportSettingTitle" = "Sokongan";
 "OthersSettingTitle" = "Lain-lain";
-"RatingTitleLeft" = "Nilai";
-"RatingTitleRight" = "";
-"RatingDetail" = "Jika anda menyukai produk kami, sila berikan 5 bintang ⭐️. Sokongan anda sangat bermakna!";
 "iCloudDisableTitle" = "iCloud Tidak Tersedia";
 "iCloudDisableDetail" = "Pergi ke Tetapan > Apple ID > iCloud dan pastikan iCloud Drive dihidupkan untuk Manic EMU";
 "iCloudSyncConfilictTitle" = "Konflik Sync iCloud";
-"iCloudSyncConfilictDetail" = "Fail awan:\n%@\n\nFail tempatan:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Simpan iCloud";
 "iCloudSyncConfilictSaveLocal" = "Simpan Tempatan";
 "SettingsNonMemberDesc" = "Anda akan menjadi watak utama dalam cerita ini";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Terima kasih kerana bermain di";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Emel belum ditetapkan";
-"IDCopy" = "ID disalin";
 "SendEmailSuccess" = "Emel berjaya dihantar";
 "SendEmailFailed" = "Gagal hantar emel: %@";
 "iCloudTipsTitle" = "Hidupkan Sync iCloud";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Volum";
 "GameSettingFastForwardResume" = "Kelajuan Normal";
 "GameSettingFastForward" = "Laju %@";
-"GameSettingStateList" = "Senarai Simpanan";
-"GameSettingSkins" = "Tetapan Kulit";
-"GameSettingFilter" = "Penapis";
 "GameSettingScreenShot" = "Tangkap Skrin";
 "GameSettingHapticOff" = "Tiada Getaran";
 "GameSettingHapticSoft" = "Getaran Lemah";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Muat Semula";
 "GameSettingQuit" = "Keluar";
 "GameSaveStateSuccess" = "Simpanan Segera Berjaya";
-"GameSaveStateLoadFailed" = "Gagal muat simpanan, simpanan rosak atau tidak serasi";
 "GameSaveStateLoadSuccess" = "Simpanan Segera Dimuat";
 "GameSaveStateQuickLoadFailed" = "Tiada simpanan manual, gunakan Senarai Simpanan untuk simpanan auto";
 "GameSaveListTitle" = "Simpanan Segera";
-"GameCheatActivateFailed" = "%@\nGagal diaktifkan: Cheat code tidak sah";
 "GameCheatActivateSuccess" = "%@\nAktif Berjaya";
 "AirPlayingTitle" = "Paparan dihantar ke AirPlay";
 "VolumeOff" = "Volum: Mati";
 "VolumeOn" = "Volum: Hidup";
-"FunctionSortDesc1" = "Fungsi ini sebagai pintasan kulit lalai";
-"FunctionSortDesc2" = "Tekan lama untuk susun semula";
 "ManualGameSaveCountLimit" = "Had simpanan manual dicapai! Naik taraf ke ahli untuk simpanan tanpa had";
 "FastForwardSpeedLimit" = "Kelajuan maksimum x2. Naik taraf ke ahli untuk x5!";
 "ResetSpeed" = "Kembali ke Normal";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Input code untuk auto kesan format";
 "CheatCodeFormatError" = "Format cheat code tidak sah";
 "CheatCodeEmptyTitle" = "Tiada Cheat Code";
-"CheatCodeEmptyGuideLeft" = "Klik";
-"CheatCodeEmptyGuideRight" = "di atas untuk tambah cheat code";
 "EnableCheatCodeAlertTitle" = "Aktifkan Cheat Code";
 "EnableCheatCodeAlertDetail" = "Cheat code bergantung pada versi permainan. Penggunaan mungkin menyebabkan ralat!";
 
 //滤镜
-"FilterSectionHeaderTitle" = "Penapis Video";
 "FilterOriginTitle" = "Asal";
 
 //内购
@@ -328,7 +298,6 @@
 "PurchasePending" = "Pembayaran ditangguh";
 "PurchaseUnknown" = "Status tidak diketahui";
 "PurchaseErrorDesc" = "Ralat pembayaran, sila semak rangkaian";
-"PurchaseFailedTitle" = "Pembayaran Gagal";
 "RestoreSuccessDesc" = "Pembelian dipulih!";
 "RestoreEndDesc" = "Tiada pembelian boleh dipulih";
 "TrialDesc" = "Percubaan percuma, batalkan bila-bila masa";
@@ -369,25 +338,12 @@
 "ShareAppSubtitle" = "Jemput rakan anda bermain bersama!";
 "ShareRomFilesFailed" = "Gagal kongsi ROM";
 "ShareSaveFilesFailed" = "Gagal kongsi simpanan";
-"ShareFilesCopyFailed" = "Gagal salin fail";
-"ShareFilesCompressFailed" = "Gagal mampat fail";
 
 "TurnOnAirPlayAsk" = "AirPlay telah disambung. Nak buka mod skrin penuh sekarang?";
 
 "ThreeDSModePerformance" = "Mod Prestasi";
 "ThreeDSModeCompatibility" = "Mod Keserasian";
 "ThreeDSModeQuality" = "Keutamaan Grafik";
-"ThreeDSNotSupportImportSave" = "Permainan 3DS kini tidak menyokong import simpanan";
-"ThreeDSNotSupportShareSave" = "Permainan 3DS kini tidak menyokong perkongsian simpanan";
-"ThreeDSBetaAlertTitle" = "Versi Eksperimen 3DS";
-"ThreeDSBetaAlertDetail" = "Untuk membolehkan anda mengalami permainan 3DS lebih awal, Manic EMU telah melancarkan ciri 3DS dalam keadaan eksperimen. Beberapa pengoptimuman masih diperlukan.
-
-Ciri sementara tiada:
-❌ Mod Skrin Penuh AirPlay
-❌ Simpanan Automatik
-❌ Pecutan
-
-Jika berlaku ketidakstabilan, rujuk FAQ atau sertai saluran bantuan. Kami terus mengoptimumkan emulator. Sokongan anda membantu kami mencipta pengalaman lebih baik. Kami berusaha untuk anda!";
 "ThreeDSNoSupportDeviceTitle" = "Prestasi Peranti Tidak Mencukupi";
 "ThreeDSNoSupportDeviceDetail" = "Peranti ini mungkin tidak menyokong emulasi 3DS. Meneruskan boleh menyebabkan ralat tidak dijangka";
 
@@ -406,8 +362,6 @@ Tekan butang pengawal...";
 "FullScreenWhenConnectControllerTitle" = "Skrin penuh automatik";
 "FullScreenWhenConnectControllerDetail" = "Aktifkan skrin penuh apabila pengawal disambungkan";
 "JoinDiscordTitle" = "Sertai Discord";
-"JoinDiscordAlertMessage" = "Terima kasih kepada pemain %@ yang mencipta saluran ini. Teruskan?";
-"FlexSkinGuideTitle" = "Seret atau cubit untuk laraskan skrin";
 "DownloadFailed" = "Muat turun gagal";
 "RemoveDownloadTask" = "Hentikan muat turun \"%@\"?";
 "GameSettingResolution" = "Resolusi %@";
@@ -457,9 +411,6 @@ Tekan butang pengawal...";
 "RenderRightEyeDesc" = "Lumpuhkan meningkatkan prestasi sesetengah permainan, tetapi mungkin menyebabkan kelipan skrin";
 "DisableTitle" = "Lumpuhkan";
 "EnableTitle" = "Dayakan";
-"NoSaveStateToast" = "Tiada %@";
-"DeleteSelectedSaveStateAlert" = "Padam «%@» terpilih?\nTidak boleh dipulihkan!";
-"DeleteAllSaveStateAlert" = "Tiada pilihan. Padam semua «%@»?\nTidak boleh dipulihkan!";
 "AICoverSearchDesc" = "Pengesanan carian bukan Inggeris. Naik taraf ke Premium untuk carian pelbagai bahasa AI Manic EMU";
 "MaxTextSizeAllowDesc" = "Menyokong sehingga %@ aksara";
 
@@ -487,29 +438,21 @@ Tekan butang pengawal...";
 "BiosAddTitle" = "Tambah BIOS";
 "StartGameWithoutBiosTitle" = "Mulakan tanpa BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Mod Lanjutan";
 "ThreeDSAdvanceSettingTitle" = "Tetapan Lanjutan";
-"ThreeDSBasicSettingMode" = "Mod Asas";
 "ShareConfigButtonTitle" = "Kongsi Konfigurasi";
 "ImportConfigButtonTitle" = "Import Konfigurasi";
 "ShareFileFailedMissing" = "Perkongsian gagal: fail tiada";
 "ReadConfigFileFailed" = "Tidak dapat baca fail konfigurasi";
 "SwitchEmulationCore" = "Tukar Teras";
 "SwitchEmulationCoreDetail" = "Tukar teras emulasi untuk %@\nPenukaran teras akan menjadikan simpanan dari teras sebelumnya tidak boleh dibaca. Kembali ke teras asal untuk akses";
-"BeetleSaturnNoSupportCheat" = "Teras Beetle Saturn tidak menyokong kod tipu sekarang. Jika perlu, tukar ke teras Yabause";
-"CurrentTitle" = "semasa";
 "NewSkinDesc" = "Manic EMU menyokong kulit dalam format .manicskin dan .deltaskin .gammaskin. Nota: Kulit yang diimport mesti sepadan dengan platform semasa, jika tidak ia tidak akan muncul dalam senarai.\nKami juga menyediakan akses kepada komuniti kulit pihak ketiga. Ini tidak berkaitan secara rasmi dengan Manic EMU. Semasa muat turun, patuhi terma perkhidmatan setiap laman web";
 "VisitSite" = "Lawati %@";
 "OpenFile" = "Buka Fail";
 "WebViewDownloadBegin" = "Muat turun bermula";
 "RespectSilentMode" = "Hormati Mod Senyap";
 "RespectSilentModeDesc" = "Apabila dihidupkan, Manic EMU hanya akan main audio di luar mod senyap";
-"SaturnISONoSwitchCore" = "Permainan Sega Saturn format .iso tidak menyokong penukaran teras";
-"EnableFullScreenTitle" = "Dayakan Skrin Penuh";
-"DisableFullScreenTitle" = "Nyahdayakan Skrin Penuh";
 "SimulateBlowingTitle" = "Simulasikan Tiupan";
 "PaletteTitle" = "Palet";
-"SkinRestDesc" = "Menetapkan semula kulit juga akan mengembalikan kulit yang ditetapkan permainan kepada versi lalai";
 "SkinResetForAll" = "Tetapkan Semua Kulit Platform";
 "SkinResetForPlatform" = "Tetapkan Semula Kulit %@";
 "SkinDebug" = "Kawasan Ujian Kulit";
@@ -526,7 +469,6 @@ Tekan butang pengawal...";
 "MultiDiscCloseAlert" = "Fail .m3u dihasilkan. Tutup halaman selepas import";
 "MultiDiscContinueClose" = "Tutup";
 "SwapDisk" = "Tukar Cakera";
-"NotSupportSwapDisk" = "Bukan permainan multidisc";
 "TransferPakDesc" = "Transfer Pak segerakkan data GB/GBC ke N64. Untuk aktifkan: import kedua-dua ROM (.gb/.gbc) dan fail simpan (.sav)";
 "TransferPakFromLibrary" = "Import dari Pustaka";
 "TransferPakFromLibraryDesc" = "Hanya permainan dengan fail simpan dipaparkan.\nPermainan GB/GBC mesti sepadan dengan ROM N64";
@@ -535,7 +477,6 @@ Tekan butang pengawal...";
 "TransferPakOn" = "Diaktifkan";
 "TransferPakOff" = "Dinyahaktif";
 "TransferPakImportError" = "Ralat: Import kedua-dua fail (ROM dan simpan, 2 fail diperlukan)";
-"ShowControlsTitle" = "Tunjukkan Kawalan";
 "HideControlsTitle" = "Sembunyikan Kawalan";
 
 "DesignedFor" = "Direka untuk %@";
@@ -558,7 +499,6 @@ Tekan butang pengawal...";
 "WfcConnectDesc" = "Menyambung ke Nintendo WFC...\nPecutan dan cheat dinyahaktifkan";
 "WfcDisconnectDesc" = "Putus sambungan dari Nintendo WFC";
 "NotAllowOnlineGame" = "Ciri ini dinyahaktifkan semasa main dalam talian";
-"QuitGameAlert" = "Keluar permainan? Kemajuan tidak disimpan akan hilang";
 
 "SkinIdentifierExist" = "Pengenal %@ telah wujud. Sila ubah dan import semula.";
 "AnalogModeChange" = "Tukar kepada mod %@";
@@ -592,7 +532,6 @@ Tekan butang pengawal...";
 "LastActivity" = "Aktiviti Terkini: %@";
 "MemberSince" = "Ahli since: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Kemajuan";
 "AchievementsList" = "Pencapaian";
 "TotalAchievements" = "Jumlah %d pencapaian";
@@ -615,7 +554,6 @@ Tekan butang pengawal...";
 "DisableAchievementsAlert" = "Nyahdayakan RetroAchievements?";
 "SaveStateCoreUnCompatible" = "Save state dicipta dalam %@ (semasa: %@). Memuatkan mungkin menyebabkan masalah!";
 "LatestSaveStateUnCompatible" = "Tidak dapat memuatkan save state terkini due to incompatibility";
-"Snes9xAlert" = "Due to licensing issues, the Snes9x core will be removed in future updates. Please switch to bsnes and migrate your save states, or they won’t work.";
 "GotIt" = "Faham";
 "Rumble" = "Getaran";
 "RumbleDetail" = "Peranti bergetar during certain events";
@@ -631,7 +569,6 @@ Tekan butang pengawal...";
 "JumpTips" = "Membuka halaman pihak ketiga";
 "ThirdPartGameInfoTips" = "Maklumat permainan provided by third parties. Gunakan pertimbangan anda. Jika Manic EMU gagal padankan permainan, gunakan carian manual.";
 "NotSupportHardcore" = "Mod Hardcore dilumpuhkan untuk permainan ini. Mungkin Manic EMU tidak dibenarkan oleh RetroAchievements, atau permainan tidak menyokong mod hardcore.";
-"ChooseOne" = "Pilih satu";
 "FilesImporterErrorBadCue" = "Gagal import %@. Fail may be invalid or not UTF-8 encoded. Sila semak format.";
 "Leaderboard" = "Papan pemimpin";
 "LeaderboardStart" = "Mula papan pemimpin: ";
@@ -647,10 +584,8 @@ Tekan butang pengawal...";
 "AlwaysShowProgressDesc" = "Kekalkan kemajuan pencapaian kelihatan di skrin.";
 "Progress" = "Kemajuan";
 
-"DCGameNoSupportGameSave" = "Dreamcast tidak menyokong import/eksport simpanan. Gunakan VMU Explorer untuk mengedit fail memori dalam folder Manic EMU-Flycast-dc.";
 
 "Challenge" = "Cabaran";
-"GameTypeLicensingError" = "Maaf! Disebabkan sekatan lesen pada teras %@, platform ini tidak tersedia buat sementara. Anda boleh tunggu kemas kini akan datang atau guna versi sideload.";
 "DCJITLessVer" = "Versi Lalai menawarkan emulasi pantas dan tepat tetapi tidak dapat menjalankan permainan WinCE. Untuk main permainan WinCE, pilih teras WinCE.";
 "TVStandard" = "Jika standard TV permainan tidak sepadan dengan rantau, kelajuan mungkin terjejas. Kawasan PAL termasuk Eropah, Australia dan New Zealand.";
 "SNESVRAMEnable" = "Sesetengah ROM yang dihak memerlukan pilihan ini untuk memaparkan grafik dengan betul, tetapi mengaktifkannya akan menyahdayakan sokongan RetroAchievements.";
@@ -673,7 +608,6 @@ Tekan butang pengawal...";
 "LayoutEmbeddedBottomRight" = "Terbenam (Bawah-Kanan)";
 "LayoutSingleScreen" = "Skrin tunggal";
 "AirPlayLayoutTips" = "Gabungkan Tata Letak AirPlay dengan Tukar Skrin untuk lebih banyak pilihan. Nota: Menggunakan Tukar Skrin dengan tata letak terbenam boleh menyebabkan pertindihan, tidak disyorkan";
-"ToggleAnolog" = "Togol analog";
 "EnableGlobalAchievements" = "Dayakan Pencapaian Retro global";
 "GlobalHardcoreMode" = "Mod hardcore global";
 "GlobalHardcoreAlert" = "Sila dayakan Pencapaian Retro global dahulu";
@@ -689,7 +623,6 @@ Tekan butang pengawal...";
 "AppearanceLight" = "Mod Cerah";
 "AppearanceDark" = "Mod Gelap";
 "AppearanceAuto" = "Ikuti Sistem";
-"GameListBackground" = "Imej Latar Belakang";
 "GameListBackgroundUpload" = "Muat Naik";
 "GameplayManuals" = "Manual Permainan";
 "GameplayManualsNoExists" = "Tiada manual tersedia untuk permainan ini.";
@@ -699,7 +632,6 @@ Tekan butang pengawal...";
 "UnsupportSkinsDesc" = "Kulit berikut tidak disokong pada peranti ini:\n%@Nota: Membuangnya juga akan memadam kulit ini dari peranti lain yang disegerakkan melalui iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Kulit tidak disokong berjaya dibuang";
 "ForbitPKSM" = "Untuk memastikan pengalaman RetroAchievements yang adil, PKSM tidak boleh digunakan semasa RetroAchievements Global diaktifkan.";
-"FDSAlert" = "Pilihan ini hanya tersedia untuk permainan FDS.";
 "DiskSideChange" = "Balik Cakera";
 "EjectDisk" = "Keluarkan Cakera";
 
@@ -732,7 +664,6 @@ Tekan butang pengawal...";
 "TriggerProName" = "Nama TriggerPro";
 "Position" = "Kedudukan";
 "ButtonInfo" = "Maklumat Butang";
-"NoTriggerPro" = "Tiada konfigurasi TriggerPro ditemui. Anda boleh pergi ke Tetapan atau tahan pilihan TriggerPro dalam Menu Permainan untuk mencipta";
 "ManageTriggerPro" = "Urus TriggerPro";
 "EnableTriggerPro" = "Dayakan TriggerPro";
 "DisableTriggerPro" = "Nyahdayakan TriggerPro";
@@ -773,7 +704,6 @@ Tekan butang pengawal...";
 "Default" = "Lalai";
 "Imported" = "Diimport";
 "DownloadRetroArchSahders" = "Muat Turun Shader daripada RetroArch";
-"ImportShaders" = "Import Shader";
 "Shaders" = "Shader";
 "DownloadRetroArchShaders" = "Mahu muat turun shader daripada RetroArch? Setelah selesai, kategori shader RetroArch akan dikemas kini secara automatik. Anda boleh batalkan proses ini pada bila-bila masa di pengurus muat turun.";
 "RetroArchShaderUnzipFailed" = "Tidak dapat mengekstrak %@. Fail mungkin rosak semasa muat turun. Sila cuba muat turun semula.";
@@ -806,7 +736,6 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "JGenesisAlert" = "Maaf, teras JGenesis hanya menyokong fail ROM .chd.";
 "RedeemOfferCode" = "Tebus Tawaran";
 "CheatImportFailed" = "Import gagal. Fail tidak dapat dihuraikan atau tiada kod curi yang sepadan ditemui.";
-"RemoveAllCheats" = "Buang Semua Curi";
 "RemoveAllCheatsAlert" = "Adakah anda pasti mahu membuang semua kod curi? Tindakan ini tidak dapat dibatalkan.";
 "CheatCodeStatus" = "Dihidupkan";
 "Background" = "Latar Belakang";
@@ -819,13 +748,8 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "RemoveBackgroundForGame" = "Buang Latar Belakang Permainan";
 "RemoveBackgroundForConsole" = "Buang Latar Belakang Platform %@";
 "RemoveBackgroundForGlobal" = "Buang Latar Belakang Global";
-"ShaderConfigAlert" = "Ditentukan untuk %@.";
-"Global" = "Global";
-"RemoveShaderForGlobal" = "Buang Shader Global";
 "FeaturedItems" = "Item Terpilih";
-"ReUpload" = "Muat Naik Semula";
 
-"Service" = "Perkhidmatan";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "Rangkaian PSP";
 "Networking" = "Rangkaian";
@@ -864,16 +788,11 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "LoadingCheerpJ" = "Memuat CheerpJ";
 "ZipHandlerTitle" = "Pengendalian Fail ZIP";
 "ZipHandlerDetail" = "Sesetengah platform (seperti DOS dan Arcade) boleh memuat ROM terus dari fail .zip. Untuk platform lain, ROM di dalam .zip mesti diekstrak sebelum diimport.\n\nFail yang dipilih akan diekstrak dan diimport secara individu, manakala fail yang tidak dipilih akan diimport sebagai satu ROM ZIP.";
-"ConfigsResetCore" = "Tetapkan Semula kepada Lalai Teras";
-"ConfigsResetBefore" = "Kembali ke Tetapan Sebelumnya";
 "InsertDisc" = "Masukkan Cakera";
 "InsertDiscAlert" = "Anda boleh memasukkan cakera dengan memilih permainan lain dari platform yang sama di perpustakaan anda, atau dengan memilih fail cakera dari Fail. Disebabkan had sistem fail iOS, fail cakera yang dipilih dari Fail akan disalin ke cache Manic EMU.";
 "InsertDiscFailed" = "Gagal Memasukkan Cakera";
 "GenerateHomeMenu" = "Cipta Menu Utama";
 "SkinSoundEffects" = "Kesan Bunyi Kulit";
-"FirstAnniversary" = "TERIMA KASIH KERANA BERADA DI SINI,\nKAMI TULIS SESUATU UNTUK ANDA";
-"ApirlFoolsDayTitle" = "Alamak, adakah Manic EMU rosak?";
-"ApirlFoolsDayDetail" = "Jangan risau!\nHanya bergurau—Selamat Hari April Fool!\n\nSegala-galanya akan kembali normal setelah anda menutup ini.";
 "JITType" = "Jenis JIT";
 "JITTypeDesc" = "JIT Standard menawarkan prestasi terbaik, manakala JIT IR menawarkan prestasi sederhana.";
 "Pretendo" = "Rangkaian Pretendo";
@@ -888,7 +807,6 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "HomeMenuDesc" = "Gunakan butang di bawah untuk membuka Menu Utama. Kemudian pergi ke Tetapan Nimbus, beralih ke rangkaian Pretendo, dan buka Tetapan untuk memilih \"ID Rangkaian Nintendo\" dan log masuk dengan akaun Pretendo anda.\n\nSelepas itu, mana-mana permainan yang dilancarkan dari Menu Utama atau berjalan dengan teras Azahar akan menggunakan rangkaian Pretendo.\n\nJika entri Menu Utama tiada, ciri ini akan cuba menciptanya semula secara automatik.";
 "OpenHomeMenu" = "Buka Menu Utama";
 "ChooseRegion" = "Pilih Wilayah";
-"ChooseRegionDesc" = "Pilih wilayah yang betul bagi peranti 3DS yang menjalankan Alat Artic Setup. Memilih wilayah yang salah akan menghalang pemindahan data yang berjaya.";
 "HomeMenuNotFound" = "Menu Utama tidak dijumpai. Sila lengkapkan pemindahan data Artic Base terlebih dahulu.";
 "SystemUpdateAsk" = "Adakah kemas kini sistem berjaya diselesaikan?";
 "SystemUpdateDesc" = "Jika kemas kini sistem gagal disebabkan masalah rangkaian, sila cuba pindahkan data semula. Jika tidak, Menu Utama 3DS mungkin tidak berfungsi dengan betul.";

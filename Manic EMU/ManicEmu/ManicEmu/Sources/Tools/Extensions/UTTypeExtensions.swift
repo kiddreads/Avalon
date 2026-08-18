@@ -61,7 +61,7 @@ extension UTType {
         var skinTypes: [UTType] = []
         var zipTypes: [UTType] = []
         //获取自己注册的UTType
-        if let declarations: [[String: Any]] = Constants.Config.value(forKey: "UTExportedTypeDeclarations") {
+        if let declarations: [[String: Any]] = R.Config.value(forKey: "UTExportedTypeDeclarations") {
             for declaration in declarations {
                 if let identifier = declaration["UTTypeIdentifier"] as? String {
                     if identifier.hasPrefix("public.aoshuang.game."), let uttype = UTType(identifier) {

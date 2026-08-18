@@ -11,7 +11,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Dịch vụ đám mây";
 "ImportAddLanServiceTitle" = "Dịch vụ mạng nội bộ";
-"ImportAddDiscoverServiceTitle" = "Dịch vụ khám phá";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -32,7 +31,6 @@
 "LandServiceEditConnect" = "Kết nối";
 "AddLandServiceSuccess" = "Thêm %@ thành công";
 "AddLandServiceFailed" = "Thêm %@ thất bại\nVui lòng kiểm tra kết nối mạng, trạng thái dịch vụ hoặc thông tin nhập";
-"AddLandServiceTimeout" = "Quá thời gian kết nối";
 "FilesImporterErrorFileExist" = "\"%@\" đã tồn tại, không cần nhập";
 "FilesImporterErrorBadCopy" = "Nhập \"%@\" thất bại, lỗi sao chép tệp";
 "FilesImporterErrorBadExtension" = "Nhập \"%@\" thất bại, định dạng không hỗ trợ";
@@ -78,7 +76,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nDùng trình duyệt để truyền tệp";
 "ImportServiceListPasteTitle" = "Đọc clipboard";
 "ImportServiceListPasteDetail" = "Hỗ trợ sao chép tệp từ macOS và ứng dụng Files";
-"ImportHowTo" = "Cách nhập";
 "ImportTopHintTitle" = "Câu chuyện phiêu lưu đầy mơ ước bắt đầu từ đây!";
 "ImportDragAndDropTips" = "Kéo thả tệp vào bất kỳ giao diện Manic EMU để truyền";
 "ImportChannelTips" = "Tham gia %@ nếu cần hỗ trợ";
@@ -112,7 +109,6 @@
 "TimeDurationMinuteFormat" = "%d phút";
 "FatalErrorTitle" = "Lỗi nghiêm trọng";
 "FatalErrorDesc" = "Lỗi tải tài nguyên hệ thống, Manic EMU có thể gặp sự cố";
-"LodingFailedTitle" = "Tải thất bại";
 "AirPlayDesc" = "Bắt đầu cuộc phiêu lưu ngay!";
 "ToastSuccess" = "Lưu thành công";
 "ToastFailed" = "Lưu thất bại";
@@ -128,25 +124,22 @@
 "GamesImportSave" = "Nhập lưu trữ";
 "GamesShareSave" = "Xuất lưu trữ";
 "GamesDelete" = "Xóa trò chơi";
-"GamesRandom" = "Không biết chơi gì? Chọn ngẫu nhiên";
 "LoadGameErrorRomNotExist" = "Lỗi tải trò chơi: ROM không tồn tại";
 "GamesListEmptyGuideLeft" = "Nhấn vào";
 "GamesListEmptyGuideRight" = "bên dưới để nhập trò chơi";
 "GamesListEmptyWelcomeLeft" = "Chào mừng đến với thế giới";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Đảm bảo ROM được lấy từ nguồn hợp pháp";
+"LandscapeEmptyAddGame" = "Thêm trò chơi";
 "DeleteGameAlertDetail" = "ROM, lưu trữ và cheat code sẽ bị xóa vĩnh viễn!";
 "DeleteSkinAlertDetail" = "Skin đã xóa không thể khôi phục!";
-"DeleteGameGameStateAlertTitle" = "Xóa lưu trữ tức thời";
 "DeleteGameGameStateAlertDetail" = "Lưu trữ tức thời đã xóa không thể khôi phục!";
 "confirmDelte" = "Xác nhận xóa";
 
 //Controllers
 "ControllersTouchName" = "Điều khiển cảm ứng";
-"ControllersHeaderTitle" = "Bộ điều khiển";
 "ControllersPlayerIndex" = "Người chơi %d";
 "ControllersPlayerUnset" = "Chưa chọn";
-"ControllersHowToConnect" = "Cách kết nối";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "Chơi %@ · Tổng %@";
@@ -158,7 +151,6 @@
 "ReadySegmentManualSave" = "Lưu trữ tức thời thủ công";
 "ReadySegmentAutoSave" = "Lưu trữ tức thời tự động";
 "ReadyEditTitleFailed" = "Đổi tên thất bại: Tên không được trống";
-"ReadyEditTitleSuccess" = "Đổi tên thành công";
 "ReadyGameSaveStatesEmpty" = "Chưa có lưu trữ";
 "GameSaveGuideBecomTitle" = "Trở thành";
 "GameSaveGuideMemberTitle" = "Thành viên";
@@ -170,12 +162,10 @@
 "GameSaveTitle" = "Lưu trữ %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU hỗ trợ skin định dạng .deltaskin .gammaskin";
 "SkinNavigationSubTitleSpecifiedGame" = "Skin dành riêng cho %@";
 "SkinSegmentPortraitTitle" = "Dọc";
 "SkinSegmentLandscapeTitle" = "Ngang";
 "SkinAddTitle" = "Thêm skin";
-"HowToFetch" = "Cách nhận";
 "SkinDelete" = "Xóa skin";
 "DefaultSkinCannotEdit" = "Không thể chỉnh sửa skin mặc định";
 
@@ -187,16 +177,11 @@
 "HistoryEmptyStartGame" = "Bắt đầu ngay";
 
 //Settings
-"LeftHandTitle" = "Chế độ thuận tay trái";
-"LeftHandDetail" = "Đảo vị trí phím điều khiển";
 "QuickGameTitle" = "Khởi động nhanh";
 "QuickGameDetail" = "Bỏ qua trang chuẩn bị khi nhấn vào trò chơi";
 "AirPlayTitle" = "Chế độ AirPlay toàn màn hình";
 "AirPlayDetail" = "Hiển thị trò chơi toàn màn hình khi phát";
 "iCloudTitle" = "Đồng bộ iCloud";
-"iCloudDetail" = "Đồng bộ trò chơi, skin, lưu trữ và cài đặt trên các thiết bị cùng Apple ID";
-"AppIconTitle" = "Biểu tượng ứng dụng";
-"WidgetTitle" = "Tiện ích màn hình";
 "QATitle" = "Câu hỏi thường gặp";
 "FeedbackTitle" = "Phản hồi";
 "ShareAppTitle" = "Chia sẻ Manic EMU";
@@ -210,13 +195,9 @@
 "AdvanceSettingTitle" = "Cài đặt nâng cao";
 "SupportSettingTitle" = "Hỗ trợ";
 "OthersSettingTitle" = "Khác";
-"RatingTitleLeft" = "Đánh giá";
-"RatingTitleRight" = "";
-"RatingDetail" = "Nếu thấy ứng dụng hữu ích, hãy đánh giá 5 sao để ủng hộ chúng tôi!";
 "iCloudDisableTitle" = "iCloud tạm khóa";
 "iCloudDisableDetail" = "Vui lòng đăng nhập iCloud và bật iCloud Drive trong Cài đặt > Apple ID";
 "iCloudSyncConfilictTitle" = "Xung đột đồng bộ";
-"iCloudSyncConfilictDetail" = "Tệp đám mây:\n%@\n\nTệp cục bộ:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Giữ bản đám mây";
 "iCloudSyncConfilictSaveLocal" = "Giữ bản cục bộ";
 "SettingsNonMemberDesc" = "Bạn là nhân vật chính của câu chuyện này";
@@ -224,7 +205,6 @@
 "ThanksCommingDesc" = "Cảm ơn bạn đã đến với";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Chưa thiết lập email";
-"IDCopy" = "Đã sao chép ID";
 "SendEmailSuccess" = "Gửi email thành công";
 "SendEmailFailed" = "Gửi email thất bại%@";
 "iCloudTipsTitle" = "Bật đồng bộ iCloud";
@@ -239,9 +219,6 @@
 "GameSettingVolume" = "Âm lượng";
 "GameSettingFastForwardResume" = "Tốc độ bình thường";
 "GameSettingFastForward" = "Tua nhanh x%@";
-"GameSettingStateList" = "Danh sách lưu trữ";
-"GameSettingSkins" = "Thiết lập skin";
-"GameSettingFilter" = "Bộ lọc";
 "GameSettingScreenShot" = "Chụp màn hình";
 "GameSettingHapticOff" = "Tắt rung";
 "GameSettingHapticSoft" = "Rung nhẹ";
@@ -260,17 +237,13 @@
 "GameSettingReload" = "Khởi động lại";
 "GameSettingQuit" = "Thoát";
 "GameSaveStateSuccess" = "Lưu trữ tức thời thành công";
-"GameSaveStateLoadFailed" = "Lỗi tải: Lưu trữ không tương thích hoặc hỏng";
 "GameSaveStateLoadSuccess" = "Tải lưu trữ thành công";
 "GameSaveStateQuickLoadFailed" = "Không có lưu trữ thủ công, dùng \"Danh sách lưu trữ\" để tải tự động";
 "GameSaveListTitle" = "Lưu trữ tức thời";
-"GameCheatActivateFailed" = "%@\nKích hoạt thất bại: Cheat code không hợp lệ";
 "GameCheatActivateSuccess" = "%@\nKích hoạt thành công";
 "AirPlayingTitle" = "Hình ảnh đang phát qua AirPlay";
 "VolumeOff" = "Tắt âm";
 "VolumeOn" = "Bật âm";
-"FunctionSortDesc1" = "Các chức năng mặc định trên skin chính thức";
-"FunctionSortDesc2" = "Nhấn giữ để sắp xếp";
 "ManualGameSaveCountLimit" = "Đã vượt giới hạn lưu trữ! Nâng cấp thành viên để mở khóa";
 "FastForwardSpeedLimit" = "Tốc độ tối đa x2! Nâng cấp để đạt x5";
 "ResetSpeed" = "Về tốc độ thường";
@@ -284,13 +257,10 @@
 "AutoDetectFormat" = "Nhập code để tự động nhận dạng";
 "CheatCodeFormatError" = "Định dạng cheat code không đúng";
 "CheatCodeEmptyTitle" = "Chưa có cheat code";
-"CheatCodeEmptyGuideLeft" = "Nhấn vào";
-"CheatCodeEmptyGuideRight" = "góc trái để thêm cheat code";
 "EnableCheatCodeAlertTitle" = "Kích hoạt cheat code";
 "EnableCheatCodeAlertDetail" = "Cheat code phải khớp phiên bản trò chơi. Sử dụng có thể gây lỗi hệ thống!";
 
 //Filter
-"FilterSectionHeaderTitle" = "Bộ lọc hình ảnh";
 "FilterOriginTitle" = "Gốc";
 
 //In-App Purchase
@@ -347,7 +317,6 @@ Baidu Cloud, Alibaba Cloud, WebDAV/SMB
 "PurchasePending" = "Thanh toán đang chờ xử lý";
 "PurchaseUnknown" = "Trạng thái không xác định";
 "PurchaseErrorDesc" = "Lỗi mạng, thử lại sau";
-"PurchaseFailedTitle" = "Thanh toán thất bại";
 "RestoreSuccessDesc" = "Khôi phục thành công!";
 "RestoreEndDesc" = "Không tìm thấy giao dịch";
 "TrialDesc" = "Dùng thử miễn phí, hủy bất kỳ lúc nào";
@@ -388,25 +357,12 @@ Baidu Cloud, Alibaba Cloud, WebDAV/SMB
 "ShareAppSubtitle" = "Cùng bạn bè khám phá!";
 "ShareRomFilesFailed" = "Chia sẻ ROM thất bại";
 "ShareSaveFilesFailed" = "Chia sẻ lưu trữ thất bại";
-"ShareFilesCopyFailed" = "Lỗi sao chép";
-"ShareFilesCompressFailed" = "Lỗi nén tệp";
 
 "TurnOnAirPlayAsk" = "Đã kết nối AirPlay. Bật chế độ toàn màn hình ngay bây giờ?";
 
 "ThreeDSModePerformance" = "Chế độ Hiệu suất";
 "ThreeDSModeCompatibility" = "Chế độ Tương thích";
 "ThreeDSModeQuality" = "Ưu tiên Đồ họa";
-"ThreeDSNotSupportImportSave" = "Game 3DS hiện không hỗ trợ nhập file lưu";
-"ThreeDSNotSupportShareSave" = "Game 3DS hiện không hỗ trợ chia sẻ file lưu";
-"ThreeDSBetaAlertTitle" = "Bản Thử nghiệm 3DS";
-"ThreeDSBetaAlertDetail" = "Để bạn trải nghiệm game 3DS sớm hơn, Manic EMU đã phát hành tính năng 3DS ở trạng thái thử nghiệm. Một số tối ưu vẫn cần thiết.
-
-Tính năng tạm thời thiếu:
-❌ Chế độ toàn màn hình AirPlay
-❌ Tự động lưu
-❌ Tăng tốc
-
-Nếu gặp lỗi, hãy xem FAQ hoặc tham gia kênh hỗ trợ. Chúng tôi đang liên tục cải thiện trình giả lập. Sự ủng hộ của bạn giúp tạo trải nghiệm hoàn hảo hơn. Luôn nỗ lực vì bạn!";
 "ThreeDSNoSupportDeviceTitle" = "Hiệu năng thiết bị không đủ";
 "ThreeDSNoSupportDeviceDetail" = "Thiết bị hiện tại có thể không hỗ trợ giả lập 3DS. Tiếp tục có thể gây ra lỗi không thể đoán trước";
 
@@ -425,8 +381,6 @@ Nhấn nút điều khiển...";
 "FullScreenWhenConnectControllerTitle" = "Tự động toàn màn hình";
 "FullScreenWhenConnectControllerDetail" = "Tự động vào chế độ toàn màn hình khi kết nối điều khiển";
 "JoinDiscordTitle" = "Tham gia Discord";
-"JoinDiscordAlertMessage" = "Cảm ơn người chơi %@ đã tạo kênh này. Tiếp tục tham gia?";
-"FlexSkinGuideTitle" = "Kéo hoặc thu phóng để điều chỉnh màn hình";
 "DownloadFailed" = "Tải xuống thất bại";
 "RemoveDownloadTask" = "Dừng tải xuống và xóa \"%@\"?";
 "GameSettingResolution" = "Độ phân giải %@";
@@ -477,9 +431,6 @@ Nhấn nút điều khiển...";
 "RenderRightEyeDesc" = "Vô hiệu hóa kết xuất mắt phải giúp cải thiện hiệu suất một số trò chơi, nhưng có thể gây ra hiện tượng nhấp nháy hình ảnh";
 "DisableTitle" = "Vô hiệu hóa";
 "EnableTitle" = "Kích hoạt";
-"NoSaveStateToast" = "Chưa có %@";
-"DeleteSelectedSaveStateAlert" = "Xóa mục đã chọn 「%@」?\nKhông thể khôi phục sau khi xóa!";
-"DeleteAllSaveStateAlert" = "Không có mục nào được chọn. Xóa tất cả 「%@」?\nKhông thể khôi phục sau khi xóa!";
 "AICoverSearchDesc" = "Phát hiện tìm kiếm không phải tiếng Anh, nâng cấp tài khoản Premium để Manic EMU sử dụng công nghệ AI mới nhất hỗ trợ tìm kiếm đa ngôn ngữ";
 "MaxTextSizeAllowDesc" = "Tùy chọn này hỗ trợ tối đa %@ ký tự";
 
@@ -507,29 +458,21 @@ Nhấn nút điều khiển...";
 "BiosAddTitle" = "Thêm BIOS";
 "StartGameWithoutBiosTitle" = "Khởi chạy không cần BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Chế độ Nâng cao";
 "ThreeDSAdvanceSettingTitle" = "Cài đặt Nâng cao";
-"ThreeDSBasicSettingMode" = "Chế độ Cơ bản";
 "ShareConfigButtonTitle" = "Chia sẻ Cấu hình";
 "ImportConfigButtonTitle" = "Nhập Cấu hình";
 "ShareFileFailedMissing" = "Chia sẻ thất bại: tệp không tồn tại";
 "ReadConfigFileFailed" = "Không thể đọc tệp cấu hình";
 "SwitchEmulationCore" = "Chuyển Lõi";
 "SwitchEmulationCoreDetail" = "Chuyển lõi giả lập cho %@\nViệc chuyển lõi sẽ khiến bản lưu từ lõi cũ không thể đọc. Để truy cập, hãy chuyển về lõi gốc";
-"BeetleSaturnNoSupportCheat" = "Lõi Beetle Saturn hiện không hỗ trợ mã cheat. Nếu cần, hãy chuyển sang lõi Yabause";
-"CurrentTitle" = "hiện tại";
 "NewSkinDesc" = "Manic EMU hỗ trợ skin định dạng .manicskin và .deltaskin .gammaskin. Lưu ý: skin nhập vào phải phù hợp với nền tảng hiện tại, nếu không sẽ không hiển thị trong danh sách.\nChúng tôi cũng cung cấp quyền truy cập vào cộng đồng skin bên thứ ba. Những cộng đồng này không liên kết chính thức với Manic EMU. Khi tải skin, vui lòng tuân thủ nghiêm ngặt điều khoản dịch vụ của từng trang web";
 "VisitSite" = "Truy cập %@";
 "OpenFile" = "Mở Tệp";
 "WebViewDownloadBegin" = "Đã bắt đầu tải xuống";
 "RespectSilentMode" = "Tôn trọng Chế độ Im lặng";
 "RespectSilentModeDesc" = "Khi bật, Manic EMU chỉ phát âm thanh khi không ở chế độ im lặng";
-"SaturnISONoSwitchCore" = "Trò chơi Sega Saturn định dạng .iso không hỗ trợ chuyển lõi";
-"EnableFullScreenTitle" = "Bật Toàn màn hình";
-"DisableFullScreenTitle" = "Tắt Toàn màn hình";
 "SimulateBlowingTitle" = "Mô phỏng Thổi";
 "PaletteTitle" = "Bảng màu";
-"SkinRestDesc" = "Đặt lại skin cũng sẽ khôi phục skin do trò chơi chỉ định về mặc định";
 "SkinResetForAll" = "Đặt lại tất cả skin nền tảng";
 "SkinResetForPlatform" = "Đặt lại skin %@";
 "SkinDebug" = "Khu vực Thử nghiệm Skin";
@@ -546,7 +489,6 @@ Nhấn nút điều khiển...";
 "MultiDiscCloseAlert" = "Đã tạo tệp .m3u. Đóng trang sau khi nhập vào thư viện";
 "MultiDiscContinueClose" = "Đóng";
 "SwapDisk" = "Đổi đĩa";
-"NotSupportSwapDisk" = "Không phải game đa đĩa";
 "TransferPakDesc" = "Transfer Pak đồng bộ dữ liệu GB/GBC với N64. Để kích hoạt: nhập cả ROM (.gb/.gbc) và tệp lưu (.sav)";
 "TransferPakFromLibrary" = "Nhập từ thư viện";
 "TransferPakFromLibraryDesc" = "Chỉ hiển thị game có tệp lưu.\nGame GB/GBC phải khớp với ROM N64, nếu không sẽ thất bại";
@@ -555,7 +497,6 @@ Nhấn nút điều khiển...";
 "TransferPakOn" = "Đã bật";
 "TransferPakOff" = "Đã tắt";
 "TransferPakImportError" = "Lỗi: Nhập cả ROM và tệp lưu (cần 2 tệp)";
-"ShowControlsTitle" = "Hiện điều khiển";
 "HideControlsTitle" = "Ẩn điều khiển";
 
 "DesignedFor" = "Thiết kế dành cho %@";
@@ -578,7 +519,6 @@ Nhấn nút điều khiển...";
 "WfcConnectDesc" = "Đang kết nối Nintendo WFC...\nTăng tốc và cheat bị vô hiệu hóa";
 "WfcDisconnectDesc" = "Ngắt kết nối Nintendo WFC";
 "NotAllowOnlineGame" = "Tính năng này bị vô hiệu hóa khi chơi online";
-"QuitGameAlert" = "Thoát game? Tiến trình chưa lưu sẽ mất";
 
 "SkinIdentifierExist" = "Định danh %@ đã tồn tại. Vui lòng sửa và nhập lại.";
 "AnalogModeChange" = "Chuyển sang chế độ %@";
@@ -612,7 +552,6 @@ Nhấn nút điều khiển...";
 "LastActivity" = "Hoạt động gần nhất: %@";
 "MemberSince" = "Thành viên since: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Tiến trình";
 "AchievementsList" = "Thành tựu";
 "TotalAchievements" = "Tổng %d thành tựu";
@@ -635,7 +574,6 @@ Nhấn nút điều khiển...";
 "DisableAchievementsAlert" = "Tắt RetroAchievements?";
 "SaveStateCoreUnCompatible" = "Save state được tạo trong %@ (hiện tại: %@). Tải có thể gây ra sự cố!";
 "LatestSaveStateUnCompatible" = "Không thể tải save state mới nhất do không tương thích";
-"Snes9xAlert" = "Do vấn đề cấp phép, core Snes9x sẽ bị loại bỏ trong future updates. Vui lòng chuyển sang bsnes và di chuyển save states của bạn, nếu không chúng sẽ không hoạt động.";
 "GotIt" = "Đã hiểu";
 "Rumble" = "Rung";
 "RumbleDetail" = "Thiết bị rung during certain events";
@@ -651,7 +589,6 @@ Nhấn nút điều khiển...";
 "JumpTips" = "Đang mở trang bên thứ ba";
 "ThirdPartGameInfoTips" = "Thông tin trò chơi provided by third parties. Sử dụng judgment của bạn. Nếu Manic EMU không khớp trò chơi, hãy sử dụng manual search.";
 "NotSupportHardcore" = "Chế độ Hardcore bị tắt cho trò chơi này. Có thể Manic EMU không được RetroAchievements ủy quyền, hoặc trò chơi không hỗ trợ chế độ hardcore.";
-"ChooseOne" = "Chọn một";
 "FilesImporterErrorBadCue" = "Nhập %@ thất bại. Tệp may be invalid or not UTF-8 encoded. Vui lòng kiểm tra format.";
 "Leaderboard" = "Bảng xếp hạng";
 "LeaderboardStart" = "Bắt đầu bảng xếp hạng: ";
@@ -667,10 +604,8 @@ Nhấn nút điều khiển...";
 "AlwaysShowProgressDesc" = "Giữ tiến trình thành tựu hiển thị trên màn hình.";
 "Progress" = "Tiến Trình";
 
-"DCGameNoSupportGameSave" = "Dreamcast không hỗ trợ nhập/xuất tập tin lưu. Sử dụng VMU Explorer để chỉnh sửa tập tin bộ nhớ trong thư mục Manic EMU-Flycast-dc.";
 
 "Challenge" = "Thử Thách";
-"GameTypeLicensingError" = "Xin lỗi! Do hạn chế bản quyền với lõi %@, nền tảng này tạm thời không khả dụng. Bạn có thể đợi bản cập nhật sau hoặc dùng phiên bản sideload.";
 "DCJITLessVer" = "Phiên bản Mặc định cung cấp mô phỏng nhanh và chính xác nhưng không chạy được game WinCE. Để chơi game WinCE, vui lòng chọn lõi WinCE.";
 "TVStandard" = "Nếu tiêu chuẩn TV của trò chơi không khớp với khu vực, tốc độ có thể bị ảnh hưởng. Khu vực PAL bao gồm châu Âu, Úc và New Zealand.";
 "SNESVRAMEnable" = "Một số ROM bị hack yêu cầu tùy chọn này để hiển thị đồ họa chính xác, nhưng kích hoạt sẽ vô hiệu hóa hỗ trợ RetroAchievements.";
@@ -693,7 +628,6 @@ Nhấn nút điều khiển...";
 "LayoutEmbeddedBottomRight" = "Nhúng (Dưới-Phải)";
 "LayoutSingleScreen" = "Màn hình đơn";
 "AirPlayLayoutTips" = "Kết hợp Bố cục AirPlay với Hoán đổi Màn hình để có thêm tùy chọn. Lưu ý: Dùng Hoán đổi Màn hình với bố cục nhúng có thể gây chồng chéo, không khuyến nghị";
-"ToggleAnolog" = "Chuyển đổi analog";
 "EnableGlobalAchievements" = "Bật RetroAchievements toàn cầu";
 "GlobalHardcoreMode" = "Chế độ hardcore toàn cầu";
 "GlobalHardcoreAlert" = "Vui lòng bật RetroAchievements toàn cầu trước";
@@ -709,7 +643,6 @@ Nhấn nút điều khiển...";
 "AppearanceLight" = "Chế độ Sáng";
 "AppearanceDark" = "Chế độ Tối";
 "AppearanceAuto" = "Theo Hệ thống";
-"GameListBackground" = "Hình nền";
 "GameListBackgroundUpload" = "Tải lên";
 "GameplayManuals" = "Sách hướng dẫn trò chơi";
 "GameplayManualsNoExists" = "Không có sách hướng dẫn cho trò chơi này.";
@@ -719,7 +652,6 @@ Nhấn nút điều khiển...";
 "UnsupportSkinsDesc" = "Các da sau không được hỗ trợ trên thiết bị này:\n%@Lưu ý: Xóa chúng cũng sẽ xóa các da này khỏi các thiết bị khác được đồng bộ qua iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Đã xóa da không hỗ trợ thành công";
 "ForbitPKSM" = "Để đảm bảo trải nghiệm RetroAchievements công bằng, PKSM không thể được sử dụng khi RetroAchievements Toàn cầu được bật.";
-"FDSAlert" = "Tùy chọn này chỉ khả dụng cho trò chơi FDS.";
 "DiskSideChange" = "Lật đĩa";
 "EjectDisk" = "Đẩy đĩa ra";
 
@@ -752,7 +684,6 @@ Nhấn nút điều khiển...";
 "TriggerProName" = "Tên TriggerPro";
 "Position" = "Vị trí";
 "ButtonInfo" = "Thông tin nút";
-"NoTriggerPro" = "Không tìm thấy cấu hình TriggerPro. Bạn có thể vào Cài đặt hoặc nhấn giữ tùy chọn TriggerPro trong Menu Trò chơi để tạo";
 "ManageTriggerPro" = "Quản lý TriggerPro";
 "EnableTriggerPro" = "Bật TriggerPro";
 "DisableTriggerPro" = "Tắt TriggerPro";
@@ -793,7 +724,6 @@ Nhấn nút điều khiển...";
 "Default" = "Mặc định";
 "Imported" = "Đã nhập";
 "DownloadRetroArchSahders" = "Tải Shader từ RetroArch";
-"ImportShaders" = "Nhập Shader";
 "Shaders" = "Shader";
 "DownloadRetroArchShaders" = "Bạn có muốn tải shader từ RetroArch không? Sau khi hoàn tất, danh mục shader RetroArch sẽ tự động làm mới. Bạn có thể hủy quá trình này bất cứ lúc nào trong trình quản lý tải xuống.";
 "RetroArchShaderUnzipFailed" = "Không thể giải nén %@. Tệp có thể đã bị hỏng trong quá trình tải xuống. Vui lòng thử tải lại.";
@@ -826,7 +756,6 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "JGenesisAlert" = "Xin lỗi, lõi JGenesis chỉ hỗ trợ tệp ROM .chd.";
 "RedeemOfferCode" = "Đổi Ưu Đãi";
 "CheatImportFailed" = "Nhập thất bại. Không thể phân tích tệp hoặc không tìm thấy mã cheat phù hợp.";
-"RemoveAllCheats" = "Xóa Tất Cả Cheat";
 "RemoveAllCheatsAlert" = "Bạn có chắc chắn muốn xóa tất cả mã cheat không? Hành động này không thể hoàn tác.";
 "CheatCodeStatus" = "Đã Bật";
 "Background" = "Nền";
@@ -839,13 +768,8 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "RemoveBackgroundForGame" = "Xóa Nền Trò Chơi";
 "RemoveBackgroundForConsole" = "Xóa Nền Nền Tảng %@";
 "RemoveBackgroundForGlobal" = "Xóa Nền Toàn Cục";
-"ShaderConfigAlert" = "Đã đặt cho %@.";
-"Global" = "Toàn Cục";
-"RemoveShaderForGlobal" = "Xóa Shader Toàn Cục";
 "FeaturedItems" = "Mục Nổi Bật";
-"ReUpload" = "Tải Lên Lại";
 
-"Service" = "Dịch vụ";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "Mạng PSP";
 "Networking" = "Mạng";
@@ -884,16 +808,11 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "LoadingCheerpJ" = "Đang tải CheerpJ";
 "ZipHandlerTitle" = "Xử lý tệp ZIP";
 "ZipHandlerDetail" = "Một số nền tảng (như DOS và Arcade) có thể tải ROM trực tiếp từ tệp .zip. Đối với các nền tảng khác, ROM bên trong tệp .zip cần được giải nén trước khi nhập.\n\nCác tệp đã chọn sẽ được giải nén và nhập riêng lẻ, trong khi các tệp không được chọn sẽ được nhập dưới dạng một ROM ZIP duy nhất.";
-"ConfigsResetCore" = "Đặt lại về mặc định lõi";
-"ConfigsResetBefore" = "Khôi phục cài đặt trước đó";
 "InsertDisc" = "Chèn đĩa";
 "InsertDiscAlert" = "Bạn có thể chèn đĩa bằng cách chọn một trò chơi khác từ cùng nền tảng trong thư viện của mình hoặc chọn tệp đĩa từ Tệp. Do giới hạn hệ thống tệp iOS, các tệp đĩa được chọn từ Tệp sẽ được sao chép vào bộ nhớ đệm của Manic EMU.";
 "InsertDiscFailed" = "Chèn đĩa thất bại";
 "GenerateHomeMenu" = "Tạo menu chính";
 "SkinSoundEffects" = "Hiệu ứng âm thanh giao diện";
-"FirstAnniversary" = "CẢM ƠN BẠN ĐÃ Ở ĐÂY,\nCHÚNG TÔI ĐÃ VIẾT MỘT ĐIỀU GÌ ĐÓ CHO BẠN";
-"ApirlFoolsDayTitle" = "Ối, Manic EMU bị hỏng rồi à?";
-"ApirlFoolsDayDetail" = "Đừng lo!\nChỉ đùa thôi—Chúc ngày Cá tháng Tư vui vẻ!\n\nMọi thứ sẽ trở lại bình thường sau khi bạn đóng cái này.";
 "JITType" = "Loại JIT";
 "JITTypeDesc" = "JIT tiêu chuẩn mang lại hiệu suất tốt nhất, trong khi JIT IR mang lại hiệu suất trung bình.";
 "Pretendo" = "Mạng Pretendo";
@@ -908,7 +827,6 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "HomeMenuDesc" = "Sử dụng nút bên dưới để mở Trình đơn Chính. Sau đó, vào Cài đặt Nimbus, chuyển sang mạng Pretendo, mở Cài đặt để chọn \"ID Mạng Nintendo\" và đăng nhập bằng tài khoản Pretendo của bạn.\n\nSau đó, bất kỳ trò chơi nào được khởi chạy từ Trình đơn Chính hoặc chạy với lõi Azahar sẽ sử dụng mạng Pretendo.\n\nNếu thiếu mục Trình đơn Chính, tính năng này sẽ cố gắng tự động tạo lại.";
 "OpenHomeMenu" = "Mở Trình đơn Chính";
 "ChooseRegion" = "Chọn khu vực";
-"ChooseRegionDesc" = "Chọn đúng khu vực của thiết bị 3DS đang chạy Công cụ Artic Setup. Chọn sai khu vực sẽ ngăn việc truyền dữ liệu thành công.";
 "HomeMenuNotFound" = "Không tìm thấy Trình đơn Chính. Vui lòng hoàn tất truyền dữ liệu Artic Base trước.";
 "SystemUpdateAsk" = "Cập nhật hệ thống có hoàn tất thành công không?";
 "SystemUpdateDesc" = "Nếu cập nhật hệ thống thất bại do sự cố mạng, vui lòng thử truyền dữ liệu lại. Nếu không, Trình đơn Chính 3DS có thể không hoạt động bình thường.";

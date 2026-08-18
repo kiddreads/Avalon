@@ -14,6 +14,7 @@ import ProHUD
 class ThemeManager {
     static let shared = ThemeManager()
     private var themeUpdateToken: Any? = nil
+    var mainColor = R.Color.Red
     
     func setup() {
         themeUpdateToken = Theme.defalut.observe(keyPaths: [\Theme.icon, \Theme.colors, \Theme.coverStyle, \Theme.coverRadiusRatio, \Theme.platformOrder, \Theme.forceSquare, \Theme.gamesPerRow, \Theme.hideIndicator, \Theme.hideGameTitle, \Theme.hideGroupTitle, \Theme.groupTitleStyle]) { [weak self] change in
@@ -85,8 +86,8 @@ class ThemeManager {
             let mainColorHex = themeColor.colors.first,
             let mainColor = UIColor(hexString: mainColorHex) {
             let gradientColors = themeColor.colors.compactMap({ UIColor(hexString: $0) })
-            if Constants.Color.MainDynamicColor.hexString != mainColor.hexString {
-                Constants.Color.MainDynamicColor = mainColor
+            if self.mainColor.hexString != mainColor.hexString {
+                self.mainColor = mainColor
                 //刷新整个系统的外观 会驱使traitCollectionDidChange方法进行调用
                 if let userInterfaceStyle = ApplicationSceneDelegate.applicationWindow?.traitCollection.userInterfaceStyle {
                     if userInterfaceStyle == .dark {
@@ -96,39 +97,39 @@ class ThemeManager {
                     }
                 }
                 self.updateAppearance()
-                NotificationCenter.default.post(name: Constants.NotificationName.MainColorChange, object: nil)
+                NotificationCenter.default.post(name: R.NotificationName.MainColorChange, object: nil)
             }
             
-            if Constants.Color.Gradient != gradientColors {
-                Constants.Color.Gradient = gradientColors
-                NotificationCenter.default.post(name: Constants.NotificationName.GradientColorChange, object: nil)
+            if R.Color.Gradient != gradientColors {
+                R.Color.Gradient = gradientColors
+                NotificationCenter.default.post(name: R.NotificationName.GradientColorChange, object: nil)
             }
         }
     }
     
     private func updateCoverStyle() {
         let theme = Theme.defalut
-        Constants.Size.GameCoverForceSquare = theme.forceSquare
-        Constants.Size.GameCoverStyle = theme.coverStyle
-        Constants.Size.GameCoverCornerRatio = CGFloat(theme.coverRadiusRatio)
-        NotificationCenter.default.post(name: Constants.NotificationName.GameCoverChange, object: nil)
+        R.Style.GameCoverForceSquare = theme.forceSquare
+        R.Style.GameCoverStyle = theme.coverStyle
+        R.Style.GameCoverCornerRatio = CGFloat(theme.coverRadiusRatio)
+        NotificationCenter.default.post(name: R.NotificationName.GameCoverChange, object: nil)
     }
     
     private func updatePlatformOrder() {
         let theme = Theme.defalut
-        Constants.Config.PlatformOrder = theme.platformOrder.map({ $0 })
-        NotificationCenter.default.post(name: Constants.NotificationName.PlatformOrderChange, object: nil)
+        R.Config.PlatformOrder = theme.platformOrder.map({ $0 })
+        NotificationCenter.default.post(name: R.NotificationName.PlatformOrderChange, object: nil)
     }
     
     private func updateGamelist() {
         let theme = Theme.defalut
         if theme.gamesPerRow > 0 && theme.gamesPerRow <= 5 {
-            Constants.Size.GamesPerRow = Double(theme.gamesPerRow)
-            Constants.Size.GamesHideScrollIndicator = theme.hideIndicator
-            Constants.Size.GamesHideTitle = theme.hideGameTitle
-            Constants.Size.GamesHideGroupTitle = theme.hideGroupTitle
-            Constants.Size.GamesGroupTitleStyle = theme.groupTitleStyle
-            NotificationCenter.default.post(name: Constants.NotificationName.GameListStyleChange, object: nil)
+            R.Style.GamesPerRow = Double(theme.gamesPerRow)
+            R.Style.GamesHideScrollIndicator = theme.hideIndicator
+            R.Style.GamesHideTitle = theme.hideGameTitle
+            R.Style.GamesHideGroupTitle = theme.hideGroupTitle
+            R.Style.GamesGroupTitleStyle = theme.groupTitleStyle
+            NotificationCenter.default.post(name: R.NotificationName.GameListStyleChange, object: nil)
         }
     }
     

@@ -135,7 +135,7 @@ class DSEmulatorBridge : EmulatorBridgeBase {
                 if let x = touchPointX, let y = touchPointY {
                     let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x, y: touchInputFrame.minY + touchInputFrame.height*y)
 #if DEBUG
-                    Log.debug("\(String(describing: Self.self)) \n触摸屏幕:(\(touchInputFrame.minX + touchInputFrame.width*x), \(touchInputFrame.minY + touchInputFrame.height*y) touchPoint:\(touchPoint) Ratio:(\(x), \(y))")
+                    Log.debug("🎮 \(objectInfo(self))  \n触摸屏幕:(\(touchInputFrame.minX + touchInputFrame.width*x), \(touchInputFrame.minY + touchInputFrame.height*y) touchPoint:\(touchPoint) Ratio:(\(x), \(y))")
 #endif
                     LibretroCore.sharedInstance().sendTouchEventX(touchPoint.x, y: touchPoint.y)
                     touchPointX = nil
@@ -144,7 +144,7 @@ class DSEmulatorBridge : EmulatorBridgeBase {
             } else if let gameInput = DSGameInput(rawValue: input),
                       let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
-                Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+                Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
                 LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
             }

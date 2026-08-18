@@ -65,7 +65,7 @@ extension UIDevice {
             return .iPhoneFullScreen
         }
         let screenSize = UIScreen.main.bounds.size
-        let appSize = Constants.Size.WindowSize
+        let appSize = R.Size.WindowSize
         let screenWidth = screenSize.width
         let appWidth = appSize.width
         
@@ -84,12 +84,17 @@ extension UIDevice {
             return .iPadOneThirdScreen
         }
     }
+    
     static var isLandscape: Bool {
         UIDevice.currentOrientation == .landscapeLeft || UIDevice.currentOrientation == .landscapeRight
     }
     
+    static var isPortrait: Bool {
+        !isLandscape
+    }
+    
     static var isPadMini: Bool {
-        if UIDevice.isPad, Constants.Size.WindowSize.minDimension <= 744 {
+        if UIDevice.isPad, R.Size.WindowSize.minDimension <= 744 {
             return true
         }
         return false
@@ -107,7 +112,7 @@ extension UIDevice {
         UIWindow.applicationWindow?.windowScene?.interfaceOrientation ?? .portrait
     }
     static var hasNotch: Bool {
-        let insets = Constants.Size.SafeAera
+        let insets = R.Size.SafeArea
         let orientation = UIDevice.currentOrientation
         if orientation == .landscapeRight {
             return insets.left > 20
@@ -117,22 +122,6 @@ extension UIDevice {
             return insets.bottom > 20
         }
         return insets.top > 20
-    }
-    
-    var language: String {
-        if let lan = Locale.preferredLanguages.first {
-            switch lan {
-            case contains(string: "Hans"):
-                return "zh-hans"
-            case contains(string: "Hant"):
-                return "zh-hant"
-            case hasPrefix(prefix: "en"):
-                return "en"
-            default:
-                return "en"
-            }
-        }
-        return "en"
     }
     
     private static var mtlDevice: MTLDevice? = MTLCreateSystemDefaultDevice()
@@ -157,7 +146,7 @@ extension UIDevice {
         if Device.isPhone() || Device.isPod() {
             return true
         } else if Device.isSimulator() {
-            if Constants.Size.WindowSize.minDimension < 744 { //ipad mini 8.3寸 最小宽度是744
+            if R.Size.WindowSize.minDimension < 744 { //ipad mini 8.3寸 最小宽度是744
                 return true
             }
         }
@@ -168,7 +157,7 @@ extension UIDevice {
         if Device.isPad() {
             return true
         } else if Device.isSimulator() {
-            if Constants.Size.WindowSize.minDimension >= 744 { //ipad mini 8.3寸 最小宽度是744
+            if R.Size.WindowSize.minDimension >= 744 { //ipad mini 8.3寸 最小宽度是744
                 return true
             }
         }

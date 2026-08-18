@@ -11,8 +11,8 @@ import Kingfisher
 
 class CheevosPopupAchievementCell: UICollectionViewCell {
     private let containerView: RoundAndBorderView = {
-        let view = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        let view = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium, borderColor: R.Color.Border, borderWidth: 1)
+        view.backgroundColor = R.Color.BackgroundSecondary
         return view
     }()
     
@@ -35,14 +35,16 @@ class CheevosPopupAchievementCell: UICollectionViewCell {
     
     private let progressLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.caption(size: .m)
-        view.textColor = Constants.Color.Yellow
+        view.font = R.Font.Caption()
+        view.textColor = R.Color.Yellow
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(containerView)
+        enablePressEffect = true
+        
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -51,14 +53,14 @@ class CheevosPopupAchievementCell: UICollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.size.equalTo(50)
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
         }
         
         containerView.addSubview(infoContainerView)
         infoContainerView.snp.makeConstraints { make in
             make.centerY.equalTo(imageView)
-            make.leading.equalTo(imageView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.leading.equalTo(imageView.snp.trailing).offset(R.Size.ContentSpaceSmall)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
         }
         
         infoContainerView.addSubview(titleLabel)
@@ -77,7 +79,7 @@ class CheevosPopupAchievementCell: UICollectionViewCell {
         progressView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalTo(progressLabel)
-            make.trailing.equalTo(progressLabel.snp.leading).offset(-Constants.Size.ContentSpaceMin)
+            make.trailing.equalTo(progressLabel.snp.leading).offset(-R.Size.ContentSpaceSmall)
             make.height.equalTo(2)
         }
     }
@@ -89,10 +91,10 @@ class CheevosPopupAchievementCell: UICollectionViewCell {
     func setData(achievement: CheevosAchievement) {
         imageView.kf.setImage(with: URL(string: achievement.unlockedBadgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(40)))
         
-        let matt = NSMutableAttributedString(string: achievement.title ?? "", attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
-        matt.append(NSAttributedString(string: "\n\(achievement._description ?? "")", attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.LabelSecondary]))
+        let matt = NSMutableAttributedString(string: achievement.title ?? "", attributes: [.font: R.Font.Body(), .foregroundColor: R.Color.LabelPrimary])
+        matt.append(NSAttributedString(string: "\n\(achievement._description ?? "")", attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelSecondary]))
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+        style.lineSpacing = R.Size.ContentSpaceTiny/2
         style.alignment = .left
         titleLabel.attributedText = matt.applying(attributes: [.paragraphStyle: style])
         
@@ -116,8 +118,8 @@ class CheevosPopupAchievementCell: UICollectionViewCell {
 
 class CheevosPopupLeaderboardCell: UICollectionViewCell {
     private let containerView: RoundAndBorderView = {
-        let view = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        let view = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium, borderColor: R.Color.Border, borderWidth: 1)
+        view.backgroundColor = R.Color.BackgroundSecondary
         return view
     }()
     
@@ -145,14 +147,14 @@ class CheevosPopupLeaderboardCell: UICollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.size.equalTo(40)
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
         }
         
         containerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(imageView.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.leading.equalTo(imageView.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
         }
     }
     
@@ -167,10 +169,10 @@ class CheevosPopupLeaderboardCell: UICollectionViewCell {
             imageView.image = leaderboard.image
         }
         
-        let matt = NSMutableAttributedString(string: leaderboard.title ?? "", attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: UIColor.white])
-        matt.append(NSAttributedString(string: "\n\(leaderboard._description ?? "")", attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.LabelSecondary]))
+        let matt = NSMutableAttributedString(string: leaderboard.title ?? "", attributes: [.font: R.Font.Body(), .foregroundColor: UIColor.white])
+        matt.append(NSAttributedString(string: "\n\(leaderboard._description ?? "")", attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelSecondary]))
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+        style.lineSpacing = R.Size.ContentSpaceTiny/2
         style.alignment = .left
         titleLabel.attributedText = matt.applying(attributes: [.paragraphStyle: style])
     }
@@ -180,20 +182,21 @@ enum CheevosPopupViewType {
     case leaderboard, progress, challenge
 }
 
-class CheevosPopupView: UIView {
-    /// 充当导航条
-    private var navigationBlurView: NavigationBlurView = {
-        let view = NavigationBlurView()
-        view.makeBlur()
-        return view
-    }()
-    
-    private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
-        view.enableRoundCorner = true
-        view.addTapGesture { [weak self] gesture in
-            guard let self = self else { return }
-            self.didTapClose?()
+class CheevosPopupView: BaseView {
+    private lazy var navigationView: ASNavigationView = {
+        let title: String
+        switch type {
+        case .leaderboard:
+            title = R.string.localizable.leaderboard()
+        case .progress:
+            title = R.string.localizable.progress()
+        case .challenge:
+            title = R.string.localizable.challenge()
+        }
+        let view = ASNavigationView(.defaultNavigation(title: title, titleIcon: .symbolImage(R.image.retroachievements_iconSymbols(),
+                                                                                             colors: [R.Color.Indigo, R.Color.Yellow])))
+        view.didTapClose = { [weak self] in
+            self?.hide()
         }
         return view
     }()
@@ -207,9 +210,10 @@ class CheevosPopupView: UIView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
+        view.isFocusable = true
         view.allowsSelection = true
         view.allowsMultipleSelection = false
-        view.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid + Constants.Size.ContentSpaceMax, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        view.contentInset = .insets(bottom: R.Size.ContentInsetBottom)
         return view
     }()
 
@@ -217,20 +221,18 @@ class CheevosPopupView: UIView {
     
     private var achievements: [CheevosAchievement] = []
     
-    ///点击关闭按钮回调
-    var didTapClose: (()->Void)? = nil
+    
+    private var hideCompletion: (()->Void)? = nil
     
     let type: CheevosPopupViewType
     
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
-    
-    init(type: CheevosPopupViewType, leaderBoards: [CheevosLeaderboard]? = nil, achievements: [CheevosAchievement]? = nil) {
+    required init?(parameters: Any...) {
+        guard let type = parameters.compactMap({ $0 as? CheevosPopupViewType }).first else { return nil }
         self.type = type
-        
         super.init(frame: .zero)
-        Log.debug("\(String(describing: Self.self)) init")
+        
+        let leaderBoards = parameters.compactMap({ $0 as? [CheevosLeaderboard] }).first
+        let achievements = parameters.compactMap({ $0 as? [CheevosAchievement] }).first
         
         switch type {
         case .leaderboard:
@@ -245,41 +247,18 @@ class CheevosPopupView: UIView {
             self.achievements = achievements ?? []
         }
 
+        addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalToSuperview().offset(R.Size.SheetGrabberTopInset)
+            make.height.equalTo(R.Size.NavigationHeight)
+        }
+        
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        addSubview(navigationBlurView)
-        navigationBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let headerLabel = UILabel()
-        headerLabel.font = Constants.Font.title(size: .s, weight: .bold)
-        headerLabel.textColor = Constants.Color.LabelPrimary
-        switch type {
-        case .leaderboard:
-            headerLabel.text = R.string.localizable.leaderboard()
-        case .progress:
-            headerLabel.text = R.string.localizable.progress()
-        case .challenge:
-            headerLabel.text = R.string.localizable.challenge()
-        }
-        
-        navigationBlurView.addSubview(headerLabel)
-        headerLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-        }
-        
-        navigationBlurView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(navigationView.snp.bottom)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -291,17 +270,23 @@ class CheevosPopupView: UIView {
         let layout = UICollectionViewCompositionalLayout  { [weak self] sectionIndex, env in
             guard let self else { return nil }
             
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(self.type == .leaderboard ? 64 : Constants.Size.ItemHeightHuge)), subitem: item, count: Int(1))
+            let height = self.type == .leaderboard ? 64 : R.Size.ItemHeightExtraLarge
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                 heightDimension: .fractionalHeight(1)))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                              heightDimension: .absolute(height)),
+                                                           subitem: item,
+                                                           count: Int(1))
             
-            
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.Size.ContentSpaceMid, bottom: 0, trailing: Constants.Size.ContentSpaceMid)
-            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(Constants.Size.ContentSpaceMid)
+            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(R.Size.ContentSpaceMedium)
             
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = Constants.Size.ContentSpaceMid
+            section.interGroupSpacing = R.Size.ContentSpaceMedium
 
-            section.contentInsets = NSDirectionalEdgeInsets(top: Constants.Size.ContentSpaceMid, leading: Constants.Size.ContentSpaceMid, bottom: Constants.Size.ContentSpaceMid, trailing: Constants.Size.ContentSpaceMid)
+            section.contentInsets = NSDirectionalEdgeInsets(top: R.Size.ContentSpaceMedium,
+                                                            leading: R.Size.ContentSpaceMedium,
+                                                            bottom: R.Size.ContentSpaceMedium,
+                                                            trailing: R.Size.ContentSpaceMedium)
             
             return section
         }
@@ -330,73 +315,42 @@ extension CheevosPopupView: UICollectionViewDataSource {
 extension CheevosPopupView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard type == .challenge || type == .progress else { return }
-        topViewController()?.present(RetroAchievementsDetailViewController(achievement: achievements[indexPath.row]), animated: true)
+        RetroAchievementsDetailView.show(achievement: achievements[indexPath.row])
     }
 }
 
-extension CheevosPopupView {
-    static var isShow: Bool {
-        Sheet.find(identifier: String(describing: CheevosPopupView.self)).count > 0 ? true : false
-    }
+extension CheevosPopupView: ShowableView {
     
     static func show(type: CheevosPopupViewType,
                      leaderboards: [CheevosLeaderboard]? = nil,
                      achievements: [CheevosAchievement]? = nil,
                      hideCompletion: (()->Void)? = nil) {
-        Sheet.lazyPush(identifier: String(describing: CheevosPopupView.self)) { sheet in
-            sheet.configGamePlayingStyle(isForGameMenu: true, hideCompletion: hideCompletion)
+        if let leaderboards {
+            Self.show(parameters: type, leaderboards)?.hideCompletion = hideCompletion
+        } else if let achievements {
+            Self.show(parameters: type, achievements)?.hideCompletion = hideCompletion
+        }
+    }
+    
+    func didHide() {
+        hideCompletion?()
+    }
+    
+    var prefferdConstraintHeight: CGFloat? {
+        switch type {
+        case .leaderboard:
+            var height = R.Size.SheetGrabberTopInset + R.Size.NavigationHeight
+            height += CGFloat(leaderBoards.count) * 64
+            height += CGFloat(leaderBoards.count + 1) * R.Size.ContentSpaceMedium
+            height += R.Size.ContentInsetBottom
+            return height
             
-            let view = UIView()
-            
-            let grabber = UIImageView(image: R.image.grabber_icon())
-            grabber.isUserInteractionEnabled = true
-            grabber.contentMode = .center
-            view.addSubview(grabber)
-            let grabberHeight = Constants.Size.ContentSpaceTiny*3
-            grabber.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
-                make.height.equalTo(grabberHeight)
-            }
-            
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || PlayViewController.menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.makeBlur()
-            view.addSubview(containerView)
-            containerView.snp.makeConstraints { make in
-                make.top.equalTo(grabber.snp.bottom)
-                make.leading.bottom.trailing.equalToSuperview()
-                if let maxHeight = sheet.config.cardMaxHeight {
-                    make.height.equalTo(maxHeight - grabberHeight)
-                }
-            }
-            view.addPanGesture { [weak view, weak sheet] gesture in
-                guard let view = view, let sheet = sheet else { return }
-                let point = gesture.translation(in: gesture.view)
-                view.transform = .init(translationX: 0, y: point.y <= 0 ? 0 : point.y)
-                if gesture.state == .recognized {
-                    let v = gesture.velocity(in: gesture.view)
-                    if (view.y > view.height*2/3 && v.y > 0) || v.y > 1200 {
-                        // 达到移除的速度
-                        sheet.pop()
-                    }
-                    UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseOut], animations: {
-                        view.transform = .identity
-                    })
-                }
-            }
-            
-            let listView = CheevosPopupView(type: type, leaderBoards: leaderboards, achievements: achievements)
-            listView.didTapClose = { [weak sheet] in
-                sheet?.pop()
-                hideCompletion?()
-            }
-            containerView.addSubview(listView)
-            listView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            sheet.set(customView: view).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+        case .progress, .challenge:
+            var height = R.Size.SheetGrabberTopInset + R.Size.NavigationHeight
+            height += CGFloat(achievements.count) * R.Size.ItemHeightExtraLarge
+            height += CGFloat(achievements.count + 1) * R.Size.ContentSpaceMedium
+            height += R.Size.ContentInsetBottom
+            return height
         }
     }
 }

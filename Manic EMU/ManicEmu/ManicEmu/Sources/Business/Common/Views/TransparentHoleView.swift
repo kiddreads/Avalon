@@ -7,7 +7,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class TransparentHoleView: UIView {
+class TransparentHoleView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(.dm, light: .white, dark: .black)
@@ -31,7 +31,7 @@ class TransparentHoleView: UIView {
 
         // 计算透明区域的矩形
         let transparentRect = self.bounds
-        let transparentPath = UIBezierPath(roundedRect: transparentRect, cornerRadius: Constants.Size.CornerRadiusMax*2)
+        let transparentPath = UIBezierPath(roundedRect: transparentRect, cornerRadius: R.Size.CornerRadiusLarge*2)
         path.append(transparentPath)
         path.usesEvenOddFillRule = true
         

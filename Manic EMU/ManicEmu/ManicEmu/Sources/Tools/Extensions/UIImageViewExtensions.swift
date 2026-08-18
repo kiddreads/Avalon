@@ -10,12 +10,41 @@ import Kingfisher
 
 extension UIImageView {
     func setGameCover(game: Game, size: CGSize? = nil, completion: ((UIImage)->Void)? = nil) {
+        self.kf.cancelDownloadTask()
         if game.isNDSHomeMenuGame || game.is3DSHomeMenuGame || game.isDOSHomeMenuGame {
             //Home Menu的图标进行特殊处理
-            self.kf.cancelDownloadTask()
             self.contentMode = .scaleAspectFill
             self.image = HomeMenuImage(size: size ?? .init(300), gameType: game.gameType, isDSi: game.isDSiHomeMenuGame)
             completion?(UIImage.tryDataImageOrPlaceholder(tryData: image?.jpegData(compressionQuality: 0.7)))
+            return
+        }
+        
+        if R.Style.GameCoverForceSquare,
+            let data = game.icon?.storedData() {
+            self.contentMode = .scaleAspectFill
+            let cache = KingfisherManager.shared.cache
+            let cacheKey = data.md5String
+            cache.retrieveImage(forKey: cacheKey, completionHandler: { result in
+                DispatchQueue.main.async {
+                    func storeCache() {
+                        let image = UIImage.tryDataImageOrPlaceholder(tryData: data, preferenceSize: size)
+                        cache.store(image, forKey: cacheKey, processorIdentifier: DefaultImageProcessor.default.identifier)
+                        self.image = image
+                        completion?(UIImage.tryDataImageOrPlaceholder(tryData: data))
+                    }
+                    switch result {
+                    case .success(let value):
+                        if let image = value.image {
+                            self.image = image
+                            completion?(UIImage.tryDataImageOrPlaceholder(tryData: data))
+                        } else {
+                            storeCache()
+                        }
+                    case .failure(_):
+                        storeCache()
+                    }
+                }
+            })
             return
         }
         
@@ -28,11 +57,10 @@ extension UIImageView {
                     completion?(successResult.image)
                 case .failure(_):
                     self.contentMode = .scaleAspectFit
-                    completion?(UIImage.placeHolder())
+                    completion?(UIImage.placeHolder(preferenceSize: size))
                 }
             }
         } else {
-            self.kf.cancelDownloadTask()
             let data = game.gameCover?.storedData()
             if let data {
                 self.contentMode = .scaleAspectFill

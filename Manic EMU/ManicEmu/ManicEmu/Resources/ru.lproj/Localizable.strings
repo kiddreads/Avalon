@@ -11,7 +11,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "Облачные сервисы";
 "ImportAddLanServiceTitle" = "Локальная сеть";
-"ImportAddDiscoverServiceTitle" = "Обнаружение сервисов";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -32,7 +31,6 @@
 "LandServiceEditConnect" = "Подключиться";
 "AddLandServiceSuccess" = "Сервис %@ успешно добавлен";
 "AddLandServiceFailed" = "Ошибка добавления %@\nПроверьте подключение к сети, статус сервиса или корректность данных";
-"AddLandServiceTimeout" = "Таймаут подключения";
 "FilesImporterErrorFileExist" = "\"%@\" уже существует. Импорт не требуется";
 "FilesImporterErrorBadCopy" = "Ошибка импорта \"%@\": сбой копирования файла";
 "FilesImporterErrorBadExtension" = "Ошибка импорта \"%@\": неподдерживаемое расширение файла";
@@ -78,7 +76,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nИспользуйте браузер для передачи";
 "ImportServiceListPasteTitle" = "Буфер обмена";
 "ImportServiceListPasteDetail" = "Поддержка файлов из macOS и приложения «Файлы»";
-"ImportHowTo" = "Как импортировать";
 "ImportTopHintTitle" = "История, полная мечтаний и приключений, начинается здесь!";
 "ImportDragAndDropTips" = "Перетащите файлы в любое окно Manic EMU для передачи";
 "ImportChannelTips" = "При возникновении вопросов присоединяйтесь к %@";
@@ -112,7 +109,6 @@
 "TimeDurationMinuteFormat" = "%d минут";
 "FatalErrorTitle" = "Критическая ошибка";
 "FatalErrorDesc" = "Сбой загрузки системных ресурсов. Возможны серьёзные ошибки в работе Manic EMU";
-"LodingFailedTitle" = "Ошибка загрузки";
 "AirPlayDesc" = "Начните своё приключение прямо сейчас!";
 "ToastSuccess" = "Сохранено успешно";
 "ToastFailed" = "Ошибка сохранения";
@@ -128,25 +124,22 @@
 "GamesImportSave" = "Импорт сохранений";
 "GamesShareSave" = "Экспорт сохранений";
 "GamesDelete" = "Удалить игру";
-"GamesRandom" = "Случайная игра";
 "LoadGameErrorRomNotExist" = "Ошибка: ROM-файл отсутствует";
 "GamesListEmptyGuideLeft" = "Нажмите";
 "GamesListEmptyGuideRight" = "ниже для импорта";
 "GamesListEmptyWelcomeLeft" = "Добро пожаловать в мир";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Убедитесь в легальности источников получения ROM-файлов";
+"LandscapeEmptyAddGame" = "Добавить игру";
 "DeleteGameAlertDetail" = "Все данные игры (ROM, сохранения, чит-коды) будут удалены безвозвратно!";
 "DeleteSkinAlertDetail" = "Скин будет удалён безвозвратно!";
-"DeleteGameGameStateAlertTitle" = "Удаление сейва";
 "DeleteGameGameStateAlertDetail" = "Сейв будет удалён безвозвратно!";
 "confirmDelte" = "Подтвердить удаление";
 
 //Controllers
 "ControllersTouchName" = "Сенсорное управление";
-"ControllersHeaderTitle" = "Контроллеры";
 "ControllersPlayerIndex" = "Игрок %d";
 "ControllersPlayerUnset" = "Не назначен";
-"ControllersHowToConnect" = "Как подключить";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ назад · всего %@";
@@ -158,7 +151,6 @@
 "ReadySegmentManualSave" = "Ручные сейвы";
 "ReadySegmentAutoSave" = "Автосейвы";
 "ReadyEditTitleFailed" = "Ошибка: название не может быть пустым";
-"ReadyEditTitleSuccess" = "Название изменено";
 "ReadyGameSaveStatesEmpty" = "Нет сохранений";
 "GameSaveGuideBecomTitle" = "Станьте";
 "GameSaveGuideMemberTitle" = "участником";
@@ -170,12 +162,10 @@
 "GameSaveTitle" = "Сейв %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU поддерживает скины в формате .deltaskin .gammaskin";
 "SkinNavigationSubTitleSpecifiedGame" = "Специальный скин для %@";
 "SkinSegmentPortraitTitle" = "Портретная";
 "SkinSegmentLandscapeTitle" = "Альбомная";
 "SkinAddTitle" = "Новый скин";
-"HowToFetch" = "Как получить";
 "SkinDelete" = "Удалить скин";
 "DefaultSkinCannotEdit" = "Стандартный скин нельзя редактировать";
 
@@ -187,16 +177,11 @@
 "HistoryEmptyStartGame" = "Начать игру";
 
 //Settings
-"LeftHandTitle" = "Левый режим";
-"LeftHandDetail" = "Зеркальное отражение элементов управления";
 "QuickGameTitle" = "Быстрый старт";
 "QuickGameDetail" = "Пропускать страницу подготовки";
 "AirPlayTitle" = "Режим AirPlay";
 "AirPlayDetail" = "Полноэкранная трансляция на внешний экран";
 "iCloudTitle" = "iCloud-синхронизация";
-"iCloudDetail" = "Синхронизация игр, скинов, настроек между устройствами";
-"AppIconTitle" = "Иконка приложения";
-"WidgetTitle" = "Виджеты";
 "QATitle" = "Частые вопросы";
 "FeedbackTitle" = "Обратная связь";
 "ShareAppTitle" = "Поделиться «Manic EMU»";
@@ -210,13 +195,9 @@
 "AdvanceSettingTitle" = "Расширенные настройки";
 "SupportSettingTitle" = "Поддержка";
 "OthersSettingTitle" = "Прочее";
-"RatingTitleLeft" = "Оценить";
-"RatingTitleRight" = "";
-"RatingDetail" = "Если вам нравится приложение, поддержите нас 5 звёздами!";
 "iCloudDisableTitle" = "iCloud недоступен";
 "iCloudDisableDetail" = "Включите iCloud Drive в настройках iPhone: «Настройки» → Apple ID → iCloud";
 "iCloudSyncConfilictTitle" = "Конфликт синхронизации";
-"iCloudSyncConfilictDetail" = "Облачная версия:\n%@\n\nЛокальная версия:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Сохранить облачную";
 "iCloudSyncConfilictSaveLocal" = "Сохранить локальную";
 "SettingsNonMemberDesc" = "Вы — главный герой этой истории";
@@ -224,7 +205,6 @@
 "ThanksCommingDesc" = "Спасибо, что играете в";
 "PlayGameDesc" = "";
 "NoEmailSetting" = "Email не настроен";
-"IDCopy" = "ID скопирован";
 "SendEmailSuccess" = "Письмо отправлено";
 "SendEmailFailed" = "Ошибка отправки: %@";
 "iCloudTipsTitle" = "Включить iCloud";
@@ -239,9 +219,6 @@
 "GameSettingVolume" = "Громкость";
 "GameSettingFastForwardResume" = "Обычная скорость";
 "GameSettingFastForward" = "Ускорение x%@";
-"GameSettingStateList" = "Список сейвов";
-"GameSettingSkins" = "Скины";
-"GameSettingFilter" = "Фильтры";
 "GameSettingScreenShot" = "Скриншот";
 "GameSettingHapticOff" = "Вибрация выкл.";
 "GameSettingHapticSoft" = "Слабая";
@@ -260,17 +237,13 @@
 "GameSettingReload" = "Перезапуск";
 "GameSettingQuit" = "Выход";
 "GameSaveStateSuccess" = "Сейв сохранён";
-"GameSaveStateLoadFailed" = "Ошибка загрузки: повреждённый сейв";
 "GameSaveStateLoadSuccess" = "Сейв загружен";
 "GameSaveStateQuickLoadFailed" = "Нет ручных сейвов. Используйте список сейвов для автосохранений";
 "GameSaveListTitle" = "Список сейвов";
-"GameCheatActivateFailed" = "%@\nОшибка активации: неверный чит-код";
 "GameCheatActivateSuccess" = "%@\nАктивирован успешно";
 "AirPlayingTitle" = "Игра транслируется на внешний экран";
 "VolumeOff" = "Без звука";
 "VolumeOn" = "Звук включён";
-"FunctionSortDesc1" = "Эти функции отображаются как быстрые настройки";
-"FunctionSortDesc2" = "Удерживайте для изменения порядка";
 "ManualGameSaveCountLimit" = "Лимит сейвов! Разблокируйте безлимит с подпиской";
 "FastForwardSpeedLimit" = "Максимум x2! Разблокируйте x5 с подпиской";
 "ResetSpeed" = "Сбросить скорость";
@@ -284,13 +257,10 @@
 "AutoDetectFormat" = "Введите код для автоопределения";
 "CheatCodeFormatError" = "Неверный формат чит-кода";
 "CheatCodeEmptyTitle" = "Нет чит-кодов";
-"CheatCodeEmptyGuideLeft" = "Нажмите";
-"CheatCodeEmptyGuideRight" = "для добавления";
 "EnableCheatCodeAlertTitle" = "Включить чит-коды";
 "EnableCheatCodeAlertDetail" = "Чит-коды зависят от версии игры. Использование может вызвать ошибки!";
 
 //Фильтры
-"FilterSectionHeaderTitle" = "Видеофильтры";
 "FilterOriginTitle" = "Оригинал";
 
 //In-App Purchases
@@ -350,7 +320,6 @@
 "PurchasePending" = "Ожидание подтверждения";
 "PurchaseUnknown" = "Неизвестный статус";
 "PurchaseErrorDesc" = "Ошибка оплаты. Проверьте интернет";
-"PurchaseFailedTitle" = "Ошибка оплаты";
 "RestoreSuccessDesc" = "Покупки восстановлены!";
 "RestoreEndDesc" = "Активных подписок не найдено";
 "TrialDesc" = "Бесплатный пробный период";
@@ -391,25 +360,12 @@
 "ShareAppSubtitle" = "Пригласите друзей в игру!";
 "ShareRomFilesFailed" = "Ошибка: ROM недоступен";
 "ShareSaveFilesFailed" = "Ошибка: сохранений нет";
-"ShareFilesCopyFailed" = "Ошибка копирования";
-"ShareFilesCompressFailed" = "Ошибка архивации";
 
 "TurnOnAirPlayAsk" = "AirPlay подключён. Перейти в полноэкранный режим сейчас?";
 
 "ThreeDSModePerformance" = "Режим Производительности";
 "ThreeDSModeCompatibility" = "Режим Совместимости";
 "ThreeDSModeQuality" = "Приоритет Графики";
-"ThreeDSNotSupportImportSave" = "3DS-игры пока не поддерживают импорт сохранений";
-"ThreeDSNotSupportShareSave" = "3DS-игры пока не поддерживают обмен сохранениями";
-"ThreeDSBetaAlertTitle" = "Экспериментальная версия 3DS";
-"ThreeDSBetaAlertDetail" = "Чтобы вы могли раньше насладиться 3DS-играми, Manic EMU выпустил экспериментальную версию. Некоторые функции требуют оптимизации.
-
-Временно недоступны:
-❌ Полноэкранный режим AirPlay
-❌ Автосохранения
-❌ Ускорение
-
-При нестабильной работе обратитесь к FAQ или в наш канал поддержки. Мы постоянно улучшаем эмулятор. Ваша поддержка помогает нам создавать идеальный игровой опыт. Мы работаем для вас!";
 "ThreeDSNoSupportDeviceTitle" = "Недостаточная производительность устройства";
 "ThreeDSNoSupportDeviceDetail" = "Производительности этого устройства может не хватить для эмуляции 3DS. Продолжение работы может привести к непредсказуемым сбоям";
 
@@ -428,8 +384,6 @@
 "FullScreenWhenConnectControllerTitle" = "Авто-полноэкранный режим";
 "FullScreenWhenConnectControllerDetail" = "Включать полноэкранный режим при подключении контроллера";
 "JoinDiscordTitle" = "Присоединиться к Discord";
-"JoinDiscordAlertMessage" = "Благодарим игрока %@ за создание канала. Продолжить?";
-"FlexSkinGuideTitle" = "Перетаскивайте или масштабируйте экран";
 "DownloadFailed" = "Ошибка загрузки";
 "RemoveDownloadTask" = "Отменить загрузку \"%@\"?";
 "GameSettingResolution" = "Разрешение %@";
@@ -479,9 +433,6 @@
 "RenderRightEyeDesc" = "Отключение улучшает производительность в некоторых играх, но может вызвать мерцание";
 "DisableTitle" = "Отключить";
 "EnableTitle" = "Включить";
-"NoSaveStateToast" = "%@ отсутствует";
-"DeleteSelectedSaveStateAlert" = "Удалить выбранный «%@»?\nВосстановление невозможно!";
-"DeleteAllSaveStateAlert" = "Нет выбора. Удалить все «%@»?\nВосстановление невозможно!";
 "AICoverSearchDesc" = "Обнаружен поиск не на английском. Обновите до Premium для многоязычного AI-поиска Manic EMU";
 "MaxTextSizeAllowDesc" = "Поддерживает до %@ символов";
 
@@ -509,29 +460,21 @@
 "BiosAddTitle" = "Добавить BIOS";
 "StartGameWithoutBiosTitle" = "Запустить без BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Расширенный Режим";
 "ThreeDSAdvanceSettingTitle" = "Расширенные Настройки";
-"ThreeDSBasicSettingMode" = "Базовый Режим";
 "ShareConfigButtonTitle" = "Поделиться Конфигурацией";
 "ImportConfigButtonTitle" = "Импортировать Конфигурацию";
 "ShareFileFailedMissing" = "Ошибка: файл не существует";
 "ReadConfigFileFailed" = "Не удалось прочитать файл конфигурации";
 "SwitchEmulationCore" = "Сменить Ядро";
 "SwitchEmulationCoreDetail" = "Смена ядра эмуляции для %@\nПриведет к недоступности сохранений предыдущего ядра. Для доступа вернитесь к исходному ядру";
-"BeetleSaturnNoSupportCheat" = "Ядро Beetle Saturn не поддерживает читы. При необходимости переключитесь на ядро Yabause";
-"CurrentTitle" = "текущее";
 "NewSkinDesc" = "Manic EMU поддерживает скины в форматах .manicskin и .deltaskin .gammaskin. Важно: импортируемый скин должен соответствовать платформе, иначе не отобразится в списке.\nТакже предоставлен доступ к сторонним сообществам скинов. Они не связаны с Manic EMU. При загрузке строго соблюдайте условия служб сайтов";
 "VisitSite" = "Посетить %@";
 "OpenFile" = "Открыть Файл";
 "WebViewDownloadBegin" = "Загрузка началась";
 "RespectSilentMode" = "Уважать Тихий Режим";
 "RespectSilentModeDesc" = "При включении Manic EMU воспроизводит звук только вне тихого режима";
-"SaturnISONoSwitchCore" = "Игры Sega Saturn в .iso не поддерживают смену ядра";
-"EnableFullScreenTitle" = "Включить Полный Экран";
-"DisableFullScreenTitle" = "Выключить Полный Экран";
 "SimulateBlowingTitle" = "Симулировать Дуновение";
 "PaletteTitle" = "Палитра";
-"SkinRestDesc" = "Сброс скина восстановит также скины игр до версий по умолчанию";
 "SkinResetForAll" = "Сбросить все скины";
 "SkinResetForPlatform" = "Сбросить скин %@";
 "SkinDebug" = "Тестовая Зона Скинов";
@@ -548,7 +491,6 @@
 "MultiDiscCloseAlert" = ".m3u создан. Закройте после импорта";
 "MultiDiscContinueClose" = "Закрыть";
 "SwapDisk" = "Сменить диск";
-"NotSupportSwapDisk" = "Игра не поддерживает смену дисков";
 "TransferPakDesc" = "Transfer Pak синхронизирует GB/GBC с N64. Для активации импортируйте ROM (.gb/.gbc) и сейв (.sav)";
 "TransferPakFromLibrary" = "Импорт из библиотеки";
 "TransferPakFromLibraryDesc" = "Только игры с сохранениями.\nВыбранные GB/GBC игры должны соответствовать N64 ROM";
@@ -557,7 +499,6 @@
 "TransferPakOn" = "Включено";
 "TransferPakOff" = "Выключено";
 "TransferPakImportError" = "Ошибка: Импортируйте ROM и сейв (2 файла)";
-"ShowControlsTitle" = "Показать управление";
 "HideControlsTitle" = "Скрыть управление";
 
 "DesignedFor" = "Разработано для %@";
@@ -580,7 +521,6 @@
 "WfcConnectDesc" = "Подключение к Nintendo WFC...\nУскорение и читы отключены";
 "WfcDisconnectDesc" = "Отключиться от Nintendo WFC";
 "NotAllowOnlineGame" = "Функция отключена в онлайн-игре";
-"QuitGameAlert" = "Выйти из игры? Несохранённый прогресс будет потерян";
 
 "SkinIdentifierExist" = "Идентификатор %@ уже существует. Измените и повторите импорт.";
 "AnalogModeChange" = "Переключить в режим %@";
@@ -614,7 +554,6 @@
 "LastActivity" = "Последняя активность: %@";
 "MemberSince" = "Участник с: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Прогресс";
 "AchievementsList" = "Достижения";
 "TotalAchievements" = "Всего %d достижений";
@@ -637,7 +576,6 @@
 "DisableAchievementsAlert" = "Отключить RetroAchievements?";
 "SaveStateCoreUnCompatible" = "Сейв был создан в %@ (текущий: %@). Загрузка может вызвать проблемы!";
 "LatestSaveStateUnCompatible" = "Нельзя загрузить последний сейв из-за несовместимости";
-"Snes9xAlert" = "Из-за лицензионных проблем ядро Snes9x будет удалено в будущем. Переключитесь на bsnes и перенесите сейвы, иначе они не заработают.";
 "GotIt" = "Понятно";
 "Rumble" = "Вибрация";
 "RumbleDetail" = "Устройство вибрирует при certain events";
@@ -653,7 +591,6 @@
 "JumpTips" = "Открывается сторонняя страница";
 "ThirdPartGameInfoTips" = "Информация об игре предоставлена third parties. Используйте свое judgment. Если Manic EMU не найдет игру, используйте manual search.";
 "NotSupportHardcore" = "Хардкорный режим отключен для этой игры. Возможно, Manic EMU не авторизован RetroAchievements или игра его не поддерживает.";
-"ChooseOne" = "Выберите один";
 "FilesImporterErrorBadCue" = "Ошибка импорта %@. Файл может быть invalid или не в UTF-8. Проверьте format.";
 "Leaderboard" = "Таблица лидеров";
 "LeaderboardStart" = "Начало таблицы: ";
@@ -669,10 +606,8 @@
 "AlwaysShowProgressDesc" = "Держать прогресс достижений видимым на экране.";
 "Progress" = "Прогресс";
 
-"DCGameNoSupportGameSave" = "Dreamcast не поддерживает импорт/экспорт сохранений. Используйте VMU Explorer для редактирования файлов памяти в папке Manic EMU-Flycast-dc.";
 
 "Challenge" = "Испытание";
-"GameTypeLicensingError" = "Извините! Из-за лицензионных ограничений ядра %@ эта платформа временно недоступна. Вы можете дождаться будущего обновления или воспользоваться версией для сайдлоада.";
 "DCJITLessVer" = "Версия По умолчанию обеспечивает быструю и точную эмуляцию, но не поддерживает игры WinCE. Для запуска WinCE-игр выберите ядро WinCE.";
 "TVStandard" = "Если стандарт ТВ игры не совпадает с регионом, это может повлиять на скорость. PAL-регионы включают в себя Европу, Австралию и Новую Зеландию.";
 "SNESVRAMEnable" = "Некоторые модифицированные ROM требуют эту опцию для корректного отображения графики, но ее включение отключит поддержку RetroAchievements.";
@@ -695,7 +630,6 @@
 "LayoutEmbeddedBottomRight" = "Встроенный (Низ-Право)";
 "LayoutSingleScreen" = "Один экран";
 "AirPlayLayoutTips" = "Комбинируйте макет AirPlay с переключением экранов для большего количества вариантов. Примечание: Использование переключения экранов со встроенным макетом может вызвать наложение, не рекомендуется";
-"ToggleAnolog" = "Переключить аналоговый";
 "EnableGlobalAchievements" = "Включить глобальные RetroAchievements";
 "GlobalHardcoreMode" = "Глобальный хардкорный режим";
 "GlobalHardcoreAlert" = "Сначала включите глобальные RetroAchievements";
@@ -711,7 +645,6 @@
 "AppearanceLight" = "Светлый режим";
 "AppearanceDark" = "Тёмный режим";
 "AppearanceAuto" = "Следовать системе";
-"GameListBackground" = "Фоновое изображение";
 "GameListBackgroundUpload" = "Загрузить";
 "GameplayManuals" = "Игровые инструкции";
 "GameplayManualsNoExists" = "Для этой игры нет доступной инструкции.";
@@ -721,7 +654,6 @@
 "UnsupportSkinsDesc" = "Следующие скины не поддерживаются на этом устройстве:\n%@Примечание: Удаление также приведёт к удалению этих скинов с других устройств, синхронизированных через iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Неподдерживаемые скины успешно удалены";
 "ForbitPKSM" = "Для обеспечения честного опыта RetroAchievements, PKSM нельзя использовать, пока включён глобальный RetroAchievements.";
-"FDSAlert" = "Эта опция доступна только для игр FDS.";
 "DiskSideChange" = "Перевернуть диск";
 "EjectDisk" = "Извлечь диск";
 
@@ -754,7 +686,6 @@
 "TriggerProName" = "Имя TriggerPro";
 "Position" = "Позиция";
 "ButtonInfo" = "Информация о кнопке";
-"NoTriggerPro" = "Конфигурация TriggerPro не найдена. Вы можете перейти в Настройки или нажать и удерживать опцию TriggerPro в Игровом Меню, чтобы создать ее";
 "ManageTriggerPro" = "Управление TriggerPro";
 "EnableTriggerPro" = "Включить TriggerPro";
 "DisableTriggerPro" = "Отключить TriggerPro";
@@ -795,7 +726,6 @@
 "Default" = "По умолчанию";
 "Imported" = "Импортировано";
 "DownloadRetroArchSahders" = "Загрузить шейдеры из RetroArch";
-"ImportShaders" = "Импортировать шейдеры";
 "Shaders" = "Шейдеры";
 "DownloadRetroArchShaders" = "Загрузить шейдеры из RetroArch? По завершении категория шейдеров RetroArch обновится автоматически. Вы можете отменить этот процесс в любое время в менеджере загрузок.";
 "RetroArchShaderUnzipFailed" = "Не удалось распаковать %@. Возможно, файл был поврежден при загрузке. Попробуйте загрузить его снова.";
@@ -828,7 +758,6 @@ PlayCase специализируется на высококачественн�
 "JGenesisAlert" = "Извините, ядро JGenesis поддерживает только ROM-файлы .chd.";
 "RedeemOfferCode" = "Использовать предложение";
 "CheatImportFailed" = "Ошибка импорта. Файл не может быть проанализирован или не найдены соответствующие чит-коды.";
-"RemoveAllCheats" = "Удалить все читы";
 "RemoveAllCheatsAlert" = "Вы уверены, что хотите удалить все чит-коды? Это действие нельзя отменить.";
 "CheatCodeStatus" = "Включено";
 "Background" = "Фон";
@@ -841,13 +770,8 @@ PlayCase специализируется на высококачественн�
 "RemoveBackgroundForGame" = "Удалить фон игры";
 "RemoveBackgroundForConsole" = "Удалить фон платформы %@";
 "RemoveBackgroundForGlobal" = "Удалить глобальный фон";
-"ShaderConfigAlert" = "Установлено для %@.";
-"Global" = "Глобальный";
-"RemoveShaderForGlobal" = "Удалить глобальный шейдер";
 "FeaturedItems" = "Рекомендуемые товары";
-"ReUpload" = "Повторная загрузка";
 
-"Service" = "Службы";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "Сеть PSP";
 "Networking" = "Сеть";
@@ -886,16 +810,11 @@ PlayCase специализируется на высококачественн�
 "LoadingCheerpJ" = "Загрузка CheerpJ";
 "ZipHandlerTitle" = "Обработка ZIP-файлов";
 "ZipHandlerDetail" = "Некоторые платформы (например, DOS и Arcade) могут загружать ПЗУ напрямую из .zip-файлов. Для других платформ ПЗУ внутри .zip необходимо извлечь перед импортом.\n\nВыбранные файлы будут извлечены и импортированы по отдельности, а невыбранные файлы будут импортированы как единое ZIP-ПЗУ.";
-"ConfigsResetCore" = "Сбросить к настройкам ядра";
-"ConfigsResetBefore" = "Вернуться к предыдущим настройкам";
 "InsertDisc" = "Вставить диск";
 "InsertDiscAlert" = "Вы можете вставить диск, выбрав другую игру с той же платформы в вашей библиотеке, или выбрав файл диска из Файлов. Из-за ограничений файловой системы iOS файлы дисков, выбранные из Файлов, будут скопированы в кэш Manic EMU.";
 "InsertDiscFailed" = "Не удалось вставить диск";
 "GenerateHomeMenu" = "Создать домашнее меню";
 "SkinSoundEffects" = "Звуковые эффекты скина";
-"FirstAnniversary" = "СПАСИБО, ЧТО ВЫ С НАМИ,\nМЫ КОЕ-ЧТО ВАМ НАПИСАЛИ";
-"ApirlFoolsDayTitle" = "Ой, Manic EMU сломался?";
-"ApirlFoolsDayDetail" = "Не волнуйтесь!\nЭто шутка — С Днём смеха!\n\nВсё вернётся в норму, как только вы закроете это.";
 "JITType" = "Тип JIT";
 "JITTypeDesc" = "Стандартный JIT обеспечивает лучшую производительность, в то время как IR JIT обеспечивает среднюю производительность.";
 "Pretendo" = "Сеть Pretendo";
@@ -910,7 +829,6 @@ PlayCase специализируется на высококачественн�
 "HomeMenuDesc" = "Используйте кнопку ниже, чтобы открыть Home Menu. Затем перейдите в Настройки Nimbus, переключитесь на сеть Pretendo и откройте Настройки, чтобы выбрать «ID Nintendo Network» и войти с вашей учетной записью Pretendo.\n\nПосле этого любые игры, запущенные из Home Menu или работающие с ядром Azahar, будут использовать сеть Pretendo.\n\nЕсли запись Home Menu отсутствует, эта функция попытается автоматически воссоздать ее.";
 "OpenHomeMenu" = "Открыть Home Menu";
 "ChooseRegion" = "Выбрать регион";
-"ChooseRegionDesc" = "Выберите правильный регион устройства 3DS, на котором запущен инструмент Artic Setup. Выбор неправильного региона предотвратит успешную передачу данных.";
 "HomeMenuNotFound" = "Home Menu не найден. Сначала завершите передачу данных Artic Base.";
 "SystemUpdateAsk" = "Обновление системы завершилось успешно?";
 "SystemUpdateDesc" = "Если обновление системы не удалось из-за сетевых проблем, попробуйте передать данные снова. В противном случае Home Menu 3DS может работать некорректно.";

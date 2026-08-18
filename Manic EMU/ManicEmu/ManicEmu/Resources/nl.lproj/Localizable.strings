@@ -10,7 +10,6 @@
 // Import
 "ImportAddCloudServiceTitle" = "Clouddiensten";
 "ImportAddLanServiceTitle" = "Lokaal netwerk";
-"ImportAddDiscoverServiceTitle" = "Ontdekservice";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -31,7 +30,6 @@
 "LandServiceEditConnect" = "Verbinden";
 "AddLandServiceSuccess" = "%@ succesvol toegevoegd";
 "AddLandServiceFailed" = "%@ toevoegen mislukt\nControleer je netwerk, serverstatus of ingevoerde gegevens";
-"AddLandServiceTimeout" = "Verbinding met service verlopen";
 "FilesImporterErrorFileExist" = "\"%@\" bestaat al en wordt niet geïmporteerd";
 "FilesImporterErrorBadCopy" = "Importeren van \"%@\" mislukt: fout tijdens kopiëren";
 "FilesImporterErrorBadExtension" = "Importeren van \"%@\" mislukt: bestandstype niet herkend";
@@ -77,7 +75,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nGebruik browser om bestanden over te dragen";
 "ImportServiceListPasteTitle" = "Klembord lezen";
 "ImportServiceListPasteDetail" = "Ondersteunt bestanden van macOS en Bestanden-app";
-"ImportHowTo" = "Hoe importeer ik?";
 "ImportTopHintTitle" = "Een verhaal vol dromen en avonturen begint hier!";
 "ImportDragAndDropTips" = "Sleep bestanden naar elk Manic EMU-scherm om ze over te dragen";
 "ImportChannelTips" = "Vragen? Sluit je aan bij %@ voor hulp";
@@ -111,7 +108,6 @@
 "TimeDurationMinuteFormat" = "%d min";
 "FatalErrorTitle" = "Kritieke fout";
 "FatalErrorDesc" = "Systeembronnen laden mislukt. Manic EMU kan instabiel worden";
-"LodingFailedTitle" = "Laden mislukt";
 "AirPlayDesc" = "Start nu je avontuur!";
 "ToastSuccess" = "Opgeslagen";
 "ToastFailed" = "Opslaan mislukt";
@@ -127,25 +123,22 @@
 "GamesImportSave" = "Gameopslag importeren";
 "GamesShareSave" = "Gameopslag exporteren";
 "GamesDelete" = "Game verwijderen";
-"GamesRandom" = "Ik weet niet wat ik moet spelen, verras me";
 "LoadGameErrorRomNotExist" = "Game laden mislukt: ROM bestaat niet";
 "GamesListEmptyGuideLeft" = "Klik op de";
 "GamesListEmptyGuideRight" = "hieronder om games te importeren";
 "GamesListEmptyWelcomeLeft" = "Welkom in de wereld van";
 "GamesListEmptyWelcomeRight" = "";
 "GamesListEmptyWarnning" = "Zorg ervoor dat je ROMs legaal verkregen zijn";
+"LandscapeEmptyAddGame" = "Game toevoegen";
 "DeleteGameAlertDetail" = "ROM, opslag en cheatcodes worden permanent verwijderd!";
 "DeleteSkinAlertDetail" = "Skin wordt permanent verwijderd!";
-"DeleteGameGameStateAlertTitle" = "Handmatige opslagstatus verwijderen";
 "DeleteGameGameStateAlertDetail" = "Handmatige opslagstatus wordt permanent verwijderd!";
 "confirmDelte" = "Bevestig verwijderen";
 
 // Controllers
 "ControllersTouchName" = "Touchcontroller";
-"ControllersHeaderTitle" = "Controllers";
 "ControllersPlayerIndex" = "Speler %d";
 "ControllersPlayerUnset" = "Niet toegewezen";
-"ControllersHowToConnect" = "Hoe verbind ik een controller?";
 
 // GameInfo
 "ReadyGameInfoSubTitle" = "%@ gespeeld · Totaal %@";
@@ -157,7 +150,6 @@
 "ReadySegmentManualSave" = "Handmatige opslagstatus";
 "ReadySegmentAutoSave" = "Automatische opslagstatus";
 "ReadyEditTitleFailed" = "Hernoemen mislukt: naam mag niet leeg zijn";
-"ReadyEditTitleSuccess" = "Hernoemd";
 "ReadyGameSaveStatesEmpty" = "Geen opslagstatus";
 "GameSaveGuideBecomTitle" = "Word";
 "GameSaveGuideMemberTitle" = "lid";
@@ -169,12 +161,10 @@
 "GameSaveTitle" = "Opslag %d";
 
 // Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU ondersteunt .deltaskin .gammaskin-bestanden";
 "SkinNavigationSubTitleSpecifiedGame" = "Skin instellen voor %@";
 "SkinSegmentPortraitTitle" = "Portret";
 "SkinSegmentLandscapeTitle" = "Landschap";
 "SkinAddTitle" = "Skin toevoegen";
-"HowToFetch" = "Hoe te verkrijgen";
 "SkinDelete" = "Skin verwijderen";
 "DefaultSkinCannotEdit" = "Standaardskin kan niet bewerkt worden";
 
@@ -186,16 +176,11 @@
 "HistoryEmptyStartGame" = "Nu spelen";
 
 // Settings
-"LeftHandTitle" = "Linkshandige modus";
-"LeftHandDetail" = "Spiegel joystick, DPad en knoppen";
 "QuickGameTitle" = "Snel starten";
 "QuickGameDetail" = "Sla het voorbereidingsscherm over";
 "AirPlayTitle" = "AirPlay volledig scherm";
 "AirPlayDetail" = "Spelbeeld wordt volledig gespiegeld";
 "iCloudTitle" = "iCloud-sync";
-"iCloudDetail" = "Sync games, skins, opslag en instellingen tussen apparaten";
-"AppIconTitle" = "App-pictogram";
-"WidgetTitle" = "Widgets";
 "QATitle" = "FAQ";
 "FeedbackTitle" = "Feedback";
 "ShareAppTitle" = "Deel Manic EMU";
@@ -209,13 +194,9 @@
 "AdvanceSettingTitle" = "Geavanceerd";
 "SupportSettingTitle" = "Ondersteuning";
 "OthersSettingTitle" = "Overig";
-"RatingTitleLeft" = "Beoordeel";
-"RatingTitleRight" = "";
-"RatingDetail" = "Geef ons een 5-sterrenbeoordeling als je ons waardeert";
 "iCloudDisableTitle" = "iCloud niet beschikbaar";
 "iCloudDisableDetail" = "Ga naar 'Instellingen > Apple ID > iCloud' en zorg dat iCloud Schakelbaar is voor Manic EMU";
 "iCloudSyncConfilictTitle" = "iCloud-conflict";
-"iCloudSyncConfilictDetail" = "Cloudbestand:\n%@\n\nLokaal bestand:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "Cloud behouden";
 "iCloudSyncConfilictSaveLocal" = "Lokaal behouden";
 "SettingsNonMemberDesc" = "Jij bent de hoofdpersoon";
@@ -223,7 +204,6 @@
 "ThanksCommingDesc" = "Bedankt dat je";
 "PlayGameDesc" = "speelt";
 "NoEmailSetting" = "E-mailadres niet ingesteld";
-"IDCopy" = "ID gekopieerd";
 "SendEmailSuccess" = "E-mail verzonden";
 "SendEmailFailed" = "E-mail mislukt: %@";
 "iCloudTipsTitle" = "iCloud-sync inschakelen";
@@ -238,9 +218,6 @@
 "GameSettingVolume" = "Volume";
 "GameSettingFastForwardResume" = "Normale snelheid";
 "GameSettingFastForward" = "Versnellen %@";
-"GameSettingStateList" = "Opslaglijst";
-"GameSettingSkins" = "Skins instellen";
-"GameSettingFilter" = "Filter";
 "GameSettingScreenShot" = "Screenshot";
 "GameSettingHapticOff" = "Trilling uit";
 "GameSettingHapticSoft" = "Zwak";
@@ -259,17 +236,13 @@
 "GameSettingReload" = "Herstarten";
 "GameSettingQuit" = "Afsluiten";
 "GameSaveStateSuccess" = "Opslagstatus opgeslagen";
-"GameSaveStateLoadFailed" = "Laden mislukt: opslagstatus is beschadigd";
 "GameSaveStateLoadSuccess" = "Opslagstatus geladen";
 "GameSaveStateQuickLoadFailed" = "Geen handmatige opslag. Gebruik 'Opslaglijst' voor automatische opslag";
 "GameSaveListTitle" = "Opslagstatus";
-"GameCheatActivateFailed" = "%@\nCheatcode is ongeldig";
 "GameCheatActivateSuccess" = "%@\nGeactiveerd";
 "AirPlayingTitle" = "Beeld wordt gespiegeld via AirPlay";
 "VolumeOff" = "Volume uit";
 "VolumeOn" = "Volume aan";
-"FunctionSortDesc1" = "Standaard functies voor officiële skins";
-"FunctionSortDesc2" = "Sleep om volgorde aan te passen";
 "ManualGameSaveCountLimit" = "Maximaal aantal handmatige opslagpunten bereikt. Word lid voor onbeperkt opslaan";
 "FastForwardSpeedLimit" = "Maximale snelheid x2. Word lid voor x5 versnelling";
 "ResetSpeed" = "Normale snelheid";
@@ -283,13 +256,10 @@
 "AutoDetectFormat" = "Code wordt automatisch herkend";
 "CheatCodeFormatError" = "Ongeldige cheatcode";
 "CheatCodeEmptyTitle" = "Geen cheatcodes";
-"CheatCodeEmptyGuideLeft" = "Klik op";
-"CheatCodeEmptyGuideRight" = "linksboven om een cheatcode toe te voegen";
 "EnableCheatCodeAlertTitle" = "Cheatcode activeren";
 "EnableCheatCodeAlertDetail" = "Cheatcodes zijn gameversie-afhankelijk en kunnen instabiliteit veroorzaken. Gebruik op eigen risico.";
 
 // 滤镜
-"FilterSectionHeaderTitle" = "Videofilters";
 "FilterOriginTitle" = "Origineel";
 
 // 内购
@@ -355,7 +325,6 @@
 "PurchasePending" = "Betaling in behandeling";
 "PurchaseUnknown" = "Onbekende status";
 "PurchaseErrorDesc" = "Betaling mislukt. Controleer je netwerk";
-"PurchaseFailedTitle" = "Betaling mislukt";
 "RestoreSuccessDesc" = "Aankoop hersteld!";
 "RestoreEndDesc" = "Geen aankoop gevonden";
 "TrialDesc" = "Gratis proefperiode. Altijd annuleerbaar";
@@ -396,25 +365,12 @@
 "ShareAppSubtitle" = "Nodig je vrienden uit voor een avontuur!";
 "ShareRomFilesFailed" = "ROM delen mislukt";
 "ShareSaveFilesFailed" = "Opslag delen mislukt";
-"ShareFilesCopyFailed" = "Delen mislukt: kopiëren fout";
-"ShareFilesCompressFailed" = "Delen mislukt: comprimeren fout";
 
 "TurnOnAirPlayAsk" = "AirPlay is verbonden. Nu naar volledig scherm overschakelen?";
 
 "ThreeDSModePerformance" = "Prestatiemodus";
 "ThreeDSModeCompatibility" = "Compatibiliteitsmodus";
 "ThreeDSModeQuality" = "Grafische Prioriteit";
-"ThreeDSNotSupportImportSave" = "3DS-games ondersteunen momenteel het importeren van saves niet";
-"ThreeDSNotSupportShareSave" = "3DS-games ondersteunen momenteel het delen van saves niet";
-"ThreeDSBetaAlertTitle" = "Experimentele 3DS-versie";
-"ThreeDSBetaAlertDetail" = "Om je eerder 3DS-games te laten ervaren, heeft Manic EMU een experimentele 3DS-functie uitgebracht. Sommige optimalisaties zijn nog nodig.
-
-Tijdelijk niet beschikbaar:
-❌ AirPlay Volledig Scherm
-❌ Automatisch Opslaan
-❌ Versnellingsfunctie
-
-Bij problemen raadpleeg onze FAQ of join ons supportkanaal. We optimaliseren continu. Jouw steun helpt ons een perfecte ervaring te creëren. We werken hard voor jou!";
 "ThreeDSNoSupportDeviceTitle" = "Onvoldoende apparaatprestaties";
 "ThreeDSNoSupportDeviceDetail" = "Dit apparaat ondersteunt mogelijk geen 3DS-emulatie. Doorgaan kan onvoorspelbare fouten veroorzaken";
 
@@ -433,8 +389,6 @@ Druk op de controllerknop...";
 "FullScreenWhenConnectControllerTitle" = "Automatisch volledig scherm";
 "FullScreenWhenConnectControllerDetail" = "Volledig scherm bij controllerverbinding";
 "JoinDiscordTitle" = "Word lid van Discord";
-"JoinDiscordAlertMessage" = "Bedankt aan speler %@ voor dit kanaal. Doorgaan?";
-"FlexSkinGuideTitle" = "Sleep of knijp om aan te passen";
 "DownloadFailed" = "Download mislukt";
 "RemoveDownloadTask" = "Download van \"%@\" annuleren?";
 "GameSettingResolution" = "Resolutie %@";
@@ -484,9 +438,6 @@ Druk op de controllerknop...";
 "RenderRightEyeDesc" = "Uitschakelen verbetert prestaties bij sommige spellen, maar kan flikkeringen veroorzaken";
 "DisableTitle" = "Uitschakelen";
 "EnableTitle" = "Inschakelen";
-"NoSaveStateToast" = "Geen %@ beschikbaar";
-"DeleteSelectedSaveStateAlert" = "Geselecteerde «%@» verwijderen?\nVerwijderen is permanent!";
-"DeleteAllSaveStateAlert" = "Geen selectie. Alle «%@» verwijderen?\nVerwijderen is permanent!";
 "AICoverSearchDesc" = "Niet-Engelse zoekopdracht gedetecteerd. Upgrade naar Premium voor meertalig zoeken met AI";
 "MaxTextSizeAllowDesc" = "Ondersteunt maximaal %@ tekens";
 
@@ -514,29 +465,21 @@ Druk op de controllerknop...";
 "BiosAddTitle" = "BIOS toevoegen";
 "StartGameWithoutBiosTitle" = "Starten zonder BIOS";
 
-"ThreeDSAdvanceSettingMode" = "Geavanceerde Modus";
 "ThreeDSAdvanceSettingTitle" = "Geavanceerde Instellingen";
-"ThreeDSBasicSettingMode" = "Basis Modus";
 "ShareConfigButtonTitle" = "Configuratie Delen";
 "ImportConfigButtonTitle" = "Configuratie Importeren";
 "ShareFileFailedMissing" = "Delen mislukt: bestand bestaat niet";
 "ReadConfigFileFailed" = "Kan configuratiebestand niet lezen";
 "SwitchEmulationCore" = "Kern Wisselen";
 "SwitchEmulationCoreDetail" = "Verander emulatiekern voor %@\nKernwisseling maakt opslagen van de vorige kern onleesbaar. Ga terug naar de oorspronkelijke kern om ze te benaderen";
-"BeetleSaturnNoSupportCheat" = "De Beetle Saturn-kern ondersteunt momenteel geen cheatcodes. Schakel over naar de Yabause-kern indien nodig";
-"CurrentTitle" = "huidige";
 "NewSkinDesc" = "Manic EMU ondersteunt skins in .manicskin- en .deltaskin .gammaskin-formaten. Let op: geïmporteerde skins moeten overeenkomen met het huidige platform, anders verschijnen ze niet in de lijst.\nWe bieden ook toegang tot skin-communities van derden. Deze zijn niet officieel verbonden met Manic EMU. Volg bij het downloaden strikt de servicevoorwaarden van elke website";
 "VisitSite" = "Bezoek %@";
 "OpenFile" = "Bestand Openen";
 "WebViewDownloadBegin" = "Download gestart";
 "RespectSilentMode" = "Stille Modus Eren";
 "RespectSilentModeDesc" = "Indien ingeschakeld, speelt Manic EMU alleen audio af buiten de stille modus";
-"SaturnISONoSwitchCore" = "Sega Saturn .iso-spellen ondersteunen geen kernwisseling";
-"EnableFullScreenTitle" = "Volledig Scherm Inschakelen";
-"DisableFullScreenTitle" = "Volledig Scherm Uitschakelen";
 "SimulateBlowingTitle" = "Blaas Simulatie";
 "PaletteTitle" = "Palet";
-"SkinRestDesc" = "Reset van de skin herstelt ook door spellen toegewezen skins naar standaardversies";
 "SkinResetForAll" = "Alle platformskins resetten";
 "SkinResetForPlatform" = "%@-skin resetten";
 "SkinDebug" = "Skin Testgebied";
@@ -553,7 +496,6 @@ Druk op de controllerknop...";
 "MultiDiscCloseAlert" = ".m3u aangemaakt. Sluit na importeren";
 "MultiDiscContinueClose" = "Doorgaan met sluiten";
 "SwapDisk" = "Schijf wisselen";
-"NotSupportSwapDisk" = "Geen multidisc-spel";
 "TransferPakDesc" = "Transfer Pak synchroniseert GB/GBC met N64. Activeer door ROM (.gb/.gbc) en opslagbestand (.sav) te importeren";
 "TransferPakFromLibrary" = "Importeren uit bibliotheek";
 "TransferPakFromLibraryDesc" = "Alleen spellen met opslagbestanden.\nGB/GBC-spellen moeten overeenkomen met N64 ROM";
@@ -562,7 +504,6 @@ Druk op de controllerknop...";
 "TransferPakOn" = "Ingeschakeld";
 "TransferPakOff" = "Uitgeschakeld";
 "TransferPakImportError" = "Fout: Importeer ROM en opslagbestand (2 bestanden vereist)";
-"ShowControlsTitle" = "Bediening tonen";
 "HideControlsTitle" = "Bediening verbergen";
 
 "DesignedFor" = "Ontworpen voor %@";
@@ -585,7 +526,6 @@ Druk op de controllerknop...";
 "WfcConnectDesc" = "Verbinden met Nintendo WFC...\nVersnelling en cheats uitgeschakeld";
 "WfcDisconnectDesc" = "Verbinding met Nintendo WFC verbreken";
 "NotAllowOnlineGame" = "Deze functie is uitgeschakeld tijdens online spelen";
-"QuitGameAlert" = "Spel afsluiten? Niet-opgeslagen voortgang gaat verloren";
 
 "SkinIdentifierExist" = "Identifier %@ bestaat al. Wijzig en importeer opnieuw.";
 "AnalogModeChange" = "Overschakelen naar %@-modus";
@@ -619,7 +559,6 @@ Druk op de controllerknop...";
 "LastActivity" = "Laatste activiteit: %@";
 "MemberSince" = "Lid sinds: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "Voortgang";
 "AchievementsList" = "Prestaties";
 "TotalAchievements" = "%d prestaties totaal";
@@ -642,7 +581,6 @@ Druk op de controllerknop...";
 "DisableAchievementsAlert" = "RetroAchievements uitschakelen?";
 "SaveStateCoreUnCompatible" = "Save state is gemaakt in %@ (huidig: %@). Laden kan problemen veroorzaken!";
 "LatestSaveStateUnCompatible" = "Laatste save state kan niet laden vanwege incompatibiliteit";
-"Snes9xAlert" = "Vanwege licentieproblemen wordt de Snes9x-core in de toekomst verwijderd. Schakel over naar bsnes en migreer je save states, anders werken ze niet.";
 "GotIt" = "Begrepen";
 "Rumble" = "Trillingen";
 "RumbleDetail" = "Het apparaat trilt tijdens bepaalde events";
@@ -658,7 +596,6 @@ Druk op de controllerknop...";
 "JumpTips" = "Externe pagina openen";
 "ThirdPartGameInfoTips" = "Game-info wordt door derden geleverd. Gebruik je eigen oordeel. Als Manic EMU een game niet vindt, zoek dan handmatig.";
 "NotSupportHardcore" = "Hardcore Modus is uitgeschakeld voor deze game. Misschien is Manic EMU niet door RetroAchievements geautoriseerd, of de game ondersteunt het niet.";
-"ChooseOne" = "Kies er een";
 "FilesImporterErrorBadCue" = "Importeren van %@ mislukt. Het bestand is ongeldig of niet UTF-8. Controleer het format.";
 "Leaderboard" = "Scorebord";
 "LeaderboardStart" = "Scorebord start: ";
@@ -674,10 +611,8 @@ Druk op de controllerknop...";
 "AlwaysShowProgressDesc" = "Houd prestatiewoortgang zichtbaar op scherm.";
 "Progress" = "Voortgang";
 
-"DCGameNoSupportGameSave" = "Dreamcast ondersteunt geen importeren/exporteren van saves. Gebruik VMU Explorer om geheugenbestanden in de map Manic EMU-Flycast-dc te bewerken.";
 
 "Challenge" = "Uitdaging";
-"GameTypeLicensingError" = "Sorry! Vanwege licentiebeperkingen met de %@-core is dit platform tijdelijk niet beschikbaar. U kunt wachten op een toekomstige update of de sideload-versie proberen.";
 "DCJITLessVer" = "De Standaardversie biedt snelle en nauwkeurige emulatie, maar ondersteunt geen WinCE-games. Kies de WinCE-core om WinCE-games te spelen.";
 "TVStandard" = "Als de tv-standaard van de game niet overeenkomt met de regio, kan dit de snelheid beïnvloeden. PAL-regio’s omvatten voornamelijk Europa, Australië en Nieuw-Zeeland.";
 "SNESVRAMEnable" = "Sommige gehackte ROMs vereisen deze optie voor correcte grafische weergave, maar inschakelen ervan zal RetroAchievements-ondersteuning uitschakelen.";
@@ -700,7 +635,6 @@ Druk op de controllerknop...";
 "LayoutEmbeddedBottomRight" = "Ingesloten (Rechtsonder)";
 "LayoutSingleScreen" = "Enkel scherm";
 "AirPlayLayoutTips" = "Combineer AirPlay-lay-out met Scherm wisselen voor meer opties. Let op: Scherm wisselen met ingesloten lay-out kan overlapping veroorzaken, niet aanbevolen";
-"ToggleAnolog" = "Analoog schakelen";
 "EnableGlobalAchievements" = "Globale RetroAchievements inschakelen";
 "GlobalHardcoreMode" = "Globale hardcore modus";
 "GlobalHardcoreAlert" = "Schakel eerst globale RetroAchievements in";
@@ -716,7 +650,6 @@ Druk op de controllerknop...";
 "AppearanceLight" = "Lichte Modus";
 "AppearanceDark" = "Donkere Modus";
 "AppearanceAuto" = "Systeem Volgen";
-"GameListBackground" = "Achtergrondafbeelding";
 "GameListBackgroundUpload" = "Uploaden";
 "GameplayManuals" = "Spelhandleidingen";
 "GameplayManualsNoExists" = "Geen handleiding beschikbaar voor dit spel.";
@@ -726,7 +659,6 @@ Druk op de controllerknop...";
 "UnsupportSkinsDesc" = "De volgende skins worden niet ondersteund op dit apparaat:\n%@Opmerking: Verwijderen zal deze skins ook verwijderen van andere apparaten gesynchroniseerd via iCloud.";
 "UnsupportSkinsRemoveSuccess" = "Niet-ondersteunde skins succesvol verwijderd";
 "ForbitPKSM" = "Om een eerlijke RetroAchievements-ervaring te garanderen, kan PKSM niet worden gebruikt terwijl Global RetroAchievements is ingeschakeld.";
-"FDSAlert" = "Deze optie is alleen beschikbaar voor FDS-spellen.";
 "DiskSideChange" = "Schijf Omdraaien";
 "EjectDisk" = "Schijf Uitwerpen";
 
@@ -759,7 +691,6 @@ Druk op de controllerknop...";
 "TriggerProName" = "TriggerPro-naam";
 "Position" = "Positie";
 "ButtonInfo" = "Knopinformatie";
-"NoTriggerPro" = "Geen TriggerPro-configuratie gevonden. Je kunt naar Instellingen gaan of lang op de TriggerPro-optie in het Spelmenu drukken om er een te maken";
 "ManageTriggerPro" = "TriggerPro beheren";
 "EnableTriggerPro" = "TriggerPro inschakelen";
 "DisableTriggerPro" = "TriggerPro uitschakelen";
@@ -800,7 +731,6 @@ Druk op de controllerknop...";
 "Default" = "Standaard";
 "Imported" = "Geïmporteerd";
 "DownloadRetroArchSahders" = "Shaders downloaden van RetroArch";
-"ImportShaders" = "Shaders importeren";
 "Shaders" = "Shaders";
 "DownloadRetroArchShaders" = "Shaders van RetroArch downloaden? Na voltooiing wordt de RetroArch shader-categorie automatisch ververst. Je kunt dit proces op elk moment annuleren in de downloadmanager.";
 "RetroArchShaderUnzipFailed" = "%@ kon niet worden uitgepakt. Het bestand is mogelijk beschadigd tijdens het downloaden. Probeer het opnieuw te downloaden.";
@@ -833,7 +763,6 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "JGenesisAlert" = "Sorry, de JGenesis-kern ondersteunt alleen .chd ROM-bestanden.";
 "RedeemOfferCode" = "Aanbieding Inwisselen";
 "CheatImportFailed" = "Importeren mislukt. Het bestand kon niet worden geparseerd of er zijn geen bijpassende cheatcodes gevonden.";
-"RemoveAllCheats" = "Alle Cheats Verwijderen";
 "RemoveAllCheatsAlert" = "Weet je zeker dat je alle cheatcodes wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.";
 "CheatCodeStatus" = "Ingeschakeld";
 "Background" = "Achtergrond";
@@ -846,13 +775,8 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "RemoveBackgroundForGame" = "Spel Achtergrond Verwijderen";
 "RemoveBackgroundForConsole" = "%@ Platform Achtergrond Verwijderen";
 "RemoveBackgroundForGlobal" = "Globale Achtergrond Verwijderen";
-"ShaderConfigAlert" = "Ingesteld voor %@.";
-"Global" = "Globaal";
-"RemoveShaderForGlobal" = "Globale Shader Verwijderen";
 "FeaturedItems" = "Uitgelichte Items";
-"ReUpload" = "Opnieuw Uploaden";
 
-"Service" = "Diensten";
 "NintendoWFC" = "Nintendo WFC";
 "PSPNetworking" = "PSP Netwerk";
 "Networking" = "Netwerk";
@@ -891,16 +815,11 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "LoadingCheerpJ" = "CheerpJ laden";
 "ZipHandlerTitle" = "ZIP-bestandsverwerking";
 "ZipHandlerDetail" = "Sommige platforms (zoals DOS en Arcade) kunnen ROM's rechtstreeks uit .zip-bestanden laden. Voor andere platforms moeten ROM's in een .zip worden uitgepakt voordat ze worden geïmporteerd.\n\nGeselecteerde bestanden worden uitgepakt en afzonderlijk geïmporteerd, terwijl niet-geselecteerde bestanden worden geïmporteerd als een enkele ZIP-ROM.";
-"ConfigsResetCore" = "Reset naar kernelstandaard";
-"ConfigsResetBefore" = "Herstel naar eerdere instellingen";
 "InsertDisc" = "Schijf plaatsen";
 "InsertDiscAlert" = "Je kunt een schijf plaatsen door een ander spel van hetzelfde platform in je bibliotheek te selecteren, of door een schijfbestand te kiezen uit Bestanden. Vanwege beperkingen van het iOS-bestandssysteem worden schijfbestanden die uit Bestanden zijn geselecteerd, gekopieerd naar de cache van Manic EMU.";
 "InsertDiscFailed" = "Plaatsen van schijf mislukt";
 "GenerateHomeMenu" = "Startmenu aanmaken";
 "SkinSoundEffects" = "Skin-geluidseffecten";
-"FirstAnniversary" = "BEDANKT DAT JE ER BENT,\nWE HEBBEN IETS VOOR JE GESCHREVEN";
-"ApirlFoolsDayTitle" = "Oeps, is Manic EMU kapot?";
-"ApirlFoolsDayDetail" = "Geen zorgen!\nHet is maar een grap—Fijne 1 april!\n\nAlles is weer normaal zodra je dit sluit.";
 "JITType" = "JIT-type";
 "JITTypeDesc" = "Standaard JIT biedt de beste prestaties, terwijl IR JIT matige prestaties biedt.";
 "Pretendo" = "Pretendo-netwerk";
@@ -915,7 +834,6 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "HomeMenuDesc" = "Gebruik de onderstaande knop om het Home Menu te openen. Ga vervolgens naar Nimbus-instellingen, schakel over naar het Pretendo-netwerk en open Instellingen om \"Nintendo Network ID\" te selecteren en log in met je Pretendo-account.\n\nDaarna gebruiken alle games die vanuit het Home Menu worden gestart of die draaien met de Azahar-kern het Pretendo-netwerk.\n\nAls het Home Menu-item ontbreekt, zal deze functie proberen het automatisch opnieuw aan te maken.";
 "OpenHomeMenu" = "Home Menu openen";
 "ChooseRegion" = "Regio selecteren";
-"ChooseRegionDesc" = "Selecteer de juiste regio van het 3DS-apparaat waarop de Artic Setup-tool wordt uitgevoerd. Het kiezen van de verkeerde regio voorkomt een succesvolle gegevensoverdracht.";
 "HomeMenuNotFound" = "Home Menu niet gevonden. Voltooi eerst de Artic Base-gegevensoverdracht.";
 "SystemUpdateAsk" = "Is de systeemupdate succesvol voltooid?";
 "SystemUpdateDesc" = "Als de systeemupdate is mislukt vanwege netwerkproblemen, probeer dan de gegevens opnieuw over te zetten. Anders werkt het 3DS Home Menu mogelijk niet correct.";

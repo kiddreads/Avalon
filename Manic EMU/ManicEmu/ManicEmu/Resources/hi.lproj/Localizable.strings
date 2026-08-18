@@ -11,7 +11,6 @@
 //Import
 "ImportAddCloudServiceTitle" = "क्लाउड सेवा";
 "ImportAddLanServiceTitle" = "लोकल नेटवर्क सेवा";
-"ImportAddDiscoverServiceTitle" = "डिस्कवर सेवा";
 "GoogleDrive" = "Google Drive";
 "Dropbox" = "Dropbox";
 "OneDrive" = "OneDrive";
@@ -32,7 +31,6 @@
 "LandServiceEditConnect" = "कनेक्ट करें";
 "AddLandServiceSuccess" = "%@ सफलतापूर्वक जोड़ा गया";
 "AddLandServiceFailed" = "%@ जोड़ने में विफल\nकृपया नेटवर्क कनेक्शन, सेवा स्थिति या दर्ज की गई जानकारी जांचें";
-"AddLandServiceTimeout" = "सर्वर से कनेक्ट होने में समय समाप्त";
 "FilesImporterErrorFileExist" = "\"%@\" पहले से मौजूद है, इम्पोर्ट करने की आवश्यकता नहीं";
 "FilesImporterErrorBadCopy" = "\"%@\" इम्पोर्ट करने में विफल, फाइल कॉपी करते समय त्रुटि";
 "FilesImporterErrorBadExtension" = "\"%@\" इम्पोर्ट करने में विफल, फाइल एक्सटेंशन पहचान में असमर्थ";
@@ -78,7 +76,6 @@
 "ImportServiceListWiFiOnDetail" = "%@\nब्राउज़र का उपयोग करके फाइल ट्रांसफर करें";
 "ImportServiceListPasteTitle" = "पेस्टबोर्ड पढ़ें";
 "ImportServiceListPasteDetail" = "macOS और फाइल ऐप से कॉपी की गई फाइल्स का समर्थन करता है";
-"ImportHowTo" = "कैसे इम्पोर्ट करें";
 "ImportTopHintTitle" = "एक सपनों और साहसिक कार्यों से भरी कहानी यहीं से शुरू होगी!";
 "ImportDragAndDropTips" = "फाइल्स को Manic EMU के किसी भी इंटरफेस पर ड्रैग और ड्रॉप करके ट्रांसफर करें";
 "ImportChannelTips" = "यदि कोई प्रश्न हो तो %@ में शामिल हों";
@@ -112,7 +109,6 @@
 "TimeDurationMinuteFormat" = "%d मिनट";
 "FatalErrorTitle" = "घातक त्रुटि";
 "FatalErrorDesc" = "सिस्टम संसाधन लोड करने में विफल, Manic EMU में गंभीर खामियां हो सकती हैं";
-"LodingFailedTitle" = "लोड करने में विफल";
 "AirPlayDesc" = "अभी साहसिक कार्य शुरू करें!";
 "ToastSuccess" = "सफलतापूर्वक सेव हुआ";
 "ToastFailed" = "सेव करने में विफल";
@@ -128,25 +124,22 @@
 "GamesImportSave" = "गेम सेव इम्पोर्ट करें";
 "GamesShareSave" = "गेम सेव एक्सपोर्ट करें";
 "GamesDelete" = "गेम हटाएं";
-"GamesRandom" = "क्या खेलना है पता नहीं, रैंडम चुनें";
 "LoadGameErrorRomNotExist" = "गेम लोडिंग त्रुटि, ROM मौजूद नहीं";
 "GamesListEmptyGuideLeft" = "नीचे";
 "GamesListEmptyGuideRight" = "पर क्लिक करके गेम इम्पोर्ट करें";
 "GamesListEmptyWelcomeLeft" = "";
 "GamesListEmptyWelcomeRight" = "की दुनिया में आपका स्वागत है";
 "GamesListEmptyWarnning" = "कृपया कानूनी स्रोतों से गेम ROM फाइल्स प्राप्त करने का ध्यान रखें";
+"LandscapeEmptyAddGame" = "गेम जोड़ें";
 "DeleteGameAlertDetail" = "गेम ROM, सेव और चीट कोड डेटा सभी हटा दिए जाएंगे, यह क्रिया वापस नहीं की जा सकती!";
 "DeleteSkinAlertDetail" = "स्किन हटाने के बाद पुनर्प्राप्त नहीं की जा सकती!";
-"DeleteGameGameStateAlertTitle" = "मैन्युअल सेव स्टेट हटाएं";
 "DeleteGameGameStateAlertDetail" = "मैन्युअल सेव स्टेट हटाने के बाद पुनर्प्राप्त नहीं की जा सकती!";
 "confirmDelte" = "हटाने की पुष्टि करें";
 
 //Controllers
 "ControllersTouchName" = "स्क्रीन कंट्रोलर";
-"ControllersHeaderTitle" = "कंट्रोलर";
 "ControllersPlayerIndex" = "प्लेयर %d";
 "ControllersPlayerUnset" = "निर्दिष्ट नहीं";
-"ControllersHowToConnect" = "कैसे कनेक्ट करें";
 
 //GameInfo
 "ReadyGameInfoSubTitle" = "%@ खेला गया · कुल %@";
@@ -158,7 +151,6 @@
 "ReadySegmentManualSave" = "मैन्युअल सेव स्टेट";
 "ReadySegmentAutoSave" = "ऑटो सेव स्टेट";
 "ReadyEditTitleFailed" = "नाम बदलने में विफल, गेम नाम खाली नहीं हो सकता";
-"ReadyEditTitleSuccess" = "नाम सफलतापूर्वक बदला गया";
 "ReadyGameSaveStatesEmpty" = "अभी तक कोई सेव नहीं";
 "GameSaveGuideBecomTitle" = "बनें";
 "GameSaveGuideMemberTitle" = "मेंबर";
@@ -170,12 +162,10 @@
 "GameSaveTitle" = "सेव %d";
 
 //Skin
-"SkinNavigationSubTitleCommon" = "Manic EMU .deltaskin .gammaskin फॉर्मेट स्किन्स के साथ पूरी तरह कॉम्पैटिबल है";
 "SkinNavigationSubTitleSpecifiedGame" = "केवल %@ के लिए स्किन सेट करें";
 "SkinSegmentPortraitTitle" = "पोर्ट्रेट";
 "SkinSegmentLandscapeTitle" = "लैंडस्केप";
 "SkinAddTitle" = "नई स्किन जोड़ें";
-"HowToFetch" = "कैसे प्राप्त करें";
 "SkinDelete" = "स्किन हटाएं";
 "DefaultSkinCannotEdit" = "डिफ़ॉल्ट स्किन एडिट नहीं की जा सकती";
 
@@ -187,16 +177,11 @@
 "HistoryEmptyStartGame" = "अभी खेलें";
 
 //Settings
-"LeftHandTitle" = "लेफ्ट-हैंड मोड";
-"LeftHandDetail" = "जॉयस्टिक, DPad और बटन्स को लेफ्ट-राइट मिरर करें";
 "QuickGameTitle" = "क्विक स्टार्ट गेम";
 "QuickGameDetail" = "गेम पर क्लिक करते ही सीधे प्ले स्क्रीन पर जाएं";
 "AirPlayTitle" = "AirPlay फुलस्क्रीन मोड";
 "AirPlayDetail" = "चालू करने पर गेम स्क्रीन फुलस्क्रीन में प्रोजेक्ट होगी";
 "iCloudTitle" = "iCloud सिंक";
-"iCloudDetail" = "समान Apple ID वाले डिवाइस पर गेम, स्किन, सेव्स और सेटिंग्स सिंक करें";
-"AppIconTitle" = "ऐप आइकन";
-"WidgetTitle" = "विजेट";
 "QATitle" = "सामान्य प्रश्न";
 "FeedbackTitle" = "फीडबैक";
 "ShareAppTitle" = "「Manic EMU」दोस्तों के साथ शेयर करें";
@@ -210,13 +195,9 @@
 "AdvanceSettingTitle" = "एडवांस्ड सेटिंग्स";
 "SupportSettingTitle" = "सपोर्ट";
 "OthersSettingTitle" = "अन्य";
-"RatingTitleLeft" = "";
-"RatingTitleRight" = "को रेट करें";
-"RatingDetail" = "अगर आपको हमारा प्रोडक्ट पसंद आया, तो कृपया 5-स्टार रिव्यू दें, आपकी प्रशंसा हमारे लिए बहुत महत्वपूर्ण है :)";
 "iCloudDisableTitle" = "iCloud अस्थायी रूप से अनुपलब्ध";
 "iCloudDisableDetail" = "iCloud सिंक सेवा चालू करने का प्रयास किया गया, लेकिन यह तभी काम करेगा जब आप iCloud में लॉग इन करके Manic EMU को एक्सेस की अनुमति दें। iPhone की 'सेटिंग्स' > 'Apple ID' > 'iCloud' में जाकर iCloud ड्राइव चालू करें और Manic EMU को एक्सेस दें";
 "iCloudSyncConfilictTitle" = "iCloud सिंक कॉन्फ्लिक्ट";
-"iCloudSyncConfilictDetail" = "क्लाउड फाइल:\n%@\n\nलोकल फाइल:\n%@";
 "iCloudSyncConfilictSaveiCloud" = "iCloud रखें";
 "iCloudSyncConfilictSaveLocal" = "लोकल रखें";
 "SettingsNonMemberDesc" = "आप इस कहानी के मुख्य किरदार बनने वाले हैं";
@@ -224,7 +205,6 @@
 "ThanksCommingDesc" = "";
 "PlayGameDesc" = "में गेम खेलने आने के लिए धन्यवाद";
 "NoEmailSetting" = "आपने अभी तक ईमेल सेट नहीं किया है";
-"IDCopy" = "आपकी ID कॉपी की गई";
 "SendEmailSuccess" = "ईमेल सफलतापूर्वक भेजा गया";
 "SendEmailFailed" = "ईमेल भेजने में विफल %@";
 "iCloudTipsTitle" = "iCloud सिंक चालू करें";
@@ -239,9 +219,6 @@
 "GameSettingVolume" = "वॉल्यूम";
 "GameSettingFastForwardResume" = "नॉर्मल स्पीड";
 "GameSettingFastForward" = "फास्ट-फॉरवर्ड %@";
-"GameSettingStateList" = "सेव स्टेट लिस्ट";
-"GameSettingSkins" = "स्किन सेट करें";
-"GameSettingFilter" = "फिल्टर";
 "GameSettingScreenShot" = "गेम स्क्रीनशॉट";
 "GameSettingHapticOff" = "हैप्टिक बंद";
 "GameSettingHapticSoft" = "हैप्टिक सॉफ्ट";
@@ -260,17 +237,13 @@
 "GameSettingReload" = "रिलोड";
 "GameSettingQuit" = "बाहर निकलें";
 "GameSaveStateSuccess" = "सेव स्टेट सफल";
-"GameSaveStateLoadFailed" = "सेव स्टेट लोड विफल, यह सेव स्टेट खराब या असंगत है";
 "GameSaveStateLoadSuccess" = "सेव स्टेट सफलतापूर्वक लोड हुआ";
 "GameSaveStateQuickLoadFailed" = "कोई मैन्युअल सेव स्टेट उपलब्ध नहीं, अगर आप ऑटो सेव स्टेट लोड करना चाहते हैं तो 'सेव स्टेट लिस्ट' का उपयोग करें";
 "GameSaveListTitle" = "सेव स्टेट्स";
-"GameCheatActivateFailed" = "%@\nएक्टिवेशन विफल, चीट कोड अमान्य";
 "GameCheatActivateSuccess" = "%@\nसफलतापूर्वक एक्टिवेट हुआ";
 "AirPlayingTitle" = "गेम स्क्रीन एयरप्ले पर प्रोजेक्ट हो रही है";
 "VolumeOff" = "वॉल्यूम ऑफ";
 "VolumeOn" = "वॉल्यूम ऑन";
-"FunctionSortDesc1" = "ये फंक्शन ऑफिशियल डिफ़ॉल्ट स्किन के क्विक फंक्शन के रूप में उपयोग होंगे";
-"FunctionSortDesc2" = "ऑर्डर बदलने के लिए लॉन्ग प्रेस करके ड्रैग करें";
 "ManualGameSaveCountLimit" = "आपके सेव स्टेट्स की संख्या लिमिट से अधिक हो गई है! अनलिमिटेड सेव स्टेट्स के लिए मेंबरशिप अपग्रेड करें या सेव स्टेट लिस्ट से कुछ डिलीट करें";
 "FastForwardSpeedLimit" = "आपकी मैक्सिमम स्पीड x2 है! x5 स्पीड के लिए मेंबरशिप अपग्रेड करें";
 "ResetSpeed" = "स्पीड रीसेट";
@@ -284,13 +257,10 @@
 "AutoDetectFormat" = "कोड डालने पर फॉर्मेट ऑटो डिटेक्ट होगा";
 "CheatCodeFormatError" = "चीट कोड फॉर्मेट गलत है";
 "CheatCodeEmptyTitle" = "अभी तक कोई चीट कोड नहीं";
-"CheatCodeEmptyGuideLeft" = "चीट कोड जोड़ने के लिए ऊपर बाएँ";
-"CheatCodeEmptyGuideRight" = "पर क्लिक करें";
 "EnableCheatCodeAlertTitle" = "चीट कोड चालू करें";
 "EnableCheatCodeAlertDetail" = "चीट कोड गेम वर्जन पर निर्भर करते हैं, सही वर्जन के लिए ही काम करेंगे! चीट कोड गेम डेटा को मॉडिफाई करते हैं जिससे गेम क्रैश या अनइंस्टेबल हो सकता है, अपने विवेक से उपयोग करें।";
 
 //滤镜
-"FilterSectionHeaderTitle" = "वीडियो फिल्टर्स";
 "FilterOriginTitle" = "ओरिजिनल";
 
 //内购
@@ -356,7 +326,6 @@
 "PurchasePending" = "आपका भुगतान लंबित है, पूर्ण होने पर सदस्यता सक्रिय होगी";
 "PurchaseUnknown" = "अज्ञात भुगतान स्थिति";
 "PurchaseErrorDesc" = "भुगतान अस्थायी रूप से असंभव, कृपया नेटवर्क जांचकर पुनः प्रयास करें";
-"PurchaseFailedTitle" = "भुगतान विफल";
 "RestoreSuccessDesc" = "इन-ऐप खरीद पुनर्स्थापित!";
 "RestoreEndDesc" = "पुनर्स्थापना पूर्ण, कोई वैध खरीद नहीं मिली!";
 "TrialDesc" = "ट्रायल अवधि में कोई शुल्क नहीं, कभी भी रद्द करें";
@@ -397,25 +366,12 @@
 "ShareAppSubtitle" = "अपने दोस्तों को इस रोमांचक साहस में शामिल होने के लिए आमंत्रित करें!";
 "ShareRomFilesFailed" = "ROM साझा करने में विफल, फ़ाइल प्राप्त नहीं हो सकी";
 "ShareSaveFilesFailed" = "गेम सेव साझा करने में विफल, कोई सेव फ़ाइल नहीं मिली";
-"ShareFilesCopyFailed" = "फ़ाइल साझा करने में विफल, कॉपी करते समय त्रुटि";
-"ShareFilesCompressFailed" = "फ़ाइल साझा करने में विफल, कंप्रेस करते समय त्रुटि";
 
 "TurnOnAirPlayAsk" = "AirPlay कनेक्ट हो चुका है। क्या अभी पूर्ण स्क्रीन मोड चालू करें?";
 
 "ThreeDSModePerformance" = "परफॉर्मेंस मोड";
 "ThreeDSModeCompatibility" = "कम्पैटिबिलिटी मोड";
 "ThreeDSModeQuality" = "ग्राफ़िक्स प्राथमिकता";
-"ThreeDSNotSupportImportSave" = "3DS गेम्स वर्तमान में सेव फाइल आयात का समर्थन नहीं करते";
-"ThreeDSNotSupportShareSave" = "3DS गेम्स वर्तमान में सेव फाइल साझा करने का समर्थन नहीं करते";
-"ThreeDSBetaAlertTitle" = "3DS प्रायोगिक संस्करण";
-"ThreeDSBetaAlertDetail" = "आपको 3DS गेम्स का अनुभव जल्दी कराने के लिए, Manic EMU ने प्रायोगिक 3DS सुविधा जारी की है। कुछ अनुकूलन की आवश्यकता है।
-
-अस्थायी रूप से अनुपलब्ध सुविधाएँ:
-❌ एयरप्ले फुल स्क्रीन मोड
-❌ ऑटो सेव
-❌ गति बढ़ाने की सुविधा
-
-अस्थिरता होने पर हमारे FAQ देखें या सपोर्ट चैनल में शामिल हों। हम एमुलेटर को लगातार बेहतर बना रहे हैं। आपका समर्थन बेहतर गेमिंग अनुभव बनाने में मदद करेगा। हम आपके लिए कड़ी मेहनत कर रहे हैं!";
 "ThreeDSNoSupportDeviceTitle" = "डिवाइस का प्रदर्शन अपर्याप्त";
 "ThreeDSNoSupportDeviceDetail" = "यह डिवाइस 3DS एमुलेशन को संभाल नहीं सकता। जारी रखने पर अप्रत्याशित त्रुटियाँ हो सकती हैं";
 
@@ -434,8 +390,6 @@
 "FullScreenWhenConnectControllerTitle" = "ऑटो फुल स्क्रीन";
 "FullScreenWhenConnectControllerDetail" = "कंट्रोलर कनेक्ट होने पर फुल स्क्रीन सक्रिय करें";
 "JoinDiscordTitle" = "डिस्कॉर्ड जॉइन करें";
-"JoinDiscordAlertMessage" = "खिलाड़ी %@ को इस चैनल के लिए धन्यवाद। जारी रखें?";
-"FlexSkinGuideTitle" = "स्क्रीन एडजस्ट करने के लिए ड्रैग या ज़ूम करें";
 "DownloadFailed" = "डाउनलोड विफल";
 "RemoveDownloadTask" = "\"%@\" डाउनलोड रद्द करें?";
 "GameSettingResolution" = "रिज़ॉल्यूशन %@";
@@ -485,9 +439,6 @@
 "RenderRightEyeDesc" = "अक्षम करने से कुछ गेम्स का प्रदर्शन बेहतर होता है, लेकिन स्क्रीन फ्लिकर हो सकता है";
 "DisableTitle" = "अक्षम करें";
 "EnableTitle" = "सक्षम करें";
-"NoSaveStateToast" = "%@ उपलब्ध नहीं";
-"DeleteSelectedSaveStateAlert" = "चयनित «%@» हटाएं?\nहटाने के बाद पुनर्प्राप्त नहीं किया जा सकता!";
-"DeleteAllSaveStateAlert" = "कोई चयन नहीं। सभी «%@» हटाएं?\nहटाने के बाद पुनर्प्राप्त नहीं किया जा सकता!";
 "AICoverSearchDesc" = "गैर-अंग्रेजी खोज का पता चला। मल्टीलिंगुअल AI खोज के लिए प्रीमियम में अपग्रेड करें";
 "MaxTextSizeAllowDesc" = "अधिकतम %@ वर्णों तक समर्थित";
 
@@ -515,29 +466,21 @@
 "BiosAddTitle" = "BIOS जोड़ें";
 "StartGameWithoutBiosTitle" = "BIOS के बिना शुरू करें";
 
-"ThreeDSAdvanceSettingMode" = "उन्नत मोड";
 "ThreeDSAdvanceSettingTitle" = "उन्नत सेटिंग्स";
-"ThreeDSBasicSettingMode" = "मूल मोड";
 "ShareConfigButtonTitle" = "कॉन्फ़िग साझा करें";
 "ImportConfigButtonTitle" = "कॉन्फ़िग आयात करें";
 "ShareFileFailedMissing" = "साझा करने में विफल: फ़ाइल मौजूद नहीं";
 "ReadConfigFileFailed" = "कॉन्फ़िग फ़ाइल पढ़ने में असमर्थ";
 "SwitchEmulationCore" = "कोर स्विच करें";
 "SwitchEmulationCoreDetail" = "%@ के लिए एमुलेशन कोर स्विच करें\nकोर स्विचिंग पिछले कोर के सेव अप्राप्य हो जाएंगे। पहुंचने के लिए मूल कोर पर वापस स्विच करें";
-"BeetleSaturnNoSupportCheat" = "बीटल सैटर्न कोर वर्तमान में चीट कोड समर्थित नहीं करता। जरूरत हो तो याबॉस कोर पर स्विच करें";
-"CurrentTitle" = "वर्तमान";
 "NewSkinDesc" = "मैनिक ईएमयू .manicskin और .deltaskin .gammaskin फॉर्मेट में स्किन सपोर्ट करता है। ध्यान दें: आयातित स्किन की विशेषताएं वर्तमान प्लेटफॉर्म से मेल खानी चाहिए, नहीं तो सूची में दिखाई नहीं देगी।\nइसके अलावा, हम तृतीय-पक्ष स्किन कम्युनिटी एक्सेस प्रदान करते हैं। ये मैनिक ईएमयू से आधिकारिक तौर पर संबद्ध नहीं हैं। स्किन डाउनलोड करते समय संबंधित वेबसाइटों की सेवा शर्तों का पालन करें";
 "VisitSite" = "%@ पर जाएँ";
 "OpenFile" = "फ़ाइल खोलें";
 "WebViewDownloadBegin" = "डाउनलोड शुरू हो गया";
 "RespectSilentMode" = "साइलेंट मोड का पालन करें";
 "RespectSilentModeDesc" = "सक्षम होने पर, मैनिक ईएमयू केवल साइलेंट मोड बंद होने पर ऑडियो चलाएगा";
-"SaturnISONoSwitchCore" = "सेगा सैटर्न .iso फॉर्मेट गेम कोर स्विचिंग सपोर्ट नहीं करते";
-"EnableFullScreenTitle" = "पूर्ण स्क्रीन सक्षम करें";
-"DisableFullScreenTitle" = "पूर्ण स्क्रीन अक्षम करें";
 "SimulateBlowingTitle" = "उड़ाने का अनुकरण";
 "PaletteTitle" = "पैलेट";
-"SkinRestDesc" = "स्किन रीसेट करने पर गेम-असाइन्ड स्किन भी डिफ़ॉल्ट पर वापस आ जाएंगी";
 "SkinResetForAll" = "सभी प्लेटफ़ॉर्म स्किन रीसेट करें";
 "SkinResetForPlatform" = "%@ स्किन रीसेट करें";
 "SkinDebug" = "स्किन टेस्ट एरिया";
@@ -554,7 +497,6 @@
 "MultiDiscCloseAlert" = ".m3u फ़ाइल बन गई। लाइब्रेरी में आयात करने के बाद पेज बंद करें";
 "MultiDiscContinueClose" = "बंद करना जारी रखें";
 "SwapDisk" = "डिस्क बदलें";
-"NotSupportSwapDisk" = "मल्टीडिस्क गेम नहीं है";
 "TransferPakDesc" = "Transfer Pak, GB/GBC डेटा को N64 से सिंक करता है। सक्रिय करने के लिए, ROM (.gb/.gbc) और सेव फ़ाइल (.sav) दोनों आयात करें";
 "TransferPakFromLibrary" = "लाइब्रेरी से आयात करें";
 "TransferPakFromLibraryDesc" = "केवल सेव फ़ाइल वाले गेम दिखाए गए।\nचुने गए GB/GBC गेम, N64 ROM से मेल खाने चाहिए, अन्यथा Transfer Pak विफल हो सकता है";
@@ -563,7 +505,6 @@
 "TransferPakOn" = "सक्रिय";
 "TransferPakOff" = "निष्क्रिय";
 "TransferPakImportError" = "त्रुटि: ROM और सेव फ़ाइल दोनों आयात करें (2 फ़ाइलें आवश्यक)";
-"ShowControlsTitle" = "नियंत्रण दिखाएं";
 "HideControlsTitle" = "नियंत्रण छिपाएं";
 
 "DesignedFor" = "%@ के लिए डिज़ाइन किया गया";
@@ -586,7 +527,6 @@
 "WfcConnectDesc" = "Nintendo WFC से कनेक्ट हो रहा है...\nफास्ट फॉरवर्ड और चीट अक्षम";
 "WfcDisconnectDesc" = "Nintendo WFC से डिस्कनेक्ट करें";
 "NotAllowOnlineGame" = "ऑनलाइन प्ले के लिए यह सुविधा अक्षम है";
-"QuitGameAlert" = "गेम बंद करें? अनसेव प्रोग्रेस खो जाएगी";
 
 "SkinIdentifierExist" = "पहचानकर्ता: %@ पहले से मौजूद है। कृपया संशोधित करके पुनः आयात करें।";
 "AnalogModeChange" = "%@ मोड पर स्विच करें";
@@ -620,7 +560,6 @@
 "LastActivity" = "अंतिम गतिविधि: %@";
 "MemberSince" = "सदस्य since: %@";
 "RetroAchievements" = "RetroAchievements";
-"RetroAchievements2" = "Retro\nAchievements";
 "CompletionProgress" = "प्रगति";
 "AchievementsList" = "उपलब्धियां";
 "TotalAchievements" = "कुल %d उपलब्धियां";
@@ -643,7 +582,6 @@
 "DisableAchievementsAlert" = "RetroAchievements अक्षम करें?";
 "SaveStateCoreUnCompatible" = "सेव स्टेट %@ में बनाई गई थी (वर्तमान: %@)। लोड करने से समस्याएं हो सकती हैं!";
 "LatestSaveStateUnCompatible" = "कोर असंगति के कारण नवीनतम सेव स्टेट लोड नहीं हो सकती";
-"Snes9xAlert" = "लाइसेंसिंग issues के कारण, Snes9x core future updates हटा दिया जाएगा। कृपया bsnes पर स्विच करें और अपनी सेव स्टेट्स माइग्रेट करें, नहीं तो वे काम नहीं करेंगी।";
 "GotIt" = "समझ गया";
 "Rumble" = "कंपन";
 "RumbleDetail" = "कुछ events के दौरान डिवाइस कंपन करता है";
@@ -659,7 +597,6 @@
 "JumpTips" = "तीसरे पक्ष का पेज खोलना";
 "ThirdPartGameInfoTips" = "गेम जानकारी third parties द्वारा प्रदान की जाती है। अपने judgment का use करें। यदि Manic EMU कोई गेम match नहीं कर पाता, तो manual search का use करें।";
 "NotSupportHardcore" = "इस गेम के लिए हार्डकोर मोड अक्षम है। शायद Manic EMU, RetroAchievements द्वारा अधिकृत नहीं है, या गेम हार्डकोर मोड support नहीं करता।";
-"ChooseOne" = "एक चुनें";
 "FilesImporterErrorBadCue" = "%@ आयात करने में विफल। फ़ाइल invalid या UTF-8 encoded नहीं हो सकती। कृपया format जांचें।";
 "Leaderboard" = "लीडरबोर्ड";
 "LeaderboardStart" = "लीडरबोर्ड Start: ";
@@ -675,10 +612,8 @@
 "AlwaysShowProgressDesc" = "स्क्रीन पर उपलब्धि प्रगति दिखाई रखें।";
 "Progress" = "प्रगति";
 
-"DCGameNoSupportGameSave" = "Dreamcast सेव आयात/निर्यात का समर्थन नहीं करता है। Manic EMU-Flycast-dc फ़ोल्डर में स्थित मेमोरी फ़ाइलों को संपादित करने के लिए VMU Explorer का उपयोग करें।";
 
 "Challenge" = "चुनौती";
-"GameTypeLicensingError" = "क्षमा करें! %@ कोर के लाइसेंस प्रतिबंधों के कारण यह प्लेटफ़ॉर्म अस्थायी रूप से उपलब्ध नहीं है। आप अगला अपडेट का इंतज़ार कर सकते हैं या साइडलोड संस्करण का उपयोग कर सकते हैं।";
 "DCJITLessVer" = "डिफ़ॉल्ट संस्करण तेज़ और सटीक एम्यूलेशन प्रदान करता है लेकिन WinCE गेम नहीं चला सकता। WinCE गेम चलाने के लिए कृपया WinCE कोर चुनें।";
 "TVStandard" = "यदि गेम का टीवी मानक क्षेत्र से मेल नहीं खाता, तो गति प्रभावित हो सकती है। PAL क्षेत्र मुख्य रूप से यूरोप, ऑस्ट्रेलिया और न्यूज़ीलैंड शामिल करते हैं।";
 "SNESVRAMEnable" = "कुछ हैक किए गए ROM को ग्राफिक्स सही प्रस्तुत करने के लिए इस विकल्प की आवश्यकता होती है, लेकिन सक्षम करने से RetroAchievements समर्थन अक्षम हो जाएगा।";
@@ -701,7 +636,6 @@
 "LayoutEmbeddedBottomRight" = "एम्बेडेड (नीचे-दाएं)";
 "LayoutSingleScreen" = "एकल स्क्रीन";
 "AirPlayLayoutTips" = "अधिक लेआउट विकल्पों के लिए AirPlay लेआउट को स्वैप स्क्रीन के साथ संयोजित करें। नोट: एम्बेडेड लेआउट के साथ स्वैप स्क्रीन का उपयोग ओवरलैपिंग का कारण बन सकता है, अनुशंसित नहीं";
-"ToggleAnolog" = "एनालॉग टॉगल करें";
 "EnableGlobalAchievements" = "वैश्विक RetroAchievements सक्षम करें";
 "GlobalHardcoreMode" = "वैश्विक हार्डकोर मोड";
 "GlobalHardcoreAlert" = "कृपया पहले वैश्विक RetroAchievements सक्षम करें";
@@ -717,7 +651,6 @@
 "AppearanceLight" = "लाइट मोड";
 "AppearanceDark" = "डार्क मोड";
 "AppearanceAuto" = "सिस्टम का पालन करें";
-"GameListBackground" = "बैकग्राउंड इमेज";
 "GameListBackgroundUpload" = "अपलोड";
 "GameplayManuals" = "गेम मैन्युअल";
 "GameplayManualsNoExists" = "इस गेम के लिए कोई मैन्युअल उपलब्ध नहीं है।";
@@ -727,7 +660,6 @@
 "UnsupportSkinsDesc" = "निम्नलिखित स्किन इस डिवाइस पर समर्थित नहीं हैं:\n%@नोट: हटाने से ये स्किन iCloud के माध्यम से सिंक किए गए अन्य डिवाइस से भी डिलीट हो जाएंगी।";
 "UnsupportSkinsRemoveSuccess" = "असमर्थित स्किन सफलतापूर्वक हटाई गई";
 "ForbitPKSM" = "एक निष्पक्ष RetroAchievements अनुभव सुनिश्चित करने के लिए, ग्लोबल RetroAchievements सक्षम होने पर PKSM का उपयोग नहीं किया जा सकता।";
-"FDSAlert" = "यह विकल्प केवल FDS गेम्स के लिए उपलब्ध है।";
 "DiskSideChange" = "डिस्क पलटें";
 "EjectDisk" = "डिस्क बाहर निकालें";
 
@@ -760,7 +692,6 @@
 "TriggerProName" = "TriggerPro नाम";
 "Position" = "स्थिति";
 "ButtonInfo" = "बटन जानकारी";
-"NoTriggerPro" = "कोई TriggerPro कॉन्फ़िगरेशन नहीं मिला। आप सेटिंग्स में जा सकते हैं या गेम मेनू में TriggerPro विकल्प को लंबे समय तक दबाकर एक बना सकते हैं";
 "ManageTriggerPro" = "TriggerPro प्रबंधित करें";
 "EnableTriggerPro" = "TriggerPro सक्षम करें";
 "DisableTriggerPro" = "TriggerPro अक्षम करें";
@@ -801,7 +732,6 @@
 "Default" = "डिफ़ॉल्ट";
 "Imported" = "आयातित";
 "DownloadRetroArchSahders" = "RetroArch से शेडर डाउनलोड करें";
-"ImportShaders" = "शेडर आयात करें";
 "Shaders" = "शेडर";
 "DownloadRetroArchShaders" = "क्या आप RetroArch से शेडर डाउनलोड करना चाहते हैं? पूरा होने पर, RetroArch शेडर श्रेणी स्वचालित रूप से ताज़ा हो जाएगी। आप डाउनलोड प्रबंधक में किसी भी समय इस प्रक्रिया को रद्द कर सकते हैं।";
 "RetroArchShaderUnzipFailed" = "%@ को निकाला नहीं जा सका। डाउनलोड के दौरान फ़ाइल खराब हो सकती है। कृपया इसे फिर से डाउनलोड करने का प्रयास करें।";
@@ -834,7 +764,6 @@ PlayCase हाई-क्वालिटी iPhone केसों पर के
 "JGenesisAlert" = "क्षमा करें, JGenesis कोर केवल .chd ROM फ़ाइलों का समर्थन करता है।";
 "RedeemOfferCode" = "ऑफ़र रिडीम करें";
 "CheatImportFailed" = "आयात विफल। फ़ाइल को पार्स नहीं किया जा सका या कोई मेल खाता चीट कोड नहीं मिला।";
-"RemoveAllCheats" = "सभी चीट हटाएं";
 "RemoveAllCheatsAlert" = "क्या आप वाकई सभी चीट कोड हटाना चाहते हैं? यह कार्य पूर्ववत नहीं किया जा सकता।";
 "CheatCodeStatus" = "सक्षम";
 "Background" = "पृष्ठभूमि";
@@ -847,13 +776,8 @@ PlayCase हाई-क्वालिटी iPhone केसों पर के
 "RemoveBackgroundForGame" = "गेम पृष्ठभूमि हटाएं";
 "RemoveBackgroundForConsole" = "%@ प्लेटफ़ॉर्म पृष्ठभूमि हटाएं";
 "RemoveBackgroundForGlobal" = "वैश्विक पृष्ठभूमि हटाएं";
-"ShaderConfigAlert" = "%@ के लिए सेट किया गया।";
-"Global" = "वैश्विक";
-"RemoveShaderForGlobal" = "वैश्विक शेडर हटाएं";
 "FeaturedItems" = "फ़ीचर्ड आइटम्स";
-"ReUpload" = "पुनः अपलोड करें";
 
-"Service" = "सेवाएँ";
 "NintendoWFC" = "निनटेंडो WFC";
 "PSPNetworking" = "PSP नेटवर्किंग";
 "Networking" = "नेटवर्क";
@@ -892,16 +816,11 @@ PlayCase हाई-क्वालिटी iPhone केसों पर के
 "LoadingCheerpJ" = "CheerpJ लोड हो रहा है";
 "ZipHandlerTitle" = "ZIP फ़ाइल हैंडलिंग";
 "ZipHandlerDetail" = "कुछ प्लेटफ़ॉर्म (जैसे DOS और Arcade) ROM को सीधे .zip फ़ाइलों से लोड कर सकते हैं। अन्य प्लेटफ़ॉर्म के लिए, .zip के अंदर ROM को आयात करने से पहले निकाला जाना चाहिए।\n\nचयनित फ़ाइलों को निकाला जाएगा और व्यक्तिगत रूप से आयात किया जाएगा, जबकि अचयनित फ़ाइलों को एकल ZIP ROM के रूप में आयात किया जाएगा।";
-"ConfigsResetCore" = "कोर डिफॉल्ट पर रीसेट करें";
-"ConfigsResetBefore" = "पिछली सेटिंग्स पर लौटें";
 "InsertDisc" = "डिस्क डालें";
 "InsertDiscAlert" = "आप अपनी लाइब्रेरी में उसी प्लेटफ़ॉर्म से कोई अन्य गेम चुनकर, या फ़ाइल ऐप से डिस्क फ़ाइल चुनकर डिस्क डाल सकते हैं। iOS फ़ाइल सिस्टम सीमाओं के कारण, फ़ाइल ऐप से चुनी गई डिस्क फ़ाइलें Manic EMU के कैश में कॉपी कर दी जाएंगी।";
 "InsertDiscFailed" = "डिस्क डालने में विफल";
 "GenerateHomeMenu" = "होम मेनू बनाएं";
 "SkinSoundEffects" = "स्किन ध्वनि प्रभाव";
-"FirstAnniversary" = "यहाँ होने के लिए धन्यवाद,\nहमने आपके लिए कुछ लिखा है";
-"ApirlFoolsDayTitle" = "उह-ओह, क्या Manic EMU खराब हो गया?";
-"ApirlFoolsDayDetail" = "चिंता मत करो!\nबस एक मज़ाक है—अप्रैल फूल दिवस की शुभकामनाएँ!\n\nइसे बंद करते ही सब कुछ सामान्य हो जाएगा।";
 "JITType" = "JIT प्रकार";
 "JITTypeDesc" = "मानक JIT सर्वोत्तम प्रदर्शन प्रदान करता है, जबकि IR JIT मध्यम प्रदर्शन प्रदान करता है।";
 "Pretendo" = "Pretendo नेटवर्क";
@@ -916,7 +835,6 @@ PlayCase हाई-क्वालिटी iPhone केसों पर के
 "HomeMenuDesc" = "होम मेनू खोलने के लिए नीचे दिए गए बटन का उपयोग करें। फिर Nimbus सेटिंग्स पर जाएं, Pretendo नेटवर्क पर स्विच करें, और \"निंटेंडो नेटवर्क आईडी\" चुनने के लिए सेटिंग्स खोलें और अपने Pretendo खाते से साइन इन करें।\n\nउसके बाद, होम मेनू से लॉन्च किए गए या Azahar कोर के साथ चलने वाले किसी भी गेम का उपयोग Pretendo नेटवर्क करेगा।\n\nयदि होम मेनू प्रविष्टि गायब है, तो यह सुविधा स्वचालित रूप से इसे फिर से बनाने का प्रयास करेगी।";
 "OpenHomeMenu" = "होम मेनू खोलें";
 "ChooseRegion" = "क्षेत्र चुनें";
-"ChooseRegionDesc" = "Artic Setup टूल चलाने वाले 3DS डिवाइस का सही क्षेत्र चुनें। गलत क्षेत्र चुनने से डेटा स्थानांतरण सफल नहीं होगा।";
 "HomeMenuNotFound" = "होम मेनू नहीं मिला। कृपया पहले Artic Base डेटा स्थानांतरण पूरा करें।";
 "SystemUpdateAsk" = "क्या सिस्टम अपडेट सफलतापूर्वक पूरा हुआ?";
 "SystemUpdateDesc" = "यदि नेटवर्क समस्याओं के कारण सिस्टम अपडेट विफल हो गया है, तो कृपया डेटा को फिर से स्थानांतरित करने का प्रयास करें। अन्यथा, 3DS होम मेनू ठीक से काम नहीं कर सकता है।";

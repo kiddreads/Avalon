@@ -14,14 +14,14 @@ class CheevosChallengeView: RoundAndBorderView {
     private let containerView = UIView()
     
     init() {
-        super.init(roundCorner: .allCorners, radius: 16, borderColor: Constants.Color.Border, borderWidth: 1)
+        super.init(roundCorner: .allCorners, radius: 16, borderColor: R.Color.Border, borderWidth: 1)
         makeBlur(blurRadius: 2.5, blurAlpha: 0.4)
         
-        enableInteractive = true
+        enablePressEffect = true
         
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            make.leading.equalToSuperview().offset(R.Size.ContentSpaceSmall)
             make.top.bottom.equalToSuperview()
         }
         
@@ -30,7 +30,7 @@ class CheevosChallengeView: RoundAndBorderView {
         addSubview(icon)
         icon.snp.makeConstraints { make in
             make.size.equalTo(12)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
+            make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceSmall)
             make.centerY.equalToSuperview()
             make.leading.equalTo(containerView.snp.trailing).offset(5)
         }

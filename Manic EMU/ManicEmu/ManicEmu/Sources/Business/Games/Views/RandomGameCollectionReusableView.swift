@@ -10,37 +10,18 @@
 import UIKit
 
 class RandomGameCollectionReusableView: UICollectionReusableView {
-    private var titleLabel: UILabel = {
-        let view = UILabel()
-        view.textColor = Constants.Color.LabelPrimary
-        view.font = Constants.Font.body()
-        view.text = R.string.localizable.gamesRandom()
-        return view
-    }()
     
-    var iconImage: UIImageView = {
-        let view = UIImageView(image: .symbolImage(.diceFill))
-        view.contentMode = .center
-        return view
-    }()
+    var randomButton = ASButtonView(.extraSmall(icon: .symbol(.diceFill, colors: [R.Color.LabelPrimary]),
+                                                title: R.string.localizable.randomGaming(),
+                                                titleColor: R.Color.LabelPrimary,
+                                                background: R.Color.BackgroundSecondary))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        enableInteractive = true
-        delayInteractiveTouchEnd = true
-        
-        addSubviews([iconImage, titleLabel])
-    
-        iconImage.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            make.centerX.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeMin)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(iconImage.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+        addSubview(randomButton)
+        randomButton.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
     

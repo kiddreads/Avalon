@@ -9,15 +9,10 @@
 import UIKit
 import SwiftUI
 
-class DropGlowEffectView: UIView {
-    
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
-    }
+class DropGlowEffectView: BaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
         if #available(iOS 17.0, *) {
             let vc = UIHostingController(rootView: GlowEffect().edgesIgnoringSafeArea(.all))
             vc.view.backgroundColor = .clear

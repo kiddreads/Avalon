@@ -9,7 +9,7 @@
 
 import UIKit
 
-class ImportFileCollectionViewCell: UICollectionViewCell, DynamicShadow {
+class ImportFileCollectionViewCell: UICollectionViewCell {
     private var iconView: ServiceIconView = {
         let view = ServiceIconView(roundCorner: .allCorners)
         return view
@@ -21,64 +21,46 @@ class ImportFileCollectionViewCell: UICollectionViewCell, DynamicShadow {
         return view
     }()
     
-    var infoContainerView: UIView = {
+    private var infoContainerView: UIView = {
         let view = UIView()
-        view.enableInteractive = true
-        view.delayInteractiveTouchEnd = true
-        view.backgroundColor = Constants.Color.BackgroundPrimary
-        view.layerCornerRadius = Constants.Size.CornerRadiusMax
+        view.backgroundColor = R.Color.BackgroundSecondary
+        view.layerCornerRadius = R.Size.CornerRadiusLarge
         return view
     }()
     
+    var topLeftGradientView = UIImageView()
+    var bottomRightGradientView = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        updateDynamicShadow()
+        enablePressEffect = true
         
-        let topHintView = UIView()
-        addSubview(topHintView)
-        topHintView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMax)
+        infoContainerView.addSubview(topLeftGradientView)
+        topLeftGradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
-        let hintIcon = UIImageView(image: UIImage(symbol: .moonStarsFill))
-        topHintView.addSubview(hintIcon)
-        hintIcon.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeMin)
-        }
-        
-        let hintLabel = UILabel()
-        hintLabel.textColor = Constants.Color.LabelPrimary
-        hintLabel.font = Constants.Font.body()
-        hintLabel.text = R.string.localizable.importTopHintTitle()
-        hintLabel.numberOfLines = 0
-        topHintView.addSubview(hintLabel)
-        hintLabel.snp.makeConstraints { make in
-            make.leading.equalTo(hintIcon.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalToSuperview()
+        infoContainerView.addSubview(bottomRightGradientView)
+        bottomRightGradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
 
         addSubview(infoContainerView)
         infoContainerView.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview()
-            make.top.equalTo(topHintView.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+            make.edges.equalToSuperview()
             make.height.equalTo(100)
         }
         
         infoContainerView.addSubviews([iconView, titleLabel])
         iconView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+            make.leading.equalToSuperview().inset(R.Size.ContentSpaceLarge)
             make.centerY.equalToSuperview()
             make.size.equalTo(48)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+            make.leading.equalTo(iconView.snp.trailing).offset(R.Size.ContentSpaceSmall)
+            make.trailing.equalToSuperview().inset(R.Size.ContentSpaceLarge)
             make.centerY.equalToSuperview()
         }
     }
@@ -87,10 +69,29 @@ class ImportFileCollectionViewCell: UICollectionViewCell, DynamicShadow {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateDynamicShadow()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let size = self.size
+        guard size != .zero else { return }
+        
+        if topLeftGradientView.image == nil {
+            UIImage.radialGradientImage(size: size, colors: [R.Color.Indigo.forceStyle(.dark).withAlphaComponent(0.5), .clear], startCenter: CGPoint(x: 0, y: 0)) { [weak self] topLeftDarkImage in
+                UIImage.radialGradientImage(size: size, colors: [R.Color.Indigo.forceStyle(.light).withAlphaComponent(0.5), R.Color.BackgroundSecondary.forceStyle(.light).withAlphaComponent(0)], startCenter: CGPoint(x: 0, y: 0)) { [weak self] topLeftLightImage in
+                    if let topLeftDarkImage, let topLeftLightImage {
+                        self?.topLeftGradientView.image = UIImage(.dm, light: topLeftLightImage, dark: topLeftDarkImage)
+                    }
+                }
+            }
+        }
+        
+        if bottomRightGradientView.image == nil {
+            UIImage.radialGradientImage(size: size, colors: [R.Color.Indigo.forceStyle(.dark).withAlphaComponent(0.5), .clear], startCenter: CGPoint(x: 1, y: 1)) { [weak self] bottomRightDarkImage in
+                UIImage.radialGradientImage(size: size, colors: [R.Color.Indigo.forceStyle(.light).withAlphaComponent(0.5), R.Color.BackgroundSecondary.forceStyle(.light).withAlphaComponent(0) ], startCenter: CGPoint(x: 1, y: 1)) { [weak self] bottomRightLightImage in
+                    if let bottomRightDarkImage, let bottomRightLightImage {
+                        self?.bottomRightGradientView.image = UIImage(.dm, light: bottomRightLightImage, dark: bottomRightDarkImage)
+                    }
+                }
+            }
         }
     }
     
@@ -102,15 +103,16 @@ class ImportFileCollectionViewCell: UICollectionViewCell, DynamicShadow {
         iconView.radius = service.iconCornerRadius
         titleLabel.text = service.title
         
-        var matt = NSMutableAttributedString(string: service.title, attributes: [.font: Constants.Font.title(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
+        var matt = NSMutableAttributedString(string: service.title, attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
         if let detail = service.detail {
-            matt.append(NSAttributedString(string: "\n" + detail, attributes: [.font: Constants.Font.body(), .foregroundColor: Constants.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\n" + detail, attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
             let style = NSMutableParagraphStyle()
-            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineSpacing = R.Size.ContentSpaceTiny/2
             matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
         }
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = .byTruncatingTail
+        style.lineSpacing = R.Size.ContentSpaceTiny
         matt = matt.applying(attributes: [.paragraphStyle: style]) as! NSMutableAttributedString
         titleLabel.attributedText = matt
     }

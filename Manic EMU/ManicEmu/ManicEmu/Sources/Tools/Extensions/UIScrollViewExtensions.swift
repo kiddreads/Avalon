@@ -70,7 +70,7 @@ extension UIScrollView {
     
     /// 隐藏边缘效果（iOS 26.0+）
     private func hideEdgeEffects() {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, tvOS 26.0, *) {
              self.topEdgeEffect.isHidden = true
              self.leftEdgeEffect.isHidden = true
              self.bottomEdgeEffect.isHidden = true

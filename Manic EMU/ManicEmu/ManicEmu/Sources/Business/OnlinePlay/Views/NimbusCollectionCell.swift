@@ -12,9 +12,9 @@ class NimbusCollectionCell: UICollectionViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         let text = R.string.localizable.pretendoNimbusDesc()
-        let matt = NSMutableAttributedString(string: text, attributes: [.font: Constants.Font.body(size: .s), .foregroundColor: Constants.Color.LabelSecondary])
+        let matt = NSMutableAttributedString(string: text, attributes: [.font: R.Font.Footnote(), .foregroundColor: R.Color.LabelSecondary])
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = Constants.Size.ContentSpaceUltraTiny
+        style.lineSpacing = R.Size.ContentSpaceTiny
         style.alignment = .left
         label.attributedText = matt.applying(attributes: [.paragraphStyle: style])
         return label
@@ -23,11 +23,11 @@ class NimbusCollectionCell: UICollectionViewCell {
     private lazy var button: SymbolButton = {
         let view = SymbolButton(image: nil,
                                 title: R.string.localizable.installNimbus(),
-                                titleFont: Constants.Font.body(size: .m),
-                                titleColor: Constants.Color.LabelSecondary,
+                                titleFont: R.Font.Body2(),
+                                titleColor: R.Color.LabelSecondary,
                                 titleAlignment: .right,
                                 horizontalContian: true)
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        view.backgroundColor = R.Color.BackgroundTertiary
         view.isUserInteractionEnabled = false
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
@@ -42,8 +42,8 @@ class NimbusCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         
         let containerView = UIView()
-        containerView.layerCornerRadius = Constants.Size.CornerRadiusMax
-        containerView.backgroundColor = Constants.Color.BackgroundPrimary
+        containerView.layerCornerRadius = R.Size.CornerRadiusLarge
+        containerView.backgroundColor = R.Color.BackgroundSecondary
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -51,14 +51,14 @@ class NimbusCollectionCell: UICollectionViewCell {
         
         containerView.addSubview(descLabel)
         descLabel.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.leading.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
         
         containerView.addSubview(button)
         button.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(descLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
+            make.leading.bottom.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(descLabel.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.height.equalTo(R.Size.ItemHeightMedium)
         }
     }
     
@@ -69,12 +69,12 @@ class NimbusCollectionCell: UICollectionViewCell {
     func setData(config: PretendoNetworkingConfig) {
         if config.articBaseDone {
             button.isUserInteractionEnabled = true
-            button.titleLabel.textColor = Constants.Color.LabelPrimary
-            button.backgroundColor = Constants.Color.Main
+            button.titleLabel.textColor = R.Color.LabelPrimary
+            button.backgroundColor = R.Color.Main
         } else {
             button.isUserInteractionEnabled = false
-            button.titleLabel.textColor = Constants.Color.LabelSecondary
-            button.backgroundColor = Constants.Color.BackgroundSecondary
+            button.titleLabel.textColor = R.Color.LabelSecondary
+            button.backgroundColor = R.Color.BackgroundTertiary
         }
     }
 }

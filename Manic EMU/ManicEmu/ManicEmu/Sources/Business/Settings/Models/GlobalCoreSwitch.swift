@@ -44,7 +44,7 @@ struct GlobalCoreSwitch: SmartCodable, Equatable {
         Log.debug("获取默认GlobalCoreSwitch配置")
         
         var configs = [String: String]()
-        let gameTypes = System.allCases.map({ $0.gameType }).filter({ $0.supportCores.count > 0 })
+        let gameTypes = System.allGameTypes.filter({ $0.supportCores.count > 0 })
         for gameType in gameTypes {
             configs[gameType.localizedShortName] = gameType.supportCores.first(where: { !$0.isEmpty })
         }

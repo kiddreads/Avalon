@@ -12,7 +12,7 @@ import SideMenu
 
 class SideMenuShowStyle: SideMenuPresentationStyle {
     
-    private class CoverView: UIView {
+    private class CoverView: BaseView {
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.backgroundColor = UIColor(.dm, light: .white.withAlphaComponent(0.35), dark: .black.withAlphaComponent(0.7))
@@ -48,7 +48,7 @@ class SideMenuShowStyle: SideMenuPresentationStyle {
         /// The ending alpha of the presenting view when the menu is fully displayed.
         presentingEndAlpha = 1
         /// The amount the presenting view is translated along the x-axis. Zero is stationary, negative values are off-screen, positive values are on screen.
-        presentingTranslateFactor = 1-(Constants.Size.WindowWidth*(1-0.879))/2/Constants.Size.WindowWidth
+        presentingTranslateFactor = 1-(R.Size.WindowWidth*(1-0.879))/2/R.Size.WindowWidth
         /// The amount the presenting view is scaled. Less than one shrinks the view, larger than one grows the view.
         presentingScaleFactor = 0.879
         /// The strength of the parallax effect on the presenting view once the menu is displayed.

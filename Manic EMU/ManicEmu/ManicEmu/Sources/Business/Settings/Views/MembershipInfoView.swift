@@ -7,13 +7,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-class MembershipInfoView: UIView {
+class MembershipInfoView: BaseView {
     
     private var membershipNotification: Any? = nil
     private var productUpdateNotification: Any? = nil
     
     deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
         if let membershipNotification = membershipNotification {
             NotificationCenter.default.removeObserver(membershipNotification)
         }
@@ -25,33 +24,40 @@ class MembershipInfoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        Log.debug("\(String(describing: Self.self)) init")
         setupViews()
         
-        membershipNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MembershipChange, object: nil, queue: .main) { [weak self] notification in
+        membershipNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.MembershipChange, object: nil, queue: .main) { [weak self] notification in
             self?.setupViews()
         }
-        productUpdateNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.ProductsUpdate, object: nil, queue: .main) { [weak self] notification in
+        productUpdateNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.ProductsUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.setupViews()
         }
+        
+        overrideUserInterfaceStyle = .dark
     }
     
     private func setupViews() {
         subviews.forEach { $0.removeFromSuperview() }
         let isMember = PurchaseManager.isMember
         
+        let contentContainer = UIView()
+        addSubview(contentContainer)
+        contentContainer.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
+        let secondLineContent: UIView
+        
         if isMember {
             let titleContainer = UIView()
-            addSubview(titleContainer)
+            contentContainer.addSubview(titleContainer)
             titleContainer.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+                make.top.equalToSuperview()
                 make.centerX.equalToSuperview()
-                make.height.equalTo(Constants.Size.IconSizeMin.height)
-                make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                make.height.equalTo(R.Size.IconSizeMedium.height)
             }
             
-            let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
+            let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: R.Color.LabelPrimary))
             if Locale.isRTLLanguage {
                 titleLeftView.transform = CGAffineTransform(scaleX: -1, y: 1)
             }
@@ -71,36 +77,35 @@ class MembershipInfoView: UIView {
                 text = R.string.localizable.hi() + " " + R.string.localizable.monthlyMemberTitle()
             }
             titleLabel.text = text
-            titleLabel.font = Constants.Font.title(size: .s)
-            titleLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+            titleLabel.font = R.Font.Headline(emphasis: true)
+            titleLabel.textColor = R.Color.LabelPrimary
             titleContainer.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
-                make.leading.equalTo(titleLeftView.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.leading.equalTo(titleLeftView.snp.trailing).offset(R.Size.ContentSpaceTiny)
                 make.centerY.equalToSuperview()
             }
             
-            let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
+            let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: R.Color.LabelPrimary))
             if !Locale.isRTLLanguage {
                 titleRightView.transform = CGAffineTransform(scaleX: -1, y: 1)
             }
             titleRightView.contentMode = .center
             titleContainer.addSubview(titleRightView)
             titleRightView.snp.makeConstraints { make in
-                make.trailing.top.bottom.equalToSuperview()
-                make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.trailing.centerY.equalToSuperview()
+                make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
             }
             
             let thankContainer = UIView()
-            addSubview(thankContainer)
+            secondLineContent = thankContainer
+            contentContainer.addSubview(thankContainer)
             thankContainer.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalTo(titleContainer.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
-                make.leading.greaterThanOrEqualToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                make.top.equalTo(titleContainer.snp.bottom).offset(R.Size.ContentSpaceTiny)
             }
             let thankLabel = UILabel()
-            thankLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-            thankLabel.font = Constants.Font.body(size: .s, weight: .medium)
+            thankLabel.textColor = R.Color.LabelPrimary
+            thankLabel.font = R.Font.Footnote(emphasis: true)
             thankLabel.text = R.string.localizable.thanksCommingDesc()
             thankLabel.adjustsFontSizeToFitWidth = true
             thankContainer.addSubview(thankLabel)
@@ -108,65 +113,76 @@ class MembershipInfoView: UIView {
                 make.leading.top.bottom.equalToSuperview()
             }
             
-            let appNameImage = UIImageView(image: R.image.app_title()?.scaled(toSize: CGSize(width: 100, height: 8.2)))
+            let appNameImage = UIImageView(image: R.image.app_title())
             thankContainer.addSubview(appNameImage)
             appNameImage.snp.makeConstraints { make in
-                make.leading.equalTo(thankLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.leading.equalTo(thankLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
                 make.centerY.equalTo(thankLabel)
+                make.size.equalTo(CGSize(width: 100, height: 8.2))
             }
             
             let playLabel = UILabel()
-            playLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-            playLabel.font = Constants.Font.body(size: .s, weight: .medium)
+            playLabel.textColor = R.Color.LabelPrimary
+            playLabel.font = R.Font.Footnote(emphasis: true)
             playLabel.text = R.string.localizable.playGameDesc()
             playLabel.adjustsFontSizeToFitWidth = true
             thankContainer.addSubview(playLabel)
             playLabel.snp.makeConstraints { make in
-                make.leading.equalTo(appNameImage.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.leading.equalTo(appNameImage.snp.trailing).offset(R.Size.ContentSpaceTiny)
                 make.trailing.equalToSuperview()
                 make.centerY.equalTo(thankLabel)
             }
             
         } else {
-            let becomeLabel = UILabel()
-            becomeLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-            becomeLabel.font = Constants.Font.title(size: .s)
-            becomeLabel.text = R.string.localizable.gameSaveGuideBecomTitle()
-            becomeLabel.adjustsFontSizeToFitWidth = true
-            addSubview(becomeLabel)
-            becomeLabel.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMin)
+            let titleContainer = UIView()
+            contentContainer.addSubview(titleContainer)
+            titleContainer.snp.makeConstraints { make in
+                make.top.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.height.equalTo(R.Size.IconSizeMedium.height)
             }
             
-            let appNameImage = UIImageView(image: R.image.app_title()?.scaled(toSize: CGSize(width: 138, height: 11.31)))
-            addSubview(appNameImage)
+            let becomeLabel = UILabel()
+            becomeLabel.textColor = R.Color.LabelPrimary
+            becomeLabel.font = R.Font.Headline(emphasis: true)
+            becomeLabel.text = R.string.localizable.gameSaveGuideBecomTitle()
+            becomeLabel.adjustsFontSizeToFitWidth = true
+            titleContainer.addSubview(becomeLabel)
+            becomeLabel.snp.makeConstraints { make in
+                make.leading.centerY.top.bottom.equalToSuperview()
+                
+            }
+            
+            let appNameImage = UIImageView(image: R.image.app_title())
+            titleContainer.addSubview(appNameImage)
             appNameImage.snp.makeConstraints { make in
-                make.leading.equalTo(becomeLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-                make.centerY.equalTo(becomeLabel)
+                make.leading.equalTo(becomeLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
+                make.centerY.equalToSuperview()
             }
             
             let memberLabel = UILabel()
-            memberLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-            memberLabel.font = Constants.Font.title(size: .s)
+            memberLabel.textColor = R.Color.LabelPrimary
+            memberLabel.font = R.Font.Headline(emphasis: true)
             memberLabel.text = R.string.localizable.gameSaveGuideMemberTitle()
             memberLabel.adjustsFontSizeToFitWidth = true
-            addSubview(memberLabel)
+            titleContainer.addSubview(memberLabel)
             memberLabel.snp.makeConstraints { make in
-                make.leading.equalTo(appNameImage.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.leading.equalTo(appNameImage.snp.trailing).offset(R.Size.ContentSpaceTiny)
                 make.centerY.equalTo(becomeLabel)
-                make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                make.trailing.lessThanOrEqualToSuperview()
             }
             
             let detalLabel = UILabel()
-            detalLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
-            detalLabel.font = Constants.Font.body(size: .s, weight: .medium)
+            secondLineContent = detalLabel
+            detalLabel.textColor = R.Color.LabelPrimary
+            detalLabel.font = R.Font.Footnote(emphasis: true)
             detalLabel.text = R.string.localizable.settingsNonMemberDesc()
             detalLabel.adjustsFontSizeToFitWidth = true
-            addSubview(detalLabel)
+            contentContainer.addSubview(detalLabel)
             detalLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                make.top.equalTo(becomeLabel.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
+                make.centerX.equalToSuperview()
+                make.leading.trailing.equalToSuperview()
+                make.top.equalTo(titleContainer.snp.bottom).offset(R.Size.ContentSpaceTiny)
             }
         }
        
@@ -184,15 +200,12 @@ class MembershipInfoView: UIView {
             }
         }
         let giftView = SettingsMembershipGiftView(symbol: symbol, title: title)
-        addSubview(giftView)
+        contentContainer.addSubview(giftView)
         giftView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
-            if PurchaseManager.isMember {
-                make.centerX.equalToSuperview()
-            } else {
-                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            }
-            make.height.equalTo(32)
+            make.bottom.equalToSuperview()
+            make.top.equalTo(secondLineContent.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(R.Size.ButtonSmall)
         }
     }
     

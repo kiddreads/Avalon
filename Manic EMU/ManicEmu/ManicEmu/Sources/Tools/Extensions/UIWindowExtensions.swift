@@ -21,6 +21,35 @@ extension UIWindow {
 #endif
     }
     
+    static var topWindow: UIWindow? {
+        if let window = ApplicationSceneDelegate.applicationScene?.windows.last(where: { w in
+            if w.isHidden {
+                return false
+            }
+            
+            if w.rootViewController == nil {
+                return false
+            }
+            
+            if String(describing: type(of: w)) == "SheetWindow" {
+                return w.windowLevel != .normal
+            }
+            
+            if String(describing: type(of: w)) == "AlertWindow" {
+                return false
+            }
+            
+            if w.windowLevel != .normal {
+                return false
+            }
+            
+            return true
+        }) {
+            return window
+        }
+        return applicationWindow
+    }
+    
 #if os(iOS)
     func showDropView() {
         guard subviews.first(where: { $0 is DropGlowEffectView }) == nil else { return }

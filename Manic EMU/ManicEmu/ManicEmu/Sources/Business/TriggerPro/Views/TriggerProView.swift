@@ -8,8 +8,8 @@
 
 import Haptica
 
-class TriggerProView: UIView {
-    var hapticType: GameSetting.HapticType = .soft {
+class TriggerProView: BaseView {
+    var hapticType: GameOption.HapticType = .soft {
         didSet {
             isHapticEnabled = true
             switch hapticType {
@@ -185,8 +185,8 @@ class TriggerProView: UIView {
         needsLayoutButtons = false
         guard !buttons.isEmpty else { return }
         
-        let spacing: CGFloat = Constants.Size.ContentSpaceMin // 按钮之间的间距
-        let padding: CGFloat = Constants.Size.ContentSpaceMax // 边距
+        let spacing: CGFloat = R.Size.ContentSpaceSmall // 按钮之间的间距
+        let padding: CGFloat = R.Size.ContentSpaceLarge // 边距
         let maxWidth = bounds.width - padding * 2
         
         // 使用流式布局计算每个按钮的位置

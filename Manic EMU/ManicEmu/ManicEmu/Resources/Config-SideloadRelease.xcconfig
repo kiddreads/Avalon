@@ -11,3 +11,5 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 #include "ManicEmu/Resources/Config-Base.xcconfig"
+
+APP_BUILD_CONDITIONS = SIDE_LOAD

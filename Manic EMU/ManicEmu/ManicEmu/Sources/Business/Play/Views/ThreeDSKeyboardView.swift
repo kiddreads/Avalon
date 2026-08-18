@@ -8,18 +8,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ProHUD
-import IQKeyboardManagerSwift
 
 struct ThreeDSKeyboardView {
     static func showForCitra(hintText: String?,
                              keyboardType: ThreeDSKeyboardType,
                              maxTextSize: UInt16) {
-        
-        Task { @MainActor in
-            IQKeyboardManager.shared.isEnabled = true
-            IQKeyboardManager.shared.keyboardDistance = 100
-        }
-        
         
         Alert { alert in
             alert.config.cardCornerRadius = 0
@@ -31,7 +24,7 @@ struct ThreeDSKeyboardView {
             let textfiledWidth = UIDevice.isPhone ? 300 : 380
 
             let containerView = RoundAndBorderView(roundCorner: .allCorners)
-            containerView.backgroundColor = Constants.Color.Background
+            containerView.backgroundColor = R.Color.BackgroundPrimary
             containerView.makeBlur()
             //标题
             let titleLabel = UILabel()
@@ -43,23 +36,23 @@ struct ThreeDSKeyboardView {
                 textTitle = R.string.localizable.game3DSInputTitle()
             }
             titleLabel.text = textTitle
-            titleLabel.font = Constants.Font.title(size: .s)
-            titleLabel.textColor = Constants.Color.LabelPrimary
+            titleLabel.font = R.Font.Headline(emphasis: true)
+            titleLabel.textColor = R.Color.LabelPrimary
             containerView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.leading.trailing.greaterThanOrEqualToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.leading.trailing.greaterThanOrEqualToSuperview().inset(R.Size.ContentSpaceMedium)
             }
             
             //输入框
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
-            textFieldContainer.backgroundColor = Constants.Color.InputBackground
+            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium, borderColor: R.Color.Border, borderWidth: 1)
+            textFieldContainer.backgroundColor = R.Color.InputBox
             containerView.addSubview(textFieldContainer)
             textFieldContainer.snp.makeConstraints { make in
-                make.height.equalTo(Constants.Size.ItemHeightMid)
-                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.height.equalTo(R.Size.ItemHeightMedium)
+                make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceMedium)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
                 make.width.equalTo(textfiledWidth)
             }
             
@@ -67,24 +60,24 @@ struct ThreeDSKeyboardView {
             if maxTextSize > 0 {
                 textField.placeholder = R.string.localizable.maxTextSizeAllowDesc("\(maxTextSize)")
             }
-            textField.tintColor = Constants.Color.Main
-            textField.textColor = Constants.Color.LabelPrimary
-            textField.font = Constants.Font.body()
+            textField.tintColor = R.Color.Main
+            textField.textColor = R.Color.LabelPrimary
+            textField.font = R.Font.Footnote()
             textField.clearButtonMode = .whileEditing
             textFieldContainer.addSubview(textField)
             textField.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
             }
             textField.becomeFirstResponder()
             
             let line = UIView()
-            line.backgroundColor = Constants.Color.Border
+            line.backgroundColor = R.Color.Border
             containerView.addSubview(line)
             line.snp.makeConstraints { make in
                 make.height.equalTo(1)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(textFieldContainer.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                make.top.equalTo(textFieldContainer.snp.bottom).offset(R.Size.ContentSpaceMedium)
             }
             
             //按钮
@@ -102,10 +95,6 @@ struct ThreeDSKeyboardView {
                         "keyboardText" : text
                     ])
                 }
-                
-                Task { @MainActor in
-                    IQKeyboardManager.shared.isEnabled = false
-                }
             }
             
             if keyboardType == .none {
@@ -116,11 +105,11 @@ struct ThreeDSKeyboardView {
             
             let okButton = UILabel()
             okButton.isUserInteractionEnabled = true
-            okButton.enableInteractive = true
+            okButton.enablePressEffect = true
             okButton.text = R.string.localizable.confirmTitle()
             okButton.textAlignment = .center
-            okButton.font = Constants.Font.title(size: .s, weight: .regular)
-            okButton.textColor = Constants.Color.LabelPrimary
+            okButton.font = R.Font.Headline()
+            okButton.textColor = R.Color.LabelPrimary
             okButton.addTapGesture { gesture in
                 if let text = textField.text, !text.isEmpty {
                     if maxTextSize > 0, text.count > maxTextSize {
@@ -138,9 +127,9 @@ struct ThreeDSKeyboardView {
             containerView.addSubview(okButton)
             okButton.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalTo(line.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+                make.top.equalTo(line.snp.bottom).offset(R.Size.ContentSpaceLarge)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+                make.bottom.equalToSuperview().inset(R.Size.ContentSpaceLarge)
             }
             
             alert.set(customView: containerView).snp.makeConstraints { make in
@@ -152,11 +141,6 @@ struct ThreeDSKeyboardView {
     static func showForAzahar(config: AzaharKeyboardConfig,
                               tapAction: ((_ buttonType: AzaharButtonType, _ inputText: String?)->Void)? = nil) {
         
-        Task { @MainActor in
-            IQKeyboardManager.shared.isEnabled = true
-            IQKeyboardManager.shared.keyboardDistance = 100
-        }
-        
         Alert { alert in
             alert.config.cardCornerRadius = 0
             alert.contentMaskView.alpha = 0
@@ -167,7 +151,7 @@ struct ThreeDSKeyboardView {
             let textfiledWidth = UIDevice.isPhone ? 300 : 380
 
             let containerView = RoundAndBorderView(roundCorner: .allCorners)
-            containerView.backgroundColor = Constants.Color.Background
+            containerView.backgroundColor = R.Color.BackgroundPrimary
             containerView.makeBlur()
             
             // 标题
@@ -180,25 +164,25 @@ struct ThreeDSKeyboardView {
                 textTitle = R.string.localizable.game3DSInputTitle()
             }
             titleLabel.text = textTitle
-            titleLabel.font = Constants.Font.title(size: .s)
-            titleLabel.textColor = Constants.Color.LabelPrimary
+            titleLabel.font = R.Font.Headline(emphasis: true)
+            titleLabel.textColor = R.Color.LabelPrimary
             containerView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-                make.leading.trailing.greaterThanOrEqualToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.top.equalToSuperview().offset(R.Size.ContentSpaceMedium)
+                make.leading.trailing.greaterThanOrEqualToSuperview().inset(R.Size.ContentSpaceMedium)
             }
             
             // 输入框容器高度根据是否多行模式调整
-            let textFieldHeight = config.multilineMode ? Constants.Size.ItemHeightMid * 3 : Constants.Size.ItemHeightMid
+            let textFieldHeight = config.multilineMode ? R.Size.ItemHeightMedium * 3 : R.Size.ItemHeightMedium
             
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
-            textFieldContainer.backgroundColor = Constants.Color.InputBackground
+            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium, borderColor: R.Color.Border, borderWidth: 1)
+            textFieldContainer.backgroundColor = R.Color.InputBox
             containerView.addSubview(textFieldContainer)
             textFieldContainer.snp.makeConstraints { make in
                 make.height.equalTo(textFieldHeight)
-                make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceMedium)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
                 make.width.equalTo(textfiledWidth)
             }
             
@@ -209,9 +193,9 @@ struct ThreeDSKeyboardView {
                 // 多行模式使用 UITextView
                 let textView = UITextView()
                 textView.backgroundColor = .clear
-                textView.tintColor = Constants.Color.Main
-                textView.textColor = Constants.Color.LabelPrimary
-                textView.font = Constants.Font.body()
+                textView.tintColor = R.Color.Main
+                textView.textColor = R.Color.LabelPrimary
+                textView.font = R.Font.Footnote()
                 textView.textContainerInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
                 textFieldContainer.addSubview(textView)
                 textView.snp.makeConstraints { make in
@@ -230,9 +214,9 @@ struct ThreeDSKeyboardView {
                     textField.placeholder = R.string.localizable.maxTextSizeAllowDesc("\(config.maxTextLength)")
                 }
                 
-                textField.tintColor = Constants.Color.Main
-                textField.textColor = Constants.Color.LabelPrimary
-                textField.font = Constants.Font.body()
+                textField.tintColor = R.Color.Main
+                textField.textColor = R.Color.LabelPrimary
+                textField.font = R.Font.Footnote()
                 textField.clearButtonMode = .whileEditing
                 
                 // 根据过滤器设置键盘类型
@@ -244,19 +228,19 @@ struct ThreeDSKeyboardView {
                 textFieldContainer.addSubview(textField)
                 textField.snp.makeConstraints { make in
                     make.top.bottom.equalToSuperview()
-                    make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceTiny)
+                    make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
                 }
                 textField.becomeFirstResponder()
                 inputText = { textField.text }
             }
             
             let line = UIView()
-            line.backgroundColor = Constants.Color.Border
+            line.backgroundColor = R.Color.Border
             containerView.addSubview(line)
             line.snp.makeConstraints { make in
                 make.height.equalTo(1)
-                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-                make.top.equalTo(textFieldContainer.snp.bottom).offset(Constants.Size.ContentSpaceMid)
+                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
+                make.top.equalTo(textFieldContainer.snp.bottom).offset(R.Size.ContentSpaceMedium)
             }
             
             // 输入验证函数
@@ -317,10 +301,6 @@ struct ThreeDSKeyboardView {
             func closeKeyboard(text: String?, buttonType: AzaharButtonType) {
                 alert.pop()
                 tapAction?(buttonType, text)
-                
-                Task { @MainActor in
-                    IQKeyboardManager.shared.isEnabled = false
-                }
             }
             
             // 获取自定义按钮文本
@@ -335,11 +315,11 @@ struct ThreeDSKeyboardView {
             // buttonText数组顺序: [0]=Cancel, [1]=Forgot, [2]=Ok
             let okButton = UILabel()
             okButton.isUserInteractionEnabled = true
-            okButton.enableInteractive = true
+            okButton.enablePressEffect = true
             okButton.text = getButtonText(at: 2, defaultText: R.string.localizable.confirmTitle())
             okButton.textAlignment = .center
-            okButton.font = Constants.Font.title(size: .s, weight: .regular)
-            okButton.textColor = Constants.Color.LabelPrimary
+            okButton.font = R.Font.Headline()
+            okButton.textColor = R.Color.LabelPrimary
             okButton.addTapGesture { gesture in
                 let text = inputText()
                 
@@ -360,22 +340,22 @@ struct ThreeDSKeyboardView {
             
             let cancelButton = UILabel()
             cancelButton.isUserInteractionEnabled = true
-            cancelButton.enableInteractive = true
+            cancelButton.enablePressEffect = true
             cancelButton.text = getButtonText(at: 0, defaultText: R.string.localizable.cancelTitle())
             cancelButton.textAlignment = .center
-            cancelButton.font = Constants.Font.title(size: .s, weight: .regular)
-            cancelButton.textColor = Constants.Color.LabelSecondary
+            cancelButton.font = R.Font.Headline()
+            cancelButton.textColor = R.Color.LabelSecondary
             cancelButton.addTapGesture { gesture in
                 closeKeyboard(text: nil, buttonType: .cancel)
             }
 
             let forgetButton = UILabel()
             forgetButton.isUserInteractionEnabled = true
-            forgetButton.enableInteractive = true
+            forgetButton.enablePressEffect = true
             forgetButton.text = getButtonText(at: 1, defaultText: R.string.localizable.inputForget())
             forgetButton.textAlignment = .center
-            forgetButton.font = Constants.Font.title(size: .s, weight: .regular)
-            forgetButton.textColor = Constants.Color.LabelSecondary
+            forgetButton.font = R.Font.Headline()
+            forgetButton.textColor = R.Color.LabelSecondary
             forgetButton.addTapGesture { gesture in
                 closeKeyboard(text: nil, buttonType: .forgot)
             }
@@ -386,9 +366,9 @@ struct ThreeDSKeyboardView {
                 containerView.addSubview(okButton)
                 okButton.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
-                    make.top.equalTo(line.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-                    make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                    make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+                    make.top.equalTo(line.snp.bottom).offset(R.Size.ContentSpaceLarge)
+                    make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+                    make.bottom.equalToSuperview().inset(R.Size.ContentSpaceLarge)
                 }
             } else if config.buttonConfig == .dual {
                 // 取消 | 确定
@@ -396,7 +376,7 @@ struct ThreeDSKeyboardView {
                 containerView.addSubview(okButton)
 
                 let verticalLine = UIView()
-                verticalLine.backgroundColor = Constants.Color.BackgroundSecondary
+                verticalLine.backgroundColor = R.Color.BackgroundTertiary
                 containerView.addSubview(verticalLine)
                 verticalLine.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 1, height: 26))
@@ -405,13 +385,13 @@ struct ThreeDSKeyboardView {
                 }
 
                 cancelButton.snp.makeConstraints { make in
-                    make.top.equalTo(line.snp.bottom).offset(Constants.Size.ContentSpaceMax)
-                    make.leading.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-                    make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+                    make.top.equalTo(line.snp.bottom).offset(R.Size.ContentSpaceLarge)
+                    make.leading.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+                    make.bottom.equalToSuperview().inset(R.Size.ContentSpaceLarge)
                     make.trailing.equalTo(verticalLine.snp.leading)
                 }
                 okButton.snp.makeConstraints { make in
-                    make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                    make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
                     make.leading.equalTo(verticalLine.snp.trailing)
                     make.centerY.equalTo(cancelButton)
                 }
@@ -424,9 +404,9 @@ struct ThreeDSKeyboardView {
 
                 forgetButton.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
-                    make.top.equalTo(line.snp.bottom).offset(Constants.Size.ContentSpaceMax)
+                    make.top.equalTo(line.snp.bottom).offset(R.Size.ContentSpaceLarge)
                     make.width.equalToSuperview().dividedBy(3)
-                    make.bottom.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
+                    make.bottom.equalToSuperview().inset(R.Size.ContentSpaceLarge)
                 }
 
                 cancelButton.snp.makeConstraints { make in
@@ -445,10 +425,10 @@ struct ThreeDSKeyboardView {
                 line.isHidden = true
                 textFieldContainer.snp.remakeConstraints { make in
                     make.height.equalTo(textFieldHeight)
-                    make.top.equalTo(titleLabel.snp.bottom).offset(Constants.Size.ContentSpaceMid)
-                    make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+                    make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceMedium)
+                    make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
                     make.width.equalTo(textfiledWidth)
-                    make.bottom.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+                    make.bottom.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
                 }
             }
             

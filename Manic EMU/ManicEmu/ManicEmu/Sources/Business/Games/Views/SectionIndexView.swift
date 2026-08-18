@@ -57,14 +57,14 @@
 
 // MARK: - SectionIndexViewDataSource
 
-@objc public protocol SectionIndexViewDataSource: NSObjectProtocol {
+@objc protocol SectionIndexViewDataSource: NSObjectProtocol {
     @objc func numberOfScetions(in sectionIndexView: SectionIndexView) -> Int
     @objc func sectionIndexView(_ sectionIndexView: SectionIndexView, itemAt section: Int) -> SectionIndexViewItem
 }
 
 // MARK: - SectionIndexViewDelegate
 
-@objc public protocol SectionIndexViewDelegate: NSObjectProtocol {
+@objc protocol SectionIndexViewDelegate: NSObjectProtocol {
     @objc func sectionIndexView(_ sectionIndexView: SectionIndexView, didSelect section: Int)
     @objc func sectionIndexViewDidSelectSearch(_ sectionIndexView: SectionIndexView)
     @objc func sectionIndexViewToucheEnded(_ sectionIndexView: SectionIndexView)
@@ -72,12 +72,12 @@
 
 // MARK: - SectionIndexView
 
-public class SectionIndexView: UIView {
+class SectionIndexView: BaseView {
     @objc public weak var dataSource: SectionIndexViewDataSource? { didSet { reloadData() } }
     @objc public weak var delegate: SectionIndexViewDelegate?
 
     @objc public var isItemIndicatorAlwaysInCenterY = false
-    @objc public var itemIndicatorHorizontalOffset: CGFloat = -20
+    @objc public var itemIndicatorHorizontalOffset: CGFloat = 60
 
     @objc public private(set) var selectedItem: SectionIndexViewItem?
     @objc public private(set) var isTouching = false
@@ -144,10 +144,15 @@ public class SectionIndexView: UIView {
     @objc public func showCurrentItemIndicator() {
         guard let selectedItem = selectedItem, let indicator = selectedItem.indicator else { return }
         guard indicator.superview != nil else {
-            let x = -(indicator.bounds.width * 0.5) + itemIndicatorHorizontalOffset
-            let y = isItemIndicatorAlwaysInCenterY ? (bounds.height - selectedItem.bounds.height) * 0.5 : selectedItem.center.y
-            indicator.center = CGPoint(x: x, y: y)
-            addSubview(indicator)
+            containerView.addSubview(indicator)
+            indicator.snp.makeConstraints { make in
+                if isItemIndicatorAlwaysInCenterY {
+                    make.centerY.equalToSuperview()
+                } else {
+                    make.centerY.equalTo(selectedItem)
+                }
+                make.trailing.equalToSuperview().inset(itemIndicatorHorizontalOffset)
+            }
             return
         }
         indicator.alpha = 1
@@ -173,8 +178,8 @@ public class SectionIndexView: UIView {
         
         let searchItem = SectionIndexViewItemView()
         searchItem.image = UIImage(symbol: .magnifyingglass,
-                                   font: Constants.Font.caption(size: .s, weight: .bold),
-                                   color: Constants.Color.LabelTertiary)
+                                   font: R.Font.Caption2(emphasis: true),
+                                   color: R.Color.LabelTertiary)
         searchItem.selectedColor = .clear
         items.insert(searchItem, at: 0)
         searchItem.isHidden = hideSearch
@@ -253,7 +258,7 @@ public class SectionIndexView: UIView {
     }
 }
 
-public extension SectionIndexView {
+extension SectionIndexView {
     static let touchesOccurredNotification = Notification.Name("SectionIndexViewTouchesOccurredNotification")
     static let touchesEndedNotification = Notification.Name("SectionIndexViewTouchesEndedNotification")
 }

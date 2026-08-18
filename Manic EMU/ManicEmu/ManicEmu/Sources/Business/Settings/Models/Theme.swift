@@ -110,8 +110,8 @@ class Theme: Object, ObjectUpdatable {
     }()
     ///强制方形比例
     @Persisted var forceSquare: Bool = false
-    ///iPhone游戏列表列数 默认2列
-    @Persisted var gamesPerRow: Int = 2
+    ///iPhone游戏列表列数 默认3列
+    @Persisted var gamesPerRow: Int = 3
     ///滑动索引条是否隐藏
     @Persisted var hideIndicator: Bool = false
     ///隐藏游戏标题
@@ -213,7 +213,7 @@ class Theme: Object, ObjectUpdatable {
            let jsonString = String(data: data, encoding: .utf8) {
             Log.debug("[Theme] set manufacturerOrder:\(jsonString)")
             updateExtra(key: ExtraKey.manufacturerOrder.rawValue, value: jsonString)
-            NotificationCenter.default.post(name: Constants.NotificationName.ManufacturerOrderUpdate, object: nil)
+            NotificationCenter.default.post(name: R.NotificationName.ManufacturerOrderUpdate, object: nil)
         }
     }
 }
