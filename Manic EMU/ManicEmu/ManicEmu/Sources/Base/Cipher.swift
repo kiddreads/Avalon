@@ -6,8 +6,8 @@
 //  Copyright © 2026 Manic EMU. All rights reserved.
 //
 
-extension Constants {
-    struct Cipher {
+extension _R {
+    struct _Cipher {
         static let BaiduYunAppKey = ""
         static let BaiduYunSecretKey = ""
         static let DropboxAppKey = ""
