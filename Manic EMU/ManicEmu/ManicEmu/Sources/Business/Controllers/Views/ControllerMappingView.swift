@@ -423,18 +423,6 @@ class ControllerMappingView: BaseView {
         } else if inputString == "rightThumbstickButton" {
             return "R3"
         } else {
-//            if gameController.name.contains("DualShock", caseSensitive: false) ||  gameController.name.contains("DualSense", caseSensitive: false) {
-//                //索尼的手柄 b->× x->△ a->○ y->□
-//                if controllerInputString == "b" {
-//                    return "×"
-//                } else if controllerInputString == "a" {
-//                    return "○"
-//                } else if controllerInputString == "y" {
-//                    return "□"
-//                } else if controllerInputString == "x" {
-//                    return "△"
-//                }
-//            }
             if let firstUppercased = inputString.first?.uppercased() {
                 return firstUppercased + inputString.dropFirst()
             }
@@ -568,6 +556,12 @@ class ControllerMappingView: BaseView {
 extension ControllerMappingView: GameControllerReceiver {
     //这里只处理mfi控制器
     func gameController(_ gameController: any DeltaCore.GameController, didActivate input: any DeltaCore.Input, value: Double) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.gameController(gameController, didActivate: input, value: value)
+            }
+            return
+        }
         guard gameController.inputType != .keyboard else { return }
         if gameController.inputType == .controllerSkin, selectedSkinInput == nil {
             if input.stringValue.contains("touchScreenX", caseSensitive: false) ||

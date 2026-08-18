@@ -10,20 +10,17 @@
 import UIKit
 
 class ManicApplication: UIApplication {
-    // 键盘事件已统一由 DeltaCore 的 KeyboardGameController（GCKeyboard）采集，
-    // 不再使用 handleKeyUIEvent 私有 API 通路。
+    //Keyboard events are now uniformly captured by DeltaCore's KeyboardGameController (GCKeyboard),
+    //and the private API path via handleKeyUIEvent is no longer used.
     
     override func sendEvent(_ event: UIEvent) {
-        // 用户触摸屏幕代表切换为触摸操作意图，移除 FocusKit 当前焦点（位置已记忆，方向键可恢复）
+        // When the user touches the screen, it signals a switch to touch-based interaction, removing FocusKit's current focus (the position is remembered and can be restored with the arrow keys).
         if event.type == .touches,
            let touches = event.allTouches,
            touches.contains(where: { $0.phase == .began }) {
             FocusSystem.shared.userDidTouchScreen()
         }
         super.sendEvent(event)
-//        if PlayViewController.isGaming, PlayViewController.currentGameType == .dos {
-//            LibretroCore.sharedInstance().send(event)
-//        }
     }
     
     
@@ -32,8 +29,14 @@ class ManicApplication: UIApplication {
             for press in presses {
                 LibretroCore.sharedInstance().handle(press, with: event, down: true)
             }
+            super.pressesBegan(presses, with: event)
+            return
         }
-        super.pressesBegan(presses, with: event)
+        // Gamepad UIPress on iPad drives system focus on the main thread (Metal hitch).
+        // Keyboard keys while typing must still reach the text field.
+        if shouldForwardPressesToUIKit(presses) {
+            super.pressesBegan(presses, with: event)
+        }
     }
     
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -41,8 +44,17 @@ class ManicApplication: UIApplication {
             for press in presses {
                 LibretroCore.sharedInstance().handle(press, with: event, down: false)
             }
+            super.pressesEnded(presses, with: event)
+            return
         }
-        super.pressesEnded(presses, with: event)
+        if shouldForwardPressesToUIKit(presses) {
+            super.pressesEnded(presses, with: event)
+        }
+    }
+    
+    private func shouldForwardPressesToUIKit(_ presses: Set<UIPress>) -> Bool {
+        let hasKeyboardKey = presses.contains { $0.key != nil }
+        return hasKeyboardKey && FocusSystem.shared.isEditingText
     }
     
 }

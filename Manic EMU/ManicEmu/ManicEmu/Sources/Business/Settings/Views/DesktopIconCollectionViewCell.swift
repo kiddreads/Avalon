@@ -41,6 +41,7 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
             super.init(frame: frame)
             
             enablePressEffect = true
+            enableFocusEffects = false
             
             addSubview(imageView)
             imageView.snp.makeConstraints { make in

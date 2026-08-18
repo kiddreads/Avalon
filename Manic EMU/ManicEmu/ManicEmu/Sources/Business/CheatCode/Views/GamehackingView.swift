@@ -282,6 +282,7 @@ class GamehackingView: BaseView {
                                        titleColor: R.Color.LabelPrimary.forceStyle(.dark),
                                        titleAlignment: .center,
                                        background: R.Color.Main))
+        view.enableFocusEffects = false
         view.isHidden = true
         view.didTapButton = { [weak self] in
             self?.collectSelectedCheatsAndSave()

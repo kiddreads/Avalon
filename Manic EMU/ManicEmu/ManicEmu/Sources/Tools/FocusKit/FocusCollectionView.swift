@@ -17,8 +17,11 @@ import UIKit
 /// 设计要点：
 /// - 焦点锚点：`FocusedElement`（cell 或 supplementary），视觉通过 `focusEffect` 呈现。
 /// - cell / header / footer 均可聚焦整体或其内部 `isFocusable` 子视图。
-/// - 跨元素寻径基于 layoutAttributes 空间搜索（同行左右 / 同列上下）。
-/// - supplementary 滚动使用 `scrollRectToVisible`（`scrollToItem` 仅适用于 cell）。
+/// - Item-to-item search uses layout frames + IndexPath. A cell is focused first;
+///   down/right then enters inner controls, which keep four-way navigation until
+///   that heading is empty and focus leaves the cell.
+/// - Vertical collections center the focused item; horizontal / orthogonal
+///   scrollers use a minimum reveal so a strip does not jump.
 
 // MARK: - 配置属性
 
@@ -79,6 +82,8 @@ extension UICollectionView: FocusContainer {
         return focusCoordinator.firstFocusableElement() != nil
     }
 
+    var isolatesFocusNavigation: Bool { true }
+
     func enterFocus(from direction: FocusDirection?, preferred: UIView?) -> UIView? {
         focusCoordinator.enter(from: direction, preferred: preferred)
     }
@@ -125,8 +130,16 @@ private final class FocusCollectionCoordinator: NSObject {
 
     private var pendingEntryDirection: FocusDirection?
     private var pendingEntryOriginFrame: CGRect?
+    private weak var pendingPreferredInner: UIView?
+    /// Last inner focus per item. Re-entering that item restores it (cell as container).
+    private var lastInnerByElement: [FocusedElement: WeakView] = [:]
     private var pendingProbe: (element: FocusedElement, direction: FocusDirection?, originFrame: CGRect?)?
     private var scrollAnchor: FocusedElement?
+
+    private final class WeakView {
+        weak var view: UIView?
+        init(_ view: UIView) { self.view = view }
+    }
 
     var focusedIndexPath: IndexPath? {
         if case .cell(let indexPath)? = focusedElement { return indexPath }
@@ -157,8 +170,13 @@ private final class FocusCollectionCoordinator: NSObject {
 
         if let preferred, preferred !== collectionView,
            let element = focusedElement(containing: preferred), isFocusableElement(element) {
-            let originFrame = FocusEngine.frameInWindow(of: preferred)
-            switch moveTo(element, direction: direction, originFrame: originFrame, shouldFocus: true) {
+            switch moveTo(
+                element,
+                direction: direction,
+                originFrame: FocusEngine.frameInWindow(of: preferred),
+                shouldFocus: true,
+                preferredInner: preferred
+            ) {
             case .handled(let view): return view
             case .exit: return collectionView
             }
@@ -210,6 +228,7 @@ private final class FocusCollectionCoordinator: NSObject {
         focusedElement = nil
         pendingEntryDirection = nil
         pendingEntryOriginFrame = nil
+        pendingPreferredInner = nil
     }
 
     // MARK: 方向导航
@@ -227,18 +246,24 @@ private final class FocusCollectionCoordinator: NSObject {
             return moveTo(target, direction: direction, originFrame: nil, shouldFocus: true)
         }
 
+        // Cell is focused first. Down/right may enter inner items; once inside,
+        // all four directions stay among inners until that heading is empty.
         if let element = focusedElement,
-           let host = hostView(for: element),
-           let inner = focusedTarget, inner !== host, inner.isDescendant(of: host) {
-            let candidates = FocusEngine.collectCandidates(in: host)
-                .filter { $0 !== inner && !$0.isDescendant(of: inner) }
-            if let next = FocusEngine.bestCandidate(from: FocusEngine.frameInWindow(of: inner),
-                                                    direction: direction,
-                                                    candidates: candidates) {
-                inner.fk_applyFocus(false)
-                next.fk_applyFocus(true)
-                focusedTarget = next
-                scrollToMakeVisible(element, focusedView: next)
+           let host = hostView(for: element) {
+            let current = focusedTarget ?? host
+            let insideCell = current !== host && current.isDescendant(of: host)
+            if insideCell {
+                if let next = FocusEngine.nextCandidate(
+                    from: current,
+                    direction: direction,
+                    insideHost: host
+                ) {
+                    moveFocusInsideCell(from: current, to: next, host: host, element: element)
+                    return .handled(next)
+                }
+            } else if direction == .down || direction == .right,
+                      let next = firstInner(in: host, from: direction) {
+                moveFocusInsideCell(from: current, to: next, host: host, element: element)
                 return .handled(next)
             }
         }
@@ -247,7 +272,16 @@ private final class FocusCollectionCoordinator: NSObject {
             return .exit
         }
         let originFrame = focusedTarget.map { FocusEngine.frameInWindow(of: $0) }
+            ?? cellFrameInWindow(for: current)
         return moveTo(resolved.element, direction: direction, originFrame: originFrame, shouldFocus: resolved.shouldFocus)
+    }
+
+    private func cellFrameInWindow(for element: FocusedElement) -> CGRect? {
+        guard let collectionView, let window = collectionView.window,
+              let attributes = layoutAttributes(for: element) else {
+            return focusedTarget.map { FocusEngine.frameInWindow(of: $0) }
+        }
+        return collectionView.convert(attributes.frame, to: window)
     }
 
     private func resolveNavigationTarget(from start: FocusedElement, direction: FocusDirection) -> (element: FocusedElement, shouldFocus: Bool)? {
@@ -259,27 +293,11 @@ private final class FocusCollectionCoordinator: NSObject {
         }
 
         guard let _ = layoutAttributes(for: start) else { return nil }
-
-        var current = start
-        var farthest: FocusedElement?
-        var visited = Set<FocusedElement>()
-
-        while let next = nextElement(from: current, direction: direction) {
-            guard visited.insert(next).inserted else { break }
-            farthest = next
-
-            if let _ = hostView(for: next) {
-                if isFocusableElement(next) {
-                    return (next, true)
-                }
-            } else if isNavigableElement(next) {
-                return (next, true)
-            }
-            current = next
+        guard let next = nextElement(from: start, direction: direction) else { return nil }
+        if let _ = hostView(for: next) {
+            return (next, isFocusableElement(next))
         }
-
-        guard let farthest else { return nil }
-        return (farthest, false)
+        return (next, isNavigableElement(next))
     }
 
     private func resolveOrthogonalNavigation(from start: IndexPath, direction: FocusDirection) -> (element: FocusedElement, shouldFocus: Bool)? {
@@ -294,16 +312,28 @@ private final class FocusCollectionCoordinator: NSObject {
         }
     }
 
-    private func moveTo(_ element: FocusedElement, direction: FocusDirection?, originFrame: CGRect?, shouldFocus: Bool) -> FocusContainerResult {
+    private func moveTo(
+        _ element: FocusedElement,
+        direction: FocusDirection?,
+        originFrame: CGRect?,
+        shouldFocus: Bool,
+        preferredInner: UIView? = nil
+    ) -> FocusContainerResult {
         guard let collectionView else { return .exit }
 
         lastFocusedElement = element
-        scrollToReveal(element, direction: direction)
+        scrollToReveal(element)
 
         if shouldFocus, let host = hostView(for: element), isFocusableElement(element) {
             pendingProbe = nil
             scrollAnchor = nil
-            focus(element, direction: direction, originFrame: originFrame, scroll: false)
+            focus(
+                element,
+                direction: direction,
+                originFrame: originFrame,
+                preferredInner: preferredInner,
+                scroll: false
+            )
             return .handled(focusedTarget ?? host)
         }
 
@@ -315,9 +345,99 @@ private final class FocusCollectionCoordinator: NSObject {
         return .handled(collectionView)
     }
 
-    private func scrollPosition(for direction: FocusDirection?) -> UICollectionView.ScrollPosition {
-        guard let direction else { return [] }
-        return direction.isHorizontal ? .centeredHorizontally : .centeredVertically
+    private func scrollToReveal(_ element: FocusedElement) {
+        scrollToMakeVisible(element, focusedView: nil, animated: true)
+    }
+
+    private func scrollToMakeVisible(_ element: FocusedElement, focusedView: UIView?, animated: Bool = true) {
+        guard let collectionView else { return }
+
+        if let target = focusedView ?? hostView(for: element) {
+            revealInEnclosingScrollers(target, element: element, animated: animated)
+            return
+        }
+
+        if case .cell(let indexPath) = element {
+            if isPrimarilyVertical(collectionView) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
+            } else {
+                collectionView.scrollToItem(at: indexPath, at: [], animated: animated)
+            }
+            return
+        }
+
+        guard let attributes = layoutAttributes(for: element) else { return }
+        if isPrimarilyVertical(collectionView) {
+            centerVertically(attributes.frame, in: collectionView, animated: animated)
+        } else {
+            revealRect(attributes.frame.insetBy(dx: -8, dy: -8), in: collectionView, animated: animated)
+        }
+    }
+
+    /// Nested horizontal scrollers: minimum reveal. This collection, if it
+    /// scrolls vertically, centers the item. Stops here so a parent pager
+    /// (Home `PageContentView`) is not moved.
+    private func revealInEnclosingScrollers(_ view: UIView, element: FocusedElement, animated: Bool) {
+        var current: UIView? = view.superview
+        while let candidate = current {
+            if let scrollView = candidate as? UIScrollView, !scrollView.isPagingEnabled {
+                if scrollView === collectionView {
+                    revealInCollection(view, element: element, animated: animated)
+                } else if isPrimarilyHorizontal(scrollView) || isPrimarilyVertical(scrollView) {
+                    let frame = view.convert(view.bounds, to: scrollView).insetBy(dx: -8, dy: -8)
+                    revealRect(frame, in: scrollView, animated: animated)
+                }
+            }
+            if candidate === collectionView { break }
+            current = candidate.superview
+        }
+    }
+
+    private func revealInCollection(_ view: UIView, element: FocusedElement, animated: Bool) {
+        guard let collectionView else { return }
+        if isPrimarilyVertical(collectionView) {
+            switch element {
+            case .cell(let indexPath):
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
+            case .supplementary:
+                centerVertically(view.convert(view.bounds, to: collectionView), in: collectionView, animated: animated)
+            }
+            return
+        }
+        let frame = view.convert(view.bounds, to: collectionView).insetBy(dx: -8, dy: -8)
+        revealRect(frame, in: collectionView, animated: animated)
+    }
+
+    /// True when this scroller's extra content is mainly on X (orthogonal strips).
+    private func isPrimarilyHorizontal(_ scrollView: UIScrollView) -> Bool {
+        let extraX = scrollView.contentSize.width - scrollView.bounds.width
+        let extraY = scrollView.contentSize.height - scrollView.bounds.height
+        return extraX > 1 && extraX > extraY
+    }
+
+    /// True when this scroller's extra content is mainly on Y (game grids, lists).
+    private func isPrimarilyVertical(_ scrollView: UIScrollView) -> Bool {
+        let extraX = scrollView.contentSize.width - scrollView.bounds.width
+        let extraY = scrollView.contentSize.height - scrollView.bounds.height
+        return extraY > 1 && extraY >= extraX
+    }
+
+    private func centerVertically(_ rect: CGRect, in scrollView: UIScrollView, animated: Bool) {
+        let inset = scrollView.adjustedContentInset
+        let visibleHeight = scrollView.bounds.height - inset.top - inset.bottom
+        guard visibleHeight > 0.5 else { return }
+        let minOffset = -inset.top
+        let maxOffset = max(minOffset, scrollView.contentSize.height - scrollView.bounds.height + inset.bottom)
+        var offset = scrollView.contentOffset
+        offset.y = min(max(rect.midY - visibleHeight / 2 - inset.top, minOffset), maxOffset)
+        guard abs(offset.y - scrollView.contentOffset.y) > 0.5 else { return }
+        scrollView.setContentOffset(offset, animated: animated)
+    }
+
+    private func revealRect(_ rect: CGRect, in scrollView: UIScrollView, animated: Bool) {
+        let visible = scrollView.bounds.inset(by: scrollView.adjustedContentInset)
+        guard !visible.contains(rect) else { return }
+        scrollView.scrollRectToVisible(rect, animated: animated)
     }
 
     // MARK: 确定键
@@ -345,7 +465,13 @@ private final class FocusCollectionCoordinator: NSObject {
 
     // MARK: 聚焦
 
-    private func focus(_ element: FocusedElement, direction: FocusDirection?, originFrame: CGRect?, scroll: Bool = true) {
+    private func focus(
+        _ element: FocusedElement,
+        direction: FocusDirection?,
+        originFrame: CGRect?,
+        preferredInner: UIView? = nil,
+        scroll: Bool = true
+    ) {
         if focusedElement != element, let focusedTarget {
             focusedTarget.fk_applyFocus(false)
             self.focusedTarget = nil
@@ -355,6 +481,7 @@ private final class FocusCollectionCoordinator: NSObject {
         lastFocusedElement = element
         pendingEntryDirection = direction
         pendingEntryOriginFrame = originFrame
+        pendingPreferredInner = preferredInner
         if scroll {
             scrollToMakeVisible(element, focusedView: nil)
         }
@@ -385,8 +512,6 @@ private final class FocusCollectionCoordinator: NSObject {
         var target = focusedTarget
         if target == nil || (target !== currentHost && !(target!.isDescendant(of: currentHost))) {
             target = resolveFocusTarget(in: currentHost)
-            pendingEntryDirection = nil
-            pendingEntryOriginFrame = nil
         }
         guard let target else {
             focusedTarget?.fk_applyFocus(false)
@@ -394,6 +519,9 @@ private final class FocusCollectionCoordinator: NSObject {
             focusedHost = nil
             scrollAnchor = element
             focusedElement = nil
+            pendingPreferredInner = nil
+            pendingEntryDirection = nil
+            pendingEntryOriginFrame = nil
             return
         }
 
@@ -402,6 +530,12 @@ private final class FocusCollectionCoordinator: NSObject {
         }
         focusedHost = currentHost
         focusedTarget = target
+        if let element = focusedElement {
+            rememberInner(target, for: element)
+        }
+        pendingPreferredInner = nil
+        pendingEntryDirection = nil
+        pendingEntryOriginFrame = nil
     }
 
     private func resolvePendingProbeIfPossible() {
@@ -416,15 +550,89 @@ private final class FocusCollectionCoordinator: NSObject {
     }
 
     private func resolveFocusTarget(in host: UIView) -> UIView? {
-        if host.fk_canFocus { return host }
-
-        let candidates = FocusEngine.collectCandidates(in: host)
+        if host.fk_canFocus {
+            return host
+        }
+        let candidates = focusableTargets(in: host)
         guard !candidates.isEmpty else { return nil }
+
+        if let preferred = pendingPreferredInner, isValidInner(preferred, host: host, candidates: candidates) {
+            return preferred
+        }
+        if let element = focusedElement,
+           let remembered = lastInner(for: element),
+           isValidInner(remembered, host: host, candidates: candidates) {
+            return remembered
+        }
         if let direction = pendingEntryDirection, let origin = pendingEntryOriginFrame,
-           let best = FocusEngine.bestCandidate(from: origin, direction: direction, candidates: candidates) {
+           let best = FocusEngine.bestCandidate(
+            from: origin,
+            direction: direction,
+            candidates: candidates,
+            searchBounds: FocusEngine.frameInWindow(of: host),
+            expandPolicy: .verticalOnly,
+            geometry: .viewFrame
+           ) {
             return best
         }
-        return FocusEngine.initialCandidate(in: host) ?? host
+        return FocusEngine.topLeadingCandidate(among: candidates)
+    }
+
+    private func focusableTargets(in host: UIView) -> [UIView] {
+        var candidates = FocusEngine.collectFocusableDescendants(in: host)
+        if host.fk_canFocus {
+            candidates.append(host)
+        }
+        var seen = Set<ObjectIdentifier>()
+        var resolved: [UIView] = []
+        resolved.reserveCapacity(candidates.count)
+        for view in candidates {
+            if seen.insert(ObjectIdentifier(view)).inserted {
+                resolved.append(view)
+            }
+        }
+        return resolved
+    }
+
+    private func lastInner(for element: FocusedElement) -> UIView? {
+        lastInnerByElement[element]?.view
+    }
+
+    private func rememberInner(_ view: UIView, for element: FocusedElement) {
+        lastInnerByElement[element] = WeakView(view)
+    }
+
+    private func isValidInner(_ view: UIView, host: UIView, candidates: [UIView]) -> Bool {
+        guard view === host || view.isDescendant(of: host) else { return false }
+        return candidates.contains { $0 === view }
+    }
+
+    /// Enter an inner control from a focused cell. Origin is the cell's top-leading
+    /// corner so inners inside the cell frame still count as down/right.
+    private func firstInner(in host: UIView, from direction: FocusDirection) -> UIView? {
+        let inners = FocusEngine.collectFocusableDescendants(in: host)
+        guard !inners.isEmpty else { return nil }
+        let hostFrame = FocusEngine.frameInWindow(of: host)
+        let origin = CGRect(x: hostFrame.minX, y: hostFrame.minY, width: 1, height: 1)
+        return FocusEngine.bestCandidate(
+            from: origin,
+            direction: direction,
+            candidates: inners,
+            searchBounds: hostFrame,
+            expandPolicy: .all,
+            geometry: .viewFrame
+        ) ?? FocusEngine.topLeadingCandidate(among: inners)
+    }
+
+    private func moveFocusInsideCell(from current: UIView, to next: UIView, host: UIView, element: FocusedElement) {
+        if current !== next {
+            current.fk_applyFocus(false)
+        }
+        next.fk_applyFocus(true)
+        rememberInner(next, for: element)
+        focusedTarget = next
+        focusedHost = host
+        scrollToMakeVisible(element, focusedView: next)
     }
 
     // MARK: 可视区 / 滚动
@@ -453,35 +661,6 @@ private final class FocusCollectionCoordinator: NSObject {
         return CGRect(x: frame.midX, y: frame.midY, width: 1, height: 1)
     }
 
-    private func scrollToReveal(_ element: FocusedElement, direction: FocusDirection?) {
-        guard let collectionView else { return }
-        switch element {
-        case .cell(let indexPath):
-            collectionView.scrollToItem(at: indexPath, at: scrollPosition(for: direction), animated: true)
-        case .supplementary:
-            scrollToMakeVisible(element, focusedView: nil, animated: true)
-        }
-    }
-
-    private func scrollToMakeVisible(_ element: FocusedElement, focusedView: UIView?, animated: Bool = true) {
-        guard let collectionView else { return }
-
-        let targetFrame: CGRect
-        if let focusedView {
-            targetFrame = focusedView.convert(focusedView.bounds, to: collectionView).insetBy(dx: -8, dy: -8)
-        } else if let host = hostView(for: element) {
-            targetFrame = host.convert(host.bounds, to: collectionView).insetBy(dx: -8, dy: -8)
-        } else if let attributes = layoutAttributes(for: element) {
-            targetFrame = attributes.frame.insetBy(dx: -8, dy: -8)
-        } else {
-            return
-        }
-
-        let visible = collectionView.bounds.inset(by: collectionView.adjustedContentInset)
-        guard !visible.contains(targetFrame) else { return }
-        collectionView.scrollRectToVisible(targetFrame, animated: animated)
-    }
-
     // MARK: 寻径
 
     private func nextElement(from current: FocusedElement, direction: FocusDirection) -> FocusedElement? {
@@ -497,21 +676,7 @@ private final class FocusCollectionCoordinator: NSObject {
             }
         }
 
-        guard let attributes = layoutAttributes(for: current) else { return nil }
-
-        if let found = spatialSearch(from: attributes, direction: direction) {
-            return found
-        }
-
-        if direction.isHorizontal {
-            return nil
-        }
-
-        if case .cell(let indexPath) = current,
-           let next = arithmeticNextSection(from: indexPath, direction: direction) {
-            return .cell(next)
-        }
-        return nil
+        return sequentialItem(from: current, direction: direction)
     }
 
     private func adjacentItem(from current: IndexPath, direction: FocusDirection) -> IndexPath? {
@@ -543,96 +708,53 @@ private final class FocusCollectionCoordinator: NSObject {
         return IndexPath(item: item, section: section)
     }
 
-    private func sharesRow(_ origin: CGRect, with candidate: CGRect, tolerance: CGFloat = 4) -> Bool {
-        candidate.maxY > origin.minY + tolerance && candidate.minY < origin.maxY - tolerance
+    /// Item-to-item search inside a collection, including section headers.
+    /// Up/down pick the nearest row (header vs cells). Left/right stay in the
+    /// current row so a full-width header cannot steal a hop between cells.
+    private func sequentialItem(from current: FocusedElement, direction: FocusDirection) -> FocusedElement? {
+        guard let originFrame = layoutAttributes(for: current)?.frame else { return nil }
+        let items = allNavigableLayoutItems().filter { $0.element != current }
+        guard !items.isEmpty else { return nil }
+        let frames = items.map(\.frame)
+        let bounds = frames.reduce(originFrame) { $0.union($1) }
+        guard let index = FocusEngine.bestFrameIndex(
+            from: originFrame,
+            direction: direction,
+            frames: frames,
+            searchBounds: bounds,
+            expandPolicy: .verticalOnly
+        ) else {
+            return nil
+        }
+        return items[index].element
     }
 
-    private func sharesColumn(_ origin: CGRect, with candidate: CGRect, tolerance: CGFloat = 4) -> Bool {
-        candidate.maxX > origin.minX + tolerance && candidate.minX < origin.maxX - tolerance
+    private func allNavigableLayoutItems() -> [(element: FocusedElement, frame: CGRect)] {
+        guard let collectionView else { return [] }
+        var result: [(FocusedElement, CGRect)] = []
+        for section in 0..<collectionView.numberOfSections {
+            for kind in [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter] {
+                let element = FocusedElement.supplementary(kind: kind, section: section)
+                if let frame = layoutFrameIfNavigable(element) {
+                    result.append((element, frame))
+                }
+            }
+            for item in 0..<collectionView.numberOfItems(inSection: section) {
+                let element = FocusedElement.cell(IndexPath(item: item, section: section))
+                if let frame = layoutFrameIfNavigable(element) {
+                    result.append((element, frame))
+                }
+            }
+        }
+        return result
     }
 
-    private func spatialSearch(from origin: UICollectionViewLayoutAttributes, direction: FocusDirection) -> FocusedElement? {
-        guard let collectionView else { return nil }
-        let contentSize = collectionView.collectionViewLayout.collectionViewContentSize
-        let limit = direction.isHorizontal ? contentSize.width : contentSize.height
-
-        var offset: CGFloat = 0
-        var distance: CGFloat = 600
-        while offset < limit + distance {
-            if let found = spatialSearch(from: origin, direction: direction, offset: offset, distance: distance) {
-                return found
-            }
-            offset += distance
-            distance = 3000
+    private func layoutFrameIfNavigable(_ element: FocusedElement) -> CGRect? {
+        guard isNavigableElement(element), let frame = layoutAttributes(for: element)?.frame else { return nil }
+        if hostView(for: element) == nil {
+            return frame
         }
-        return nil
-    }
-
-    private func spatialSearch(from origin: UICollectionViewLayoutAttributes,
-                               direction: FocusDirection,
-                               offset: CGFloat,
-                               distance: CGFloat) -> FocusedElement? {
-        guard let collectionView else { return nil }
-        let originFrame = origin.frame
-
-        let searchRect: CGRect
-        switch direction {
-        case .up:
-            searchRect = CGRect(x: originFrame.minX, y: originFrame.midY - offset - distance,
-                                width: originFrame.width, height: distance)
-        case .down:
-            searchRect = CGRect(x: originFrame.minX, y: originFrame.midY + offset,
-                                width: originFrame.width, height: distance)
-        case .left:
-            searchRect = CGRect(x: originFrame.midX - offset - distance, y: originFrame.minY,
-                                width: distance, height: originFrame.height)
-        case .right:
-            searchRect = CGRect(x: originFrame.midX + offset, y: originFrame.minY,
-                                width: distance, height: originFrame.height)
-        }
-
-        let candidates = collectionView.collectionViewLayout.layoutAttributesForElements(in: searchRect) ?? []
-
-        var best: UICollectionViewLayoutAttributes?
-        var bestDistance = CGFloat.greatestFiniteMagnitude
-        var bestTransverse = CGFloat.greatestFiniteMagnitude
-
-        for attributes in candidates {
-            guard !attributes.isHidden, attributes.alpha > 0 else { continue }
-            guard attributesElement(from: attributes) != attributesElement(from: origin) else { continue }
-            guard isNavigableAttributes(attributes) else { continue }
-
-            let mainDistance: CGFloat
-            switch direction {
-            case .up: mainDistance = origin.center.y - attributes.center.y
-            case .down: mainDistance = attributes.center.y - origin.center.y
-            case .left: mainDistance = origin.center.x - attributes.center.x
-            case .right: mainDistance = attributes.center.x - origin.center.x
-            }
-            guard mainDistance > 0 else { continue }
-
-            if direction.isHorizontal {
-                guard sharesRow(originFrame, with: attributes.frame) else { continue }
-            } else {
-                guard sharesColumn(originFrame, with: attributes.frame) else { continue }
-            }
-
-            let transverse: CGFloat
-            if direction.isHorizontal {
-                transverse = abs(attributes.center.y - origin.center.y)
-            } else {
-                transverse = abs(attributes.center.x - origin.center.x)
-            }
-
-            if mainDistance < bestDistance
-                || (mainDistance == bestDistance && (transverse < bestTransverse
-                || (transverse == bestTransverse && attributes.indexPath.section < (best?.indexPath.section ?? Int.max)))) {
-                best = attributes
-                bestDistance = mainDistance
-                bestTransverse = transverse
-            }
-        }
-        return best.map { attributesElement(from: $0) }
+        return isFocusableElement(element) ? frame : nil
     }
 
     private func entryElement(from direction: FocusDirection?) -> FocusedElement? {

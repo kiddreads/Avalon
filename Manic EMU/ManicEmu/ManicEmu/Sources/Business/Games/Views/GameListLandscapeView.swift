@@ -171,10 +171,14 @@ class GameListLandscapeView: BaseView {
     }()
     
     private lazy var tipsButton: ASButtonView = {
-        //暂不需要点击事件 后续再添加
-        let view = ASButtonView(.extraSmall(icon: .symbol(.questionmarkCircle, colors: [R.Color.LabelSecondary]),
-                                            title: "Tips",
-                                            titleColor: R.Color.LabelSecondary).enableGlass(true))
+        // Visual hint only; hold Command / Select to show the cheatsheet.
+        var button = ASButton.extraSmall(icon: .symbol(.command, colors: [R.Color.LabelSecondary]),
+                                         title: R.string.localizable.focusShortcutsTips(),
+                                         titleColor: R.Color.LabelSecondary).enableGlass(true)
+        button.state = .disabled
+        let view = ASButtonView(button)
+        view.isFocusable = false
+        view.isHidden = true
         return view
     }()
     
@@ -306,12 +310,12 @@ class GameListLandscapeView: BaseView {
             make.bottom.equalTo(safeAreaLayoutGuide)
         }
         
-        //Tips按钮 右下角
         addSubview(tipsButton)
         tipsButton.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide).inset(R.Size.ContentSpaceHuge)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(R.Size.ContentSpaceLarge)
         }
+        updateTipsButton()
         
         //聚焦信息面板 位置跟随聚焦cell 由updateInfoPanelPosition动态更新偏移
         addSubview(infoPanelView)
@@ -380,6 +384,29 @@ class GameListLandscapeView: BaseView {
                 self.carouselView.reloadItems(at: [IndexPath(row: row, section: 0)])
             }
         })
+
+        let inputChange: (Notification) -> Void = { [weak self] _ in
+            self?.updateTipsButton()
+        }
+        notificationTokens.append(center.addObserver(forName: .externalGameControllerDidConnect, object: nil, queue: .main, using: inputChange))
+        notificationTokens.append(center.addObserver(forName: .externalGameControllerDidDisconnect, object: nil, queue: .main, using: inputChange))
+        notificationTokens.append(center.addObserver(forName: .externalKeyboardDidConnect, object: nil, queue: .main, using: inputChange))
+        notificationTokens.append(center.addObserver(forName: .externalKeyboardDidDisconnect, object: nil, queue: .main, using: inputChange))
+    }
+
+    /// Hide when nothing is connected; Command glyph for keyboard-only, Select glyph when a gamepad is present.
+    private func updateTipsButton() {
+        let connected = ExternalGameControllerManager.shared.connectedControllers
+        guard !connected.isEmpty else {
+            tipsButton.isHidden = true
+            return
+        }
+        tipsButton.isHidden = false
+        let hasGamepad = connected.contains { $0.inputType != .keyboard }
+        let icon: ASIcon = hasGamepad
+            ? .symbolImage(R.image.sel_iconSymbols(), colors: [R.Color.LabelSecondary])
+            : .symbol(.command, colors: [R.Color.LabelSecondary])
+        tipsButton.setIcon(icon)
     }
     
     //MARK: - 数据管线
@@ -924,7 +951,8 @@ class GameListLandscapeView: BaseView {
                 itemLayout = .fixedHeight(R.Size.ItemHeightExtraLarge)
             case .toggle:
                 cell = .iconTitleDetailSwitchCell(title: entry.item.title,
-                                                  state: entry.item.currentBool ? .on : .off)
+                                                  state: entry.item.currentBool ? .on : .off,
+                                                  enablePressEffect: false)
                 itemLayout = .fixedHeight(R.Size.ItemHeightLarge)
             case .optionalNumber, .selection:
                 cell = .iconTitleChevronCell(title: entry.item.title,
@@ -1072,13 +1100,11 @@ class GameListLandscapeView: BaseView {
         cardView.focusCommands = [
             FocusCommand(key: .left, title: moveTitle, handler: { [weak self] in
                 guard let self else { return true }
-                _ = self.shiftCarouselPage(Locale.isRTLLanguage ? 1 : -1)
-                return true
+                return self.shiftCarouselPage(Locale.isRTLLanguage ? 1 : -1)
             }),
             FocusCommand(key: .right, title: moveTitle, handler: { [weak self] in
                 guard let self else { return true }
-                _ = self.shiftCarouselPage(Locale.isRTLLanguage ? -1 : 1)
-                return true
+                return self.shiftCarouselPage(Locale.isRTLLanguage ? -1 : 1)
             })
         ]
         cardView.onFocusConfirm = { [weak self] in

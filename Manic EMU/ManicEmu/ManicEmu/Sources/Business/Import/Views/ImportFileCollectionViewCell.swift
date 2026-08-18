@@ -24,7 +24,6 @@ class ImportFileCollectionViewCell: UICollectionViewCell {
     private var infoContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = R.Color.BackgroundSecondary
-        view.layerCornerRadius = R.Size.CornerRadiusLarge
         return view
     }()
     
@@ -34,6 +33,7 @@ class ImportFileCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         enablePressEffect = true
+        layerCornerRadius = R.Size.CornerRadiusLarge
         
         infoContainerView.addSubview(topLeftGradientView)
         topLeftGradientView.snp.makeConstraints { make in

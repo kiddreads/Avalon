@@ -19,6 +19,7 @@ class SettingsMembershipView: BaseView {
         super.init(frame: frame)
         
         enablePressEffect = true
+        enableFocusEffects = false
         
         let containerView = UIView()
         containerView.layerCornerRadius = R.Size.CornerRadiusLarge

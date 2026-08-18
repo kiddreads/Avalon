@@ -41,6 +41,7 @@ class PlatformSortCollectionViewCell: UICollectionViewCell {
         }
         
         icon.backgroundColor = .clear
+        icon.isFocusable = false
         addSubview(icon)
         icon.snp.makeConstraints { make in
             make.size.equalTo(R.Size.IconSizeMedium)

@@ -18,11 +18,17 @@ enum FocusContainerResult {
     case exit
 }
 
-/// 具有"进入层级"能力的容器视图。
+/// A container that can be entered as a focus level.
 ///
-/// 对外层引擎而言，页面级寻径会展开容器内部已实例化的可聚焦后代参与打分；
-/// 命中后调用 `enterFocus(from:preferred:)` 进入容器；容器内导航仍由容器自行管理。
+/// Page-level search flattens focusable descendants; the container view is
+/// never a candidate. `UICollectionView` then isolates D-pad to item/IndexPath
+/// search; each cell is a mini-page for its inner focusable views. Other
+/// containers stay in the page-level pool and only receive enter/leave callbacks.
 protocol FocusContainer: UIView {
+    /// When true, D-pad stays inside this container until it returns `.exit`.
+    /// `UICollectionView` isolates; generic containers stay in the page-level pool.
+    var isolatesFocusNavigation: Bool { get }
+
     /// 容器当前是否可以被进入（例如 UICollectionView 无任何 item 时应返回 false）
     var canEnterFocus: Bool { get }
 
@@ -49,15 +55,15 @@ protocol FocusContainer: UIView {
     /// 焦点位于容器内部时生效的额外命令
     func containerFocusCommands() -> [FocusCommand]
 
-    /// 供外层空间寻径打分的"进入落点"参考矩形（window 坐标系）。
-    /// 全屏容器与页面上其他可聚焦视图（如悬浮工具条）frame 重叠时，
-    /// 容器整体 frame 会被半平面过滤排除导致无法进入；
-    /// 返回进入后实际会落焦的位置可让打分准确。返回 nil 表示使用容器整体 frame。
+    /// Window-space rect used when the container itself is the candidate (no
+    /// flattened descendant). Prefer the entry slot over the full container
+    /// frame so a full-screen list can still lose to a floating toolbar.
     func focusEntryFrame(from direction: FocusDirection) -> CGRect?
 }
 
 extension FocusContainer {
     var canEnterFocus: Bool { true }
+    var isolatesFocusNavigation: Bool { false }
     func containerFocusCommands() -> [FocusCommand] { [] }
     func focusEntryFrame(from direction: FocusDirection) -> CGRect? { nil }
 

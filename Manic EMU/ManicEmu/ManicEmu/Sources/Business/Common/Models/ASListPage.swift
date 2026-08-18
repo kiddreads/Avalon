@@ -324,7 +324,8 @@ extension ASListPage {
                                               titleColor: UIColor = R.Color.LabelPrimary,
                                               detail: String? = nil,
                                               detailColor: UIColor = R.Color.LabelSecondary,
-                                              state: ASSwitch.State = .off) -> Self {
+                                              state: ASSwitch.State = .off,
+                                              enablePressEffect: Bool = true) -> Self {
             var styles = [Style]()
             if let icon {
                 styles.append(.icon(icon))
@@ -336,7 +337,7 @@ extension ASListPage {
                 styles.append(.detail(.extraSmallText(detail, color: detailColor)))
             }
             styles.append(.switch(.init(state: state)))
-            return .normal(styles)
+            return .normal(styles, enablePressEffect: enablePressEffect)
         }
         
         static func iconTitleDetailCell(icon: ASIcon? = nil,

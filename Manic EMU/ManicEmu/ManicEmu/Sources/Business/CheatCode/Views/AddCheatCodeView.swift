@@ -71,7 +71,7 @@ class AddCheatCodeView: BaseView {
         button.allAttributes[.disabled] = disableAttributes
         
         let view = ASButtonView(button)
-        
+        view.enableFocusEffects = false
         view.didTapButton = { [weak self] in
             guard let self = self else { return }
             self.collectionView.endEditing(true)

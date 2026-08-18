@@ -355,11 +355,11 @@ class TriggerProManageView: BaseView {
     }
     
     private func getNavigation() -> ASListPage.Navigation {
-        
-        let navigation = ASListPage.Navigation.defaultNavigation(title: "TriggerPro",
+        var navigation = ASListPage.Navigation.defaultNavigation(title: "TriggerPro",
                                                                  titleIcon: .symbolImage(R.image.triggerpro_iconSymbols()),
                                                                  tools: datas.count > 0 ? [.symbolImage(R.image.selectedit_iconSymbols())] : [],
                                                                  edit: R.string.localizable.selectAll())
+        navigation.enableClose = showClose
         return navigation
     }
     

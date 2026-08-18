@@ -42,6 +42,8 @@ protocol ShowableView: UIViewAndControllerType {
     
     //Page hide callback
     func didHide()
+    
+    func preferredFocusView() -> UIView?
 }
 
 extension ShowableView where Self: UIView {
@@ -76,6 +78,8 @@ extension ShowableView where Self: UIView {
                 view?.didShowUp()
             }, dismiss: { [weak view] in
                 view?.didHide()
+            }, preferredFocusView: { [weak view] in
+                return view?.preferredFocusView()
             })
             return view
         }
@@ -93,6 +97,10 @@ extension ShowableView where Self: UIView {
     func didShowUp() {}
     
     func didHide() {}
+    
+    func preferredFocusView() -> UIView? {
+        return nil
+    }
 }
 
 fileprivate var ShowableViewShowAsSheetKey: UInt8 = 0

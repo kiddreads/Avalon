@@ -121,9 +121,9 @@ class BaseViewController: UIViewController {
     }
     
     /// Presented pages own a FocusKit context. Home tabs are sibling roots activated by HomeViewController.
-    /// PlayViewController disables FocusKit while gaming and must not push a competing context.
+    /// Live emulation keeps FocusKit off; a paused game (GameOptions, etc.) can take a context.
     var shouldManageFocusContext: Bool {
-        presentingViewController != nil && !PlayViewController.isGaming
+        presentingViewController != nil && !PlayViewController.isEmulationActive
     }
     
     override func viewDidAppear(_ animated: Bool) {

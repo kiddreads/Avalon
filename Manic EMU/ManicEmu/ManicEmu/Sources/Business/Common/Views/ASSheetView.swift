@@ -35,7 +35,8 @@ class ASSheetView: BaseView {
                      enableMultiInstance: Bool = false,
                      action: ASSheetViewAction? = nil,
                      showSuccess: ((SheetTarget) -> Void)? = nil,
-                     dismiss: (()->Void)? = nil) {
+                     dismiss: (()->Void)? = nil,
+                     preferredFocusView: (() -> UIView?)? = nil) {
         Sheet { sheetView in
             
             if let identifier {
@@ -223,7 +224,9 @@ class ASSheetView: BaseView {
             
             //dismiss callback
             sheetView.onViewDidAppear { sheet in
-                sheet.pushOverlayFocusContext()
+                sheet.pushOverlayFocusContext(configure: { context in
+                    context.preferredFocusView = preferredFocusView
+                })
                 syncLandscapeBackgroundCovering()
             }
             sheetView.onViewDidDisappear { sheet in

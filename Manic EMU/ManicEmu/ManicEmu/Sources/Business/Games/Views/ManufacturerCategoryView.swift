@@ -17,6 +17,7 @@ class ManufacturerCategoryView: BaseView {
             super.init(frame: frame)
             backgroundColor = .clear
             enablePressEffect = true
+            enableFocusEffects = false
             
             
             addSubview(normalImageView)
@@ -162,6 +163,13 @@ extension ManufacturerCategoryView: UICollectionViewDataSource {
         cell.setDatas(normalImage: manufacturer.normalImage, highlightImage: manufacturer.highlightImage)
         cell.onLongPress = {
             ASWebView.show(url: R.URLs.manufacturer(manufacturer))
+        }
+        cell.onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            if self.collectionView(self.collectionView, shouldSelectItemAt: indexPath) {
+                self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+            }
+            return true
         }
         return cell
     }

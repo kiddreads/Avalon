@@ -373,6 +373,8 @@
 		57B6ECCD2D798425002E619C /* CheatTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECCC2D798419002E619C /* CheatTypeExtensions.swift */; };
 		57B6ECF52D79F1EA002E619C /* SkinSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */; };
 		57BA59B52E3F13D100110849 /* LibretroCoreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */; };
+		57BA7467303486ED0039E284 /* FocusShortcutsTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA7463303486E20039E284 /* FocusShortcutsTipsView.swift */; };
+		57BA7468303486ED0039E284 /* FocusShortcutsTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA7463303486E20039E284 /* FocusShortcutsTipsView.swift */; };
 		57BF5ECB2FDB08FE0073D318 /* ASSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF5EC72FDB08F60073D318 /* ASSwitchView.swift */; };
 		57BF5ECC2FDB08FE0073D318 /* ASSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF5EC72FDB08F60073D318 /* ASSwitchView.swift */; };
 		57BF5ED92FDB09A80073D318 /* ASCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF5ED52FDB09A00073D318 /* ASCheckView.swift */; };
@@ -1507,6 +1509,7 @@
 		57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSettingsView.swift; sourceTree = "<group>"; };
 		57BA45C12D1B235400BCA5E1 /* Config-Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Base.xcconfig"; sourceTree = "<group>"; };
 		57BA59B42E3F13C900110849 /* LibretroCoreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibretroCoreExtensions.swift; sourceTree = "<group>"; };
+		57BA7463303486E20039E284 /* FocusShortcutsTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusShortcutsTipsView.swift; sourceTree = "<group>"; };
 		57BF5EC72FDB08F60073D318 /* ASSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSwitchView.swift; sourceTree = "<group>"; };
 		57BF5ED52FDB09A00073D318 /* ASCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASCheckView.swift; sourceTree = "<group>"; };
 		57BF5EDC2FDB09AC0073D318 /* ASRadioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASRadioView.swift; sourceTree = "<group>"; };
@@ -3038,6 +3041,7 @@
 				F0C500000000000000000106 /* FocusCollectionView.swift */,
 				F0C500000000000000000107 /* FocusSystem.swift */,
 				F0C500000000000000000108 /* FocusSystem+UIViewController.swift */,
+				57BA7463303486E20039E284 /* FocusShortcutsTipsView.swift */,
 			);
 			path = FocusKit;
 			sourceTree = "<group>";
@@ -3615,6 +3619,7 @@
 				57CDCE402FD5CBD3005BA4C8 /* SkinCollectionViewCell.swift in Sources */,
 				57CDCE412FD5CBD3005BA4C8 /* Shaders.metal in Sources */,
 				57CDCE422FD5CBD3005BA4C8 /* PersistedKit.swift in Sources */,
+				57BA7467303486ED0039E284 /* FocusShortcutsTipsView.swift in Sources */,
 				57CDCE432FD5CBD3005BA4C8 /* GlobalCoreSwitchView.swift in Sources */,
 				57744AE52FD91CBF00DECBC7 /* ASProgressView.swift in Sources */,
 				57BF60082FE05CC90073D318 /* ASListInputView.swift in Sources */,
@@ -4010,6 +4015,7 @@
 				57CCB3A92D66CE610036476B /* SkinCollectionViewCell.swift in Sources */,
 				5706B0FA2DFFED100066122E /* Shaders.metal in Sources */,
 				576060182D22BC5900A98B0C /* PersistedKit.swift in Sources */,
+				57BA7468303486ED0039E284 /* FocusShortcutsTipsView.swift in Sources */,
 				578E4B502F8A2AA60027E6D0 /* GlobalCoreSwitchView.swift in Sources */,
 				57744AE62FD91CBF00DECBC7 /* ASProgressView.swift in Sources */,
 				57BF60092FE05CC90073D318 /* ASListInputView.swift in Sources */,

@@ -104,4 +104,17 @@ enum ASIcon {
         }
         return tempIcon
     }
+    
+    func updateCornerStyle(_ cornerStyle: ASCornerStyle) -> Self {
+        switch self {
+        case .symbol(let sFSymbol, let weight, let colors, _, let animated):
+            return .symbol(sFSymbol, weight: weight, colors: colors, cornerStyle: cornerStyle, animated: animated)
+        case .symbolImage(let uIImage, let weight, let colors, _, let animated):
+            return .symbolImage(uIImage, weight: weight, colors: colors, cornerStyle: cornerStyle, animated: animated)
+        case .image(let uIImage, let color, _):
+            return .image(uIImage, color: color, cornerStyle: cornerStyle)
+        case .imageUrl(let uRL, let processSize, _):
+            return .imageUrl(uRL, processSize: processSize, cornerStyle: cornerStyle)
+        }
+    }
 }

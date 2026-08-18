@@ -75,6 +75,7 @@ class GameCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .clear
         enablePressEffect = true
+        enableFocusEffects = false
         
         contentView.addSubview(selectedBackground)
         selectedBackground.snp.makeConstraints { make in

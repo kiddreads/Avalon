@@ -37,6 +37,8 @@ class ImportMottoCollectionViewCell: UICollectionViewCell {
         
         layer.zPosition = .greatestFiniteMagnitude
         
+        keepCellHeightView.layerCornerRadius = R.Size.CornerRadiusMedium
+        
         addSubviews([keepCellHeightView, backgroundGradientView, imageView, labelView])
         
         keepCellHeightView.snp.makeConstraints { make in
@@ -73,6 +75,14 @@ class ImportMottoCollectionViewCell: UICollectionViewCell {
                                                      size: CGSize(width: backgroundGradientView.width,
                                                                   height: backgroundGradientView.height*2))).cgPath
         backgroundGradientView.layer.mask = ovalLayer
+        
+        if UIDevice.isPhone, UIDevice.isLandscape {
+            keepCellHeightView.backgroundColor = R.Color.BackgroundSecondary
+            backgroundGradientView.isHidden = true
+        } else {
+            keepCellHeightView.backgroundColor = .clear
+            backgroundGradientView.isHidden = false
+        }
     }
     
     func updateViews() {

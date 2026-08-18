@@ -252,13 +252,10 @@ class LibretroNetplayView: BaseView {
     
     private func makeIdleCell(for item: IdleItem) -> ASListPage.Cell {
         if item.isSwitch {
-            let cell = ASListPage.Cell.iconTitleDetailSwitchCell(icon: item.icon,
-                                                                 title: item.title,
-                                                                 state: boolValue(for: item) ? .on : .off)
-            if let styles = cell.normalValue?.styles {
-                return .normal(styles, enablePressEffect: false)
-            }
-            return cell
+            return ASListPage.Cell.iconTitleDetailSwitchCell(icon: item.icon,
+                                                             title: item.title,
+                                                             state: boolValue(for: item) ? .on : .off,
+                                                             enablePressEffect: false)
         }
         let password = stringValue(for: item)
         return .iconTitleDetailChevronCell(icon: item.icon,
@@ -322,13 +319,10 @@ class LibretroNetplayView: BaseView {
     }
     
     private func makeHostSwitchCell() -> ASListPage.Cell {
-        let cell = ASListPage.Cell.iconTitleDetailSwitchCell(icon: .symbolImage(R.image.online_iconSymbols()),
-                                                             title: R.string.localizable.startNetplayHost(),
-                                                             state: session.isHosting ? .on : .off)
-        if let styles = cell.normalValue?.styles {
-            return .normal(styles, enablePressEffect: false)
-        }
-        return cell
+        return ASListPage.Cell.iconTitleDetailSwitchCell(icon: .symbolImage(R.image.online_iconSymbols()),
+                                                         title: R.string.localizable.startNetplayHost(),
+                                                         state: session.isHosting ? .on : .off,
+                                                         enablePressEffect: false)
     }
     
     private func makeRefreshCell(title: String) -> ASListPage.Cell {

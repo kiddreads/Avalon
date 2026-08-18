@@ -248,6 +248,10 @@ extension GameInfoView: ShowableView {
         sheetData.fullScreenForLandscape = true
         return sheetData
     }
+    
+    func preferredFocusView() -> UIView? {
+        return gameInfoDetailView.startGameButton
+    }
 }
 
 extension GameInfoView: ViewTransition {

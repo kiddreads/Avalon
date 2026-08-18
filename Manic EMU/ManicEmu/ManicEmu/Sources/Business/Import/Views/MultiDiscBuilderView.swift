@@ -126,6 +126,7 @@ class MultiDiscBuilderView: BaseView {
             guard let self else { return }
             self.importGame()
         }
+        view.enableFocusEffects = false
         return view
     }()
     

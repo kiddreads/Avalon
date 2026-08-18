@@ -14,6 +14,9 @@ import Foundation
 /// 键盘由 DeltaCore 的 KeyboardGameController 通过 GCKeyboard（HID 原始按键状态）采集，
 /// 完全绕开 UIKit 的 UIKeyCommand/系统快捷键消费机制（系统保留组合如 ⌃⌘F 除外）。
 ///
+/// 仅在 ExternalInputDispatch.sink == .focusKit 时处理（未游戏或游戏已暂停）。
+/// 游戏运行中的按键由 PlayViewController 与模拟核心接收，不经过本类。
+///
 /// 本类只负责两件事：
 /// 1. 摇杆方向输入的按住去重；
 /// 2. 键盘修饰键组合成 chord，固定顺序 control → option → shift → command，
@@ -36,13 +39,21 @@ class FocusKeyObserver {
     private static var activeComposedKeys = [String: String]()
     
     func start() {
+        _ = FocusSystem.shared
         externalGameControllerDidPress = NotificationCenter.default.addObserver(forName: .externalGameControllerDidPress, object: nil, queue: .main) { notification in
-            guard !PlayViewController.isGaming else { return }
+            guard ExternalInputDispatch.sink == .focusKit else { return }
             
             if let userInfo = notification.userInfo,
                let input = userInfo["input"] as? any Input {
                 
                 if input.type == .controller(.keyboard) {
+                    if FocusSystem.shared.isEditingText {
+                        // Letters stay with the field; Escape still ends editing.
+                        if input.stringValue == "escape" {
+                            Self.handleKeyboard(input.stringValue, isPressed: true)
+                        }
+                        return
+                    }
                     Self.handleKeyboard(input.stringValue, isPressed: true)
                     return
                 }
@@ -52,7 +63,7 @@ class FocusKeyObserver {
         }
         
         externalGameControllerDidRelease = NotificationCenter.default.addObserver(forName: .externalGameControllerDidRelease, object: nil, queue: .main) { notification in
-            guard !PlayViewController.isGaming else { return }
+            guard ExternalInputDispatch.sink == .focusKit else { return }
             
             if let userInfo = notification.userInfo,
                let input = userInfo["input"] as? any Input {
@@ -88,6 +99,10 @@ class FocusKeyObserver {
     }
     
     // MARK: - 键盘处理
+    
+    func handleTextEditingDidBegin() {
+        Self.resetKeyboardState()
+    }
     
     private static func resetKeyboardState() {
         heldModifiers.removeAll()
@@ -140,12 +155,10 @@ class FocusKeyObserver {
     // MARK: - 输出
     
     private static func activateKey(_ key: String) {
-        Log.debug("[FocusKeyObserver] activateKey: \(key)")
         FocusSystem.shared.keyDown(mappingKey(key))
     }
     
     private static func deactivateKey(_ key: String) {
-        Log.debug("[FocusKeyObserver] deactivateKey: \(key)")
         // 释放时走同样的映射，保证 keyDown/keyUp 配对
         FocusSystem.shared.keyUp(mappingKey(key))
     }

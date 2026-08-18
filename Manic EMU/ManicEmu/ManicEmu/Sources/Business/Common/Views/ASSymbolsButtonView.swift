@@ -108,7 +108,7 @@ class ASSymbolsButtonView: UIVisualEffectView {
         
         for (index, icon) in icons.enumerated() {
             let iconView = ensureIconView(at: index)
-            iconView.icon = icon
+            iconView.icon = icon.updateCornerStyle(.circle)
             rebindTapGesture(for: iconView, at: index)
             containerView.addArrangedSubview(iconView)
         }

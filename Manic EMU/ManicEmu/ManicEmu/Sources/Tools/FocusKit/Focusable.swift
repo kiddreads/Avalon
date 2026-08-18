@@ -89,8 +89,13 @@ extension UIView {
     /// 视图自身（不含祖先链）是否具备聚焦条件；祖先可见性由引擎遍历时保证
     var fk_defaultCanFocus: Bool {
         guard isFocusable else { return false }
-        guard window != nil, !isHidden, alpha > 0.01 else { return false }
-        guard bounds.width > 0, bounds.height > 0 else { return false }
+        guard window != nil else { return false }
+        var node: UIView? = self
+        while let current = node {
+            if current.isHidden || current.alpha <= 0.01 { return false }
+            node = current.superview
+        }
+        guard bounds.width > 0.5, bounds.height > 0.5 else { return false }
         if let control = self as? UIControl, !control.isEnabled, onFocusConfirm == nil { return false }
         return true
     }
@@ -147,18 +152,20 @@ extension UIView {
         }
         overrideUserInterfaceStyle = UIDevice.isDarkMode ? .light : .dark
         backgroundColor = R.Color.BackgroundPrimary.forceStyle(UIDevice.isDarkMode ? .light : .dark)
-        let w = bounds.width
-        let h = bounds.height
-        guard w > 0.5, h > 0.5 else { return }
-        let shortest = min(w, h)
-        let longest = max(w, h)
-        let aspectRatio = longest / shortest
-        if aspectRatio > 2.0 {
-            layerCornerRadius = shortest / 2.0
-        } else if shortest / longest > 0.9 {
-            layerCornerRadius = h / 2.0
-        } else {
-            layerCornerRadius = R.Size.AppleIconCornerRadius(height: h)
+        if layerCornerRadius == 0 {
+            let w = bounds.width
+            let h = bounds.height
+            guard w > 0.5, h > 0.5 else { return }
+            let shortest = min(w, h)
+            let longest = max(w, h)
+            let aspectRatio = longest / shortest
+            if aspectRatio > 1.1 {
+                layerCornerRadius = shortest / 2.0
+            } else if shortest / longest > 0.9 {
+                layerCornerRadius = h / 2.0
+            } else {
+                layerCornerRadius = R.Size.AppleIconCornerRadius(height: h)
+            }
         }
     }
 
@@ -219,7 +226,7 @@ extension UIView {
 
 extension UISlider {
     /// Make the slider focusable and consume left/right to nudge value.
-    func enableFocusAdjustment(step: Float = 0.05) {
+    func enableFocusAdjustment(step: Float = 0.01) {
         isFocusable = true
         focusCommands = [
             FocusCommand(key: .left, title: R.string.localizable.focusHintAdjust(), action: { [weak self] in

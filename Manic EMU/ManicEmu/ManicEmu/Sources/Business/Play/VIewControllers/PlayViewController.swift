@@ -663,6 +663,8 @@ class PlayViewController: GameViewController {
         super.viewDidLoad()
         
         PlayViewController.currentPlayViewController = self
+        ExternalInputDispatch.sink = .gameplay
+        FocusSystem.shared.isEnabled = false
         
         //发送开始游戏通知
         NotificationCenter.default.post(name: R.NotificationName.StartPlayGame, object: nil)
@@ -772,9 +774,9 @@ class PlayViewController: GameViewController {
             citraCore?.destory()
         }
         
+        removeExternalGameControllerReceivers()
         PlayViewController.currentPlayViewController = nil
-        
-        FocusSystem.shared.isEnabled = true
+        PlayViewController.refreshExternalInputSink()
         
         //发送结束游戏通知
         NotificationCenter.default.post(name: R.NotificationName.StopPlayGame, object: nil)
@@ -856,6 +858,15 @@ class PlayViewController: GameViewController {
     }
     
     override func gameController(_ gameController: any GameController, didActivate input: any Input, value: Double) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.gameController(gameController, didActivate: input, value: value)
+            }
+            return
+        }
+        if gameController.inputType == .mfi || gameController.inputType == .keyboard {
+            guard ExternalInputDispatch.sink == .gameplay else { return }
+        }
         guard !isPaused else { return }
         if let directKeyboardInput = input as? AnyInput,
            directKeyboardInput.type == .controller(GameControllerInputType("directKeyboard")),
@@ -868,6 +879,12 @@ class PlayViewController: GameViewController {
     }
     
     override func gameController(_ gameController: any GameController, didDeactivate input: any Input) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.gameController(gameController, didDeactivate: input)
+            }
+            return
+        }
         if let directKeyboardInput = input as? AnyInput,
            directKeyboardInput.type == .controller(GameControllerInputType("directKeyboard")),
            manicGame.isLibretroType,
@@ -1265,20 +1282,25 @@ extension PlayViewController {
         guard !isWFCConnect else {
             return false
         }
+        var didPause = false
         if manicGame.isCitra3DS {
             citraCore?.pause()
-            return true
+            didPause = true
         } else if manicGame.isLibretroType {
             LibretroCore.sharedInstance().pause()
-            return true
+            didPause = true
         } else if manicGame.isJGenesisCore {
             jGenesisCore?.pause()
-            return true
+            didPause = true
         } else if manicGame.isJ2MECore {
             j2meCore?.pause()
-            return true
+            didPause = true
         }
-        return false
+        if didPause {
+            releaseHeldExternalCoreInputs()
+            PlayViewController.refreshExternalInputSink()
+        }
+        return didPause
     }
     
     private func resumeEmulationAndHandleAudio() {
@@ -1294,6 +1316,48 @@ extension PlayViewController {
         } else if manicGame.isJ2MECore {
             j2meCore?.resume()
             updateAudio()
+        }
+        PlayViewController.refreshExternalInputSink()
+        replayHeldExternalCoreInputs()
+    }
+    
+    /// Release mapped core / function keys so pause does not leave a stuck input.
+    private func releaseHeldExternalCoreInputs() {
+        guard let emulatorCore else { return }
+        for controller in ExternalGameControllerManager.shared.connectedControllers {
+            let held = controller.activatedInputs
+            for (physicalInput, _) in held {
+                if let mapped = controller.mappedInput(for: physicalInput, receiver: emulatorCore) {
+                    emulatorCore.gameController(controller, didDeactivate: mapped)
+                }
+                if let mapped = controller.mappedInput(for: physicalInput, receiver: self) {
+                    gameController(controller, didDeactivate: mapped)
+                }
+            }
+        }
+    }
+    
+    /// Re-apply still-held analog sticks after resume. Digital buttons are not replayed
+    /// so closing a menu while holding A cannot fire an in-game confirm.
+    private func replayHeldExternalCoreInputs() {
+        guard ExternalInputDispatch.sink == .gameplay else { return }
+        guard let emulatorCore else { return }
+        for controller in ExternalGameControllerManager.shared.connectedControllers {
+            for (physicalInput, value) in controller.activatedInputs {
+                guard physicalInput.isContinuous else { continue }
+                if let mapped = controller.mappedInput(for: physicalInput, receiver: emulatorCore) {
+                    emulatorCore.gameController(controller, didActivate: mapped, value: value)
+                }
+            }
+        }
+    }
+    
+    private func removeExternalGameControllerReceivers() {
+        for controller in ExternalGameControllerManager.shared.connectedControllers {
+            controller.removeReceiver(self)
+            if let emulatorCore {
+                controller.removeReceiver(emulatorCore)
+            }
         }
     }
     
@@ -3854,6 +3918,28 @@ extension PlayViewController: GameViewControllerDelegate {
 //MARK: 静态公开方法
 extension PlayViewController {
     static var isGaming: Bool { currentPlayViewController != nil }
+    
+    /// Playing and the core is not paused. Pause (GameOptions, etc.) yields FocusKit instead of cores.
+    static var isEmulationActive: Bool {
+        guard let currentPlayViewController else { return false }
+        return !currentPlayViewController.isPaused
+    }
+    
+    static func refreshExternalInputSink() {
+        if ControllerMappingViewController.isCapturingInput {
+            ExternalInputDispatch.sink = .mapping
+            FocusSystem.shared.isEnabled = false
+            return
+        }
+        if isEmulationActive {
+            ExternalInputDispatch.sink = .gameplay
+            FocusSystem.shared.isEnabled = false
+            FocusSystem.shared.userDidTouchScreen()
+        } else {
+            ExternalInputDispatch.sink = .focusKit
+            FocusSystem.shared.isEnabled = true
+        }
+    }
     
     static var enableAirplay: Bool {
         if let _ = currentPlayViewController {

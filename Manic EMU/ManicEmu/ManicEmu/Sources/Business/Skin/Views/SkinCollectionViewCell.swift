@@ -69,6 +69,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
     var playcaseButton: UIImageView = {
         let view = UIImageView(image: R.image.playcase_footnote())
         view.enablePressEffect = true
+        view.isFocusable = false
         view.isHidden = true
         view.isUserInteractionEnabled = true
         return view
@@ -84,6 +85,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
                                                          right: R.Size.ContentSpaceSmall),
                                 titlePosition: .right,
                                 enableGlass: true)
+        view.isFocusable = false
         view.enableRoundCorner = true
         view.isHidden = true
         return view
@@ -98,6 +100,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         enablePressEffect = true
+        enableFocusEffects = false
         
         layerCornerRadius = R.Size.CornerRadiusMedium
         backgroundColor = R.Color.BackgroundPrimary

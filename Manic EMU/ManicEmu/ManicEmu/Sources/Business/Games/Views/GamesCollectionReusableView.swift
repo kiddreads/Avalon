@@ -59,6 +59,7 @@ class GamesCollectionReusableView: UICollectionReusableView {
             make.trailing.equalToSuperview()
         }
         titleContainer.enablePressEffect = true
+        titleContainer.enableFocusEffects = false
         titleContainer.addTapGesture { [weak self] gesture in
             guard let self else { return }
             self.didTapPlatform?()
@@ -83,11 +84,13 @@ class GamesCollectionReusableView: UICollectionReusableView {
             make.trailing.equalToSuperview()
         }
         brandImageContainer.enablePressEffect = true
+        brandImageContainer.enableFocusEffects = false
         brandImageContainer.addTapGesture { [weak self] gesture in
             guard let self else { return }
             self.didTapPlatform?()
         }
         
+        gamesCountButton.enableFocusEffects = false
         addSubview(gamesCountButton)
         gamesCountButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()

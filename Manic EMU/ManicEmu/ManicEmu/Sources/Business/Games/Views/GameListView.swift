@@ -826,6 +826,28 @@ extension GameListView: UICollectionViewDataSource {
                          showTitle: !R.Style.GamesHideTitle || isSearchMode,
                          indexPath: indexPath)
         }
+        
+        cell.onFocusConfirm = { [weak self] in
+            guard let self else { return false }
+            if self.isSelectionMode {
+                if let selectedItems = self.collectionView.indexPathsForSelectedItems,
+                    selectedItems.contains(where: { $0 == indexPath }) {
+                    //deselected
+                    self.collectionView.deselectItem(at: indexPath, animated: true)
+                    self.deselectItem(at: indexPath)
+                } else {
+                    //selected
+                    if self.collectionView(self.collectionView, shouldSelectItemAt: indexPath) {
+                        self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                        self.selectItem(at: indexPath)
+                    }
+                }
+            } else {
+                let _ = self.collectionView(self.collectionView, shouldSelectItemAt: indexPath)
+            }
+            return true
+        }
+        
         return cell
     }
     
@@ -892,7 +914,7 @@ extension UIView {
 }
 
 extension GameListView: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func selectItem(at indexPath: IndexPath) {
         if isSelectionMode {
             if let selectedItems = collectionView.indexPathsForSelectedItems?.count {
                 if selectedItems == totalGamesCountForCurrentMode && selectedItems > 1 {
@@ -904,6 +926,10 @@ extension GameListView: UICollectionViewDelegate {
             }
             UIView.springAnimate { self.bottomToolView.alpha = 1 }
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectItem(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -942,13 +968,17 @@ extension GameListView: UICollectionViewDelegate {
         return false
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    func deselectItem(at indexPath: IndexPath) {
         if let selectCount = collectionView.indexPathsForSelectedItems?.count {
             didListViewSelectionChange?(selectCount > 0 ? .selectSome(onlyOne: selectCount == 1) : .selectNone);
             if selectCount == 0 {
                 UIView.springAnimate { self.bottomToolView.alpha = 0 }
             }
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        deselectItem(at: indexPath)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

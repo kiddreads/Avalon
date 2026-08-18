@@ -28,15 +28,21 @@ struct FocusKey: Hashable, RawRepresentable, ExpressibleByStringLiteral, CustomS
     init(_ rawValue: String) { self.rawValue = rawValue }
     init(stringLiteral value: String) { self.rawValue = value }
 
-    /// 方向：移动焦点
+    /// Direction: move focus
     static let up = FocusKey("up")
     static let down = FocusKey("down")
     static let left = FocusKey("left")
     static let right = FocusKey("right")
-    /// 确定：默认执行焦点视图的点击模拟
+    /// Confirm: default is a click on the focused view
     static let a = FocusKey("a")
-    /// 取消：默认关闭当前页面（dismiss / ProHUD pop / navigation pop）
+    /// Cancel: default dismisses the current page (sheet / ProHUD / navigation pop)
     static let b = FocusKey("b")
+    /// Keyboard modifier; long-press shows the shortcut cheatsheet
+    static let command = FocusKey("command")
+    /// Keyboard modifier; long-press shows the shortcut cheatsheet
+    static let control = FocusKey("control")
+    /// Controller Select / View / − ; long-press shows the shortcut cheatsheet
+    static let select = FocusKey("select")
 
     /// 若是方向键则返回对应方向
     var direction: FocusDirection? {

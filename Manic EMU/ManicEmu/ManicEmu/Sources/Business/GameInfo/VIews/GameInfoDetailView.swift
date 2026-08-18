@@ -64,7 +64,7 @@ class GameInfoDetailView: BaseView {
         return view
     }()
     
-    private lazy var startGameButton: ASButtonView = {
+    lazy var startGameButton: ASButtonView = {
         let view = ASButtonView(.extraLarge(icon: .symbol(.playFill, colors: [R.Color.LabelPrimary.forceStyle(.dark)]),
                                             title: R.string.localizable.play(),
                                             titleColor: R.Color.LabelPrimary.forceStyle(.dark),
@@ -72,6 +72,7 @@ class GameInfoDetailView: BaseView {
                                             sizeStyle: .fixHeight(R.Size.ButtonLarge,
                                                                   insets: .init(horizontal: R.Size.ItemHeightMedium*2,
                                                                                 vertical: R.Size.ContentSpaceSmall*2))))
+        view.enableFocusEffects = false
         view.didTapButton = { [weak self] in
             guard let self = self else { return }
             PlayViewController.startGame(game: game)

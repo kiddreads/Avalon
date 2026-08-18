@@ -16,8 +16,21 @@ import ProHUD
 /// ProHUD 的 alert/sheet、侧边栏等都可以各自作为一个 context。
 /// `FocusSystem` 以栈维护 context，只有栈顶 context 接收输入事件。
 final class FocusContext {
-    /// 焦点导航的根视图，候选收集只在此子树内进行
+    /// 焦点导航的根视图，候选收集默认在此子树内进行
     private(set) weak var rootView: UIView?
+
+    /// Views that participate in page-level search even if they are not
+    /// descendants of `rootView` (parent-owned chrome such as a tab bar).
+    private var additionalSearchRootRefs: [WeakSearchRoot] = []
+
+    private final class WeakSearchRoot {
+        weak var view: UIView?
+        let enterHeadings: Set<FocusDirection>
+        init(_ view: UIView, enterHeadings: Set<FocusDirection>) {
+            self.view = view
+            self.enterHeadings = enterHeadings
+        }
+    }
 
     /// 页面拥有者（UIViewController / ProHUD 的 SheetTarget、AlertTarget 等），
     /// 用于取消键（b）的默认关闭行为
@@ -71,6 +84,38 @@ final class FocusContext {
 
     func removeAllCommands() {
         commands.removeAll()
+    }
+
+    /// Register chrome that should compete in this page's directional search.
+    /// `enterHeadings` limits which D-pad directions may land in that chrome
+    /// (bottom tab bar: `.down` only, so left/right/up stay in page content).
+    func addAdditionalSearchRoot(_ view: UIView, enterHeadings: Set<FocusDirection> = [.down]) {
+        additionalSearchRootRefs.removeAll { $0.view == nil || $0.view === view }
+        additionalSearchRootRefs.append(WeakSearchRoot(view, enterHeadings: enterHeadings))
+    }
+
+    var additionalSearchRoots: [UIView] {
+        additionalSearchRootRefs.compactMap(\.view)
+    }
+
+    func additionalSearchRoots(entering direction: FocusDirection) -> [UIView] {
+        additionalSearchRootRefs.compactMap { ref in
+            guard let view = ref.view, ref.enterHeadings.contains(direction) else { return nil }
+            return view
+        }
+    }
+
+    /// Whether `view` belongs to this page: `rootView` or an additional search root.
+    func contains(_ view: UIView) -> Bool {
+        if let root = rootView, view === root || view.isDescendant(of: root) {
+            return true
+        }
+        for extra in additionalSearchRoots {
+            if view === extra || view.isDescendant(of: extra) {
+                return true
+            }
+        }
+        return false
     }
 
     // MARK: - 取消键默认行为

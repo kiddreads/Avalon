@@ -490,10 +490,8 @@ class SkinSettingsView: BaseView {
         let layout = UICollectionViewCompositionalLayout  { [weak self] sectionIndex, env in
             guard let self = self else { return nil }
             
-            let column: CGFloat
-            if UIDevice.isPhone || self.showClose {
-                column = self.isPortraitSkinPage ? 2.0 : 1.0
-            } else {
+            var column: CGFloat = self.isPortraitSkinPage ? 2.0 : 1.0
+            if UIDevice.isPad, UIDevice.isLandscape {
                 column = self.isPortraitSkinPage ? 3.0 : 2.0
             }
             
@@ -777,6 +775,26 @@ extension SkinSettingsView: UICollectionViewDataSource {
             cell.playcaseButton.addTapGesture { _ in
                 PlayCasePromoView.show(showDontShow: false)
             }
+            cell.onFocusConfirm = { [weak self] in
+                guard let self else { return false }
+                if self.isEditMode {
+                    if let selectedItems = self.collectionView.indexPathsForSelectedItems,
+                        selectedItems.contains(where: { $0 == indexPath }) {
+                        //deselected
+                        self.collectionView.deselectItem(at: indexPath, animated: true)
+                        self.deselectItem(at: indexPath)
+                    } else {
+                        //selected
+                        if self.collectionView(self.collectionView, shouldSelectItemAt: indexPath) {
+                            self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                            self.selectItem(at: indexPath)
+                        }
+                    }
+                } else {
+                    let _ = self.collectionView(self.collectionView, shouldSelectItemAt: indexPath)
+                }
+                return true
+            }
             return cell
         }
     }
@@ -880,16 +898,24 @@ extension SkinSettingsView: UICollectionViewDelegate {
         }
     }
     
+    func deselectItem(at indexPath: IndexPath) {
+        guard isEditMode else { return }
+        updateNavigation()
+        updateToolView()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        deselectItem(at: indexPath)
+    }
+    
+    func selectItem(at indexPath: IndexPath) {
         guard isEditMode else { return }
         updateNavigation()
         updateToolView()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard isEditMode else { return }
-        updateNavigation()
-        updateToolView()
+        selectItem(at: indexPath)
     }
     
     private func resetSkin(gameType: GameType? = nil) {

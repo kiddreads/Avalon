@@ -53,7 +53,6 @@ class HomeViewController: BaseViewController {
     
     lazy var homeTabBar: HomeTabBar = {
         let view = HomeTabBar()
-        view.isFocusable = false
         view.selectionChange = { [weak self] selection in
             var selection = selection
             if Locale.isRTLLanguage {
@@ -307,6 +306,8 @@ class HomeViewController: BaseViewController {
         shouldHandoffTabFocus = false
         viewController.activateFocusRoot { [weak self] context in
             guard let self else { return }
+            // Tab bar lives on HomeViewController; include it in this tab's page-level search.
+            context.addAdditionalSearchRoot(self.homeTabBar)
             context.addCommands([
                 FocusCommand(key: FocusKey("control+1"), title: R.string.localizable.tabbarTitleGames(), action: { [weak self] in
                     self?.homeTabBar.currentSelection = .games

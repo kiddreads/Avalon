@@ -120,6 +120,12 @@ extension GameMetadataView {
         
         init(text: String) {
             super.init(frame: .zero)
+            isFocusable = true
+            onFocusConfirm = { [weak self] in
+                self?.textView.becomeFirstResponder()
+                return true
+            }
+            
             
             backgroundColor = R.Color.InputBox
             masksToBounds = true

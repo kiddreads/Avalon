@@ -98,6 +98,7 @@ class ColorPickerView: BaseView {
                                        titleColor: R.Color.LabelPrimary.forceStyle(.dark),
                                        titleAlignment: .center,
                                        background: R.Color.Main))
+        view.enableFocusEffects = false
         view.didTapButton = { [weak self] in
             guard let self else { return }
             if var themeColor = self.themeColor {

@@ -1015,3 +1015,4 @@ Press the controller button to complete mapping...";
 "FocusHintMove" = "Move";
 "FocusHintBack" = "Back";
 "FocusHintAdjust" = "Adjust";
+"FocusShortcutsTips" = "Tips";

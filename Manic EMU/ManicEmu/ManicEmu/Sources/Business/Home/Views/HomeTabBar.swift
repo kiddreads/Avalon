@@ -46,8 +46,7 @@ class HomeTabBar: BaseView {
             titleLabel.alpha = isSelected ? 1 : 0
             
             enablePressEffect = true
-            // Tab items are switched by Home's page-level left/right, not by focusing the bar itself.
-            isFocusable = false
+            enableFocusEffects = false
             
             let contentView = UIView()
             contentView.addSubviews([symbolView, titleLabel])
@@ -159,6 +158,9 @@ class HomeTabBar: BaseView {
     
     /// 选中状态更改回调
     var selectionChange: ((BarSelection) -> Void)?
+
+    private weak var focusedBar: BarView?
+    private weak var lastFocusedBar: BarView?
     
     /// 当前的选中状态 修改此值会回调selectionChange
     var currentSelection: BarSelection = .games {
@@ -213,6 +215,7 @@ class HomeTabBar: BaseView {
         }
         
         enablePressEffect = true
+        isFocusable = true
         gamesBar.setPressEffectListener { [weak self] state in
             guard let self, FocusSystem.shared.currentFocusedView == nil else { return }
             self.focusEffect = state == .lift
@@ -236,6 +239,18 @@ class HomeTabBar: BaseView {
         }
         settingsBar.addTapGesture { [weak self] gesture in
             self?.currentSelection = .settings
+        }
+        gamesBar.onFocusConfirm = { [weak self] in
+            self?.currentSelection = .games
+            return true
+        }
+        importBar.onFocusConfirm = { [weak self] in
+            self?.currentSelection = .imports
+            return true
+        }
+        settingsBar.onFocusConfirm = { [weak self] in
+            self?.currentSelection = .settings
+            return true
         }
     }
     
@@ -345,6 +360,98 @@ class HomeTabBar: BaseView {
                 }
                 
             }
+        }
+    }
+}
+
+// MARK: - FocusContainer
+
+extension HomeTabBar: FocusContainer {
+    var isolatesFocusNavigation: Bool { true }
+
+    var canEnterFocus: Bool {
+        window != nil && !isHidden && alpha > 0.01
+    }
+
+    func enterFocus(from direction: FocusDirection?, preferred: UIView?) -> UIView? {
+        _ = preferred
+        // Content may only enter the tab bar by heading down. Left/right/up stay on the page.
+        if let direction, direction != .down { return nil }
+        let bar = barView(for: currentSelection)
+        guard bar.fk_canFocus else { return nil }
+        applyBarFocus(bar)
+        return bar
+    }
+
+    func navigateFocus(_ direction: FocusDirection, current: UIView?) -> FocusContainerResult {
+        switch direction {
+        case .up, .down:
+            return .exit
+        case .left, .right:
+            let origin = (current as? BarView) ?? focusedBar ?? barView(for: currentSelection)
+            guard let next = adjacentBar(from: origin, direction: direction) else {
+                return .handled(origin)
+            }
+            applyBarFocus(next)
+            return .handled(next)
+        }
+    }
+
+    var currentFocusedDescendant: UIView? { focusedBar }
+
+    var lastFocusedDescendant: UIView? { lastFocusedBar }
+
+    func resignFocus() {
+        focusedBar = nil
+    }
+
+    func performPrimaryActionOnFocused() -> Bool {
+        focusedBar?.fk_performPrimaryAction() ?? false
+    }
+
+    func focusEntryFrame(from direction: FocusDirection) -> CGRect? {
+        FocusEngine.frameInWindow(of: barView(for: currentSelection))
+    }
+}
+
+extension HomeTabBar {
+    private var orderedBars: [BarView] { [gamesBar, importBar, settingsBar] }
+
+    private func barView(for selection: BarSelection) -> BarView {
+        switch selection {
+        case .games: return gamesBar
+        case .imports: return importBar
+        case .settings: return settingsBar
+        }
+    }
+
+    private func selection(for bar: BarView) -> BarSelection? {
+        if bar === gamesBar { return .games }
+        if bar === importBar { return .imports }
+        if bar === settingsBar { return .settings }
+        return nil
+    }
+
+    private func adjacentBar(from current: BarView, direction: FocusDirection) -> BarView? {
+        let bars = orderedBars
+        guard let index = bars.firstIndex(where: { $0 === current }) else { return bars.first }
+        var delta = direction == .right ? 1 : -1
+        if Locale.isRTLLanguage {
+            delta = -delta
+        }
+        let next = (index + delta + bars.count) % bars.count
+        return bars[next]
+    }
+
+    private func applyBarFocus(_ bar: BarView) {
+        if let focusedBar, focusedBar !== bar {
+            focusedBar.fk_applyFocus(false)
+        }
+        bar.fk_applyFocus(true)
+        focusedBar = bar
+        lastFocusedBar = bar
+        if let selection = selection(for: bar), currentSelection != selection {
+            currentSelection = selection
         }
     }
 }

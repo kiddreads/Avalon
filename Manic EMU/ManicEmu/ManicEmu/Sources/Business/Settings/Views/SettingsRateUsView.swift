@@ -10,6 +10,7 @@ class SettingsRateUsView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         enablePressEffect = true
+        enableFocusEffects = false
         
         let containerView = UIView()
         containerView.layerCornerRadius = R.Size.CornerRadiusLarge

@@ -65,6 +65,7 @@ class ASProgressView: BaseView {
             self.updateValue(sender.value)
         }
         slider.enableFocusAdjustment()
+        slider.enableFocusEffects = false
         return slider
     }()
     

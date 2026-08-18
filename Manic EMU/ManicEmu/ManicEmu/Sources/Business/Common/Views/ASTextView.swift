@@ -109,6 +109,23 @@ class ASTextView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var canBecomeFirstResponder: Bool {
+        return isEditable
+    }
+    
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
+        if isEditable {
+            return textView.becomeFirstResponder()
+        }
+        return false
+    }
+    
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        return textView.resignFirstResponder()
+    }
+    
     @objc private func handleTextDidChange() {
         let value = textView.text ?? ""
         // 同步模型但不刷新视图，防止重置 attributedText 打断选区与编辑菜单

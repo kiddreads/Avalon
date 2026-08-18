@@ -171,7 +171,9 @@ class GameOptionsView: BaseView {
             return ASListPage.Cell.iconTitleDetailSwitchCell(icon: option.icon,
                                                              title: option.title,
                                                              detail: detail,
-                                                             state: switchValue)
+                                                             state: switchValue,
+                                                             enablePressEffect: false)
+            
             
         } else if let imageValue = accessory.imageValue {
             return ASListPage.Cell.iconTitleImageChevronCell(icon: option.icon,

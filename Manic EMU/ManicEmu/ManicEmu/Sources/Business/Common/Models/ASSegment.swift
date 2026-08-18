@@ -16,7 +16,7 @@ struct ASSegment {
     var contentInsets = UIEdgeInsets(inset: R.Size.ContentSpaceTiny)
     var itemSpacing = R.Size.ContentSpaceTiny
     
-    static func iconSegment(icons: [ASIcon], index: Int = 0) -> Self {
+    static func iconSegment(icons: [ASIcon], index: Int = 0) -> Self {        
         Self(items: icons.map({
             ASButton.iconOnly(icon: $0,
                               iconSize: CGSize(R.Size.ButtonExtraSmall),

@@ -36,6 +36,7 @@ class SettingsBottomView: BaseView {
             make.top.bottom.equalToSuperview()
         }
         supportUsView.enablePressEffect = true
+        supportUsView.enableFocusEffects = false
         supportUsView.addTapGesture { gesture in
             UIApplication.shared.open(R.URLs.Donate)
         }

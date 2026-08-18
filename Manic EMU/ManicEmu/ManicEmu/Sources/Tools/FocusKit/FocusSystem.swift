@@ -84,12 +84,90 @@ final class FocusSystem {
     /// 焦点当前所在的容器
     private weak var focusedContainer: (UIView & FocusContainer)?
 
-    /// 是否已接入手柄或外接键盘。未接入时不展示焦点高亮，方向键首次按下才会落焦。
+    /// Last successful D-pad hop. Opposite direction from the landing view
+    /// returns here so A→B then reverse lands on A, not a different neighbor.
+    private struct FocusHop {
+        weak var from: UIView?
+        let direction: FocusDirection
+    }
+    private var lastHop: FocusHop?
+
+    /// True when a hardware keyboard/gamepad is connected. No highlight until the first direction key.
     var hasExternalInput: Bool {
         ExternalGameControllerManager.shared.connectedControllers.count > 0
     }
+    
+    /// True while a text field/view is first responder. Keyboard then types; FocusKit stays idle.
+    var isEditingText: Bool {
+        Self.textInputIsFirstResponder
+    }
+    
+    private static var textInputIsFirstResponder: Bool {
+        guard let responder = UIResponder.firstResponder else { return false }
+        if responder is UITextField || responder is UITextView {
+            return true
+        }
+        var view = responder as? UIView
+        while let current = view {
+            if current is UITextField || current is UITextView || current is UISearchBar {
+                return true
+            }
+            view = current.superview
+        }
+        return false
+    }
 
-    private init() {}
+    private var textEditingObservers: [Any] = []
+
+    private init() {
+        let center = NotificationCenter.default
+        let beginEditing: (Notification) -> Void = { [weak self] _ in
+            self?.handleTextEditingDidBegin()
+        }
+        textEditingObservers = [
+            center.addObserver(forName: UITextField.textDidBeginEditingNotification, object: nil, queue: .main, using: beginEditing),
+            center.addObserver(forName: UITextView.textDidBeginEditingNotification, object: nil, queue: .main, using: beginEditing)
+        ]
+        registerShortcutTipsCommands()
+    }
+
+    /// Long-press Command / Control / Select to show the cheatsheet. Only runs while FocusKit is enabled.
+    private func registerShortcutTipsCommands() {
+        let title = R.string.localizable.focusShortcutsTips()
+        let mappings: [(FocusKey, FocusShortcutsTipsView.Source)] = [
+            (.command, .keyboard),
+            (.control, .keyboard),
+            (.select, .controller)
+        ]
+        for (key, source) in mappings {
+            addGlobalCommand(FocusCommand(key: key, pressType: .longPress, title: title) { [weak self] in
+                guard let self else { return false }
+                guard self.isEnabled, self.currentContext != nil else { return false }
+                let extraKeys = self.heldKeys.keys.filter { $0 != key }
+                if extraKeys.contains(where: { !FocusShortcutsTipsView.isTriggerKey($0) }) {
+                    return false
+                }
+                FocusShortcutsTipsView.show(source: source, holding: key)
+                return true
+            })
+        }
+    }
+    
+    private func handleTextEditingDidBegin() {
+        FocusKeyObserver.shared.handleTextEditingDidBegin()
+        cancelAllPresses()
+        userDidTouchScreen()
+    }
+
+    /// Resign the current text input. Restores the FocusKit highlight on the field.
+    private func endTextEditing() {
+        guard isEditingText else { return }
+        UIResponder.firstResponder?.resignFirstResponder()
+        currentContext?.rootView?.window?.endEditing(true)
+        guard let context = currentContext else { return }
+        guard focusedView == nil && focusedContainer == nil else { return }
+        establishInitialFocus(in: context)
+    }
 
     // MARK: - Context 栈
 
@@ -98,6 +176,7 @@ final class FocusSystem {
         guard !contexts.contains(where: { $0 === context }) else { return }
         rememberAndClearCurrentFocus()
         contexts.append(context)
+        lastHop = nil
         activateTopContext()
     }
 
@@ -109,6 +188,7 @@ final class FocusSystem {
         if popped.contains(where: { containsCurrentFocus(in: $0) }) {
             clearCurrentFocus()
         }
+        lastHop = nil
         activateTopContext()
     }
 
@@ -124,6 +204,7 @@ final class FocusSystem {
         if let top = contexts.last, top !== context {
             rememberAndClearCurrentFocus()
             contexts.removeLast()
+            lastHop = nil
         }
         if !contexts.contains(where: { $0 === context }) {
             contexts.append(context)
@@ -133,6 +214,8 @@ final class FocusSystem {
 
     /// 替换栈底 context（Home Tab 等同级页面）。
     /// 三个 Tab 各持有自己的 FocusContext，不互相压栈；Sheet 等覆盖层仍叠在当前 Tab 之上。
+    /// If the current focus already belongs to the incoming context (shared
+    /// chrome such as a tab bar), keep it instead of re-establishing.
     func replaceRoot(with context: FocusContext) {
         if contexts.isEmpty {
             contexts.append(context)
@@ -146,11 +229,12 @@ final class FocusSystem {
             return
         }
         let replacingActive = contexts.count == 1
-        if replacingActive {
+        let keepFocus = replacingActive && currentFocusedView.map { isView($0, inside: context) } == true
+        if replacingActive && !keepFocus {
             rememberAndClearCurrentFocus()
         }
         contexts[0] = context
-        if replacingActive {
+        if replacingActive && !keepFocus {
             activateTopContext()
         }
     }
@@ -159,6 +243,7 @@ final class FocusSystem {
     func reset() {
         clearCurrentFocus()
         contexts.removeAll()
+        lastHop = nil
     }
 
     // MARK: - 全局命令
@@ -180,7 +265,14 @@ final class FocusSystem {
     /// 否则等到 `keyUp(_:)` 时按短按分发。
     func keyDown(_ key: FocusKey) {
         guard isEnabled else { return }
-        // 输入源应保证 down/up 配对，重复按下兜底忽略
+        // Typing: leave arrows/confirm with the field. B/Esc only ends editing.
+        if isEditingText {
+            if key == .b {
+                endTextEditing()
+            }
+            return
+        }
+        // Sources should pair down/up; ignore a repeated down.
         guard heldKeys[key] == nil else { return }
 
         let state = HeldKeyState()
@@ -205,15 +297,16 @@ final class FocusSystem {
         }
     }
 
-    /// 按键抬起。与 `keyDown(_:)` 配对调用。
+    /// Key released; pairs with `keyDown(_:)`.
     func keyUp(_ key: FocusKey) {
         guard let state = heldKeys.removeValue(forKey: key) else { return }
         state.invalidate()
+        FocusShortcutsTipsView.handleKeyUp(key)
         guard isEnabled else { return }
 
-        // 方向键在按下/连发阶段已经响应过，抬起只做清理
+        // Direction keys already navigated on down / repeat; up is cleanup only.
         if key.direction != nil { return }
-        // 长按已被消费，短按不再触发
+        // Long-press already consumed this press; skip the tap.
         if state.longPressHandled { return }
 
         send(key)
@@ -274,6 +367,7 @@ final class FocusSystem {
             state.invalidate()
         }
         heldKeys.removeAll()
+        FocusShortcutsTipsView.hide()
     }
 
     // MARK: - 手动焦点控制
@@ -288,6 +382,7 @@ final class FocusSystem {
         } else {
             setFocus(view, container: nil, context: context)
         }
+        lastHop = nil
     }
 
     /// 焦点失效（如页面内容刷新）后重建焦点
@@ -391,31 +486,37 @@ final class FocusSystem {
     private func moveFocus(_ direction: FocusDirection, in context: FocusContext) {
         guard let root = context.rootView else { return }
 
-        // 尚无焦点：建立初始焦点（仍属方向键触发，需带上方向）
+        // No focus yet: establish one, still tagged with the D-pad heading.
         if focusedView == nil && focusedContainer == nil {
             establishInitialFocus(in: context, direction: direction)
             return
         }
 
-        // 焦点在容器内：先让容器消化
+        let originView = focusedView ?? (focusedContainer as UIView?)
+
+        // Isolating containers own D-pad, including reverse within the container.
+        // Page-level reverse hop must not skip remaining inner targets in a cell.
         var exitingContainer: (UIView & FocusContainer)?
-        if let container = focusedContainer {
+        if let container = focusedContainer, container.isolatesFocusNavigation {
             switch container.navigateFocus(direction, current: focusedView) {
             case .handled(let view):
                 updateFocusInsideContainer(container, view: view, direction: direction, context: context)
+                rememberHop(from: originView, direction: direction)
                 return
             case .exit:
                 exitingContainer = container
             }
         }
 
-        // 页面级空间寻径。出发点优先用实际聚焦的 cell/子视图：
-        // 全屏容器与页面上其他可聚焦视图（悬浮工具条等）重叠时，
-        // 以容器整体 frame 出发会把所有 sibling 都过滤掉，导致无法离开容器
+        if tryReverseHop(direction, from: originView, in: context, exitingContainer: exitingContainer) {
+            return
+        }
+
+        // Page-level search. Prefer the real focused cell/subview as origin so a
+        // full-screen list can still yield to overlapping overlays (toolbars).
         let origin: UIView? = focusedView ?? (focusedContainer as UIView?)
         guard let origin else { return }
-        // 容器无内部焦点（翻页滚动的退化态）时以容器可视中心为出发点，
-        // 同样是为了避免容器整体 frame 过滤掉重叠的 sibling
+        // Degenerate container (paging with no inner focus): aim from the visible center.
         var originFrame: CGRect?
         if focusedView == nil, let container = focusedContainer {
             let frame = FocusEngine.frameInWindow(of: container)
@@ -426,16 +527,52 @@ final class FocusSystem {
             direction: direction,
             in: root,
             originFrame: originFrame,
-            excludingContainerSubtree: exitingContainer
+            excludingContainerSubtree: exitingContainer,
+            additionalRoots: context.additionalSearchRoots(entering: direction)
         ) else {
             notifyNavigationBlocked(direction, in: context)
             return
         }
 
         applyNavigationTarget(target, direction: direction, context: context)
+        rememberHop(from: originView, direction: direction)
     }
 
-    /// 页面级寻径命中后落焦：内部后代折叠为 enterContainer，普通视图直接 setFocus
+    /// Opposite of the last hop returns to that view when it is still valid.
+    /// If an isolating container just exited, only reverse to a view outside it —
+    /// going back to a different inner of that container is the container's job.
+    private func tryReverseHop(
+        _ direction: FocusDirection,
+        from current: UIView?,
+        in context: FocusContext,
+        exitingContainer: (UIView & FocusContainer)? = nil
+    ) -> Bool {
+        guard direction == lastHop?.direction.opposite,
+              let previous = lastHop?.from,
+              previous.window != nil,
+              previous !== current,
+              isView(previous, inside: context)
+        else {
+            return false
+        }
+        if let exiting = exitingContainer,
+           previous === exiting || previous.isDescendant(of: exiting) {
+            return false
+        }
+        let stillFocusable = previous.fk_canFocus || FocusEngine.focusContainer(for: previous) != nil
+        guard stillFocusable else { return false }
+
+        applyNavigationTarget(previous, direction: direction, context: context)
+        if currentFocusedView === current { return false }
+        rememberHop(from: current, direction: direction)
+        return true
+    }
+
+    private func rememberHop(from origin: UIView?, direction: FocusDirection) {
+        lastHop = FocusHop(from: origin, direction: direction)
+    }
+
+    /// After a page-level hit: enter the container if the target lives inside one.
     private func applyNavigationTarget(_ target: UIView, direction: FocusDirection?, context: FocusContext) {
         if let container = FocusEngine.focusContainer(for: target), target !== container {
             enterContainer(container, from: direction, preferred: target, context: context, notifyDirection: direction)
@@ -470,14 +607,14 @@ final class FocusSystem {
         releaseCurrentFocus(exceptContainer: container)
         focusedContainer = container
         focusedView = (inner === container) ? nil : inner
-        context.lastFocusedView = inner === container ? container : inner
+        rememberContentFocus(focusedView ?? container, in: context)
         notifyFocusChange(direction: notifyDirection ?? direction)
     }
 
     private func updateFocusInsideContainer(_ container: UIView & FocusContainer, view: UIView, direction: FocusDirection, context: FocusContext) {
         focusedContainer = container
         focusedView = (view === container) ? nil : view
-        context.lastFocusedView = view === container ? container : view
+        rememberContentFocus(focusedView ?? container, in: context)
         notifyFocusChange(direction: direction)
     }
 
@@ -486,10 +623,16 @@ final class FocusSystem {
         releaseCurrentFocus(exceptContainer: container)
         focusedView = view
         focusedContainer = container
-        context.lastFocusedView = view
+        rememberContentFocus(view, in: context)
         view.fk_applyFocus(true)
         FocusEngine.ensureVisible(view)
         notifyFocusChange(direction: direction)
+    }
+
+    /// Chrome in additional search roots keeps its own memory; page restore should return to content.
+    private func rememberContentFocus(_ view: UIView, in context: FocusContext) {
+        guard let root = context.rootView, view === root || view.isDescendant(of: root) else { return }
+        context.lastFocusedView = view
     }
 
     private func notifyFocusChange(direction: FocusDirection? = nil) {
@@ -516,6 +659,7 @@ final class FocusSystem {
     private func clearCurrentFocus() {
         let hadFocus = focusedView != nil || focusedContainer != nil
         releaseCurrentFocus()
+        lastHop = nil
         if hadFocus {
             notifyFocusChange()
         }
@@ -598,8 +742,7 @@ final class FocusSystem {
     }
 
     private func isView(_ view: UIView, inside context: FocusContext) -> Bool {
-        guard let root = context.rootView else { return false }
-        return view === root || view.isDescendant(of: root)
+        context.contains(view)
     }
 
     private func containsCurrentFocus(in context: FocusContext) -> Bool {

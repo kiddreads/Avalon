@@ -11,6 +11,9 @@ import UIKit
 
 
 class ControllerMappingViewController: BaseViewController {
+    private static weak var capturingInstance: ControllerMappingViewController?
+    static var isCapturingInput: Bool { capturingInstance != nil }
+    
     private var controllerMappingView: ControllerMappingView
     
     @available(*, unavailable)
@@ -48,8 +51,8 @@ class ControllerMappingViewController: BaseViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Mapping consumes the same controller/keyboard events as FocusKit.
-        FocusSystem.shared.isEnabled = false
+        Self.capturingInstance = self
+        PlayViewController.refreshExternalInputSink()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -69,7 +72,10 @@ class ControllerMappingViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        FocusSystem.shared.isEnabled = true
+        if Self.capturingInstance === self {
+            Self.capturingInstance = nil
+        }
+        PlayViewController.refreshExternalInputSink()
         AppDelegate.orientation = R.Config.DefaultOrientation
     }
 }

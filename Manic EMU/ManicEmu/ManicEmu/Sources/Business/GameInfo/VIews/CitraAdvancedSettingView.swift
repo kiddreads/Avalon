@@ -116,12 +116,9 @@ class CitraAdvancedSettingView: BaseView {
     private func makeCell(for item: SettingItem) -> ASListPage.Cell {
         switch item.type {
         case .switch:
-            let cell = ASListPage.Cell.iconTitleDetailSwitchCell(title: item.key,
-                                                                 state: currentBool(for: item) ? .on : .off)
-            if let styles = cell.normalValue?.styles {
-                return .normal(styles, enablePressEffect: false)
-            }
-            return cell
+            return ASListPage.Cell.iconTitleDetailSwitchCell(title: item.key,
+                                                             state: currentBool(for: item) ? .on : .off,
+                                                             enablePressEffect: false)
         case .option:
             return .iconTitleDetailChevronCell(title: item.key,
                                                chevronTitle: currentOptionLabel(for: item))

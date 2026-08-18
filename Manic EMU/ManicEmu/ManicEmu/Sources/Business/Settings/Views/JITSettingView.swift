@@ -337,6 +337,7 @@ class JITSettingView: BaseView {
     private lazy var navigationView: ASNavigationView = {
         var navigation = ASListPage.Navigation.defaultNavigation(title: "JIT",
                                                                  titleIcon: .symbolImage(R.image.jit_iconSymbols()))
+        navigation.enableClose = showClose
         let view = ASNavigationView(navigation)
         view.didTapClose = { [weak self] in
             guard let self = self else { return }

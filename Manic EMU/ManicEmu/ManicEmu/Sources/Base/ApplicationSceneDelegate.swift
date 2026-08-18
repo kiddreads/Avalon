@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GameController
 import OAuthSwift
 import UniformTypeIdentifiers
 
@@ -21,7 +22,7 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
             window = UIWindow(windowScene: windowScene)
             ApplicationSceneDelegate.applicationWindow = window
             window?.tintColor = R.Color.Main
-            //初始化数据库
+            installGamepadEventInteraction(on: window)
             ResourcesKit.loadResources { isSuccess in
                 Database.setup {
                     ThemeManager.shared.setup()
@@ -60,6 +61,20 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             let dropInteraction = UIDropInteraction(delegate: self)
             window?.addInteraction(dropInteraction)
+        }
+    }
+    
+    /// Route gamepad HID through Game Controller instead of UIKit (iPad system focus hitch).
+    /// iOS 18+; older versions fall back to swallowing gamepad UIPress in ManicApplication.
+    private func installGamepadEventInteraction(on window: UIWindow?) {
+        guard let window else { return }
+        if #available(iOS 18.0, *) {
+            let interaction = GCEventInteraction()
+            interaction.handledEventTypes = .gamepad
+            if #available(iOS 26.0, *) {
+                interaction.receivesEventsInView = false
+            }
+            window.addInteraction(interaction)
         }
     }
     

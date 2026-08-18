@@ -82,7 +82,10 @@ struct LimitedTextInputView {
                 make.top.equalTo((detailView ?? navigationView).snp.bottom).offset(R.Size.ContentSpaceSmall)
                 make.height.equalTo(R.Size.ItemHeightMedium)
             }
+            // Touch: open the keyboard after the alert animates.
+            // Controller/keyboard: wait for A on the already-focused field.
             DispatchQueue.main.asyncAfter(delay: 0.35) {
+                guard !FocusSystem.shared.hasExternalInput else { return }
                 inputView.becomeFirstResponder()
             }
             

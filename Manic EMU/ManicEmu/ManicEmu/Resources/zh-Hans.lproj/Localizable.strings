@@ -1010,3 +1010,4 @@
 "FocusHintMove" = "移动";
 "FocusHintBack" = "后退";
 "FocusHintAdjust" = "调整";
+"FocusShortcutsTips" = "提示";

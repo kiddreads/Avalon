@@ -29,6 +29,7 @@ class SettingsAdventureCardView: BaseView {
         view.layerBorderWidth = R.Size.Border
         view.isUserInteractionEnabled = true
         view.enablePressEffect = true
+        view.enableFocusEffects = false
         return view
     }()
     

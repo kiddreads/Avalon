@@ -213,6 +213,8 @@ class AddTriggerButtonStyleView: BaseView {
             let view = UISlider()
             view.minimumTrackTintColor = R.Color.Main
             view.maximumTrackTintColor = R.Color.BackgroundTertiary
+            view.enableFocusAdjustment()
+            view.enableFocusEffects = false
             return view
         }()
         

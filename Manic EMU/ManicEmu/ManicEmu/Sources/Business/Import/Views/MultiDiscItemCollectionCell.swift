@@ -47,6 +47,7 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
             make.top.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
         
+        deleteIcon.isFocusable = false
         addSubview(deleteIcon)
         deleteIcon.backgroundColor = R.Color.BackgroundTertiary
         deleteIcon.snp.makeConstraints { make in

@@ -602,6 +602,7 @@ extension ASListPageView {
             return bottomButton
         }
         let view = ASButtonView(bottom)
+        view.enableFocusEffects = false
         bottomButton = view
         return view
     }
