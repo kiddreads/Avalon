@@ -152,7 +152,7 @@ class ArticBaseCollectionCell: UICollectionViewCell {
                             if let index = R.Strings.ThreeDSHomeMenuRegions.firstIndex(where: { $0 == region }), index < regionOptions.count {
                                 regionValue = regionOptions[index]
                             }
-                            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Azahar.name, configs: ["citra_region_value": regionValue], reload: false)
+                            LibretroCore.sharedInstance().updateConfig(EmulationCore.Azahar.name, configs: ["citra_region_value": regionValue], reload: false)
                             let game = Game()
                             game.id = gameHash
                             game.name = ipAddress.ip + ":" + "\(ipAddress.port)"
@@ -161,7 +161,7 @@ class ArticBaseCollectionCell: UICollectionViewCell {
                             game.importDate = Date()
                             game.defaultCore = 1
                             try? realm.write { realm.add(game) }
-                            PlayViewController.startGame(game: game)
+                            game.handleTapAction(forceQuick: true)
                         }
                     })
                 })

@@ -397,7 +397,7 @@ class LibretroNetplayView: BaseView {
             } else if let index = navigationValue.tapToolsValue {
                 if index == 0 {
                     //info
-                    let desc = LibretroCore.Cores.libretroCores.reduce("", { result, core in
+                    let desc = EmulationCore.libretroCores.reduce("", { result, core in
                         var gameTypesString: String = ""
                         if let gameTypes = core.gameTypes {
                             gameTypesString = "(\(gameTypes.reduce("", { $0 + ($0.isEmpty ? "" : " ") + $1.localizedShortName })))"
@@ -441,7 +441,7 @@ class LibretroNetplayView: BaseView {
                                   detail: item.detail,
                                   text: stringValue(for: item),
                                   placeholder: item.title,
-                                  limitedType: .normal(textSize: 128, emptyEnable: true)) { [weak self] result in
+                                  limitedType: .normal(maxTextSize: 128, emptyEnable: true)) { [weak self] result in
             guard let self, let password = result as? String else { return }
             self.writeConfig(item.configKey, value: password)
             self.listView.updateCellData(cellData.updateNormalChevron(title: password),

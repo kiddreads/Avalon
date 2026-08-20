@@ -143,6 +143,19 @@ struct SteamGridDBKit {
     
     // MARK: Search
     
+    /**
+     [{
+     "id": 37382,
+     "release_date": 495417600,
+     "types":
+     [
+         "eshop"
+     ],
+     "name": "Super Mario Bros.",
+     "verified": true
+ }]
+     */
+    
     static func searchGame(apiKey: String, query: String) async throws -> [SteamGridDBGame] {
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
         return try await request(
@@ -184,6 +197,33 @@ struct SteamGridDBKit {
     }
     
     // MARK: Grids
+    
+    /**
+     [{
+     "id": 185819,
+     "style": "alternate",
+     "thumb": "https://cdn2.steamgriddb.com/thumb/75f29e87a3923053bde594667a5e33d3.jpg",
+     "epilepsy": false,
+     "mime": "image/png",
+     "downvotes": 0,
+     "width": 600,
+     "url": "https://cdn2.steamgriddb.com/grid/75f29e87a3923053bde594667a5e33d3.png",
+     "nsfw": false,
+     "author":
+     {
+         "name": "nawavon",
+         "steam64": "76561198042206255",
+         "avatar": "https://avatars.steamstatic.com/b15f125a8007d8cd85ee1ab22cab7e55fcc69dcf_medium.jpg"
+     },
+     "notes": "Edited version of the original box art that extends the illustration and removes additional logos. Made by https://steamcommunity.com/id/nawavon/.",
+     "upvotes": 0,
+     "language": "en",
+     "height": 900,
+     "lock": false,
+     "score": 0,
+     "humor": false
+ }]
+     */
     
     static func getGrids(apiKey: String, options: SteamGridDBImageOptions) async throws -> SteamGridDBImagePage {
         try await getImages(apiKey: apiKey, pathPrefix: "grids", options: options)
@@ -239,6 +279,33 @@ struct SteamGridDBKit {
     
     // MARK: Heroes
     
+    /**
+     [{
+     "id": 26365,
+     "style": "alternate",
+     "thumb": "https://cdn2.steamgriddb.com/hero_thumb/105f777347c73908a23cbf0de0c33d3b.jpg",
+     "epilepsy": false,
+     "mime": "image/png",
+     "downvotes": 0,
+     "width": 3840,
+     "url": "https://cdn2.steamgriddb.com/hero/105f777347c73908a23cbf0de0c33d3b.png",
+     "nsfw": false,
+     "author":
+     {
+         "name": "Fander",
+         "steam64": "76561198393672878",
+         "avatar": "https://avatars.steamstatic.com/d1759af8a4457122df0bcef4d4451379657394cb_medium.jpg"
+     },
+     "notes": "Some stars. Wanted to make a simple background resembling some of NES box art backgrounds.",
+     "upvotes": 0,
+     "language": "en",
+     "height": 1240,
+     "lock": false,
+     "score": 0,
+     "humor": false
+ }]
+     */
+    
     static func getHeroes(apiKey: String, options: SteamGridDBImageOptions) async throws -> SteamGridDBImagePage {
         try await getImages(apiKey: apiKey, pathPrefix: "heroes", options: options)
     }
@@ -293,6 +360,33 @@ struct SteamGridDBKit {
     
     // MARK: Icons
     
+    /**
+     [{
+     "id": 52875,
+     "style": "official",
+     "thumb": "https://cdn2.steamgriddb.com/icon/9c1202f4af69c9c722163a0f73d11c23/32/64x64.png",
+     "epilepsy": false,
+     "mime": "image/vnd.microsoft.icon",
+     "downvotes": 0,
+     "width": 0,
+     "url": "https://cdn2.steamgriddb.com/icon/9c1202f4af69c9c722163a0f73d11c23.ico",
+     "nsfw": false,
+     "author":
+     {
+         "name": "Rabbid4240",
+         "steam64": "76561198315448831",
+         "avatar": "https://avatars.steamstatic.com/249967a8a0b31161c8ca2480af6f09e1cb1566de_medium.jpg"
+     },
+     "notes": null,
+     "upvotes": 0,
+     "language": "en",
+     "height": 0,
+     "lock": false,
+     "score": 0,
+     "humor": false
+ }]
+     */
+    
     static func getIcons(apiKey: String, options: SteamGridDBImageOptions) async throws -> SteamGridDBImagePage {
         try await getImages(apiKey: apiKey, pathPrefix: "icons", options: options)
     }
@@ -346,6 +440,33 @@ struct SteamGridDBKit {
     }
     
     // MARK: Logos
+    
+    /**
+     [{
+     "id": 1604,
+     "style": "official",
+     "thumb": "https://cdn2.steamgriddb.com/logo_thumb/a368b0de8b91cfb3f91892fbf1ebd4b2.png",
+     "epilepsy": false,
+     "mime": "image/png",
+     "downvotes": 0,
+     "width": 4585,
+     "url": "https://cdn2.steamgriddb.com/logo/a368b0de8b91cfb3f91892fbf1ebd4b2.png",
+     "nsfw": false,
+     "author":
+     {
+         "name": "Jib",
+         "steam64": "76561198394798289",
+         "avatar": "https://cdn2.steamgriddb.com/profile/avatar_1882.png?1779617926"
+     },
+     "notes": null,
+     "upvotes": 0,
+     "language": "en",
+     "height": 1440,
+     "lock": false,
+     "score": 0,
+     "humor": false
+ }]
+     */
     
     static func getLogos(apiKey: String, options: SteamGridDBImageOptions) async throws -> SteamGridDBImagePage {
         try await getImages(apiKey: apiKey, pathPrefix: "logos", options: options)

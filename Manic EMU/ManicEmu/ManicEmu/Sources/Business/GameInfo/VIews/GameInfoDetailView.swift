@@ -75,7 +75,7 @@ class GameInfoDetailView: BaseView {
         view.enableFocusEffects = false
         view.didTapButton = { [weak self] in
             guard let self = self else { return }
-            PlayViewController.startGame(game: game)
+            self.game.handleTapAction(forceQuick: true)
         }
         view.isAccessibilityElement = true
         view.accessibilityLabel = R.string.localizable.startGameTitle()
@@ -101,7 +101,7 @@ class GameInfoDetailView: BaseView {
                              confirmAction: { [weak self] in
                 guard let self else { return }
                 self.game.safeMode = true
-                PlayViewController.startGame(game: self.game)
+                self.game.handleTapAction(forceQuick: true)
             })
         }
         view.isAccessibilityElement = true

@@ -105,7 +105,7 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
             Self.launchGameID = nil
             let realm = Database.realm
             if let game = realm.object(ofType: Game.self, forPrimaryKey: launchGameID) {
-                PlayViewController.startGame(game: game)
+                game.handleTapAction(forceQuick: true)
             }
         }
         

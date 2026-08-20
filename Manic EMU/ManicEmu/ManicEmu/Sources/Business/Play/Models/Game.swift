@@ -108,15 +108,15 @@ class Game: Object, ObjectUpdatable {
     
     static let DsHomeMenuPrimaryKey = "Home Menu"
     static let DsiHomeMenuPrimaryKey = "Home Menu (DSi)"
-    
     static let DOSHomeMenuPrimaryKey = "Home Menu (DOSBox)"
+    static let SymbianHomePrimary = "Home Menu (Symbian)"
     
     ///安全模式
     var safeMode = false
     
     ///文件是否存在
     var isRomExtsts: Bool {
-        if isAzaharArticBase {
+        if isAzaharArticBase || gameType == .symbian {
             return true
         }
         return FileManager.default.fileExists(atPath: romUrl.path)
@@ -153,6 +153,12 @@ class Game: Object, ObjectUpdatable {
         
         if isPSPPBPGame, let gamePath = getExtraString(key: ExtraKey.pspPBPGamePath.rawValue) {
             return URL(fileURLWithPath: R.Path.PSPGame.appendingPathComponent(gamePath))
+        } else if gameType == .symbian {
+            if isSymbianHomeMenu, let app = symbianSystemApp {
+                return URL(string: "uid://\(app.uid)")!
+            } else {
+                return URL(string: "uid://\(id)")!
+            }   
         }
         
         return localUrl
@@ -230,7 +236,7 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .lynx {
             return URL(fileURLWithPath: R.Path.Holani.appendingPathComponent("\(name).srm"))
         } else if gameType == .j2me {
-            return URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? LibretroCore.Cores.J2meJS.name : LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+            return URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? EmulationCore.J2meJS.name : EmulationCore.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         } else if gameType == .dos {
             if let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: R.Path.DOSBoxPure), includingPropertiesForKeys: [.isDirectoryKey]) {
                 for case let fileURL as URL in enumerator {
@@ -353,7 +359,7 @@ class Game: Object, ObjectUpdatable {
         return "openbios"
     }
     
-    var libretroCore: LibretroCore.Cores? {
+    var libretroCore: EmulationCore? {
         if gameType == .psp {
             return .PPSSPP
         } else if gameType == .nes || gameType == .fds  {
@@ -436,6 +442,8 @@ class Game: Object, ObjectUpdatable {
             return .Holani
         } else if gameType == .dos {
             return .DOSBoxPure
+        } else if gameType == .symbian {
+            return .EKA2L1
         }
         return nil
     }
@@ -537,6 +545,8 @@ class Game: Object, ObjectUpdatable {
             return Bundle.main.path(forResource: "holani.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .dos {
             return Bundle.main.path(forResource: "dosbox.pure.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .symbian {
+            return Bundle.main.path(forResource: "eka2l1.libretro", ofType: "framework", inDirectory: "Frameworks")
         }
         return nil
     }
@@ -639,7 +649,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportRetroAchievements: Bool {
-        if gameType == ._3ds || gameType == .doom || gameType == .a5200 || gameType == .dos {
+        if gameType == ._3ds || gameType == .doom || gameType == .a5200 || gameType == .dos || gameType == .symbian {
             return false
         }
         if gameType == .arcade, defaultCore == 0 {
@@ -885,11 +895,11 @@ class Game: Object, ObjectUpdatable {
     }
     
     func deleteJ2meSaves() {
-        let j2mejsUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.J2meJS.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+        let j2mejsUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(EmulationCore.J2meJS.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: j2mejsUrl)
         SyncManager.delete(localFilePath: j2mejsUrl.path)
         
-        let freej2meUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(LibretroCore.Cores.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+        let freej2meUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(EmulationCore.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         try? FileManager.safeRemoveItem(at: freej2meUrl)
         SyncManager.delete(localFilePath: freej2meUrl.path)
     }
@@ -960,6 +970,14 @@ class Game: Object, ObjectUpdatable {
         return getExtraBool(key: ExtraKey.isArticBaseHomeMenu.rawValue) ?? false
     }
     
+    var isSymbianHomeMenu: Bool {
+        guard gameType == .symbian else { return false }
+        if id == Game.SymbianHomePrimary {
+            return true
+        }
+        return false
+    }
+    
     var isPSPPBPGame: Bool {
         guard gameType == .psp else { return false }
         return getExtraBool(key: ExtraKey.isPSPPBPGame.rawValue) ?? false
@@ -1019,6 +1037,7 @@ class Game: Object, ObjectUpdatable {
             gameType == .dc ||
             gameType == .j2me ||
             gameType == .dos ||
+            gameType == .symbian ||
             isClownMDEmuCore {
             return false
         }
@@ -1054,11 +1073,13 @@ class Game: Object, ObjectUpdatable {
     
     var supportJit: Bool {
         if (isCitra3DS && !Settings.defalut.threeDSAdvancedSettingMode) ||
+            isAzahar3DS ||
             gameType == .psp ||
             (gameType == .ds && defaultCore == 0) ||
             gameType == .n64 ||
             (gameType == .ps1 && defaultCore == 0) ||
-            gameType == .dc || gameType == .dos {
+            gameType == .dc || gameType == .dos ||
+            gameType == .symbian {
             return true
         }
         return false
@@ -1094,7 +1115,8 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportFastForward: Bool {
-        if (gameType == .j2me && defaultCore != 0) {
+        if (gameType == .j2me && defaultCore != 0) ||
+            gameType == .symbian {
             return false
         }
         return true
@@ -1106,7 +1128,8 @@ class Game: Object, ObjectUpdatable {
             (gameType == ._32x && defaultCore != 0) ||
             gameType == .j2me ||
             (gameType == .n64 && !isN64ParaLLEl) ||
-            gameType.externalType {
+            gameType.externalType ||
+            gameType == .symbian {
             return false
         }
         return true
@@ -1195,7 +1218,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportSaveState: Bool {
-        if gameType == .jaguar || gameType == .j2me {
+        if gameType == .jaguar || gameType == .j2me || gameType == .symbian {
             return false
         }
         return true
@@ -1225,7 +1248,7 @@ class Game: Object, ObjectUpdatable {
         guard isLibretroType, !gameType.externalType else { return false }
         //virtualjaguar(Jaguar)不支持存档(savestate = false)
         //prboom(DOOM)、azahar(3DS)、flycast全系(DC)仅basic级别存档,不支持rewind
-        if gameType == .jaguar || gameType == .doom || gameType == ._3ds || gameType == .dc {
+        if gameType == .jaguar || gameType == .doom || gameType == ._3ds || gameType == .dc || gameType == .symbian {
             return false
         }
         //SS只有mednafen_saturn(defaultCore == 0)支持;yabause仅basic级别
@@ -1233,6 +1256,128 @@ class Game: Object, ObjectUpdatable {
             return false
         }
         return true
+    }
+    
+    //For Symbian system apps
+    var symbianSystemApp: SymbianSystemApp? = nil
+    
+    func updateSymbianGame(device: LibretroSymbianDevice) {
+        guard gameType == .symbian else { return }
+        updateExtra(key: ExtraKey.symbianFirmwareCode.rawValue, value: device.firmwareCode)
+        updateExtra(key: ExtraKey.symbianFirmwareModel.rawValue, value: device.model)
+        updateExtra(key: ExtraKey.symbianOSVer.rawValue, value: SymbianOS.getOS(by: device).rawValue)
+    }
+    
+    /// Relative E: prefixes `system/<dir>/<name>` from an N-Gage 1.0 dump. Empty for SIS/SISX.
+    var ngageRelativeFiles: [String] {
+        let raw: [String]
+        if let files = getExtra(key: ExtraKey.ngageFiles.rawValue) as? [String] {
+            raw = files
+        } else if let joined = getExtraString(key: ExtraKey.ngageFiles.rawValue), !joined.isEmpty {
+            raw = joined.split(separator: "\n", omittingEmptySubsequences: true).map(String.init)
+        } else {
+            return []
+        }
+        let compacted = Array(Set(raw.compactMap { Self.ngageEDriveRelativePath($0) })).sorted()
+        if Set(raw) != Set(compacted), realm?.isInWriteTransaction != true {
+            updateExtra(key: ExtraKey.ngageFiles.rawValue, value: compacted)
+        }
+        return compacted
+    }
+    
+    /// `system/apps/6rbc` even if an older import stored a leaf or temp absolute path.
+    private static func ngageEDriveRelativePath(_ path: String) -> String? {
+        let normalized = path.replacingOccurrences(of: "\\", with: "/")
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            .lowercased()
+        guard let range = normalized.range(of: "system/") else { return nil }
+        let parts = String(normalized[range.lowerBound...]).split(separator: "/").map(String.init)
+        guard parts.count >= 3, parts[0] == "system" else { return nil }
+        return "\(parts[0])/\(parts[1])/\(parts[2])"
+    }
+    
+    var symbianInstallPackages: [(uid: Int, index: Int)] {
+        guard let items = getExtra(key: ExtraKey.symbianPackages.rawValue) as? [[String: Any]] else { return [] }
+        return items.compactMap { item in
+            guard let uid = Self.symbianJSONInt(item["uid"]), let index = Self.symbianJSONInt(item["index"]) else {
+                return nil
+            }
+            return (uid, index)
+        }
+    }
+    
+    private static func symbianJSONInt(_ value: Any?) -> Int? {
+        if let int = value as? Int {
+            return int
+        }
+        if let number = value as? NSNumber {
+            return number.intValue
+        }
+        return nil
+    }
+    
+    /// Removes N-Gage card files from E: or uninstalls SIS packages. Call before deleting the Realm row.
+    func uninstallFromSymbianStorage() {
+        guard gameType == .symbian else { return }
+        let files = ngageRelativeFiles
+        if !files.isEmpty {
+            let root = R.Path.EKA2L1DriveE
+            for relative in files {
+                let path = root.appendingPathComponent(relative)
+                var isDirectory: ObjCBool = false
+                FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
+                try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: path))
+                if isDirectory.boolValue {
+                    SyncManager.deletePath(localPath: path)
+                } else {
+                    SyncManager.delete(localFilePath: path)
+                }
+            }
+            return
+        }
+        for package in symbianInstallPackages {
+            LibretroCore.uninstallSymbianGame(withUid: package.uid, index: package.index)
+        }
+    }
+    
+    var usingSymbianDeviceIndex: Int? {
+        if let firmwareCode = getExtraString(key: ExtraKey.symbianFirmwareCode.rawValue),
+           let devices = LibretroCore.getSymbianDevices(),
+           let index = devices.firstIndex(where: { $0.firmwareCode == firmwareCode }) {
+            return index
+        }
+        return nil
+    }
+    
+    var usingSymbianOS: SymbianOS {
+        if let int = getExtraInt(key: ExtraKey.symbianOSVer.rawValue),
+            let os = SymbianOS(rawValue: int) {
+            return os
+        }
+        return .S60v3
+    }
+    
+    func handleTapAction(forceQuick: Bool = false, saveState: GameSaveState? = nil) {
+        if isNDSHomeMenuGame {
+            let biosCompletion = gameType.isNDSBiosComplete()
+            if (id == Game.DsHomeMenuPrimaryKey && !biosCompletion.isDSComplete) ||
+                (id == Game.DsiHomeMenuPrimaryKey && !biosCompletion.isDsiComplete) {
+                //弹出bios导入页面
+                BIOSSelectionView.show(gameType: gameType)
+            } else {
+                PlayViewController.startGame(game: self, saveState: saveState)
+            }
+        } else if isSymbianHomeMenu {
+            SymbianFirmwareView.show()
+        } else if Settings.defalut.quickGame || forceQuick {
+            PlayViewController.startGame(game: self, saveState: saveState)
+        } else {
+            if gameType == .unknown {
+                PlatformSelectionView.show(games: [self])
+            } else {
+                GameInfoView.show(readyAction: .default, game: self)
+            }
+        }
     }
 }
 

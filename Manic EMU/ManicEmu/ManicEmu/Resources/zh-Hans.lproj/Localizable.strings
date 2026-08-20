@@ -1011,3 +1011,27 @@
 "FocusHintBack" = "后退";
 "FocusHintAdjust" = "调整";
 "FocusShortcutsTips" = "提示";
+
+"SymbianOSFirmware" = "Symbian OS 固件";
+"SymbianOSFirmwareDesc" = "运行 Symbian OS 以及安装应用需要固件。";
+"SymbianOSFirmwareRecommend" = "推荐固件：%@";
+"NoFirmware" = "暂无固件";
+"AddFirmware" = "添加固件";
+"InstallFirmware" = "安装固件";
+"SymbianFirmwareFormatDesc" = "Symbian OS 固件使用 .ROM 格式。\nS60v2 及更新版本的固件还需要 .RPKG 资源文件。";
+"AddRomFirmware" = "添加 .ROM 固件";
+"AddRpkgFile" = "添加 .RPKG 文件";
+"SymbianFirmwareNeedRom" = "请先添加 .ROM 固件文件。";
+"SymbianFirmwareNeedRpkg" = "该固件还需要 .RPKG 资源文件。";
+"SymbianFirmwareInstallSuccess" = "固件安装成功";
+"SymbianFirmwareInstallFailed" = "固件安装失败";
+"SymbianFirmwareAlreadyExist" = "该固件已安装";
+"SymbianFirmwareChoosing" = "切换固件";
+"NoSystemApp" = "暂无系统应用";
+"SymbianGameNeedFirmware" = "添加 Symbian 游戏前请先安装 Symbian OS 固件。";
+"GoToInstallFirmware" = "安装固件";
+"FirmwareNotSupport" = "该固件不支持此 Symbian 应用。";
+"NGagePendingInstallOverwrite" = "N-Gage 文件夹里已有尚未安装的游戏。N-Gage 2.0 应用一次只能安装一个。要替换之前的安装包吗？";
+"NGagePackageReady" = "安装包已就绪。请在 S60v3 或更新固件上安装并打开 N-Gage 2.0 应用，以继续安装。";
+"NGage2Install" = "N-Gage 2.0 安装";
+"SymbianAppGetKilled" = "Symbian 应用已退出。\n如果是意外退出，请尝试切换不同的固件再运行。";

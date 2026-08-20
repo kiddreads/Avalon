@@ -676,6 +676,10 @@ class ShaderListView: BaseView {
             }
         }
         
+        if didUsingShaderChange {
+            previewShader = usingShader
+        }
+        
         if didUsingShaderChange, reloadViews {
             updateContents()
         }

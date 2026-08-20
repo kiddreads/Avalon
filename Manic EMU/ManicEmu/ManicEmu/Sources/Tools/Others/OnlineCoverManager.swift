@@ -129,7 +129,7 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("Atari - Lynx/Named_Boxarts")
             case .xbox360:
                 boxArtUrl = host.appendingPathComponent("Microsoft - Xbox 360/Named_Boxarts")
-            case .ns, .j2me:
+            case .ns, .j2me, .symbian:
                 searchCoversFromMoby(coverMatch: coverMatch,
                                      persistentedTranslation: persistentedTranslation,
                                      isCallBackMain: isCallBackMain,

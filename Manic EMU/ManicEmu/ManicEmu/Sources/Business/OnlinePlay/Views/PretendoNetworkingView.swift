@@ -223,7 +223,7 @@ extension PretendoNetworkingView: UICollectionViewDataSource {
                     }).filter({
                         $0.isArticBaseHomeMenu
                     }).first {
-                        PlayViewController.startGame(game: game)
+                        game.handleTapAction(forceQuick: true)
                         return true
                     } else {
                         return false

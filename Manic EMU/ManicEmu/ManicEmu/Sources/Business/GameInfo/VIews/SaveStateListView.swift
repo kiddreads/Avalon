@@ -258,7 +258,7 @@ class SaveStateListView: BaseView {
                                 self.hideCompletion?(state)
                                 self.hasCallHideCompletion = true
                             } else {
-                                PlayViewController.startGame(game: self.game, saveState: state)
+                                self.game.handleTapAction(forceQuick: true)
                             }
                         })
                     } else {
@@ -266,7 +266,7 @@ class SaveStateListView: BaseView {
                             self.hideCompletion?(state)
                             self.hasCallHideCompletion = true
                         } else {
-                            PlayViewController.startGame(game: self.game, saveState: state)
+                            self.game.handleTapAction(forceQuick: true, saveState: state)
                         }
                     }
                 }

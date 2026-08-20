@@ -104,6 +104,8 @@ extension GameType {
             self = .j2me
         } else if ["zip", "dosz", "exe", "com", "bat", "iso", "cue", "img", "ima", "vhd", "jrc", "tc", "m3u", "conf"].contains(ext) {
             self = .dos
+        } else if ["sis", "sisx", "n-gage"].contains(ext) {
+            self = .symbian
         } else {
             self = .notSupport
         }
@@ -186,6 +188,8 @@ extension GameType {
             self = .dos
         } else if shortName.uppercased() == "XBOX" {
             self = .xbox
+        } else if shortName.uppercased() == "Symbian".uppercased() {
+            self = .symbian
         } else {
             return nil
         }
@@ -230,6 +234,7 @@ extension GameType {
         case .win95: return "Windows 95"
         case .win98: return "Windows 98"
         case .xbox: return "Xbox"
+        case .symbian: return "Symbian OS"
         default: return ""
         }
     }
@@ -273,6 +278,7 @@ extension GameType {
         case .win95: return  NSLocalizedString("WIN95", comment: "")
         case .win98: return  NSLocalizedString("WIN98", comment: "")
         case .xbox: return  NSLocalizedString("XBOX", comment: "")
+        case .symbian: return  NSLocalizedString("Symbian", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -317,6 +323,7 @@ extension GameType {
         case .win95: return 1995
         case .win98: return 1998
         case .xbox: return 2001
+        case .symbian: return 2003
         default: return 0
         }
     }
@@ -354,6 +361,7 @@ extension GameType {
         case .lynx: return Lynx.core
         case .j2me: return J2ME.core
         case .dos: return DOS.core
+        case .symbian: return Symbian.core
         default: return nil
         }
     }
@@ -424,6 +432,7 @@ extension GameType {
         case .lynx: return "lnx"
         case .j2me: return nil
         case .dos: return nil
+        case .symbian: return nil
         default: return localizedShortName.lowercased()
         }
     }
@@ -441,44 +450,44 @@ extension GameType {
     
     var supportCores: [String] {
         if self == .ss {
-            return [LibretroCore.Cores.BeetleSaturn.name, LibretroCore.Cores.Yabause.name]
+            return [EmulationCore.BeetleSaturn.name, EmulationCore.Yabause.name]
         } else if self == .gba {
-            return [LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
+            return [EmulationCore.mGBA.name, EmulationCore.VBAM.name]
         } else if self == .md {
 #if SIDE_LOAD
-            return [LibretroCore.Cores.ClownMDEmu.name, LibretroCore.Cores.PicoDrive.name]
+            return [EmulationCore.ClownMDEmu.name, EmulationCore.PicoDrive.name]
 #endif
         } else if self == .ms || self == .gg || self == .sg1000 {
 #if SIDE_LOAD
-            return [LibretroCore.Cores.Gearsystem.name, LibretroCore.Cores.PicoDrive.name]
+            return [EmulationCore.Gearsystem.name, EmulationCore.PicoDrive.name]
 #endif
         } else if self == .gb || self == .gbc {
-            return [LibretroCore.Cores.Gambatte.name, LibretroCore.Cores.mGBA.name, LibretroCore.Cores.VBAM.name]
+            return [EmulationCore.Gambatte.name, EmulationCore.mGBA.name, EmulationCore.VBAM.name]
         } else if self == .arcade {
 #if SIDE_LOAD
-            return [LibretroCore.Cores.MAME.name, LibretroCore.Cores.FinalBurnNeo.name]
+            return [EmulationCore.MAME.name, EmulationCore.FinalBurnNeo.name]
 #endif
         } else if self == ._3ds {
-            return [LibretroCore.Cores.Citra.name, LibretroCore.Cores.Azahar.name]
+            return [EmulationCore.Citra.name, EmulationCore.Azahar.name]
         } else if self == ._32x {
 #if SIDE_LOAD
-            return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name]
+            return [EmulationCore.PicoDrive.name, EmulationCore.JGenesis.name]
 #endif
         } else if self == .mcd {
 #if SIDE_LOAD
-            return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name, LibretroCore.Cores.ClownMDEmu.name]
+            return [EmulationCore.PicoDrive.name, EmulationCore.JGenesis.name, EmulationCore.ClownMDEmu.name]
 #else
-            return ["", LibretroCore.Cores.JGenesis.name, LibretroCore.Cores.ClownMDEmu.name]
+            return ["", EmulationCore.JGenesis.name, EmulationCore.ClownMDEmu.name]
 #endif
         } else if self == .ds {
-            return [LibretroCore.Cores.melonDSDS.name, LibretroCore.Cores.DeSmuME.name]
+            return [EmulationCore.melonDSDS.name, EmulationCore.DeSmuME.name]
         } else if self == .j2me {
-            return [LibretroCore.Cores.J2meJS.name, LibretroCore.Cores.freej2me.name]
+            return [EmulationCore.J2meJS.name, EmulationCore.freej2me.name]
         } else if self == .ps1 {
-            return [LibretroCore.Cores.BeetlePSXHW.name, LibretroCore.Cores.PCSXReArmed.name]
+            return [EmulationCore.BeetlePSXHW.name, EmulationCore.PCSXReArmed.name]
         } else if self == .snes {
 #if SIDE_LOAD
-            return [LibretroCore.Cores.bsnes.name, LibretroCore.Cores.Snes9x.name]
+            return [EmulationCore.bsnes.name, EmulationCore.Snes9x.name]
 #endif
         }
         return []
@@ -544,6 +553,8 @@ extension GameType {
             return .microsoft
         case .chm:
             return .modRetro
+        case .symbian:
+            return .nokia
         default:
             return .nintendo
         }
@@ -663,6 +674,8 @@ extension GameType {
                 image = R.image.win98_group_brand()
             } else if self == .xbox {
                 image = R.image.xbox_group_brand()
+            } else if self == .symbian {
+                image = R.image.symbian_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image
@@ -717,6 +730,11 @@ extension GameType {
             return R.BIOS.A7800Bios
         } else if self == .lynx {
             return R.BIOS.LynxBios
+        } else if self == .symbian {
+            return [BIOSItem(fileName: R.string.localizable.symbianOSFirmware(),
+                             imported: false,
+                             desc: R.string.localizable.symbianOSFirmwareDesc(),
+                             required: true)]
         }
         return []
     }

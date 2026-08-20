@@ -131,6 +131,10 @@ enum SpecialCoreOption: String {
     case prboom_rumble = "prboom-rumble"
     //dos
     case dosbox_pure_cpu_core
+    //symbian
+    case eka2l1_cpu_backend
+    case screen_buffer_sync
+    case eka2l1_device_index
     
     
     
@@ -256,6 +260,9 @@ enum SpecialCoreOption: String {
             return [.prboom_resolution]
         } else if game.gameType == .dos {
             return [.dosbox_pure_cpu_core]
+        } else if game.gameType == .symbian {
+            return [.eka2l1_cpu_backend,
+                    .eka2l1_device_index]
         }
         return []
     }
@@ -346,6 +353,8 @@ enum SpecialCoreOption: String {
             ]
         } else if game.gameType == .doom {
             result = [.prboom_rumble: "enabled"]
+        } else if game.gameType == .symbian {
+            result = [.screen_buffer_sync: "off"]
         }
         return result.mapKeysAndValues({ ($0.key.rawValue, $0.value) })
     }

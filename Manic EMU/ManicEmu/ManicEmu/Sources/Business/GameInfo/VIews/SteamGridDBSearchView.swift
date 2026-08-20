@@ -85,7 +85,7 @@ class SteamGridDBSearchView: BaseView {
                 LimitedTextInputView.show(icon: .symbolImage(R.image.key_iconSymbols()),
                                           title: "SteamGridDB API Key",
                                           detail: R.string.localizable.steamGridDBAPIKeyDesc() + "\n" + R.string.localizable.steamGridDBAPIKeyAlert(),
-                                          limitedType: .normal(textSize: 255), confirmAction: { [weak self] key in
+                                          limitedType: .normal(maxTextSize: 255), confirmAction: { [weak self] key in
                     guard let self else { return }
                     if let key = key as? String, !key.trimmed.isEmpty {
                         Settings.defalut.updateExtra(key: ExtraKey.steamGridDBAPIKey.rawValue, value: key)

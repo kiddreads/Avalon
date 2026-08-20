@@ -160,7 +160,7 @@ class GamesViewController: BaseViewController {
             ApplicationSceneDelegate.launchGameID = nil
             let realm = Database.realm
             if let game = realm.object(ofType: Game.self, forPrimaryKey: launchGameID) {
-                PlayViewController.startGame(game: game)
+                game.handleTapAction(forceQuick: true)
             }
         }
     }
@@ -222,7 +222,7 @@ class GamesViewController: BaseViewController {
                 guard let self = self else { return }
                 if Settings.defalut.quickGame {
                     self.hideSideMenu(completion: {
-                        PlayViewController.startGame(game: game)
+                        game.handleTapAction(forceQuick: true)
                     })
                 } else {
                     self.hideSideMenu()

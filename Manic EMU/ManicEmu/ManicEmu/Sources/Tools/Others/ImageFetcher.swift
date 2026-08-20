@@ -202,7 +202,7 @@ struct ImageFetcher {
                     LimitedTextInputView.show(icon: .symbolImage(R.image.key_iconSymbols()),
                                               title: "API Key",
                                               detail: R.string.localizable.steamGridDBAPIKeyDesc() + "\n" + R.string.localizable.steamGridDBAPIKeyAlert(),
-                                              limitedType: .normal(textSize: 255), confirmAction: { key in
+                                              limitedType: .normal(maxTextSize: 255), confirmAction: { key in
                         if let key = key as? String, !key.trimmed.isEmpty {
                             Settings.defalut.updateExtra(key: ExtraKey.steamGridDBAPIKey.rawValue, value: key)
                             showSteamGridDBSearchView(apiKey: key)

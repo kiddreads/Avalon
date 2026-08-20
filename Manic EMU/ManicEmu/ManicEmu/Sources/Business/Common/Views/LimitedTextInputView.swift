@@ -13,7 +13,7 @@ struct LimitedTextInputView {
     enum LimitedType {
         case integer(min: Int, max: Int)
         case decimal(min: Double, max: Double)
-        case normal(textSize: Int, emptyEnable: Bool = false)
+        case normal(maxTextSize: Int, emptyEnable: Bool = false)
     }
     
     static func show(icon: ASIcon? = nil,
@@ -21,6 +21,8 @@ struct LimitedTextInputView {
                      detail: String? = nil,
                      text: String? = nil,
                      placeholder: String? = nil,
+                     cancelTitle: String? = R.string.localizable.cancelTitle(),
+                     confirmTitle: String? = R.string.localizable.confirmTitle(),
                      limitedType: LimitedType,
                      keyboadType: UIKeyboardType = .default,
                      confirmAction: ((_ result: Any)->Void)? = nil,
@@ -108,7 +110,7 @@ struct LimitedTextInputView {
             }
             
             //cancelButton
-            let cancelButton = ASButtonView(.quickButton(title: R.string.localizable.cancelTitle(),
+            let cancelButton = ASButtonView(.quickButton(title: cancelTitle,
                                                          titleColor: R.Color.LabelSecondary,
                                                          titleFont: R.Font.Headline(),
                                                          titleAlignment: .center,
@@ -123,7 +125,7 @@ struct LimitedTextInputView {
             verticalLine.backgroundColor = R.Color.Border
             
             //confrim button
-            let button = ASButtonView(.quickButton(title: R.string.localizable.confirmTitle(),
+            let button = ASButtonView(.quickButton(title: confirmTitle,
                                                    titleColor: R.Color.Main,
                                                    titleFont: R.Font.Headline(emphasis: true),
                                                    titleAlignment: .center,
@@ -154,8 +156,8 @@ struct LimitedTextInputView {
                         } else {
                             inputView.shake()
                         }
-                    case .normal(let textSize, _):
-                        if text.count <= textSize {
+                    case .normal(let maxTextSize, _):
+                        if text.count <= maxTextSize {
                             closeKeyboard(input: text)
                         } else {
                             inputView.shake()

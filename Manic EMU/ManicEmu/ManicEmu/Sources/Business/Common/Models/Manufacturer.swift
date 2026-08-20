@@ -9,13 +9,13 @@
 
 
 enum Manufacturer: Int, CaseIterable {
-    case nintendo, sony, sega, arcade, atari, sun, microsoft, modRetro
+    case nintendo, sony, sega, arcade, atari, sun, microsoft, modRetro, nokia
     
     static var allCases: [Manufacturer] {
         if Locale.prefersUS {
-            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft, .modRetro]
+            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft, .modRetro, .nokia]
         } else {
-            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft, .modRetro]
+            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft, .modRetro, .nokia]
         }
     }
     
@@ -45,6 +45,8 @@ enum Manufacturer: Int, CaseIterable {
             "Microsoft"
         case .modRetro:
             "ModRetro"
+        case .nokia:
+            "Nokia"
         }
     }
     
@@ -73,6 +75,8 @@ enum Manufacturer: Int, CaseIterable {
             R.image.microsoft_normal()!
         case .modRetro:
             R.image.modretro_normal()!
+        case .nokia:
+            R.image.nokia_normal()!
         }
     }
     
@@ -94,6 +98,8 @@ enum Manufacturer: Int, CaseIterable {
             R.image.microsoft_highlight()!
         case .modRetro:
             R.image.modretro_highlight()!
+        case .nokia:
+            R.image.nokia_highlight()!
         }
     }
 }

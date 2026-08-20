@@ -32,7 +32,7 @@ class ASWebView: BaseView {
                 LimitedTextInputView.show(title: R.string.localizable.readyEditCoverSearch(),
                                           detail: nil,
                                           text: nil,
-                                          limitedType: .normal(textSize: 2083),
+                                          limitedType: .normal(maxTextSize: 2083),
                                           keyboadType: .URL) { [weak self] result in
                     guard let self else { return }
                     if let result = result as? String {

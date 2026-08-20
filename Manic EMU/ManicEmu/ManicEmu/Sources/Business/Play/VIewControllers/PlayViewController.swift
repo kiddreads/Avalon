@@ -451,8 +451,13 @@ class PlayViewController: GameViewController {
             }
         })
         notificationTokens.append(center.addObserver(forName: Notification.Name(rawValue: "LibretroDidShutdownNotification"), object: nil, queue: .main) { [weak self] notification in
+            guard let self else { return }
             //Libretro Shutdown
-            self?.dismiss(animated: true)
+            if self.manicGame.gameType == .symbian {
+                UIView.makeToast(message: R.string.localizable.symbianAppGetKilled())
+            }
+            UIView.hideAllAlert()
+            GameOption.quit.performAction(with: [self.manicGame])
         })
         notificationTokens.append(center.addObserver(forName: R.NotificationName.MotionShake, object: nil, queue: .main) { [weak self] notification in
             //设备晃动通知
@@ -649,6 +654,16 @@ class PlayViewController: GameViewController {
             guard let self else { return }
             self.updateFunctionButton()
         }))
+        notificationTokens.append(center.addObserver(forName: Notification.Name(rawValue: "FirmwareNoSupportNotification"), object: nil, queue: .main) { [weak self] notification in
+            guard let self else { return }
+            //Libretro Shutdown
+            UIView.makeToast(message: R.string.localizable.firmwareNotSupport())
+            DispatchQueue.main.asyncAfter(delay: 3) { [weak self] in
+                guard let self else { return }
+                UIView.hideAllAlert()
+                GameOption.quit.performAction(with: [self.manicGame])
+            }
+        })
     }
     
     @MainActor required init() {
@@ -687,7 +702,9 @@ class PlayViewController: GameViewController {
                 } else {
                     make.top.equalTo(gameView.snp.bottom).offset(19)
                 }
-            } else {
+            } else if manicGame.gameType == .symbian, UIDevice.isPhone {
+                make.top.equalTo(gameView.snp.bottom).offset(4)
+            } else  {
                 make.top.equalTo(gameView.snp.bottom)
             }
             if manicGame.gameType == .pm && !UIDevice.isLandscape {
@@ -695,8 +712,11 @@ class PlayViewController: GameViewController {
             } else {
                 make.leading.trailing.equalTo(gameView)
             }
-            if manicGame.gameType == .j2me || manicGame.gameType == .dos || manicGame.gameType == .doom {
-                make.height.equalTo(30)
+            if manicGame.gameType == .j2me ||
+                manicGame.gameType == .dos ||
+                manicGame.gameType == .doom ||
+                (manicGame.gameType == .symbian && UIDevice.isPhone) {
+                make.height.equalTo(R.Size.ItemHeightMicro)
             } else {
                 make.height.equalTo(R.Size.ItemHeightMedium)
             }
@@ -826,12 +846,12 @@ class PlayViewController: GameViewController {
         let fromSize = R.Size.WindowSize
         let toSize = size
         if manicGame.orientation == .portrait {
-            //当前设置为竖屏，只允许从横屏旋转到竖屏
+            // Portrait lock: ignore landscape-bound transitions.
             if fromSize.height > fromSize.width && toSize.height < toSize.width {
                 return
             }
         } else if manicGame.orientation == .landscape {
-            //当前设置为横屏，允许横屏旋转 或者竖屏到横屏
+            // Landscape lock: ignore portrait-bound transitions.
             if fromSize.height < fromSize.width && toSize.height > toSize.width {
                 return
             }
@@ -846,6 +866,9 @@ class PlayViewController: GameViewController {
             self.view.setNeedsLayout()
         }) { [weak self] _ in
             guard let self = self else { return }
+            // Preference lookup and traits are based on the post-rotation size.
+            self.updateSkin()
+            self.view.setNeedsLayout()
             self.resumeEmulationAndHandleAudio()
             if self.manicGame.isLibretroType {
                 self.updateFastforward(speed: self.manicGame.speed)
@@ -921,6 +944,7 @@ extension PlayViewController {
     }
     
     private func saveState(type: GameSaveStateType) {
+        guard manicGame.supportSaveState else { return }
         let now = Date.now
         if type == .manualSaveState,
            let lastSaveDate = lastSaveDate,
@@ -1144,6 +1168,9 @@ extension PlayViewController {
                 }
             })
         } else if let mappingKey = MappingOption(rawValue: inputStringValue) {
+            
+            guard MappingOption.availableOptions(games: [manicGame]).contains(where: { $0 == mappingKey }) else { return }
+            
             if let gameOption = mappingKey.gameOption {
                 gameOption.performAction(with: [manicGame], performImmediately: true)
             } else if mappingKey == .j2meSettings || mappingKey == .dosSettings {
@@ -1457,7 +1484,7 @@ extension PlayViewController {
             DispatchQueue.main.asyncAfter(delay: manicGame.isPicodriveCore && firstInit ? 1 : 0) {
                 if self.manicGame.gameType == .arcade, self.manicGame.defaultCore == 1, firstInit, !self.isHardcoreMode {
                     //FBNeo激活作弊码
-                    if let configs = LibretroCore.sharedInstance().getConfigs(LibretroCore.Cores.FinalBurnNeo.name) {
+                    if let configs = LibretroCore.sharedInstance().getConfigs(EmulationCore.FinalBurnNeo.name) {
                         var needToActivedKeys = [String]()
                         configs.enumerateLines { line, stop in
                             if line.hasPrefix("fbneo-cheat-") {
@@ -1726,6 +1753,16 @@ extension PlayViewController {
                 updateLibretroCoreConfigs(core: .PrBoom, configs: [.prboom_resolution: "320x200"], safeMode: true)
             } else if manicGame.gameType == .dos {
                 updateLibretroCoreConfigs(core: .DOSBoxPure, configs: [:])
+            } else if manicGame.gameType == .symbian {
+                var deviceIndex: Int? = nil
+                if let app = manicGame.symbianSystemApp {
+                    deviceIndex = app.deviceIndex
+                }
+                updateLibretroCoreConfigs(core: .EKA2L1, configs: [
+                    .eka2l1_cpu_backend: "dyncom",
+                    .eka2l1_device_index: "\(deviceIndex ?? manicGame.usingSymbianDeviceIndex ?? 0)"
+                ])
+                LibretroCore.sharedInstance().setLibretroLogMonitor(true)
             }
         } else {
             //non safe mode
@@ -1969,7 +2006,7 @@ extension PlayViewController {
                 if manicGame.isAzahar3DS {
                     var enableJIT = false
                     if LibretroCore.jitAvailable() {
-                        if let value = LibretroCore.sharedInstance().coreConfigValue(LibretroCore.Cores.Azahar.name,
+                        if let value = LibretroCore.sharedInstance().coreConfigValue(EmulationCore.Azahar.name,
                                                                                      key: SpecialCoreOption.citra_use_cpu_jit.rawValue),
                             value == "disabled" {
                             enableJIT = false
@@ -2018,6 +2055,16 @@ extension PlayViewController {
                 updateLibretroCoreConfigs(core: .DOSBoxPure, configs: [
                     .dosbox_pure_cpu_core: enableJIT ? "dynamic" : "normal"
                 ])
+            } else if manicGame.gameType == .symbian {
+                let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+                if enableJIT {
+                    setupUniversalScript(gameType: .symbian)
+                }
+                updateLibretroCoreConfigs(core: .EKA2L1, configs: [
+                    .eka2l1_cpu_backend: enableJIT ? "dynarmic" : "dyncom",
+                    .eka2l1_device_index: "\(manicGame.usingSymbianDeviceIndex ?? 0)"
+                ])
+                LibretroCore.sharedInstance().setLibretroLogMonitor(true)
             }
         }
         
@@ -2087,7 +2134,7 @@ extension PlayViewController {
                         setupAchievementProgressView()
                         setupAchievementChallengeView()
                         if manicGame.gameType == .psp {
-                            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PPSSPP.name, configs: ["ppsspp_cheats": "disabled"], reload: false)
+                            LibretroCore.sharedInstance().updateConfig(EmulationCore.PPSSPP.name, configs: ["ppsspp_cheats": "disabled"], reload: false)
                         }
                     }
                 } else {
@@ -2110,7 +2157,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.PrBoom.libretroPath)
             } else if manicGame.gameType == .dos {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.DOSBoxPure.libretroPath)
-            } else {
+            }
+            else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.LibretroSavePath.libretroPath)
             }
             
@@ -2150,9 +2198,8 @@ extension PlayViewController {
         updateScreenScaling()
     }
     
-    //更新皮肤
+    /// Reload the controller skin for the current orientation and settings.
     private func updateSkin() {
-        
         func setPreferredSkin() {
             showSkinButtons()
             isFullScreen = false
@@ -2174,11 +2221,14 @@ extension PlayViewController {
                 }
                 controllerView.controllerSkin = controllerSkin
                 currentSkinID = skin.id
+            } else {
+                // Same dual-orientation skin may only be stored under the other orientation key.
+                controllerView.updateControllerSkin()
             }
         }
         
         if manicGame.forceFullSkin {
-            //设置全屏皮肤
+            // Full-screen flex skin.
             let realm = Database.realm
             if let coreName = emulatorCore?.deltaCore.name,
                let skin = realm.objects(Skin.self).where({ $0.fileName == "\(coreName)_FLEX.manicskin" }).first,
@@ -2564,6 +2614,8 @@ extension PlayViewController {
                 controllerView.activateButtonInputInterception = nil
                 controllerView.deactivateButtonInputInterception = nil
             }
+        } else if manicGame.gameType == .symbian {
+            controllerView.allowTapThroughIfButtonNotHit = true
         }
         
         if let gameMetalView {
@@ -2641,13 +2693,44 @@ extension PlayViewController {
                                 })
                             }
                         }
+                    } else if manicGame.gameType == .symbian {
+                        compltion = { _ in
+                            LibretroCore.sharedInstance().registerEKA2L1InputDialog { initText, maxLength in
+                                Log.debug("Symbian InputDialog initText:\(initText ?? "nil") maxLength:\(maxLength)")
+                                LimitedTextInputView.show(title: R.string.localizable.game3DSInputTitle(),
+                                                          text: initText,
+                                                          limitedType: .normal(maxTextSize: maxLength <= 0 ? 1024 : maxLength),
+                                                          confirmAction: { result in
+                                    if let result = result as? String {
+                                        LibretroCore.sharedInstance().submitEKA2L1Input(result)
+                                    }
+                                })
+                            } questionDialog: { text, buttonYes, buttonNo in
+                                Log.debug("Symbian questionDialog text:\(text) buttonYes:\(buttonYes ?? "nil") buttonNo:\(buttonNo ?? "nil")")
+                                LimitedTextInputView.show(detail: text,
+                                                          cancelTitle: buttonNo,
+                                                          confirmTitle: buttonYes,
+                                                          limitedType: .normal(maxTextSize: 1024),
+                                                          confirmAction: { result in
+                                    if let result = result as? String {
+                                        LibretroCore.sharedInstance().submitEKA2L1Input(result)
+                                    }
+                                })
+                            }
+                        }
                     }
                     self.updateDualScreenViews()
                     LibretroCore.sharedInstance().setCustomSaveExtension(customSaveExtension)
                     if self.manicGame.isNDSHomeMenuGame || self.manicGame.isDSiHomeMenuGame || self.manicGame.isDOSHomeMenuGame {
                         LibretroCore.sharedInstance().loadWithoutContent(corePath)
                     } else {
-                        LibretroCore.sharedInstance().loadGame(manicGame.isAzaharArticBase ? manicGame.romUrl.string : manicGame.romUrl.path, corePath: corePath, completion: compltion)
+                        let romPath: String
+                        if manicGame.isAzaharArticBase || manicGame.gameType == .symbian {
+                            romPath = manicGame.romUrl.string
+                        } else {
+                            romPath = manicGame.romUrl.path
+                        }
+                        LibretroCore.sharedInstance().loadGame(romPath, corePath: corePath, completion: compltion)
                     }
                     
                     DispatchQueue.main.asyncAfter(delay: 0.5) { [weak self] in
@@ -3089,7 +3172,7 @@ extension PlayViewController {
         } else if manicGame.gameType == .n64 {
             updateN64Resolution(resolution, reload: true)
         } else if manicGame.gameType == .ps1 && manicGame.defaultCore == 0 {
-            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetlePSXHW.name, key: "beetle_psx_hw_internal_resolution", value: resolution.resolutionTitleForPS1, reload: true)
+            LibretroCore.sharedInstance().updateConfig(EmulationCore.BeetlePSXHW.name, key: "beetle_psx_hw_internal_resolution", value: resolution.resolutionTitleForPS1, reload: true)
         } else if manicGame.gameType == .dc {
             updateDCResolution(resolution, reload: true)
         } else if manicGame.gameType == .ds {
@@ -3281,7 +3364,7 @@ extension PlayViewController {
     
     private func updateN64Resolution(_ resolution: GameOption.Resolution, reload: Bool) {
         if manicGame.isN64ParaLLEl {
-            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name,
+            LibretroCore.sharedInstance().updateConfig(EmulationCore.Mupen64PlushNext.name,
                                                        key: SpecialCoreOption.mupen64plus_parallel_rdp_upscaling.rawValue,
                                                        value: resolution.resolutionTitleForN64ParaLLEl, reload: reload)
         } else {
@@ -3290,7 +3373,7 @@ extension PlayViewController {
             if resolution != .undefine {
                 option = options[resolution.rawValue - 1]
             }
-            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Mupen64PlushNext.name,
+            LibretroCore.sharedInstance().updateConfig(EmulationCore.Mupen64PlushNext.name,
                                                        key: SpecialCoreOption.mupen64plus_43screensize.rawValue,
                                                        value: option,
                                                        reload: reload)
@@ -3303,7 +3386,7 @@ extension PlayViewController {
         if resolution != .undefine {
             option = options[resolution.rawValue - 1]
         }
-        LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Flycast.name,
+        LibretroCore.sharedInstance().updateConfig(EmulationCore.Flycast.name,
                                                    key: SpecialCoreOption.reicast_internal_resolution.rawValue,
                                                    value: option,
                                                    reload: reload)
@@ -3312,7 +3395,7 @@ extension PlayViewController {
     private func updatePSPResolution(_ resolution: GameOption.Resolution, reload: Bool) {
         let scale = UInt32(resolution == .undefine ? 1 : resolution.rawValue)
         let option = "\(480*scale)x\(272*scale)"
-        LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PPSSPP.name,
+        LibretroCore.sharedInstance().updateConfig(EmulationCore.PPSSPP.name,
                                                    key: SpecialCoreOption.ppsspp_internal_resolution.rawValue,
                                                    value: option, reload: reload)
     }
@@ -3563,7 +3646,7 @@ extension PlayViewController {
         manicGame.updateExtra(key: ExtraKey.nesPalette.rawValue, value: nesPalette.name)
         if nesPalette.type == .nestopia {
             if firstInit {
-                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name,
+                LibretroCore.sharedInstance().updateConfig(EmulationCore.Nestopia.name,
                                                            key: SpecialCoreOption.nestopia_palette.rawValue,
                                                            value: nesPalette.name,
                                                            reload: false)
@@ -3581,7 +3664,7 @@ extension PlayViewController {
             }
             do {
                 try FileManager.safeCopyItem(at: URL(fileURLWithPath: fromPath), to: URL(fileURLWithPath: R.Path.System.appendingPathComponent("custom.pal")), shouldReplace: true)
-                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name,
+                LibretroCore.sharedInstance().updateConfig(EmulationCore.Nestopia.name,
                                                            key: SpecialCoreOption.nestopia_palette.rawValue,
                                                            value: "custom",
                                                            reload: false)
@@ -3855,7 +3938,7 @@ extension PlayViewController {
         })
     }
     
-    private func updateLibretroCoreConfigs(core: LibretroCore.Cores,
+    private func updateLibretroCoreConfigs(core: EmulationCore,
                                            configs: [SpecialCoreOption: String],
                                            reload: Bool = false,
                                            safeMode: Bool = false) {

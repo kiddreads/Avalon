@@ -37,7 +37,7 @@ class GameListLandscapeView: BaseView {
             guard let view = PlayHistoryView.show() else { return }
             view.didTapGame = { [weak self] game in
                 guard let self else { return }
-                self.progressGame(game)
+                game.handleTapAction()
             }
         }
         return view
@@ -153,7 +153,7 @@ class GameListLandscapeView: BaseView {
         let view = ASButtonView(button)
         view.didTapButton = { [weak self] in
             guard let self, let game = self.focusedGame else { return }
-            PlayViewController.startGame(game: game)
+            game.handleTapAction(forceQuick: true)
         }
         return view
     }()
@@ -1048,18 +1048,6 @@ class GameListLandscapeView: BaseView {
             make.top.equalTo(self.snp.top).offset(anchor.y)
         }
     }
-    
-    //MARK: - Others
-    private func progressGame(_ game: Game) {
-        if Settings.defalut.quickGame {
-            PlayViewController.startGame(game: game)
-        } else if game.gameType == .unknown {
-            PlatformSelectionView.show(games: [game])
-        } else {
-            GameInfoView.show(readyAction: .default, game: game)
-        }
-    }
-
     // MARK: - Carousel FocusKit
 
     private var currentCarouselFocusView: UIView? {
@@ -1197,7 +1185,7 @@ extension GameListLandscapeView: UICollectionViewDelegate {
             carouselLayout.setCurrentPage(indexPath.row)
         } else if let game = focusedGame {
             UIDevice.generateHaptic()
-            progressGame(game)
+            game.handleTapAction()
         }
     }
     

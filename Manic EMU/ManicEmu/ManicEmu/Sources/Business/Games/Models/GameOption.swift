@@ -77,7 +77,8 @@ enum GameOption: Int, CaseIterable {
          gameShortcut,
          deadZone,
          rewind,
-         netplay
+         netplay,
+         symbianDevice
         
     //When adding a new option, make sure to add it at the end; otherwise, it might affect the existing Prefference configurations
     
@@ -219,6 +220,8 @@ enum GameOption: Int, CaseIterable {
                 .symbolImage(R.image.rewind_iconSymbols())
         case .netplay:
                 .symbolImage(R.image.online_iconSymbols())
+        case .symbianDevice:
+                .symbol(.candybarphone)
         }
     }
     
@@ -360,6 +363,8 @@ enum GameOption: Int, CaseIterable {
             R.string.localizable.rewind()
         case .netplay:
             R.string.localizable.netplay()
+        case .symbianDevice:
+            R.string.localizable.symbianFirmwareChoosing()
         }
     }
     
@@ -484,6 +489,7 @@ enum GameOption: Int, CaseIterable {
             .ndsMicrophone,
             .clownMDTvStandard,
             .snesVRAM,
+            .symbianDevice,
             .coreSettings
         ],
         [
@@ -907,6 +913,15 @@ enum GameOption: Int, CaseIterable {
             }
             return .chevron(ver)
             
+        case .symbianDevice:
+            if let model = firstGame.getExtraString(key: ExtraKey.symbianFirmwareModel.rawValue) {
+                if games.count == 1 {
+                    return .chevron(model)
+                } else if games.allSatisfy({ $0.getExtraString(key: ExtraKey.symbianFirmwareModel.rawValue) == model }) {
+                    return .chevron(model)
+                }
+            }
+            
         case .rename,
                 .cover,
                 .skins,
@@ -960,7 +975,6 @@ enum GameOption: Int, CaseIterable {
             return [
                 .rename,
                 .cover,
-                .skins,
                 .importSave,
                 .shareSave,
                 .platformChange,
@@ -988,11 +1002,35 @@ enum GameOption: Int, CaseIterable {
                 .clownMDTvStandard,
                 .snesVRAM,
                 .dcCore,
+                .symbianDevice,
             ]
         }
     }
     
     static func availableOptions(game: Game, scene: Scene = .common) -> [Self] {
+        if game.isSymbianHomeMenu {
+            var options: [Self] = [.rename,
+                                   .cover,
+                                   .delete,
+                                   .volume,
+                                   .haptic,
+                                   .airplay,
+                                   .orientation,
+                                   .gameOptionSort,
+                                   .airPlayScaling,
+                                   .triggerPro,
+                                   .gameShortcut,
+                                   .deadZone]
+            
+            if scene == .gaming {
+                options += [.screenShot,
+                            .hideControls,
+                            .reload,
+                            .quit]
+            }
+            return options
+        }
+        
         if game.gameType.externalType {
             return [.rename, .cover, .delete]
         }
@@ -1191,6 +1229,10 @@ enum GameOption: Int, CaseIterable {
             allOptions.remove(.dcCore)
         }
         
+        if game.gameType != .symbian {
+            allOptions.remove(.symbianDevice)
+        }
+        
         allOptions.subtract(disableOptionsForScene(scene))
         
         return Array(allOptions)
@@ -1235,7 +1277,8 @@ enum GameOption: Int, CaseIterable {
                                                             .palette,
                                                             .triggerPro,
                                                             .gameShortcut,
-                                                            .dcCore],
+                                                            .dcCore,
+                                                            .symbianDevice],
                                                   condition: {
                 !games.allSatisfy({ $0.gameType == firstGame.gameType })
             })

@@ -323,6 +323,9 @@ class GameListView: BaseView {
                     self.updateDatas()
                     self.collectionView.reloadData()
                     self.reloadIndexView()
+                    if !self.isGamesExist {
+                        UIView.springAnimate { self.bottomToolView.alpha = 0 }
+                    }
                 }
                 
                 //如果被修改了则更新视图
@@ -889,7 +892,7 @@ extension GameListView: UICollectionViewDataSource {
                 let randomSection = Int(arc4random()) % self.normalDatas.count
                 if let games = self.normalDatas[self.sortDatasKeys()[randomSection]] {
                     let randomGame = games[Int(arc4random()) % games.count]
-                    PlayViewController.startGame(game: randomGame)
+                    randomGame.handleTapAction(forceQuick: true)
                 }
             }
             return header
@@ -947,23 +950,7 @@ extension GameListView: UICollectionViewDelegate {
         }
         
         if let game = getGame(at: indexPath) {
-            if game.isNDSHomeMenuGame {
-                let biosCompletion = game.gameType.isNDSBiosComplete()
-                if (game.id == Game.DsHomeMenuPrimaryKey && !biosCompletion.isDSComplete) || (game.id == Game.DsiHomeMenuPrimaryKey && !biosCompletion.isDsiComplete) {
-                    //弹出bios导入页面
-                    BIOSSelectionView.show(gameType: game.gameType)
-                } else {
-                    PlayViewController.startGame(game: game)
-                }
-            } else if Settings.defalut.quickGame {
-                PlayViewController.startGame(game: game)
-            } else {
-                if game.gameType == .unknown {
-                    PlatformSelectionView.show(games: [game])
-                } else {
-                    GameInfoView.show(readyAction: .default, game: game)
-                }
-            }
+            game.handleTapAction()
         }
         return false
     }

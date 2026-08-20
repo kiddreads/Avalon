@@ -15,7 +15,7 @@ import ZipArchive
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
+        case symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .arcade: GameType.arcade.localizedName
@@ -33,6 +33,7 @@ class BIOSSelectionView: BaseView {
             case .lynx: GameType.lynx.localizedName
             case .a7800: GameType.a7800.localizedName
             case .a5200: GameType.a5200.localizedName
+            case .symbian: GameType.symbian.localizedName
             }
         }
         
@@ -53,6 +54,7 @@ class BIOSSelectionView: BaseView {
             case .a5200: return .a5200
             case .a7800: return .a7800
             case .lynx: return .lynx
+            case .symbian: return .symbian
             }
         }
     }
@@ -77,6 +79,8 @@ class BIOSSelectionView: BaseView {
                     } else {
                         MAMEBiosView.show()
                     }
+                } else if sectionIndex.gameType == .symbian {
+                    SymbianFirmwareView.show()
                 } else {
                     self.importBios(gameType: sectionIndex.gameType)
                 }
@@ -169,9 +173,13 @@ class BIOSSelectionView: BaseView {
         } else {
             importTitle = R.string.localizable.tabbarTitleImport()
         }
-        styles.append(.button(.large(title: importTitle,
-                                     titleColor: item.imported ? R.Color.Green : R.Color.Red,
-                                     background: .clear)))
+        if item.fileName == R.string.localizable.symbianOSFirmware() {
+            styles.append(.chevron(.init()))
+        } else {
+            styles.append(.button(.large(title: importTitle,
+                                         titleColor: item.imported ? R.Color.Green : R.Color.Red,
+                                         background: .clear)))
+        }
         return .normal(styles)
     }
     
@@ -185,6 +193,7 @@ class BIOSSelectionView: BaseView {
         DispatchQueue.global().async { [weak self] in
             guard let self else { return }
             for gameType in self.biosItemMaps.keys {
+                guard gameType != .symbian else { continue }
                 self.reloadImportState(gameType: gameType, updateViews: false)
             }
             DispatchQueue.main.async {

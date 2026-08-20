@@ -11,6 +11,7 @@
 
 enum System: CaseIterable
 {
+    case symbian
     case xbox
     case dos
     case doom
@@ -80,7 +81,8 @@ enum System: CaseIterable
                 Jaguar.core,
                 J2ME.core,
                 DOOM.core,
-                DOS.core]
+                DOS.core,
+                Symbian.core]
     }
     
     ///Returns all supported game types.
@@ -95,7 +97,7 @@ enum System: CaseIterable
                 }).filter({
                     !gameTypeOrders.contains([$0])
                 })
-                gameTypeOrders += missGameTypes
+                gameTypeOrders = missGameTypes + gameTypeOrders
             }
             return gameTypeOrders.compactMap { GameType(shortName: $0) }
         } else {
@@ -142,6 +144,7 @@ extension System {
         case .xbox360: return .xbox360
         case .dos: return .dos
         case .xbox: return .xbox
+        case .symbian: return .symbian
         }
     }
 }

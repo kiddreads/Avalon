@@ -15,6 +15,7 @@ import IceCream
 import SmartCodable
 import Citra
 import PLzmaSDK
+import Unrar
 
 class FilesImporter: NSObject {
     static let shared = FilesImporter()
@@ -114,6 +115,8 @@ extension FilesImporter {
             let (m3uResultUrls, m3uResultError, m3uResultM3uItems, m3uResultMultiFileItems) = handleM3uFiles(urls: multiFileResultUrls, multiFileItems: multiFileResultItems)
             
             urls = m3uResultUrls
+            let nGage20Urls = urls.filter { isNGage20PackageURL($0) }
+            urls.removeAll { isNGage20PackageURL($0) }
             let group = DispatchGroup()
             var errors: [ImportError] = preErrors
             var gameErrors = [ImportError]()
@@ -124,7 +127,28 @@ extension FilesImporter {
             var importGames: [(id: String, name: String)] = []
             var importSkins: [String] = []
             var importGameSaves: [(id: String, name: String)] = []
+            let hasSymbianFirmware = !(LibretroCore.getSymbianDevices() ?? []).isEmpty
+            var skippedSymbianWithoutFirmware = false
             for url in urls {
+                if isSymbianImportURL(url) {
+                    if !hasSymbianFirmware {
+                        skippedSymbianWithoutFirmware = true
+                        continue
+                    }
+                    group.enter()
+                    importGame(url: url, items: []) { gameId, gameName, error in
+                        DispatchQueue.main.async {
+                            if let error = error {
+                                gameErrors.append(error)
+                            }
+                            if let gameId, let gameName {
+                                importGames.append((gameId, gameName))
+                            }
+                            group.leave()
+                        }
+                    }
+                    continue
+                }
                 if let fileType = FileType(fileExtension: url.pathExtension) {
                     //The file type was identified by its extension.
                     switch fileType {
@@ -188,11 +212,12 @@ extension FilesImporter {
                 clearProcessingState()
                 
                 UIView.hideLoading()
-                if silentMode {
-                    importCompletion?()
-                    return
-                }
-                //先处理gameSave的错误
+                importNGage20Packages(nGage20Urls) {
+                    if silentMode {
+                        importCompletion?()
+                        return
+                    }
+                    // Handle save-file errors first.
                 ErrorHandler.shared.handleErrors(gameSaveErrors) { error in
                     switch error {
                     case .saveNoMatchGames(_), .saveAlreadyExist(_, _), .saveMatchToMuch(_, _):
@@ -349,17 +374,32 @@ extension FilesImporter {
                     errors.append(contentsOf: unhandledErrors)
                     errors.append(contentsOf: gameErrors)
                     errors.append(contentsOf: skinErrors)
+                    func finishImport() {
+                        if skippedSymbianWithoutFirmware {
+                            UIView.makeAlert(detail: R.string.localizable.symbianGameNeedFirmware(),
+                                             confirmTitle: R.string.localizable.goToInstallFirmware(),
+                                             confirmAction: {
+                                SymbianFirmwareView.show()
+                            }, hideAction: {
+                                handleImportSuccess()
+                                importCompletion?()
+                            })
+                        } else {
+                            handleImportSuccess()
+                            importCompletion?()
+                        }
+                    }
                     if errors.count > 0 {
                         UIView.makeAlert(title: R.string.localizable.importErrorTitle(),
                                          detail: String.errorMessage(from: errors),
                                          cancelTitle: R.string.localizable.confirmTitle(),
                                          hideAction: {
-                            handleImportSuccess()
+                            finishImport()
                         })
                     } else {
-                        handleImportSuccess()
+                        finishImport()
                     }
-                    importCompletion?()
+                }
                 }
             }
         }
@@ -368,11 +408,7 @@ extension FilesImporter {
     private static func startGame(gameId: String) {
         let realm = Database.realm
         if let game = realm.object(ofType: Game.self, forPrimaryKey: gameId) {
-            if Settings.defalut.quickGame {
-                PlayViewController.startGame(game: game)
-            } else {
-                GameInfoView.show(readyAction: .default, game: game)
-            }
+            game.handleTapAction()
         }
     }
     
@@ -415,6 +451,10 @@ extension FilesImporter {
     
     private static func importGame(url: URL, items: [URL] = [], completion: ((_ gameId: String?, _ gameName: String?, _ error: ImportError?)->Void)?) {
         DispatchQueue.global(qos: .userInitiated).async {
+            if isSymbianImportURL(url) {
+                importSymbianGame(url: url, completion: completion)
+                return
+            }
             let realm = Database.realm
             var ciaTitleUrl: URL? = nil
             let originalUrl = url
@@ -846,7 +886,13 @@ extension FilesImporter {
             
             
             for url in urls {
-                if (url.pathExtension.lowercased() == "zip" || url.pathExtension.lowercased() == "7z") && MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+                let fileExtension = url.pathExtension.lowercased()
+                if (fileExtension == "zip" || fileExtension == "7z") && MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+                    results.append(url)
+                    continue
+                }
+                
+                if ["zip", "7z", "rar"].contains(fileExtension), isNGage10Archive(url) {
                     results.append(url)
                     continue
                 }
@@ -1036,7 +1082,7 @@ extension FilesImporter {
                 }
             }
             
-            func extractSaveFiles(archive: Archive) {
+            func extractSaveFiles(archive: ZIPFoundation.Archive) {
                 for entry in archive {
                     if entry.type == .file && entry.path.hasPrefix("sdmc") {
                         let savePath = R.Path.ThreeDS.appendingPathComponent(entry.path)
@@ -1096,7 +1142,7 @@ extension FilesImporter {
                 }
             }
             
-            func extractSaveFiles(archive: Archive) {
+            func extractSaveFiles(archive: ZIPFoundation.Archive) {
                 for entry in archive {
                     if entry.type == .file {
                         let realPath = entry.path.components(separatedBy: "/")[1...].reduce("") { $0 + "/" + $1 }
@@ -1394,6 +1440,371 @@ extension FilesImporter {
         results.removeAll(where: { excludes.contains([$0]) })
         
         return (results, errors, cueItems)
+    }
+    
+    private static func isNGage20PackageURL(_ url: URL) -> Bool {
+        url.pathExtension.lowercased() == "n-gage"
+    }
+    
+    private static func nGage20StagedPackages() -> [URL] {
+        let dir = URL(fileURLWithPath: R.Path.EKA2L1DriveENGage)
+        guard let items = try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil) else {
+            return []
+        }
+        return items.filter { $0.pathExtension.lowercased() == "n-gage" }
+    }
+    
+    /// N-Gage 2.0 packages are staged for the in-OS installer; no Realm row.
+    private static func importNGage20Packages(_ urls: [URL], completion: @escaping () -> Void) {
+        var remaining = urls
+        func next() {
+            guard let url = remaining.first else {
+                completion()
+                return
+            }
+            remaining.removeFirst()
+            importOneNGage20Package(url, completion: next)
+        }
+        next()
+    }
+    
+    private static func importOneNGage20Package(_ url: URL, completion: @escaping () -> Void) {
+        let stageAndNotify = {
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try stageNGage20Package(url)
+                    DispatchQueue.main.async {
+                        UIView.makeAlert(title: R.string.localizable.nGage2Install(),
+                                         detail: R.string.localizable.nGagePackageReady(),
+                                         cancelTitle: R.string.localizable.gotIt(),
+                                         enableForceHide: false,
+                                         cancelAction: completion)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        UIView.makeToast(message: R.string.localizable.importErrorTitle())
+                        completion()
+                    }
+                }
+            }
+        }
+        if nGage20StagedPackages().isEmpty {
+            stageAndNotify()
+            return
+        }
+        UIView.makeAlert(title: R.string.localizable.nGage2Install(),
+                         detail: R.string.localizable.nGagePendingInstallOverwrite(),
+                         confirmTitle: R.string.localizable.confirmTitle(),
+                         enableForceHide: false,
+                         cancelAction: completion,
+                         confirmAction: stageAndNotify)
+    }
+    
+    private static func stageNGage20Package(_ url: URL) throws {
+        let dir = URL(fileURLWithPath: R.Path.EKA2L1DriveENGage)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        for old in nGage20StagedPackages() {
+            try? FileManager.safeRemoveItem(at: old)
+        }
+        let dest = dir.appendingPathComponent(url.lastPathComponent)
+        try FileManager.safeCopyItem(at: url, to: dest, shouldReplace: true)
+    }
+    
+    private static func isSymbianPackageExtension(_ ext: String) -> Bool {
+        ext == "sis" || ext == "sisx"
+    }
+    
+    private static func isSymbianImportURL(_ url: URL) -> Bool {
+        let ext = url.pathExtension.lowercased()
+        if isSymbianPackageExtension(ext) {
+            return true
+        }
+        guard ["zip", "7z", "rar"].contains(ext) else { return false }
+        if MAMEKit.isSupportTitle(fileName: url.lastPathComponent.deletingPathExtension) {
+            return false
+        }
+        return isNGage10Archive(url)
+    }
+    
+    private static func isNGage10Archive(_ url: URL) -> Bool {
+        nGageDumpInfo(from: archiveEntryPaths(url)) != nil
+    }
+    
+    private struct NGageDumpInfo {
+        /// Path from archive extract root to the folder that contains `system/apps`. Empty if that folder is the archive root.
+        let dumpRootRelative: String
+        let gameFolder: String
+    }
+    
+    /// N-Gage 1.0 card dumps register as `system/apps/<GameName>/<GameName>.aif` (case-insensitive). An extra wrapper folder is allowed.
+    private static func nGageDumpInfo(from entries: [String]) -> NGageDumpInfo? {
+        for entry in entries {
+            let parts = entry.replacingOccurrences(of: "\\", with: "/")
+                .split(separator: "/")
+                .map(String.init)
+                .filter { !$0.isEmpty && $0 != "." }
+            guard let systemIdx = parts.firstIndex(where: { $0.lowercased() == "system" }) else { continue }
+            let after = Array(parts[(systemIdx + 1)...])
+            guard after.count >= 3, after[0].lowercased() == "apps" else { continue }
+            let folder = after[1]
+            let file = after[2]
+            guard file.lowercased() == folder.lowercased() + ".aif" else { continue }
+            let prefix = parts[..<systemIdx].joined(separator: "/")
+            return NGageDumpInfo(dumpRootRelative: prefix, gameFolder: folder)
+        }
+        return nil
+    }
+    
+    private static func archiveEntryPaths(_ url: URL) -> [String] {
+        let ext = url.pathExtension.lowercased()
+        if ext == "zip" {
+            guard let archive = try? ZIPFoundation.Archive(url: url, accessMode: .read, pathEncoding: nil) else { return [] }
+            return archive.compactMap { $0.type == .file ? $0.path : nil }
+        }
+        if ext == "7z" {
+            do {
+                let decoder = try Decoder(stream: InStream(path: Path(url.path)), fileType: .sevenZ)
+                _ = try decoder.open()
+                let count = try decoder.count()
+                var paths: [String] = []
+                paths.reserveCapacity(Int(count))
+                for index in 0..<count {
+                    let item = try decoder.item(at: index)
+                    if item.isDir { continue }
+                    paths.append(try item.path().description)
+                }
+                return paths
+            } catch {
+                return []
+            }
+        }
+        if ext == "rar" {
+            do {
+                let archive = try Unrar.Archive(fileURL: url)
+                return try archive.entries().compactMap { $0.directory ? nil : $0.fileName }
+            } catch {
+                return []
+            }
+        }
+        return []
+    }
+    
+    private static func extractArchive(_ url: URL, to dest: URL) -> Bool {
+        try? FileManager.default.createDirectory(at: dest, withIntermediateDirectories: true)
+        let ext = url.pathExtension.lowercased()
+        if ext == "zip" {
+            return SSZipArchive.unzipFile(atPath: url.path, toDestination: dest.path)
+        }
+        if ext == "7z" {
+            do {
+                let decoder = try Decoder(stream: InStream(path: Path(url.path)), fileType: .sevenZ)
+                _ = try decoder.open()
+                return try decoder.extract(to: Path(dest.path), itemsFullPath: true)
+            } catch {
+                Log.debug("Failed to extract N-Gage 7z: \(error)")
+                return false
+            }
+        }
+        if ext == "rar" {
+            do {
+                let archive = try Unrar.Archive(fileURL: url)
+                for entry in try archive.entries() {
+                    if entry.directory { continue }
+                    let relative = entry.fileName.replacingOccurrences(of: "\\", with: "/")
+                    let fileURL = dest.appendingPathComponent(relative)
+                    try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+                    let data = try archive.extract(entry)
+                    try data.write(to: fileURL)
+                }
+                return true
+            } catch {
+                Log.debug("Failed to extract N-Gage rar: \(error)")
+                return false
+            }
+        }
+        return false
+    }
+    
+    /// Unique E: prefixes `system/<dir>/<name>` (e.g. `system/apps/6rbc`, `system/libs/foo.dll`).
+    private static func collectNGageInstalledFiles(dumpRoot: URL) -> [String] {
+        var prefixes = Set<String>()
+        let root = dumpRoot.resolvingSymlinksInPath()
+        if let enumerator = FileManager.default.enumerator(at: root,
+                                                           includingPropertiesForKeys: [.isRegularFileKey],
+                                                           options: [.skipsHiddenFiles]) {
+            for case let fileURL as URL in enumerator {
+                let isFile = (try? fileURL.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) ?? false
+                guard isFile else { continue }
+                if let relative = nGageEDriveRelativePath(of: fileURL, dumpRoot: root) {
+                    prefixes.insert(relative)
+                }
+            }
+        }
+        return prefixes.sorted()
+    }
+    
+    /// E: relative prefix `system/<first>/<second>`. Drops extract-root / `/private/var` prefixes.
+    private static func nGageEDriveRelativePath(of fileURL: URL, dumpRoot: URL) -> String? {
+        let rootPath = dumpRoot.resolvingSymlinksInPath().standardizedFileURL.path
+        let filePath = fileURL.resolvingSymlinksInPath().standardizedFileURL.path
+        var relative = filePath
+        if filePath.hasPrefix(rootPath) {
+            relative = String(filePath.dropFirst(rootPath.count))
+        }
+        return nGageEDriveRelativePath(relative)
+    }
+    
+    private static func nGageEDriveRelativePath(_ path: String) -> String? {
+        let normalized = path.replacingOccurrences(of: "\\", with: "/")
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            .lowercased()
+        guard let range = normalized.range(of: "system/") else { return nil }
+        let parts = String(normalized[range.lowerBound...]).split(separator: "/").map(String.init)
+        guard parts.count >= 3, parts[0] == "system" else { return nil }
+        return "\(parts[0])/\(parts[1])/\(parts[2])"
+    }
+    
+    private static func installSymbianGameSync(_ path: String) -> (LibretroSymbianGameInstallResult, LibretroSymbianGame?) {
+        let lock = DispatchSemaphore(value: 0)
+        var mapped = LibretroSymbianGameInstallResult.unknown
+        var installed: LibretroSymbianGame?
+        LibretroCore.installSymbianGame(path) { result, game in
+            mapped = result
+            installed = game
+            lock.signal()
+        }
+        lock.wait()
+        return (mapped, installed)
+    }
+    
+    private static func importSymbianGame(url: URL, completion: ((_ gameId: String?, _ gameName: String?, _ error: ImportError?)->Void)?) {
+        let originalName = url.deletingPathExtension().lastPathComponent
+        let ext = url.pathExtension.lowercased()
+        var installPath = url.path
+        var ngageFiles: [String] = []
+        var tempRoot: URL?
+        var isNGageArchive = false
+        
+        if ["zip", "7z", "rar"].contains(ext) {
+            isNGageArchive = true
+            let entries = archiveEntryPaths(url)
+            guard let info = nGageDumpInfo(from: entries) else {
+                completion?(nil, nil, .badFile(fileName: originalName))
+                return
+            }
+            let temp = URL(fileURLWithPath: R.Path.Temp.appendingPathComponent("NGageImport-\(UUID().uuidString)"))
+            tempRoot = temp
+            guard extractArchive(url, to: temp) else {
+                try? FileManager.default.removeItem(at: temp)
+                completion?(nil, nil, .badFile(fileName: originalName))
+                return
+            }
+            let dumpRoot = info.dumpRootRelative.isEmpty ? temp : temp.appendingPathComponent(info.dumpRootRelative)
+            guard FileManager.default.fileExists(atPath: dumpRoot.path) else {
+                try? FileManager.default.removeItem(at: temp)
+                completion?(nil, nil, .badFile(fileName: originalName))
+                return
+            }
+            ngageFiles = collectNGageInstalledFiles(dumpRoot: dumpRoot)
+            installPath = dumpRoot.path
+        }
+        defer {
+            if let tempRoot {
+                try? FileManager.default.removeItem(at: tempRoot)
+            }
+        }
+        
+        let (result, installed) = installSymbianGameSync(installPath)
+        guard result == .OK, let installed else {
+            Log.debug("Symbian game install failed result:\(result.rawValue) \(originalName)")
+            if result == .alreadyExist {
+                completion?(nil, nil, .fileExist(fileName: originalName))
+            } else {
+                completion?(nil, nil, .badFile(fileName: originalName))
+            }
+            return
+        }
+        
+        let uidString = installed.uidString
+        guard tryBeginProcessing(uidString) else {
+            completion?(nil, nil, .fileExist(fileName: originalName))
+            return
+        }
+        
+        let realm = Database.realm
+        if let game = realm.object(ofType: Game.self, forPrimaryKey: uidString) {
+            if game.isDeleted {
+                do {
+                    try realm.write { game.isDeleted = false }
+                    if let device = installed.compatibleDevice {
+                        game.updateSymbianGame(device: device)
+                    }
+                    completion?(game.id, game.displayName, nil)
+                } catch {
+                    completion?(nil, nil, .writeDatabase(fileName: originalName))
+                }
+            } else {
+                completion?(nil, nil, .fileExist(fileName: originalName))
+            }
+            return
+        }
+        
+        let game = Game()
+        game.id = uidString
+        let caption = [installed.longCaption, installed.shortCaption]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first(where: { !$0.isEmpty })
+        game.name = caption ?? originalName
+        game.fileExtension = isNGageArchive ? "nge" : ext
+        game.importDate = Date()
+        game.gameType = .symbian
+        
+        if let icon = installed.icon, let iconData = icon.jpegData(compressionQuality: 0.7) {
+            game.gameCover = CreamAsset.create(objectID: game.id, propName: "gameCover", data: iconData)
+        }
+        
+        var extras: [String: Any] = [:]
+        if !ngageFiles.isEmpty {
+            extras[ExtraKey.ngageFiles.rawValue] = ngageFiles
+        }
+        let packages: [[String: Any]] = installed.packages.map { package in
+            ["uid": package.uid, "index": package.index]
+        }
+        if !packages.isEmpty {
+            extras[ExtraKey.symbianPackages.rawValue] = packages
+        } else if ngageFiles.isEmpty {
+            extras[ExtraKey.symbianPackages.rawValue] = [["uid": installed.uid, "index": 0]]
+        }
+        if let device = installed.compatibleDevice {
+            extras[ExtraKey.symbianFirmwareCode.rawValue] = device.firmwareCode
+            extras[ExtraKey.symbianFirmwareModel.rawValue] = device.model
+            extras[ExtraKey.symbianOSVer.rawValue] = SymbianOS.getOS(by: device).rawValue
+        }
+        if !extras.isEmpty {
+            game.extras = extras.jsonData()
+        }
+        
+        do {
+            try realm.write { realm.add(game) }
+            if let device = installed.compatibleDevice {
+                game.updateSymbianGame(device: device)
+                //Set the skin preference based on the system version
+                if SymbianOS.getOS(by: device).rawValue > SymbianOS.S60v3.rawValue,
+                   let skinId = FileHashUtil.truncatedHash(url: R.URLs.SymbianEdgeSkinUrl) {
+                    Prefference.defalut.storePrefference(kind: .skin,
+                                                         storeKey: .orientationKey(gameId: game.id, isLandScape: true),
+                                                         storeValue: skinId)
+                    Prefference.defalut.storePrefference(kind: .skin,
+                                                         storeKey: .orientationKey(gameId: game.id, isLandScape: false),
+                                                         storeValue: skinId)
+                }
+            }
+            OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
+            completion?(game.id, game.displayName, nil)
+        } catch {
+            Log.debug("Failed to insert Symbian game into database:\(error)")
+            completion?(nil, nil, .writeDatabase(fileName: originalName))
+        }
     }
 }
 

@@ -95,66 +95,91 @@ extension GameOption {
                              detail: R.string.localizable.deleteGameAlertDetail(),
                              confirmTitle: R.string.localizable.confirmDelte(),
                              confirmAction: {
-                Game.change { realm in
-                    for game in games {
-                        if game.isRomExtsts {
-                            if game.gameType == ._3ds, game.fileExtension.lowercased() == "app", let range = game.romUrl.path.range(of: "/content/") {
-                                let gamePath = String(game.romUrl.path[...range.lowerBound])
-                                try FileManager.safeRemoveItem(at: URL(fileURLWithPath: gamePath))
-                                SyncManager.delete(localFilePath: gamePath)
-                                //删除DLC和更新
-                                let updatePath = gamePath.replacingOccurrences(of: "/00040000/", with: "/0004000e/")
-                                try FileManager.safeRemoveItem(at: URL(fileURLWithPath: updatePath))
-                                SyncManager.deletePath(localPath: updatePath)
-                                let dlcPath = gamePath.replacingOccurrences(of: "/00040000/", with: "/0004008c/")
-                                try FileManager.safeRemoveItem(at: URL(fileURLWithPath: dlcPath))
-                                SyncManager.deletePath(localPath: dlcPath)
-                            } else if game.isMultiFileGame {
-                                let romParentPath = game.romUrl.path.deletingLastPathComponent
-                                try FileManager.safeRemoveItem(at: URL(fileURLWithPath: romParentPath))
-                                SyncManager.deletePath(localPath: romParentPath)
-                            } else {
-                                try FileManager.safeRemoveItem(at: game.romUrl)
-                                SyncManager.delete(localFilePath: game.romUrl.path)
-                            }
-                        }
-                        
-                        if game.gameType == .j2me {
-                            game.deleteJ2meSaves()
-                        } else if game.gameType == .dos {
-                            game.deleteDosFiles()
-                        } else {
-                            if game.isSaveExtsts {
-                                if game.gameType == .psp, let code = game.gameCodeForPSP {
-                                    //psp的存档可能分为多个文件夹
-                                    try? FileManager.default.contentsOfDirectory(atPath: R.Path.PSPSave).filter({ $0.hasPrefix(code)}).forEach { savePath in
-                                        let deletePath = R.Path.PSPSave.appendingPathComponent(savePath)
-                                        try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: deletePath))
-                                        SyncManager.deletePath(localPath: deletePath)
-                                    }
+                let sisUninstallJobs: [(uid: Int, index: Int)] = games.flatMap { game -> [(uid: Int, index: Int)] in
+                    guard game.gameType == .symbian, game.ngageRelativeFiles.isEmpty else { return [] }
+                    return game.symbianInstallPackages
+                }
+                let performDelete = {
+                    Game.change { realm in
+                        for game in games {
+                            if game.gameType == .symbian {
+                                // SIS packages were already uninstalled off the main thread.
+                                if !game.ngageRelativeFiles.isEmpty {
+                                    game.uninstallFromSymbianStorage()
+                                }
+                            } else if game.isRomExtsts {
+                                if game.gameType == ._3ds, game.fileExtension.lowercased() == "app", let range = game.romUrl.path.range(of: "/content/") {
+                                    let gamePath = String(game.romUrl.path[...range.lowerBound])
+                                    try FileManager.safeRemoveItem(at: URL(fileURLWithPath: gamePath))
+                                    SyncManager.delete(localFilePath: gamePath)
+                                    // Remove DLC and update titles.
+                                    let updatePath = gamePath.replacingOccurrences(of: "/00040000/", with: "/0004000e/")
+                                    try FileManager.safeRemoveItem(at: URL(fileURLWithPath: updatePath))
+                                    SyncManager.deletePath(localPath: updatePath)
+                                    let dlcPath = gamePath.replacingOccurrences(of: "/00040000/", with: "/0004008c/")
+                                    try FileManager.safeRemoveItem(at: URL(fileURLWithPath: dlcPath))
+                                    SyncManager.deletePath(localPath: dlcPath)
+                                } else if game.isMultiFileGame {
+                                    let romParentPath = game.romUrl.path.deletingLastPathComponent
+                                    try FileManager.safeRemoveItem(at: URL(fileURLWithPath: romParentPath))
+                                    SyncManager.deletePath(localPath: romParentPath)
                                 } else {
-                                    try FileManager.safeRemoveItem(at: game.gameSaveUrl)
-                                    SyncManager.delete(localFilePath: game.gameSaveUrl.path)
+                                    try FileManager.safeRemoveItem(at: game.romUrl)
+                                    SyncManager.delete(localFilePath: game.romUrl.path)
                                 }
                             }
+                            
+                            if game.gameType == .j2me {
+                                game.deleteJ2meSaves()
+                            } else if game.gameType == .dos {
+                                game.deleteDosFiles()
+                            } else {
+                                if game.isSaveExtsts {
+                                    if game.gameType == .psp, let code = game.gameCodeForPSP {
+                                        // PSP saves may span multiple folders.
+                                        try? FileManager.default.contentsOfDirectory(atPath: R.Path.PSPSave).filter({ $0.hasPrefix(code)}).forEach { savePath in
+                                            let deletePath = R.Path.PSPSave.appendingPathComponent(savePath)
+                                            try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: deletePath))
+                                            SyncManager.deletePath(localPath: deletePath)
+                                        }
+                                    } else {
+                                        try FileManager.safeRemoveItem(at: game.gameSaveUrl)
+                                        SyncManager.delete(localFilePath: game.gameSaveUrl.path)
+                                    }
+                                }
+                            }
+                            
+                            if let coverData = game.gameCover {
+                                coverData.deleteAndClean(realm: realm)
+                            }
+                            CreamAsset.batchDeleteAndClean(assets: game.gameSaveStates.compactMap({ $0.stateCover }), realm: realm)
+                            CreamAsset.batchDeleteAndClean(assets: game.gameSaveStates.compactMap({ $0.stateData }), realm: realm)
+                            if Settings.defalut.iCloudSyncEnable {
+                                // Soft-delete while iCloud sync is on.
+                                game.gameCheats.forEach { $0.isDeleted = true }
+                                game.gameSaveStates.forEach { $0.isDeleted = true }
+                                game.isDeleted = true
+                            } else {
+                                // Local hard delete.
+                                realm.delete(game.gameCheats)
+                                realm.delete(game.gameSaveStates)
+                                realm.delete(game)
+                            }
                         }
-                        
-                        if let coverData = game.gameCover {
-                            coverData.deleteAndClean(realm: realm)
-                        }
-                        CreamAsset.batchDeleteAndClean(assets: game.gameSaveStates.compactMap({ $0.stateCover }), realm: realm)
-                        CreamAsset.batchDeleteAndClean(assets: game.gameSaveStates.compactMap({ $0.stateData }), realm: realm)
-                        if Settings.defalut.iCloudSyncEnable {
-                            //iCloud同步时使用软删除
-                            game.gameCheats.forEach { $0.isDeleted = true }
-                            game.gameSaveStates.forEach { $0.isDeleted = true }
-                            game.isDeleted = true
-                        } else {
-                            //本地删除
-                            realm.delete(game.gameCheats)
-                            realm.delete(game.gameSaveStates)
-                            realm.delete(game)
-                        }
+                    }
+                }
+                if sisUninstallJobs.isEmpty {
+                    performDelete()
+                    return
+                }
+                UIView.makeLoading()
+                DispatchQueue.global().async {
+                    for job in sisUninstallJobs {
+                        LibretroCore.uninstallSymbianGame(withUid: job.uid, index: job.index)
+                    }
+                    DispatchQueue.main.async {
+                        performDelete()
+                        UIView.hideLoading()
                     }
                 }
             })
@@ -226,7 +251,7 @@ extension GameOption {
             
         case .retroAchievements:
             if !firstGame.supportRetroAchievements {
-                let showName = firstGame.gameType == .arcade ? LibretroCore.Cores.MAME.name : firstGame.gameType.localizedShortName
+                let showName = firstGame.gameType == .arcade ? EmulationCore.MAME.name : firstGame.gameType.localizedShortName
                 UIView.makeToast(message: R.string.localizable.achievementsNotSupport(showName))
                 return
             }
@@ -994,6 +1019,9 @@ extension GameOption {
             
         case .dcCore:
             performStringAction(with: games, accessoryChange: accessoryChange)
+            
+        case .symbianDevice:
+            performStringAction(with: games, accessoryChange: accessoryChange)
         }
     }
     
@@ -1131,6 +1159,7 @@ extension GameOption {
         guard let firstGame = games.first else { return }
         
         var options = [String]()
+        var symbianDevices = [LibretroSymbianDevice]()
         var detail: String? = nil
         if self == .azaharEmulationAccuracy {
             options = ["HLE", "LLE"]
@@ -1210,6 +1239,17 @@ extension GameOption {
         } else if self == .dcCore {
             options = ["Default", "WinCE", "Fuse"]
             detail = R.string.localizable.dcjitLessVer()
+        } else if self == .symbianDevice {
+            if let devices = LibretroCore.getSymbianDevices(),
+                devices.count > 0 {
+                symbianDevices = devices
+                options = devices.map({ $0.model })
+                detail = R.string.localizable.symbianOSFirmwareDesc()
+            } else {
+                UIView.makeToast(message: R.string.localizable.noFirmware())
+                SymbianFirmwareView.show()
+                return
+            }
         }
         
         guard options.count > 0 else { return }
@@ -1302,9 +1342,9 @@ extension GameOption {
                         }
                         if PlayViewController.isGaming {
                             if firstGame.gameType == .vb {
-                                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.BeetleVB.name, key: SpecialCoreOption.vb_color_mode.rawValue, value: palette.paletteTitleForVB, reload: true)
+                                LibretroCore.sharedInstance().updateConfig(EmulationCore.BeetleVB.name, key: SpecialCoreOption.vb_color_mode.rawValue, value: palette.paletteTitleForVB, reload: true)
                             } else if firstGame.gameType == .pm {
-                                LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PokeMini.name, key: SpecialCoreOption.pokemini_palette.rawValue, value: palette.paletteTitleForPM, reload: true)
+                                LibretroCore.sharedInstance().updateConfig(EmulationCore.PokeMini.name, key: SpecialCoreOption.pokemini_palette.rawValue, value: palette.paletteTitleForPM, reload: true)
                             } else if firstGame.gameType == .gb {
                                 if firstGame.defaultCore == 0 {
                                     //Gambatte
@@ -1391,8 +1431,15 @@ extension GameOption {
                         resumeEmulationIfNeed()
                     }
                 } else if self == .dcCore {
+                    Game.change { realm in
+                        games.forEach({
+                            $0.defaultCore = index
+                        })
+                    }
+                } else if self == .symbianDevice {
+                    let device = symbianDevices[index]
                     games.forEach({
-                        $0.defaultCore = index
+                        $0.updateSymbianGame(device: device)
                     })
                 }
                 accessoryChange?()

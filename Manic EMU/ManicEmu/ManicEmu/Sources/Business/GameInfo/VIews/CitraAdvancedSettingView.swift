@@ -469,9 +469,9 @@ class CitraAdvancedSettingView: BaseView {
         case "factor_3d":
             return .integer(min: 0, max: 100)
         case "pp_shader_name":
-            return .normal(textSize: 256)
+            return .normal(maxTextSize: 256)
         case "anaglyph_shader_name":
-            return .normal(textSize: 256)
+            return .normal(maxTextSize: 256)
         case "volume":
             return .decimal(min: 0.0, max: 1.0)
         case "init_time":
@@ -481,7 +481,7 @@ class CitraAdvancedSettingView: BaseView {
         case "steps_per_hour":
             return .integer(min: 0, max: Int.max)
         default:
-            return .normal(textSize: 256)
+            return .normal(maxTextSize: 256)
         }
     }
 }

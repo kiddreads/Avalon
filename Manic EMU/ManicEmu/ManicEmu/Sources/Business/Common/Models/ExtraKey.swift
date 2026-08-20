@@ -74,4 +74,9 @@ enum ExtraKey: String {
     case rewind
     case nickname
     case joinDate
+    case symbianFirmwareCode
+    case symbianFirmwareModel
+    case symbianOSVer
+    case ngageFiles
+    case symbianPackages
 }

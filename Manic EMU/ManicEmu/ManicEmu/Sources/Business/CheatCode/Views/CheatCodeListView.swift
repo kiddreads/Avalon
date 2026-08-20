@@ -73,7 +73,7 @@ class CheatCodeListView: BaseView {
         self.game = game
         let isFBNeo = game.gameType == .arcade && game.defaultCore == 1
         if isFBNeo {
-            if let configs = LibretroCore.sharedInstance().getConfigs(LibretroCore.Cores.FinalBurnNeo.name),
+            if let configs = LibretroCore.sharedInstance().getConfigs(EmulationCore.FinalBurnNeo.name),
                PlayViewController.isGaming {
                 var tuples = [(key: String, enable: Bool, name: String)]()
                 configs.enumerateLines { line, stop in

@@ -184,7 +184,7 @@ class SettingsAdventureCardView: BaseView {
         LimitedTextInputView.show(title: R.string.localizable.nickname(),
                                   text: Settings.nickname,
                                   placeholder: Settings.defaultNickname,
-                                  limitedType: .normal(textSize: 30)) { [weak self] result in
+                                  limitedType: .normal(maxTextSize: 30)) { [weak self] result in
             guard let nickname = result as? String else { return }
             Settings.defalut.updateExtra(key: ExtraKey.nickname.rawValue, value: nickname)
             self?.reloadNickname()
