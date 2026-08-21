@@ -141,6 +141,10 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("DOS/Named_Boxarts")
             case .xbox:
                 boxArtUrl = host.appendingPathComponent("Microsoft - Xbox/Named_Boxarts")
+            case .ngc:
+                boxArtUrl = host.appendingPathComponent("Nintendo - GameCube/Named_Boxarts")
+            case .wii:
+                boxArtUrl = host.appendingPathComponent("Nintendo - Wii/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }

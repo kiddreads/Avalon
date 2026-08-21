@@ -211,9 +211,6 @@ class GameOptionsView: BaseView {
             var metadata: GameMetadata? = nil
             if let data = GameMetadata.getGameMetadata(game: game) {
                 metadata = data
-            } else if let data = GameMetadataKit.getGameInfo(game: game) {
-                data.persist(to: game)
-                metadata = data
             }
             
             if let metadata, !metadata.overview.isEmpty {

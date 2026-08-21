@@ -78,7 +78,8 @@ enum GameOption: Int, CaseIterable {
          deadZone,
          rewind,
          netplay,
-         symbianDevice
+         symbianDevice,
+         wiiControllerMode
         
     //When adding a new option, make sure to add it at the end; otherwise, it might affect the existing Prefference configurations
     
@@ -138,7 +139,7 @@ enum GameOption: Int, CaseIterable {
                 .symbolImage(R.image.texture_iconSymbols())
         case .ps1Bios:
                 .symbolImage(R.image.bios_iconSymbols())
-        case .ps1ControllerMode:
+        case .ps1ControllerMode, .wiiControllerMode:
                 .symbolImage(R.image.controller_iconSymbols())
         case .ps1Sbi:
                 .symbolImage(R.image.sbi_cionSymbols())
@@ -281,7 +282,7 @@ enum GameOption: Int, CaseIterable {
             R.string.localizable.texture()
         case .ps1Bios:
             "BIOS"
-        case .ps1ControllerMode:
+        case .ps1ControllerMode, .wiiControllerMode:
             R.string.localizable.psxControllerMode()
         case .ps1Sbi:
             R.string.localizable.sbiImport()
@@ -490,7 +491,8 @@ enum GameOption: Int, CaseIterable {
             .clownMDTvStandard,
             .snesVRAM,
             .symbianDevice,
-            .coreSettings
+            .wiiControllerMode,
+            .coreSettings,
         ],
         [
             .saveState,
@@ -922,6 +924,15 @@ enum GameOption: Int, CaseIterable {
                 }
             }
             
+        case .wiiControllerMode:
+            let extraKey = ExtraKey.wiiController.rawValue
+            let firstGameValue = firstGame.getExtraInt(key: extraKey) ?? 0
+            if games.allSatisfy({
+                ($0.getExtraInt(key: extraKey) ?? 0) == firstGameValue
+            }) {
+                return .chevron(R.Strings.WiiControllers[firstGameValue])
+            }
+            
         case .rename,
                 .cover,
                 .skins,
@@ -1231,6 +1242,10 @@ enum GameOption: Int, CaseIterable {
         
         if game.gameType != .symbian {
             allOptions.remove(.symbianDevice)
+        }
+        
+        if game.gameType != .wii {
+            allOptions.remove(.wiiControllerMode)
         }
         
         allOptions.subtract(disableOptionsForScene(scene))

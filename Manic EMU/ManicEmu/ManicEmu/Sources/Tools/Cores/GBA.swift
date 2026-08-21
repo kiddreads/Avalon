@@ -15,12 +15,6 @@ extension GameType
     static let gba = GameType("public.aoshuang.game.gba")
 }
 
-extension CheatType
-{
-    static let gameShark = CheatType("gameShark")
-    static let codeBreaker = CheatType("codeBreaker")
-}
-
 @objc enum GBAGameInput: Int, Input, CaseIterable {
     case a
     case b

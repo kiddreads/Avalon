@@ -156,6 +156,7 @@ struct GameMetadataKit {
     
     static func getGameInfo(game: Game) -> GameMetadata? {
         guard let md5 = md5Hash(for: game.romUrl) else { return nil }
+        game.updateExtra(key: ExtraKey.hasQueryMetadata.rawValue, value: true)
         return getGameInfo(md5: md5)
     }
     

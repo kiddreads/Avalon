@@ -134,7 +134,21 @@ class AddCheatCodeView: BaseView {
         var result = [CheatFormat]()
         result.append(autoDetectCheatFormat)
         if let supportedCheatFormats = game.gameType.manicEmuCore?.supportedCheatFormats {
-            result.append(contentsOf: supportedCheatFormats)
+            if game.isDolphinCore {
+                // ARMax is uniquely hyphenated; Gecko vs decrypted AR share a layout so prefer Gecko on Wii.
+                result.append(contentsOf: supportedCheatFormats.sorted { lhs, rhs in
+                    func rank(_ format: CheatFormat) -> Int {
+                        if format.type == .ARMax { return 0 }
+                        if game.gameType == .wii {
+                            return format.type == .Gecko ? 1 : 2
+                        }
+                        return format.type == .actionReplay ? 1 : 2
+                    }
+                    return rank(lhs) < rank(rhs)
+                })
+            } else {
+                result.append(contentsOf: supportedCheatFormats)
+            }
         }
         return result
     }()

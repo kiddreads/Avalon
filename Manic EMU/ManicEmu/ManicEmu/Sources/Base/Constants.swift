@@ -74,6 +74,7 @@ extension _R {
                 case .dos, .win95, .win98: return 0.8
                 case .chm: return 0.7908
                 case .xbox: return 0.714
+                case .ngc, .wii: return 0.706
                 default: return 1.0
                 }
             case .style2:
@@ -512,6 +513,8 @@ extension _R {
         static let EKA2L1 = Document.appendingPathComponent(EmulationCore.EKA2L1.name)
         static let EKA2L1DriveE = EKA2L1.appendingPathComponent("data/drives/e")
         static let EKA2L1DriveENGage = EKA2L1DriveE.appendingPathComponent("n-gage")
+        static let Dolphin = Document.appendingPathComponent(EmulationCore.Dolphin.name)
+        static let DolphinGameSettings = Dolphin.appendingPathComponent("User/GameSettings")
         static let NimbusPath = Resource.appendingPathComponent("Nimbus210")
         static let Nimbus3DSPath = NimbusPath.appendingPathComponent("3ds")
         static let NimbusCiaPath = NimbusPath.appendingPathComponent("cias/nimbus.cia")
@@ -536,6 +539,7 @@ extension _R {
         static let HasShowFreeJ2meAlert = "HasShowFreeJ2meAlert"
         static let HasShowFirstAnniversaryLetter = "HasShowFirstAnniversaryLetter"
         static let FoolsDayTrickCount = "FoolsDayTrickCount"
+        static let HasShowDolphinCoreAlert = "HasShowDolphinCoreAlert"
     }
     
     struct _Font {
@@ -587,6 +591,11 @@ extension _R {
         static let J2MEScreenSizes = ["96x65", "96x96", "104x80", "128x128", "132x176", "128x160", "176x208", "176x220", "208x208", "240x320", "320x240", "240x400", "352x416", "360x640", "640x360", "480x800", "800x480"]
         static let DOSKeyboardSkinID = "public.aoshuang.game.dos.standard.keyboard"
         static let AzaharArticBaseGameID = "AzaharArticBase"
+        static let WiiControllers = [
+            "Classic Controller Pro",
+            "Wiimote",
+            R.string.localizable.wiimoteSideways()
+        ]
     }
     
     enum _Config {

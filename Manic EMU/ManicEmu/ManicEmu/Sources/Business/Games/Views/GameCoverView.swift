@@ -301,6 +301,10 @@ class GameCoverView: BaseView {
                 image = style == .style2 ? R.image.xbox_cover_v() : R.image.xbox_cover_h()
             } else if gameType == .symbian {
                 image = style == .style2 ? R.image.symbian_cover_v() : R.image.symbian_cover_h()
+            } else if gameType == .ngc {
+                image = style == .style2 ? R.image.ngc_cover_v() : R.image.ngc_cover_h()
+            } else if gameType == .wii {
+                image = style == .style2 ? R.image.wii_cover_v() : R.image.wii_cover_h()
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, R.Style.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(R.Style.GamesPerRow-1)))

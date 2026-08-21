@@ -113,6 +113,7 @@ class CheatCodeListView: BaseView {
                     if !deletions.isEmpty || !insertions.isEmpty || !modifications.isEmpty {
                         self.updateNavigation()
                         self.updateContents()
+                        DolphinCheatINI.sync(game: self.game)
                     }
                 default:
                     break
@@ -132,6 +133,7 @@ class CheatCodeListView: BaseView {
             make.edges.equalToSuperview()
         }
         listPageView = listView
+        DolphinCheatINI.sync(game: game)
     }
     
     convenience init(game: Game) {
@@ -157,7 +159,7 @@ class CheatCodeListView: BaseView {
                     hide()
                 }
             } else if let index =  navigationValue.tapToolsValue {
-                if index == 0 {
+                if datas.count > 0, index == 0 {
                     //edit mode
                     isEditMode = true
                 } else if index == 1 {
@@ -179,7 +181,7 @@ class CheatCodeListView: BaseView {
                         Settings.defalut.updateExtra(key: ExtraKey.cheatSort.rawValue, value: optionIndex)
                         self.updateContents()
                     })
-                } else if index == 2 {
+                } else if (datas.count == 0 && index == 0) || index == 2 {
                     //search
                     UIView.makeAlert(title: R.string.localizable.searchCheatCodes(),
                                      detail: R.string.localizable.jumpThirdPartAlert(),
@@ -189,7 +191,7 @@ class CheatCodeListView: BaseView {
                         GamehackingView.show(game: self.game)
                     })
                     
-                } else if index == 3 {
+                } else if (datas.count == 0 && index == 2) || index == 3 {
                     //more...
                     var cheatFileExtension = ""
                     var supportFileExtensions: [UTType] = []
@@ -331,11 +333,17 @@ class CheatCodeListView: BaseView {
     }
     
     private func getNavigation() -> ASListPage.Navigation {
-        var tools: [ASIcon] = (isFBNeoGame || datas.count == 0) ? [] : [
-            .symbolImage(R.image.selectedit_iconSymbols()),
-            .symbolImage(R.image.sort_iocnSymbols()),
-            .symbolImage(R.image.searchRegular_iconSymbols()),
-        ]
+        var tools: [ASIcon]
+        if isFBNeoGame {
+            tools = []
+        } else if datas.count == 0 {
+            tools = [.symbolImage(R.image.searchRegular_iconSymbols())]
+        } else {
+            tools = [.symbolImage(R.image.selectedit_iconSymbols()),
+                     .symbolImage(R.image.sort_iocnSymbols()),
+                     .symbolImage(R.image.searchRegular_iconSymbols())]
+        }
+        
         if game.gameType == ._3ds || game.gameType == .psp {
             tools.append(.symbolImage(R.image.ellipsis_iconSymbols()))
         }
@@ -430,6 +438,7 @@ class CheatCodeListView: BaseView {
                     })
                 })
             }
+            DolphinCheatINI.sync(game: game)
         }
         
         if !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowCheatCodeWarning), activate {

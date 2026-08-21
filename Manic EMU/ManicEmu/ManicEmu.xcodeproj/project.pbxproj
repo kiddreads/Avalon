@@ -8,12 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		000FF60D4C0C45458B42CDD8 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 578E1FF52FD16A4600A2749A /* SnapKit */; };
+		023B2A9DBF6F473782A64EC6 /* Wii.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DDA01B1DB4E15B8F0C5C6 /* Wii.swift */; };
 		09F571A7F5D7461983B3A140 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDCD032FD5A9CE005BA4C8 /* ColorfulX */; };
+		0E964747C5B24B348A8665E0 /* Wii.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DDA01B1DB4E15B8F0C5C6 /* Wii.swift */; };
 		0EE14A659E7A4FE7B9DED3C4 /* SDL in Frameworks */ = {isa = PBXBuildFile; productRef = 571BB9392DA44D6B00830134 /* SDL */; };
 		1EADD4E491B048A4A3E448B1 /* SMBClient in Frameworks */ = {isa = PBXBuildFile; productRef = 57F632A22D6F17AB007270E8 /* SMBClient */; };
 		20DCABBC83024417BC08EB72 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23D02FD2BD0800A2749A /* ZipArchive */; };
+		23CE581FDA6A4771B987DE69 /* dolphin.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9770068F58CC4F29B21DE396 /* dolphin.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23DA80D04F904D45A8C893AC /* GCDWebUploader in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23862FD2981800A2749A /* GCDWebUploader */; };
 		2A580A2CC68B45E99AB72675 /* Fireworks in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24562FD3F9D700A2749A /* Fireworks */; };
+		2A84A76AE2A94C3EB048E0D1 /* dolphin.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9770068F58CC4F29B21DE396 /* dolphin.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3008E79240634E729DB35FEB /* NGC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691349DFB9FB4307A3151455 /* NGC.swift */; };
 		349598F48E5541F89B1CBE80 /* eka2l1.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 25F38CF54CA347238295BE77 /* eka2l1.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		390955369D6D495092F62AC2 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 578E26E22FD41F8300A2749A /* Device */; };
 		3C1B9BAFB4C4403B92AD40D6 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5706B0BD2DFDE4570066122E /* BlurUIKit */; };
@@ -254,8 +259,6 @@
 		578E23E02FD30F1100A2749A /* DeltaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23DF2FD30F1100A2749A /* DeltaCore */; };
 		578E23F52FD31ADD00A2749A /* DeltaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23F42FD31ADD00A2749A /* DeltaCore */; };
 		578E24012FD31C0100A2749A /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24002FD31C0100A2749A /* ZIPFoundation */; };
-		57F8A0B12FD31C0100A274A1 /* Unrar in Frameworks */ = {isa = PBXBuildFile; productRef = 57F8A0B42FD31C0100A274A4 /* Unrar */; };
-		57F8A0B22FD31C0100A274A2 /* Unrar in Frameworks */ = {isa = PBXBuildFile; productRef = 57F8A0B42FD31C0100A274A4 /* Unrar */; };
 		578E24232FD3400700A2749A /* EmulatorBridgingBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E24202FD33FFC00A2749A /* EmulatorBridgingBase.swift */; };
 		578E24442FD3EEE300A2749A /* MarqueeLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24432FD3EEE300A2749A /* MarqueeLabel */; };
 		578E24572FD3F9D700A2749A /* Fireworks in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24562FD3F9D700A2749A /* Fireworks */; };
@@ -374,6 +377,12 @@
 		57B6ECC02D7969E2002E619C /* AddCheatCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECBF2D7969DA002E619C /* AddCheatCodeView.swift */; };
 		57B6ECCB2D797CB8002E619C /* AddCheatCodeContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECCA2D797CA7002E619C /* AddCheatCodeContentCell.swift */; };
 		57B6ECCD2D798425002E619C /* CheatTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECCC2D798419002E619C /* CheatTypeExtensions.swift */; };
+		57B6ECD12D7984A0002E619C /* ARMaxDecrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECD02D7984A0002E619C /* ARMaxDecrypt.swift */; };
+		57B6ECD22D7984A0002E619C /* ARMaxDecrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECD02D7984A0002E619C /* ARMaxDecrypt.swift */; };
+		57B6ECD42D7984B0002E619C /* DolphinGameID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECD32D7984B0002E619C /* DolphinGameID.swift */; };
+		57B6ECD52D7984B0002E619C /* DolphinGameID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECD32D7984B0002E619C /* DolphinGameID.swift */; };
+		57B6ECD72D7984B0002E619C /* DolphinCheatINI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECD62D7984B0002E619C /* DolphinCheatINI.swift */; };
+		57B6ECD82D7984B0002E619C /* DolphinCheatINI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECD62D7984B0002E619C /* DolphinCheatINI.swift */; };
 		57B6ECF52D79F1EA002E619C /* SkinSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */; };
 		57BA2D9330357F200039E284 /* SymbianFirmwareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA2D8F30357F0E0039E284 /* SymbianFirmwareView.swift */; };
 		57BA2D9430357F200039E284 /* SymbianFirmwareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BA2D8F30357F0E0039E284 /* SymbianFirmwareView.swift */; };
@@ -946,6 +955,8 @@
 		57F632FE2D718236007270E8 /* SettingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F632FD2D71822A007270E8 /* SettingsListView.swift */; };
 		57F633002D718366007270E8 /* SettingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F632FF2D718360007270E8 /* SettingItem.swift */; };
 		57F633042D718C4E007270E8 /* LocaleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F633032D718C45007270E8 /* LocaleExtensions.swift */; };
+		57F8A0B12FD31C0100A274A1 /* Unrar in Frameworks */ = {isa = PBXBuildFile; productRef = 57F8A0B42FD31C0100A274A4 /* Unrar */; };
+		57F8A0B22FD31C0100A274A2 /* Unrar in Frameworks */ = {isa = PBXBuildFile; productRef = 57F8A0B42FD31C0100A274A4 /* Unrar */; };
 		57FD1341300F277E007F211A /* GamehackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FD1340300F2779007F211A /* GamehackingView.swift */; };
 		57FD1342300F277E007F211A /* GamehackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FD1340300F2779007F211A /* GamehackingView.swift */; };
 		57FD135B300F6195007F211A /* ASWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FD135A300F618F007F211A /* ASWebView.swift */; };
@@ -985,6 +996,7 @@
 		A5DE1F18256BC78B0099425B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5DE1F1A256BC78B0099425B /* InfoPlist.strings */; };
 		A5DE1F1F256BC7F10099425B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5DE1F21256BC7F10099425B /* Localizable.strings */; };
 		A5DE1F6C256BDD250099425B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DE1F6B256BDD250099425B /* HomeViewController.swift */; };
+		A65D0A457B5749D3B4E590B2 /* NGC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691349DFB9FB4307A3151455 /* NGC.swift */; };
 		A8D9BF2608324215AB272D58 /* BlankSlate in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23A42FD2AA0600A2749A /* BlankSlate */; };
 		ADE1A2C2A17E4D50AE2EB564 /* PLzmaSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 570A27FF2DCF03CF001249C6 /* PLzmaSDK */; };
 		AE5A3FEEB61B4A0B9DB6C05A /* JXBanner in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23B62FD2B7D400A2749A /* JXBanner */; };
@@ -1075,6 +1087,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2A84A76AE2A94C3EB048E0D1 /* dolphin.libretro.framework in Embed Frameworks */,
 				DE2953C2BE0E42C8A8F0EEAB /* eka2l1.libretro.framework in Embed Frameworks */,
 				57CDCF4F2FD5CBD3005BA4C8 /* MoltenVK.xcframework in Embed Frameworks */,
 				57CDCF502FD5CBD3005BA4C8 /* Citra.framework in Embed Frameworks */,
@@ -1124,6 +1137,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				23CE581FDA6A4771B987DE69 /* dolphin.libretro.framework in Embed Frameworks */,
 				349598F48E5541F89B1CBE80 /* eka2l1.libretro.framework in Embed Frameworks */,
 				57C75B502FD5928E0093A2B3 /* MoltenVK.xcframework in Embed Frameworks */,
 				57C75AB12FD557640093A2B3 /* Citra.framework in Embed Frameworks */,
@@ -1180,6 +1194,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A2DDA01B1DB4E15B8F0C5C6 /* Wii.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wii.swift; sourceTree = "<group>"; };
 		2068D6E791D56FF6148997EA /* DOOM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOOM.swift; sourceTree = "<group>"; };
 		20B6A88FB41ED3142FD4FD9E /* prboom.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = prboom.libretro.framework; path = ../Cores/prboom.libretro.framework; sourceTree = SOURCE_ROOT; };
 		25F38CF54CA347238295BE77 /* eka2l1.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = eka2l1.libretro.framework; path = ../Cores/eka2l1.libretro.framework; sourceTree = SOURCE_ROOT; };
@@ -1522,6 +1537,9 @@
 		57B6ECBF2D7969DA002E619C /* AddCheatCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCheatCodeView.swift; sourceTree = "<group>"; };
 		57B6ECCA2D797CA7002E619C /* AddCheatCodeContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCheatCodeContentCell.swift; sourceTree = "<group>"; };
 		57B6ECCC2D798419002E619C /* CheatTypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatTypeExtensions.swift; sourceTree = "<group>"; };
+		57B6ECD02D7984A0002E619C /* ARMaxDecrypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMaxDecrypt.swift; sourceTree = "<group>"; };
+		57B6ECD32D7984B0002E619C /* DolphinGameID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DolphinGameID.swift; sourceTree = "<group>"; };
+		57B6ECD62D7984B0002E619C /* DolphinCheatINI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DolphinCheatINI.swift; sourceTree = "<group>"; };
 		57B6ECF42D79F1E4002E619C /* SkinSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSettingsView.swift; sourceTree = "<group>"; };
 		57BA2D8F30357F0E0039E284 /* SymbianFirmwareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbianFirmwareView.swift; sourceTree = "<group>"; };
 		57BA2DA43035935F0039E284 /* SymbianDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbianDeviceView.swift; sourceTree = "<group>"; };
@@ -5938,6 +5956,8 @@
 		57FD13F0301109D5007F211A /* LandscapeBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandscapeBackgroundView.swift; sourceTree = "<group>"; };
 		57FD140F3011C71E007F211A /* ShaderPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderPreviewView.swift; sourceTree = "<group>"; };
 		57J2ME01F23397000EA24F1 /* J2ME.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = J2ME.swift; sourceTree = "<group>"; };
+		691349DFB9FB4307A3151455 /* NGC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGC.swift; sourceTree = "<group>"; };
+		9770068F58CC4F29B21DE396 /* dolphin.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = dolphin.libretro.framework; path = ../Cores/dolphin.libretro.framework; sourceTree = SOURCE_ROOT; };
 		A392D5632E96682600F920E7 /* DisabledTapSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledTapSwitch.swift; sourceTree = "<group>"; };
 		A392D5B22E9796B800F920E7 /* ServiceIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceIconView.swift; sourceTree = "<group>"; };
 		A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtensions.swift; sourceTree = "<group>"; };
@@ -11780,6 +11800,7 @@
 		57C75AD42FD572260093A2B3 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				9770068F58CC4F29B21DE396 /* dolphin.libretro.framework */,
 				25F38CF54CA347238295BE77 /* eka2l1.libretro.framework */,
 				578E22F12FD1EE6600A2749A /* azahar.libretro.framework */,
 				572918892F8B9F6400985D2C /* pcsx.rearmed.libretro.framework */,
@@ -11951,6 +11972,8 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				0A2DDA01B1DB4E15B8F0C5C6 /* Wii.swift */,
+				691349DFB9FB4307A3151455 /* NGC.swift */,
 				460B02C144024C2EAC5EAF21 /* Symbian.swift */,
 				578452B92F6A79340020A88F /* DOS.swift */,
 				57J2ME01F23397000EA24F1 /* J2ME.swift */,
@@ -12274,6 +12297,10 @@
 				B262620F2A260E4C00174003 /* SideMenuShowStyle.swift */,
 				B278BA802A32DA9000D0458D /* PurchaseManager.swift */,
 				57DF84E82D64249D00AA0AAB /* ShareManager.swift */,
+				57B6ECD02D7984A0002E619C /* ARMaxDecrypt.swift */,
+				57B6ECD32D7984B0002E619C /* DolphinGameID.swift */,
+				57B6ECD62D7984B0002E619C /* DolphinCheatINI.swift */,
+				57BA59B42E3F13C900110849 /* EmulationCore.swift */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -12312,7 +12339,6 @@
 				5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */,
 				A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */,
 				5720E7C92E5446F700EC0DA5 /* ArrayExtensions.swift */,
-				57BA59B42E3F13C900110849 /* EmulationCore.swift */,
 				575A39CF2DCD2B3500B28FC2 /* UIImageViewExtensions.swift */,
 				57CC354B2DBF216200DF7418 /* ControllerSkinExtensions.swift */,
 				57CC33BD2DBCDF2C00DF7418 /* CGRectExtensions.swift */,
@@ -12585,7 +12611,7 @@
 				578E23B52FD2B7D400A2749A /* XCRemoteSwiftPackageReference "JXBanner" */,
 				578E23CF2FD2BD0800A2749A /* XCRemoteSwiftPackageReference "ZipArchive" */,
 				578E23FF2FD31C0000A2749A /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
-				57F8A0B32FD31C0100A274A3 /* XCRemoteSwiftPackageReference "Unrar.swift" */,
+				57F8A0B32FD31C0100A274A3 /* XCRemoteSwiftPackageReference "Unrar" */,
 				578E24422FD3EEE300A2749A /* XCRemoteSwiftPackageReference "MarqueeLabel" */,
 				578E24552FD3F9D700A2749A /* XCRemoteSwiftPackageReference "fireworks" */,
 				578E26742FD4065C00A2749A /* XCRemoteSwiftPackageReference "FLEX" */,
@@ -12757,6 +12783,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E964747C5B24B348A8665E0 /* Wii.swift in Sources */,
+				3008E79240634E729DB35FEB /* NGC.swift in Sources */,
 				75A984D24586436BA6AF31C9 /* Symbian.swift in Sources */,
 				F0C500000000000000000201 /* FocusTypes.swift in Sources */,
 				F0C500000000000000000202 /* Focusable.swift in Sources */,
@@ -12810,6 +12838,9 @@
 				57CDCDAC2FD5CBD3005BA4C8 /* WebDavServiceProvider.swift in Sources */,
 				57CDCDAD2FD5CBD3005BA4C8 /* ThemeColorCollectionViewCell.swift in Sources */,
 				57CDCDAE2FD5CBD3005BA4C8 /* CheatTypeExtensions.swift in Sources */,
+				57B6ECD22D7984A0002E619C /* ARMaxDecrypt.swift in Sources */,
+				57B6ECD52D7984B0002E619C /* DolphinGameID.swift in Sources */,
+				57B6ECD82D7984B0002E619C /* DolphinCheatINI.swift in Sources */,
 				57ABFAF32FEA56EA001C1425 /* ImportNavigationView.swift in Sources */,
 				57BF5FA32FDEF16B0073D318 /* ASSegmentView.swift in Sources */,
 				57FD135C300F6195007F211A /* ASWebView.swift in Sources */,
@@ -13157,6 +13188,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				023B2A9DBF6F473782A64EC6 /* Wii.swift in Sources */,
+				A65D0A457B5749D3B4E590B2 /* NGC.swift in Sources */,
 				A529C8391AE54EA58B07E509 /* Symbian.swift in Sources */,
 				F0C500000000000000000301 /* FocusTypes.swift in Sources */,
 				F0C500000000000000000302 /* Focusable.swift in Sources */,
@@ -13210,6 +13243,9 @@
 				57F632AD2D6FEC32007270E8 /* WebDavServiceProvider.swift in Sources */,
 				570F59102DC5BB03007BFD92 /* ThemeColorCollectionViewCell.swift in Sources */,
 				57B6ECCD2D798425002E619C /* CheatTypeExtensions.swift in Sources */,
+				57B6ECD12D7984A0002E619C /* ARMaxDecrypt.swift in Sources */,
+				57B6ECD42D7984B0002E619C /* DolphinGameID.swift in Sources */,
+				57B6ECD72D7984B0002E619C /* DolphinCheatINI.swift in Sources */,
 				57ABFAF22FEA56EA001C1425 /* ImportNavigationView.swift in Sources */,
 				57BF5FA42FDEF16B0073D318 /* ASSegmentView.swift in Sources */,
 				57FD135B300F6195007F211A /* ASWebView.swift in Sources */,
@@ -14720,14 +14756,6 @@
 				kind = branch;
 			};
 		};
-		57F8A0B32FD31C0100A274A3 /* XCRemoteSwiftPackageReference "Unrar.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mtgto/Unrar.swift";
-			requirement = {
-				kind = exactVersion;
-				version = 0.5.4;
-			};
-		};
 		578E24422FD3EEE300A2749A /* XCRemoteSwiftPackageReference "MarqueeLabel" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Daiuno/MarqueeLabel.git";
@@ -14992,6 +15020,14 @@
 				version = 1.59.0;
 			};
 		};
+		57F8A0B32FD31C0100A274A3 /* XCRemoteSwiftPackageReference "Unrar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mtgto/Unrar.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 0.5.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -15131,11 +15167,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 578E23FF2FD31C0000A2749A /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
-		};
-		57F8A0B42FD31C0100A274A4 /* Unrar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 57F8A0B32FD31C0100A274A3 /* XCRemoteSwiftPackageReference "Unrar.swift" */;
-			productName = Unrar;
 		};
 		578E24432FD3EEE300A2749A /* MarqueeLabel */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -15343,6 +15374,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 57F632E12D714E46007270E8 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */;
 			productName = WebDavKit;
+		};
+		57F8A0B42FD31C0100A274A4 /* Unrar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57F8A0B32FD31C0100A274A3 /* XCRemoteSwiftPackageReference "Unrar" */;
+			productName = Unrar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

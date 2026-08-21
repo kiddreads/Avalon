@@ -15,12 +15,6 @@ extension GameType
     static let nes = GameType("public.aoshuang.game.nes")
 }
 
-extension CheatType
-{
-    static let gameGenie6 = CheatType("GameGenie6")
-    static let gameGenie8 = CheatType("GameGenie8")
-}
-
 @objc enum NESGameInput: Int, Input, CaseIterable {
     case a
     case b

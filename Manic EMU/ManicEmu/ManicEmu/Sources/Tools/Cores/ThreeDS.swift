@@ -17,11 +17,6 @@ extension GameType
     static let _3ds = GameType("public.aoshuang.game.3ds")
 }
 
-extension CheatType
-{
-    static let gateshark = CheatType("Gateshark")
-}
-
 @objc enum ThreeDSGameInput: Int, Input, CaseIterable {
     case a = 700
     case b = 701

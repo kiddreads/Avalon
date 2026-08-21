@@ -265,6 +265,28 @@ class Game: Object, ObjectUpdatable {
             return nil
         }
     }
+
+    var gameIDForDolphin: String? {
+        guard isDolphinCore else { return nil }
+        let value = getExtraString(key: ExtraKey.dolphinGameID.rawValue)
+        return (value?.isEmpty == false) ? value : nil
+    }
+
+    /// Parse the ROM header into extras when the Game ID is missing.
+    @discardableResult
+    func ensureDolphinGameID() -> String? {
+        if let gameIDForDolphin { return gameIDForDolphin }
+        guard isDolphinCore else { return nil }
+        let id: String?
+        if fileExtension.lowercased() == "elf" {
+            id = DolphinGameID.makeElfOrDolID(fileName: fileName)
+        } else {
+            id = DolphinGameID.read(from: romUrl)
+        }
+        guard let id else { return nil }
+        updateExtra(key: ExtraKey.dolphinGameID.rawValue, value: id)
+        return id
+    }
     
     var translatedName: String? {
         if let extras,
@@ -444,6 +466,8 @@ class Game: Object, ObjectUpdatable {
             return .DOSBoxPure
         } else if gameType == .symbian {
             return .EKA2L1
+        } else if gameType == .ngc || gameType == .wii {
+            return .Dolphin
         }
         return nil
     }
@@ -547,6 +571,8 @@ class Game: Object, ObjectUpdatable {
             return Bundle.main.path(forResource: "dosbox.pure.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .symbian {
             return Bundle.main.path(forResource: "eka2l1.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .ngc || gameType == .wii {
+            return Bundle.main.path(forResource: "dolphin.libretro", ofType: "framework", inDirectory: "Frameworks")
         }
         return nil
     }
@@ -1078,8 +1104,10 @@ class Game: Object, ObjectUpdatable {
             (gameType == .ds && defaultCore == 0) ||
             gameType == .n64 ||
             (gameType == .ps1 && defaultCore == 0) ||
-            gameType == .dc || gameType == .dos ||
-            gameType == .symbian {
+            gameType == .dc ||
+            gameType == .dos ||
+            gameType == .symbian ||
+            isDolphinCore {
             return true
         }
         return false
@@ -1163,7 +1191,8 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportConsoleHome: Bool {
-        if gameType == ._3ds && defaultCore == 0 {
+        if isCitra3DS ||
+            gameType == .wii {
             return true
         }
         return false
@@ -1242,16 +1271,15 @@ class Game: Object, ObjectUpdatable {
         aliasName ?? name
     }
     
-    ///是否支持回朔 依据核心info文件的存档支持级别判断:rewind要求savestate_features达到serialized及以上
+    /// Whether rewind is available. Requires savestate_features of serialized or higher.
     var supportRewind: Bool {
-        //非Libretro核心不支持:Citra 3DS、JGenesis(32X/MCD)、J2ME、NS/Xbox360/Xbox外部类型
+        // Non-libretro and external types do not support rewind.
         guard isLibretroType, !gameType.externalType else { return false }
-        //virtualjaguar(Jaguar)不支持存档(savestate = false)
-        //prboom(DOOM)、azahar(3DS)、flycast全系(DC)仅basic级别存档,不支持rewind
+        // Jaguar has savestate = false. DOOM, 3DS, DC, Symbian, NGC, and Wii are basic-only.
         if gameType == .jaguar || gameType == .doom || gameType == ._3ds || gameType == .dc || gameType == .symbian {
             return false
         }
-        //SS只有mednafen_saturn(defaultCore == 0)支持;yabause仅basic级别
+        // Saturn: only Beetle Saturn (defaultCore == 0) supports rewind; Yabause is basic.
         if gameType == .ss, fileExtension.lowercased() == "iso" || defaultCore == 1 {
             return false
         }
@@ -1378,6 +1406,10 @@ class Game: Object, ObjectUpdatable {
                 GameInfoView.show(readyAction: .default, game: self)
             }
         }
+    }
+    
+    var isDolphinCore: Bool {
+        gameType == .ngc || gameType == .wii
     }
 }
 

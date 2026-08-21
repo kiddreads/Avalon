@@ -15,11 +15,6 @@ extension GameType
     static let psp = GameType("public.aoshuang.game.psp")
 }
 
-extension CheatType
-{
-    static let cwCheat = CheatType("CWCheat")
-}
-
 @objc enum PSPGameInput: Int, Input, CaseIterable {
     case a
     case b

@@ -187,7 +187,7 @@ class PlayViewController: GameViewController {
                         UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShow3DSNotSupportAlert)
                         launchGameByDismissOtherVC()
                     })
-                }  else if game.gameType == .ps1, !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowPS1PlayAlert) {
+                } else if game.gameType == .ps1, !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowPS1PlayAlert) {
                     UIView.makeAlert(title: R.string.localizable.psxRunAlert(),
                                      detail: R.string.localizable.sbiImportDesc(),
                                      detailAlignment: .left,
@@ -203,7 +203,17 @@ class PlayViewController: GameViewController {
                     }
                 } else if game.isJGenesisCore, game.gameType == .mcd, game.fileExtension.lowercased() != "chd" {
                     UIView.makeToast(message: R.string.localizable.jGenesisAlert())
-                } else {
+                } else if game.isDolphinCore,
+                          !game.jit,
+                          !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowDolphinCoreAlert) {
+                    UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                                     detail: R.string.localizable.dolphinCoreWraning(),
+                                     cancelTitle: R.string.localizable.gotIt(),
+                                     hideAction: {
+                        UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShowDolphinCoreAlert)
+                        launchGameByDismissOtherVC()
+                    })
+                }  else {
                     launchGameByDismissOtherVC()
                 }
             }
@@ -704,7 +714,9 @@ class PlayViewController: GameViewController {
                 }
             } else if manicGame.gameType == .symbian, UIDevice.isPhone {
                 make.top.equalTo(gameView.snp.bottom).offset(4)
-            } else  {
+            } else if manicGame.isDolphinCore {
+                make.top.equalTo(gameView.snp.bottom).offset(5)
+            } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
             if manicGame.gameType == .pm && !UIDevice.isLandscape {
@@ -1509,8 +1521,12 @@ extension PlayViewController {
                             // Convert newline separators to '+' (libretro standard for multi-line cheats)
                             let coreCode: String
                             if CheatType(cheatCode.type) == .actionReplay16, self.manicGame.isPicodriveCore, cheatCode.code.count > 6 {
-                                //MD不支持0123456789格式的作弊码，需要转换成012345:6789格式
+                                // PicoDrive rejects 0123456789; it needs 012345:6789
                                 coreCode = cheatCode.code[...5] + ":" + cheatCode.code[6...]
+                            } else if self.manicGame.isDolphinCore, CheatType(cheatCode.type) == .ARMax {
+                                // Stock Dolphin retro_cheat_set only matches decrypted Action Replay.
+                                guard let decrypted = ARMaxDecrypt.toActionReplay(cheatCode.code) else { continue }
+                                coreCode = decrypted
                             } else {
                                 coreCode = cheatCode.code.replacingOccurrences(of: "\n", with: "+")
                             }
@@ -1551,6 +1567,9 @@ extension PlayViewController {
     
     //加载默认配置
     private func loadConfig() {
+        let enableAchievements = manicGame.safeMode ? false : manicGame.enableAchievements
+        isHardcoreMode = enableAchievements ? manicGame.enableHarcore : false
+        
         if !manicGame.safeMode {
             //non safe mode
             //设置按钮隐藏
@@ -1763,6 +1782,8 @@ extension PlayViewController {
                     .eka2l1_device_index: "\(deviceIndex ?? manicGame.usingSymbianDeviceIndex ?? 0)"
                 ])
                 LibretroCore.sharedInstance().setLibretroLogMonitor(true)
+            } else if manicGame.isDolphinCore {
+                updateLibretroCoreConfigs(core: .Dolphin, configs: [:])
             }
         } else {
             //non safe mode
@@ -2065,6 +2086,32 @@ extension PlayViewController {
                     .eka2l1_device_index: "\(manicGame.usingSymbianDeviceIndex ?? 0)"
                 ])
                 LibretroCore.sharedInstance().setLibretroLogMonitor(true)
+            } else if manicGame.isDolphinCore {
+                let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+                if enableJIT {
+                    setupUniversalScript(gameType: manicGame.gameType)
+                }
+                var isNGCBiosExists = false
+                if manicGame.gameType == .ngc,
+                    let bios = manicGame.gameType.biosItems.first {
+                    let biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
+                    let biosInDoc = R.Path.BIOS.appendingPathComponent(bios.fileName)
+                    if FileManager.default.fileExists(atPath: biosInLib) {
+                        isNGCBiosExists = true
+                    } else if FileManager.default.fileExists(atPath: biosInDoc) {
+                        do {
+                            try FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc),
+                                                    to: URL(fileURLWithPath: biosInLib))
+                            isNGCBiosExists = true
+                        } catch {}
+                    }
+                }
+                //4: JITARM64 5: Cached Interpreter
+                updateLibretroCoreConfigs(core: .Dolphin, configs: [
+                    .dolphin_cpu_core: enableJIT ? "4" : "5",
+                    .dolphin_skip_gc_bios: isNGCBiosExists ? "disabled" : "enabled",
+                    .dolphin_cheats_enabled: isHardcoreMode ? "disabled" : "enabled"
+                ])
             }
         }
         
@@ -2122,11 +2169,8 @@ extension PlayViewController {
                 //non safe mode
                 //RetroAchievements配置
                 if manicGame.supportRetroAchievements, let user = AchievementsUser.getUser() {
-                    let enableAchievements = manicGame.enableAchievements
-                    let hardcore = manicGame.enableHarcore
-                    isHardcoreMode = hardcore
                     LibretroCore.sharedInstance().updateLibretroConfigs(["cheevos_enable": enableAchievements ? "true" : "false",
-                                                                         "cheevos_hardcore_mode_enable": hardcore ? "true" : "false",
+                                                                         "cheevos_hardcore_mode_enable": isHardcoreMode ? "true" : "false",
                                                                          "cheevos_token": user.token,
                                                                          "cheevos_username": user.username])
                     if enableAchievements {
@@ -2142,7 +2186,7 @@ extension PlayViewController {
                 }
             }
             
-            //修改存档位置
+            // Save directory must match Game.gameSaveUrl.
             if manicGame.gameType == .gb {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.GBSavePath.libretroPath)
             } else if manicGame.gameType == .gbc {
@@ -2410,6 +2454,8 @@ extension PlayViewController {
                         var iconColor = R.Color.LabelTertiary
                         if manicGame.gameType == .dos {
                             iconColor = R.Color.LabelTertiary.forceStyle(.dark)
+                        } else if manicGame.isDolphinCore {
+                            iconColor = UIColor.black.withAlphaComponent(0.25)
                         }
                         let buttonContainerView = UIView()
                         let button = ASButtonView(.iconOnlyWithSmallSize(icon: shortcut.icon.updateColorsIfNeed(colors: [iconColor], forceUpdate: true),
@@ -2744,6 +2790,11 @@ extension PlayViewController {
                             if manicGame.defaultCore == 0 {
                                 LibretroCore.sharedInstance().startWFCStatusMonitor()
                             }
+                        } else if manicGame.gameType == .wii {
+                            let wiiController = manicGame.getExtraInt(key: ExtraKey.wiiController.rawValue) ?? 0
+                            LibretroCore.sharedInstance().setWiiRemote(wiiController != 0)
+                            //Wiiremote Sideways
+                            WiiEmulatorBridge.shared.isWiiremoteSideways = wiiController == 2
                         }
                         DispatchQueue.main.asyncAfter(delay: 2.5) {
                             self.updateFastforward(speed: self.manicGame.speed)
@@ -3079,6 +3130,13 @@ extension PlayViewController {
                 }
             } else {
                 //TODO: azahar 返回主页
+            }
+        } else if manicGame.gameType == .wii {
+            DispatchQueue.main.asyncAfter(delay: 1) {
+                LibretroCore.sharedInstance().press(.R3, playerIndex: 0)
+                DispatchQueue.main.asyncAfter(delay: 0.1) {
+                    LibretroCore.sharedInstance().release(.R3, playerIndex: 0)
+                }
             }
         }
     }

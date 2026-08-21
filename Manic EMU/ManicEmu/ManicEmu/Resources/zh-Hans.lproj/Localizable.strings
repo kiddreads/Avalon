@@ -1035,3 +1035,10 @@
 "NGagePackageReady" = "安装包已就绪。请在 S60v3 或更新固件上安装并打开 N-Gage 2.0 应用，以继续安装。";
 "NGage2Install" = "N-Gage 2.0 安装";
 "SymbianAppGetKilled" = "Symbian 应用已退出。\n如果是意外退出，请尝试切换不同的固件再运行。";
+
+"DolphinGameIDMissing" = "无法获取当前游戏的GameID，因此无法编辑作弊码。";
+"BIOSCommondDesc" = "某些特定游戏在没有 BIOS 的情况下可能无法正常运行";
+"WiimoteSideways" = "Wiimote 横握";
+"WiimoteDesc" = "默认皮肤中，Wiimote映射关系：\n「X」 -> 「1」\n「Y」 -> 「2」\n「ZL」 -> 「摇晃」\n「右摇杆」 -> 「倾斜」";
+"DolphinCoreWraning" = "受限于现阶段 dolphin 核心的 JITless 性能限制，游戏模拟中设备会发烫并卡顿掉帧，但是背后还有众多英雄们在努力优化中，一切都会慢慢变好的，对吧!";
+"DolphinSaveTips" = "请使用 文件 App， 打开目录： Manic EMU - dolphin-emu - User 自行进行管理存档文件";

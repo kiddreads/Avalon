@@ -58,12 +58,25 @@ class PlatformSelectionView: BaseView {
                         }
                     }
                 }
-                //如果切换到PSP 则检查game code
+                // Fill PSP game code when switching to PSP.
                 if gameType == .psp {
                     for game in games {
                         if game.gameCodeForPSP == nil,
                            let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
                             game.updateExtra(key: ExtraKey.PSPGameCode.rawValue, value: gameCode)
+                        }
+                    }
+                }
+
+                if gameType == .ngc || gameType == .wii {
+                    for game in games {
+                        if game.gameIDForDolphin == nil {
+                            if game.fileExtension.lowercased() == "elf" {
+                                game.updateExtra(key: ExtraKey.dolphinGameID.rawValue,
+                                                 value: DolphinGameID.makeElfOrDolID(fileName: game.fileName))
+                            } else {
+                                game.ensureDolphinGameID()
+                            }
                         }
                     }
                 }

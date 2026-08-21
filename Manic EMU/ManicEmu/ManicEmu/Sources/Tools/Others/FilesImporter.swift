@@ -659,6 +659,15 @@ extension FilesImporter {
                         if gameType == .psp, !isPSPPBP, let gameCode = LibretroCore.getPSPGameID(withRomPath: url.path) {
                             game.extras = [ExtraKey.PSPGameCode.rawValue: gameCode].jsonData()
                         }
+
+                        if game.isDolphinCore, let dolphinID = DolphinGameID.read(from: url) {
+                            if let extras = game.extras,
+                               let data = Game.updateExtra(extras: extras, key: ExtraKey.dolphinGameID.rawValue, value: dolphinID) {
+                                game.extras = data
+                            } else {
+                                game.extras = [ExtraKey.dolphinGameID.rawValue: dolphinID].jsonData()
+                            }
+                        }
                         
                         do {
                             //Copy the ROMs

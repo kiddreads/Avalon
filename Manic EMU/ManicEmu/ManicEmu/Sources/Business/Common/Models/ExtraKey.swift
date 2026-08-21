@@ -41,6 +41,7 @@ enum ExtraKey: String {
     case forceFullSkin
     case enableManufacturerFilter
     case PSPGameCode
+    case dolphinGameID
     case cheatSort
     case flexBackground
     case shaderConfig
@@ -70,6 +71,7 @@ enum ExtraKey: String {
     case landscapeListStyle
     case landscapeShaderToy
     case gameMetadata
+    case hasQueryMetadata
     case hideGameRating
     case rewind
     case nickname
@@ -79,4 +81,5 @@ enum ExtraKey: String {
     case symbianOSVer
     case ngageFiles
     case symbianPackages
+    case wiiController
 }

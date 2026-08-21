@@ -13,11 +13,6 @@ extension GameType
     static let doom = GameType("public.aoshuang.game.doom")
 }
 
-extension CheatType
-{
-    static let doomCommands = CheatType("DoomCommands")
-}
-
 @objc enum DOOMGameInput: Int, Input, CaseIterable {
     case a
     case b

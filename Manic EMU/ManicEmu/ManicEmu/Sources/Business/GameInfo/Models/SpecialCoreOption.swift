@@ -135,6 +135,22 @@ enum SpecialCoreOption: String {
     case eka2l1_cpu_backend
     case screen_buffer_sync
     case eka2l1_device_index
+    //dolphin
+    case dolphin_cpu_clock_rate
+    case dolphin_cpu_core
+    case dolphin_osd_enabled
+    case dolphin_fast_disc_speed
+    case dolphin_gpu_texture_decoding
+    case dolphin_shader_compilation_mode
+    case dolphin_log_level
+    case dolphin_log_boot
+    case dolphin_log_core
+    case dolphin_log_video
+    case dolphin_log_common
+    case dolphin_vi_skip
+    case dolphin_skip_gc_bios
+    case dolphin_cheats_enabled
+    case dolphin_cheats_import
     
     
     
@@ -263,6 +279,12 @@ enum SpecialCoreOption: String {
         } else if game.gameType == .symbian {
             return [.eka2l1_cpu_backend,
                     .eka2l1_device_index]
+        } else if game.isDolphinCore {
+            var options: Set<Self> = [.dolphin_cheats_enabled, .dolphin_cheats_import]
+            if game.gameType == .ngc {
+                options.insert(.dolphin_skip_gc_bios)
+            }
+            return options
         }
         return []
     }
@@ -355,6 +377,37 @@ enum SpecialCoreOption: String {
             result = [.prboom_rumble: "enabled"]
         } else if game.gameType == .symbian {
             result = [.screen_buffer_sync: "off"]
+        } else if game.isDolphinCore {
+            let enableJIT = LibretroCore.jitAvailable() && game.jit
+            if enableJIT {
+                result = [
+                    .dolphin_cpu_clock_rate: "1.0",
+                    .dolphin_osd_enabled: "disabled",
+                    .dolphin_fast_disc_speed: "disabled",
+                    .dolphin_gpu_texture_decoding: "disabled",
+                    .dolphin_shader_compilation_mode: "0",
+                    .dolphin_log_level: "1",
+                    .dolphin_log_boot: "disabled",
+                    .dolphin_log_core: "disabled",
+                    .dolphin_log_video: "disabled",
+                    .dolphin_log_common: "disabled",
+                    .dolphin_vi_skip: "disabled"
+                ]
+            } else {
+                result = [
+                    .dolphin_cpu_clock_rate: "0.2",
+                    .dolphin_osd_enabled: "disabled",
+                    .dolphin_fast_disc_speed: "enabled",
+                    .dolphin_gpu_texture_decoding: "enabled",
+                    .dolphin_shader_compilation_mode: "3",
+                    .dolphin_log_level: "1",
+                    .dolphin_log_boot: "disabled",
+                    .dolphin_log_core: "disabled",
+                    .dolphin_log_video: "disabled",
+                    .dolphin_log_common: "disabled",
+                    .dolphin_vi_skip: "enabled"
+                ]
+            }
         }
         return result.mapKeysAndValues({ ($0.key.rawValue, $0.value) })
     }
@@ -362,10 +415,11 @@ enum SpecialCoreOption: String {
     static func resolvedCoreConfigs(game: Game,
                                     optimizationCoreConfigs: [Self: String],
                                     safeMode: Bool) -> [String: String]? {
+        let bestSetupCoreConfigs = getBestSetupCoreConfigs(game: game)
         var resolvedCoreConfigs = optimizationCoreConfigs.mapKeysAndValues({
             ($0.key.rawValue, $0.value)
         })
-        resolvedCoreConfigs += getBestSetupCoreConfigs(game: game)
+        resolvedCoreConfigs = bestSetupCoreConfigs + resolvedCoreConfigs
         if !safeMode,
            let storeCoreConfigs = Prefference.defalut.getPrefference(kind: .coreOptions,
                                                                      storeKey: .coreOptionsKey(gameId: game.id, defaultCore: game.defaultCore),

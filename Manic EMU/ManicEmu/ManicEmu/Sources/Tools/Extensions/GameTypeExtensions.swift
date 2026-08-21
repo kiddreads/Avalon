@@ -12,7 +12,7 @@ import RealmSwift
 
 ///通过文件名后缀生成GameType
 extension GameType {
-    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip"]
+    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip", "elf", "dol", "rvz", "wad"]
     
     static func gameTypes(multiPlatformFileExtension: String) -> [GameType] {
         let ext = multiPlatformFileExtension.lowercased()
@@ -21,7 +21,7 @@ extension GameType {
         case "chd":
             return [.ps1, .psp, .mcd, .ss, .dc]
         case "iso":
-            return [.psp, .mcd, .ss, .dos]
+            return [.psp, .mcd, .ss, .dos, .ngc, .wii]
         case "bin":
             return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar]
         case "cue":
@@ -34,6 +34,14 @@ extension GameType {
             return [.ps1, .ss]
         case "zip":
             return [.arcade, .dos]
+        case "elf":
+            return [.psp, .ngc, .wii]
+        case "dol":
+            return [.ngc, .wii]
+        case "rvz":
+            return [.ngc, .wii]
+        case "wad":
+            return [.doom, .wii]
         default:
             return []
         }
@@ -106,6 +114,10 @@ extension GameType {
             self = .dos
         } else if ["sis", "sisx", "n-gage"].contains(ext) {
             self = .symbian
+        } else if ["gcm", "gcz"].contains(ext) {
+            self = .ngc
+        } else if ["wbfs", "ciso", "wia"].contains(ext) {
+            self = .wii
         } else {
             self = .notSupport
         }
@@ -190,6 +202,10 @@ extension GameType {
             self = .xbox
         } else if shortName.uppercased() == "Symbian".uppercased() {
             self = .symbian
+        } else if shortName.uppercased() == "NGC" {
+            self = .ngc
+        } else if shortName.uppercased() == "Wii".uppercased() {
+            self = .wii
         } else {
             return nil
         }
@@ -235,6 +251,8 @@ extension GameType {
         case .win98: return "Windows 98"
         case .xbox: return "Xbox"
         case .symbian: return "Symbian OS"
+        case .ngc: return "Nintendo GameCube"
+        case .wii: return "Nintendo Wii"
         default: return ""
         }
     }
@@ -279,6 +297,8 @@ extension GameType {
         case .win98: return  NSLocalizedString("WIN98", comment: "")
         case .xbox: return  NSLocalizedString("XBOX", comment: "")
         case .symbian: return  NSLocalizedString("Symbian", comment: "")
+        case .ngc: return  NSLocalizedString("NGC", comment: "")
+        case .wii: return  NSLocalizedString("Wii", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -324,6 +344,8 @@ extension GameType {
         case .win98: return 1998
         case .xbox: return 2001
         case .symbian: return 2003
+        case .ngc: return 2001
+        case .wii: return 2006
         default: return 0
         }
     }
@@ -362,6 +384,8 @@ extension GameType {
         case .j2me: return J2ME.core
         case .dos: return DOS.core
         case .symbian: return Symbian.core
+        case .ngc: return NGC.core
+        case .wii: return Wii.core
         default: return nil
         }
     }
@@ -537,7 +561,7 @@ extension GameType {
     
     var manufacturer: Manufacturer {
         switch self {
-        case ._3ds, .ds, .gb, .gba, .gbc, .nes, .fds, .snes, .vb, .pm, .n64, .ns:
+        case ._3ds, .ds, .gb, .gba, .gbc, .nes, .fds, .snes, .vb, .pm, .n64, .ns, .ngc, .wii:
             return .nintendo
         case .ps1, .psp:
             return .sony
@@ -562,7 +586,7 @@ extension GameType {
     
     var supportAnalogInput: Bool {
         switch self {
-        case .psp, ._3ds, .arcade, .dc, .ps1, .n64, .dos:
+        case .psp, ._3ds, .arcade, .dc, .ps1, .n64, .dos, .ngc, .wii:
             return true
         default: return false
         }
@@ -676,6 +700,10 @@ extension GameType {
                 image = R.image.xbox_group_brand()
             } else if self == .symbian {
                 image = R.image.symbian_group_brand()
+            } else if self == .ngc {
+                image = R.image.ngc_group_brand()
+            } else if self == .wii {
+                image = R.image.wii_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image
@@ -735,6 +763,11 @@ extension GameType {
                              imported: false,
                              desc: R.string.localizable.symbianOSFirmwareDesc(),
                              required: true)]
+        } else if self == .ngc {
+            return [BIOSItem(fileName: "IPL.bin",
+                             imported: false,
+                             desc: R.string.localizable.biosCommondDesc(),
+                             required: false)]
         }
         return []
     }

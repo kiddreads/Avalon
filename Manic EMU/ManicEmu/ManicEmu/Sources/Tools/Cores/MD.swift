@@ -15,11 +15,6 @@ extension GameType
     static let md = GameType("public.aoshuang.game.md")
 }
 
-extension CheatType
-{
-    static let actionReplay16 = CheatType("ActionReplay16")
-}
-
 @objc enum MDGameInput: Int, Input, CaseIterable {
     case a
     case b

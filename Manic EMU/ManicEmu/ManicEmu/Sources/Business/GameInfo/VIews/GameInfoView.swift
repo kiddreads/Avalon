@@ -177,6 +177,23 @@ class GameInfoView: BaseView {
                 self?.gameInfoDetailView.titleTextField.becomeFirstResponder()
             }
         })
+        
+        let hasQueryMetadata = game.getExtraBool(key: ExtraKey.hasQueryMetadata.rawValue) ?? false
+        if !hasQueryMetadata {
+            let gameId = game.id
+            DispatchQueue.global().async { [weak self] in
+                guard let self else { return }
+                let realm = Database.realm
+                if let tempGame = realm.object(ofType: Game.self, forPrimaryKey: gameId),
+                    let data = GameMetadataKit.getGameInfo(game: tempGame) {
+                    data.persist(to: tempGame)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self else { return }
+                        self.gameOptionView.reloadOptionsView(games: [self.game])
+                    }
+                }
+            }
+        }
     }
     
     convenience init(readyAction: ReadyAction = .default, game: Game) {

@@ -56,6 +56,12 @@ extension GameOption {
             ShareManager.shareFiles(games: games, shareFileType: .rom)
             
         case .importSave:
+            if firstGame.isDolphinCore {
+                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                                 detail: R.string.localizable.dolphinSaveTips(),
+                                 cancelTitle: R.string.localizable.gotIt())
+                return
+            }
             FilesImporter.shared.presentImportController(supportedTypes: UTType.gamesaveTypes, allowsMultipleSelection: false) { urls in
                 if var url = urls.first {
                     if firstGame.gameType == ._3ds || firstGame.gameType == .psp {
@@ -88,6 +94,12 @@ extension GameOption {
             }
             
         case .shareSave:
+            if games.contains(where: { $0.isDolphinCore }) {
+                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                                 detail: R.string.localizable.dolphinSaveTips(),
+                                 cancelTitle: R.string.localizable.gotIt())
+                return
+            }
             ShareManager.shareFiles(games: games, shareFileType: .save)
             
         case .delete:
@@ -268,6 +280,16 @@ extension GameOption {
                     UIView.makeToast(message: R.string.localizable.fbNeoCheatCodeDesc())
                 }
                 return
+            }
+
+            if firstGame.isDolphinCore {
+                if firstGame.gameIDForDolphin == nil {
+                    firstGame.ensureDolphinGameID()
+                }
+                if firstGame.gameIDForDolphin == nil {
+                    UIView.makeToast(message: R.string.localizable.dolphinGameIDMissing())
+                    return
+                }
             }
             
             pauseEmulationIfNeed()
@@ -1022,6 +1044,10 @@ extension GameOption {
             
         case .symbianDevice:
             performStringAction(with: games, accessoryChange: accessoryChange)
+            
+        case .wiiControllerMode:
+            performStringAction(with: games, accessoryChange: accessoryChange)
+            
         }
     }
     
@@ -1250,6 +1276,9 @@ extension GameOption {
                 SymbianFirmwareView.show()
                 return
             }
+        } else if self == .wiiControllerMode {
+            options = R.Strings.WiiControllers
+            detail = R.string.localizable.wiimoteDesc()
         }
         
         guard options.count > 0 else { return }
@@ -1282,18 +1311,16 @@ extension GameOption {
                         $0.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: index)
                     })
                 } else if self == .ps1ControllerMode {
+                    games.forEach({
+                        $0.updateExtra(key: ExtraKey.isAnalog.rawValue, value: index == 0)
+                    })
                     if PlayViewController.isGaming {
                         let isAnalog = firstGame.getExtraBool(key: ExtraKey.isAnalog.rawValue) ?? true
                         if (isAnalog && index == 1) || (!isAnalog && index == 0) {
                             PlayViewController.updateAnalogMode()
                         }
                         resumeEmulationIfNeed()
-                    } else {
-                        games.forEach({
-                            $0.updateExtra(key: ExtraKey.isAnalog.rawValue, value: index == 0)
-                        })
                     }
-                    
                 } else if self == .ps1Renderer {
                     games.forEach({
                         $0.updateExtra(key: ExtraKey.psxRenderer.rawValue, value: index == 0)
@@ -1441,6 +1468,16 @@ extension GameOption {
                     games.forEach({
                         $0.updateSymbianGame(device: device)
                     })
+                } else if self == .wiiControllerMode {
+                    games.forEach({
+                        $0.updateExtra(key: ExtraKey.wiiController.rawValue, value: index)
+                    })
+                    if PlayViewController.isGaming {
+                        let wiiController = firstGame.getExtraInt(key: ExtraKey.wiiController.rawValue) ?? 0
+                        LibretroCore.sharedInstance().setWiiRemote(wiiController != 0)
+                        WiiEmulatorBridge.shared.isWiiremoteSideways = wiiController == 2
+                        resumeEmulationIfNeed()
+                    }
                 }
                 accessoryChange?()
             }
