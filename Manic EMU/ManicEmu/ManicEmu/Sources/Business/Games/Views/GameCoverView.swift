@@ -315,6 +315,12 @@ class GameCoverView: BaseView {
                 } else if gameTypeCategory == 3 {
                     image = style == .style2 ? R.image.supergrafx_cover_v() : R.image.supergrafx_cover_h()
                 }
+            } else if gameType == .ngp {
+                if gameTypeCategory == 0 {
+                    image = style == .style2 ? R.image.ngp_cover_v() : R.image.ngp_cover_h()
+                } else if gameTypeCategory == 1 {
+                    image = style == .style2 ? R.image.ngp_color_cover_v() : R.image.ngp_color_cover_h()
+                }
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, R.Style.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(R.Style.GamesPerRow-1)))

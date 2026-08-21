@@ -237,6 +237,8 @@ class Game: Object, ObjectUpdatable {
             return URL(fileURLWithPath: R.Path.Holani.appendingPathComponent("\(name).srm"))
         } else if gameType == .pce {
             return URL(fileURLWithPath: R.Path.BeetlePCE.appendingPathComponent("\(name).srm"))
+        } else if gameType == .ngp {
+            return URL(fileURLWithPath: R.Path.BeetleNeoPop.appendingPathComponent("\(name).flash"))
         } else if gameType == .j2me {
             return URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? EmulationCore.J2meJS.name : EmulationCore.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         } else if gameType == .dos {
@@ -466,6 +468,8 @@ class Game: Object, ObjectUpdatable {
             return .Holani
         } else if gameType == .pce {
             return .BeetlePCE
+        } else if gameType == .ngp {
+            return .BeetleNeoPop
         } else if gameType == .dos {
             return .DOSBoxPure
         } else if gameType == .symbian {
@@ -573,6 +577,8 @@ class Game: Object, ObjectUpdatable {
             return Bundle.main.path(forResource: "holani.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .pce {
             return Bundle.main.path(forResource: "mednafen.pce.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .ngp {
+            return Bundle.main.path(forResource: "mednafen.ngp.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .dos {
             return Bundle.main.path(forResource: "dosbox.pure.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .symbian {
@@ -1016,7 +1022,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportChangeCategory: Bool {
-        if gameType == .gb || gameType == .dos || gameType == .pce {
+        if gameType == .gb || gameType == .dos || gameType == .pce || gameType == .ngp {
             return true
         }
         return false
@@ -1029,15 +1035,17 @@ class Game: Object, ObjectUpdatable {
             return [.dos, .win95, .win98]
         } else if gameType == .pce {
             return [.pce, .turbografx_16, .turbografx_cd, .supergrafx]
+        } else if gameType == .ngp {
+            return [.ngp, .ngpc]
         }
         return []
     }
     
     func updateCategory(gameType: GameType) {
         guard supportChangeCategory else { return }
-        if gameType == .gb || gameType == .dos || gameType == .pce {
+        if gameType == .gb || gameType == .dos || gameType == .pce || gameType == .ngp {
             updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 0)
-        } else if gameType == .chm || gameType == .win95 || gameType == .turbografx_16 {
+        } else if gameType == .chm || gameType == .win95 || gameType == .turbografx_16 || gameType == .ngpc {
             updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 1)
         } else if gameType == .win98 || gameType == .turbografx_cd {
             updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 2)
@@ -1067,7 +1075,7 @@ class Game: Object, ObjectUpdatable {
         return nil
     }
     
-    ///GB/DOS/PCE support category switching onto virtual GameTypes
+    ///GB/DOS/PCE/NGP support category switching onto virtual GameTypes
     var effectiveGameType: GameType {
         virtualGameType ?? gameType
     }

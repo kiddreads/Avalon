@@ -75,6 +75,7 @@ extension _R {
                 case .chm: return 0.7908
                 case .xbox: return 0.714
                 case .ngc, .wii: return 0.706
+                case .ngp, .ngpc: return 0.8594
                 default: return 1.0
                 }
             case .style2:
@@ -491,6 +492,7 @@ extension _R {
         static let VirtualJaguar = Document.appendingPathComponent(EmulationCore.VirtualJaguar.name)
         static let Holani = Document.appendingPathComponent(EmulationCore.Holani.name)
         static let BeetlePCE = Document.appendingPathComponent(EmulationCore.BeetlePCE.name)
+        static let BeetleNeoPop = Document.appendingPathComponent(EmulationCore.BeetleNeoPop.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
         static let MAMEDB = Resource.appendingPathComponent("MAME.db")

@@ -669,6 +669,10 @@ extension FilesImporter {
                             }
                         }
                         
+                        if game.gameType == .ngp {
+                            game.extras = [ExtraKey.gameTypeCategory.rawValue: 1].jsonData()
+                        }
+                        
                         do {
                             //Copy the ROMs
                             if ciaTitleUrl == nil {

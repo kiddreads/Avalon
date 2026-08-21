@@ -143,6 +143,8 @@ class Settings: Object, ObjectUpdatable {
                     GameType.turbografx_cd.localizedShortName == platform ||
                     GameType.supergrafx.localizedShortName == platform {
             realPlatform = GameType.pce.localizedName
+        } else if GameType.ngpc.localizedShortName == platform {
+            realPlatform = GameType.ngp.localizedName
         }
         return getExtraBool(key: realPlatform + "Visible") ?? true
     }

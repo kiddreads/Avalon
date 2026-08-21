@@ -732,6 +732,8 @@ class PlayViewController: GameViewController {
                 (manicGame.gameType == .symbian && UIDevice.isPhone) ||
                 manicGame.gameType == .pce {
                 make.height.equalTo(R.Size.ItemHeightMicro)
+            } else if manicGame.gameType == .ngp {
+                make.height.equalTo(R.Size.ItemHeightTiny)
             } else {
                 make.height.equalTo(R.Size.ItemHeightMedium)
             }
@@ -2204,8 +2206,7 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.PrBoom.libretroPath)
             } else if manicGame.gameType == .dos {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.DOSBoxPure.libretroPath)
-            }
-            else {
+            } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: R.Path.LibretroSavePath.libretroPath)
             }
             

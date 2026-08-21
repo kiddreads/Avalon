@@ -325,6 +325,9 @@ class GameListView: BaseView {
                     self.reloadIndexView()
                     if !self.isGamesExist {
                         UIView.springAnimate { self.bottomToolView.alpha = 0 }
+                        if self.isSelectionMode {
+                            self.selectionMode = .normalMode
+                        }
                     }
                 }
                 
@@ -455,6 +458,22 @@ class GameListView: BaseView {
             normalDatas[.supergrafx] = supergrafxGames.count > 0 ? supergrafxGames : nil
         }
         
+        //NGP games can switch categories
+        if let ngpGames = normalDatas[.ngp], ngpGames.count > 0 {
+            var newNgpGames = [Game]()
+            var ngpcGames = [Game]()
+            for ngp in ngpGames {
+                let ngpGameType = ngp.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
+                if ngpGameType == 0 {
+                    newNgpGames.append(ngp)
+                } else if ngpGameType == 1 {
+                    ngpcGames.append(ngp)
+                }
+            }
+            normalDatas[.ngp] = newNgpGames.count > 0 ? newNgpGames : nil
+            normalDatas[.ngpc] = ngpcGames.count > 0 ? ngpcGames : nil
+        }
+        
         //hide platform
         let allGameTypes = normalDatas.keys
         for gameType in allGameTypes {
@@ -466,6 +485,8 @@ class GameListView: BaseView {
                 platform = GameType.dos.localizedShortName
             } else if gameType == .turbografx_16 || gameType == .turbografx_cd || gameType == .supergrafx {
                 platform = GameType.pce.localizedShortName
+            } else if gameType == .ngpc {
+                platform = GameType.ngp.localizedShortName
             }
             visible = Settings.defalut.getPlatformVisible(platform: platform)
             if !visible {
@@ -736,6 +757,11 @@ class GameListView: BaseView {
                 return true
             }
             
+            if gameType == .ngpc,
+               games.where({ $0.gameType == .ngp }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 1 }).count > 0 {
+                return true
+            }
+            
             if games.count(where: { $0.gameType == gameType }) > 0 {
                 return true
             }
@@ -782,6 +808,7 @@ extension GameListView: UICollectionViewDataSource {
         predefinedOrder.insert(.turbografx_16, at: predefinedOrder.firstIndex(of: .pce)!)
         predefinedOrder.insert(.turbografx_cd, at: predefinedOrder.firstIndex(of: .turbografx_16)!)
         predefinedOrder.insert(.supergrafx, at: predefinedOrder.firstIndex(of: .turbografx_cd)!)
+        predefinedOrder.insert(.ngpc, at: predefinedOrder.firstIndex(of: .ngp)!)
         let sortedKeys: [GameType] = predefinedOrder.filter { (isSearchMode ? searchDatas : normalDatas).keys.contains($0) }
         return sortedKeys
     }
@@ -804,8 +831,8 @@ extension GameListView: UICollectionViewDataSource {
     }
     
     private func getIndexPath(for game: Game) -> IndexPath? {
-        if let results = (isSearchMode ? searchDatas : normalDatas)[game.gameType] {
-            if let section = sortDatasKeys().firstIndex(of: game.gameType), let row = results.firstIndex(of: game) {
+        if let results = (isSearchMode ? searchDatas : normalDatas)[game.effectiveGameType] {
+            if let section = sortDatasKeys().firstIndex(of: game.effectiveGameType), let row = results.firstIndex(of: game) {
                 return IndexPath(row: row, section: section)
             }
         }
@@ -869,6 +896,10 @@ extension GameListView: UICollectionViewDataSource {
                             coverGameType = .turbografx_cd
                         } else if gameTypeCategory == 3 {
                             coverGameType = .supergrafx
+                        }
+                    } else if game.gameType == .ngp {
+                        if gameTypeCategory == 1 {
+                            coverGameType = .ngpc
                         }
                     }
                 }

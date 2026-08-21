@@ -151,6 +151,10 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("NEC - PC Engine CD - TurboGrafx-CD/Named_Boxarts")
             case .supergrafx:
                 boxArtUrl = host.appendingPathComponent("NEC - PC Engine SuperGrafx/Named_Boxarts")
+            case .ngp:
+                boxArtUrl = host.appendingPathComponent("SNK - Neo Geo Pocket/Named_Boxarts")
+            case .ngpc:
+                boxArtUrl = host.appendingPathComponent("SNK - Neo Geo Pocket Color/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }

@@ -120,6 +120,8 @@ extension GameType {
             self = .wii
         } else if ["pce", "sgx", "toc"].contains(ext) {
             self = .pce
+        } else if ["ngp", "ngc", "ngpc", "npc"].contains(ext) {
+            self = .ngp
         } else {
             self = .notSupport
         }
@@ -210,6 +212,8 @@ extension GameType {
             self = .wii
         } else if shortName.uppercased() == "PCE" {
             self = .pce
+        } else if shortName.uppercased() == "NGP" {
+            self = .ngp
         } else {
             return nil
         }
@@ -261,6 +265,8 @@ extension GameType {
         case .turbografx_16: return "TurboGrafx-16"
         case .turbografx_cd: return "TurboGrafx-CD"
         case .supergrafx: return "SuperGrafx"
+        case .ngp: return "Neo Geo Pocket"
+        case .ngpc: return "Neo Geo Pocket Color"
         default: return ""
         }
     }
@@ -311,6 +317,8 @@ extension GameType {
         case .turbografx_16: return  NSLocalizedString("TG-16", comment: "")
         case .turbografx_cd: return  NSLocalizedString("TG-CD", comment: "")
         case .supergrafx: return  NSLocalizedString("SGX", comment: "")
+        case .ngp: return  NSLocalizedString("NGP", comment: "")
+        case .ngpc: return  NSLocalizedString("NGPC", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -362,6 +370,8 @@ extension GameType {
         case .turbografx_16: return 1989
         case .turbografx_cd: return 1989
         case .supergrafx: return 1989
+        case .ngp: return 1998
+        case .ngpc: return 1999
         default: return 0
         }
     }
@@ -403,6 +413,7 @@ extension GameType {
         case .ngc: return NGC.core
         case .wii: return Wii.core
         case .pce: return PCE.core
+        case .ngp: return NGP.core
         default: return nil
         }
     }
@@ -601,6 +612,8 @@ extension GameType {
             return .nokia
         case .pce, .turbografx_16, .turbografx_cd, .supergrafx:
             return .nec
+        case .ngp, .ngpc:
+            return .snk
         default:
             return .nintendo
         }
@@ -734,6 +747,10 @@ extension GameType {
                 image = R.image.turbografx_cd_group_brand()
             } else if self == .supergrafx {
                 image = R.image.supergrafx_group_brand()
+            } else if self == .ngp {
+                image = R.image.ngp_group_brand()
+            } else if self == .ngpc {
+                image = R.image.ngp_color_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image

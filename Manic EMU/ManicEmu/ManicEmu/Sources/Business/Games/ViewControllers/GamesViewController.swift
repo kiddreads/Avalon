@@ -307,7 +307,6 @@ class GamesViewController: BaseViewController {
                 make.leading.bottom.trailing.equalToSuperview()
             }
             
-            gamesSeperatorView.isHidden = gamesToolViewIsHidden
             if gamesSeperatorView.superview == nil {
                 view.addSubview(gamesSeperatorView)
             }

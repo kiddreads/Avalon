@@ -420,6 +420,8 @@ class GameListLandscapeView: BaseView {
             platform = GameType.dos.localizedShortName
         } else if gameType == .turbografx_16 || gameType == .turbografx_cd || gameType == .supergrafx {
             platform = GameType.pce.localizedShortName
+        } else if gameType == .ngpc {
+            platform = GameType.ngp.localizedShortName
         }
         return Settings.defalut.getPlatformVisible(platform: platform)
     }
@@ -433,6 +435,8 @@ class GameListLandscapeView: BaseView {
             return manufacturer.gameTypes.contains(.dos)
         case .turbografx_16, .turbografx_cd, .supergrafx:
             return manufacturer.gameTypes.contains(.pce)
+        case .ngpc:
+            return manufacturer.gameTypes.contains(.ngp)
         default:
             return manufacturer.gameTypes.contains(gameType)
         }
@@ -448,6 +452,7 @@ class GameListLandscapeView: BaseView {
         order.insert(.turbografx_16, at: order.firstIndex(of: .pce)!)
         order.insert(.turbografx_cd, at: order.firstIndex(of: .turbografx_16)!)
         order.insert(.supergrafx, at: order.firstIndex(of: .turbografx_cd)!)
+        order.insert(.ngpc, at: order.firstIndex(of: .ngp)!)
         return order
     }
     

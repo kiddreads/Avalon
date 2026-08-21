@@ -1055,6 +1055,10 @@
 		AA122ED56C3140C1864D4EC8 /* mednafen.pce.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9408D7BF872544CFABE4D652 /* mednafen.pce.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1CAAD3DB49C34DAD998DD033 /* PCE.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E402E22DFA4C9D96FFBC89 /* PCE.swift */; };
 		D94752D7D273464B9E4B625C /* PCE.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E402E22DFA4C9D96FFBC89 /* PCE.swift */; };
+		0750DCA306CA4EB7A036C987 /* mednafen.ngp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5F74DFC689D94836B20159EB /* mednafen.ngp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A672B510CD9141B18392D564 /* NGP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D4867970474EB9B27D4D8D /* NGP.swift */; };
+		1186ADAD578A4FAC9E5337EA /* NGP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D4867970474EB9B27D4D8D /* NGP.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1092,6 +1096,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 
+				0750DCA306CA4EB7A036C987 /* mednafen.ngp.libretro.framework in Embed Frameworks */,
 				FFD8F5F4CE02425E8BA80296 /* mednafen.pce.libretro.framework in Embed Frameworks */,
 				2A84A76AE2A94C3EB048E0D1 /* dolphin.libretro.framework in Embed Frameworks */,
 				DE2953C2BE0E42C8A8F0EEAB /* eka2l1.libretro.framework in Embed Frameworks */,
@@ -1144,6 +1149,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 
+				5F74DFC689D94836B20159EB /* mednafen.ngp.libretro.framework in Embed Frameworks */,
 				AA122ED56C3140C1864D4EC8 /* mednafen.pce.libretro.framework in Embed Frameworks */,
 				23CE581FDA6A4771B987DE69 /* dolphin.libretro.framework in Embed Frameworks */,
 				349598F48E5541F89B1CBE80 /* eka2l1.libretro.framework in Embed Frameworks */,
@@ -6007,6 +6013,8 @@
 		F0C500000000000000000108 /* FocusSystem+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FocusSystem+UIViewController.swift"; sourceTree = "<group>"; };
 		9408D7BF872544CFABE4D652 /* mednafen.pce.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.pce.libretro.framework; path = ../Cores/mednafen.pce.libretro.framework; sourceTree = SOURCE_ROOT; };
 		A0E402E22DFA4C9D96FFBC89 /* PCE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCE.swift; sourceTree = "<group>"; };
+		4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.ngp.libretro.framework; path = ../Cores/mednafen.ngp.libretro.framework; sourceTree = SOURCE_ROOT; };
+		78D4867970474EB9B27D4D8D /* NGP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGP.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -11811,6 +11819,7 @@
 			isa = PBXGroup;
 			children = (
 
+				4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */,
 				9408D7BF872544CFABE4D652 /* mednafen.pce.libretro.framework */,
 				9770068F58CC4F29B21DE396 /* dolphin.libretro.framework */,
 				25F38CF54CA347238295BE77 /* eka2l1.libretro.framework */,
@@ -11985,6 +11994,7 @@
 			isa = PBXGroup;
 			children = (
 
+				78D4867970474EB9B27D4D8D /* NGP.swift */,
 				A0E402E22DFA4C9D96FFBC89 /* PCE.swift */,
 				0A2DDA01B1DB4E15B8F0C5C6 /* Wii.swift */,
 				691349DFB9FB4307A3151455 /* NGC.swift */,
@@ -12798,6 +12808,7 @@
 			buildActionMask = 2147483647;
 			files = (
 
+				A672B510CD9141B18392D564 /* NGP.swift in Sources */,
 				1CAAD3DB49C34DAD998DD033 /* PCE.swift in Sources */,
 				0E964747C5B24B348A8665E0 /* Wii.swift in Sources */,
 				3008E79240634E729DB35FEB /* NGC.swift in Sources */,
@@ -13205,6 +13216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 
+				1186ADAD578A4FAC9E5337EA /* NGP.swift in Sources */,
 				D94752D7D273464B9E4B625C /* PCE.swift in Sources */,
 				023B2A9DBF6F473782A64EC6 /* Wii.swift in Sources */,
 				A65D0A457B5749D3B4E590B2 /* NGC.swift in Sources */,

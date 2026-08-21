@@ -1,5 +1,5 @@
 //
-//  PCE.swift
+//  NGP.swift
 //  ManicEmu
 //
 //  Created by Daiuno on 2026/8/21.
@@ -11,13 +11,11 @@
 import AVFoundation
 
 extension GameType {
-    static let pce = GameType("public.aoshuang.game.pce")
-    static let turbografx_16 = GameType("public.aoshuang.game.turbografx_16")
-    static let turbografx_cd = GameType("public.aoshuang.game.turbografx_cd")
-    static let supergrafx = GameType("public.aoshuang.game.supergrafx")
+    static let ngp = GameType("public.aoshuang.game.ngp")
+    static let ngpc = GameType("public.aoshuang.game.ngpc")
 }
 
-@objc enum PCEGameInput: Int, Input, CaseIterable {
+@objc enum NGPGameInput: Int, Input, CaseIterable {
     case a
     case b
     case x
@@ -34,12 +32,12 @@ extension GameType {
     case r2
     case l3
     case r3
-    
+
     case flex
     case menu
 
     var type: InputType {
-        return .game(.pce)
+        return .game(.ngp)
     }
     
     init?(stringValue: String) {
@@ -63,35 +61,35 @@ extension GameType {
     }
 }
 
-struct PCE: DeltaCoreProtocol {
-    static let core = PCE()
+struct NGP: DeltaCoreProtocol {
+    static let core = NGP()
     
-    var name: String { "PCE" }
-    var identifier: String { "com.aoshuang.PCECore" }
+    var name: String { "NGP" }
+    var identifier: String { "com.aoshuang.NGPCore" }
     
-    var gameType: GameType { GameType.pce }
-    var gameInputType: Input.Type { PCEGameInput.self }
-    var allInputs: [Input] { PCEGameInput.allCases }
-    var gameSaveFileExtension: String { "srm" }
+    var gameType: GameType { GameType.ngp }
+    var gameInputType: Input.Type { NGPGameInput.self }
+    var allInputs: [Input] { NGPGameInput.allCases }
+    var gameSaveFileExtension: String { "flash" }
         
-    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 256, height: 224))
+    let videoFormat = VideoFormat(format: .bitmap(.rgb565), dimensions: CGSize(width: 160, height: 152))
     
     var supportedCheatFormats: Set<CheatFormat> {
         return []
     }
     
-    var emulatorBridge: EmulatorBridging { PCEEmulatorBridge.shared }
+    var emulatorBridge: EmulatorBridging { NGPEmulatorBridge.shared }
     
     private init() {}
 }
 
 
-class PCEEmulatorBridge : EmulatorBridgeBase {
-    static let shared = PCEEmulatorBridge()
+class NGPEmulatorBridge : EmulatorBridgeBase {
+    static let shared = NGPEmulatorBridge()
 
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
-        if let gameInput = PCEGameInput(rawValue: input),
+        if let gameInput = NGPGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
 #if DEBUG
 Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
@@ -100,7 +98,7 @@ Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
         }
     }
     
-    func gameInputToCoreInput(gameInput: PCEGameInput) -> LibretroButton? {
+    func gameInputToCoreInput(gameInput: NGPGameInput) -> LibretroButton? {
         if gameInput == .a { return .A }
         else if gameInput == .b { return .B }
         else if gameInput == .x { return .X }
@@ -121,7 +119,7 @@ Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
     }
     
     override func deactivateInput(_ input: Int, playerIndex: Int) {
-        if let gameInput = PCEGameInput(rawValue: input),
+        if let gameInput = NGPGameInput(rawValue: input),
             let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
