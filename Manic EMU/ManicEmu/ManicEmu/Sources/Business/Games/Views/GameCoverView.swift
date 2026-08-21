@@ -305,6 +305,16 @@ class GameCoverView: BaseView {
                 image = style == .style2 ? R.image.ngc_cover_v() : R.image.ngc_cover_h()
             } else if gameType == .wii {
                 image = style == .style2 ? R.image.wii_cover_v() : R.image.wii_cover_h()
+            } else if gameType == .pce {
+                if gameTypeCategory == 0 {
+                    image = style == .style2 ? R.image.pce_cover_v() : R.image.pce_cover_h()
+                } else if gameTypeCategory == 1 {
+                    image = style == .style2 ? R.image.turbografx_16_cover_v() : R.image.turbografx_16_cover_h()
+                } else if gameTypeCategory == 2 {
+                    image = style == .style2 ? R.image.turbografx_cd_cover_v() : R.image.turbografx_cd_cover_h()
+                } else if gameTypeCategory == 3 {
+                    image = style == .style2 ? R.image.supergrafx_cover_v() : R.image.supergrafx_cover_h()
+                }
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, R.Style.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(R.Style.GamesPerRow-1)))

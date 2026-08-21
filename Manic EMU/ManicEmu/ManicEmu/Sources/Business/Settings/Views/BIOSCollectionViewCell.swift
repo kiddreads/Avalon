@@ -143,6 +143,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = R.BIOS.A7800Bios
             } else if gameType == .lynx {
                 biosItems = R.BIOS.LynxBios
+            } else if gameType == .pce {
+                biosItems = R.BIOS.PCEBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
@@ -412,6 +414,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = R.BIOS.A7800Bios.count
         } else if gameType == .lynx {
             itemCount = R.BIOS.LynxBios.count
+        } else if gameType == .pce {
+            itemCount = R.BIOS.PCEBios.count
         }
         return (Double(itemCount) * R.Size.ItemHeightLarge) + (Double(itemCount + 1) * R.Size.ContentSpaceMedium)
     }

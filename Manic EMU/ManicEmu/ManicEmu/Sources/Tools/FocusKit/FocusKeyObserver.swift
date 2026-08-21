@@ -45,7 +45,7 @@ class FocusKeyObserver {
             
             if let userInfo = notification.userInfo,
                let input = userInfo["input"] as? any Input {
-                
+                guard input.type != .controller(.controllerSkin) else { return }
                 if input.type == .controller(.keyboard) {
                     if FocusSystem.shared.isEditingText {
                         // Letters stay with the field; Escape still ends editing.
@@ -67,7 +67,7 @@ class FocusKeyObserver {
             
             if let userInfo = notification.userInfo,
                let input = userInfo["input"] as? any Input {
-                
+                guard input.type != .controller(.controllerSkin) else { return }
                 if input.type == .controller(.keyboard) {
                     Self.handleKeyboard(input.stringValue, isPressed: false)
                     return

@@ -139,6 +139,10 @@ class Settings: Object, ObjectUpdatable {
             realPlatform = GameType.gb.localizedName
         } else if GameType.win95.localizedShortName == platform || GameType.win98.localizedShortName == platform {
             realPlatform = GameType.dos.localizedName
+        } else if GameType.turbografx_16.localizedShortName == platform ||
+                    GameType.turbografx_cd.localizedShortName == platform ||
+                    GameType.supergrafx.localizedShortName == platform {
+            realPlatform = GameType.pce.localizedName
         }
         return getExtraBool(key: realPlatform + "Visible") ?? true
     }

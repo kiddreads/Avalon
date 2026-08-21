@@ -41,6 +41,8 @@ class CategorySelectionView: BaseView {
             if let index  {
                 for game in games {
                     game.updateCategory(gameType: supportedCategories[index])
+                    game.matchCover(force: true,
+                                    useVirtualGameTypeIfNeed: true)
                 }
                 completion?(true)
             } else {

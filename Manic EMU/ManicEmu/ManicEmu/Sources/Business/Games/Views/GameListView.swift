@@ -431,6 +431,30 @@ class GameListView: BaseView {
             normalDatas[.win98] = win98Games.count > 0 ? win98Games : nil
         }
         
+        //PCE games can switch categories
+        if let pceGames = normalDatas[.pce], pceGames.count > 0 {
+            var newPceGames = [Game]()
+            var turbografx16Games = [Game]()
+            var turbografxCdGames = [Game]()
+            var supergrafxGames = [Game]()
+            for pce in pceGames {
+                let pceGameType = pce.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
+                if pceGameType == 0 {
+                    newPceGames.append(pce)
+                } else if pceGameType == 1 {
+                    turbografx16Games.append(pce)
+                } else if pceGameType == 2 {
+                    turbografxCdGames.append(pce)
+                } else if pceGameType == 3 {
+                    supergrafxGames.append(pce)
+                }
+            }
+            normalDatas[.pce] = newPceGames.count > 0 ? newPceGames : nil
+            normalDatas[.turbografx_16] = turbografx16Games.count > 0 ? turbografx16Games : nil
+            normalDatas[.turbografx_cd] = turbografxCdGames.count > 0 ? turbografxCdGames : nil
+            normalDatas[.supergrafx] = supergrafxGames.count > 0 ? supergrafxGames : nil
+        }
+        
         //hide platform
         let allGameTypes = normalDatas.keys
         for gameType in allGameTypes {
@@ -440,6 +464,8 @@ class GameListView: BaseView {
                 platform = GameType.gb.localizedShortName
             } else if gameType == .win95 || gameType == .win98 {
                 platform = GameType.dos.localizedShortName
+            } else if gameType == .turbografx_16 || gameType == .turbografx_cd || gameType == .supergrafx {
+                platform = GameType.pce.localizedShortName
             }
             visible = Settings.defalut.getPlatformVisible(platform: platform)
             if !visible {
@@ -695,6 +721,21 @@ class GameListView: BaseView {
                 return true
             }
             
+            if gameType == .turbografx_16,
+               games.where({ $0.gameType == .pce }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 1 }).count > 0 {
+                return true
+            }
+            
+            if gameType == .turbografx_cd,
+               games.where({ $0.gameType == .pce }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 2 }).count > 0 {
+                return true
+            }
+            
+            if gameType == .supergrafx,
+               games.where({ $0.gameType == .pce }).filter({ ($0.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0) == 3 }).count > 0 {
+                return true
+            }
+            
             if games.count(where: { $0.gameType == gameType }) > 0 {
                 return true
             }
@@ -738,6 +779,9 @@ extension GameListView: UICollectionViewDataSource {
         predefinedOrder.insert(.chm, at: predefinedOrder.firstIndex(of: .gb)!)
         predefinedOrder.insert(.win95, at: predefinedOrder.firstIndex(of: .dos)!)
         predefinedOrder.insert(.win98, at: predefinedOrder.firstIndex(of: .win95)!)
+        predefinedOrder.insert(.turbografx_16, at: predefinedOrder.firstIndex(of: .pce)!)
+        predefinedOrder.insert(.turbografx_cd, at: predefinedOrder.firstIndex(of: .turbografx_16)!)
+        predefinedOrder.insert(.supergrafx, at: predefinedOrder.firstIndex(of: .turbografx_cd)!)
         let sortedKeys: [GameType] = predefinedOrder.filter { (isSearchMode ? searchDatas : normalDatas).keys.contains($0) }
         return sortedKeys
     }
@@ -817,6 +861,14 @@ extension GameListView: UICollectionViewDataSource {
                             coverGameType = .win95
                         } else if gameTypeCategory == 2 {
                             coverGameType = .win98
+                        }
+                    } else if game.gameType == .pce {
+                        if gameTypeCategory == 1 {
+                            coverGameType = .turbografx_16
+                        } else if gameTypeCategory == 2 {
+                            coverGameType = .turbografx_cd
+                        } else if gameTypeCategory == 3 {
+                            coverGameType = .supergrafx
                         }
                     }
                 }

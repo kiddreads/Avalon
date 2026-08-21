@@ -490,6 +490,7 @@ extension _R {
         static let ProSystem = Document.appendingPathComponent(EmulationCore.ProSystem.name)
         static let VirtualJaguar = Document.appendingPathComponent(EmulationCore.VirtualJaguar.name)
         static let Holani = Document.appendingPathComponent(EmulationCore.Holani.name)
+        static let BeetlePCE = Document.appendingPathComponent(EmulationCore.BeetlePCE.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
         static let MAMEDB = Resource.appendingPathComponent("MAME.db")
@@ -995,6 +996,13 @@ extension _R {
         
         static let LynxBios = [
             BIOSItem(fileName: "lynxboot.img", imported: false, desc: "Lynx Boot Image", required: false)
+        ]
+        
+        static let PCEBios = [
+            BIOSItem(fileName: "syscard3.pce", imported: false, desc: "Super CD-ROM2 System V3.xx", required: false),
+            BIOSItem(fileName: "syscard2.pce", imported: false, desc: "CD-ROM System V2.xx", required: false),
+            BIOSItem(fileName: "syscard1.pce", imported: false, desc: "CD-ROM System V1.xx", required: false),
+            BIOSItem(fileName: "gexpress.pce", imported: false, desc: "Game Express CD Card", required: false)
         ]
     }
     

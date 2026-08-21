@@ -235,6 +235,8 @@ class Game: Object, ObjectUpdatable {
             }
         } else if gameType == .lynx {
             return URL(fileURLWithPath: R.Path.Holani.appendingPathComponent("\(name).srm"))
+        } else if gameType == .pce {
+            return URL(fileURLWithPath: R.Path.BeetlePCE.appendingPathComponent("\(name).srm"))
         } else if gameType == .j2me {
             return URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? EmulationCore.J2meJS.name : EmulationCore.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         } else if gameType == .dos {
@@ -462,6 +464,8 @@ class Game: Object, ObjectUpdatable {
             return .VirtualJaguar
         } else if gameType == .lynx {
             return .Holani
+        } else if gameType == .pce {
+            return .BeetlePCE
         } else if gameType == .dos {
             return .DOSBoxPure
         } else if gameType == .symbian {
@@ -567,6 +571,8 @@ class Game: Object, ObjectUpdatable {
             return Bundle.main.path(forResource: "virtualjaguar.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .lynx {
             return Bundle.main.path(forResource: "holani.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .pce {
+            return Bundle.main.path(forResource: "mednafen.pce.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .dos {
             return Bundle.main.path(forResource: "dosbox.pure.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .symbian {
@@ -1010,7 +1016,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportChangeCategory: Bool {
-        if gameType == .gb || gameType == .dos {
+        if gameType == .gb || gameType == .dos || gameType == .pce {
             return true
         }
         return false
@@ -1021,19 +1027,49 @@ class Game: Object, ObjectUpdatable {
             return [.gb, .chm]
         } else if gameType == .dos {
             return [.dos, .win95, .win98]
+        } else if gameType == .pce {
+            return [.pce, .turbografx_16, .turbografx_cd, .supergrafx]
         }
         return []
     }
     
     func updateCategory(gameType: GameType) {
         guard supportChangeCategory else { return }
-        if gameType == .gb || gameType == .dos {
+        if gameType == .gb || gameType == .dos || gameType == .pce {
             updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 0)
-        } else if gameType == .chm || gameType == .win95 {
+        } else if gameType == .chm || gameType == .win95 || gameType == .turbografx_16 {
             updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 1)
-        } else if gameType == .win98 {
+        } else if gameType == .win98 || gameType == .turbografx_cd {
             updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 2)
+        } else if gameType == .supergrafx {
+            updateExtra(key: ExtraKey.gameTypeCategory.rawValue, value: 3)
         }
+    }
+    
+    func matchCover(force: Bool = false,
+                    useVirtualGameTypeIfNeed: Bool = true) {
+        if gameCover == nil && onlineCoverUrl == nil {
+            if force || !hasCoverMatch {
+                OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(gameType: effectiveGameType,
+                                                                                      gameID: id,
+                                                                                      gameName: name,
+                                                                                      fileExtension: fileExtension))
+            }
+        }
+    }
+    
+    var virtualGameType: GameType? {
+        if supportedCategories.count > 0,
+           let category = getExtraInt(key: ExtraKey.gameTypeCategory.rawValue),
+           category < supportedCategories.count {
+            return supportedCategories[category]
+        }
+        return nil
+    }
+    
+    ///GB/DOS/PCE support category switching onto virtual GameTypes
+    var effectiveGameType: GameType {
+        virtualGameType ?? gameType
     }
     
     func changeDefaultCore(coreIndex: Int) {
@@ -1064,7 +1100,8 @@ class Game: Object, ObjectUpdatable {
             gameType == .j2me ||
             gameType == .dos ||
             gameType == .symbian ||
-            isClownMDEmuCore {
+            isClownMDEmuCore,
+            gameType == .pce {
             return false
         }
         return true

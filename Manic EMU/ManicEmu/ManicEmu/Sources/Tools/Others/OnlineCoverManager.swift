@@ -20,7 +20,7 @@ class OnlineCoverManager {
         var fileExtension: String
         
         init(game: Game) {
-            self.gameType = game.gameType
+            self.gameType = game.effectiveGameType
             self.gameID = game.id
             self.gameName = game.translatedName ?? game.displayName
             self.fileExtension = game.fileExtension
@@ -81,7 +81,7 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy Advance/Named_Boxarts")
             case .gbc:
                 boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy Color/Named_Boxarts")
-            case .gb:
+            case .gb, .chm:
                 boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy/Named_Boxarts")
             case .nes:
                 boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo Entertainment System/Named_Boxarts")
@@ -137,7 +137,7 @@ class OnlineCoverManager {
                 return
             case .doom:
                 boxArtUrl = host.appendingPathComponent("DOOM/Named_Boxarts")
-            case .dos:
+            case .dos, .win95, .win98:
                 boxArtUrl = host.appendingPathComponent("DOS/Named_Boxarts")
             case .xbox:
                 boxArtUrl = host.appendingPathComponent("Microsoft - Xbox/Named_Boxarts")
@@ -145,6 +145,12 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("Nintendo - GameCube/Named_Boxarts")
             case .wii:
                 boxArtUrl = host.appendingPathComponent("Nintendo - Wii/Named_Boxarts")
+            case .pce, .turbografx_16:
+                boxArtUrl = host.appendingPathComponent("NEC - PC Engine - TurboGrafx 16/Named_Boxarts")
+            case .turbografx_cd:
+                boxArtUrl = host.appendingPathComponent("NEC - PC Engine CD - TurboGrafx-CD/Named_Boxarts")
+            case .supergrafx:
+                boxArtUrl = host.appendingPathComponent("NEC - PC Engine SuperGrafx/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }

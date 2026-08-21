@@ -83,9 +83,7 @@ class PlatformSelectionView: BaseView {
                 
                 NotificationCenter.default.post(name: R.NotificationName.PlatformSelectionChange, object: nil)
                 for game in games {
-                    if !game.hasCoverMatch {
-                        OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
-                    }
+                    game.matchCover(force: true)
                 }
             }
             completion?()

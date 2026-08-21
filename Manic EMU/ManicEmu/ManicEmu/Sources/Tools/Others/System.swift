@@ -11,6 +11,7 @@
 
 enum System: CaseIterable
 {
+    case pce
     case ngc
     case wii
     case symbian
@@ -86,7 +87,8 @@ enum System: CaseIterable
                 DOS.core,
                 Symbian.core,
                 NGC.core,
-                Wii.core]
+                Wii.core,
+                PCE.core]
     }
     
     ///Returns all supported game types.
@@ -151,6 +153,7 @@ extension System {
         case .symbian: return .symbian
         case .ngc: return .ngc
         case .wii: return .wii
+        case .pce: return .pce
         }
     }
 }

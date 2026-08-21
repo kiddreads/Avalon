@@ -44,7 +44,8 @@ enum EmulationCore: CaseIterable {
          DOSBoxPure,
          PCSXReArmed,
          EKA2L1,
-         Dolphin
+         Dolphin,
+         BeetlePCE
     
     var name: String {
         switch self {
@@ -122,6 +123,8 @@ enum EmulationCore: CaseIterable {
             "EKA2L1"
         case .Dolphin:
             "dolphin-emu"
+        case .BeetlePCE:
+            "Beetle PCE"
         }
     }
     
@@ -193,6 +196,8 @@ enum EmulationCore: CaseIterable {
             return [.symbian]
         case .Dolphin:
             return [.ngc, .wii]
+        case .BeetlePCE:
+            return [.pce]
         }
     }
     
@@ -241,7 +246,8 @@ enum EmulationCore: CaseIterable {
                 .melonDSDS,
                 .DeSmuME,
                 .Holani,
-                .VirtualJaguar:
+                .VirtualJaguar,
+                .BeetlePCE:
             return true
         default:
             return false

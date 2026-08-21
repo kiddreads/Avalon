@@ -716,6 +716,8 @@ class PlayViewController: GameViewController {
                 make.top.equalTo(gameView.snp.bottom).offset(4)
             } else if manicGame.isDolphinCore {
                 make.top.equalTo(gameView.snp.bottom).offset(5)
+            } else if manicGame.gameType == .pce {
+                make.top.equalTo(gameView.snp.bottom).offset(R.Size.ContentSpaceMedium)
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
@@ -727,7 +729,8 @@ class PlayViewController: GameViewController {
             if manicGame.gameType == .j2me ||
                 manicGame.gameType == .dos ||
                 manicGame.gameType == .doom ||
-                (manicGame.gameType == .symbian && UIDevice.isPhone) {
+                (manicGame.gameType == .symbian && UIDevice.isPhone) ||
+                manicGame.gameType == .pce {
                 make.height.equalTo(R.Size.ItemHeightMicro)
             } else {
                 make.height.equalTo(R.Size.ItemHeightMedium)
@@ -2456,6 +2459,8 @@ extension PlayViewController {
                             iconColor = R.Color.LabelTertiary.forceStyle(.dark)
                         } else if manicGame.isDolphinCore {
                             iconColor = UIColor.black.withAlphaComponent(0.25)
+                        } else if manicGame.gameType == .pce {
+                            iconColor = UIColor(hexString: "#8F8F92")!
                         }
                         let buttonContainerView = UIView()
                         let button = ASButtonView(.iconOnlyWithSmallSize(icon: shortcut.icon.updateColorsIfNeed(colors: [iconColor], forceUpdate: true),

@@ -97,7 +97,12 @@ struct Database {
             }
             
             //检查是否有游戏的封面还没有匹配
-            let games = realm.objects(Game.self).where { !$0.isDeleted && $0.gameCover == nil && !$0.hasCoverMatch }
+            let games = realm.objects(Game.self).where {
+                !$0.isDeleted &&
+                $0.gameCover == nil &&
+                $0.onlineCoverUrl == nil &&
+                !$0.hasCoverMatch
+            }
             games.forEach { game in
                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
             }

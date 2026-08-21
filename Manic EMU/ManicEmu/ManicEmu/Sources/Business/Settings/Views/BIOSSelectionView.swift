@@ -15,7 +15,7 @@ import ZipArchive
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case ngc, symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
+        case pce, ngc, symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .arcade: GameType.arcade.localizedName
@@ -35,6 +35,7 @@ class BIOSSelectionView: BaseView {
             case .a5200: GameType.a5200.localizedName
             case .symbian: GameType.symbian.localizedName
             case .ngc:  GameType.ngc.localizedName
+            case .pce: GameType.pce.localizedName
             }
         }
         
@@ -57,6 +58,7 @@ class BIOSSelectionView: BaseView {
             case .lynx: return .lynx
             case .symbian: return .symbian
             case .ngc: return .ngc
+            case .pce: return .pce
             }
         }
     }

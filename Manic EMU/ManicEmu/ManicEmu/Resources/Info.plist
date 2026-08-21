@@ -413,6 +413,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>PCE Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.pce</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -1451,6 +1463,33 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PCE Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.pce</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pce</string>
+					<string>sgx</string>
+					<string>cue</string>
+					<string>ccd</string>
+					<string>chd</string>
+					<string>toc</string>
+					<string>m3u</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -1545,6 +1584,7 @@
 					<string>min</string>
 					<string>zip</string>
 					<string>img</string>
+					<string>pce</string>
 				</array>
 			</dict>
 		</dict>

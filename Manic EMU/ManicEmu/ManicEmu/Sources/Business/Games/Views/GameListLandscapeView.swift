@@ -411,24 +411,6 @@ class GameListLandscapeView: BaseView {
     
     //MARK: - 数据管线
     
-    ///GB/DOS支持切换分类 转换为虚拟GameType
-    private static func effectiveGameType(of game: Game) -> GameType {
-        if game.supportChangeCategory {
-            let category = game.getExtraInt(key: ExtraKey.gameTypeCategory.rawValue) ?? 0
-            if game.gameType == .gb, category == 1 {
-                return .chm
-            }
-            if game.gameType == .dos {
-                if category == 1 {
-                    return .win95
-                } else if category == 2 {
-                    return .win98
-                }
-            }
-        }
-        return game.gameType
-    }
-    
     ///平台是否可见 虚拟类型映射回原平台配置
     private static func isPlatformVisible(_ gameType: GameType) -> Bool {
         var platform = gameType.localizedShortName
@@ -436,6 +418,8 @@ class GameListLandscapeView: BaseView {
             platform = GameType.gb.localizedShortName
         } else if gameType == .win95 || gameType == .win98 {
             platform = GameType.dos.localizedShortName
+        } else if gameType == .turbografx_16 || gameType == .turbografx_cd || gameType == .supergrafx {
+            platform = GameType.pce.localizedShortName
         }
         return Settings.defalut.getPlatformVisible(platform: platform)
     }
@@ -447,6 +431,8 @@ class GameListLandscapeView: BaseView {
             return manufacturer == .modRetro
         case .win95, .win98:
             return manufacturer.gameTypes.contains(.dos)
+        case .turbografx_16, .turbografx_cd, .supergrafx:
+            return manufacturer.gameTypes.contains(.pce)
         default:
             return manufacturer.gameTypes.contains(gameType)
         }
@@ -459,6 +445,9 @@ class GameListLandscapeView: BaseView {
         order.insert(.chm, at: order.firstIndex(of: .gb)!)
         order.insert(.win95, at: order.firstIndex(of: .dos)!)
         order.insert(.win98, at: order.firstIndex(of: .win95)!)
+        order.insert(.turbografx_16, at: order.firstIndex(of: .pce)!)
+        order.insert(.turbografx_cd, at: order.firstIndex(of: .turbografx_16)!)
+        order.insert(.supergrafx, at: order.firstIndex(of: .turbografx_cd)!)
         return order
     }
     
@@ -496,8 +485,7 @@ class GameListLandscapeView: BaseView {
         //按虚拟类型分组
         var grouped: [GameType: [Game]] = [:]
         for game in games {
-            let type = Self.effectiveGameType(of: game)
-            grouped[type, default: []].append(game)
+            grouped[game.effectiveGameType, default: []].append(game)
         }
         
         //平台可见性过滤
@@ -559,7 +547,7 @@ class GameListLandscapeView: BaseView {
         //只展示有游戏的厂商
         let manufacturers = Theme.defalut.manufacturerOrder.filter { manufacturer in
             games.contains { game in
-                let type = Self.effectiveGameType(of: game)
+                let type = game.effectiveGameType
                 return Self.isPlatformVisible(type) && Self.manufacturerAllows(type, manufacturer: manufacturer)
             }
         }
@@ -1152,7 +1140,7 @@ extension GameListLandscapeView: UICollectionViewDataSource {
     }
     
     private func cardSize(for game: Game) -> CGSize {
-        sizedCard(ratio: R.Size.GameCoverRatio(gameType: Self.effectiveGameType(of: game)))
+        sizedCard(ratio: R.Size.GameCoverRatio(gameType: game.effectiveGameType))
     }
     
     private var showsEmptyCard: Bool { displayGames.isEmpty }

@@ -19,19 +19,19 @@ extension GameType {
         guard multiPlatformFileExtensions.contains(ext) else { return [] }
         switch ext {
         case "chd":
-            return [.ps1, .psp, .mcd, .ss, .dc]
+            return [.ps1, .psp, .mcd, .ss, .dc, .pce]
         case "iso":
             return [.psp, .mcd, .ss, .dos, .ngc, .wii]
         case "bin":
             return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar]
         case "cue":
-            return [.ps1, .mcd, .ss, .dc, .dos]
+            return [.ps1, .mcd, .ss, .dc, .dos, .pce]
         case "m3u":
-            return [ ps1, .mcd, .ss, .dc, .dos]
+            return [.ps1, .mcd, .ss, .dc, .dos, .pce]
         case "pbp":
             return [.ps1, .psp]
         case "ccd":
-            return [.ps1, .ss]
+            return [.ps1, .ss, .pce]
         case "zip":
             return [.arcade, .dos]
         case "elf":
@@ -118,6 +118,8 @@ extension GameType {
             self = .ngc
         } else if ["wbfs", "ciso", "wia"].contains(ext) {
             self = .wii
+        } else if ["pce", "sgx", "toc"].contains(ext) {
+            self = .pce
         } else {
             self = .notSupport
         }
@@ -206,6 +208,8 @@ extension GameType {
             self = .ngc
         } else if shortName.uppercased() == "Wii".uppercased() {
             self = .wii
+        } else if shortName.uppercased() == "PCE" {
+            self = .pce
         } else {
             return nil
         }
@@ -253,6 +257,10 @@ extension GameType {
         case .symbian: return "Symbian OS"
         case .ngc: return "Nintendo GameCube"
         case .wii: return "Nintendo Wii"
+        case .pce: return "PC Engine"
+        case .turbografx_16: return "TurboGrafx-16"
+        case .turbografx_cd: return "TurboGrafx-CD"
+        case .supergrafx: return "SuperGrafx"
         default: return ""
         }
     }
@@ -299,6 +307,10 @@ extension GameType {
         case .symbian: return  NSLocalizedString("Symbian", comment: "")
         case .ngc: return  NSLocalizedString("NGC", comment: "")
         case .wii: return  NSLocalizedString("Wii", comment: "")
+        case .pce: return  NSLocalizedString("PCE", comment: "")
+        case .turbografx_16: return  NSLocalizedString("TG-16", comment: "")
+        case .turbografx_cd: return  NSLocalizedString("TG-CD", comment: "")
+        case .supergrafx: return  NSLocalizedString("SGX", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -346,6 +358,10 @@ extension GameType {
         case .symbian: return 2003
         case .ngc: return 2001
         case .wii: return 2006
+        case .pce: return 1987
+        case .turbografx_16: return 1989
+        case .turbografx_cd: return 1989
+        case .supergrafx: return 1989
         default: return 0
         }
     }
@@ -386,6 +402,7 @@ extension GameType {
         case .symbian: return Symbian.core
         case .ngc: return NGC.core
         case .wii: return Wii.core
+        case .pce: return PCE.core
         default: return nil
         }
     }
@@ -457,6 +474,9 @@ extension GameType {
         case .j2me: return nil
         case .dos: return nil
         case .symbian: return nil
+        case .pce, .turbografx_16: return "pce"
+        case .turbografx_cd: return "pcd"
+        case .supergrafx: return "pce"
         default: return localizedShortName.lowercased()
         }
     }
@@ -579,6 +599,8 @@ extension GameType {
             return .modRetro
         case .symbian:
             return .nokia
+        case .pce, .turbografx_16, .turbografx_cd, .supergrafx:
+            return .nec
         default:
             return .nintendo
         }
@@ -704,6 +726,14 @@ extension GameType {
                 image = R.image.ngc_group_brand()
             } else if self == .wii {
                 image = R.image.wii_group_brand()
+            } else if self == .pce {
+                image = R.image.pce_group_brand()
+            } else if self == .turbografx_16 {
+                image = R.image.turbografx_16_group_brand()
+            } else if self == .turbografx_cd {
+                image = R.image.turbografx_cd_group_brand()
+            } else if self == .supergrafx {
+                image = R.image.supergrafx_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image
@@ -758,6 +788,8 @@ extension GameType {
             return R.BIOS.A7800Bios
         } else if self == .lynx {
             return R.BIOS.LynxBios
+        } else if self == .pce {
+            return R.BIOS.PCEBios
         } else if self == .symbian {
             return [BIOSItem(fileName: R.string.localizable.symbianOSFirmware(),
                              imported: false,

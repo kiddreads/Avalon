@@ -108,7 +108,7 @@ class LibretroCoverSearchView: BaseView {
     private func searchCover(text: String?) {
         if let text = text?.trimmed {
             UIView.makeLoading()
-            let gameType = game.gameType
+            let gameType = game.effectiveGameType
             let id = game.id
             let fileExtension = game.fileExtension
             DispatchQueue.global().async { [weak self] in

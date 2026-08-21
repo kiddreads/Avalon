@@ -151,6 +151,12 @@ enum SpecialCoreOption: String {
     case dolphin_skip_gc_bios
     case dolphin_cheats_enabled
     case dolphin_cheats_import
+    //pce
+    case pce_default_joypad_type_p1
+    case pce_default_joypad_type_p2
+    case pce_default_joypad_type_p3
+    case pce_default_joypad_type_p4
+    case pce_default_joypad_type_p5
     
     
     
@@ -285,6 +291,12 @@ enum SpecialCoreOption: String {
                 options.insert(.dolphin_skip_gc_bios)
             }
             return options
+        } else if game.gameType == .pce {
+            return [.pce_default_joypad_type_p1,
+                    .pce_default_joypad_type_p2,
+                    .pce_default_joypad_type_p3,
+                    .pce_default_joypad_type_p4,
+                    .pce_default_joypad_type_p5]
         }
         return []
     }
@@ -408,6 +420,14 @@ enum SpecialCoreOption: String {
                     .dolphin_vi_skip: "enabled"
                 ]
             }
+        } else if game.gameType == .pce {
+            result = [
+                .pce_default_joypad_type_p1: "6 Buttons",
+                .pce_default_joypad_type_p2: "6 Buttons",
+                .pce_default_joypad_type_p3: "6 Buttons",
+                .pce_default_joypad_type_p4: "6 Buttons",
+                .pce_default_joypad_type_p5: "6 Buttons"
+            ]
         }
         return result.mapKeysAndValues({ ($0.key.rawValue, $0.value) })
     }
