@@ -9,13 +9,13 @@
 
 
 enum Manufacturer: Int, CaseIterable {
-    case nintendo, sony, sega, arcade, atari, sun, microsoft, modRetro, nokia, nec, snk
+    case nintendo, sony, sega, arcade, atari, sun, microsoft, modRetro, nokia, nec, snk, commodore
     
     static var allCases: [Manufacturer] {
         if Locale.prefersUS {
-            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft, .modRetro, .nokia, .nec, .snk]
+            [.nintendo, .sony, .sega, .atari, .arcade, .sun, .microsoft, .modRetro, .nokia, .nec, .snk, .commodore]
         } else {
-            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft, .modRetro, .nokia, .nec, .snk]
+            [.nintendo, .sony, .sega, .arcade, .atari, .sun, .microsoft, .modRetro, .nokia, .nec, .snk, .commodore]
         }
     }
     
@@ -51,6 +51,8 @@ enum Manufacturer: Int, CaseIterable {
             "NEC"
         case .snk:
             "SNK"
+        case .commodore:
+            "Commodore"
         }
     }
     
@@ -85,6 +87,8 @@ enum Manufacturer: Int, CaseIterable {
             R.image.nec_normal()!
         case .snk:
             R.image.snk_normal()!
+        case .commodore:
+            R.image.commodore_normal()!
         }
     }
     
@@ -112,6 +116,8 @@ enum Manufacturer: Int, CaseIterable {
             R.image.nec_highlight()!
         case .snk:
             R.image.snk_highlight()!
+        case .commodore:
+            R.image.commodore_highlight()!
         }
     }
 }

@@ -145,12 +145,18 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = R.BIOS.LynxBios
             } else if gameType == .pce {
                 biosItems = R.BIOS.PCEBios
+            } else if gameType == .c64 {
+                biosItems = R.BIOS.C64Bios
+            } else if gameType == .amiga {
+                biosItems = R.BIOS.AmigaBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
                 var biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
                 if gameType == .dc {
                     biosInLib = R.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
+                } else if gameType == .c64 {
+                    biosInLib = R.Path.System.appendingPathComponent("vice/\(bios.fileName)")
                 }
                 let isBiosExists: Bool
                 if gameType == .arcade {
@@ -248,6 +254,9 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                                                 var matchFilePath = R.Path.System.appendingPathComponent(match.fileName)
                                                 if gameType == .dc {
                                                     matchFilePath = R.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                                } else if gameType == .c64 {
+                                                    try? FileManager.default.createDirectory(atPath: R.Path.System.appendingPathComponent("vice"), withIntermediateDirectories: true)
+                                                    matchFilePath = R.Path.System.appendingPathComponent("vice/\(match.fileName)")
                                                 }
                                                 try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
                                             }
@@ -416,6 +425,10 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = R.BIOS.LynxBios.count
         } else if gameType == .pce {
             itemCount = R.BIOS.PCEBios.count
+        } else if gameType == .c64 {
+            itemCount = R.BIOS.C64Bios.count
+        } else if gameType == .amiga {
+            itemCount = R.BIOS.AmigaBios.count
         }
         return (Double(itemCount) * R.Size.ItemHeightLarge) + (Double(itemCount + 1) * R.Size.ContentSpaceMedium)
     }

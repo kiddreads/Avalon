@@ -437,6 +437,30 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>C64 Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.c64</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Amiga Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.amiga</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Manic EMU Controller Skin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -1526,6 +1550,97 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>C64 Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.c64</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>d64</string>
+					<string>d71</string>
+					<string>d80</string>
+					<string>d81</string>
+					<string>d82</string>
+					<string>g64</string>
+					<string>g41</string>
+					<string>x64</string>
+					<string>t64</string>
+					<string>tap</string>
+					<string>prg</string>
+					<string>p00</string>
+					<string>crt</string>
+					<string>bin</string>
+					<string>zip</string>
+					<string>gz</string>
+					<string>d6z</string>
+					<string>d7z</string>
+					<string>d8z</string>
+					<string>g6z</string>
+					<string>g4z</string>
+					<string>x6z</string>
+					<string>cmd</string>
+					<string>m3u</string>
+					<string>vfl</string>
+					<string>vsf</string>
+					<string>nib</string>
+					<string>nbz</string>
+					<string>d2m</string>
+					<string>d4m</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Amiga Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.amiga</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>adf</string>
+					<string>adz</string>
+					<string>dms</string>
+					<string>fdi</string>
+					<string>ipf</string>
+					<string>hdf</string>
+					<string>hdz</string>
+					<string>lha</string>
+					<string>slave</string>
+					<string>info</string>
+					<string>cue</string>
+					<string>ccd</string>
+					<string>nrg</string>
+					<string>mds</string>
+					<string>iso</string>
+					<string>chd</string>
+					<string>uae</string>
+					<string>m3u</string>
+					<string>zip</string>
+					<string>7z</string>
+					<string>rp9</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -1621,6 +1736,13 @@
 					<string>zip</string>
 					<string>img</string>
 					<string>pce</string>
+					<string>A500</string>
+					<string>A600</string>
+					<string>A1200</string>
+					<string>A4000</string>
+					<string>CDTV</string>
+					<string>CD32</string>
+					<string>ext</string>
 				</array>
 			</dict>
 		</dict>

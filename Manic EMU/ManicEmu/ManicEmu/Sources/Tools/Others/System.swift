@@ -11,6 +11,8 @@
 
 enum System: CaseIterable
 {
+    case amiga
+    case c64
     case ngp
     case pce
     case ngc
@@ -90,7 +92,9 @@ enum System: CaseIterable
                 NGC.core,
                 Wii.core,
                 PCE.core,
-                NGP.core]
+                NGP.core,
+                C64.core,
+                Amiga.core]
     }
     
     ///Returns all supported game types.
@@ -157,6 +161,8 @@ extension System {
         case .wii: return .wii
         case .pce: return .pce
         case .ngp: return .ngp
+        case .c64: return .c64
+        case .amiga: return .amiga
         }
     }
 }

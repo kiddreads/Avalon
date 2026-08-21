@@ -15,7 +15,7 @@ import ZipArchive
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case pce, ngc, symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
+        case amiga, c64, pce, ngc, symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .arcade: GameType.arcade.localizedName
@@ -36,6 +36,8 @@ class BIOSSelectionView: BaseView {
             case .symbian: GameType.symbian.localizedName
             case .ngc:  GameType.ngc.localizedName
             case .pce: GameType.pce.localizedName
+            case .c64: GameType.c64.localizedName
+            case .amiga: GameType.amiga.localizedName
             }
         }
         
@@ -59,6 +61,8 @@ class BIOSSelectionView: BaseView {
             case .symbian: return .symbian
             case .ngc: return .ngc
             case .pce: return .pce
+            case .c64: return .c64
+            case .amiga: return .amiga
             }
         }
     }
@@ -213,6 +217,8 @@ class BIOSSelectionView: BaseView {
             var biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
             if gameType == .dc {
                 biosInLib = R.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
+            } else if gameType == .c64 {
+                biosInLib = R.Path.System.appendingPathComponent("vice/\(bios.fileName)")
             }
             let isBiosExists: Bool
             if gameType == .arcade {
@@ -267,6 +273,9 @@ class BIOSSelectionView: BaseView {
                                 var matchFilePath = R.Path.System.appendingPathComponent(match.fileName)
                                 if gameType == .dc {
                                     matchFilePath = R.Path.Flycast.appendingPathComponent("dc/\(match.fileName)")
+                                } else if gameType == .c64 {
+                                    try? FileManager.default.createDirectory(atPath: R.Path.System.appendingPathComponent("vice"), withIntermediateDirectories: true)
+                                    matchFilePath = R.Path.System.appendingPathComponent("vice/\(match.fileName)")
                                 }
                                 try? FileManager.safeCopyItem(at: match.url, to: URL(fileURLWithPath: matchFilePath), shouldReplace: true)
                             }

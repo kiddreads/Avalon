@@ -239,6 +239,10 @@ class Game: Object, ObjectUpdatable {
             return URL(fileURLWithPath: R.Path.BeetlePCE.appendingPathComponent("\(name).srm"))
         } else if gameType == .ngp {
             return URL(fileURLWithPath: R.Path.BeetleNeoPop.appendingPathComponent("\(name).flash"))
+        } else if gameType == .c64 {
+            return URL(fileURLWithPath: R.Path.VICEx64sc.appendingPathComponent("\(name).nvr"))
+        } else if gameType == .amiga {
+            return URL(fileURLWithPath: R.Path.PUAE.appendingPathComponent("\(name).nvr"))
         } else if gameType == .j2me {
             return URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(defaultCore == 0 ? EmulationCore.J2meJS.name : EmulationCore.freej2me.name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         } else if gameType == .dos {
@@ -470,6 +474,10 @@ class Game: Object, ObjectUpdatable {
             return .BeetlePCE
         } else if gameType == .ngp {
             return .BeetleNeoPop
+        } else if gameType == .c64 {
+            return .VICEx64sc
+        } else if gameType == .amiga {
+            return .PUAE
         } else if gameType == .dos {
             return .DOSBoxPure
         } else if gameType == .symbian {
@@ -579,6 +587,10 @@ class Game: Object, ObjectUpdatable {
             return Bundle.main.path(forResource: "mednafen.pce.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .ngp {
             return Bundle.main.path(forResource: "mednafen.ngp.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .c64 {
+            return Bundle.main.path(forResource: "vice.x64sc.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .amiga {
+            return Bundle.main.path(forResource: "puae.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .dos {
             return Bundle.main.path(forResource: "dosbox.pure.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .symbian {
@@ -1108,8 +1120,10 @@ class Game: Object, ObjectUpdatable {
             gameType == .j2me ||
             gameType == .dos ||
             gameType == .symbian ||
-            isClownMDEmuCore,
-            gameType == .pce {
+            isClownMDEmuCore ||
+            gameType == .pce ||
+            gameType == .amiga ||
+            gameType == .c64  {
             return false
         }
         return true
@@ -1285,7 +1299,9 @@ class Game: Object, ObjectUpdatable {
     
     var supportInsertDisc: Bool {
         if gameType == .ps1 ||
-            gameType == .dos {
+            gameType == .dos ||
+            gameType == .c64 ||
+            gameType == .amiga {
             return true
         }
         return false

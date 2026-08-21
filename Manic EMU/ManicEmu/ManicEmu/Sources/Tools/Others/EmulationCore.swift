@@ -46,7 +46,9 @@ enum EmulationCore: CaseIterable {
          EKA2L1,
          Dolphin,
          BeetlePCE,
-         BeetleNeoPop
+         BeetleNeoPop,
+         VICEx64sc,
+         PUAE
     
     var name: String {
         switch self {
@@ -128,6 +130,10 @@ enum EmulationCore: CaseIterable {
             "Beetle PCE"
         case .BeetleNeoPop:
             "Beetle NeoPop"
+        case .VICEx64sc:
+            "VICE x64sc"
+        case .PUAE:
+            "PUAE"
         }
     }
     
@@ -203,6 +209,10 @@ enum EmulationCore: CaseIterable {
             return [.pce]
         case .BeetleNeoPop:
             return [.ngp]
+        case .VICEx64sc:
+            return [.c64]
+        case .PUAE:
+            return [.amiga]
         }
     }
     

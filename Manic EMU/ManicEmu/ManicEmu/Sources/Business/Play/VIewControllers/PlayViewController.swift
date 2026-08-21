@@ -674,6 +674,13 @@ class PlayViewController: GameViewController {
                 GameOption.quit.performAction(with: [self.manicGame])
             }
         })
+        notificationTokens.append(center.addObserver(forName: Notification.Name(rawValue: "AmigaBiosMissingNotification"), object: nil, queue: .main) { notification in
+            if let log = notification.object as? String {
+                UIView.makeAlert(title: R.string.localizable.mameFileMissingTitle(),
+                                 detail: log,
+                                 cancelTitle: R.string.localizable.confirmTitle())
+            }
+        })
     }
     
     @MainActor required init() {
@@ -702,7 +709,7 @@ class PlayViewController: GameViewController {
                 make.top.equalTo(gameView.snp.bottom).offset(-9)
             } else if manicGame.gameType == .j2me {
                 make.top.equalTo(gameView.snp.bottom).offset(2)
-            } else if manicGame.gameType == .dos || manicGame.gameType == .doom {
+            } else if manicGame.gameType.usesDOSSkinLayout {
                 if UIDevice.isPad {
                     make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
                 } else if UIDevice.isSmallScreenPhone {
@@ -727,8 +734,7 @@ class PlayViewController: GameViewController {
                 make.leading.trailing.equalTo(gameView)
             }
             if manicGame.gameType == .j2me ||
-                manicGame.gameType == .dos ||
-                manicGame.gameType == .doom ||
+                manicGame.gameType.usesDOSSkinLayout ||
                 (manicGame.gameType == .symbian && UIDevice.isPhone) ||
                 manicGame.gameType == .pce {
                 make.height.equalTo(R.Size.ItemHeightMicro)
@@ -1221,15 +1227,16 @@ extension PlayViewController {
             } else if mappingKey == .rightDifficulty {
                 update2600RightDifficulty(isInit: false)
             } else if mappingKey == .useKeyboardSkin {
-                guard manicGame.gameType == .dos else {
+                guard manicGame.gameType.supportsKeyboardSkin else {
                     UIView.makeToast(message: R.string.localizable.notSupportGameSetting(manicGame.gameType.localizedShortName))
                     return
                 }
                 let realm = Database.realm
+                let keyboardSkinID = "\(manicGame.gameType.rawValue).standard.keyboard"
                 if let skin = realm.objects(Skin.self).where({
-                    $0.gameType == .dos &&
+                    $0.gameType == manicGame.gameType &&
                     $0.skinType == .buildIn &&
-                    $0.identifier == R.Strings.DOSKeyboardSkinID
+                    $0.identifier == keyboardSkinID
                 }).first {
                     Prefference.defalut.storePrefference(kind: .skin,
                                                          storeKey: .orientationKey(gameId: manicGame.id, isLandScape: true),
@@ -1240,12 +1247,12 @@ extension PlayViewController {
                     updateSkin()
                 }
             } else if mappingKey == .useJoypadSkin {
-                guard manicGame.gameType == .dos else {
+                guard manicGame.gameType.supportsKeyboardSkin else {
                     UIView.makeToast(message: R.string.localizable.notSupportGameSetting(manicGame.gameType.localizedShortName))
                     return
                 }
                 let realm = Database.realm
-                if let skin = realm.objects(Skin.self).where({ $0.gameType == .dos && $0.skinType == .default }).first {
+                if let skin = realm.objects(Skin.self).where({ $0.gameType == manicGame.gameType && $0.skinType == .default }).first {
                     Prefference.defalut.storePrefference(kind: .skin,
                                                          storeKey: .orientationKey(gameId: manicGame.id, isLandScape: true),
                                                          storeValue: skin.id)
@@ -1789,6 +1796,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().setLibretroLogMonitor(true)
             } else if manicGame.isDolphinCore {
                 updateLibretroCoreConfigs(core: .Dolphin, configs: [:])
+            } else if manicGame.gameType == .amiga {
+                LibretroCore.sharedInstance().setLibretroLogMonitor(true)
             }
         } else {
             //non safe mode
@@ -2117,6 +2126,8 @@ extension PlayViewController {
                     .dolphin_skip_gc_bios: isNGCBiosExists ? "disabled" : "enabled",
                     .dolphin_cheats_enabled: isHardcoreMode ? "disabled" : "enabled"
                 ])
+            } else if manicGame.gameType == .amiga {
+                LibretroCore.sharedInstance().setLibretroLogMonitor(true)
             }
         }
         
@@ -2310,7 +2321,7 @@ extension PlayViewController {
         updateFilter()
         //尝试添加屏幕按钮
         updateFunctionButton()
-        if manicGame.gameType == .ds || (manicGame.gameType == ._3ds && !manicGame.isAzaharArticBase) || (manicGame.gameType == .dos && UIDevice.isPad) {
+        if manicGame.gameType == .ds || (manicGame.gameType == ._3ds && !manicGame.isAzaharArticBase) || (manicGame.gameType.usesDOSSkinLayout && UIDevice.isPad) {
             updateFunctionButtonContainer()
         }
         //更新3DS画面视图
@@ -2456,7 +2467,7 @@ extension PlayViewController {
                     let functionButtonCount = shortcuts.count
                     for (index, shortcut) in shortcuts.enumerated() {
                         var iconColor = R.Color.LabelTertiary
-                        if manicGame.gameType == .dos {
+                        if manicGame.gameType.usesDOSSkinLayout {
                             iconColor = R.Color.LabelTertiary.forceStyle(.dark)
                         } else if manicGame.isDolphinCore {
                             iconColor = UIColor.black.withAlphaComponent(0.25)
@@ -2580,7 +2591,7 @@ extension PlayViewController {
                     }
                 }
             }
-        } else if manicGame.gameType == .dos, UIDevice.isPad {
+        } else if manicGame.gameType.usesDOSSkinLayout, UIDevice.isPad {
             functionButtonContainer.snp.updateConstraints { make in
                 make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
             }
@@ -2638,11 +2649,11 @@ extension PlayViewController {
     private func updateLibretroViews() {
         guard manicGame.isLibretroType else { return }
         
-        if manicGame.gameType == .dos {
+        if manicGame.gameType.supportsKeyboardSkin {
             controllerView.allowTapThroughIfButtonNotHit = true
             controllerView.allowKeyboardEvents = false
             if let skin = controllerView.controllerSkin,
-               skin.identifier == R.Strings.DOSKeyboardSkinID {
+               skin.identifier.hasSuffix(".keyboard") {
                 controllerView.activateButtonInputInterception = { input in
                     if input.stringValue == "menu" || input.stringValue == "useJoypadSkin" {
                         return false

@@ -88,8 +88,7 @@ class Skin: Object, ObjectUpdatable {
     }
     
     var isEditable: Bool {
-        if skinType == .default ||
-            identifier == "public.aoshuang.game.dos.standard.keyboard" {
+        if skinType == .default || identifier.hasSuffix(".keyboard") {
             return false
         }
         return true

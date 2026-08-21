@@ -155,6 +155,10 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("SNK - Neo Geo Pocket/Named_Boxarts")
             case .ngpc:
                 boxArtUrl = host.appendingPathComponent("SNK - Neo Geo Pocket Color/Named_Boxarts")
+            case .c64:
+                boxArtUrl = host.appendingPathComponent("Commodore - 64/Named_Boxarts")
+            case .amiga:
+                boxArtUrl = host.appendingPathComponent("Commodore - Amiga/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }

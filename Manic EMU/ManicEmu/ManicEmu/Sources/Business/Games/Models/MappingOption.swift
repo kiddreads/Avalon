@@ -116,6 +116,11 @@ enum MappingOption: String, CaseIterable {
             availableMappingOptions.append(.rewind)
         }
         
+        if games.allSatisfy({ $0.gameType.supportsKeyboardSkin }) {
+            availableMappingOptions.append(.useJoypadSkin)
+            availableMappingOptions.append(.useKeyboardSkin)
+        }
+        
         return availableMappingOptions
     }
     

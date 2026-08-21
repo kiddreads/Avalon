@@ -96,6 +96,23 @@ struct ResourcesKit {
                     } catch {
                         Log.debug("复用皮肤出错:\(error)")
                     }
+                    
+                    let templateKeyboardSkinPath = R.Path.Resource.appendingPathComponent("\(reuse.gameType.reuseGameType().localizedShortName)_KEYBOARD.manicskin")
+                    let newKeyboardSkinPath = R.Path.Resource.appendingPathComponent("\(reuse.name)_KEYBOARD.manicskin")
+                    let keyboardSkinInfoPath = R.Path.Resource.appendingPathComponent("\(reuse.name)_KEYBOARD.skininfo")
+                    if FileManager.default.fileExists(atPath: templateKeyboardSkinPath),
+                       FileManager.default.fileExists(atPath: keyboardSkinInfoPath) {
+                        do {
+                            try FileManager.safeCopyItem(at: URL(fileURLWithPath: templateKeyboardSkinPath), to: URL(fileURLWithPath: newKeyboardSkinPath), shouldReplace: true)
+                            let archive = try Archive(url: URL(fileURLWithPath: newKeyboardSkinPath), accessMode: .update)
+                            if let oldInfoJson = archive["info.json"] {
+                                try archive.remove(oldInfoJson)
+                            }
+                            try archive.addEntry(with: "info.json", fileURL: URL(fileURLWithPath: keyboardSkinInfoPath))
+                        } catch {
+                            Log.debug("复用皮肤出错:\(error)")
+                        }
+                    }
                 }
                 
                 Log.debug("资源解压结束:\(Date.now.timeIntervalSince1970ms)")

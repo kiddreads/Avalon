@@ -321,6 +321,10 @@ class GameCoverView: BaseView {
                 } else if gameTypeCategory == 1 {
                     image = style == .style2 ? R.image.ngp_color_cover_v() : R.image.ngp_color_cover_h()
                 }
+            } else if gameType == .c64 {
+                image = style == .style2 ? R.image.c64_cover_v() : R.image.c64_cover_h()
+            } else if gameType == .amiga {
+                image = style == .style2 ? R.image.amiga_cover_v() : R.image.amiga_cover_h()
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, R.Style.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(R.Style.GamesPerRow-1)))

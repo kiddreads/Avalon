@@ -12,28 +12,30 @@ import RealmSwift
 
 ///通过文件名后缀生成GameType
 extension GameType {
-    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip", "elf", "dol", "rvz", "wad"]
+    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip", "7z", "elf", "dol", "rvz", "wad"]
     
     static func gameTypes(multiPlatformFileExtension: String) -> [GameType] {
         let ext = multiPlatformFileExtension.lowercased()
         guard multiPlatformFileExtensions.contains(ext) else { return [] }
         switch ext {
         case "chd":
-            return [.ps1, .psp, .mcd, .ss, .dc, .pce]
+            return [.ps1, .psp, .mcd, .ss, .dc, .pce, .amiga]
         case "iso":
-            return [.psp, .mcd, .ss, .dos, .ngc, .wii]
+            return [.psp, .mcd, .ss, .dos, .ngc, .wii, .amiga]
         case "bin":
-            return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar]
+            return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar, .c64]
         case "cue":
-            return [.ps1, .mcd, .ss, .dc, .dos, .pce]
+            return [.ps1, .mcd, .ss, .dc, .dos, .pce, .amiga]
         case "m3u":
-            return [.ps1, .mcd, .ss, .dc, .dos, .pce]
+            return [.ps1, .mcd, .ss, .dc, .dos, .pce, .c64, .amiga]
         case "pbp":
             return [.ps1, .psp]
         case "ccd":
-            return [.ps1, .ss, .pce]
+            return [.ps1, .ss, .pce, .amiga]
         case "zip":
-            return [.arcade, .dos]
+            return [.arcade, .dos, .c64, .amiga]
+        case "7z":
+            return [.amiga]
         case "elf":
             return [.psp, .ngc, .wii]
         case "dol":
@@ -122,6 +124,10 @@ extension GameType {
             self = .pce
         } else if ["ngp", "ngc", "ngpc", "npc"].contains(ext) {
             self = .ngp
+        } else if ["d64", "d71", "d80", "d81", "d82", "g64", "g41", "x64", "t64", "tap", "prg", "p00", "crt", "d6z", "d7z", "d8z", "g6z", "g4z", "x6z", "cmd", "vfl", "vsf", "nib", "nbz", "d2m", "d4m", "gz"].contains(ext) {
+            self = .c64
+        } else if ["adf", "adz", "dms", "fdi", "ipf", "hdf", "hdz", "lha", "slave", "info", "nrg", "mds", "uae", "rp9"].contains(ext) {
+            self = .amiga
         } else {
             self = .notSupport
         }
@@ -214,6 +220,10 @@ extension GameType {
             self = .pce
         } else if shortName.uppercased() == "NGP" {
             self = .ngp
+        } else if shortName.uppercased() == "C64" {
+            self = .c64
+        } else if shortName.uppercased() == "Amiga".uppercased() {
+            self = .amiga
         } else {
             return nil
         }
@@ -267,6 +277,8 @@ extension GameType {
         case .supergrafx: return "SuperGrafx"
         case .ngp: return "Neo Geo Pocket"
         case .ngpc: return "Neo Geo Pocket Color"
+        case .c64: return "Commodore 64"
+        case .amiga: return "Commodore Amiga"
         default: return ""
         }
     }
@@ -319,6 +331,8 @@ extension GameType {
         case .supergrafx: return  NSLocalizedString("SGX", comment: "")
         case .ngp: return  NSLocalizedString("NGP", comment: "")
         case .ngpc: return  NSLocalizedString("NGPC", comment: "")
+        case .c64: return  NSLocalizedString("C64", comment: "")
+        case .amiga: return  NSLocalizedString("Amiga", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -372,6 +386,8 @@ extension GameType {
         case .supergrafx: return 1989
         case .ngp: return 1998
         case .ngpc: return 1999
+        case .c64: return 1982
+        case .amiga: return 1985
         default: return 0
         }
     }
@@ -414,6 +430,8 @@ extension GameType {
         case .wii: return Wii.core
         case .pce: return PCE.core
         case .ngp: return NGP.core
+        case .c64: return C64.core
+        case .amiga: return Amiga.core
         default: return nil
         }
     }
@@ -497,7 +515,7 @@ extension GameType {
             return .md
         } else if self == .fds {
             return .nes
-        } else if self == .doom {
+        } else if self == .doom || self == .c64 || self == .amiga {
             return .dos
         }
         return self
@@ -557,10 +575,20 @@ extension GameType {
             return [.ms, .gg, .sg1000]
         } else if self == .nes || self == .fds {
             return [.nes, .fds]
-        } else if self == .dos || self == .doom {
-            return [.dos, .doom]
+        } else if self == .dos || self == .doom || self == .c64 || self == .amiga {
+            return [.dos, .doom, .c64, .amiga]
         }
         return [self]
+    }
+    
+    /// Platforms that reuse DOS joypad/keyboard skins.
+    var supportsKeyboardSkin: Bool {
+        self == .dos || self == .c64 || self == .amiga
+    }
+    
+    /// Default/FLEX skin layout inherited from DOS (includes DOOM).
+    var usesDOSSkinLayout: Bool {
+        self == .dos || self == .doom || self == .c64 || self == .amiga
     }
     
     func isNDSBiosComplete() -> (isDSComplete: Bool, isDsiComplete: Bool) {
@@ -614,6 +642,8 @@ extension GameType {
             return .nec
         case .ngp, .ngpc:
             return .snk
+        case .c64, .amiga:
+            return .commodore
         default:
             return .nintendo
         }
@@ -621,7 +651,7 @@ extension GameType {
     
     var supportAnalogInput: Bool {
         switch self {
-        case .psp, ._3ds, .arcade, .dc, .ps1, .n64, .dos, .ngc, .wii:
+        case .psp, ._3ds, .arcade, .dc, .ps1, .n64, .dos, .ngc, .wii, .c64, .amiga:
             return true
         default: return false
         }
@@ -751,6 +781,10 @@ extension GameType {
                 image = R.image.ngp_group_brand()
             } else if self == .ngpc {
                 image = R.image.ngp_color_group_brand()
+            } else if self == .c64 {
+                image = R.image.c64_group_brand()
+            } else if self == .amiga {
+                image = R.image.amiga_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image
@@ -807,6 +841,10 @@ extension GameType {
             return R.BIOS.LynxBios
         } else if self == .pce {
             return R.BIOS.PCEBios
+        } else if self == .c64 {
+            return R.BIOS.C64Bios
+        } else if self == .amiga {
+            return R.BIOS.AmigaBios
         } else if self == .symbian {
             return [BIOSItem(fileName: R.string.localizable.symbianOSFirmware(),
                              imported: false,

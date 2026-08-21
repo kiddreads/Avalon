@@ -1059,6 +1059,14 @@
 		5F74DFC689D94836B20159EB /* mednafen.ngp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A672B510CD9141B18392D564 /* NGP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D4867970474EB9B27D4D8D /* NGP.swift */; };
 		1186ADAD578A4FAC9E5337EA /* NGP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D4867970474EB9B27D4D8D /* NGP.swift */; };
+		E5385955E04D43598CAC5694 /* vice.x64sc.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6A6021052A14459DA6F729AB /* vice.x64sc.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2197E4E9458342E6AF80B1BA /* vice.x64sc.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6A6021052A14459DA6F729AB /* vice.x64sc.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C77604CEA6544406AAC031FA /* C64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C004DF500A40988FE64A18 /* C64.swift */; };
+		3CC0A81B407547FBA1CF0693 /* C64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C004DF500A40988FE64A18 /* C64.swift */; };
+		16D61BE375CD4F61ACCF0FF2 /* puae.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03741E2E8CB24E5790E97476 /* puae.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E2162239F8584ED6843B9760 /* puae.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03741E2E8CB24E5790E97476 /* puae.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0965D1CD6E9344C18E3454A6 /* Amiga.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93489E15EFD47F2AE825436 /* Amiga.swift */; };
+		8CFD19E8FFCB46D79A392284 /* Amiga.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93489E15EFD47F2AE825436 /* Amiga.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1096,6 +1104,8 @@
 			dstSubfolderSpec = 10;
 			files = (
 
+				16D61BE375CD4F61ACCF0FF2 /* puae.libretro.framework in Embed Frameworks */,
+				E5385955E04D43598CAC5694 /* vice.x64sc.libretro.framework in Embed Frameworks */,
 				0750DCA306CA4EB7A036C987 /* mednafen.ngp.libretro.framework in Embed Frameworks */,
 				FFD8F5F4CE02425E8BA80296 /* mednafen.pce.libretro.framework in Embed Frameworks */,
 				2A84A76AE2A94C3EB048E0D1 /* dolphin.libretro.framework in Embed Frameworks */,
@@ -1149,6 +1159,8 @@
 			dstSubfolderSpec = 10;
 			files = (
 
+				E2162239F8584ED6843B9760 /* puae.libretro.framework in Embed Frameworks */,
+				2197E4E9458342E6AF80B1BA /* vice.x64sc.libretro.framework in Embed Frameworks */,
 				5F74DFC689D94836B20159EB /* mednafen.ngp.libretro.framework in Embed Frameworks */,
 				AA122ED56C3140C1864D4EC8 /* mednafen.pce.libretro.framework in Embed Frameworks */,
 				23CE581FDA6A4771B987DE69 /* dolphin.libretro.framework in Embed Frameworks */,
@@ -6015,6 +6027,10 @@
 		A0E402E22DFA4C9D96FFBC89 /* PCE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCE.swift; sourceTree = "<group>"; };
 		4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.ngp.libretro.framework; path = ../Cores/mednafen.ngp.libretro.framework; sourceTree = SOURCE_ROOT; };
 		78D4867970474EB9B27D4D8D /* NGP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGP.swift; sourceTree = "<group>"; };
+		6A6021052A14459DA6F729AB /* vice.x64sc.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vice.x64sc.libretro.framework; path = ../Cores/vice.x64sc.libretro.framework; sourceTree = SOURCE_ROOT; };
+		37C004DF500A40988FE64A18 /* C64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C64.swift; sourceTree = "<group>"; };
+		03741E2E8CB24E5790E97476 /* puae.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = puae.libretro.framework; path = ../Cores/puae.libretro.framework; sourceTree = SOURCE_ROOT; };
+		B93489E15EFD47F2AE825436 /* Amiga.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amiga.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -11819,6 +11835,8 @@
 			isa = PBXGroup;
 			children = (
 
+				03741E2E8CB24E5790E97476 /* puae.libretro.framework */,
+				6A6021052A14459DA6F729AB /* vice.x64sc.libretro.framework */,
 				4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */,
 				9408D7BF872544CFABE4D652 /* mednafen.pce.libretro.framework */,
 				9770068F58CC4F29B21DE396 /* dolphin.libretro.framework */,
@@ -11994,6 +12012,8 @@
 			isa = PBXGroup;
 			children = (
 
+				B93489E15EFD47F2AE825436 /* Amiga.swift */,
+				37C004DF500A40988FE64A18 /* C64.swift */,
 				78D4867970474EB9B27D4D8D /* NGP.swift */,
 				A0E402E22DFA4C9D96FFBC89 /* PCE.swift */,
 				0A2DDA01B1DB4E15B8F0C5C6 /* Wii.swift */,
@@ -12808,6 +12828,8 @@
 			buildActionMask = 2147483647;
 			files = (
 
+				0965D1CD6E9344C18E3454A6 /* Amiga.swift in Sources */,
+				C77604CEA6544406AAC031FA /* C64.swift in Sources */,
 				A672B510CD9141B18392D564 /* NGP.swift in Sources */,
 				1CAAD3DB49C34DAD998DD033 /* PCE.swift in Sources */,
 				0E964747C5B24B348A8665E0 /* Wii.swift in Sources */,
@@ -13216,6 +13238,8 @@
 			buildActionMask = 2147483647;
 			files = (
 
+				8CFD19E8FFCB46D79A392284 /* Amiga.swift in Sources */,
+				3CC0A81B407547FBA1CF0693 /* C64.swift in Sources */,
 				1186ADAD578A4FAC9E5337EA /* NGP.swift in Sources */,
 				D94752D7D273464B9E4B625C /* PCE.swift in Sources */,
 				023B2A9DBF6F473782A64EC6 /* Wii.swift in Sources */,

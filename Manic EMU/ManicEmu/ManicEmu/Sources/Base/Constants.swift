@@ -76,6 +76,8 @@ extension _R {
                 case .xbox: return 0.714
                 case .ngc, .wii: return 0.706
                 case .ngp, .ngpc: return 0.8594
+                case .c64: return 0.7146
+                case .amiga: return 0.7052
                 default: return 1.0
                 }
             case .style2:
@@ -493,6 +495,8 @@ extension _R {
         static let Holani = Document.appendingPathComponent(EmulationCore.Holani.name)
         static let BeetlePCE = Document.appendingPathComponent(EmulationCore.BeetlePCE.name)
         static let BeetleNeoPop = Document.appendingPathComponent(EmulationCore.BeetleNeoPop.name)
+        static let VICEx64sc = Document.appendingPathComponent(EmulationCore.VICEx64sc.name)
+        static let PUAE = Document.appendingPathComponent(EmulationCore.PUAE.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
         static let MAMEDB = Resource.appendingPathComponent("MAME.db")
@@ -1005,6 +1009,28 @@ extension _R {
             BIOSItem(fileName: "syscard2.pce", imported: false, desc: "CD-ROM System V2.xx", required: false),
             BIOSItem(fileName: "syscard1.pce", imported: false, desc: "CD-ROM System V1.xx", required: false),
             BIOSItem(fileName: "gexpress.pce", imported: false, desc: "Game Express CD Card", required: false)
+        ]
+        
+        static let C64Bios = [
+            BIOSItem(fileName: "JiffyDOS_C64.bin", imported: false, desc: "JiffyDOS C64 Kernal", required: false),
+            BIOSItem(fileName: "JiffyDOS_1541-II.bin", imported: false, desc: "JiffyDOS 1541 drive BIOS", required: false),
+            BIOSItem(fileName: "JiffyDOS_1571_repl310654.bin", imported: false, desc: "JiffyDOS 1571 drive BIOS", required: false),
+            BIOSItem(fileName: "JiffyDOS_1581.bin", imported: false, desc: "JiffyDOS 1581 drive BIOS", required: false)
+        ]
+        
+        static let AmigaBios = [
+            BIOSItem(fileName: "kick33180.A500", imported: false, desc: "A500-A2000 KS v1.2 rev 33.180", required: false),
+            BIOSItem(fileName: "kick34005.A500", imported: false, desc: "A500-A2000-CDTV KS v1.3 rev 34.005", required: true),
+            BIOSItem(fileName: "kick37175.A500", imported: false, desc: "A500+ KS v2.04 rev 37.175", required: false),
+            BIOSItem(fileName: "kick37350.A600", imported: false, desc: "A600 KS v2.05 rev 37.350", required: false),
+            BIOSItem(fileName: "kick40063.A600", imported: false, desc: "A600-A2000 KS v3.1 rev 40.063", required: false),
+            BIOSItem(fileName: "kick39106.A1200", imported: false, desc: "A1200 KS v3.0 rev 39.106", required: false),
+            BIOSItem(fileName: "kick40068.A1200", imported: false, desc: "A1200 KS v3.1 rev 40.068", required: true),
+            BIOSItem(fileName: "kick39106.A4000", imported: false, desc: "A4000 KS v3.0 rev 39.106", required: false),
+            BIOSItem(fileName: "kick40068.A4000", imported: false, desc: "A4000 KS v3.1 rev 40.068", required: false),
+            BIOSItem(fileName: "kick34005.CDTV", imported: false, desc: "CDTV extended ROM v1.0", required: false),
+            BIOSItem(fileName: "kick40060.CD32", imported: false, desc: "CD32 KS v3.1 rev 40.060", required: true),
+            BIOSItem(fileName: "kick40060.CD32.ext", imported: false, desc: "CD32 extended ROM rev 40.060", required: true)
         ]
     }
     

@@ -254,7 +254,7 @@ class ControllerMappingView: BaseView {
             
             tipsView.snp.remakeConstraints { make in
                 var moreOffset = 0.0
-                if gameType == .dos || gameType == .doom {
+                if gameType.usesDOSSkinLayout {
                     moreOffset = R.Size.ContentSpaceExtraSmall
                 }
                 make.top.equalTo(frames.mainGameViewFrame.maxY + R.Size.ContentSpaceExtraSmall + moreOffset)
