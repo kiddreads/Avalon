@@ -11,7 +11,7 @@ import SmartCodable
 import RealmSwift
 
 struct GlobalCoreSwitch: SmartCodable, Equatable {
-    var globalCoreConfigs = [String: String]()
+    private var globalCoreConfigs = [String: String]()
     
     func getUsingCoreName(gameType: GameType) -> String? {
         return globalCoreConfigs[gameType.localizedShortName]
@@ -35,10 +35,14 @@ struct GlobalCoreSwitch: SmartCodable, Equatable {
             coreConfig = Settings.defalut.getExtraString(key: ExtraKey.globalCoreConfigs.rawValue)
         }
         
-        if let coreConfig, let config = GlobalCoreSwitch.deserialize(from: coreConfig) {
+        if let coreConfig, var config = GlobalCoreSwitch.deserialize(from: coreConfig) {
 #if DEBUG
             Log.debug("获取GlobalCoreSwitch配置:\n\(config.toJSONString(prettyPrint: true) ?? "")")
 #endif
+            //The default core for the 3DS has been changed to Azahar.
+            if config.getUsingCoreName(gameType: GameType._3ds) == nil {
+                config.globalCoreConfigs[GameType._3ds.localizedShortName] = EmulationCore.Azahar.name
+            }
             return config
         }
         Log.debug("获取默认GlobalCoreSwitch配置")
@@ -46,7 +50,12 @@ struct GlobalCoreSwitch: SmartCodable, Equatable {
         var configs = [String: String]()
         let gameTypes = System.allGameTypes.filter({ $0.supportCores.count > 0 })
         for gameType in gameTypes {
-            configs[gameType.localizedShortName] = gameType.supportCores.first(where: { !$0.isEmpty })
+            if gameType == ._3ds {
+                //The default core for the 3DS has been changed to Azahar.
+                configs[gameType.localizedShortName] = EmulationCore.Azahar.name
+            } else {
+                configs[gameType.localizedShortName] = gameType.supportCores.first(where: { !$0.isEmpty })
+            }
         }
         return GlobalCoreSwitch(globalCoreConfigs: configs)
     }

@@ -248,7 +248,7 @@ extension _R {
         
         static var SheetWindowMinSize: CGSize {
             let size = SheetWindowMaxSize
-            return CGSize(width: size.width, height: 200)
+            return CGSize(width: size.width, height: 250)
         }
         
         static var SheetFullScreenForIpadLandscape: CGSize {
@@ -603,6 +603,11 @@ extension _R {
             "Wiimote",
             R.string.localizable.wiimoteSideways()
         ]
+        static let SymbianEdgeSkinIdentifier = "public.aoshuang.game.symbian.standard.edge"
+        static let SymbianEdgeFlexSkinIdentifier = "public.aoshuang.game.symbian.edge.flex"
+        static let SymbianSkinIdentifier = "public.aoshuang.game.symbian.standard"
+        static let SymbianFlexSkinIdentifier = "public.aoshuang.game.symbian.flex"
+        
     }
     
     enum _Config {
@@ -838,9 +843,11 @@ extension _R {
             return Gamehacking.appendingPathComponent("system/\(searchSystem)/\(gameName)")
         }
         
+        static let SymbianSkinUrl = URL(fileURLWithPath: R.Path.Resource.appendingPathComponent("Symbian.manicskin"))
+        static let SymbianFlexSkinUrl = URL(fileURLWithPath: R.Path.Resource.appendingPathComponent("Symbian_Flex.manicskin"))
         static let SymbianEdgeSkinUrl = URL(fileURLWithPath: R.Path.Resource.appendingPathComponent("Symbian_Edge.manicskin"))
         static let SymbianEdgeFlexSkinUrl = URL(fileURLWithPath: R.Path.Resource.appendingPathComponent("Symbian_Edge_Flex.manicskin"))
-        static let SymbianFlexSkinUrl = URL(fileURLWithPath: R.Path.Resource.appendingPathComponent("Symbian_Flex.manicskin"))
+        
     }
     
     struct _BIOS {
@@ -902,6 +909,10 @@ extension _R {
         
         static let ThreeDSBios = [
             BIOSItem(fileName: "nand.zip", imported: false, desc: "The internal storage of 3DS ", required: false)
+        ]
+        
+        static let WiiBios = [
+            BIOSItem(fileName: "keys.bin", imported: false, desc: R.string.localizable.wiiKeysBinDesc(), required: true)
         ]
         
         static let ArcadeDSBios = [

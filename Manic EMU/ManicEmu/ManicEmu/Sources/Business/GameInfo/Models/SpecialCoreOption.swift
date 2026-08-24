@@ -47,20 +47,39 @@ enum SpecialCoreOption: String {
     case beetle_saturn_cart
     case beetle_saturn_horizontal_overscan
     //ds
+    //melonDS
     case melonds_firmware_language
     case melonds_console_mode
     case melonds_mic_input
     case melonds_jit_enable
     case melonds_mic_input_active
+    case melonds_hybrid_ratio
+    case melonds_hybrid_small_screen
     case melonds_number_of_screen_layouts
+    case melonds_screen_gap
     case melonds_screen_layout1
+    case melonds_screen_layout2
+    case melonds_screen_layout3
+    case melonds_screen_layout4
+    case melonds_screen_layout5
+    case melonds_screen_layout6
+    case melonds_screen_layout7
+    case melonds_screen_layout8
+    case melonds_custom_layout_config
     case melonds_show_cursor
+    //desmume
     case desmume_internal_resolution
     case desmume_firmware_language
     case desmume_mic_mode
     case desmume_pointer_type
     case desmume_pointer_device_l
     case desmume_pointer_device_r
+    case desmume_screens_layout
+    case desmume_screens_gap
+    case desmume_hybrid_layout_ratio
+    case desmume_hybrid_layout_scale
+    case desmume_hybrid_showboth_screens
+    case desmume_hybrid_cursor_always_smallscreen
     //gba gbc gb
     case vbam_gbHardware
     case vbam_usebios
@@ -105,9 +124,13 @@ enum SpecialCoreOption: String {
     case citra_use_cpu_jit
     case citra_use_default_aes_key
     case citra_required_online_lle_modules
-    case citra_layout_option
     case citra_touch_touchscreen
     case citra_input_type
+    case citra_layout_option
+    case citra_swap_screen
+    case citra_swap_screen_mode
+    case citra_large_screen_proportion
+    case citra_custom_layout_config
     //a2600
     case stella_crop_hoverscan
     //a5200
@@ -214,13 +237,32 @@ enum SpecialCoreOption: String {
                     .melonds_firmware_language,
                     .melonds_console_mode,
                     .melonds_mic_input,
-                    .melonds_jit_enable
+                    .melonds_jit_enable,
+                    .melonds_hybrid_ratio,
+                    .melonds_hybrid_small_screen,
+                    .melonds_number_of_screen_layouts,
+                    .melonds_screen_gap,
+                    .melonds_screen_layout1,
+                    .melonds_screen_layout2,
+                    .melonds_screen_layout3,
+                    .melonds_screen_layout4,
+                    .melonds_screen_layout5,
+                    .melonds_screen_layout6,
+                    .melonds_screen_layout7,
+                    .melonds_screen_layout8,
+                    .melonds_custom_layout_config,
                 ]
             } else if game.defaultCore == 1 {
                 return [
                     .desmume_internal_resolution,
                     .desmume_firmware_language,
                     .desmume_mic_mode,
+                    .desmume_screens_layout,
+                    .desmume_screens_gap,
+                    .desmume_hybrid_layout_ratio,
+                    .desmume_hybrid_layout_scale,
+                    .desmume_hybrid_showboth_screens,
+                    .desmume_hybrid_cursor_always_smallscreen,
                 ]
             }
         } else if game.gameType == .gba {
@@ -276,7 +318,12 @@ enum SpecialCoreOption: String {
             return [
                 .citra_use_cpu_jit,
                 .citra_use_default_aes_key,
-                .citra_required_online_lle_modules
+                .citra_layout_option,
+                .citra_layout_option,
+                .citra_swap_screen,
+                .citra_swap_screen_mode,
+                .citra_large_screen_proportion,
+                .citra_custom_layout_config,
             ]
         } else if game.gameType == .doom {
             return [.prboom_resolution]
@@ -393,7 +440,7 @@ enum SpecialCoreOption: String {
             let enableJIT = LibretroCore.jitAvailable() && game.jit
             if enableJIT {
                 result = [
-                    .dolphin_cpu_clock_rate: "1.0",
+                    .dolphin_cpu_clock_rate: "1.00",
                     .dolphin_osd_enabled: "disabled",
                     .dolphin_fast_disc_speed: "disabled",
                     .dolphin_gpu_texture_decoding: "disabled",
@@ -407,7 +454,7 @@ enum SpecialCoreOption: String {
                 ]
             } else {
                 result = [
-                    .dolphin_cpu_clock_rate: "0.2",
+                    .dolphin_cpu_clock_rate: "0.20",
                     .dolphin_osd_enabled: "disabled",
                     .dolphin_fast_disc_speed: "enabled",
                     .dolphin_gpu_texture_decoding: "enabled",

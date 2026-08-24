@@ -22,7 +22,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_bg" translatesAutoresizingMaskIntoConstraints="NO" id="dGb-Sc-2GC">
                                 <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="file_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="X4q-0E-ySM">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_corner" translatesAutoresizingMaskIntoConstraints="NO" id="X4q-0E-ySM">
                                 <rect key="frame" x="180" y="358" width="80" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="CfA-Vj-G08"/>
@@ -59,7 +59,7 @@
     </scenes>
     <resources>
         <image name="app_title_light" width="138.33332824707031" height="11.666666984558105"/>
-        <image name="file_icon.png" width="1024" height="1024"/>
+        <image name="icon_corner" width="40" height="40"/>
         <image name="launch_bg" width="812" height="812"/>
     </resources>
 </document>

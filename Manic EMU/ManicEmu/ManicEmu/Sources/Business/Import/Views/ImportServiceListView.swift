@@ -38,10 +38,18 @@ class ImportServiceListView: BaseView {
                 ], completion: { [weak self] index in
                     guard let self else { return }
                     if let index {
-                        
-                        EmulatorInteractionKit.fetchGames(type: index == 0 ? .meloNX : .xeniOS)
+                        var type: EmulatorInteractionKit.EmulatorType? = nil
+                        if index == 0 {
+                            type = .meloNX
+                        } else if index == 1 {
+                            type = .xeniOS
+                        } else if index == 2 {
+                            type = .dukeX
+                        }
+                        if let type {
+                            EmulatorInteractionKit.fetchGames(type: type)
+                        }
                     }
-                    
                 })
             }
         }

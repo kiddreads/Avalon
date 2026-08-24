@@ -855,6 +855,8 @@ extension GameType {
                              imported: false,
                              desc: R.string.localizable.biosCommondDesc(),
                              required: false)]
+        } else if self == .wii {
+            return R.BIOS.WiiBios
         }
         return []
     }

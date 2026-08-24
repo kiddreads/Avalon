@@ -1750,7 +1750,8 @@ extension FilesImporter {
                 do {
                     try realm.write { game.isDeleted = false }
                     if let device = installed.compatibleDevice {
-                        game.updateSymbianGame(device: device)
+                        game.updateSymbianGame(device: device,
+                                               changeSkin: SymbianOS.getOS(by: device).rawValue > SymbianOS.S60v3.rawValue)
                     }
                     completion?(game.id, game.displayName, nil)
                 } catch {
@@ -1800,17 +1801,8 @@ extension FilesImporter {
         do {
             try realm.write { realm.add(game) }
             if let device = installed.compatibleDevice {
-                game.updateSymbianGame(device: device)
-                //Set the skin preference based on the system version
-                if SymbianOS.getOS(by: device).rawValue > SymbianOS.S60v3.rawValue,
-                   let skinId = FileHashUtil.truncatedHash(url: R.URLs.SymbianEdgeSkinUrl) {
-                    Prefference.defalut.storePrefference(kind: .skin,
-                                                         storeKey: .orientationKey(gameId: game.id, isLandScape: true),
-                                                         storeValue: skinId)
-                    Prefference.defalut.storePrefference(kind: .skin,
-                                                         storeKey: .orientationKey(gameId: game.id, isLandScape: false),
-                                                         storeValue: skinId)
-                }
+                game.updateSymbianGame(device: device,
+                                       changeSkin: SymbianOS.getOS(by: device).rawValue > SymbianOS.S60v3.rawValue)
             }
             OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
             completion?(game.id, game.displayName, nil)

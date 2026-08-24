@@ -1039,9 +1039,6 @@ extension GameOption {
                 LibretroNetplayView.show()
             }
             
-        case .dcCore:
-            performStringAction(with: games, accessoryChange: accessoryChange)
-            
         case .symbianDevice:
             performStringAction(with: games, accessoryChange: accessoryChange)
             
@@ -1262,9 +1259,6 @@ extension GameOption {
             detail = R.string.localizable.airPlayLayoutTips()
         } else if self == .screenScaling {
             options = GameOption.ScreenScaling.allCases.map({ $0.title })
-        } else if self == .dcCore {
-            options = ["Default", "WinCE", "Fuse"]
-            detail = R.string.localizable.dcjitLessVer()
         } else if self == .symbianDevice {
             if let devices = LibretroCore.getSymbianDevices(),
                 devices.count > 0 {
@@ -1324,6 +1318,15 @@ extension GameOption {
                 } else if self == .ps1Renderer {
                     games.forEach({
                         $0.updateExtra(key: ExtraKey.psxRenderer.rawValue, value: index == 0)
+                    })
+                } else if self == .n64RdpPlugin {
+                    Game.change { realm in
+                        games.forEach({
+                            $0.resolution = .one
+                        })
+                    }
+                    games.forEach({
+                        $0.updateExtra(key: ExtraKey.rdpPlugin.rawValue, value: index == 0)
                     })
                 } else if self == .ndsSystemType {
                     games.forEach({
@@ -1457,16 +1460,10 @@ extension GameOption {
                         hideSheetInGaming()
                         resumeEmulationIfNeed()
                     }
-                } else if self == .dcCore {
-                    Game.change { realm in
-                        games.forEach({
-                            $0.defaultCore = index
-                        })
-                    }
                 } else if self == .symbianDevice {
                     let device = symbianDevices[index]
                     games.forEach({
-                        $0.updateSymbianGame(device: device)
+                        $0.updateSymbianGame(device: device, changeSkin: true)
                     })
                 } else if self == .wiiControllerMode {
                     games.forEach({

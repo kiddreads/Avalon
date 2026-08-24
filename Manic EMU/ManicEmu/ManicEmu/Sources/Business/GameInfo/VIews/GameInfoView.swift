@@ -187,10 +187,12 @@ class GameInfoView: BaseView {
                 if let tempGame = realm.object(ofType: Game.self, forPrimaryKey: gameId),
                     let data = GameMetadataKit.getGameInfo(game: tempGame) {
                     data.persist(to: tempGame)
-                    DispatchQueue.main.async { [weak self] in
+                    realm.refresh()
+                    //Allow a little grace period for cross-thread data updates.
+                    DispatchQueue.main.asyncAfter(delay: 1, execute: { [weak self] in
                         guard let self else { return }
                         self.gameOptionView.reloadOptionsView(games: [self.game])
-                    }
+                    })
                 }
             }
         }
@@ -213,6 +215,7 @@ class GameInfoView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard width > 0 else { return }
         if UIDevice.isLandscape {
             gameInfoDetailView.frame = CGRect(origin: CGPoint(x: 0, y: height - gameInfoDetailHeight),
                                               size: CGSize(width: width/2, height: gameInfoDetailHeight))

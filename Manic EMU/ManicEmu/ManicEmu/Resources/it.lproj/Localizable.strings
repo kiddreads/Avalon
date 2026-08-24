@@ -616,7 +616,6 @@ Premi il pulsante del controller...";
 
 
 "Challenge" = "Sfida";
-"DCJITLessVer" = "La versione Predefinita offre emulazione rapida e accurata ma non supporta i giochi WinCE. Per giocare ai titoli WinCE, seleziona il core WinCE.";
 "TVStandard" = "Se lo standard TV del gioco non corrisponde alla regione, la velocità potrebbe essere influenzata. Le regioni PAL includono principalmente Europa, Australia e Nuova Zelanda.";
 "SNESVRAMEnable" = "Alcune ROM modificate richiedono questa opzione per il corretto rendering grafico, ma l'attivazione disabiliterà il supporto RetroAchievements.";
 "AirPlayScaling" = "Ridimensionamento AirPlay";

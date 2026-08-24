@@ -236,15 +236,15 @@ class GameOptionsView: BaseView {
     
     private func handleAction(_ action: ASListPage.Action) {
         if let normalItemValue = action.normalItemValue {
-            var indexPath = normalItemValue.indexPath
-            
+            let indexPath = normalItemValue.indexPath
+            var groupIndex = indexPath
             if scene == .gameInfo,
                let overview = GameMetadata.getGameMetadata(game: game)?.overview,
                !overview.isEmpty {
-                indexPath = IndexPath(row: indexPath.row, section: indexPath.section - 1)
+                groupIndex = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             }
             
-            let option = optionGroups[indexPath.section][indexPath.row]
+            let option = optionGroups[groupIndex.section][groupIndex.row]
             
             let shouldHide = shouldHideBlock?(option) ?? false
             option.performAction(with: games, accessoryChange: { [weak self] in

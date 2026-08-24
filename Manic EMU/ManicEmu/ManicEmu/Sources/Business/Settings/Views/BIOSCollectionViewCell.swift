@@ -149,6 +149,10 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = R.BIOS.C64Bios
             } else if gameType == .amiga {
                 biosItems = R.BIOS.AmigaBios
+            } else if gameType == .wii {
+                biosItems = R.BIOS.WiiBios
+            } else if gameType == .ngc {
+                biosItems = gameType.biosItems
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {

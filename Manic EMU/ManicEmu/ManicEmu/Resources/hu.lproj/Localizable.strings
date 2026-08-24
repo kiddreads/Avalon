@@ -614,7 +614,6 @@ Nyomja meg a kontroller gombját...";
 
 
 "Challenge" = "Kihívás";
-"DCJITLessVer" = "Az Alapértelmezett verzió gyors és pontos emulációt kínál, de nem futtat WinCE játékokat. WinCE játékokhoz válassza a WinCE magot.";
 "TVStandard" = "Ha a játék TV szabványa nem egyezik a régióval, az befolyásolhatja a sebességet. A PAL régiók főként Európát, Ausztráliát és Új-Zélandot foglalják magukba.";
 "SNESVRAMEnable" = "Néhány hackelt ROM megköveteli ezt az opciót a helyes grafikai megjelenítéshez, de engedélyezése letiltja a RetroAchievements támogatást.";
 "AirPlayScaling" = "AirPlay skálázás";

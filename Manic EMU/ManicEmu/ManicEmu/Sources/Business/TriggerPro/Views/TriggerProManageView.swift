@@ -81,7 +81,7 @@ class TriggerProManageView: BaseView {
     private var triggersUpdateToken: NotificationToken? = nil
     
     required init?(parameters: Any...) {
-        self.showClose = parameters.compactMap({ $0 as? Bool }).first ?? false
+        self.showClose = parameters.compactMap({ $0 as? Bool }).first ?? true
         super.init(frame: .zero)
         
         updateDatas()

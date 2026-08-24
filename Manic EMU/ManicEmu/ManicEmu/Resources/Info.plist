@@ -601,6 +601,7 @@
 		<string>atariemulator</string>
 		<string>xenios</string>
 		<string>stikjit</string>
+		<string>dukex</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

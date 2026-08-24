@@ -11,6 +11,10 @@ is_debug_build() {
     [[ "${CONFIGURATION:-}" == "Debug" || "${TARGET_NAME:-}" == "ManicEmuDebug" ]]
 }
 
+is_release_target() {
+    [[ "${TARGET_NAME:-}" == "ManicEmuRelease" ]]
+}
+
 compute_metadata_fingerprint() {
     find "$SRC_DIR" -type f ! -name '.DS_Store' -print0 \
         | LC_ALL=C sort -z \
@@ -86,7 +90,11 @@ fi
 
 current_content="$(compute_content_fingerprint)"
 
-if [[ -n "$stored_content" && "$current_content" == "$stored_content" && -f "$OUT_FILE" ]]; then
+# Release always recompresses: the zip omits fbneo, but fingerprints still cover the full tree,
+# so a Debug-built System.core would otherwise be reused as "up to date".
+if is_release_target; then
+    echo "Gen System.core: ManicEmuRelease always recompresses"
+elif [[ -n "$stored_content" && "$current_content" == "$stored_content" && -f "$OUT_FILE" ]]; then
     write_ver_file "${current_mtime:-$(compute_metadata_fingerprint)}" "$current_content"
     echo "Gen System.core: up to date (content)"
     exit 0
@@ -97,13 +105,25 @@ tmp_zip="$(mktemp -u "${TMPDIR:-/tmp}/System.core.XXXXXX")"
 cleanup() { rm -f "$tmp_zip"; }
 trap cleanup EXIT
 
+zip_args=(-9 -q -r "$tmp_zip" . -x "*.DS_Store" -x "*/.DS_Store")
+if is_release_target; then
+    echo "Gen System.core: excluding Libretro/system/fbneo"
+    zip_args+=(-x "Libretro/system/fbneo/*")
+fi
+
 (
     cd "$SRC_DIR"
-    zip -9 -q -r "$tmp_zip" . -x "*.DS_Store" -x "*/.DS_Store"
+    zip "${zip_args[@]}"
 )
 
 mv -f "$tmp_zip" "$OUT_FILE"
 trap - EXIT
 
-write_ver_file "$(compute_metadata_fingerprint)" "$current_content"
-echo "Gen System.core: wrote $OUT_FILE"
+if is_release_target; then
+    # Drop the fingerprint cache so the next Debug/Sideload build recompresses with fbneo.
+    rm -f "$VER_FILE"
+    echo "Gen System.core: wrote $OUT_FILE (cache invalidated)"
+else
+    write_ver_file "$(compute_metadata_fingerprint)" "$current_content"
+    echo "Gen System.core: wrote $OUT_FILE"
+fi

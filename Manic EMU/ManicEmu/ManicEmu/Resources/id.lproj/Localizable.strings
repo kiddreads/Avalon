@@ -605,7 +605,6 @@ Tekan tombol kontroler...";
 
 
 "Challenge" = "Tantangan";
-"DCJITLessVer" = "Versi Default menawarkan emulasi cepat dan akurat tetapi tidak dapat menjalankan game WinCE. Untuk memainkan game WinCE, pilih inti WinCE.";
 "TVStandard" = "Jika standar TV game tidak sesuai dengan wilayah, kecepatan mungkin terpengaruh. Wilayah PAL mencakup Eropa, Australia, dan Selandia Baru.";
 "SNESVRAMEnable" = "Beberapa ROM yang di-hack memerlukan opsi ini untuk merender grafik dengan benar, tetapi mengaktifkannya akan menonaktifkan dukungan RetroAchievements.";
 "AirPlayScaling" = "Penskalaan AirPlay";

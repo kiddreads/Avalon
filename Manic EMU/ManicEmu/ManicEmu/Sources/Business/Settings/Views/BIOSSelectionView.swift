@@ -15,7 +15,7 @@ import ZipArchive
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case amiga, c64, pce, ngc, symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
+        case amiga, c64, pce, ngc, wii, symbian, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .arcade: GameType.arcade.localizedName
@@ -35,6 +35,7 @@ class BIOSSelectionView: BaseView {
             case .a5200: GameType.a5200.localizedName
             case .symbian: GameType.symbian.localizedName
             case .ngc:  GameType.ngc.localizedName
+            case .wii: GameType.wii.localizedName
             case .pce: GameType.pce.localizedName
             case .c64: GameType.c64.localizedName
             case .amiga: GameType.amiga.localizedName
@@ -60,6 +61,7 @@ class BIOSSelectionView: BaseView {
             case .lynx: return .lynx
             case .symbian: return .symbian
             case .ngc: return .ngc
+            case .wii: return .wii
             case .pce: return .pce
             case .c64: return .c64
             case .amiga: return .amiga
@@ -79,18 +81,25 @@ class BIOSSelectionView: BaseView {
                 if navigationValue.isTapClose {
                     self.hide()
                 }
-            } else if let indexPath = action.normalItemValue?.indexPath,
-                let sectionIndex = SectionIndex(rawValue: indexPath.section) {
-                if sectionIndex.gameType == .arcade {
+            } else if let indexPath = action.normalItemValue?.indexPath {
+                let gameType: GameType
+                if let gt = self.gameType {
+                    gameType = gt
+                } else if let sectionIndex = SectionIndex(rawValue: indexPath.section) {
+                    gameType = sectionIndex.gameType
+                } else {
+                    return
+                }
+                if gameType == .arcade {
                     if let _ = action.normalItemValue?.subActions {
-                        self.importBios(gameType: sectionIndex.gameType)
+                        self.importBios(gameType: gameType)
                     } else {
                         MAMEBiosView.show()
                     }
-                } else if sectionIndex.gameType == .symbian {
+                } else if gameType == .symbian {
                     SymbianFirmwareView.show()
                 } else {
-                    self.importBios(gameType: sectionIndex.gameType)
+                    self.importBios(gameType: gameType)
                 }
             }
         }

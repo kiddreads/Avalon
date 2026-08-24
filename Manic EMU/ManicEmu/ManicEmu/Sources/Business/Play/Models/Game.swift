@@ -312,18 +312,11 @@ class Game: Object, ObjectUpdatable {
         }
     }
     
-    var libretroShaderPath: String? {
-        if let filterName {
-            return R.Path.Shaders.appendingPathComponent(filterName)
-        }
-        return nil
-    }
-    
     func isBIOSMissing(required: Bool = true) -> Bool {
         let requireBIOS: [BIOSItem]
         if gameType == .mcd {
             if defaultCore == 2 {
-                //ClownMDEmu核心不需要bios
+                // ClownMDEmu does not need BIOS.
                 return false
             }
             requireBIOS = R.BIOS.MegaCDBios.filter({ required ? $0.required : true })
@@ -337,6 +330,8 @@ class Game: Object, ObjectUpdatable {
             requireBIOS = R.BIOS.DSBios.filter({ required ? $0.required : true })
         } else if gameType == .fds {
             requireBIOS = R.BIOS.FDSBios
+        } else if gameType == .wii {
+            requireBIOS = R.BIOS.WiiBios.filter({ required ? $0.required : true })
         } else {
             return false
         }
@@ -516,11 +511,7 @@ class Game: Object, ObjectUpdatable {
                 return Bundle.main.path(forResource: "mednafen.saturn.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .n64 {
-            if #available(iOS 26.0, tvOS 26.0, *), LibretroCore.jitAvailable(), jit {
-                return Bundle.main.path(forResource: "mupen64plus.next.jit.libretro", ofType: "framework", inDirectory: "Frameworks")
-            } else {
-                return Bundle.main.path(forResource: "mupen64plus.next.libretro", ofType: "framework", inDirectory: "Frameworks")
-            }
+            return Bundle.main.path(forResource: "mupen64plus.next.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .vb {
             return Bundle.main.path(forResource: "mednafen.vb.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .pm {
@@ -549,13 +540,7 @@ class Game: Object, ObjectUpdatable {
             if LibretroCore.jitAvailable(), jit {
                 return Bundle.main.path(forResource: "flycast.libretro", ofType: "framework", inDirectory: "Frameworks")
             } else {
-                if defaultCore == 0 {
-                    return Bundle.main.path(forResource: "flycast-jitless.libretro", ofType: "framework", inDirectory: "Frameworks")
-                } else if defaultCore == 1 {
-                    return Bundle.main.path(forResource: "flycast-jitless-wince.libretro", ofType: "framework", inDirectory: "Frameworks")
-                } else if defaultCore == 2 {
-                    return Bundle.main.path(forResource: "flycast-jitless-fuse.libretro", ofType: "framework", inDirectory: "Frameworks")
-                }
+                return Bundle.main.path(forResource: "flycast-jitless.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .ds {
             if defaultCore == 0 {
@@ -687,9 +672,6 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isN64ParaLLEl: Bool {
-        if LibretroCore.jitAvailable(), jit {
-            return false
-        }
         return gameType == .n64 && !(getExtraBool(key: ExtraKey.rdpPlugin.rawValue) ?? true)
     }
     
@@ -1350,11 +1332,100 @@ class Game: Object, ObjectUpdatable {
     //For Symbian system apps
     var symbianSystemApp: SymbianSystemApp? = nil
     
-    func updateSymbianGame(device: LibretroSymbianDevice) {
+    func updateSymbianGame(device: LibretroSymbianDevice, changeSkin: Bool = false) {
         guard gameType == .symbian else { return }
         updateExtra(key: ExtraKey.symbianFirmwareCode.rawValue, value: device.firmwareCode)
         updateExtra(key: ExtraKey.symbianFirmwareModel.rawValue, value: device.model)
         updateExtra(key: ExtraKey.symbianOSVer.rawValue, value: SymbianOS.getOS(by: device).rawValue)
+        
+        guard changeSkin else { return }
+        //Set the skin preference based on the system version
+        let gameId = id
+        DispatchQueue.main.async {
+            
+            func changeSkin(isLandScape: Bool, isFlex: Bool, isEdge: Bool) {
+                let skinUrl: URL
+                if isFlex {
+                    skinUrl = isEdge ? R.URLs.SymbianEdgeFlexSkinUrl : R.URLs.SymbianFlexSkinUrl
+                } else {
+                    skinUrl = isEdge ? R.URLs.SymbianEdgeSkinUrl : R.URLs.SymbianSkinUrl
+                }
+                guard let skinId = FileHashUtil.truncatedHash(url: skinUrl) else { return }
+                Prefference.defalut.storePrefference(kind: .skin,
+                                                     storeKey: .orientationKey(gameId: gameId, isLandScape: isLandScape),
+                                                     storeValue: skinId)
+            }
+            
+            let prefferedEdgeSkin = SymbianOS.getOS(by: device).rawValue > SymbianOS.S60v3.rawValue
+            let realm = Database.realm
+            var hadSetLandscapeSkin = false
+            var hadSetPortraitSkin = false
+            
+            if let skinId = Prefference.defalut.getPrefference(kind: .skin,
+                                                               storeKey: .orientationKey(gameId: gameId, isLandScape: true),
+                                                               bestEfforts: true)?.skinValue?.skinId,
+               let skin = realm.object(ofType: Skin.self, forPrimaryKey: skinId) {
+                //设置过横屏
+                hadSetLandscapeSkin = true
+                
+                if !prefferedEdgeSkin && skin.identifier == R.Strings.SymbianEdgeSkinIdentifier {
+                    //要换成标准横屏
+                    changeSkin(isLandScape: true, isFlex: false, isEdge: false)
+                } else if !prefferedEdgeSkin && skin.identifier == R.Strings.SymbianEdgeFlexSkinIdentifier {
+                    //切换到flex标准横屏
+                    changeSkin(isLandScape: true, isFlex: true, isEdge: false)
+                } else if prefferedEdgeSkin && skin.identifier == R.Strings.SymbianSkinIdentifier {
+                    //切换Edge横屏
+                    changeSkin(isLandScape: true, isFlex: false, isEdge: true)
+                } else if prefferedEdgeSkin && skin.identifier == R.Strings.SymbianSkinIdentifier {
+                    //切换Edge Flex横屏
+                    changeSkin(isLandScape: true, isFlex: true, isEdge: true)
+                }
+            }
+            
+            if let skinId = Prefference.defalut.getPrefference(kind: .skin,
+                                                               storeKey: .orientationKey(gameId: gameId, isLandScape: false),
+                                                               bestEfforts: true)?.skinValue?.skinId,
+               let skin = realm.object(ofType: Skin.self, forPrimaryKey: skinId) {
+                //设置过竖屏
+                hadSetPortraitSkin = true
+                if !prefferedEdgeSkin && skin.identifier == R.Strings.SymbianEdgeSkinIdentifier {
+                    //要换成标准竖屏
+                    changeSkin(isLandScape: false, isFlex: false, isEdge: false)
+                } else if !prefferedEdgeSkin && skin.identifier == R.Strings.SymbianEdgeFlexSkinIdentifier {
+                    //切换到flex标准竖屏
+                    changeSkin(isLandScape: false, isFlex: true, isEdge: false)
+                } else if prefferedEdgeSkin && skin.identifier == R.Strings.SymbianSkinIdentifier {
+                    //切换Edge竖屏
+                    changeSkin(isLandScape: false, isFlex: false, isEdge: true)
+                } else if prefferedEdgeSkin && skin.identifier == R.Strings.SymbianSkinIdentifier {
+                    //切换Edge Flex竖屏
+                    changeSkin(isLandScape: false, isFlex: true, isEdge: true)
+                }
+            }
+            
+            if !hadSetLandscapeSkin {
+                //需要设置横屏
+                if prefferedEdgeSkin {
+                    //切换Edge横屏
+                    changeSkin(isLandScape: true, isFlex: false, isEdge: true)
+                } else {
+                    //要换成标准横屏
+                    changeSkin(isLandScape: true, isFlex: false, isEdge: false)
+                }
+            }
+            
+            if !hadSetPortraitSkin {
+                //需要设置竖屏
+                if prefferedEdgeSkin {
+                    //切换Edge竖屏
+                    changeSkin(isLandScape: false, isFlex: false, isEdge: true)
+                } else {
+                    //要换成标准竖屏
+                    changeSkin(isLandScape: false, isFlex: false, isEdge: false)
+                }
+            }
+        }
     }
     
     /// Relative E: prefixes `system/<dir>/<name>` from an N-Gage 1.0 dump. Empty for SIS/SISX.

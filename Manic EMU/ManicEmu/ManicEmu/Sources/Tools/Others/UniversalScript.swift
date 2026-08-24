@@ -6,18 +6,47 @@
 //
 import Foundation
 
-
 #if SIDE_LOAD
-extension FileManager {
-    func filePath(atPath path: String, withLength length: Int) -> String? {
-        guard let file = try? contentsOfDirectory(atPath: path).filter({ $0.count == length }).first else { return nil }
-        return "\(path)/\(file)"
+/// `uname` machine id, e.g. `iPad13,16`.
+private func hardwareIdentifier() -> String {
+    var systemInfo = utsname()
+    uname(&systemInfo)
+    return withUnsafePointer(to: &systemInfo.machine) {
+        $0.withMemoryRebound(to: CChar.self, capacity: 1) {
+            String(cString: $0)
+        }
     }
+}
+
+/// iOS 26+ only. TXM is A15+/M2+ (`iPhone`/`iPad` machine major >= 14).
+/// Unparseable IDs stay PPL so we never brk on unknown hardware.
+private func hasTXMSilicon() -> Bool {
+    let id = hardwareIdentifier()
+    let digits: Substring
+    if id.hasPrefix("iPhone") {
+        digits = id.dropFirst(6)
+    } else if id.hasPrefix("iPad") {
+        digits = id.dropFirst(4)
+    } else {
+        return false
+    }
+    guard let comma = digits.firstIndex(of: ","),
+          let major = Int(digits[..<comma]) else {
+        return false
+    }
+    return major >= 14
 }
 
 public extension ProcessInfo {
     var hasTXM: Bool {
-        { if let boot = FileManager.default.filePath(atPath: "/System/Volumes/Preboot", withLength: 36), let file = FileManager.default.filePath(atPath: "\(boot)/boot", withLength: 96) { return access("\(file)/usr/standalone/firmware/FUD/Ap,TrustedExecutionMonitor.img4", F_OK) == 0 } else { return (FileManager.default.filePath(atPath: "/private/preboot", withLength: 96).map { access("\($0)/usr/standalone/firmware/FUD/Ap,TrustedExecutionMonitor.img4", F_OK) == 0 }) ?? false } }()
+        let v = operatingSystemVersion
+        if v.majorVersion < 26 {
+            Log.debug("[JIT Env] Device: Legacy machine=\(hardwareIdentifier())")
+            return false
+        }
+        let result = hasTXMSilicon()
+        Log.debug("[JIT Env] Device: \(result ? "TXM" : "PPL") machine=\(hardwareIdentifier())")
+        return result
     }
 }
 
@@ -58,20 +87,12 @@ func setupUniversalScript(gameType: GameType) {
           legacyCommands[0x71] = function(b) {};
       """
     case .n64:
+        // TXM uses core-side brk #0xf00d (universal.js). Stub leftover 0x69
+        // so an old dynarec binary cannot call prepare_memory_region after detach.
         script = """
           legacyCommands[0x70] = function(b) {};
           legacyCommands[0x71] = function(b) {};
-          legacyCommands[0x69] = manicN64Breakpoint;
-          continuesWithSignal = true;
-          var n64JitRequests = 0;
-          function manicN64Breakpoint(brkResponse) {
-              n64JitRequests++;
-              var jitAddr = x0;
-              var size = x1 > 0n ? x1 : 0x10000n;
-              log('[N64] JIT Request #' + n64JitRequests + ' addr=0x' + jitAddr.toString(16) + ' size=0x' + size.toString(16));
-              var result = prepare_memory_region(Number(jitAddr), Number(size));
-              log('[N64] prepare_memory_region result: ' + result);
-          }
+          legacyCommands[0x69] = function(b) {};
       """
     default: return
     }
@@ -81,7 +102,3 @@ func setupUniversalScript(gameType: GameType) {
     BreakSendJITScript(script, script.count)
 #endif
 }
-
-
-
-

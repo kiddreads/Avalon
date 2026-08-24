@@ -60,7 +60,20 @@ class PlayViewController: GameViewController {
     //游戏控制器，如果游戏在运行中则有值，没有进行游戏的时候则为nil
     static weak var currentPlayViewController: PlayViewController? = nil
     //屏幕上的功能按钮容器
-    private var functionButtonContainer = UIView()
+    class ShortcutButtonContainerView: UIView {
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            // Iterate through all subviews and check whether the click is on a subview
+            for subview in subviews.reversed() {
+                let convertedPoint = subview.convert(point, from: self)
+                if subview.bounds.contains(convertedPoint) {
+                    return super.hitTest(point, with: event)
+                }
+            }
+            // Click not on any subview, return nil to let the click pass through.
+            return nil
+        }
+    }
+    private var shortcutsButtonContainer = ShortcutButtonContainerView()
     //渲染视图
     private var gameMetalView: UIView? = nil
     //3DS核心
@@ -662,7 +675,7 @@ class PlayViewController: GameViewController {
         notificationTokens.append(center.addObserver(forName: R.NotificationName.ShortcutsChange, object: nil, queue: .main, using: { [weak self] notification in
             //快捷键变更
             guard let self else { return }
-            self.updateFunctionButton()
+            self.updateShortcutsButton()
         }))
         notificationTokens.append(center.addObserver(forName: Notification.Name(rawValue: "FirmwareNoSupportNotification"), object: nil, queue: .main) { [weak self] notification in
             guard let self else { return }
@@ -702,9 +715,9 @@ class PlayViewController: GameViewController {
         NotificationCenter.default.post(name: R.NotificationName.StartPlayGame, object: nil)
         
         //添加功能按钮容器按钮
-        functionButtonContainer.isHidden = true
-        view.addSubview(functionButtonContainer)
-        functionButtonContainer.snp.makeConstraints { make in
+        shortcutsButtonContainer.isHidden = true
+        view.addSubview(shortcutsButtonContainer)
+        shortcutsButtonContainer.snp.makeConstraints { make in
             if manicGame.gameType == .n64 && UIDevice.isPad {
                 make.top.equalTo(gameView.snp.bottom).offset(-9)
             } else if manicGame.gameType == .j2me {
@@ -725,6 +738,8 @@ class PlayViewController: GameViewController {
                 make.top.equalTo(gameView.snp.bottom).offset(5)
             } else if manicGame.gameType == .pce {
                 make.top.equalTo(gameView.snp.bottom).offset(R.Size.ContentSpaceMedium)
+            } else if manicGame.gameType == .ds, UIDevice.isPad {
+                make.top.equalTo(gameView.snp.bottom).offset(R.Size.ContentSpaceHuge)
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
@@ -774,7 +789,7 @@ class PlayViewController: GameViewController {
         updateSkin()
         //更新声音
         updateAudio()
-        functionButtonContainer.isHidden = false
+        shortcutsButtonContainer.isHidden = false
         //游戏启动稳定后禁用安全模式
         if manicGame.safeMode {
             DispatchQueue.main.asyncAfter(delay: 5, execute: { [weak self] in
@@ -836,7 +851,8 @@ class PlayViewController: GameViewController {
         
 #if SIDE_LOAD
         if #available(iOS 26.0, tvOS 26.0, *),
-           (manicGame.gameType == .dos || manicGame.gameType == .dc),
+           ((manicGame.gameType == .dos && ProcessInfo.processInfo.hasTXM) ||
+            manicGame.gameType == .symbian),
            (LibretroCore.jitAvailable() && manicGame.jit) {
             if UIApplication.shared.canOpenURL(R.URLs.EnableJITUrl) {
                 UIApplication.shared.open(R.URLs.EnableJITUrl)
@@ -1131,7 +1147,10 @@ extension PlayViewController {
             } else {
                 pauseEmulationIfNeed()
                 if UIDevice.isPhone && UIDevice.isPortrait {
-                    let prefferedMenuHeight = view.height - gameView.frame.maxY
+                    var prefferedMenuHeight = view.height - gameView.frame.maxY
+                    if prefferedMenuHeight < R.Size.WindowHeight/3 {
+                        prefferedMenuHeight = R.Size.SheetWindowMaxSize.height/2
+                    }
                     GameOptionsView.MaxHeightForGaming = max(prefferedMenuHeight, R.Size.SheetWindowMinSize.height)
                 }
                 GameOptionsView.show(scene: .gaming, games: [manicGame], hideCompletion: { [weak self] option in
@@ -1998,7 +2017,7 @@ extension PlayViewController {
                 }
                 updateLibretroCoreConfigs(core: .Mupen64PlushNext, configs: [
                     .mupen64plus_cpucore: (enableJIT ? "dynamic_recompiler" : "cached_interpreter"),
-                    .mupen64plus_rdp_plugin: ((manicGame.isN64ParaLLEl && !enableJIT) ? "parallel" : "gliden64"),
+                    .mupen64plus_rdp_plugin: (manicGame.isN64ParaLLEl ? "parallel" : "gliden64"),
                     .mupen64plus_pak1: manicGame.hasTransferPak ? "transfer" : "memory"
                 ])
                 updateN64Resolution(manicGame.resolution, reload: false)
@@ -2039,16 +2058,9 @@ extension PlayViewController {
             } else if manicGame.gameType == ._3ds {
                 ThreeDS.isAzaharCore = manicGame.isAzahar3DS
                 if manicGame.isAzahar3DS {
-                    var enableJIT = false
-                    if LibretroCore.jitAvailable() {
-                        if let value = LibretroCore.sharedInstance().coreConfigValue(EmulationCore.Azahar.name,
-                                                                                     key: SpecialCoreOption.citra_use_cpu_jit.rawValue),
-                            value == "disabled" {
-                            enableJIT = false
-                        } else {
-                            enableJIT = true
-                            setupUniversalScript(gameType: ._3ds)
-                        }
+                    let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
+                    if enableJIT {
+                        setupUniversalScript(gameType: ._3ds)
                     }
                     let enableLLE = (manicGame.isArticBaseHomeMenu || (manicGame.getExtraInt(key: ExtraKey.emulationAccuracy.rawValue) ?? 0 == 1)) ? true : false
                     updateLibretroCoreConfigs(core: .Azahar, configs: [
@@ -2320,9 +2332,9 @@ extension PlayViewController {
         //尝试加载滤镜
         updateFilter()
         //尝试添加屏幕按钮
-        updateFunctionButton()
+        updateShortcutsButton()
         if manicGame.gameType == .ds || (manicGame.gameType == ._3ds && !manicGame.isAzaharArticBase) || (manicGame.gameType.usesDOSSkinLayout && UIDevice.isPad) {
-            updateFunctionButtonContainer()
+            updateShortcutButtonContainer()
         }
         //更新3DS画面视图
         updateCitra3DSViews()
@@ -2451,8 +2463,8 @@ extension PlayViewController {
         }
     }
     
-    private func updateFunctionButton() {
-        functionButtonContainer.subviews.forEach { $0.removeFromSuperview() }
+    private func updateShortcutsButton() {
+        shortcutsButtonContainer.subviews.forEach { $0.removeFromSuperview() }
         if (manicGame.gameType == ._3ds && UIDevice.isPad) || manicGame.isAzaharArticBase {
             return
         }
@@ -2508,7 +2520,7 @@ extension PlayViewController {
                         button.snp.makeConstraints { make in
                             make.center.equalToSuperview()
                         }
-                        functionButtonContainer.addSubview(buttonContainerView)
+                        shortcutsButtonContainer.addSubview(buttonContainerView)
                         buttonContainerView.snp.makeConstraints { make in
                             if manicGame.gameType == .ds || manicGame.gameType == ._3ds {
                                 if UIDevice.isPhone {
@@ -2519,13 +2531,13 @@ extension PlayViewController {
                                         make.top.equalToSuperview()
                                     } else if index == 1 {
                                         make.leading.equalToSuperview()
-                                        make.top.equalTo(functionButtonContainer.subviews[index - 1].snp.bottom)
+                                        make.top.equalTo(shortcutsButtonContainer.subviews[index - 1].snp.bottom)
                                     } else if index == 2 {
                                         make.trailing.equalToSuperview()
                                         make.top.equalToSuperview()
                                     } else if index == 3 {
                                         make.trailing.equalToSuperview()
-                                        make.top.equalTo(functionButtonContainer.subviews[index - 1].snp.bottom)
+                                        make.top.equalTo(shortcutsButtonContainer.subviews[index - 1].snp.bottom)
                                     }
                                 } else {
                                     make.width.equalTo(50)
@@ -2533,7 +2545,7 @@ extension PlayViewController {
                                     if index == 0 {
                                         make.leading.equalToSuperview()
                                     } else if index == 1 {
-                                        make.leading.equalTo(functionButtonContainer.subviews[index-1].snp.trailing)
+                                        make.leading.equalTo(shortcutsButtonContainer.subviews[index-1].snp.trailing)
                                     } else if index == 2 {
                                         make.trailing.equalToSuperview().inset(50)
                                     } else if index == 3 {
@@ -2544,7 +2556,7 @@ extension PlayViewController {
                                 if index == 0 {
                                     make.leading.equalToSuperview()
                                 } else {
-                                    make.leading.equalTo(functionButtonContainer.subviews[index-1].snp.trailing)
+                                    make.leading.equalTo(shortcutsButtonContainer.subviews[index-1].snp.trailing)
                                 }
                                 make.top.bottom.equalToSuperview()
                                 if index == functionButtonCount-1 && functionButtonCount == R.Numbers.GameFunctionButtonCount {
@@ -2560,9 +2572,9 @@ extension PlayViewController {
         }
     }
     
-    private func updateFunctionButtonContainer() {
+    private func updateShortcutButtonContainer() {
         if (manicGame.gameType == .ds || (UIDevice.isPhone && manicGame.gameType == ._3ds)) &&  UIDevice.isPhone {
-            functionButtonContainer.snp.remakeConstraints { make in
+            shortcutsButtonContainer.snp.remakeConstraints { make in
                 if gameViews.count > 1 {
                     //iPhone ds布局比较特殊
                     if UIDevice.isLandscape {
@@ -2592,7 +2604,7 @@ extension PlayViewController {
                 }
             }
         } else if manicGame.gameType.usesDOSSkinLayout, UIDevice.isPad {
-            functionButtonContainer.snp.updateConstraints { make in
+            shortcutsButtonContainer.snp.updateConstraints { make in
                 make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
             }
         }

@@ -159,6 +159,7 @@ class SymbianDeviceView: BaseView {
             game = g
         } else {
             game = Game()
+            game.gameType = .symbian
             game.id = Game.SymbianHomePrimary
             game.name = Game.SymbianHomePrimary
             try? realm.write {

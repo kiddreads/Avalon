@@ -46,7 +46,6 @@ enum GameOption: Int, CaseIterable {
          ndsMicrophone,
          clownMDTvStandard,
          snesVRAM,
-         dcCore,
          coreSettings,
          saveState,
          quickLoadState,
@@ -99,7 +98,7 @@ enum GameOption: Int, CaseIterable {
                 .symbolImage(R.image.exportgamesave_iconSymbols())
         case .platformChange:
                 .symbolImage(R.image.assignplatform_iconSymbols())
-        case .switchCore, .dcCore:
+        case .switchCore:
                 .symbolImage(R.image.core_iconSymbols())
         case .changeCategory:
                 .symbolImage(R.image.category_iconSymbols())
@@ -246,7 +245,7 @@ enum GameOption: Int, CaseIterable {
             R.string.localizable.gamesDelete()
         case .platformChange:
             R.string.localizable.platformChange()
-        case .switchCore, .dcCore:
+        case .switchCore:
             R.string.localizable.switchEmulationCore()
         case .changeCategory:
             R.string.localizable.changeCategory()
@@ -413,8 +412,6 @@ enum GameOption: Int, CaseIterable {
             return R.string.localizable.airPlayLayoutTips()
         case .language:
             return R.string.localizable.consoleLanguageDesc()
-        case .dcCore:
-            return R.string.localizable.dcjitLessVer()
             
         default:
             return nil
@@ -459,7 +456,6 @@ enum GameOption: Int, CaseIterable {
         [
             .platformChange,
             .switchCore,
-            .dcCore,
             .changeCategory,
             .genHomeMenu
         ],
@@ -906,15 +902,6 @@ enum GameOption: Int, CaseIterable {
                 return .chevron(nil)
             }
             
-        case .dcCore:
-            var ver = "Default"
-            if firstGame.defaultCore == 1 {
-                ver = "WinCE"
-            } else if firstGame.defaultCore == 2 {
-                ver = "Fuse"
-            }
-            return .chevron(ver)
-            
         case .symbianDevice:
             if let model = firstGame.getExtraString(key: ExtraKey.symbianFirmwareModel.rawValue) {
                 if games.count == 1 {
@@ -1012,7 +999,6 @@ enum GameOption: Int, CaseIterable {
                 .ndsMicrophone,
                 .clownMDTvStandard,
                 .snesVRAM,
-                .dcCore,
                 .symbianDevice,
             ]
         }
@@ -1236,10 +1222,6 @@ enum GameOption: Int, CaseIterable {
             }
         }
         
-        if game.gameType != .dc {
-            allOptions.remove(.dcCore)
-        }
-        
         if game.gameType != .symbian {
             allOptions.remove(.symbianDevice)
         }
@@ -1292,7 +1274,6 @@ enum GameOption: Int, CaseIterable {
                                                             .palette,
                                                             .triggerPro,
                                                             .gameShortcut,
-                                                            .dcCore,
                                                             .symbianDevice],
                                                   condition: {
                 !games.allSatisfy({ $0.gameType == firstGame.gameType })

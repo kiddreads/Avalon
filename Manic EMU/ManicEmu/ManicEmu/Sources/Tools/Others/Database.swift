@@ -15,7 +15,16 @@ struct Database {
     static func setup(completion: (()->Void)? = nil) {
         do {
             let realm = Database.realm
-            //如果setting已经初始化过 则不再初始化
+            
+            //init Prefference
+            let prefference = realm.object(ofType: Prefference.self, forPrimaryKey: Prefference.defaultName)
+            if prefference == nil {
+                try? realm.write {
+                    realm.add(Prefference())
+                }
+            }
+            
+            //If the setting has already been initialized, it won't be initialized again.
             let oldSettings = realm.object(ofType: Settings.self, forPrimaryKey: Settings.defaultName)
             if oldSettings == nil {
                 Log.debug("设置不存在 初始化设置")
@@ -26,7 +35,7 @@ struct Database {
                     realm.add(settings)
                 }
             } else if let _ = oldSettings {
-                //设置已经存在，检查一下皮肤数量是否和模拟器数量一致，不一致的话 需要更新默认皮肤
+                //The setting already exists. Check whether the number of skins matches the number of emulators. If they don't match, you'll need to update the default skin.
                 let defaultSkins = realm.objects(Skin.self).where { $0.skinType == .default }
                 let defaultSkinsCount = defaultSkins.count
                 if defaultSkinsCount != System.allCases.filter({ !$0.gameType.externalType }).count {
@@ -52,13 +61,6 @@ struct Database {
                     try? realm.write {
                         realm.add(genDefaultSkins)
                     }
-                }
-            }
-            
-            let prefference = realm.object(ofType: Prefference.self, forPrimaryKey: Prefference.defaultName)
-            if prefference == nil {
-                try? realm.write {
-                    realm.add(Prefference())
                 }
             }
             
@@ -381,6 +383,12 @@ struct Database {
                             Theme.defalut.gamesPerRow = 3
                         }
                     }
+                    
+                    //The default core for the 3DS has been changed to Azahar.
+                    var config = GlobalCoreSwitch.getConfig(realm: realm)
+                    if config.getUsingCoreName(gameType: GameType._3ds) == nil {
+                        config.setUsingCoreName(gameType: ._3ds, coreName: EmulationCore.Azahar.name)
+                    }
                 }
             }
             
@@ -408,12 +416,12 @@ struct Database {
     
     private static var defaultConfig: Realm.Configuration {
         var config = Realm.Configuration.defaultConfiguration
-        //配置数据库路径
+        //Configure the database path.
         if !FileManager.default.fileExists(atPath: R.Path.Realm) {
             try? FileManager.default.createDirectory(atPath: R.Path.Realm, withIntermediateDirectories: true)
         }
         config.fileURL = URL(fileURLWithPath: R.Path.RealmFilePath)
-        //配置数据库版本 使用App版本来做控制
+        //Configure the database version, and use the app version for control.
         config.schemaVersion = UInt64(R.Config.AppVersion.replacingOccurrences(ofPattern: "\\.", withTemplate: ""))!
         return config
     }
@@ -427,7 +435,10 @@ struct Database {
                let hash = FileHashUtil.truncatedHash(url: controllerSkin.fileURL) {
                 if let skin = realm.object(ofType: Skin.self, forPrimaryKey: hash) {
                     //这种情况 可能Settings被删除了
-                    Log.error("Settings被误删除了!!!")
+                    Log.error("Settings被误删除了! ")
+                    try? realm.write {
+                        realm.delete(skin)
+                    }
                     defaultSkins.append(skin)
                 } else {
                     let skin = Skin()

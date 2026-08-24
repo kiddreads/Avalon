@@ -587,7 +587,6 @@ Naciśnij przycisk kontrolera...";
 
 
 "Challenge" = "Wyzwanie";
-"DCJITLessVer" = "Wersja Domyślna oferuje szybkie i dokładne emulowanie, ale nie obsługuje gier WinCE. Aby uruchomić gry WinCE, wybierz rdzeń WinCE.";
 "TVStandard" = "Jeśli standard telewizyjny gry nie odpowiada regionowi, może to wpłynąć na prędkość. Regiony PAL obejmują głównie Europę, Australię i Nową Zelandię.";
 "SNESVRAMEnable" = "Niektóre zhakowane ROMy wymagają tej opcji do poprawnego renderowania grafiki, ale jej włączenie wyłączy obsługę RetroAchievements.";
 "AirPlayScaling" = "Skalowanie AirPlay";

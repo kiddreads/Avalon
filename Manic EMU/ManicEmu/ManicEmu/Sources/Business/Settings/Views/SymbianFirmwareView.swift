@@ -319,6 +319,7 @@ class SymbianFirmwareView: BaseView {
                 let realm = Database.realm
                 if realm.object(ofType: Game.self, forPrimaryKey: Game.SymbianHomePrimary) == nil {
                     let game = Game()
+                    game.gameType = .symbian
                     game.id = Game.SymbianHomePrimary
                     game.name = Game.SymbianHomePrimary
                     try? realm.write {
