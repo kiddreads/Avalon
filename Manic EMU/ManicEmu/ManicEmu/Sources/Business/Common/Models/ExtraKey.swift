@@ -23,6 +23,7 @@ enum ExtraKey: String {
     case gameSortOrder
     case achievementsProgress
     case alwaysShowProgress
+    case cheevosSubsetId
     case tvStandard
     case snesVRAM
     case airPlayScaling

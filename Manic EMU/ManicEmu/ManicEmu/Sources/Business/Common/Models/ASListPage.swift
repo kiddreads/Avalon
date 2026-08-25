@@ -282,12 +282,13 @@ extension ASListPage {
         
         ///icon: 24x24 title: 15 medium
         static func iconTitleChevronCell(icon: ASIcon? = nil,
+                                         iconSize: CGFloat = R.Size.ButtonExtraExtraSmall,
                                          title: String? = nil,
                                          titleColor: UIColor = R.Color.LabelPrimary,
                                          chevronTitle: String? = nil) -> Self {
             var styles = [Style]()
             if let icon {
-                styles.append(.icon(icon))
+                styles.append(.icon(icon, iconSize: iconSize))
             }
             if let title {
                 styles.append(.title(.largeText(title, color: titleColor)))

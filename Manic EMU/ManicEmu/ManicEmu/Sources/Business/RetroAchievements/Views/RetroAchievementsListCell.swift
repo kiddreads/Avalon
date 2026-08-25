@@ -22,6 +22,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             
             private let missableImageView: SymbolButton = {
                 let view = SymbolButton(image: UIImage(symbol: .exclamationmarkCircle, font: R.Font.Caption(), color: .white))
+                view.enablePressEffect = false
                 view.enableRoundCorner = true
                 view.backgroundColor = .black
                 view.isHidden = true
@@ -30,6 +31,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             
             private let progressionImageView: SymbolButton = {
                 let view = SymbolButton(image: UIImage(symbol: .clockBadgeCheckmark, font: R.Font.Caption(), color: .white))
+                view.enablePressEffect = false
                 view.enableRoundCorner = true
                 view.backgroundColor = .black
                 view.isHidden = true
@@ -38,6 +40,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             
             private let winImageView: SymbolButton = {
                 let view = SymbolButton(image: UIImage(symbol: .starCircle, font: R.Font.Caption(), color: .white))
+                view.enablePressEffect = false
                 view.enableRoundCorner = true
                 view.backgroundColor = .black
                 view.isHidden = true
@@ -179,7 +182,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             
             addSubview(collectionView)
             collectionView.snp.makeConstraints { make in
-                make.top.equalTo(segmentView.snp.bottom)
+                make.top.equalTo(segmentView.snp.bottom).offset(R.Size.ContentSpaceMedium)
                 make.leading.bottom.trailing.equalToSuperview()
             }
         }
@@ -198,16 +201,13 @@ class RetroAchievementsListCell: UICollectionViewCell {
                 }
                 let cellSize = (env.container.contentSize.width - R.Size.ContentSpaceHuge*2 - R.Size.ContentSpaceSmall*(column-1))/column
                 
-                //item布局
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(cellSize),
                                                                                      heightDimension: .absolute(cellSize)))
-                //group布局
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(cellSize)), subitem: item, count: Int(column))
                 group.interItemSpacing = NSCollectionLayoutSpacing.fixed(R.Size.ContentSpaceSmall)
-                //section布局
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = R.Size.ContentSpaceSmall
-                section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 24, bottom: 24, trailing: 24)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 24, bottom: 24, trailing: 24)
                 return section
             }
             return layout
@@ -217,7 +217,10 @@ class RetroAchievementsListCell: UICollectionViewCell {
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withClass: AchievementsListViewCell.self, for: indexPath)
-            cell.setData(achievement: datas[indexPath.row], isHardcoreList: isHardcoreList)
+            let achievement = datas[indexPath.row]
+            cell.setData(achievement: achievement, isHardcoreList: isHardcoreList)
+            cell.enablePressEffect = true
+            cell.enableFocusEffects = false
             return cell
         }
         
@@ -341,7 +344,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
         let view = AchievementsListView()
         view.didTapAchievement = { [weak self] achievement in
             guard let self else { return }
-            //尝试读取缓存中的解锁进度
+            // Prefer cached unlock progress when the live achievement has none.
             if achievement.measuredProgress == nil,
                let game = self.game,
                let achievementProgress = game.getAchievementProgress(id: achievement._id) {
@@ -359,7 +362,9 @@ class RetroAchievementsListCell: UICollectionViewCell {
         view.isFocusable = true
         view.onTap { [weak self] in
             guard let self else { return }
-            if let username = self.username {
+            if let retroGame = self.retroGame {
+                UIApplication.shared.open(R.URLs.RetroGame(gameId: retroGame._id))
+            } else if let username = self.username {
                 UIApplication.shared.open(R.URLs.RetroProfile(username: username))
             } else {
                 UIApplication.shared.open(R.URLs.Retro)
@@ -371,6 +376,17 @@ class RetroAchievementsListCell: UICollectionViewCell {
     private var username: String? = nil
     
     private weak var game: Game? = nil
+    private var retroGame: CheevosGame? = nil
+    
+    private lazy var subsetItemView: ASListItemView = {
+        var styles = [ASListPage.Cell.Style]()
+        styles.append(.icon(.symbolImage(R.image.retroachievements_iconSymbols())))
+        styles.append(.title(.largeText(R.string.localizable.achievementsSubset())))
+        styles.append(.chevron(.init(title: R.string.localizable.achievementsBaseSet())))
+        let view = ASListItemView()
+        view.styles = styles
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -587,6 +603,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             make.top.equalTo(alwaysShowProgressContainer.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         let achievementCountIcon = SymbolButton(image: R.image.customTrophyFill()?.applySymbolConfig())
+        achievementCountIcon.enablePressEffect = false
         achievementInfoContainer.addSubview(achievementCountIcon)
         achievementCountIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
@@ -600,6 +617,7 @@ class RetroAchievementsListCell: UICollectionViewCell {
             make.trailing.equalToSuperview()
         }
         let pointIcon = SymbolButton(image: R.image.customFlagPatternCheckered()?.applySymbolConfig())
+        pointIcon.enablePressEffect = false
         achievementInfoContainer.addSubview(pointIcon)
         pointIcon.snp.makeConstraints { make in
             make.size.equalTo(24)
@@ -613,12 +631,36 @@ class RetroAchievementsListCell: UICollectionViewCell {
             make.trailing.equalToSuperview()
         }
         
+        let subsetContainer = UIView()
+        subsetContainer.enablePressEffect = true
+        subsetContainer.isFocusable = true
+        subsetContainer.layerCornerRadius = R.Size.CornerRadiusLarge
+        subsetContainer.addTapGesture { [weak self] _ in
+            self?.handleSubsetTap()
+        }
+        subsetContainer.onFocusConfirm = { [weak self] in
+            self?.handleSubsetTap()
+            return true
+        }
+        subsetContainer.backgroundColor = R.Color.BackgroundSecondary
+        addSubview(subsetContainer)
+        subsetContainer.snp.makeConstraints { make in
+            make.height.equalTo(R.Size.ItemHeightLarge)
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.equalTo(achievementInfoContainer.snp.bottom).offset(R.Size.ContentSpaceLarge)
+        }
+        subsetContainer.addSubview(subsetItemView)
+        subsetItemView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.top.bottom.equalToSuperview()
+        }
+        
         let achievementListLabel = UILabel()
         achievementListLabel.attributedText = NSAttributedString(string: R.string.localizable.achievementsList(), attributes: [.font: R.Font.Footnote(emphasis: true), .foregroundColor: R.Color.LabelSecondary])
         addSubview(achievementListLabel)
         achievementListLabel.snp.makeConstraints { make in
             make.leading.equalTo(coverImageView)
-            make.top.equalTo(achievementInfoContainer.snp.bottom).offset(R.Size.ContentSpaceLarge)
+            make.top.equalTo(subsetContainer.snp.bottom).offset(R.Size.ContentSpaceLarge)
         }
         
         addSubview(listView)
@@ -654,50 +696,10 @@ class RetroAchievementsListCell: UICollectionViewCell {
     func setDatas(game: Game, retroGame: CheevosGame?) {
         guard let retroGame else { return }
         self.game = game
+        self.retroGame = retroGame
         coverImageView.kf.setImage(with: URL(string: retroGame.badgeUrl), placeholder: UIImage.placeHolder(preferenceSize: .init(80)))
         
-        var achievementCount = 0
-        var hardcoreUnlockCount = 0
-        var softcoreUnlockCount = 0
-        var totalPoints = 0
-        var hardcorePoints = 0
-        var softcorePoints = 0
-        var unlockAchievementCount = 0
-        if let achievements = retroGame.achievements {
-            var validAchievements = [CheevosAchievement]()
-            for a in achievements {
-                if let badgeName = a.badgeName, badgeName == "00000" {
-                    continue
-                }
-                validAchievements.append(a)
-                achievementCount += 1
-                if a.unlocked {
-                    unlockAchievementCount += 1
-                }
-                if a.hardcoreUnlocked {
-                    hardcoreUnlockCount += 1
-                    hardcorePoints += a.points
-                }
-                if a.softcoreUnlocked {
-                    softcoreUnlockCount += 1
-                    softcorePoints += a.points
-                }
-                totalPoints += a.points
-            }
-            let percentage = achievementCount == 0 ? 0.0 : (Double(unlockAchievementCount)/Double(achievementCount)*100)
-            progressLabel.text = String(format: "%.1f%%", percentage)
-            progressView.progress = percentage
-            listView.datas = validAchievements.sorted(by: {
-                if $0.hardcoreUnlocked {
-                    return true
-                } else if $1.hardcoreUnlocked {
-                    return false
-                }
-                return false
-            })
-        }
-        
-        
+        applySelectedSubset()
         
         titleLabel.text = retroGame.title ?? game.displayName
         
@@ -706,28 +708,6 @@ class RetroAchievementsListCell: UICollectionViewCell {
         } else {
             lastActivityLabel.text = R.string.localizable.readyGameInfoNeverPlayed()
         }
-        
-        
-        achievementsCountLabel.attributedText = {
-            let matt = NSMutableAttributedString(string: R.string.localizable.totalAchievements(achievementCount), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
-            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(hardcoreUnlockCount)    ", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
-            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(softcoreUnlockCount)", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
-            let style = NSMutableParagraphStyle()
-            style.lineSpacing = R.Size.ContentSpaceTiny/2
-            return matt.applying(attributes: [.paragraphStyle: style])
-        }()
-        pointLabel.attributedText = {
-            let matt = NSMutableAttributedString(string: R.string.localizable.totalPoints(totalPoints), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
-            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(hardcorePoints)    ", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
-            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
-            matt.append(NSAttributedString(string: "\(softcorePoints)", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
-            let style = NSMutableParagraphStyle()
-            style.lineSpacing = R.Size.ContentSpaceTiny/2
-            return matt.applying(attributes: [.paragraphStyle: style])
-        }()
         
         enableSwitchButton.setOn(game.enableAchievements, animated: false)
         
@@ -744,5 +724,154 @@ class RetroAchievementsListCell: UICollectionViewCell {
         }
         
         alwaysShowProgressButton.setOn(game.getExtraBool(key: ExtraKey.alwaysShowProgress.rawValue) ?? false, animated: false)
+    }
+    
+    private func currentSubsets() -> [CheevosSubset] {
+        retroGame?.subsets ?? []
+    }
+    
+    private func resolvedSubset() -> CheevosSubset? {
+        let subsets = currentSubsets()
+        if let savedId = game?.getExtraInt(key: ExtraKey.cheevosSubsetId.rawValue),
+           let match = subsets.first(where: { $0._id == savedId }) {
+            return match
+        }
+        return subsets.first(where: { $0.isCore }) ?? subsets.first
+    }
+    
+    private func subsetDisplayTitle(_ subset: CheevosSubset?) -> String {
+        if let title = subset?.title, !title.isEmpty {
+            return title
+        }
+        return R.string.localizable.achievementsBaseSet()
+    }
+    
+    private func updateSubsetChevronTitle(_ title: String) {
+        var styles = subsetItemView.styles
+        styles.removeAll(where: {
+            if case .chevron = $0 {
+                return true
+            }
+            return false
+        })
+        styles.append(.chevron(.init(title: title)))
+        subsetItemView.styles = styles
+    }
+    
+    private func handleSubsetTap() {
+        let subsets = currentSubsets()
+        guard subsets.count > 1 else {
+            UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                             detail: R.string.localizable.achievementsMultiSetsDesc() + "\n\n" + R.string.localizable.achievementsNoSubset(),
+                             cancelTitle: R.string.localizable.cancelTitle(),
+                             confirmTitle: R.string.localizable.goToSettings(),
+                             confirmAction: { [weak self] in
+                guard let self else { return }
+                if let retroGame = self.retroGame {
+                    UIApplication.shared.open(R.URLs.RetroGame(gameId: retroGame._id))
+                } else {
+                    UIApplication.shared.open(R.URLs.Retro)
+                }
+            })
+            return
+        }
+        
+        let options = subsets.map({
+            let icon: ASIcon
+            if let urlString = $0.badgeUrl,
+                let url = URL(string: urlString) {
+                icon = .imageUrl(url, processSize: CGSize(R.Size.ItemHeightTiny),
+                                 cornerStyle: .radius(R.Size.CornerRadiusMicro))
+            } else {
+                icon = .symbolImage(R.image.retroachievements_iconSymbols())
+            }
+            return ASListPage.Cell.iconTitleChevronCell(icon: icon,
+                                                        iconSize: R.Size.ItemHeightTiny,
+                                                        title: subsetDisplayTitle($0))
+        })
+        
+        ChevronSheetView.show(icon: .symbolImage(R.image.retroachievements_iconSymbols()),
+                              title: R.string.localizable.achievementsSelectSubset(),
+                              detail: R.string.localizable.achievementsMultiSetsDesc() + "\n\n" + R.string.localizable.achievementsMultiSetsGuide(),
+                              cellOptions: options,
+                              completion: { [weak self] index in
+            guard let self, let index, index < subsets.count else { return }
+            let subset = subsets[index]
+            self.game?.updateExtra(key: ExtraKey.cheevosSubsetId.rawValue, value: subset._id)
+            self.applySelectedSubset()
+        })
+    }
+    
+    private func applySelectedSubset() {
+        guard let retroGame else { return }
+        let subset = resolvedSubset()
+        updateSubsetChevronTitle(subsetDisplayTitle(subset))
+        
+        let source: [CheevosAchievement]
+        if let subset {
+            source = (retroGame.achievements ?? []).filter { $0.subsetId == subset._id }
+        } else {
+            source = retroGame.achievements ?? []
+        }
+        
+        var achievementCount = 0
+        var hardcoreUnlockCount = 0
+        var softcoreUnlockCount = 0
+        var totalPoints = 0
+        var hardcorePoints = 0
+        var softcorePoints = 0
+        var unlockAchievementCount = 0
+        var validAchievements = [CheevosAchievement]()
+        for a in source {
+            if let badgeName = a.badgeName, badgeName == "00000" {
+                continue
+            }
+            validAchievements.append(a)
+            achievementCount += 1
+            if a.unlocked {
+                unlockAchievementCount += 1
+            }
+            if a.hardcoreUnlocked {
+                hardcoreUnlockCount += 1
+                hardcorePoints += a.points
+            }
+            if a.softcoreUnlocked {
+                softcoreUnlockCount += 1
+                softcorePoints += a.points
+            }
+            totalPoints += a.points
+        }
+        let percentage = achievementCount == 0 ? 0.0 : (Double(unlockAchievementCount) / Double(achievementCount) * 100)
+        progressLabel.text = String(format: "%.1f%%", percentage)
+        progressView.progress = percentage
+        listView.datas = validAchievements.sorted(by: {
+            if $0.hardcoreUnlocked {
+                return true
+            } else if $1.hardcoreUnlocked {
+                return false
+            }
+            return false
+        })
+        
+        achievementsCountLabel.attributedText = {
+            let matt = NSMutableAttributedString(string: R.string.localizable.totalAchievements(achievementCount), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(hardcoreUnlockCount)    ", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
+            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(softcoreUnlockCount)", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = R.Size.ContentSpaceTiny / 2
+            return matt.applying(attributes: [.paragraphStyle: style])
+        }()
+        pointLabel.attributedText = {
+            let matt = NSMutableAttributedString(string: R.string.localizable.totalPoints(totalPoints), attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.LabelPrimary])
+            matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(hardcorePoints)    ", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
+            matt.append(NSAttributedString(string: R.string.localizable.softcore() + ": ", attributes: [.font: R.Font.Caption(), .foregroundColor: R.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: "\(softcorePoints)", attributes: [.font: R.Font.Body(emphasis: true), .foregroundColor: R.Color.Yellow]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = R.Size.ContentSpaceTiny / 2
+            return matt.applying(attributes: [.paragraphStyle: style])
+        }()
     }
 }

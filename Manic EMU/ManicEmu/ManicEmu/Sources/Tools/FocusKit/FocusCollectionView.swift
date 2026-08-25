@@ -447,6 +447,11 @@ private final class FocusCollectionCoordinator: NSObject {
         let host = hostView(for: element)
 
         if let inner = focusedTarget, let host, inner !== host, inner.isDescendant(of: host) {
+            // Nested collection cells are also descendants of this cell. Confirm
+            // belongs to that inner collection, not the inner-control chain.
+            if confirmNestedCollectionItem(inner, owner: collectionView) {
+                return true
+            }
             return inner.fk_performPrimaryAction()
         }
 
@@ -454,13 +459,48 @@ private final class FocusCollectionCoordinator: NSObject {
             return true
         }
 
-        if case .cell(let indexPath) = element,
-           let delegate = collectionView.delegate,
-           delegate.responds(to: #selector(UICollectionViewDelegate.collectionView(_:didSelectItemAt:))) {
-            delegate.collectionView?(collectionView, didSelectItemAt: indexPath)
-            return true
+        if case .cell(let indexPath) = element {
+            return notifyDidSelect(in: collectionView, at: indexPath)
         }
         return false
+    }
+
+    /// When focus sits on another collection's cell (not a widget inside it),
+    /// run that collection's confirm path: cell `onFocusConfirm`, then `didSelect`.
+    private func confirmNestedCollectionItem(_ view: UIView, owner: UICollectionView) -> Bool {
+        var current: UIView? = view
+        while let candidate = current, candidate !== owner {
+            if let cell = candidate as? UICollectionViewCell,
+               let nested = owningCollectionView(of: cell),
+               nested !== owner {
+                guard view === cell else { return false }
+                if let onConfirm = cell.onFocusConfirm, onConfirm() {
+                    return true
+                }
+                guard let indexPath = nested.indexPath(for: cell) else { return false }
+                return notifyDidSelect(in: nested, at: indexPath)
+            }
+            current = candidate.superview
+        }
+        return false
+    }
+
+    private func owningCollectionView(of cell: UICollectionViewCell) -> UICollectionView? {
+        var current: UIView? = cell.superview
+        while let view = current {
+            if let collectionView = view as? UICollectionView { return collectionView }
+            current = view.superview
+        }
+        return nil
+    }
+
+    private func notifyDidSelect(in collectionView: UICollectionView, at indexPath: IndexPath) -> Bool {
+        guard let delegate = collectionView.delegate,
+              delegate.responds(to: #selector(UICollectionViewDelegate.collectionView(_:didSelectItemAt:))) else {
+            return false
+        }
+        delegate.collectionView?(collectionView, didSelectItemAt: indexPath)
+        return true
     }
 
     // MARK: 聚焦

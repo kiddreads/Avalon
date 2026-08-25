@@ -720,8 +720,9 @@ class PlayViewController: GameViewController {
         shortcutsButtonContainer.snp.makeConstraints { make in
             if manicGame.gameType == .n64 && UIDevice.isPad {
                 make.top.equalTo(gameView.snp.bottom).offset(-9)
-            } else if manicGame.gameType == .j2me {
-                make.top.equalTo(gameView.snp.bottom).offset(2)
+            } else if manicGame.gameType == .j2me ||
+                        manicGame.gameType == .gba {
+                make.top.equalTo(gameView.snp.bottom).offset(3)
             } else if manicGame.gameType.usesDOSSkinLayout {
                 if UIDevice.isPad {
                     make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
@@ -751,7 +752,8 @@ class PlayViewController: GameViewController {
             if manicGame.gameType == .j2me ||
                 manicGame.gameType.usesDOSSkinLayout ||
                 (manicGame.gameType == .symbian && UIDevice.isPhone) ||
-                manicGame.gameType == .pce {
+                manicGame.gameType == .pce ||
+                manicGame.gameType == .gba {
                 make.height.equalTo(R.Size.ItemHeightMicro)
             } else if manicGame.gameType == .ngp {
                 make.height.equalTo(R.Size.ItemHeightTiny)
@@ -2293,6 +2295,7 @@ extension PlayViewController {
                 controllerView.controllerSkin = controllerSkin
                 currentSkinID = skin.id
             } else {
+                controllerView.controllerSkin = ControllerSkin.standardControllerSkin(for: manicGame.gameType)
                 // Same dual-orientation skin may only be stored under the other orientation key.
                 controllerView.updateControllerSkin()
             }

@@ -817,6 +817,9 @@ extension _R {
             return URL(string: "https://retroachievements.org/user/\(username)")!
         }
         static let Retro = URL(string: "https://retroachievements.org")!
+        static func RetroGame(gameId: Int) -> URL {
+            return Retro.appendingPathComponent("/game/\(gameId)")
+        }
         static let MobyGames = URL(string: "https://www.mobygames.com")!
         static let InstallSideload = URL(string: "sidestore://source?url=https://apps.manicemu.site/altstore")!
         static let SideStore = URL(string: "https://sidestore.io")!

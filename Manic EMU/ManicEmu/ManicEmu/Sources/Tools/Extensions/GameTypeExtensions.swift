@@ -525,7 +525,7 @@ extension GameType {
         if self == .ss {
             return [EmulationCore.BeetleSaturn.name, EmulationCore.Yabause.name]
         } else if self == .gba {
-            return [EmulationCore.mGBA.name, EmulationCore.VBAM.name]
+            return [EmulationCore.mGBA.name, EmulationCore.VBAM.name, EmulationCore.gpSP.name]
         } else if self == .md {
 #if SIDE_LOAD
             return [EmulationCore.ClownMDEmu.name, EmulationCore.PicoDrive.name]

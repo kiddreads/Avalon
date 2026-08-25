@@ -434,7 +434,9 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .gba {
             if defaultCore == 0 {
                 return .mGBA
-            } else {
+            } else if defaultCore == 1 {
+                return .VBAM
+            } else if defaultCore == 2 {
                 return .VBAM
             }
         } else if gameType == .dc {
@@ -533,8 +535,10 @@ class Game: Object, ObjectUpdatable {
         } else if gameType == .gba {
             if defaultCore == 0 {
                 return Bundle.main.path(forResource: "mgba.libretro", ofType: "framework", inDirectory: "Frameworks")
-            } else {
+            } else if defaultCore == 1 {
                 return Bundle.main.path(forResource: "vbam.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else if defaultCore == 2 {
+                return Bundle.main.path(forResource: "gpsp.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .dc {
             if LibretroCore.jitAvailable(), jit {

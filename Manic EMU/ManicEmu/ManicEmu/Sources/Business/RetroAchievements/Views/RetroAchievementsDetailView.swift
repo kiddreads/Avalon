@@ -39,6 +39,7 @@ class RetroAchievementsDetailView: BaseView {
             }
             if let iconSymbol {
                 let iconImageView = SymbolButton(image: UIImage(symbol: iconSymbol, color: .white))
+                iconImageView.enablePressEffect = false
                 iconImageView.enableRoundCorner = true
                 iconImageView.backgroundColor = UIColor.black
                 addSubview(iconImageView)

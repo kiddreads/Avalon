@@ -48,7 +48,8 @@ enum EmulationCore: CaseIterable {
          BeetlePCE,
          BeetleNeoPop,
          VICEx64sc,
-         PUAE
+         PUAE,
+         gpSP
     
     var name: String {
         switch self {
@@ -134,6 +135,8 @@ enum EmulationCore: CaseIterable {
             "VICE x64sc"
         case .PUAE:
             "PUAE"
+        case .gpSP:
+            "gpSP"
         }
     }
     
@@ -213,6 +216,8 @@ enum EmulationCore: CaseIterable {
             return [.c64]
         case .PUAE:
             return [.amiga]
+        case .gpSP:
+            return [.gba]
         }
     }
     
@@ -233,9 +238,10 @@ enum EmulationCore: CaseIterable {
         })
     }
     
-    ///依据 libretro .info 的 savestate_features 判断是否支持 Netplay
-    ///deterministic(或未声明,默认 deterministic)支持; basic/serialized/禁用存档不支持
-    ///DOSBox-pure 虽为 serialized, 但实现了 netpacket interface, 可联机
+    /// RA netplay: .info `savestate_features` is deterministic (or omitted) *and*
+    /// libretro docs do not mark Netplay unsupported. serialized/basic/no-savestate
+    /// cores are out, except netpacket cores (DOSBox-pure, melonDS DS, Virtual Jaguar)
+    /// and Holani (docs: state-based netplay).
     var supportNetplay: Bool {
         guard isLibretroCore else { return false }
         switch self {
@@ -244,17 +250,11 @@ enum EmulationCore: CaseIterable {
                 .PicoDrive,
                 .BeetleSaturn,
                 .BeetleVB,
-                .PokeMini,
-                .BeetlePSXHW,
-                .Gambatte,
-                .VBAM,
-                .mGBA,
                 .Gearsystem,
                 .ClownMDEmu,
                 .MAME,
                 .FinalBurnNeo,
                 .Stella,
-                .PCSXReArmed,
                 .DOSBoxPure,
                 .bsnes,
                 .bsnesJG,
@@ -263,7 +263,8 @@ enum EmulationCore: CaseIterable {
                 .Holani,
                 .VirtualJaguar,
                 .BeetlePCE,
-                .BeetleNeoPop:
+                .BeetleNeoPop,
+                .gpSP:
             return true
         default:
             return false

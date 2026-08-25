@@ -41,6 +41,7 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
         }
         
         sortIcon.backgroundColor = .clear
+        sortIcon.isFocusable = false
         addSubview(sortIcon)
         sortIcon.snp.makeConstraints { make in
             make.size.equalTo(R.Size.IconSizeMedium)

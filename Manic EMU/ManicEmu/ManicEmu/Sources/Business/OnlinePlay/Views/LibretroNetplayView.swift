@@ -456,7 +456,7 @@ class LibretroNetplayView: BaseView {
         switch runtimeSections[indexPath.section] {
         case .host:
             guard let isOn = subActions?.extraValue as? Bool else { return }
-            toggleHost(isOn: isOn, cellData: cellData, indexPath: indexPath)
+            toggleHost(isOn: isOn)
         case .internet:
             if indexPath.row == 0 {
                 refreshInternetHosts()
@@ -484,28 +484,21 @@ class LibretroNetplayView: BaseView {
         }
     }
     
-    private func toggleHost(isOn: Bool, cellData: ASListPage.Cell, indexPath: IndexPath) {
-        if isOn {
-            UIView.makeLoading()
-            if LibretroCore.sharedInstance().startNetplayHost(Settings.nickname) {
-                session.isHosting = true
-                UIView.hideAllAlert()
+    /// ENABLE_HOST needs a live runloop; dismiss first so hideCompletion resumes.
+    private func toggleHost(isOn: Bool) {
+        UIView.hideAllAlert(completion: {
+            if isOn {
+                if LibretroCore.sharedInstance().startNetplayHost(Settings.nickname) {
+                    LibretroNetplaySession.shared.isHosting = true
+                } else {
+                    UIView.makeToast(message: R.string.localizable.startNetplayHostFailed())
+                }
             } else {
-                UIView.hideLoading()
-                listView.updateCellData(cellData.updateNormalSwitch(state: .off),
-                                        indexPath: indexPath,
-                                        reloadView: false)
-                UIView.makeToast(message: R.string.localizable.startNetplayHostFailed())
+                LibretroCore.sharedInstance().stopNetplayHost()
+                LibretroNetplaySession.shared.isHosting = false
+                UIDevice.generateHaptic()
             }
-        } else {
-            LibretroCore.sharedInstance().stopNetplayHost()
-            session.isHosting = false
-            UIDevice.generateHaptic()
-            listView.updateCellData(cellData.updateNormalSwitch(state: .off),
-                                    indexPath: indexPath,
-                                    reloadView: false)
-            reloadList()
-        }
+        })
     }
     
     private func refreshInternetHosts() {
@@ -564,15 +557,14 @@ class LibretroNetplayView: BaseView {
             return
         }
         
-        UIView.makeLoading(timeout: R.Numbers.WebLoadingViewTimeout)
-        if LibretroCore.sharedInstance().connect(toNetplayHost: host, nickname: Settings.nickname) {
-            session.connectedHost = host
-            session.isConnected = true
-            UIView.hideAllAlert()
-        } else {
-            UIView.hideLoading()
-            UIView.makeToast(message: R.string.localizable.connectNetplayHost())
-        }
+        UIView.hideAllAlert(completion: {
+            if LibretroCore.sharedInstance().connect(toNetplayHost: host, nickname: Settings.nickname) {
+                LibretroNetplaySession.shared.connectedHost = host
+                LibretroNetplaySession.shared.isConnected = true
+            } else {
+                UIView.makeToast(message: R.string.localizable.connectNetplayHost())
+            }
+        })
     }
     
     private func disconnect() {

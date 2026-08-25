@@ -73,47 +73,59 @@ class RetroAchievementListView: BaseView {
             make.height.equalTo(R.Size.ItemHeightMedium)
         }
         
-        UIView.makeLoading()
-        CheevosBridge.getCheevosGameInfo(game.romUrl.path) { [weak self] result, cheevosGame in
+        let gamePath = game.romUrl.path
+        let didShowLoading: Bool
+        if let cached = CheevosBridge.cachedGameInfo(forPath: gamePath) {
+            cheevosGame = cached
+            collectionView.reloadData()
+            didShowLoading = false
+        } else {
+            UIView.makeLoading()
+            didShowLoading = true
+        }
+        
+        CheevosBridge.getCheevosGameInfo(gamePath, reuseInGameClient: PlayViewController.isGaming) { [weak self] result, cheevosGame in
             guard let self else { return }
-            UIView.hideLoading()
-            self.cheevosGame = cheevosGame
-            self.collectionView.reloadData()
-            if self.cheevosGame == nil, let blankView = self.collectionView.blankSlateView as? BlankSlateEmptyView {
-                blankView.label.isHidden = false
-                if result == GetGameInfoResult.noLoaded {
-                    //游戏不支持RetroAchievements
-                    blankView.label.text = R.string.localizable.achievementsNotSupport(self.game.displayName)
-                } else if result == GetGameInfoResult.noLogin {
-                    //登录失效
-                    blankView.label.text = R.string.localizable.achievementsLoginFail()
-                } else if result == GetGameInfoResult.serverError {
-                    //服务器错误
-                    blankView.label.text = R.string.localizable.achievementsServerError()
-                } else if result == GetGameInfoResult.unknown {
-                    //未知错误
-                    blankView.label.text = R.string.localizable.errorUnknown()
-                }
-                
-                if let _ = AchievementsUser.getUser(),
-                   result != GetGameInfoResult.serverError,
-                   self.game.enableAchievements {
-                    //获取数据失败，但是当前游戏启用了RetroAchievements，对用户进行询问是否需要关闭
-                    UIView.makeAlert(detail: R.string.localizable.achievementsDataLoadFail() + "\n" + R.string.localizable.disableAchievementsAlert(),
-                                     confirmTitle: R.string.localizable.confirmTitle(),
-                                     confirmAction: {
-                        if PlayViewController.isGaming {
-                            UIView.makeAlert(detail: R.string.localizable.toggleAchievementsAlert(),
-                                             confirmTitle: R.string.localizable.confirmTitle(),
-                                             confirmAction: {
-                                self.game.enableAchievements = false
-                                NotificationCenter.default.post(name: R.NotificationName.QuitGaming, object: nil)
-                            })
-                        } else {
+            if didShowLoading {
+                UIView.hideLoading()
+            }
+            if let cheevosGame {
+                self.cheevosGame = cheevosGame
+                self.collectionView.reloadData()
+                return
+            }
+            // Keep a stale cache on screen; only show errors when nothing is available.
+            guard self.cheevosGame == nil, let blankView = self.collectionView.blankSlateView as? BlankSlateEmptyView else {
+                return
+            }
+            blankView.label.isHidden = false
+            if result == GetGameInfoResult.noLoaded {
+                blankView.label.text = R.string.localizable.achievementsNotSupport(self.game.displayName)
+            } else if result == GetGameInfoResult.noLogin {
+                blankView.label.text = R.string.localizable.achievementsLoginFail()
+            } else if result == GetGameInfoResult.serverError {
+                blankView.label.text = R.string.localizable.achievementsServerError()
+            } else if result == GetGameInfoResult.unknown {
+                blankView.label.text = R.string.localizable.errorUnknown()
+            }
+            
+            if let _ = AchievementsUser.getUser(),
+               result != GetGameInfoResult.serverError,
+               self.game.enableAchievements {
+                UIView.makeAlert(detail: R.string.localizable.achievementsDataLoadFail() + "\n" + R.string.localizable.disableAchievementsAlert(),
+                                 confirmTitle: R.string.localizable.confirmTitle(),
+                                 confirmAction: {
+                    if PlayViewController.isGaming {
+                        UIView.makeAlert(detail: R.string.localizable.toggleAchievementsAlert(),
+                                         confirmTitle: R.string.localizable.confirmTitle(),
+                                         confirmAction: {
                             self.game.enableAchievements = false
-                        }
-                    })
-                }
+                            NotificationCenter.default.post(name: R.NotificationName.QuitGaming, object: nil)
+                        })
+                    } else {
+                        self.game.enableAchievements = false
+                    }
+                })
             }
         }
     }
@@ -130,13 +142,10 @@ class RetroAchievementListView: BaseView {
     
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
-            //item布局
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                  heightDimension: .fractionalHeight(1)))
-            //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1018)), subitems: [item])
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1098)), subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            //section布局
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
             

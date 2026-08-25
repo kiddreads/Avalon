@@ -795,6 +795,9 @@
 		57909584303C7D9100A53656 /* picodrive.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57655C1E2DF6B94C003E4A6E /* picodrive.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57909585303C7D9100A53656 /* nestopia.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57F0D83C2DE2C59900760F57 /* nestopia.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57909586303C7D9100A53656 /* ppsspp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57BFBE712DD3360A00AABF98 /* ppsspp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57909605303D793A00A53656 /* gpsp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909600303D792500A53656 /* gpsp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57909608303D794200A53656 /* gpsp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909600303D792500A53656 /* gpsp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5790960E303D795200A53656 /* gpsp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909600303D792500A53656 /* gpsp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
 		57913B422D5ED722004D51AA /* GameInfoCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913B412D5ED722004D51AA /* GameInfoCoverView.swift */; };
 		57913B532D5EF725004D51AA /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913B522D5EF71D004D51AA /* DateExtension.swift */; };
@@ -1610,6 +1613,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5790960E303D795200A53656 /* gpsp.libretro.framework in Embed Frameworks */,
 				5790955E303C7D9100A53656 /* puae.libretro.framework in Embed Frameworks */,
 				5790955F303C7D9100A53656 /* vice.x64sc.libretro.framework in Embed Frameworks */,
 				57909560303C7D9100A53656 /* mednafen.ngp.libretro.framework in Embed Frameworks */,
@@ -1671,6 +1675,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57909605303D793A00A53656 /* gpsp.libretro.framework in Embed Frameworks */,
 				16D61BE375CD4F61ACCF0FF2 /* puae.libretro.framework in Embed Frameworks */,
 				E5385955E04D43598CAC5694 /* vice.x64sc.libretro.framework in Embed Frameworks */,
 				0750DCA306CA4EB7A036C987 /* mednafen.ngp.libretro.framework in Embed Frameworks */,
@@ -1722,6 +1727,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57909608303D794200A53656 /* gpsp.libretro.framework in Embed Frameworks */,
 				E2162239F8584ED6843B9760 /* puae.libretro.framework in Embed Frameworks */,
 				2197E4E9458342E6AF80B1BA /* vice.x64sc.libretro.framework in Embed Frameworks */,
 				5F74DFC689D94836B20159EB /* mednafen.ngp.libretro.framework in Embed Frameworks */,
@@ -2061,11 +2067,11 @@
 		578F28E92F3A055F00D2D998 /* CollectionFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFooterReusableView.swift; sourceTree = "<group>"; };
 		579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentHoleView.swift; sourceTree = "<group>"; };
 		5790958B303C7D9100A53656 /* ManicEmuSideload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManicEmuSideload.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		57909600303D792500A53656 /* gpsp.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gpsp.libretro.framework; sourceTree = "<group>"; };
 		57913AF42D5D89CC004D51AA /* TouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchController.swift; sourceTree = "<group>"; };
 		57913B412D5ED722004D51AA /* GameInfoCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoCoverView.swift; sourceTree = "<group>"; };
 		57913B522D5EF71D004D51AA /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		579213522D95313800E88819 /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
-		5792E7302F83B2560015CE0E /* mupen64plus.next.jit.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mupen64plus.next.jit.libretro.framework; path = ../Cores/mupen64plus.next.jit.libretro.framework; sourceTree = SOURCE_ROOT; };
 		579453BE2FE429CD00D32DD6 /* ASSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSheet.swift; sourceTree = "<group>"; };
 		579454212FE683F000D32DD6 /* ASTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTextView.swift; sourceTree = "<group>"; };
 		5796DAEF2FE413C70051F661 /* ASListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASListPage.swift; sourceTree = "<group>"; };
@@ -12489,13 +12495,13 @@
 				5744C71B2E375EFF0088081A /* pokemini.libretro.framework */,
 				5754D8C22E27A562001EA5ED /* mednafen.vb.libretro.framework */,
 				57D0BC0D2E1AD31A008C3049 /* mupen64plus.next.libretro.framework */,
-				5792E7302F83B2560015CE0E /* mupen64plus.next.jit.libretro.framework */,
 				57DCE8522E0F97780079E3AA /* yabause.libretro.framework */,
 				57DCE79D2E0C43310079E3AA /* mednafen.saturn.libretro.framework */,
 				57655C1E2DF6B94C003E4A6E /* picodrive.libretro.framework */,
 				57F0D83C2DE2C59900760F57 /* nestopia.libretro.framework */,
 				57BFBE712DD3360A00AABF98 /* ppsspp.libretro.framework */,
 				20B6A88FB41ED3142FD4FD9E /* prboom.libretro.framework */,
+				57909600303D792500A53656 /* gpsp.libretro.framework */,
 			);
 			name = Cores;
 			path = ../Cores;

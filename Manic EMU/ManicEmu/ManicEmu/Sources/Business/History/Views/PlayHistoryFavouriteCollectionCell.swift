@@ -21,6 +21,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
                                 imageAndTitlePadding: 4,
                                 enableGlass: true)
         view.enableRoundCorner = true
+        view.enablePressEffect = false
         view.backgroundColor = R.Color.SideList
         return view
     }()
