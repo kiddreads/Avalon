@@ -175,7 +175,7 @@ extension UIDevice {
     }
     
     static var isIOS15: Bool {
-        if #available(iOS 16, *) {
+        if #available(iOS 16.0, tvOS 16.0, *) {
             return false
         } else {
            return true

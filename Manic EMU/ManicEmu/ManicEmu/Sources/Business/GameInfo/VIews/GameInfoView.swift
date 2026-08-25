@@ -142,7 +142,7 @@ class GameInfoView: BaseView {
         addSubviews([gameCoverView, gameOptionView, navigationView, gameInfoDetailView])
         updateViewsConstraints()
         
-        gameUpdateToken = game.observe(keyPaths: [\Game.gameCover, \Game.icon], { [weak self] changes in
+        gameUpdateToken = game.observe(keyPaths: [\Game.gameCover, \Game.icon, \Game.onlineCoverUrl], { [weak self] changes in
             guard let self else { return }
             switch changes {
             case .change:
@@ -156,6 +156,14 @@ class GameInfoView: BaseView {
                 if let image {
                     self.gameCoverView.updateImage(image)
                     self.navigationView.gameCover.image = image.scaled(toSize: CGSize(R.Size.ItemHeightLarge - R.Size.ContentSpaceSmall*2))
+                } else if let onlineCoverUrl = self.game.onlineCoverUrl {
+                    self.game.getCoverImage(completion: { [weak self] image in
+                        guard let self else { return }
+                        if let image {
+                            self.gameCoverView.updateImage(image)
+                            self.navigationView.gameCover.image = image.scaled(toSize: CGSize(R.Size.ItemHeightLarge - R.Size.ContentSpaceSmall*2))
+                        }
+                    })
                 }
                 
             default:

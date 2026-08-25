@@ -47,7 +47,10 @@ enum LandscapeCarouselStyle: Int, CaseIterable {
         }
     }
     
-    //MARK: Layout选择持久化（每种样式族各自记住上次选中的Layout）
+    /// Snapshot slices are captured per page and tear if a flick lands mid-transform.
+    var usesSystemPaging: Bool { self == .snapshot }
+    
+    //MARK: Layout selection (each style remembers its last preset)
     
     static var currentScaleLayout: ScaleTransformViewOptions.Layout {
         get {

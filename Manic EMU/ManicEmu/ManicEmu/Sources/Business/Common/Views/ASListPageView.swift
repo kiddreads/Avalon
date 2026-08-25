@@ -506,6 +506,9 @@ extension ASListPageView {
         
         if enableSafeAreaBottomInsets {
             contentInset.bottom += R.Size.SafeArea.bottom
+            if UIDevice.isSmallScreenPhone {
+                contentInset.bottom += R.Size.ContentInsetBottom
+            }
         }
         
         collectionView.contentInset = contentInset
@@ -731,6 +734,9 @@ extension ASListPageView {
         
         if listPage.enableSafeAreaBottomInsets {
             height += R.Size.SafeArea.bottom
+            if UIDevice.isSmallScreenPhone {
+                height += R.Size.ContentInsetBottom
+            }
         }
         
         return height

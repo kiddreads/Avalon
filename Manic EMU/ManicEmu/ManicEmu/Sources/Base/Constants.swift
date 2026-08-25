@@ -239,7 +239,7 @@ extension _R {
                     let height = WindowHeight * 0.9
                     return CGSize(width: height*9/16, height: height)
                 } else {
-                    let width = WindowWidth*0.5
+                    let width = WindowWidth*(UIDevice.isPadMini ? 0.65 : 0.5)
                     return CGSize(width: width, height: width*16/9)
                 }
             }

@@ -2353,7 +2353,7 @@ extension PlayViewController {
     
     /// 按照配置开始强制旋转屏幕
     private func startOrientation() {
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.0, tvOS 16.0, *) {
             self.setNeedsUpdateOfSupportedInterfaceOrientations()
             if let scene = ApplicationSceneDelegate.applicationScene {
                 if manicGame.orientation == .landscape {

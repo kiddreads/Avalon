@@ -189,7 +189,9 @@ class HomeViewController: BaseViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        NotificationCenter.default.post(name: R.NotificationName.ViewWillTransition, object: nil)
+        if !UIDevice.isIOS15 {
+            NotificationCenter.default.post(name: R.NotificationName.ViewWillTransition, object: nil)
+        }
         homeTabBarBlurView.isHidden = UIDevice.isLandscape
         coordinator.animate(alongsideTransition: { [weak self] _ in
             guard let self else { return }
@@ -201,6 +203,9 @@ class HomeViewController: BaseViewController {
                 }
             }
             self.updateLandscapeBackgroundVisible()
+            if UIDevice.isIOS15 {
+                NotificationCenter.default.post(name: R.NotificationName.ViewWillTransition, object: nil)
+            }
             NotificationCenter.default.post(name: R.NotificationName.ViewAlongsideTransition, object: nil)
             self.homeTabBar.isHidden = UIDevice.isPhone && UIDevice.isLandscape
         }, completion: { _ in

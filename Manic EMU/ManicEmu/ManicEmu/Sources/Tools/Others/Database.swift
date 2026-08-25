@@ -427,29 +427,20 @@ struct Database {
     }
     
     private static func generateDefaultSkins() -> [Skin] {
-        //添加默认皮肤
+        //Add default skin
         var defaultSkins = [Skin]()
         System.allCores.forEach { core in
             let gameType = core.gameType
             if let controllerSkin = ControllerSkin.standardControllerSkin(for: gameType),
                let hash = FileHashUtil.truncatedHash(url: controllerSkin.fileURL) {
-                if let skin = realm.object(ofType: Skin.self, forPrimaryKey: hash) {
-                    //这种情况 可能Settings被删除了
-                    Log.error("Settings被误删除了! ")
-                    try? realm.write {
-                        realm.delete(skin)
-                    }
-                    defaultSkins.append(skin)
-                } else {
-                    let skin = Skin()
-                    skin.id = hash
-                    skin.identifier = controllerSkin.identifier
-                    skin.name = controllerSkin.name
-                    skin.fileName = controllerSkin.fileURL.lastPathComponent
-                    skin.gameType = controllerSkin.gameType
-                    skin.skinType = .default
-                    defaultSkins.append(skin)
-                }
+                let skin = Skin()
+                skin.id = hash
+                skin.identifier = controllerSkin.identifier
+                skin.name = controllerSkin.name
+                skin.fileName = controllerSkin.fileURL.lastPathComponent
+                skin.gameType = controllerSkin.gameType
+                skin.skinType = .default
+                defaultSkins.append(skin)
             }
         }
         return defaultSkins

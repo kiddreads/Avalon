@@ -146,8 +146,8 @@ struct GameScheme: Codable, Identifiable, Equatable, Hashable, Sendable {
     
     static func pullFromURL(_ url: URL) -> [GameScheme] {
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: true) {
-            if let text = components.queryItems?.first(where: { $0.name == "games" })?.value, let data = GameScheme.base64URLDecode(text) {
-                
+            if let text = components.queryItems?.first(where: { $0.name == "games" })?.value,
+                let data = GameScheme.base64URLDecode(text) {
                 if let decoded = try? JSONDecoder().decode([GameScheme].self, from: data) {
                     return decoded
                 }

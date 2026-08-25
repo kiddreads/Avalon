@@ -108,7 +108,7 @@ class GameListLandscapeView: BaseView {
     //MARK: - content区（轮播）
     private lazy var carouselLayout: CollectionViewPagingLayout = {
         let layout = CollectionViewPagingLayout()
-        layout.numberOfVisibleItems = 10
+        layout.numberOfVisibleItems = 20
         layout.scrollDirection = .horizontal
         layout.delegate = self
         return layout
@@ -117,7 +117,7 @@ class GameListLandscapeView: BaseView {
     private lazy var carouselView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: carouselLayout)
         view.backgroundColor = .clear
-        view.isPagingEnabled = true
+        view.isPagingEnabled = LandscapeCarouselStyle.current.usesSystemPaging
         view.showsHorizontalScrollIndicator = false
         view.clipsToBounds = false
         view.contentInsetAdjustmentBehavior = .never
@@ -224,10 +224,17 @@ class GameListLandscapeView: BaseView {
     }
     
     private var lastLayoutSize: CGSize = .zero
-    ///信息面板最近一次的定位 避免重复更新约束
+    /// Last info-panel anchor; skip constraint updates when unchanged.
     private var lastPanelAnchor: CGPoint = .zero
+    /// Scale/Stack flick in progress; focus info waits until the snap finishes.
+    private var isCarouselUserScrolling = false
+    private var isCarouselSnapping = false
     
     private var notificationTokens = [Any]()
+    
+    private var usesSystemCarouselPaging: Bool {
+        LandscapeCarouselStyle.current.usesSystemPaging
+    }
     
     //MARK: - 生命周期
     override init(frame: CGRect) {
@@ -317,13 +324,15 @@ class GameListLandscapeView: BaseView {
         }
         updateTipsButton()
         
-        //聚焦信息面板 位置跟随聚焦cell 由updateInfoPanelPosition动态更新偏移
+        // Info panel tracks the focused cover; offsets are updated in updateInfoPanelPosition.
         addSubview(infoPanelView)
         infoPanelView.snp.makeConstraints { make in
             make.centerX.equalTo(self.snp.leading).offset(0)
             make.top.equalTo(self.snp.top).offset(0)
             make.width.lessThanOrEqualToSuperview().offset(-R.Size.ContentSpaceLarge*2)
         }
+        
+        applyCarouselPagingMode()
     }
     
     private func setupDatas() {
@@ -529,6 +538,7 @@ class GameListLandscapeView: BaseView {
     private func reloadAll(keepFocus: Bool) {
         let focusId = keepFocus ? focusedGame?.id : nil
         rebuildDatas()
+        applyCarouselPagingMode()
         carouselLayout.invalidateLayoutInBatchUpdate()
         carouselView.reloadData()
         
@@ -538,7 +548,7 @@ class GameListLandscapeView: BaseView {
             carouselLayout.setCurrentPage(0, animated: false)
         }
         updateFocusedGameInfo()
-        //cell布局完成后再校准信息面板位置
+        // Cell frames are ready on the next cycle; snap the info panel then.
         DispatchQueue.main.async { [weak self] in
             self?.updateInfoPanelPosition()
             self?.syncCarouselFocusTargets()
@@ -1019,16 +1029,108 @@ class GameListLandscapeView: BaseView {
         }
     }
     
-    //MARK: - 聚焦信息面板位置
+    //MARK: - Carousel paging & info panel
     
-    ///信息面板跟随聚焦cell的封面底部 并相对封面居中（部分样式的聚焦cell不居中）
+    /// Snapshot keeps system paging. Scale/Stack allow inertial flicks that snap onto a card.
+    private func applyCarouselPagingMode() {
+        let paging = usesSystemCarouselPaging
+        carouselView.isPagingEnabled = paging
+        isCarouselUserScrolling = false
+        isCarouselSnapping = false
+        infoPanelView.alpha = 1
+        infoPanelView.isUserInteractionEnabled = true
+    }
+    
+    /// Maps pan velocity (pt/ms) to pages.
+    /// Light/normal → 1 page; a mid skip sits between that and a firm flick; hardest → first/last.
+    private func carouselFlickSpeed(_ velocityX: CGFloat) -> CGFloat {
+        var speed = abs(velocityX)
+        // Documented as pt/ms; if a build reports pt/s the values are hundreds+.
+        if speed > 20 {
+            speed /= 1000
+        }
+        return speed
+    }
+    
+    private func carouselPagesForVelocity(_ velocityX: CGFloat, pageCount: Int) -> Int {
+        let speed = carouselFlickSpeed(velocityX)
+        if speed < 0.50 {
+            return 0
+        }
+        if speed < 2.5 {
+            return 1
+        }
+        if speed < 3.0 {
+            return 2
+        }
+        if speed < 3.5 {
+            let t = (speed - 3.0) / 0.40
+            return min(1 + Int((2.0 * t).rounded()), pageCount)
+        }
+        if speed < 4.0 {
+            let t = (speed - 3.5) / 0.50
+            return min(2 + Int((4.0 * t).rounded()), pageCount)
+        }
+        if speed < 4.50 {
+            let t = (speed - 4.0) / 0.60
+            return min(4 + Int((8.0 * t).rounded()), pageCount)
+        }
+        if speed < 5.0 {
+            let t = (speed - 4.50) / 0.70
+            return min(8 + Int((20.0 * t).rounded()), pageCount)
+        }
+        return pageCount
+    }
+    
+    private func carouselTargetPage(offset: CGFloat,
+                                    proposedOffset: CGFloat,
+                                    velocityX: CGFloat,
+                                    pageWidth: CGFloat,
+                                    pageCount: Int) -> Int {
+        guard pageCount > 0, pageWidth > 0 else { return 0 }
+        let fractional = offset / pageWidth
+        let pages = carouselPagesForVelocity(velocityX, pageCount: pageCount)
+        let direction: Int
+        if pages == 0 {
+            direction = 0
+        } else if abs(proposedOffset - offset) > 0.5 {
+            direction = proposedOffset > offset ? 1 : -1
+        } else {
+            // Full-width pages often project ~0; pan-right decreases contentOffset.
+            direction = velocityX > 0 ? -1 : 1
+        }
+        
+        let raw: Int
+        if direction == 0 {
+            raw = Int(fractional.rounded())
+        } else if direction > 0 {
+            raw = Int(floor(fractional)) + pages
+        } else {
+            raw = Int(ceil(fractional)) - pages
+        }
+        return min(max(raw, 0), pageCount - 1)
+    }
+    
+    private func settleCarouselAfterUserScroll() {
+        guard isCarouselUserScrolling || isCarouselSnapping else { return }
+        isCarouselUserScrolling = false
+        isCarouselSnapping = false
+        infoPanelView.alpha = 1
+        infoPanelView.isUserInteractionEnabled = true
+        updateFocusedGameInfo()
+        updateInfoPanelPosition()
+        syncCarouselFocusTargets()
+        transferCarouselCardFocusIfNeeded()
+    }
+    
+    /// Info panel follows the focused cover's bottom edge and stays centered under it.
     private func updateInfoPanelPosition() {
         let index = carouselLayout.currentPage
         guard index >= 0, index < displayGames.count,
               let cell = carouselView.cellForItem(at: IndexPath(item: index, section: 0)) as? GameLandscapeCarouselCell,
               let cardSuperview = cell.cardView.superview else { return }
         
-        //cardView.frame包含transform后的包围盒 聚焦cell transform接近identity
+        // cardView.frame is the post-transform bounds; the focused card is near identity.
         let cardFrame = convert(cell.cardView.frame, from: cardSuperview)
         guard cardFrame.width > 0, cardFrame.height > 0 else { return }
         
@@ -1173,7 +1275,7 @@ extension GameListLandscapeView: UICollectionViewDelegate {
             NotificationCenter.default.post(name: R.NotificationName.HomeSelectionChange, object: HomeTabBar.BarSelection.imports)
             return
         }
-        //轮播：点击非聚焦cell滚动聚焦 点击聚焦cell等同开始游戏
+        // Tap a side card to focus it; tap the focused card to start the game.
         if indexPath.row != carouselLayout.currentPage {
             carouselLayout.setCurrentPage(indexPath.row)
         } else if let game = focusedGame {
@@ -1182,9 +1284,63 @@ extension GameListLandscapeView: UICollectionViewDelegate {
         }
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        guard scrollView === carouselView, !usesSystemCarouselPaging else { return }
+        isCarouselUserScrolling = true
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                   withVelocity velocity: CGPoint,
+                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        guard scrollView === carouselView, !usesSystemCarouselPaging, !showsEmptyCard else { return }
+        let pageWidth = scrollView.bounds.width
+        let pageCount = carouselView.numberOfItems(inSection: 0)
+        guard pageWidth > 0, pageCount > 0 else { return }
+        
+        let targetPage = carouselTargetPage(offset: scrollView.contentOffset.x,
+                                            proposedOffset: targetContentOffset.pointee.x,
+                                            velocityX: velocity.x,
+                                            pageWidth: pageWidth,
+                                            pageCount: pageCount)
+        let targetX = CGFloat(targetPage) * pageWidth
+        let distancePages = abs(scrollView.contentOffset.x - targetX) / pageWidth
+        
+        // Same settle path as tapping a card: system setContentOffset animation.
+        targetContentOffset.pointee = scrollView.contentOffset
+        
+        if distancePages < 0.002 {
+            carouselLayout.setCurrentPage(targetPage, animated: false)
+            settleCarouselAfterUserScroll()
+            return
+        }
+        
+        isCarouselSnapping = true
+        carouselLayout.setCurrentPage(targetPage, animated: true) { [weak self] in
+            self?.settleCarouselAfterUserScroll()
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard scrollView === carouselView, !usesSystemCarouselPaging else { return }
+        if !decelerate && !isCarouselSnapping {
+            settleCarouselAfterUserScroll()
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard scrollView === carouselView, !usesSystemCarouselPaging else { return }
+        if !isCarouselSnapping {
+            settleCarouselAfterUserScroll()
+        }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        guard scrollView === carouselView, !usesSystemCarouselPaging else { return }
+        settleCarouselAfterUserScroll()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView === carouselView else { return }
-        //滚动过程中信息面板实时跟随聚焦cell
         updateInfoPanelPosition()
     }
 }
@@ -1192,6 +1348,9 @@ extension GameListLandscapeView: UICollectionViewDelegate {
 //MARK: - CollectionViewPagingLayoutDelegate
 extension GameListLandscapeView: CollectionViewPagingLayoutDelegate {
     func onCurrentPageChanged(layout: CollectionViewPagingLayout, currentPage: Int) {
+        if isCarouselUserScrolling || isCarouselSnapping {
+            return
+        }
         updateFocusedGameInfo()
         updateInfoPanelPosition()
         syncCarouselFocusTargets()

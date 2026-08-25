@@ -92,7 +92,9 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     if let host = url.host, host == R.Strings.MeloNXScheme {
                         EmulatorInteractionKit.processGames(type: .meloNX, callbackUrl: url)
                     } else if let host = url.host, host == R.Strings.XeniOSScheme {
-                        EmulatorInteractionKit.processGames(type: .xeniOS,callbackUrl: url)
+                        EmulatorInteractionKit.processGames(type: .xeniOS, callbackUrl: url)
+                    } else if let host = url.host, host == R.Strings.DukeXScheme {
+                        EmulatorInteractionKit.processGames(type: .dukeX, callbackUrl: url)
                     } else {
                         Self.launchGameID = url.lastPathComponent
                     }

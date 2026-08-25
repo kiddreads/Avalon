@@ -10,6 +10,8 @@
 protocol ViewTransition where Self: UIView {
     ///About to start rotating.
     ///The device's orientation is correct, but the window size is still using old data.
+    ///belove iOS 16 orientation is not correct too!!!
+    ///So for iOS 16 and below, this method is simulated using viewAlongsideTransition.
     func viewWillTransition()
     
     ///Rotation in progress, with implicit animation supported.
