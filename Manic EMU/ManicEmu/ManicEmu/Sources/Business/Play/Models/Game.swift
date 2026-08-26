@@ -437,7 +437,7 @@ class Game: Object, ObjectUpdatable {
             } else if defaultCore == 1 {
                 return .VBAM
             } else if defaultCore == 2 {
-                return .VBAM
+                return .gpSP
             }
         } else if gameType == .dc {
             return .Flycast

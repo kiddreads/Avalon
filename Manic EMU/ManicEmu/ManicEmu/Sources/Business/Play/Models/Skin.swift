@@ -88,9 +88,13 @@ class Skin: Object, ObjectUpdatable {
     }
     
     var isEditable: Bool {
-        if skinType == .default || identifier.hasSuffix(".keyboard") {
+        if skinType == .default || isKeyboardSkin {
             return false
         }
         return true
+    }
+    
+    var isKeyboardSkin: Bool {
+        identifier.hasSuffix(".keyboard")
     }
 }

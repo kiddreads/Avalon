@@ -1050,3 +1050,5 @@
 "AchievementsNoSubset" = "该游戏暂无额外成就集。你可以在 retroachievements.org 为本游戏启用子集。\n\n已启用 Multiset 的游戏会在集合选择控件旁显示「Subset Configuration」按钮，用于启用或禁用该游戏的任意成就集。";
 "AchievementsMultiSetsGuide" = "此处仅用于切换成就列表的显示。切换成就集不会影响游戏运行中对所有成就集的收集。";
 "GoToSettings" = "去设置";
+
+"SymbianSaveTips" = "Symbian 应用没有统一的存档规范。请使用“文件”App 打开：Manic EMU - EKA2L1，自行管理存档文件。";

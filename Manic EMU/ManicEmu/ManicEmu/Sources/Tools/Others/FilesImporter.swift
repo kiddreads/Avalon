@@ -1110,6 +1110,7 @@ extension FilesImporter {
             if isSaveExist {
                 //询问是否覆盖
                 DispatchQueue.main.async {
+                    UIView.hideLoading()
                     UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
                                      detail: R.string.localizable.filesImporterErrorSaveAlreadyExist(url.lastPathComponent),
                                      confirmTitle: R.string.localizable.confirmTitle(),
@@ -1171,6 +1172,7 @@ extension FilesImporter {
             if isSaveExist {
                 //询问是否覆盖
                 DispatchQueue.main.async {
+                    UIView.hideLoading()
                     UIView.makeAlert(title: R.string.localizable.gameSaveAlreadyExistTitle(),
                                      detail: R.string.localizable.filesImporterErrorSaveAlreadyExist(url.lastPathComponent),
                                      confirmTitle: R.string.localizable.confirmTitle(),

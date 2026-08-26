@@ -345,8 +345,6 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         }
     }
     
-    
-    
     func destory() {
         citraCore.deallocateVulkanLibrary()
         citraCore.deallocateMetalLayers()
@@ -603,7 +601,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
             "ManicEMU.audioStretching" : false,
             "ManicEMU.realtimeAudio": true,
             "ManicEMU.outputType" : 3,
-            "ManicEMU.inputType" : 3,
+            "ManicEMU.inputType" : 4,
             "ManicEMU.webAPIURL" : "http://88.198.47.47:5000"
         ] + buildLayoutConfig()
     }()
@@ -638,8 +636,8 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
             "ManicEMU.audioEmulation" : 0, //"HLE" : 0, "LLE" : 1, "LLE (Multithreaded)" : 2
             "ManicEMU.audioStretching" : false,
             "ManicEMU.realtimeAudio": true,
-            "ManicEMU.outputType" : 3, //Auto = 0, Null = 1, Cubeb = 2, OpenAL = 3, SDL3 = 4,
-            "ManicEMU.inputType" : 3,//Auto = 0, Null = 1, Static = 2, Cubeb = 3, OpenAL = 4,
+            "ManicEMU.outputType" : 3, // Auto = 0, Null = 1, Cubeb = 2, OpenAL = 3, SDL3 = 4
+            "ManicEMU.inputType" : 4, // Auto = 0, Null = 1, Static = 2, Cubeb = 3, OpenAL = 4
             "ManicEMU.webAPIURL" : "http://88.198.47.47:5000"
         ] + buildLayoutConfig()
     }()
@@ -675,7 +673,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
             "ManicEMU.audioStretching" : false,
             "ManicEMU.realtimeAudio": true,
             "ManicEMU.outputType" : 3,
-            "ManicEMU.inputType" : 3,
+            "ManicEMU.inputType" : 4,
             "ManicEMU.webAPIURL" : "http://88.198.47.47:5000"
         ] + buildLayoutConfig()
     }()

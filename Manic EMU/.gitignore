@@ -96,6 +96,7 @@ Dependencies/*
 i18n/
 Scripts/System.core.ver
 ManicEmu/ManicEmu/Resources/System.core
+AppStoreConnect
 
 #claude code
 .claude

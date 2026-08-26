@@ -77,10 +77,9 @@ class ExternalSceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func updateScene() {
         if PurchaseManager.isMember, Settings.defalut.airPlay, PlayViewController.isGaming, PlayViewController.enableAirplay {
-            //开启了airPlay的全屏模式
             window?.isHidden = false
         } else {
-            //没有开启 正常显示手机镜像即可
+            // Mirror the phone instead
             window?.isHidden = true
         }
     }

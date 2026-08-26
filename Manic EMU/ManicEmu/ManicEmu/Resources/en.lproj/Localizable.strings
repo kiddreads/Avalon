@@ -1056,3 +1056,4 @@ Press the controller button to complete mapping...";
 "AchievementsMultiSetsGuide" = "This only switches which achievement list is shown. Changing the selected set does not affect earning achievements from any set while you play.";
 "GoToSettings" = "Go to Settings";
 
+"SymbianSaveTips" = "Symbian apps don't share a common save format. Please use the Files app to open: Manic EMU - EKA2L1 to manage your save files on your own.";

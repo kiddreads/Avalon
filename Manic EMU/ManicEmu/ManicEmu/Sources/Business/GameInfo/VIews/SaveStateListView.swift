@@ -156,7 +156,7 @@ class SaveStateListView: BaseView {
                                     group.enter()
                                     let now = Date.now
                                     let state = GameSaveState()
-                                    state.name = "\(now.string(withFormat: R.Strings.FileNameTimeFormat))_" + self.game.fileName
+                                    state.name = self.importedSaveStateName(url: url, timestamp: now)
                                     state.type = .manualSaveState
                                     state.date = now
                                     self.game.getCoverImage(completion: { image in
@@ -299,6 +299,24 @@ class SaveStateListView: BaseView {
             isEditMode = true
             selectedSaveStateNames.insert(state.name)
         }
+    }
+    
+    /// Citra load reads the slot from `name.deletingPathExtension.pathExtension`.
+    /// Native files are `{titleId}.{slot:02d}.cst`; keep that stem so in-game load can copy into the slot.
+    private func importedSaveStateName(url: URL, timestamp: Date) -> String {
+        let timePrefix = timestamp.string(withFormat: R.Strings.FileNameTimeFormat)
+        guard game.isCitra3DS else {
+            return "\(timePrefix)_" + game.fileName
+        }
+        let imported = url.lastPathComponent
+        let slot: UInt32
+        if let parsed = UInt32(imported.deletingPathExtension.pathExtension), (1...50).contains(parsed) {
+            slot = parsed
+        } else {
+            slot = 1
+        }
+        let titleId = String(format: "%016llX", game.identifierFor3DS)
+        return "\(timePrefix)_\(titleId).\(String(format: "%02d", slot)).cst"
     }
     
     private func getSaveStatesSection() -> ASListPage.Section {

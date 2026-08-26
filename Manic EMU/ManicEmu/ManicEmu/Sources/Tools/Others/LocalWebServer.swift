@@ -176,8 +176,13 @@ class LocalWebServer {
     func getURL() -> URL? {
         return URL(string: "http://127.0.0.1:\(port)/index.html")
     }
+
+    /// Same host as `getURL()` so WKWebView fetch stays same-origin (`localhost` ≠ `127.0.0.1`).
+    func fileURL(for fileId: String) -> String {
+        "http://127.0.0.1:\(port)/file/\(fileId)"
+    }
     
-    /// 注册 ROM 文件，返回唯一文件 ID
+    /// Registers a ROM file and returns a unique file ID.
     func registerFile(filePath: String) -> String {
         let fileId = "\(filePath.lastPathComponent.sha256())"
         files[fileId] = filePath

@@ -177,9 +177,9 @@ extension JGenesisView {
         romPath = filePath
         let fileName = filePath.lastPathComponent.escapeJSString()
         
-        // 注册文件到本地服务器
+        // Register file to local server (127.0.0.1, same origin as the page)
         let fileId = localServer.registerFile(filePath: filePath)
-        let romURL = "http://localhost:8080/file/\(fileId)"
+        let romURL = localServer.fileURL(for: fileId)
 
         let script = """
         (async () => {
@@ -228,28 +228,28 @@ extension JGenesisView {
         romPath = filePath
         let fileName = filePath.lastPathComponent.escapeJSString()
         
-        // 注册 ROM 文件到本地服务器
+        // Register ROM to local server (127.0.0.1, same origin as the page)
         let romFileId = localServer.registerFile(filePath: filePath)
-        let romURL = "http://localhost:8080/file/\(romFileId)"
+        let romURL = localServer.fileURL(for: romFileId)
         
-        // 注册 BIOS 文件（如果存在）
+        // Register BIOS files if present
         var americasBiosURL: String? = nil
         var japanBiosURL: String? = nil
         var europeBiosURL: String? = nil
         
         if let path = americasBiosPath, FileManager.default.fileExists(atPath: path) {
             let fileId = localServer.registerFile(filePath: path)
-            americasBiosURL = "http://localhost:8080/file/\(fileId)"
+            americasBiosURL = localServer.fileURL(for: fileId)
         }
         
         if let path = japanBiosPath, FileManager.default.fileExists(atPath: path) {
             let fileId = localServer.registerFile(filePath: path)
-            japanBiosURL = "http://localhost:8080/file/\(fileId)"
+            japanBiosURL = localServer.fileURL(for: fileId)
         }
         
         if let path = europeBiosPath, FileManager.default.fileExists(atPath: path) {
             let fileId = localServer.registerFile(filePath: path)
-            europeBiosURL = "http://localhost:8080/file/\(fileId)"
+            europeBiosURL = localServer.fileURL(for: fileId)
         }
         
         // 构建 JavaScript 代码中的 BIOS URL 参数

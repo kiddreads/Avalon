@@ -478,9 +478,9 @@ class J2MEView: BaseView {
         self.screenSize = screenSize
         self.rotation = rotation
         
-        // Register file to local server
+        // Same host as the page (127.0.0.1). localhost is a different origin and may resolve to ::1.
         let fileId = localServer.registerFile(filePath: filePath)
-        let jarURL = "http://localhost:\(localServer.port)/file/\(fileId)"
+        let jarURL = localServer.fileURL(for: fileId)
         let fileName = filePath.lastPathComponent
         
         // Build the JavaScript to load the JAR

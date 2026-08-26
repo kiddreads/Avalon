@@ -325,6 +325,7 @@ class PlayViewController: GameViewController {
              \Game.haptic,
              \Game.accurateShaders,
              \Game.renderRightEye,
+             \Game.swapScreen,
         ]) { [weak self] change in
             guard let self = self else { return }
             switch change {
@@ -341,6 +342,9 @@ class PlayViewController: GameViewController {
                         citraCore?.updateConfig(["ManicEMU.useShadersAccurateMul": self.manicGame.accurateShaders])
                     } else if property.name == "renderRightEye" {
                         citraCore?.updateConfig(["ManicEMU.disableRightEyeRender": self.manicGame.renderRightEye])
+                    } else if property.name == "swapScreen" {
+                        self.skinSwitchBindDatas["reverseScreens"] = self.manicGame.swapScreen
+                        self.updateSkin()
                     }
                     Log.debug("设置更新 Property '\(property.name)' changed from \(property.oldValue == nil ? "nil" : property.oldValue!) to '\(property.newValue!)'")
                 }
@@ -1088,9 +1092,13 @@ extension PlayViewController {
         
         if let state = state ?? manicGame.gameSaveStates.last {
             if manicGame.isCitra3DS {
-                if let citraCore,
-                   let slot = UInt32(state.name.deletingPathExtension.pathExtension) {
-                    //现将存档移到模拟器工作目录
+                if let citraCore {
+                    let slotFromName = UInt32(state.name.deletingPathExtension.pathExtension)
+                    let slotFromFile = state.stateData.flatMap {
+                        UInt32($0.filePath.lastPathComponent.deletingPathExtension.pathExtension)
+                    }
+                    let slot = slotFromName ?? slotFromFile ?? 1
+                    // Copy into Citra's `{titleId}.{slot:02d}.cst` before the core loads that slot.
                     if let fileUrl = state.stateData?.filePath {
                         citraCore.addSaveState(fileUrl: fileUrl, slot: slot)
                     }
@@ -2294,8 +2302,11 @@ extension PlayViewController {
                 }
                 controllerView.controllerSkin = controllerSkin
                 currentSkinID = skin.id
-            } else {
-                controllerView.controllerSkin = ControllerSkin.standardControllerSkin(for: manicGame.gameType)
+            } else if var controllerSkin = ControllerSkin.standardControllerSkin(for: manicGame.gameType) {
+                if manicGame.supportSwapScreen {
+                    controllerSkin.isSwapScreen = manicGame.swapScreen
+                }
+                controllerView.controllerSkin = controllerSkin
                 // Same dual-orientation skin may only be stored under the other orientation key.
                 controllerView.updateControllerSkin()
             }
@@ -2437,10 +2448,9 @@ extension PlayViewController {
         triggerProView?.hapticType = manicGame.haptic
     }
     
-    /// 更新AirPlay
+    /// Move the game Metal view onto the AirPlay window, or back onto the phone.
     private func updateAirPlay() {
         if PurchaseManager.isMember, Settings.defalut.airPlay, ExternalSceneDelegate.isAirPlaying {
-            //执行全屏投屏
             if let airPlayViewController = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
                 gameMetalView.removeFromSuperview()
                 var dimensions = emulatorCore?.deltaCore.videoFormat.dimensions ?? CGSize(width: 480, height: 360)
@@ -2455,7 +2465,6 @@ extension PlayViewController {
                 updateNDSCursor()
             }
         } else {
-            //不执行全屏投屏
             if let _ = ExternalSceneDelegate.airPlayViewController, let gameMetalView {
                 gameMetalView.removeFromSuperview()
                 view.insertSubview(gameMetalView, belowSubview: controllerView)
@@ -2473,7 +2482,7 @@ extension PlayViewController {
         }
         if let controllerSkin = controllerView.controllerSkin {
             if let skin = Database.realm.objects(Skin.self).first(where: { $0.identifier == controllerSkin.identifier }) {
-                if skin.skinType == .default {
+                if skin.skinType == .default || skin.isKeyboardSkin {
                     //当前使用的是默认皮肤 则添加功能按钮
                     let shortcuts = Prefference.defalut.getPrefference(kind: .gameShortcut,
                                                                        storeKey: .game(gameId: manicGame.id),

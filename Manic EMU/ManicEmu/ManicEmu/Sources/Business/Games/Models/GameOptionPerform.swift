@@ -62,6 +62,12 @@ extension GameOption {
                                  cancelTitle: R.string.localizable.gotIt())
                 return
             }
+            if firstGame.gameType == .symbian {
+                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                                 detail: R.string.localizable.symbianSaveTips(),
+                                 cancelTitle: R.string.localizable.gotIt())
+                return
+            }
             FilesImporter.shared.presentImportController(supportedTypes: UTType.gamesaveTypes, allowsMultipleSelection: false) { urls in
                 if var url = urls.first {
                     if firstGame.gameType == ._3ds || firstGame.gameType == .psp {
@@ -97,6 +103,12 @@ extension GameOption {
             if games.contains(where: { $0.isDolphinCore }) {
                 UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
                                  detail: R.string.localizable.dolphinSaveTips(),
+                                 cancelTitle: R.string.localizable.gotIt())
+                return
+            }
+            if games.contains(where: { $0.gameType == .symbian }) {
+                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                                 detail: R.string.localizable.symbianSaveTips(),
                                  cancelTitle: R.string.localizable.gotIt())
                 return
             }
@@ -218,6 +230,7 @@ extension GameOption {
             let realm = Database.realm
             if realm.object(ofType: Game.self, forPrimaryKey: Game.DOSHomeMenuPrimaryKey) == nil {
                 let game = Game()
+                game.gameType = .dos
                 game.id = Game.DOSHomeMenuPrimaryKey
                 game.name = Game.DOSHomeMenuPrimaryKey
                 try? realm.write {
@@ -776,7 +789,6 @@ extension GameOption {
 
         case .swapScreen:
             performSwitchAction(with: games, accessoryChange: accessoryChange)
-            hideSheetInGaming()
 
         case .resolution:
             if performImmediately {
@@ -791,7 +803,6 @@ extension GameOption {
 
         case .amiibo:
             PlayViewController.amiibo()
-            hideSheetInGaming()
 
         case .hideControls:
             performSwitchAction(with: games, accessoryChange: accessoryChange)
