@@ -96,8 +96,6 @@ struct S2X: DeltaCoreProtocol {
 class S2XEmulatorBridge : EmulatorBridgeBase {
     static let shared = S2XEmulatorBridge()
 
-    private var thumbstickPosition: CGPoint = .zero
-
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = S2XGameInput(rawValue: input) {

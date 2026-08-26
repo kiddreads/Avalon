@@ -75,8 +75,6 @@ struct Lynx: DeltaCoreProtocol {
 class LynxEmulatorBridge : EmulatorBridgeBase {
     static let shared = LynxEmulatorBridge()
 
-    private var thumbstickPosition: CGPoint = .zero
-
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = LynxGameInput(rawValue: input),

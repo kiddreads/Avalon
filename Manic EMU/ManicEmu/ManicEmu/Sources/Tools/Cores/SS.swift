@@ -93,8 +93,6 @@ struct SS: DeltaCoreProtocol {
 class SSEmulatorBridge : EmulatorBridgeBase {
     static let shared = SSEmulatorBridge()
 
-    private var thumbstickPosition: CGPoint = .zero
-
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = SSGameInput(rawValue: input),

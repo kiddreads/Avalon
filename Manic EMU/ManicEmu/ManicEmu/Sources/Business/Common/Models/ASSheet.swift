@@ -11,7 +11,7 @@ struct ASSheet {
     ///Except for the custom type, it will automatically handle the indentation issues at the top and bottom.
     enum Style {
         enum OptionsType {
-            case simple, radio, check
+            case simple, radio, check, chevron
         }
         
         case listPage(ASListPage)

@@ -49,7 +49,8 @@ enum EmulationCore: CaseIterable {
          BeetleNeoPop,
          VICEx64sc,
          PUAE,
-         gpSP
+         gpSP,
+         MesenS
     
     var name: String {
         switch self {
@@ -137,6 +138,8 @@ enum EmulationCore: CaseIterable {
             "PUAE"
         case .gpSP:
             "gpSP"
+        case .MesenS:
+            "Mesen-S"
         }
     }
     
@@ -218,6 +221,8 @@ enum EmulationCore: CaseIterable {
             return [.amiga]
         case .gpSP:
             return [.gba]
+        case .MesenS:
+            return [.snes, .gb, .gbc]
         }
     }
     
@@ -256,15 +261,10 @@ enum EmulationCore: CaseIterable {
                 .FinalBurnNeo,
                 .Stella,
                 .DOSBoxPure,
-                .bsnes,
-                .bsnesJG,
-                .melonDSDS,
-                .DeSmuME,
-                .Holani,
-                .VirtualJaguar,
                 .BeetlePCE,
                 .BeetleNeoPop,
-                .gpSP:
+                .gpSP,
+                .MesenS:
             return true
         default:
             return false

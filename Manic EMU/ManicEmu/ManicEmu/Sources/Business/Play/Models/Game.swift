@@ -398,6 +398,8 @@ class Game: Object, ObjectUpdatable {
                 }
             } else if defaultCore == 1 {
                 return .Snes9x
+            } else if defaultCore == 2 {
+                return .MesenS
             }
         } else if isPicodriveCore {
             return .PicoDrive
@@ -499,6 +501,8 @@ class Game: Object, ObjectUpdatable {
                 }
             } else if defaultCore == 1 {
                 return Bundle.main.path(forResource: "snes9x.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else if defaultCore == 2 {
+                return Bundle.main.path(forResource: "mesen-s.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if isPicodriveCore {
             return Bundle.main.path(forResource: "picodrive.libretro", ofType: "framework", inDirectory: "Frameworks")
@@ -531,6 +535,8 @@ class Game: Object, ObjectUpdatable {
                 return Bundle.main.path(forResource: "mgba.libretro", ofType: "framework", inDirectory: "Frameworks")
             } else if defaultCore == 2 {
                 return Bundle.main.path(forResource: "vbam.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else if defaultCore == 3 {
+                return Bundle.main.path(forResource: "mesen-s.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
         } else if gameType == .gba {
             if defaultCore == 0 {
@@ -704,6 +710,8 @@ class Game: Object, ObjectUpdatable {
         if fileExtension.lowercased() == "m3u" || fileExtension.lowercased() == "pbp" {
             return true
         } else if gameType == .dos, let diskCount = diskInfo?.diskCount, diskCount > 0 {
+            return true
+        } else if gameType == .fds {
             return true
         }
         return false
@@ -1020,7 +1028,10 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportChangeCategory: Bool {
-        if gameType == .gb || gameType == .dos || gameType == .pce || gameType == .ngp {
+        if gameType == .gb ||
+            (gameType == .dos && !isDOSHomeMenuGame) ||
+            gameType == .pce ||
+            gameType == .ngp {
             return true
         }
         return false
@@ -1109,7 +1120,8 @@ class Game: Object, ObjectUpdatable {
             isClownMDEmuCore ||
             gameType == .pce ||
             gameType == .amiga ||
-            gameType == .c64  {
+            gameType == .c64 ||
+            gameType == .sg1000  {
             return false
         }
         return true
@@ -1260,7 +1272,7 @@ class Game: Object, ObjectUpdatable {
     var supportPalette: Bool {
         if gameType == .nes ||
             gameType == .fds ||
-            gameType == .gb ||
+            (gameType == .gb && defaultCore != 3) ||
             gameType == .vb ||
             gameType == .pm {
             return true
@@ -1299,6 +1311,15 @@ class Game: Object, ObjectUpdatable {
         }
         return true
     }
+    
+    var supportSave: Bool {
+        if isDOSHomeMenuGame ||
+            gameType == .sg1000 {
+            return false
+        }
+        return true
+    }
+    
     
     var gameCoverIcon: ASIcon {
         let icon: ASIcon

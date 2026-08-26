@@ -1681,7 +1681,6 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>zip</string>
 					<string>sav</string>
 					<string>dsv</string>
 					<string>srm</string>

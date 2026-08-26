@@ -50,6 +50,8 @@ struct ASListPage {
                 return .radio(.init(isSelected: isSelected))
             case .check:
                 return .check(.init(isSelected: isSelected))
+            case .chevron:
+                return .chevron(.init())
             }
         }
         

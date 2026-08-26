@@ -1052,3 +1052,6 @@
 "GoToSettings" = "去设置";
 
 "SymbianSaveTips" = "Symbian 应用没有统一的存档规范。请使用“文件”App 打开：Manic EMU - EKA2L1，自行管理存档文件。";
+
+"DCSaveTips" = "Dreamcast 使用 VMU 存储卡保存游戏进度。请使用“文件”App 打开：Manic EMU - Flycast - dc，自行管理存档文件。";
+"DoomSaveTips" = "请使用“文件”App 打开：Manic EMU - PrBoom - doom，自行管理存档文件。";

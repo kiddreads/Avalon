@@ -1,5 +1,5 @@
 {
-  "originHash" : "a5f02b2a5812d5fa1b6bcbff54266d2e580a007e23b5ee1d2fd99d2df0ff00b8",
+  "originHash" : "f75ade9c50361fec160206aba998c9da3a1e21c9d4581c349ecda999dd4d551c",
   "pins" : [
     {
       "identity" : "attributedstring",
@@ -192,10 +192,10 @@
     {
       "identity" : "hxphotopicker",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilenceLove/HXPhotoPicker.git",
+      "location" : "https://github.com/Daiuno/HXPhotoPicker.git",
       "state" : {
-        "revision" : "bb14e10ef4d8c4e30d509dad13278e9495e37bfa",
-        "version" : "5.0.5"
+        "branch" : "master",
+        "revision" : "722de24e6bbe9c175e0abeaf2fe9375f243d2f87"
       }
     },
     {
@@ -376,15 +376,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "f8a53257000061980d45a619b8fae7c49b10bbc3"
-      }
-    },
-    {
-      "identity" : "unrar.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mtgto/Unrar.swift",
-      "state" : {
-        "revision" : "7216007a38ac122dbdeae26cfdaf7f10775c868f",
-        "version" : "0.5.4"
       }
     },
     {
@@ -600,6 +591,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "08dbaa487a89fe83396150735f2b94f3990d2f4a"
+      }
+    },
+    {
+      "identity" : "unrar.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mtgto/Unrar.swift",
+      "state" : {
+        "revision" : "7216007a38ac122dbdeae26cfdaf7f10775c868f",
+        "version" : "0.5.4"
       }
     },
     {

@@ -255,7 +255,6 @@
 		578E20AA2FD1C40700A2749A /* ProHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 578E20A92FD1C40700A2749A /* ProHUD */; };
 		578E22F42FD1EE7500A2749A /* azahar.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 578E22F12FD1EE6600A2749A /* azahar.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		578E23032FD27DA800A2749A /* CloudServiceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23022FD27DA800A2749A /* CloudServiceKit */; };
-		578E230F2FD2810B00A2749A /* HXPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 578E230E2FD2810B00A2749A /* HXPhotoPicker */; };
 		578E23202FD288C600A2749A /* Closures in Frameworks */ = {isa = PBXBuildFile; productRef = 578E231F2FD288C600A2749A /* Closures */; };
 		578E23872FD2981800A2749A /* GCDWebUploader in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23862FD2981800A2749A /* GCDWebUploader */; };
 		578E23A52FD2AA0600A2749A /* BlankSlate in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23A42FD2AA0600A2749A /* BlankSlate */; };
@@ -691,63 +690,63 @@
 		57909516303C7D9100A53656 /* DOOM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2068D6E791D56FF6148997EA /* DOOM.swift */; };
 		57909518303C7D9100A53656 /* Citra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C75AB02FD5575D0093A2B3 /* Citra.framework */; };
 		57909519303C7D9100A53656 /* Libretro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BFBE172DD32F7700AABF98 /* Libretro.framework */; };
-		5790951A303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790951B303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790951C303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790951D303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790951E303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		5790951A303C7D9100A53656 /* Tiercel in Frameworks */ = {isa = PBXBuildFile; productRef = 57C7590F2FD42C710093A2B3 /* Tiercel */; };
+		5790951B303C7D9100A53656 /* GCDWebUploader in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23862FD2981800A2749A /* GCDWebUploader */; };
+		5790951C303C7D9100A53656 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759232FD42D960093A2B3 /* Kingfisher */; };
+		5790951D303C7D9100A53656 /* HXPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 579096BA303F066D00A53656 /* HXPhotoPicker */; };
+		5790951E303C7D9100A53656 /* Fuse in Frameworks */ = {isa = PBXBuildFile; productRef = 57C7591E2FD42D480093A2B3 /* Fuse */; };
 		5790951F303C7D9100A53656 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 571748382DA26F1E007CCE25 /* CoreBluetooth.framework */; };
-		57909520303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909521303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909522303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909523303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909524303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909525303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909526303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909527303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909528303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909529303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790952A303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790952B303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790952C303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790952D303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790952E303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		57909520303C7D9100A53656 /* Permission in Frameworks */ = {isa = PBXBuildFile; productRef = 578E26C82FD41B6300A2749A /* Permission */; };
+		57909521303C7D9100A53656 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5706B0BD2DFDE4570066122E /* BlurUIKit */; };
+		57909522303C7D9100A53656 /* DNSPageView in Frameworks */ = {isa = PBXBuildFile; productRef = 578E20A22FD1B94E00A2749A /* DNSPageView */; };
+		57909523303C7D9100A53656 /* SMBClient in Frameworks */ = {isa = PBXBuildFile; productRef = 57F632A22D6F17AB007270E8 /* SMBClient */; };
+		57909524303C7D9100A53656 /* CollectionViewPagingLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 578E209D2FD1B8CB00A2749A /* CollectionViewPagingLayout */; };
+		57909525303C7D9100A53656 /* ChromaColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759D92FD486BA0093A2B3 /* ChromaColorPicker */; };
+		57909526303C7D9100A53656 /* Schedule in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759192FD42D030093A2B3 /* Schedule */; };
+		57909527303C7D9100A53656 /* Haptica in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759052FD42BD80093A2B3 /* Haptica */; };
+		57909528303C7D9100A53656 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 5713306B2D91AFE00043C28A /* ObjcExceptionBridging */; };
+		57909529303C7D9100A53656 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 578E246A2FD4017E00A2749A /* SwifterSwift */; };
+		5790952A303C7D9100A53656 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 578E1FF52FD16A4600A2749A /* SnapKit */; };
+		5790952B303C7D9100A53656 /* SQLiteCipher in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759862FD459310093A2B3 /* SQLiteCipher */; };
+		5790952C303C7D9100A53656 /* JXBanner in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23B62FD2B7D400A2749A /* JXBanner */; };
+		5790952D303C7D9100A53656 /* FluentDarkModeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 579E54502FD4237B000F08E7 /* FluentDarkModeKit */; };
+		5790952E303C7D9100A53656 /* IceCream in Frameworks */ = {isa = PBXBuildFile; productRef = 576C8C713032B5D800AEB08F /* IceCream */; };
 		5790952F303C7D9100A53656 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576F0DB52D86796100D2A1BA /* StoreKit.framework */; };
-		57909530303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909531303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909532303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909533303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909534303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909535303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909536303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909537303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909538303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909539303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790953A303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790953B303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790953C303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790953D303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790953E303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790953F303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909540303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909541303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909542303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909543303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909544303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909545303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909546303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909547303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909548303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909549303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790954A303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790954B303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790954C303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790954D303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790954E303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		5790954F303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909550303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909551303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		57909552303C7D9100A53656 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		57909530303C7D9100A53656 /* BlankSlate in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23A42FD2AA0600A2749A /* BlankSlate */; };
+		57909531303C7D9100A53656 /* DeltaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23F42FD31ADD00A2749A /* DeltaCore */; };
+		57909532303C7D9100A53656 /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 578E26DD2FD41E4D00A2749A /* VisualEffectView */; };
+		57909533303C7D9100A53656 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 578E26E22FD41F8300A2749A /* Device */; };
+		57909534303C7D9100A53656 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDCD032FD5A9CE005BA4C8 /* ColorfulX */; };
+		57909535303C7D9100A53656 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 575A39CB2DCCFA6B00B28FC2 /* SwiftSoup */; };
+		57909536303C7D9100A53656 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 57F632E22D714E46007270E8 /* WebDavKit */; };
+		57909537303C7D9100A53656 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759E02FD487190093A2B3 /* KeyboardKit */; };
+		57909538303C7D9100A53656 /* DominantColors in Frameworks */ = {isa = PBXBuildFile; productRef = 57DF84BE2D637A1A00AA0AAB /* DominantColors */; };
+		57909539303C7D9100A53656 /* PLzmaSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 570A27FF2DCF03CF001249C6 /* PLzmaSDK */; };
+		5790953A303C7D9100A53656 /* CloudServiceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23022FD27DA800A2749A /* CloudServiceKit */; };
+		5790953B303C7D9100A53656 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDCFBC2FD5D154005BA4C8 /* KeychainAccess */; };
+		5790953C303C7D9100A53656 /* Fireworks in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24562FD3F9D700A2749A /* Fireworks */; };
+		5790953D303C7D9100A53656 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23D02FD2BD0800A2749A /* ZipArchive */; };
+		5790953E303C7D9100A53656 /* SmartCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 57DA89122D82B0C20074052A /* SmartCodable */; };
+		5790953F303C7D9100A53656 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 5713306D2D91AFE00043C28A /* XCGLogger */; };
+		57909540303C7D9100A53656 /* SDL in Frameworks */ = {isa = PBXBuildFile; productRef = 571BB9392DA44D6B00830134 /* SDL */; };
+		57909541303C7D9100A53656 /* UniversalDetector in Frameworks */ = {isa = PBXBuildFile; productRef = 57C7596E2FD455AA0093A2B3 /* UniversalDetector */; };
+		57909542303C7D9100A53656 /* Closures in Frameworks */ = {isa = PBXBuildFile; productRef = 578E231F2FD288C600A2749A /* Closures */; };
+		57909543303C7D9100A53656 /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 578E26D82FD41E1200A2749A /* SideMenu */; };
+		57909544303C7D9100A53656 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5726FF452D741F5C00041AD5 /* ColorfulX */; };
+		57909545303C7D9100A53656 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 576060282D24E8BD00A98B0C /* RswiftLibrary */; };
+		57909546303C7D9100A53656 /* SwiftCloudDrive in Frameworks */ = {isa = PBXBuildFile; productRef = 57F0D84A2DE2E7A600760F57 /* SwiftCloudDrive */; };
+		57909547303C7D9100A53656 /* BetterSegmentedControl in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759142FD42CB70093A2B3 /* BetterSegmentedControl */; };
+		57909548303C7D9100A53656 /* ProHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 578E20A92FD1C40700A2749A /* ProHUD */; };
+		57909549303C7D9100A53656 /* DeltaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 578E23DF2FD30F1100A2749A /* DeltaCore */; };
+		5790954A303C7D9100A53656 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 57C7590A2FD42C2E0093A2B3 /* IQKeyboardManagerSwift */; };
+		5790954B303C7D9100A53656 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 57C758FB2FD42AF00093A2B3 /* SFSafeSymbols */; };
+		5790954C303C7D9100A53656 /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 578E26D32FD41D9300A2749A /* NVActivityIndicatorView */; };
+		5790954D303C7D9100A53656 /* MarqueeLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24432FD3EEE300A2749A /* MarqueeLabel */; };
+		5790954E303C7D9100A53656 /* CollectionViewPagingLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 578E20902FD16DA500A2749A /* CollectionViewPagingLayout */; };
+		5790954F303C7D9100A53656 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 57E48D902D8D736B008000A3 /* ConfettiSwiftUI */; };
+		57909550303C7D9100A53656 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24002FD31C0100A2749A /* ZIPFoundation */; };
+		57909551303C7D9100A53656 /* Unrar in Frameworks */ = {isa = PBXBuildFile; productRef = 57F8A0B42FD31C0100A274A4 /* Unrar */; };
+		57909552303C7D9100A53656 /* AttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 576C8D9930335C8100AEB08F /* AttributedString */; };
 		57909556303C7D9100A53656 /* file_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 57E0CCC62D9075110027FB8C /* file_icon.png */; };
 		57909557303C7D9100A53656 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A001FD24555A5F006E0F0E /* LaunchScreen.storyboard */; };
 		57909558303C7D9100A53656 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5DE1F21256BC7F10099425B /* Localizable.strings */; };
@@ -798,6 +797,11 @@
 		57909605303D793A00A53656 /* gpsp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909600303D792500A53656 /* gpsp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57909608303D794200A53656 /* gpsp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909600303D792500A53656 /* gpsp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5790960E303D795200A53656 /* gpsp.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909600303D792500A53656 /* gpsp.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5790968F303EF38F00A53656 /* mesen-s.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909689303EF38000A53656 /* mesen-s.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57909690303EF39B00A53656 /* mesen-s.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909689303EF38000A53656 /* mesen-s.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57909691303EF3A300A53656 /* mesen-s.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57909689303EF38000A53656 /* mesen-s.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		579096B5303F065800A53656 /* HXPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 579096B4303F065800A53656 /* HXPhotoPicker */; };
+		579096BB303F066D00A53656 /* HXPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 579096BA303F066D00A53656 /* HXPhotoPicker */; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
 		57913B422D5ED722004D51AA /* GameInfoCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913B412D5ED722004D51AA /* GameInfoCoverView.swift */; };
 		57913B532D5EF725004D51AA /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913B522D5EF71D004D51AA /* DateExtension.swift */; };
@@ -986,6 +990,9 @@
 		57C79DD52FE3E664003C737F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C79DD22FE3E65D003C737F /* Functions.swift */; };
 		57C79DE12FE3EC49003C737F /* ASSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C79DE02FE3EC43003C737F /* ASSheetView.swift */; };
 		57C79DE22FE3EC49003C737F /* ASSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C79DE02FE3EC43003C737F /* ASSheetView.swift */; };
+		57C81DAE2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C81DAD2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift */; };
+		57C81DAF2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C81DAD2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift */; };
+		57C81DB02FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C81DAD2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift */; };
 		57C8A11A2DF2BA3E00593F82 /* SNES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8A1192DF2BA3500593F82 /* SNES.swift */; };
 		57CC338E2DBC78AE00DF7418 /* FlexSkinSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC338D2DBC789E00DF7418 /* FlexSkinSettingViewController.swift */; };
 		57CC33BA2DBCD90700DF7418 /* AuxiliaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC33B92DBCD90700DF7418 /* AuxiliaryLineView.swift */; };
@@ -1533,7 +1540,6 @@
 		CB40A54BC3524226B63A8972 /* DNSPageView in Frameworks */ = {isa = PBXBuildFile; productRef = 578E20A22FD1B94E00A2749A /* DNSPageView */; };
 		CE17343B61E1466393584BD7 /* Haptica in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759052FD42BD80093A2B3 /* Haptica */; };
 		D247CA47581E4F73B110A2B7 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 578E24002FD31C0100A2749A /* ZIPFoundation */; };
-		D75AFB684C304BE19CF18B4D /* HXPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 578E230E2FD2810B00A2749A /* HXPhotoPicker */; };
 		D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20B6A88FB41ED3142FD4FD9E /* prboom.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D90F84D29ECD49358B4B71A1 /* SQLiteCipher in Frameworks */ = {isa = PBXBuildFile; productRef = 57C759862FD459310093A2B3 /* SQLiteCipher */; };
 		D94752D7D273464B9E4B625C /* PCE.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E402E22DFA4C9D96FFBC89 /* PCE.swift */; };
@@ -1613,6 +1619,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57909691303EF3A300A53656 /* mesen-s.libretro.framework in Embed Frameworks */,
 				5790960E303D795200A53656 /* gpsp.libretro.framework in Embed Frameworks */,
 				5790955E303C7D9100A53656 /* puae.libretro.framework in Embed Frameworks */,
 				5790955F303C7D9100A53656 /* vice.x64sc.libretro.framework in Embed Frameworks */,
@@ -1675,6 +1682,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5790968F303EF38F00A53656 /* mesen-s.libretro.framework in Embed Frameworks */,
 				57909605303D793A00A53656 /* gpsp.libretro.framework in Embed Frameworks */,
 				16D61BE375CD4F61ACCF0FF2 /* puae.libretro.framework in Embed Frameworks */,
 				E5385955E04D43598CAC5694 /* vice.x64sc.libretro.framework in Embed Frameworks */,
@@ -1727,6 +1735,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57909690303EF39B00A53656 /* mesen-s.libretro.framework in Embed Frameworks */,
 				57909608303D794200A53656 /* gpsp.libretro.framework in Embed Frameworks */,
 				E2162239F8584ED6843B9760 /* puae.libretro.framework in Embed Frameworks */,
 				2197E4E9458342E6AF80B1BA /* vice.x64sc.libretro.framework in Embed Frameworks */,
@@ -2068,6 +2077,7 @@
 		579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentHoleView.swift; sourceTree = "<group>"; };
 		5790958B303C7D9100A53656 /* ManicEmuSideload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManicEmuSideload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57909600303D792500A53656 /* gpsp.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gpsp.libretro.framework; sourceTree = "<group>"; };
+		57909689303EF38000A53656 /* mesen-s.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "mesen-s.libretro.framework"; sourceTree = "<group>"; };
 		57913AF42D5D89CC004D51AA /* TouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchController.swift; sourceTree = "<group>"; };
 		57913B412D5ED722004D51AA /* GameInfoCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoCoverView.swift; sourceTree = "<group>"; };
 		57913B522D5EF71D004D51AA /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -6427,6 +6437,7 @@
 		57C75B612FD5741C0093A2B3 /* MetalToyView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalToyView.mm; path = ../Dependencies/Libretro/ui/drivers/MetalToyView.mm; sourceTree = SOURCE_ROOT; };
 		57C79DD22FE3E65D003C737F /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		57C79DE02FE3EC43003C737F /* ASSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSheetView.swift; sourceTree = "<group>"; };
+		57C81DAD2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibretroNetplayAnalogDpad.swift; sourceTree = "<group>"; };
 		57C8A1192DF2BA3500593F82 /* SNES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNES.swift; sourceTree = "<group>"; };
 		57CC338D2DBC789E00DF7418 /* FlexSkinSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexSkinSettingViewController.swift; sourceTree = "<group>"; };
 		57CC33B92DBCD90700DF7418 /* AuxiliaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuxiliaryLineView.swift; sourceTree = "<group>"; };
@@ -6603,63 +6614,63 @@
 			files = (
 				57909518303C7D9100A53656 /* Citra.framework in Frameworks */,
 				57909519303C7D9100A53656 /* Libretro.framework in Frameworks */,
-				5790951A303C7D9100A53656 /* (null) in Frameworks */,
-				5790951B303C7D9100A53656 /* (null) in Frameworks */,
-				5790951C303C7D9100A53656 /* (null) in Frameworks */,
-				5790951D303C7D9100A53656 /* (null) in Frameworks */,
-				5790951E303C7D9100A53656 /* (null) in Frameworks */,
+				5790951A303C7D9100A53656 /* Tiercel in Frameworks */,
+				5790951B303C7D9100A53656 /* GCDWebUploader in Frameworks */,
+				5790951C303C7D9100A53656 /* Kingfisher in Frameworks */,
+				5790951D303C7D9100A53656 /* HXPhotoPicker in Frameworks */,
+				5790951E303C7D9100A53656 /* Fuse in Frameworks */,
+				57909520303C7D9100A53656 /* Permission in Frameworks */,
 				5790951F303C7D9100A53656 /* CoreBluetooth.framework in Frameworks */,
-				57909520303C7D9100A53656 /* (null) in Frameworks */,
-				57909521303C7D9100A53656 /* (null) in Frameworks */,
-				57909522303C7D9100A53656 /* (null) in Frameworks */,
-				57909523303C7D9100A53656 /* (null) in Frameworks */,
-				57909524303C7D9100A53656 /* (null) in Frameworks */,
-				57909525303C7D9100A53656 /* (null) in Frameworks */,
-				57909526303C7D9100A53656 /* (null) in Frameworks */,
-				57909527303C7D9100A53656 /* (null) in Frameworks */,
-				57909528303C7D9100A53656 /* (null) in Frameworks */,
-				57909529303C7D9100A53656 /* (null) in Frameworks */,
-				5790952A303C7D9100A53656 /* (null) in Frameworks */,
-				5790952B303C7D9100A53656 /* (null) in Frameworks */,
-				5790952C303C7D9100A53656 /* (null) in Frameworks */,
-				5790952D303C7D9100A53656 /* (null) in Frameworks */,
-				5790952E303C7D9100A53656 /* (null) in Frameworks */,
+				57909521303C7D9100A53656 /* BlurUIKit in Frameworks */,
+				57909522303C7D9100A53656 /* DNSPageView in Frameworks */,
+				57909523303C7D9100A53656 /* SMBClient in Frameworks */,
+				57909524303C7D9100A53656 /* CollectionViewPagingLayout in Frameworks */,
+				57909525303C7D9100A53656 /* ChromaColorPicker in Frameworks */,
+				57909526303C7D9100A53656 /* Schedule in Frameworks */,
+				57909527303C7D9100A53656 /* Haptica in Frameworks */,
+				57909528303C7D9100A53656 /* ObjcExceptionBridging in Frameworks */,
+				57909529303C7D9100A53656 /* SwifterSwift in Frameworks */,
+				5790952A303C7D9100A53656 /* SnapKit in Frameworks */,
+				5790952B303C7D9100A53656 /* SQLiteCipher in Frameworks */,
+				5790952C303C7D9100A53656 /* JXBanner in Frameworks */,
+				5790952D303C7D9100A53656 /* FluentDarkModeKit in Frameworks */,
+				5790952E303C7D9100A53656 /* IceCream in Frameworks */,
 				5790952F303C7D9100A53656 /* StoreKit.framework in Frameworks */,
-				57909530303C7D9100A53656 /* (null) in Frameworks */,
-				57909531303C7D9100A53656 /* (null) in Frameworks */,
-				57909532303C7D9100A53656 /* (null) in Frameworks */,
-				57909533303C7D9100A53656 /* (null) in Frameworks */,
-				57909534303C7D9100A53656 /* (null) in Frameworks */,
-				57909535303C7D9100A53656 /* (null) in Frameworks */,
-				57909536303C7D9100A53656 /* (null) in Frameworks */,
-				57909537303C7D9100A53656 /* (null) in Frameworks */,
-				57909538303C7D9100A53656 /* (null) in Frameworks */,
-				57909539303C7D9100A53656 /* (null) in Frameworks */,
-				5790953A303C7D9100A53656 /* (null) in Frameworks */,
-				5790953B303C7D9100A53656 /* (null) in Frameworks */,
-				5790953C303C7D9100A53656 /* (null) in Frameworks */,
-				5790953D303C7D9100A53656 /* (null) in Frameworks */,
-				5790953E303C7D9100A53656 /* (null) in Frameworks */,
-				5790953F303C7D9100A53656 /* (null) in Frameworks */,
-				57909540303C7D9100A53656 /* (null) in Frameworks */,
-				57909541303C7D9100A53656 /* (null) in Frameworks */,
-				57909542303C7D9100A53656 /* (null) in Frameworks */,
-				57909543303C7D9100A53656 /* (null) in Frameworks */,
-				57909544303C7D9100A53656 /* (null) in Frameworks */,
-				57909545303C7D9100A53656 /* (null) in Frameworks */,
-				57909546303C7D9100A53656 /* (null) in Frameworks */,
-				57909547303C7D9100A53656 /* (null) in Frameworks */,
-				57909548303C7D9100A53656 /* (null) in Frameworks */,
-				57909549303C7D9100A53656 /* (null) in Frameworks */,
-				5790954A303C7D9100A53656 /* (null) in Frameworks */,
-				5790954B303C7D9100A53656 /* (null) in Frameworks */,
-				5790954C303C7D9100A53656 /* (null) in Frameworks */,
-				5790954D303C7D9100A53656 /* (null) in Frameworks */,
-				5790954E303C7D9100A53656 /* (null) in Frameworks */,
-				5790954F303C7D9100A53656 /* (null) in Frameworks */,
-				57909550303C7D9100A53656 /* (null) in Frameworks */,
-				57909551303C7D9100A53656 /* (null) in Frameworks */,
-				57909552303C7D9100A53656 /* (null) in Frameworks */,
+				57909530303C7D9100A53656 /* BlankSlate in Frameworks */,
+				57909531303C7D9100A53656 /* DeltaCore in Frameworks */,
+				57909532303C7D9100A53656 /* VisualEffectView in Frameworks */,
+				57909533303C7D9100A53656 /* Device in Frameworks */,
+				57909534303C7D9100A53656 /* ColorfulX in Frameworks */,
+				57909535303C7D9100A53656 /* SwiftSoup in Frameworks */,
+				57909536303C7D9100A53656 /* WebDavKit in Frameworks */,
+				57909537303C7D9100A53656 /* KeyboardKit in Frameworks */,
+				57909538303C7D9100A53656 /* DominantColors in Frameworks */,
+				57909539303C7D9100A53656 /* PLzmaSDK in Frameworks */,
+				5790953A303C7D9100A53656 /* CloudServiceKit in Frameworks */,
+				5790953B303C7D9100A53656 /* KeychainAccess in Frameworks */,
+				5790953C303C7D9100A53656 /* Fireworks in Frameworks */,
+				5790953D303C7D9100A53656 /* ZipArchive in Frameworks */,
+				5790953E303C7D9100A53656 /* SmartCodable in Frameworks */,
+				5790953F303C7D9100A53656 /* XCGLogger in Frameworks */,
+				57909540303C7D9100A53656 /* SDL in Frameworks */,
+				57909541303C7D9100A53656 /* UniversalDetector in Frameworks */,
+				57909542303C7D9100A53656 /* Closures in Frameworks */,
+				57909543303C7D9100A53656 /* SideMenu in Frameworks */,
+				57909544303C7D9100A53656 /* ColorfulX in Frameworks */,
+				57909545303C7D9100A53656 /* RswiftLibrary in Frameworks */,
+				57909546303C7D9100A53656 /* SwiftCloudDrive in Frameworks */,
+				57909547303C7D9100A53656 /* BetterSegmentedControl in Frameworks */,
+				57909548303C7D9100A53656 /* ProHUD in Frameworks */,
+				57909549303C7D9100A53656 /* DeltaCore in Frameworks */,
+				5790954A303C7D9100A53656 /* IQKeyboardManagerSwift in Frameworks */,
+				5790954B303C7D9100A53656 /* SFSafeSymbols in Frameworks */,
+				5790954C303C7D9100A53656 /* NVActivityIndicatorView in Frameworks */,
+				5790954D303C7D9100A53656 /* MarqueeLabel in Frameworks */,
+				5790954E303C7D9100A53656 /* CollectionViewPagingLayout in Frameworks */,
+				5790954F303C7D9100A53656 /* ConfettiSwiftUI in Frameworks */,
+				57909550303C7D9100A53656 /* ZIPFoundation in Frameworks */,
+				57909551303C7D9100A53656 /* Unrar in Frameworks */,
+				57909552303C7D9100A53656 /* AttributedString in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6705,10 +6716,10 @@
 				EAE31C39F6FF42DE8F5BA497 /* Schedule in Frameworks */,
 				CE17343B61E1466393584BD7 /* Haptica in Frameworks */,
 				5F5353532F884986BF3BA407 /* ObjcExceptionBridging in Frameworks */,
-				D75AFB684C304BE19CF18B4D /* HXPhotoPicker in Frameworks */,
 				579453AF2FE4262700D32DD6 /* ProHUD in Frameworks */,
 				71ABA13BC5694ED39346ED6C /* SwifterSwift in Frameworks */,
 				000FF60D4C0C45458B42CDD8 /* SnapKit in Frameworks */,
+				579096B5303F065800A53656 /* HXPhotoPicker in Frameworks */,
 				D90F84D29ECD49358B4B71A1 /* SQLiteCipher in Frameworks */,
 				AE5A3FEEB61B4A0B9DB6C05A /* JXBanner in Frameworks */,
 				C77E86321B3D4F4C8DF998E2 /* FluentDarkModeKit in Frameworks */,
@@ -6763,6 +6774,7 @@
 				57C759102FD42C710093A2B3 /* Tiercel in Frameworks */,
 				578E23872FD2981800A2749A /* GCDWebUploader in Frameworks */,
 				57C759242FD42D960093A2B3 /* Kingfisher in Frameworks */,
+				579096BB303F066D00A53656 /* HXPhotoPicker in Frameworks */,
 				57C7591F2FD42D480093A2B3 /* Fuse in Frameworks */,
 				578E26C92FD41B6300A2749A /* Permission in Frameworks */,
 				571748392DA26F1E007CCE25 /* CoreBluetooth.framework in Frameworks */,
@@ -6774,7 +6786,6 @@
 				57C7591A2FD42D030093A2B3 /* Schedule in Frameworks */,
 				57C759062FD42BD80093A2B3 /* Haptica in Frameworks */,
 				5713306C2D91AFE00043C28A /* ObjcExceptionBridging in Frameworks */,
-				578E230F2FD2810B00A2749A /* HXPhotoPicker in Frameworks */,
 				578E246B2FD4017E00A2749A /* SwifterSwift in Frameworks */,
 				578E1FF62FD16A4600A2749A /* SnapKit in Frameworks */,
 				57C759872FD459310093A2B3 /* SQLiteCipher in Frameworks */,
@@ -12463,6 +12474,7 @@
 		57C75AD42FD572260093A2B3 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				57909689303EF38000A53656 /* mesen-s.libretro.framework */,
 				03741E2E8CB24E5790E97476 /* puae.libretro.framework */,
 				6A6021052A14459DA6F729AB /* vice.x64sc.libretro.framework */,
 				4C56A0D131A148448EA9816B /* mednafen.ngp.libretro.framework */,
@@ -12675,6 +12687,7 @@
 				57BFBE8F2DD435C700AABF98 /* PSP.swift */,
 				571BB8062DA4357900830134 /* ThreeDS.swift */,
 				578E24202FD33FFC00A2749A /* EmulatorBridgingBase.swift */,
+				57C81DAD2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift */,
 			);
 			path = Cores;
 			sourceTree = "<group>";
@@ -13297,7 +13310,6 @@
 				57B592552FD07B05003C4235 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				578E22992FD1D57B00A2749A /* XCRemoteSwiftPackageReference "SMBClient" */,
 				578E23012FD27DA800A2749A /* XCRemoteSwiftPackageReference "CloudServiceKit" */,
-				578E230D2FD2810B00A2749A /* XCRemoteSwiftPackageReference "HXPhotoPicker" */,
 				578E231E2FD288C500A2749A /* XCRemoteSwiftPackageReference "Closures" */,
 				578E23852FD2981800A2749A /* XCRemoteSwiftPackageReference "GCDWebServer" */,
 				578E23A32FD2AA0600A2749A /* XCRemoteSwiftPackageReference "BlankSlate" */,
@@ -13335,6 +13347,7 @@
 				57ABFACF2FE9849C001C1425 /* XCLocalSwiftPackageReference "../Dependencies/DNSPageView" */,
 				57F1D5162FFF962400FC5B2A /* XCLocalSwiftPackageReference "../Dependencies/DeltaCore" */,
 				576C8C5A3032B57A00AEB08F /* XCLocalSwiftPackageReference "../Dependencies/IceCream" */,
+				579096CF303F0B4C00A53656 /* XCRemoteSwiftPackageReference "HXPhotoPicker" */,
 			);
 			productRefGroup = A5A001F024555A5F006E0F0E /* Products */;
 			projectDirPath = "";
@@ -13608,6 +13621,7 @@
 				5790941D303C7D9100A53656 /* FlexBackground.swift in Sources */,
 				5790941E303C7D9100A53656 /* SectionIndexView.swift in Sources */,
 				5790941F303C7D9100A53656 /* EmulatorBridgingBase.swift in Sources */,
+				57C81DAF2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift in Sources */,
 				57909420303C7D9100A53656 /* GameSavePurchaseGuideView.swift in Sources */,
 				57909421303C7D9100A53656 /* J2MENetworkBridge.swift in Sources */,
 				57909422303C7D9100A53656 /* TriggerProPreviewController.swift in Sources */,
@@ -14054,6 +14068,7 @@
 				57CDCDFF2FD5CBD3005BA4C8 /* FlexBackground.swift in Sources */,
 				57CDCE002FD5CBD3005BA4C8 /* SectionIndexView.swift in Sources */,
 				57CDCE052FD5CBD3005BA4C8 /* EmulatorBridgingBase.swift in Sources */,
+				57C81DB02FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift in Sources */,
 				57CDCE062FD5CBD3005BA4C8 /* GameSavePurchaseGuideView.swift in Sources */,
 				57CDCE072FD5CBD3005BA4C8 /* J2MENetworkBridge.swift in Sources */,
 				57CDCE082FD5CBD3005BA4C8 /* TriggerProPreviewController.swift in Sources */,
@@ -14463,6 +14478,7 @@
 				573CEE3D2F21431300EA24F1 /* FlexBackground.swift in Sources */,
 				574789BC2D4F8769006F0D99 /* SectionIndexView.swift in Sources */,
 				578E24232FD3400700A2749A /* EmulatorBridgingBase.swift in Sources */,
+				57C81DAE2FD6082600A8D0A1 /* LibretroNetplayAnalogDpad.swift in Sources */,
 				576F0E052D88006300D2A1BA /* GameSavePurchaseGuideView.swift in Sources */,
 				572C5CB42F6E983600776F8C /* J2MENetworkBridge.swift in Sources */,
 				57D7CF592EA78B2B00F41540 /* TriggerProPreviewController.swift in Sources */,
@@ -15855,6 +15871,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Dependencies/IceCream;
 		};
+		579096A9303F062500A53656 /* XCLocalSwiftPackageReference "../Dependencies/HXPhotoPicker" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Dependencies/HXPhotoPicker;
+		};
 		579453AD2FE4262700D32DD6 /* XCLocalSwiftPackageReference "../Dependencies/ProHUD" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Dependencies/ProHUD;
@@ -15986,14 +16006,6 @@
 				kind = branch;
 			};
 		};
-		578E230D2FD2810B00A2749A /* XCRemoteSwiftPackageReference "HXPhotoPicker" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilenceLove/HXPhotoPicker.git";
-			requirement = {
-				kind = exactVersion;
-				version = 5.0.5;
-			};
-		};
 		578E231E2FD288C500A2749A /* XCRemoteSwiftPackageReference "Closures" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Daiuno/Closures.git";
@@ -16117,6 +16129,14 @@
 		578E26E12FD41F8200A2749A /* XCRemoteSwiftPackageReference "Device" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Ekhoo/Device.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		579096CF303F0B4C00A53656 /* XCRemoteSwiftPackageReference "HXPhotoPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Daiuno/HXPhotoPicker.git";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -16411,11 +16431,6 @@
 			package = 578E23012FD27DA800A2749A /* XCRemoteSwiftPackageReference "CloudServiceKit" */;
 			productName = CloudServiceKit;
 		};
-		578E230E2FD2810B00A2749A /* HXPhotoPicker */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 578E230D2FD2810B00A2749A /* XCRemoteSwiftPackageReference "HXPhotoPicker" */;
-			productName = HXPhotoPicker;
-		};
 		578E231F2FD288C600A2749A /* Closures */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 578E231E2FD288C500A2749A /* XCRemoteSwiftPackageReference "Closures" */;
@@ -16493,6 +16508,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 578E26E12FD41F8200A2749A /* XCRemoteSwiftPackageReference "Device" */;
 			productName = Device;
+		};
+		579096B4303F065800A53656 /* HXPhotoPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 579096A9303F062500A53656 /* XCLocalSwiftPackageReference "../Dependencies/HXPhotoPicker" */;
+			productName = HXPhotoPicker;
+		};
+		579096BA303F066D00A53656 /* HXPhotoPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 579096A9303F062500A53656 /* XCLocalSwiftPackageReference "../Dependencies/HXPhotoPicker" */;
+			productName = HXPhotoPicker;
 		};
 		579453AE2FE4262700D32DD6 /* ProHUD */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -96,8 +96,6 @@ struct MCD: DeltaCoreProtocol {
 class MCDEmulatorBridge : EmulatorBridgeBase {
     static let shared = MCDEmulatorBridge()
 
-    private var thumbstickPosition: CGPoint = .zero
-
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if let gameInput = MCDGameInput(rawValue: input) {

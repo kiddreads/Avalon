@@ -744,7 +744,7 @@ class PlayViewController: GameViewController {
             } else if manicGame.gameType == .pce {
                 make.top.equalTo(gameView.snp.bottom).offset(R.Size.ContentSpaceMedium)
             } else if manicGame.gameType == .ds, UIDevice.isPad {
-                make.top.equalTo(gameView.snp.bottom).offset(R.Size.ContentSpaceHuge)
+                make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 25 : 18)
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
@@ -2490,13 +2490,12 @@ extension PlayViewController {
                     guard shortcuts.count > 0 else { return }
                     let functionButtonCount = shortcuts.count
                     for (index, shortcut) in shortcuts.enumerated() {
-                        var iconColor = R.Color.LabelTertiary
-                        if manicGame.gameType.usesDOSSkinLayout {
-                            iconColor = R.Color.LabelTertiary.forceStyle(.dark)
-                        } else if manicGame.isDolphinCore {
-                            iconColor = UIColor.black.withAlphaComponent(0.25)
-                        } else if manicGame.gameType == .pce {
-                            iconColor = UIColor(hexString: "#8F8F92")!
+                        var iconColor = UIColor.white.withAlphaComponent(0.25)
+                        if (manicGame.gameType == .ds && UIDevice.isPad) ||
+                            manicGame.gameType == .wii ||
+                            (manicGame.gameType == .pce && !UIDevice.isLandscape) ||
+                            manicGame.gameType.usesDOSSkinLayout {
+                            iconColor = .black.withAlphaComponent(0.25)
                         }
                         let buttonContainerView = UIView()
                         let button = ASButtonView(.iconOnlyWithSmallSize(icon: shortcut.icon.updateColorsIfNeed(colors: [iconColor], forceUpdate: true),

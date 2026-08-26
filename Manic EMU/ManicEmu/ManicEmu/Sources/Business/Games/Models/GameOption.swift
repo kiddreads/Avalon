@@ -1067,15 +1067,15 @@ enum GameOption: Int, CaseIterable {
         }
         
         if game.isDOSHomeMenuGame {
-            allOptions.subtract([.stateList, .importSave, .shareSave, .changeCategory, .shareRom])
+            allOptions.subtract([.stateList, .shareRom])
+        }
+        
+        if !game.supportSave {
+            allOptions.subtract([.importSave, .shareSave])
         }
         
         if !game.supportChangeCategory {
             allOptions.remove(.changeCategory)
-        }
-        
-        if game.gameType == .dc {
-            allOptions.remove(.importSave)
         }
         
         if !game.supportRetroAchievements {
@@ -1139,6 +1139,10 @@ enum GameOption: Int, CaseIterable {
         }
         
         if game.gameType != .snes {
+            allOptions.remove(.snesVRAM)
+        }
+        
+        if game.gameType == .snes, game.defaultCore == 2 {
             allOptions.remove(.snesVRAM)
         }
         

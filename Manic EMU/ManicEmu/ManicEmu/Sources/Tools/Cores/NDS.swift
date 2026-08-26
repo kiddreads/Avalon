@@ -33,7 +33,7 @@ extension GameType
     case down
     case left
     case right
-    ///Thumbstick移动光标
+    /// Right analog moves the touch cursor.
     case rightThumbstickUp
     case rightThumbstickDown
     case rightThumbstickLeft

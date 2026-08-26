@@ -213,7 +213,7 @@ extension GameOption {
         
         var shortTitle: String {
             switch self {
-            case .None: ""
+            case .None: R.string.localizable.off()
             case .DMG: "DMG"
             case .Light: "Light"
             case .Pocket: "Pocket"
@@ -235,7 +235,7 @@ extension GameOption {
         var optionForGambatte: String {
             switch self {
             case .None:
-                ""
+                R.string.localizable.off()
             case .DMG:
                 "GB - DMG"
             case .Light:

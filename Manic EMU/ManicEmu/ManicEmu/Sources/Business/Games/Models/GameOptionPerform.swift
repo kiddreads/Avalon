@@ -56,19 +56,15 @@ extension GameOption {
             ShareManager.shareFiles(games: games, shareFileType: .rom)
             
         case .importSave:
-            if firstGame.isDolphinCore {
-                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
-                                 detail: R.string.localizable.dolphinSaveTips(),
-                                 cancelTitle: R.string.localizable.gotIt())
+            if showSaveTipsIfNeed(games: games) {
                 return
             }
-            if firstGame.gameType == .symbian {
-                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
-                                 detail: R.string.localizable.symbianSaveTips(),
-                                 cancelTitle: R.string.localizable.gotIt())
-                return
+            var types = UTType.gamesaveTypes
+            if firstGame.gameType == .dos,
+                let zip = UTType(filenameExtension: "zip") {
+                types += [zip]
             }
-            FilesImporter.shared.presentImportController(supportedTypes: UTType.gamesaveTypes, allowsMultipleSelection: false) { urls in
+            FilesImporter.shared.presentImportController(supportedTypes: types, allowsMultipleSelection: false) { urls in
                 if var url = urls.first {
                     if firstGame.gameType == ._3ds || firstGame.gameType == .psp {
                         FilesImporter.importFiles(urls: [url])
@@ -100,16 +96,7 @@ extension GameOption {
             }
             
         case .shareSave:
-            if games.contains(where: { $0.isDolphinCore }) {
-                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
-                                 detail: R.string.localizable.dolphinSaveTips(),
-                                 cancelTitle: R.string.localizable.gotIt())
-                return
-            }
-            if games.contains(where: { $0.gameType == .symbian }) {
-                UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
-                                 detail: R.string.localizable.symbianSaveTips(),
-                                 cancelTitle: R.string.localizable.gotIt())
+            if showSaveTipsIfNeed(games: games) {
                 return
             }
             ShareManager.shareFiles(games: games, shareFileType: .save)
@@ -1300,6 +1287,7 @@ extension GameOption {
                               detail: detail,
                               options: options,
                               selectedIndex: selectedIndex,
+                              optionType: firstGame.gameType == .fds ? .chevron : .radio,
                               groupTogether: true,
                               completion: { index in
             if let index {
@@ -1633,6 +1621,27 @@ extension GameOption {
     private func hideSheetInGaming() {
         if PlayViewController.isGaming {
             UIView.hideAllAlert()
+        }
+    }
+    
+    private func showSaveTipsIfNeed(games: [Game]) -> Bool {
+        var tips: String? = nil
+        if games.contains(where: { $0.isDolphinCore }) {
+            tips = R.string.localizable.dolphinSaveTips()
+        } else if games.contains(where: { $0.gameType == .symbian }) {
+            tips = R.string.localizable.symbianSaveTips()
+        } else if games.contains(where: { $0.gameType == .dc }) {
+            tips = R.string.localizable.dcSaveTips()
+        } else if games.contains(where: { $0.gameType == .doom }) {
+            tips = R.string.localizable.doomSaveTips()
+        }
+        if let tips {
+            UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
+                             detail: tips,
+                             cancelTitle: R.string.localizable.gotIt())
+            return true
+        } else {
+            return false
         }
     }
 }

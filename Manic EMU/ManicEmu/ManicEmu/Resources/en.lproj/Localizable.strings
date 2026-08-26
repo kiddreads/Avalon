@@ -1055,5 +1055,7 @@ Press the controller button to complete mapping...";
 "AchievementsNoSubset" = "This game has no extra achievement sets. You can enable subsets for this game on retroachievements.org.\n\nGames with Multiset enabled show a \"Subset Configuration\" button next to the set selector. Use it to enable or disable any set for the game.";
 "AchievementsMultiSetsGuide" = "This only switches which achievement list is shown. Changing the selected set does not affect earning achievements from any set while you play.";
 "GoToSettings" = "Go to Settings";
-
 "SymbianSaveTips" = "Symbian apps don't share a common save format. Please use the Files app to open: Manic EMU - EKA2L1 to manage your save files on your own.";
+
+"DCSaveTips" = "Dreamcast stores game progress on VMU memory cards. Please use the Files app to open: Manic EMU - Flycast - dc to manage your save files on your own.";
+"DoomSaveTips" = "Please use the Files app to open: Manic EMU - PrBoom - doom to manage your save files on your own.";

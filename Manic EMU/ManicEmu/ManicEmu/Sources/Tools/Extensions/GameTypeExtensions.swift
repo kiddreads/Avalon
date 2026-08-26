@@ -535,7 +535,7 @@ extension GameType {
             return [EmulationCore.Gearsystem.name, EmulationCore.PicoDrive.name]
 #endif
         } else if self == .gb || self == .gbc {
-            return [EmulationCore.Gambatte.name, EmulationCore.mGBA.name, EmulationCore.VBAM.name]
+            return [EmulationCore.Gambatte.name, EmulationCore.mGBA.name, EmulationCore.VBAM.name, EmulationCore.MesenS.name]
         } else if self == .arcade {
 #if SIDE_LOAD
             return [EmulationCore.MAME.name, EmulationCore.FinalBurnNeo.name]
@@ -560,7 +560,9 @@ extension GameType {
             return [EmulationCore.BeetlePSXHW.name, EmulationCore.PCSXReArmed.name]
         } else if self == .snes {
 #if SIDE_LOAD
-            return [EmulationCore.bsnes.name, EmulationCore.Snes9x.name]
+            return [EmulationCore.bsnes.name, EmulationCore.Snes9x.name, EmulationCore.MesenS.name]
+#else
+            return [EmulationCore.bsnes.name, "", EmulationCore.MesenS.name]
 #endif
         }
         return []

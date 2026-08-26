@@ -110,15 +110,16 @@ class DOSEmulatorBridge : EmulatorBridgeBase {
 
     private var leftThumbstickPosition: CGPoint = .zero
     private var rightThumbstickPosition: CGPoint = .zero
+    private let analogDpad = LibretroNetplayAnalogDpad()
 
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
         if input == DOSGameInput.leftThumbstickUp || input == DOSGameInput.leftThumbstickDown {
             leftThumbstickPosition.y = input == DOSGameInput.leftThumbstickUp ? value : -value
-            LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            analogDpad.moveStick(isLeft: true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: playerIndex)
         } else if input == DOSGameInput.leftThumbstickLeft || input == DOSGameInput.leftThumbstickRight {
             leftThumbstickPosition.x = input == DOSGameInput.leftThumbstickRight ? value : -value
-            LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            analogDpad.moveStick(isLeft: true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: playerIndex)
         } else if input == DOSGameInput.rightThumbstickUp || input == DOSGameInput.rightThumbstickDown {
             rightThumbstickPosition.y = input == DOSGameInput.rightThumbstickUp ? value : -value
             LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -127,6 +128,9 @@ class DOSEmulatorBridge : EmulatorBridgeBase {
             LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else if let gameInput = DOSGameInput(rawValue: input),
                   let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+            if analogDpad.handleDpad(libretroButton, pressed: true, playerIndex: playerIndex) {
+                return
+            }
 #if DEBUG
             Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
 #endif
@@ -157,10 +161,10 @@ class DOSEmulatorBridge : EmulatorBridgeBase {
     override func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == DOSGameInput.leftThumbstickUp || input == DOSGameInput.leftThumbstickDown {
             leftThumbstickPosition.y = 0
-            LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            analogDpad.moveStick(isLeft: true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: playerIndex)
         } else if input == DOSGameInput.leftThumbstickLeft || input == DOSGameInput.leftThumbstickRight {
             leftThumbstickPosition.x = 0
-            LibretroCore.sharedInstance().moveStick(true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            analogDpad.moveStick(isLeft: true, x: leftThumbstickPosition.x, y: leftThumbstickPosition.y, playerIndex: playerIndex)
         } else if input == DOSGameInput.rightThumbstickUp || input == DOSGameInput.rightThumbstickDown {
             rightThumbstickPosition.y = 0
             LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
@@ -169,6 +173,9 @@ class DOSEmulatorBridge : EmulatorBridgeBase {
             LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else if let gameInput = DOSGameInput(rawValue: input),
                   let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+            if analogDpad.handleDpad(libretroButton, pressed: false, playerIndex: playerIndex) {
+                return
+            }
             LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
         }
     }
