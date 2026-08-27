@@ -149,7 +149,7 @@ class TriggerItem: Object {
     ///按钮透明度 0-1
     @Persisted var buttonOpacity: Double = 1
     ///按钮圆角 百分比 0是矩形 100是圆形
-    @Persisted var buttonCornerRadiusRatio: Double = 26.7
+    @Persisted var buttonCornerRadiusRatio: Double = 100.0
     var buttonCornerRadius: CGFloat {
         if style == .custom {
             return (buttonCornerRadiusRatio/100)*(buttonHeight/2)

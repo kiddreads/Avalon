@@ -162,4 +162,10 @@ extension RetroAchievementsLaunchView: ShowableView {
         sheetData.fullScreenForLandscape = true
         return sheetData
     }
+    
+    func didHide() {
+        if case .jumpList(_, let didClose) = loginedAction {
+            didClose?()
+        }
+    }
 }

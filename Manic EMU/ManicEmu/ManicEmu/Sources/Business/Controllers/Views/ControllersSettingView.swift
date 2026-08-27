@@ -255,4 +255,8 @@ extension ControllersSettingView: ShowableView {
         let asSideMenu = false
         Self.show(parameters: asSideMenu, games)?.hideCompletion = hideCompletion
     }
+    
+    func didHide() {
+        hideCompletion?()
+    }
 }

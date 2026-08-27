@@ -231,7 +231,7 @@ extension FilesImporter {
                         switch error {
                         case .saveNoMatchGames(let url), .saveMatchToMuch(let url, _):
                             UIView.makeAlert(title: R.string.localizable.importErrorTitle(),
-                                             detail: R.string.localizable.importGameSaveFailedNoGameError(url.lastPathComponent), hideAction: {
+                                             detail: R.string.localizable.importGameSaveFailedNoGameError(url.lastPathComponent), hideAction: { _ in
                                 actionCompletion()
                             })
                         default:
@@ -380,7 +380,7 @@ extension FilesImporter {
                                              confirmTitle: R.string.localizable.goToInstallFirmware(),
                                              confirmAction: {
                                 SymbianFirmwareView.show()
-                            }, hideAction: {
+                            }, hideAction: { _ in
                                 handleImportSuccess()
                                 importCompletion?()
                             })
@@ -393,7 +393,7 @@ extension FilesImporter {
                         UIView.makeAlert(title: R.string.localizable.importErrorTitle(),
                                          detail: String.errorMessage(from: errors),
                                          cancelTitle: R.string.localizable.confirmTitle(),
-                                         hideAction: {
+                                         hideAction: { _ in
                             finishImport()
                         })
                     } else {
@@ -1122,7 +1122,7 @@ extension FilesImporter {
                         } else {
                             UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
                         }
-                    }, hideAction: {
+                    }, hideAction: { _ in
                         completion?()
                     })
                 }
@@ -1184,7 +1184,7 @@ extension FilesImporter {
                         } else {
                             UIView.makeToast(message: R.string.localizable.threeDSImportSaveFailed(url.lastPathComponent))
                         }
-                    }, hideAction: {
+                    }, hideAction: { _ in
                         completion?()
                     })
                 }

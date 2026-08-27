@@ -43,8 +43,15 @@ class AddTriggerMappingListView: BaseView {
     }()
     
     private lazy var addMappingButton: UIView = {
-        let view = GradientView()
-        view.setupGradient(colors: [
+        let view = RoundAndBorderView(roundCorner: [.topRight, .bottomRight], radius: R.Size.CornerRadiusMedium, borderColor: .clear)
+        let gradientView = GradientView()
+        
+        view.addSubview(gradientView)
+        gradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        gradientView.setupGradient(colors: [
             R.Color.BackgroundSecondary.withAlphaComponent(0),
             R.Color.BackgroundSecondary,
             R.Color.BackgroundSecondary],
@@ -60,12 +67,12 @@ class AddTriggerMappingListView: BaseView {
                 self.updateViews()
             })
         }
-        view.addSubview(button)
+        gradientView.addSubview(button)
         button.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
         
-        view.isHidden = triggerItem.mappings.count == 0
+        gradientView.isHidden = triggerItem.mappings.count == 0
         return view
     }()
     
@@ -307,7 +314,8 @@ class TriggerProMappingListView: BaseView {
         collectionView.snp.makeConstraints { make in
             switch style {
             case .display:
-                make.edges.equalToSuperview()
+                make.leading.top.bottom.equalToSuperview()
+                make.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
             case .selection:
                 make.top.equalTo(navigationView.snp.bottom).offset(R.Size.ContentSpaceSmall)
                 make.leading.bottom.trailing.equalToSuperview()

@@ -134,6 +134,13 @@ extension GameOption {
                                     let romParentPath = game.romUrl.path.deletingLastPathComponent
                                     try FileManager.safeRemoveItem(at: URL(fileURLWithPath: romParentPath))
                                     SyncManager.deletePath(localPath: romParentPath)
+                                } else if game.gameType == .ps1, game.fileExtension.lowercased() == "bin" {
+                                    let binUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent(game.fileName))
+                                    let cueUrl = binUrl.deletingPathExtension().appendingPathExtension("cue")
+                                    try FileManager.safeRemoveItem(at: binUrl)
+                                    try FileManager.safeRemoveItem(at: cueUrl)
+                                    SyncManager.delete(localFilePath: binUrl.path)
+                                    SyncManager.delete(localFilePath: cueUrl.path)
                                 } else {
                                     try FileManager.safeRemoveItem(at: game.romUrl)
                                     SyncManager.delete(localFilePath: game.romUrl.path)
@@ -307,9 +314,6 @@ extension GameOption {
                 UIView.makeAlert(title: R.string.localizable.gameplayManualsNoExists(),
                                  detail: R.string.localizable.gameplayManualsDesc(),
                                  confirmTitle: R.string.localizable.gameListBackgroundUpload(),
-                                 cancelAction: {
-                    resumeEmulationIfNeed()
-                },
                                  confirmAction: {
                     FilesImporter.shared.presentImportController(supportedTypes: [UTType.pdf],
                                                                  allowsMultipleSelection: false,
@@ -329,6 +333,10 @@ extension GameOption {
                             resumeEmulationIfNeed()
                         }
                     })
+                }, hideAction: { type in
+                    if type != .confirm {
+                        resumeEmulationIfNeed()
+                    }
                 })
             }
             
@@ -683,7 +691,7 @@ extension GameOption {
                                  confirmAutoHide: false,
                                  confirmAction: {
                     topViewController()?.present(PurchaseViewController(), animated: true)
-                }, hideAction: {
+                }, hideAction: { _ in
                     resumeEmulationIfNeed()
                 })
                 return
@@ -823,12 +831,14 @@ extension GameOption {
                 sections.append(.init(cells: [.iconTitleChevronCell(icon: .symbolImage(R.image.folder_iconSymbols()),
                                                                         title: R.string.localizable.gameListBackgroundUpload())]))
                 pauseEmulationIfNeed()
+                var isUploadDismiss = false
                 ASSheetView.show(.init(style: .listPage(.init(navigation: .defaultNavigation(title: title, titleIcon: icon),
                                                               sections: sections))),
                                  action: { action, updation in
                     if let indexPath = action.listPageValue?.normalItemValue?.indexPath {
                         if (customs.count == 0 && indexPath.section == 2) || indexPath.section == 3 {
                             //upload
+                            isUploadDismiss = true
                             return .dismiss(completion: {
                                 FilesImporter.shared.presentImportController(supportedTypes: [UTType(filenameExtension: "pal") ?? UTType.data],
                                                                              allowsMultipleSelection: false,
@@ -863,10 +873,14 @@ extension GameOption {
                                 $0.updateExtra(key: ExtraKey.nesPalette.rawValue, value: palette.name)
                             })
                         }
-                        resumeEmulationIfNeed()
                         accessoryChange?()
                     }
+                    resumeEmulationIfNeed()
                     return .dismiss()
+                }, dismiss: {
+                    if !isUploadDismiss {
+                        resumeEmulationIfNeed()
+                    }
                 })
                 
             } else {
@@ -910,6 +924,7 @@ extension GameOption {
                 options.append([ASListPage.Cell.iconTitleChevronCell(title: R.string.localizable.manageTriggerPro())])
                 let sheet = ASSheet(style: .simpleList(icon: icon, title: title, options: options))
                 pauseEmulationIfNeed()
+                var isFunctionDismiss = false
                 ASSheetView.show(sheet, action: { action, _ in
                     if let indexPath = action.listPageValue?.normalItemValue?.indexPath {
                         if indexPath.section == 0 || indexPath.section == 1 {
@@ -921,12 +936,14 @@ extension GameOption {
                             })
                             PlayViewController.updateTriggerPro()
                             accessoryChange?()
+                            isFunctionDismiss = true
                             return .dismiss(completion: {
                                 hideSheetInGaming()
                                 resumeEmulationIfNeed()
                             })
                         } else if indexPath.section == 2 {
                             //manageTriggerPro
+                            isFunctionDismiss = true
                             return .dismiss(completion: {
                                 TriggerProManageView.show(hideCompletion: {
                                     accessoryChange?()
@@ -936,11 +953,16 @@ extension GameOption {
                         }
                     } else if let navigationValue = action.listPageValue?.navigationValue,
                                 navigationValue.isTapClose {
+                        isFunctionDismiss = true
                         return .dismiss(completion: {
                             resumeEmulationIfNeed()
                         })
                     }
                     return .none
+                }, dismiss: {
+                    if !isFunctionDismiss {
+                        resumeEmulationIfNeed()
+                    }
                 })
             }
 
@@ -1001,6 +1023,10 @@ extension GameOption {
                     }, cancelHandle: {
                         resumeEmulationIfNeed()
                     })
+                }
+            }, hideAction: { type in
+                if type == .other {
+                    resumeEmulationIfNeed()
                 }
             })
         case .reload:
@@ -1066,9 +1092,19 @@ extension GameOption {
             } else if self == .citraShader {
                 Game.change(action: { _ in firstGame.accurateShaders.toggle() })
                 hideSheetInGaming()
+                if PlayViewController.isGaming {
+                    var message = R.string.localizable.shaderModeTitle() + " "
+                    message += (firstGame.accurateShaders ?  R.string.localizable.enableTitle() : R.string.localizable.disableTitle())
+                    UIView.makeToast(message: message)
+                }
             } else if self == .citraRightEyeRender {
                 Game.change(action: { _ in firstGame.renderRightEye.toggle() })
                 hideSheetInGaming()
+                if PlayViewController.isGaming {
+                    var message = R.string.localizable.renderRightEyeTitle() + " "
+                    message += (firstGame.renderRightEye ?  R.string.localizable.enableTitle() : R.string.localizable.disableTitle())
+                    UIView.makeToast(message: message)
+                }
             } else if self == .pspTexture {
                 firstGame.updateExtra(key: ExtraKey.pspTexture.rawValue, value: !(firstGameTimeConsumingValue ?? false))
             } else if self == .ndsMicrophone {
@@ -1079,8 +1115,9 @@ extension GameOption {
                 Game.change(action: { _ in firstGame.swapScreen.toggle() })
                 hideSheetInGaming()
             } else if self == .hideControls {
-                firstGame.updateExtra(key: ExtraKey.forceFullSkin.rawValue, value: !(firstGameTimeConsumingValue ?? false))
-                PlayViewController.updateSkin()
+                let forceFullSkin = !(firstGameTimeConsumingValue ?? false)
+                firstGame.updateExtra(key: ExtraKey.forceFullSkin.rawValue, value: forceFullSkin)
+                PlayViewController.forceFullSkin(hideControls: forceFullSkin)
                 hideSheetInGaming()
             } else if self == .rewind {
                 firstGame.updateExtra(key: ExtraKey.rewind.rawValue, value: !(firstGameTimeConsumingValue ?? false))
@@ -1220,7 +1257,7 @@ extension GameOption {
             } else if firstGame.isN64ParaLLEl {
                 options = GameOption.Resolution.AllResolutionTitleForN64ParaLLEl
             } else {
-                options = GameOption.Resolution.allCases.map({ $0.title })
+                options = GameOption.Resolution.allCases.filter({ $0 != .undefine }).map({ $0.title })
             }
         } else if self == .palette {
             if firstGame.gameType == .vb {
@@ -1304,9 +1341,6 @@ extension GameOption {
                         $0.updateExtra(key: ExtraKey.pspRenderer.rawValue, value: index)
                     })
                 } else if self == .ps1ControllerMode {
-                    games.forEach({
-                        $0.updateExtra(key: ExtraKey.isAnalog.rawValue, value: index == 0)
-                    })
                     if PlayViewController.isGaming {
                         let isAnalog = firstGame.getExtraBool(key: ExtraKey.isAnalog.rawValue) ?? true
                         if (isAnalog && index == 1) || (!isAnalog && index == 0) {
@@ -1314,6 +1348,9 @@ extension GameOption {
                         }
                         resumeEmulationIfNeed()
                     }
+                    games.forEach({
+                        $0.updateExtra(key: ExtraKey.isAnalog.rawValue, value: index == 0)
+                    })
                 } else if self == .ps1Renderer {
                     games.forEach({
                         $0.updateExtra(key: ExtraKey.psxRenderer.rawValue, value: index == 0)
@@ -1356,7 +1393,7 @@ extension GameOption {
                         performOrientation(games: games, orientation: orientation)
                     }
                 } else if self == .resolution {
-                    if let resolution = GameOption.Resolution(rawValue: index) {
+                    if let resolution = GameOption.Resolution(rawValue: index+1) {
                         performResolution(games: games, resolution: resolution)
                     }
                     
@@ -1476,6 +1513,8 @@ extension GameOption {
                     }
                 }
                 accessoryChange?()
+            } else {
+                resumeEmulationIfNeed()
             }
         })
     }
@@ -1495,11 +1534,14 @@ extension GameOption {
                 Game.change { realm in
                     games.forEach({ $0.speed = .one })
                 }
+                resumeEmulationIfNeed()
                 UIView.makeToast(message: R.string.localizable.gameSettingFastForwardResume())
             }, confirmAction: {
                 topViewController()?.present(PurchaseViewController(), animated: true)
-            }, hideAction: {
-                resumeEmulationIfNeed()
+            }, hideAction: { type in
+                if type == .other {
+                    resumeEmulationIfNeed()
+                }
             })
         } else {
             if PlayViewController.isGaming {
@@ -1642,6 +1684,19 @@ extension GameOption {
             return true
         } else {
             return false
+        }
+    }
+    
+    func showSecondPromptIfNeed(continued: (() -> Void)? = nil) {
+        if self == .quit || self == .reload || self == .quickLoadState {
+            UIView.makeAlert(title: R.string.localizable.headsUp(),
+                             detail: R.string.localizable.continuedAlert(self.title),
+                             confirmTitle: R.string.localizable.confirmTitle(),
+                             confirmAction: {
+                continued?()
+            })
+        } else {
+            continued?()
         }
     }
 }

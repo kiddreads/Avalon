@@ -146,7 +146,7 @@ class SaveStateListView: BaseView {
                     UIView.makeAlert(title: R.string.localizable.importSaveState(),
                                      detail: R.string.localizable.saveStateDesc(),
                                      cancelTitle: R.string.localizable.gotIt(),
-                                     hideAction: { [weak self] in
+                                     hideAction: { [weak self] _ in
                         if let utype = UTType(filenameExtension: "savestate") {
                             guard let self else { return }
                             FilesImporter.shared.presentImportController(supportedTypes: [utype], manualHandle: { [weak self] urls in

@@ -38,7 +38,7 @@ class PlayHistoryView: BaseView {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        view.contentInset = .insets(top: R.Size.ContentInsetTop + R.Size.ItemHeightMedium,
+        view.contentInset = .insets(top: R.Size.ContentSpaceSmall,
                                     bottom: R.Size.ContentInsetBottom)
         view.blankSlateView = PlayHistoryBlankSlateView(tapAction: { [weak self] type in
             guard let self = self else { return }
@@ -65,16 +65,18 @@ class PlayHistoryView: BaseView {
     required init?(parameters: Any...) {
         self.asSideMenu = parameters.compactMap({ $0 as? Bool }).first ?? false
         super.init(frame: CGRect(origin: .zero, size: R.Size.WindowSize))
-        addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         addSubview(navigationView)
         navigationView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(R.Size.SheetGrabberTopInset)
             make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(R.Size.NavigationHeight)
+        }
+        
+        addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.bottom.trailing.equalToSuperview()
         }
         
         updateGames()

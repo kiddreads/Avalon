@@ -101,15 +101,13 @@ struct SettingItem {
             [R.Color.Purple]
         case .theme, .onlinePlay, .FAQ, .featuredItems:
             [R.Color.Orange]
-        case .quickGame:
-            [R.Color.Red]
         case .autoSaveState, .rumble, .feedback:
             [R.Color.Green]
         case .skin, .skinSound, .about:
             [R.Color.Pink]
         case .airPlay, .qq, .telegram, .shareApp:
             [R.Color.Indigo]
-        case .iCloud, .triggerPro, .clearCache:
+        case .quickGame, .iCloud, .triggerPro, .clearCache:
             [R.Color.Yellow]
         case .fullScreenWhenConnectController, .jit, .language:
             [R.Color.Cyan]

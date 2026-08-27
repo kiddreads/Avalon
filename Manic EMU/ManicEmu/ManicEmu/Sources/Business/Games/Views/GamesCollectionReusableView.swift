@@ -95,6 +95,7 @@ class GamesCollectionReusableView: UICollectionReusableView {
         gamesCountButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
+            make.leading.greaterThanOrEqualTo(titleContainer.snp.trailing).offset(R.Size.ContentSpaceMedium)
         }
         gamesCountButton.didTapButton = { [weak self] in
             self?.didTapGameCount?()

@@ -18,7 +18,7 @@ extension UTType {
     static var skinTypes: [UTType] { allSystemTypes.skinTypes }
     
     static var binTypes: [UTType] {
-        if let uttype = UTType("public.aoshuang.bin") {
+        if let uttype = UTType("public.aoshuang.bios") {
             return getAllTypes([uttype])
         }
         return []

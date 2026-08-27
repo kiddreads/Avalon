@@ -156,6 +156,7 @@ class PlayViewController: GameViewController {
             return
         }
         
+        game.ensurePS1BinCueSheet()
         if game.isRomExtsts || game.isNDSHomeMenuGame || game.isDOSHomeMenuGame {
             UIView.hideLoadingToast(forceHide: true)
             func showPlayView() {
@@ -204,7 +205,7 @@ class PlayViewController: GameViewController {
                     UIView.makeAlert(title: R.string.localizable.psxRunAlert(),
                                      detail: R.string.localizable.sbiImportDesc(),
                                      detailAlignment: .left,
-                                     cancelTitle: R.string.localizable.confirmTitle(), hideAction: {
+                                     cancelTitle: R.string.localizable.confirmTitle(), hideAction: { _ in
                         UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShowPS1PlayAlert)
                         launchGameByDismissOtherVC()
                     });
@@ -222,7 +223,7 @@ class PlayViewController: GameViewController {
                     UIView.makeAlert(title: R.string.localizable.focusShortcutsTips(),
                                      detail: R.string.localizable.dolphinCoreWraning(),
                                      cancelTitle: R.string.localizable.gotIt(),
-                                     hideAction: {
+                                     hideAction: { _ in
                         UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShowDolphinCoreAlert)
                         launchGameByDismissOtherVC()
                     })
@@ -241,7 +242,7 @@ class PlayViewController: GameViewController {
                 }, confirmAction: {
                     UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShowSSPlayAlert)
                     BIOSSelectionView.show(gameType: .ss)
-                }, hideAction: {
+                }, hideAction: { _ in
                     UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShowSSPlayAlert)
                 });
             } else if game.gameType == .j2me, game.defaultCore == 1, !UserDefaults.standard.bool(forKey: R.DefaultKey.HasShowFreeJ2meAlert) {
@@ -341,6 +342,7 @@ class PlayViewController: GameViewController {
                     } else if property.name == "accurateShaders" {
                         citraCore?.updateConfig(["ManicEMU.useShadersAccurateMul": self.manicGame.accurateShaders])
                     } else if property.name == "renderRightEye" {
+                        
                         citraCore?.updateConfig(["ManicEMU.disableRightEyeRender": self.manicGame.renderRightEye])
                     } else if property.name == "swapScreen" {
                         self.skinSwitchBindDatas["reverseScreens"] = self.manicGame.swapScreen
@@ -438,7 +440,7 @@ class PlayViewController: GameViewController {
                                     Settings.defalut.airPlay = true
                                 }
                                 self?.updateAirPlay()
-                            }, hideAction: { [weak self] in
+                            }, hideAction: { [weak self] _ in
                                 self?.resumeEmulationAndHandleAudio()
                             })
                         }
@@ -935,7 +937,8 @@ class PlayViewController: GameViewController {
         if gameController.inputType == .mfi || gameController.inputType == .keyboard {
             guard ExternalInputDispatch.sink == .gameplay else { return }
         }
-        guard !isPaused else { return }
+        
+        guard !isPaused || input.stringValue == "menu" else { return }
         if let directKeyboardInput = input as? AnyInput,
            directKeyboardInput.type == .controller(GameControllerInputType("directKeyboard")),
            manicGame.isLibretroType,
@@ -1519,9 +1522,11 @@ extension PlayViewController {
         } else if manicGame.gameType == .psp {
             if let gameCode = manicGame.gameCodeForPSP {
                 var cheatsTxt = ""
+                var enableCheats: [String] = []
                 for cheatCode in manicGame.gameCheats {
                     if cheatCode.activate {
                         cheatsTxt += "_C1 \(cheatCode.name)\n\(cheatCode.code)\n"
+                        enableCheats.append("\(cheatCode.name)")
                     }
                 }
                 let cheatFilePath = R.Path.PSPCheat(gameCode: gameCode)
@@ -1531,6 +1536,7 @@ extension PlayViewController {
                 } else if cheatsTxt != lastPSPCheatCode {
                     LibretroCore.sharedInstance().updatePSPCheat(cheatsTxt, cheatFilePath: cheatFilePath, reloadGame: true)
                     lastPSPCheatCode = cheatsTxt
+                    UIView.makeToast(message: R.string.localizable.gameCheatActivateSuccess(String.successMessage(from: enableCheats)))
                 }
             }
         } else if manicGame.isLibretroType {
@@ -1553,10 +1559,12 @@ extension PlayViewController {
                         }
                         if needToActivedKeys.count > 0 {
                             LibretroCore.sharedInstance().updateFBNeoCheatCode(needToActivedKeys, enable: true)
+                            UIView.makeToast(message: R.string.localizable.gameCheatActivateSuccess(String.successMessage(from: needToActivedKeys)))
                         }
                     }
                 } else {
                     LibretroCore.sharedInstance().resetCheatCode()
+                    var enableCheats: [String] = []
                     for (index, cheatCode) in self.manicGame.gameCheats.enumerated() {
                         if cheatCode.activate {
                             // Convert newline separators to '+' (libretro standard for multi-line cheats)
@@ -1572,7 +1580,11 @@ extension PlayViewController {
                                 coreCode = cheatCode.code.replacingOccurrences(of: "\n", with: "+")
                             }
                             LibretroCore.sharedInstance().addCheatCode(String(coreCode), index: UInt32(index), enable: true)
+                            enableCheats.append("\(cheatCode.name)")
                         }
+                    }
+                    if enableCheats.count > 0 {
+                        UIView.makeToast(message: R.string.localizable.gameCheatActivateSuccess(String.successMessage(from: enableCheats)))
                     }
                 }
             }
@@ -2484,9 +2496,13 @@ extension PlayViewController {
             if let skin = Database.realm.objects(Skin.self).first(where: { $0.identifier == controllerSkin.identifier }) {
                 if skin.skinType == .default || skin.isKeyboardSkin {
                     //当前使用的是默认皮肤 则添加功能按钮
-                    let shortcuts = Prefference.defalut.getPrefference(kind: .gameShortcut,
+                    var shortcuts = Prefference.defalut.getPrefference(kind: .gameShortcut,
                                                                        storeKey: .game(gameId: manicGame.id),
                                                                        bestEfforts: true)?.gameShortcutValue ?? GameOption.defaultShortcutOptions(for: manicGame)
+                    let availableOptions = Set(GameOption.availableOptions(game: manicGame, scene: .gaming))
+                    shortcuts = shortcuts.filter({ availableOptions.contains($0) })
+                    
+                    
                     guard shortcuts.count > 0 else { return }
                     let functionButtonCount = shortcuts.count
                     for (index, shortcut) in shortcuts.enumerated() {
@@ -2502,7 +2518,9 @@ extension PlayViewController {
                                                                          background: .clear))
                         button.didTapButton = { [weak self] in
                             guard let self, shortcut != .rewind else { return }
-                            shortcut.performAction(with: [self.manicGame])
+                            shortcut.showSecondPromptIfNeed(continued: {
+                                shortcut.performAction(with: [self.manicGame], performImmediately: true)
+                            })
                         }
                         button.didLongPressButton = { [weak self] state in
                             guard let self else { return }
@@ -3936,6 +3954,8 @@ extension PlayViewController {
     private func updateBackground() {
         guard !manicGame.safeMode else { return }
         guard controllerView.controllerSkin?.identifier.lowercased() == manicGame.gameType.rawValue.lowercased() + ".flex" else {
+            backgroundImageView?.image = nil
+            backgroundImageView = nil
             return
         }
         if backgroundImageView == nil {
@@ -4322,6 +4342,13 @@ extension PlayViewController {
     static func updateRewind() {
         if let currentPlayViewController {
             currentPlayViewController.updateRewind()
+        }
+    }
+    
+    static func forceFullSkin(hideControls: Bool) {
+        if let currentPlayViewController {
+            currentPlayViewController.manicGame.forceFullSkin = hideControls
+            currentPlayViewController.updateSkin()
         }
     }
 }

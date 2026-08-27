@@ -92,6 +92,7 @@ class WFCSettingView: BaseView {
         return ASListPage(navigation: navigation,
                           sections: sections,
                           bottom: .extraLarge(title: R.string.localizable.dsWfcReset(),
+                                              titleColor: R.Color.LabelPrimary.forceStyle(.dark),
                                               titleAlignment: .center,
                                               background: R.Color.Main),
                           backgroundColor: .clear,

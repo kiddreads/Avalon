@@ -47,6 +47,7 @@ class PlayHistoryBlankSlateView: BaseView {
         let buttonTitle = gameCount > 0 ? R.string.localizable.historyEmptyStartGame() : R.string.localizable.historyEmptyImportGame()
         let button = ASButton.extraExtraSmall(title: buttonTitle,
                                               titleColor: R.Color.LabelPrimary.forceStyle(.dark),
+                                              titleFont: R.Font.Subheadline(),
                                               background: R.Color.Main).enableGlass(true, ignoreBackground: false)
         let actionButton = ASButtonView(button)
         actionButton.didTapButton = {

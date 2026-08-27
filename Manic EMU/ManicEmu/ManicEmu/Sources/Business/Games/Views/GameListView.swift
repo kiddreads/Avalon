@@ -54,7 +54,6 @@ class GameListView: BaseView {
     private lazy var bottomToolView: ASListToolView = {
         let view = ASListToolView(.defaultTool(otherIcons: [
             .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red]),
-            .symbolImage(R.image.cover_iconSymbols()),
             .symbolImage(R.image.skin_iconSymbols())
         ]))
         view.didTapToolButtons = { [weak self] action in
@@ -71,11 +70,6 @@ class GameListView: BaseView {
                         GameOption.delete.performAction(with: selectedIndexPaths.compactMap({ self.getGame(at: $0) }))
                     }
                 } else if index == 1 {
-                    //cover
-                    if let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems {
-                        GameOption.cover.performAction(with: selectedIndexPaths.compactMap({ self.getGame(at: $0) }))
-                    }
-                } else if index == 2 {
                     //skin
                     if let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems {
                         GameOption.skins.performAction(with: selectedIndexPaths.compactMap({ self.getGame(at: $0) }))
@@ -1113,7 +1107,8 @@ private extension GameListView {
     }
     
     func updateToolViewVisibility(for scrollView: UIScrollView) {
-        guard UIDevice.isPhone else { return }
+        guard UIDevice.isPhone,
+        scrollView.contentSize.height >= R.Size.WindowHeight else { return }
         
         let contentOffsetY = clampedContentOffsetY(for: scrollView)
         let now = CACurrentMediaTime()

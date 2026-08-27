@@ -44,6 +44,13 @@ class AddTriggerButtonStyleView: BaseView {
             }
         }
         
+        var image: UIImage? {
+            didSet {
+                guard style == .custom else { return }
+                triggerButton.image = image
+            }
+        }
+        
         var didButtonTextChange: ((String)->Void)? = nil
         var didImageChange: ((UIImage?)->Void)? = nil
         /// 输入法组字开始前的文本，用于上屏后从「旧内容 + 新输入」里取出本次输入
@@ -60,15 +67,17 @@ class AddTriggerButtonStyleView: BaseView {
         }()
         
         private lazy var editButton: ASButtonView = {
-            let view = ASButtonView(.smallIconButton(icon: .symbolImage(R.image.edit_iconSymbols()),
+            let view = ASButtonView(.smallIconButton(icon: .symbolImage(R.image.camera_iconSymbols(), colors: [R.Color.Main]),
                                                      background: R.Color.BackgroundQuaternary))
             view.didTapButton = { [weak self] in
                 guard let self = self else { return }
                 if self.style == .custom {
                     //上传照片
                     ImageFetcher.showCommonFetcher(sources: [.capture, .library, .file], completion: { [weak self] image, _ in
-                        self?.triggerButton.image = image
-                        self?.didImageChange?(image)
+                        if let image = image?.scaled(toSize: self?.buttonSize ?? TriggerItem.Style.custom.defaultSize) {
+                            self?.triggerButton.image = image
+                            self?.didImageChange?(image)
+                        }
                     })
                 } else {
                     self.titleTextField.becomeFirstResponder()
@@ -375,8 +384,14 @@ class AddTriggerButtonStyleView: BaseView {
                 self.item.buttonWidth = style.defaultSize.width
                 self.item.buttonHeight = style.defaultSize.height
                 self.item.buttonOpacity = 1
-                self.item.buttonCornerRadiusRatio = 26.7
+                self.item.buttonCornerRadiusRatio = style.defaultSize.height/2
                 self.triggerButtonView.style = style
+                self.triggerButtonView.buttonSize = style.defaultSize
+                self.triggerButtonView.buttonOpacity = 1
+                self.triggerButtonView.buttonRadius = style.defaultSize.height/2
+                self.sizeSliderView.value = Float(style.defaultSize.width)
+                self.opacitySliderView.value = 100
+                self.cornerRadiusSliderView.value = 100
                 switch style {
                 case .classic, .flat:
                     self.cornerRadiusSliderView.isHidden = true
@@ -393,6 +408,9 @@ class AddTriggerButtonStyleView: BaseView {
         triggerButtonView.buttonOpacity = item.buttonOpacity
         if item.style == .custom {
             triggerButtonView.buttonRadius = item.buttonCornerRadius
+            if let imageFilePath = item.customImage?.filePath {
+                triggerButtonView.image = UIImage(contentsOfFile: imageFilePath.path)
+            }
         } else {
             triggerButtonView.buttonRadius = 0
             triggerButtonView.buttonText = item.buttonText
@@ -438,14 +456,13 @@ class AddTriggerButtonStyleView: BaseView {
         if item.style == .custom {
             cornerRadiusSliderView.isHidden = false
             cornerRadiusSliderView.value = Float(item.buttonCornerRadiusRatio)
-            cornerRadiusSliderView.didValueChange = { [weak self] cornerRadiusRatio in
-                guard let self else { return }
-                item.buttonCornerRadiusRatio = Double(cornerRadiusRatio).rounded(numberOfDecimalPlaces: 1, rule: .toNearestOrEven)
-                self.triggerButtonView.buttonRadius = item.buttonCornerRadius
-            }
         } else {
             cornerRadiusSliderView.isHidden = true
-            cornerRadiusSliderView.didValueChange = nil
+        }
+        cornerRadiusSliderView.didValueChange = { [weak self] cornerRadiusRatio in
+            guard let self else { return }
+            item.buttonCornerRadiusRatio = Double(cornerRadiusRatio).rounded(numberOfDecimalPlaces: 1, rule: .toNearestOrEven)
+            self.triggerButtonView.buttonRadius = item.buttonCornerRadius
         }
     }
     

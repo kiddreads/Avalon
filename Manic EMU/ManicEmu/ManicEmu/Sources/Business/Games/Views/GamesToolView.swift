@@ -206,7 +206,7 @@ class GamesToolView: BaseView {
             make.height.equalTo(R.Size.ItemHeightMicro)
             make.bottom.equalToSuperview().inset(R.Size.ContentSpaceMedium)
         }
-        manufacturerCategoryView.isHidden = !(Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false)
+        manufacturerCategoryView.isHidden = !Theme.defalut.enableManufacturerFilter
         
         
         manufacturerFilterChange = NotificationCenter.default.addObserver(forName: R.NotificationName.ManufacturerFilterChange, object: nil, queue: .main) { [weak self] notification in

@@ -277,6 +277,10 @@ extension UIView {
         startLoadingTime = nil
     }
     
+    enum AlertHideType {
+        case cancel, confirm, other
+    }
+    
     private static var SheetIdentifiers = [String]()
     static func makeAlert(identifier: String? = nil,
                           title: String? = nil,
@@ -288,7 +292,7 @@ extension UIView {
                           enableForceHide: Bool = true,
                           cancelAction: (()->Void)? = nil,
                           confirmAction: (()->Void)? = nil,
-                          hideAction: (()->Void)? = nil,
+                          hideAction: ((AlertHideType)->Void)? = nil,
                           tapBackgroundAction: (()->Void)? = nil) {
         if let identifier {
             SheetIdentifiers.append(identifier)
@@ -301,6 +305,7 @@ extension UIView {
                             enableGrabber: enableForceHide,
                             enableTapBackgroundDismiss: enableForceHide)
         let enableMultiInstance = identifier == nil
+        var hideType: AlertHideType = .other
         ASSheetView.show(sheet,
                          identifier: identifier,
                          enableMultiInstance: enableMultiInstance,
@@ -308,12 +313,14 @@ extension UIView {
             if let index = action.textValue {
                 if index == 0 {
                     //cancel
+                    hideType = .cancel
                     return .dismiss {
                         cancelAction?()
                     }
                 } else if index == 1 {
                     //destructiveButtonTitle
                     if confirmAutoHide {
+                        hideType = .confirm
                         return .dismiss {
                             confirmAction?()
                         }
@@ -328,7 +335,7 @@ extension UIView {
             }
             return .dismiss()
         }, dismiss: {
-            hideAction?()
+            hideAction?(hideType)
             if let identifier {
                 SheetIdentifiers.removeFirst { $0 == identifier }
             }

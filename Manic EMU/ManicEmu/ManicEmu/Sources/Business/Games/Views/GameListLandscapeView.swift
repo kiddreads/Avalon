@@ -348,9 +348,9 @@ class GameListLandscapeView: BaseView {
             guard let self else { return }
             switch changes {
             case .update(_, let deletions, let insertions, let modifications):
-                if !deletions.isEmpty || !insertions.isEmpty {
+                if !deletions.isEmpty {
                     self.reloadAll(keepFocus: false)
-                } else if !modifications.isEmpty {
+                } else if !insertions.isEmpty || !modifications.isEmpty {
                     self.reloadAll(keepFocus: true)
                 }
             default:

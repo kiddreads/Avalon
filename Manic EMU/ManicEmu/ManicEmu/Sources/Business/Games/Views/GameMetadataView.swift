@@ -223,7 +223,8 @@ extension GameMetadataView {
         guard let tool = NavTool(rawValue: index) else { return }
         switch tool {
         case .refresh:
-            guard let metadata = GameMetadataKit.getGameInfo(game: game) else { return }
+            // Kit miss still resets: custom extras must be clearable even without an official record.
+            let metadata = GameMetadataKit.getGameInfo(game: game) ?? GameMetadata()
             box.value = metadata
             metadata.persist(to: game)
             updation?(.listPage(makeListPage()))

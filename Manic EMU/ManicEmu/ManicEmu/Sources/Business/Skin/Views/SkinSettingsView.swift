@@ -943,6 +943,16 @@ extension SkinSettingsView: UICollectionViewDelegate {
         landscapeUsingIndex = 0
         portraitUsingIndex = 0
         collectionView.reloadData()
+        
+        if PlayViewController.isGaming {
+            if let gameType {
+                if PlayViewController.currentGameType == gameType {
+                    PlayViewController.updateSkin()
+                }
+            } else {
+                PlayViewController.updateSkin()
+            }   
+        }
     }
 }
 
@@ -951,9 +961,9 @@ extension SkinSettingsView: ShowableView {
                      games: [Game] = [],
                      hideCompletion: (() -> Void)? = nil) {
         if let gameType {
-            Self.show(parameters: gameType, games)
+            Self.show(parameters: gameType, games)?.didHideSheet = hideCompletion
         } else {
-            Self.show(parameters: games)
+            Self.show(parameters: games)?.didHideSheet = hideCompletion
         }
     }
     

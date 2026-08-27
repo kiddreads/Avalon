@@ -1055,3 +1055,5 @@
 
 "DCSaveTips" = "Dreamcast 使用 VMU 存储卡保存游戏进度。请使用“文件”App 打开：Manic EMU - Flycast - dc，自行管理存档文件。";
 "DoomSaveTips" = "请使用“文件”App 打开：Manic EMU - PrBoom - doom，自行管理存档文件。";
+
+"ContinuedAlert" = "是否确认执行 %@ ，未保存的游戏进度将会失去!";

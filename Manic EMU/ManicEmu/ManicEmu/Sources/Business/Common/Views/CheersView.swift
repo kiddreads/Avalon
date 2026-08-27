@@ -15,7 +15,7 @@ import SwiftUI
 struct CheersView: View {
     
     static func makePurchaseCheers() {
-        if let window = ApplicationSceneDelegate.applicationWindow {
+        if let window = UIWindow.topWindow {
             let vc = UIHostingController(rootView: CheersView().edgesIgnoringSafeArea(.all))
             if let cheersView = vc.view {
                 

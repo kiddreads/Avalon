@@ -21,10 +21,8 @@ struct DeadZoneControl {
                          action: { action, _ in
             if let index = action.stepValue?.index {
                 let newValue = values[index]
-                if newValue != oldValue {
-                    Settings.defalut.updateExtra(key: ExtraKey.deadZone.rawValue, value: newValue)
-                    ExternalGameControllerManager.shared.deadZone = Float(newValue)
-                }
+                Settings.defalut.updateExtra(key: ExtraKey.deadZone.rawValue, value: newValue)
+                ExternalGameControllerManager.shared.deadZone = Float(newValue)
             }
             return .none
         }, dismiss: {

@@ -287,6 +287,9 @@ class GamesViewController: BaseViewController {
                 make.height.equalTo(R.Size.ItemHeightMedium)
             }
             
+            if Theme.defalut.enableManufacturerFilter {
+                gamesToolView.stopFilterManufacturer()
+            }
             gamesToolView.isHidden = false
             if gamesToolView.superview == nil {
                 view.addSubview(gamesToolView)

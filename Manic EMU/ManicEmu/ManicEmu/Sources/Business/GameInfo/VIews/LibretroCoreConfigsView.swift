@@ -83,9 +83,10 @@ class LibretroCoreConfigsView: BaseView {
         guard window != nil, !didLoadOptions else { return }
         didLoadOptions = true
         UIView.makeLoading()
-        //加载核心选项需要动态加载核心 稍作延迟保证弹出动画流畅
+        // Probing a core is slow; delay so the sheet animation can finish first.
         DispatchQueue.main.asyncAfter(delay: 0.35) { [weak self] in
             guard let self else { return }
+            LibretroCore.sharedInstance().workspace = R.Path.Libretro
             self.loadCoreOptions()
             self.listView.updatePage(self.getListPage())
             UIView.hideLoading()
@@ -117,8 +118,8 @@ class LibretroCoreConfigsView: BaseView {
                                                              storeKey: .coreOptionsKey(gameType: gameType, defaultCore: defaultCore))?.coreOptionsValue ?? [:]
     }
     
-    private func loadCoreOptions() {
-        let categories = LibretroCore.sharedInstance().getOptions(corePath) ?? []
+    private func loadCoreOptions(resetOptFile: Bool = false) {
+        let categories = LibretroCore.sharedInstance().getOptions(corePath, resetOptFile: resetOptFile) ?? []
         coreOptionCategories = categories.compactMap({ category in
             guard category.visible else { return nil }
             let visibleOptions = category.options.filter({
@@ -132,14 +133,14 @@ class LibretroCoreConfigsView: BaseView {
         overlayStoreConfigs()
     }
     
-    ///记录核心原始默认值 后续叠加/重置都从这份快照出发
+    /// Snapshot built-in core defaults. Overlay/reset always start from this, not from .opt values.
     private func snapshotCoreDefaults() {
         coreDefaultValues.removeAll()
         coreDefaultLabels.removeAll()
         for category in coreOptionCategories {
             for option in category.options {
-                coreDefaultValues[option.key] = option.value
-                coreDefaultLabels[option.key] = option.label
+                coreDefaultValues[option.key] = option.defaultValue.isEmpty ? option.value : option.defaultValue
+                coreDefaultLabels[option.key] = option.defaultLabel.isEmpty ? option.label : option.defaultLabel
             }
         }
     }
@@ -502,7 +503,7 @@ class LibretroCoreConfigsView: BaseView {
     private func resetCurrentGamesConfigs() {
         games.forEach({ deleteGameConfigs(forGameId: $0.id) })
         gameConfigs = [:]
-        reloadList()
+        reloadCoreOptionsAfterReset()
     }
     
     private func resetGameTypeConfigs() {
@@ -512,7 +513,34 @@ class LibretroCoreConfigsView: BaseView {
         allGames.forEach({ deleteGameConfigs(forGameId: $0.id) })
         gameConfigs = [:]
         gameTypeConfigs = [:]
-        reloadList()
+        reloadCoreOptionsAfterReset()
+    }
+    
+    /// Delete the per-core .opt, then re-probe so the list shows built-in defaults instead of last-run values.
+    private func reloadCoreOptionsAfterReset() {
+        changeConfigs.removeAll()
+        LibretroCore.sharedInstance().workspace = R.Path.Libretro
+        UIView.makeLoading()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.loadCoreOptions(resetOptFile: true)
+            if PlayViewController.isGaming {
+                self.applyDisplayedConfigsToRunningCore()
+            }
+            self.listView.updatePage(self.getListPage())
+            UIView.hideLoading()
+        }
+    }
+    
+    private func applyDisplayedConfigsToRunningCore() {
+        var configs = [String: String]()
+        for category in coreOptionCategories {
+            for option in category.options {
+                configs[option.key] = option.value
+            }
+        }
+        guard !configs.isEmpty else { return }
+        LibretroCore.sharedInstance().updateRunningCoreConfigs(configs, flush: false)
     }
 }
 

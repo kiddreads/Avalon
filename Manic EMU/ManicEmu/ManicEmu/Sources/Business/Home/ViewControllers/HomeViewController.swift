@@ -249,7 +249,11 @@ class HomeViewController: BaseViewController {
         homeTabBar.snp.makeConstraints { make in
             make.size.equalTo(R.Size.HomeTabBarSize)
             make.centerX.equalTo(self.view)
-            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            if UIDevice.isSmallScreenPhone {
+                make.bottom.equalToSuperview().inset(R.Size.ContentInsetBottom)
+            } else {
+                make.bottom.equalTo(view.safeAreaLayoutGuide)
+            }
         }
     }
     

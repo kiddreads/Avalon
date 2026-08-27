@@ -114,6 +114,7 @@ enum SpecialCoreOption: String {
     case beetle_psx_hw_pgxp_nclip
     case beetle_psx_hw_pgxp_texture
     case beetle_psx_hw_gte_overclock
+    case pcsx_rearmed_analog_combo
     //dc
     case reicast_internal_resolution
     case reicast_language
@@ -308,6 +309,8 @@ enum SpecialCoreOption: String {
                     .beetle_psx_hw_renderer,
                     .beetle_psx_hw_cpu_dynarec,
                 ]
+            } else if game.defaultCore == 1 {
+                return [.pcsx_rearmed_analog_combo]
             }
         } else if game.gameType == .dc {
             return [

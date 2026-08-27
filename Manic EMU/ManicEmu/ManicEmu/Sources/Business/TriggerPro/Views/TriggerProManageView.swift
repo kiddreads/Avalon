@@ -91,10 +91,10 @@ class TriggerProManageView: BaseView {
             switch changes {
             case .update(_, let deletions, let insertions, let modifications):
                 if deletions.count > 0 || insertions.count > 0 {
+                    self.updateDatas()
                     if self.allTriggers.count == 0 {
                         self.isEditMode = false
                     } else {
-                        self.updateDatas()
                         self.isSelectedAll = false
                     }
                 } else if modifications.count > 0 {
@@ -409,21 +409,21 @@ class TriggerProManageView: BaseView {
     
     private func deleteSelectedTriggers() {
         Trigger.change { realm in
-            selectedDatas.forEach({ trigger in
-                if Settings.defalut.iCloudSyncEnable {
-                    trigger.isDeleted = true
-                    trigger.items.forEach({
+            if Settings.defalut.iCloudSyncEnable {
+                selectedDatas.forEach({ triger in
+                    triger.isDeleted = true
+                    triger.items.forEach({
                         $0.customImage?.deleteAndClean(realm: realm)
                         $0.isDeleted = true
                     })
-                } else {
-                    trigger.items.forEach({
-                        $0.customImage?.deleteAndClean(realm: realm)
-                    })
+                })
+            } else {
+                selectedDatas.forEach({ trigger in
+                    trigger.items.forEach({ $0.customImage?.deleteAndClean(realm: realm) })
                     realm.delete(trigger.items)
-                    realm.delete(trigger)
-                }
-            })
+                })
+                realm.delete(selectedDatas)
+            }
         }
     }
 }

@@ -445,7 +445,7 @@ class CheatCodeListView: BaseView {
             UIView.makeAlert(title: R.string.localizable.enableCheatCodeAlertTitle(),
                              detail: R.string.localizable.enableCheatCodeAlertDetail(),
                              cancelTitle: R.string.localizable.confirmTitle(),
-                             hideAction: {
+                             hideAction: { _ in
                 UserDefaults.standard.setValue(true, forKey: R.DefaultKey.HasShowCheatCodeWarning)
                 updateGameCheat()
             })

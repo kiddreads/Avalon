@@ -204,10 +204,14 @@ class ASSheetView: BaseView {
             sheetView.config.cardCornerRadius = 0
             sheetView.config.stackDepthEffect = sheetData.enableStackDepthEffect
             sheetView.config.backgroundViewMask { mask in
-                if SheetProvider.findAll().count == 0 {
-                    mask.backgroundColor = .black.withAlphaComponent(0.5)
+                if UIDevice.isDarkMode {
+                    if SheetProvider.findAll().count == 0 {
+                        mask.backgroundColor = .black.withAlphaComponent(0.5)
+                    } else {
+                        mask.backgroundColor = .clear
+                    }
                 } else {
-                    mask.backgroundColor = .clear
+                    mask.backgroundColor = .black.withAlphaComponent(0.5)
                 }
             }
             

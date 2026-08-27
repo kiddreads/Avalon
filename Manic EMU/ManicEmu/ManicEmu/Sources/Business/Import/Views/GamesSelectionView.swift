@@ -78,19 +78,25 @@ class GamesSelectionView: BaseView {
                                                                  titleIcon: .symbolImage(R.image.controller_iconSymbols())),
                                   sections: sections,
                                   backgroundColor: .clear)
-        
+        var isFunctionDismiss = false
         ASSheetView.show(.init(style: .listPage(listPage)), action: { action, _ in
             if let indexPath = action.listPageValue?.normalItemValue?.indexPath,
                indexPath.section < gameGroups.count,
                indexPath.row < gameGroups[indexPath.section].count {
                 let game = gameGroups[indexPath.section][indexPath.row]
+                isFunctionDismiss = true
                 return .dismiss(completion: {
                     completion?(game)
                 })
             }
+            isFunctionDismiss = true
             return .dismiss(completion: {
                 completion?(nil)
             })
+        }, dismiss: {
+            if !isFunctionDismiss {
+                completion?(nil)
+            }
         })
     }
     

@@ -1059,3 +1059,5 @@ Press the controller button to complete mapping...";
 
 "DCSaveTips" = "Dreamcast stores game progress on VMU memory cards. Please use the Files app to open: Manic EMU - Flycast - dc to manage your save files on your own.";
 "DoomSaveTips" = "Please use the Files app to open: Manic EMU - PrBoom - doom to manage your save files on your own.";
+
+"ContinuedAlert" = "Are you sure you want to %@? Any unsaved game progress will be lost!";

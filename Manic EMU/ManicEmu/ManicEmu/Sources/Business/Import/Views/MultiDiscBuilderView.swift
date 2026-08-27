@@ -120,6 +120,7 @@ class MultiDiscBuilderView: BaseView {
     
     private lazy var addToLibraryButton: ASButtonView = {
         let view = ASButtonView(.large(title: R.string.localizable.m3uFileImport(),
+                                       titleColor: R.Color.LabelPrimary.forceStyle(.dark),
                                        titleAlignment: .center,
                                        background: R.Color.Main))
         view.didTapButton = { [weak self] in

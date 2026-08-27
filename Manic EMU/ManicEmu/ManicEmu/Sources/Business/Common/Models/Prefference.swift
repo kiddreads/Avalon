@@ -246,7 +246,12 @@ class Prefference: Object {
     
     func getPrefference(kind: Kind, storeKey: StoreKey, bestEfforts: Bool = false) -> Result? {
         logPrefferences(title: "getPrefference, kind:\(kind), storeKey:\(storeKey), bestEfforts:\(bestEfforts)")
-        guard let dataAndKey = getStoreDataAndKey(kind: kind, storeKey: storeKey) else { return nil }
+        guard let dataAndKey = getStoreDataAndKey(kind: kind, storeKey: storeKey) else {
+            if bestEfforts, let nextStoreKey = storeKey.nextLevel(with: kind) {
+                return getPrefference(kind: kind, storeKey: nextStoreKey, bestEfforts: bestEfforts)
+            }
+            return nil
+        }
         var storeValue: String? = nil
         let realStoreLevel: StoreLevel = storeKey.storeLevel
         if let jsonObject = try? JSONSerialization.jsonObject(with: dataAndKey.data) as? [String: Any] {

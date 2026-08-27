@@ -498,14 +498,14 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Manic EMU BIN</string>
+			<string>Manic EMU BIOS</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>public.aoshuang.bin</string>
+				<string>public.aoshuang.bios</string>
 			</array>
 		</dict>
 		<dict>
@@ -1166,6 +1166,7 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
+					<string>bin</string>
 					<string>cue</string>
 					<string>m3u</string>
 					<string>pbp</string>
@@ -1681,6 +1682,9 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
+					<string>dsg</string>
+					<string>nvr</string>
+					<string>flash</string>
 					<string>sav</string>
 					<string>dsv</string>
 					<string>srm</string>
@@ -1724,7 +1728,7 @@
 				<string>file_icon.png</string>
 			</array>
 			<key>UTTypeIdentifier</key>
-			<string>public.aoshuang.bin</string>
+			<string>public.aoshuang.bios</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

@@ -81,6 +81,12 @@ class PlatformSelectionView: BaseView {
                     }
                 }
                 
+                if gameType == .ps1 {
+                    for game in games {
+                        game.ensurePS1BinCueSheet()
+                    }
+                }
+                
                 NotificationCenter.default.post(name: R.NotificationName.PlatformSelectionChange, object: nil)
                 for game in games {
                     game.matchCover(force: true)

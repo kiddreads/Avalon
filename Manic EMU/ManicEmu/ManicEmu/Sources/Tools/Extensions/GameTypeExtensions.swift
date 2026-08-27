@@ -23,7 +23,7 @@ extension GameType {
         case "iso":
             return [.psp, .mcd, .ss, .dos, .ngc, .wii, .amiga]
         case "bin":
-            return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar, .c64]
+            return [.ps1, .md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar, .c64]
         case "cue":
             return [.ps1, .mcd, .ss, .dc, .dos, .pce, .amiga]
         case "m3u":
@@ -234,7 +234,7 @@ extension GameType {
         {
         case .nes: return Locale.prefersUS ? "Nintendo Entertainment System" : "Family Computer"
         case .fds: return "Famicom Disk System"
-        case .snes: return "Super Nintendo Entertainment System"
+        case .snes: return Locale.prefersUS ? "Super Nintendo Entertainment System" : "Super Famicom"
         case ._3ds: return "Nintendo 3DS"
         case .gbc: return "Game Boy Color"
         case .gb: return "Game Boy"

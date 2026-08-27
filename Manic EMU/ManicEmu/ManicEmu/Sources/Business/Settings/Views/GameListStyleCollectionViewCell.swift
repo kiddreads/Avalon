@@ -153,7 +153,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         var styles = [ASListPage.Cell.Style]()
         styles.append(.icon(.symbol(.line3HorizontalDecrease)))
         styles.append(.title(.largeText(R.string.localizable.enableManufacturerFilter())))
-        let switchValue = Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false
+        let switchValue = Theme.defalut.enableManufacturerFilter
         let switchState: ASSwitch.State = switchValue ? .on : .off
         styles.append(.switch(.init(state: switchState)))
         let view = ASListItemView()

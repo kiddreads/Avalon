@@ -752,7 +752,7 @@ extension ASListPage {
 extension ASListPage {
     struct BlankSlate {
         var icon: ASIcon = .image(R.image.empty_icon()!)
-        var iconLayout: ASViewLayout = .autoLayout
+        var iconLayout: ASViewLayout = .fixedSize(CGSize(width: 100, height: 72))
         var title: String = R.string.localizable.blankStateTitle()
         var detail: String? = nil
         var button: ASButton? = nil

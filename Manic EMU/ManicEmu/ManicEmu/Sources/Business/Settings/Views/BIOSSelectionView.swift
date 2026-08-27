@@ -190,7 +190,7 @@ class BIOSSelectionView: BaseView {
         } else {
             importTitle = R.string.localizable.tabbarTitleImport()
         }
-        if item.fileName == R.string.localizable.symbianOSFirmware() {
+        if item.fileName == R.string.localizable.symbianOSFirmware() || item.fileName == "nand.zip" {
             styles.append(.chevron(.init()))
         } else {
             styles.append(.button(.large(title: importTitle,

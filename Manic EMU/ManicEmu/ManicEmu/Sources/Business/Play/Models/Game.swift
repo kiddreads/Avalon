@@ -147,11 +147,10 @@ class Game: Object, ObjectUpdatable {
                let urlInNand = CitraCore.shared().getCIAContentPath(identifier: identifierFor3DS, isSdmc: false){
                 localUrl = URL(fileURLWithPath: urlInNand)
             }
+            return localUrl
         } else if isAzaharArticBase {
             return URL(string: "articinio://\(name)")!
-        }
-        
-        if isPSPPBPGame, let gamePath = getExtraString(key: ExtraKey.pspPBPGamePath.rawValue) {
+        } else if isPSPPBPGame, let gamePath = getExtraString(key: ExtraKey.pspPBPGamePath.rawValue) {
             return URL(fileURLWithPath: R.Path.PSPGame.appendingPathComponent(gamePath))
         } else if gameType == .symbian {
             if isSymbianHomeMenu, let app = symbianSystemApp {
@@ -159,9 +158,40 @@ class Game: Object, ObjectUpdatable {
             } else {
                 return URL(string: "uid://\(id)")!
             }   
+        } else if gameType == .ps1, fileExtension.lowercased() == "bin" {
+            // Beetle/PCSX cannot load a raw .bin; prefer the sibling .cue when it exists.
+            let cueUrl = localUrl.deletingPathExtension().appendingPathExtension("cue")
+            if FileManager.default.fileExists(atPath: cueUrl.path) {
+                return cueUrl
+            }
         }
         
         return localUrl
+    }
+    
+    /// PS1 cores require a .cue next to a raw .bin. Writes a single-track sheet if missing.
+    func ensurePS1BinCueSheet() {
+        guard gameType == .ps1, fileExtension.lowercased() == "bin" else { return }
+        let binUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent(fileName))
+        guard FileManager.default.fileExists(atPath: binUrl.path) else { return }
+        let cueUrl = binUrl.deletingPathExtension().appendingPathExtension("cue")
+        guard !FileManager.default.fileExists(atPath: cueUrl.path) else { return }
+        
+        let trackMode: String
+        if let size = try? FileManager.default.attributesOfItem(atPath: binUrl.path)[.size] as? UInt64,
+           size % 2352 != 0,
+           size % 2048 == 0 {
+            trackMode = "MODE1/2048"
+        } else {
+            trackMode = "MODE2/2352"
+        }
+        let cueSheet = """
+        FILE "\(binUrl.lastPathComponent)" BINARY
+          TRACK 01 \(trackMode)
+            INDEX 01 00:00:00
+        """
+        try? cueSheet.writeWithCompletePath(to: cueUrl)
+        SyncManager.upload(localFilePath: cueUrl.path)
     }
     //游戏自带存档路径
     var gameSaveUrl: URL {
@@ -178,8 +208,10 @@ class Game: Object, ObjectUpdatable {
                     return URL(fileURLWithPath: R.Path.PSPSave.appendingPathComponent(path))
                 }
             }
-        } else if gameType == .nes || gameType == .fds {
+        } else if gameType == .nes {
             return URL(fileURLWithPath: R.Path.Nestopia.appendingPathComponent("\(name).srm"))
+        } else if gameType == .fds {
+            return URL(fileURLWithPath: R.Path.Nestopia.appendingPathComponent("\(name).sav"))
         } else if gameType == .snes {
             if defaultCore == 0 {
                 return URL(fileURLWithPath: R.Path.bsnes.appendingPathComponent("\(name).srm"))
@@ -1121,7 +1153,8 @@ class Game: Object, ObjectUpdatable {
             gameType == .pce ||
             gameType == .amiga ||
             gameType == .c64 ||
-            gameType == .sg1000  {
+            gameType == .sg1000 ||
+            gameType == .ngp  {
             return false
         }
         return true
@@ -1344,7 +1377,13 @@ class Game: Object, ObjectUpdatable {
         // Non-libretro and external types do not support rewind.
         guard isLibretroType, !gameType.externalType else { return false }
         // Jaguar has savestate = false. DOOM, 3DS, DC, Symbian, NGC, and Wii are basic-only.
-        if gameType == .jaguar || gameType == .doom || gameType == ._3ds || gameType == .dc || gameType == .symbian {
+        if gameType == .jaguar ||
+            gameType == .doom ||
+            gameType == ._3ds ||
+            gameType == .dc ||
+            gameType == .symbian ||
+            isDolphinCore ||
+            gameType == .vb {
             return false
         }
         // Saturn: only Beetle Saturn (defaultCore == 0) supports rewind; Yabause is basic.

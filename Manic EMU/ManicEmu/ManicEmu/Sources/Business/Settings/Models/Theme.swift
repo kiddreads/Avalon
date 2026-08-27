@@ -123,6 +123,10 @@ class Theme: Object, ObjectUpdatable {
     ///额外数据备用
     @Persisted var extras: Data?
     
+    var enableManufacturerFilter: Bool {
+        getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false
+    }
+    
     private static func initColors() -> [ThemeColor] {
         let now = Date.now.timeIntervalSince1970ms
         var colors = [ThemeColor]()

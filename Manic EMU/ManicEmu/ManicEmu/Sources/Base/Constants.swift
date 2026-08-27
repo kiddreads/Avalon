@@ -48,7 +48,11 @@ extension _R {
             if R.Style.GameCoverForceSquare && !ignoreForceSquare {
                 return 1.0
             }
-            switch R.Style.GameCoverStyle {
+            var style = R.Style.GameCoverStyle
+            if ignoreForceSquare {
+                style = .style1 
+            }
+            switch style {
             case .style1:
                 switch gameType {
                 case ._3ds, .ds: return 1.13
@@ -111,7 +115,7 @@ extension _R {
         }
         
         static var GamesToolViewHeight: CGFloat {
-            let enableFilter = Theme.defalut.getExtraBool(key: ExtraKey.enableManufacturerFilter.rawValue) ?? false
+            let enableFilter = Theme.defalut.enableManufacturerFilter
             return R.Size.ContentSpaceExtraSmall +
             R.Size.ItemHeightTiny +
             R.Size.ContentSpaceExtraSmall +
@@ -248,7 +252,7 @@ extension _R {
         
         static var SheetWindowMinSize: CGSize {
             let size = SheetWindowMaxSize
-            return CGSize(width: size.width, height: 250)
+            return CGSize(width: size.width, height: 200)
         }
         
         static var SheetFullScreenForIpadLandscape: CGSize {

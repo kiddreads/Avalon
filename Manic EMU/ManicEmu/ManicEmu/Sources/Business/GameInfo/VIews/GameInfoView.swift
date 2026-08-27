@@ -31,7 +31,7 @@ class GameInfoView: BaseView {
                     UIView.makeAlert(title: R.string.localizable.jumpTips(),
                                      detail: R.string.localizable.thirdPartGameInfoTips(),
                                      cancelTitle: R.string.localizable.gotIt(),
-                                     hideAction: {
+                                     hideAction: { _ in
                         UserDefaults.standard.set(true, forKey: R.DefaultKey.HasShowJumpGameInfoAlert)
                         ASWebView.show(searchGame: self.game)
                     })

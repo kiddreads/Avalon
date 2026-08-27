@@ -143,7 +143,7 @@ class GameOptionsSortView: BaseView {
     private func getCell(option: GameOption) -> ASListPage.Cell {
         return ASListPage.Cell.normal([
             .icon(option.icon),
-            .title(.largeText(option.title, color: option == .quit ? R.Color.Red : R.Color.LabelPrimary)),
+            .title(.largeText(option.title, color: (option == .quit || option == .delete) ? R.Color.Red : R.Color.LabelPrimary)),
             .button(.iconOnly(icon: .symbol(.line3Horizontal, colors: [R.Color.LabelSecondary]),
                               iconSize: CGSize(R.Size.ButtonExtraExtraSmall)))
             
