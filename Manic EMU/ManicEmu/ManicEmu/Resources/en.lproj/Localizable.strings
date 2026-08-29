@@ -1061,3 +1061,27 @@ Press the controller button to complete mapping...";
 "DoomSaveTips" = "Please use the Files app to open: Manic EMU - PrBoom - doom to manage your save files on your own.";
 
 "ContinuedAlert" = "Are you sure you want to %@? Any unsaved game progress will be lost!";
+
+"BackgroundMusic" = "Background Music";
+"SoundEffects" = "Sound Effects";
+
+"BackgroundMusicDesc" = "Add a track with the button below, or place .m4a / .aac / .mp3 / .wav files in the Manic EMU - Assets folder.\nName files as Song Title(Author).";
+"AddBackgroundMusic" = "Add Background Music";
+"CoverScraping" = "Cover Scraping";
+"CoverScrapingDesc" = "Automatically fetch covers, icons, and banners from SteamGridDB.";
+"SkipExistingCovers" = "Skip Existing Artwork";
+"ScrapeCover" = "Scrape Covers";
+"ScrapeIcon" = "Scrape Icons";
+"ScrapeBanner" = "Scrape Banners";
+"StartScraping" = "Start Scraping";
+"RemoveCover" = "Remove Covers";
+"RemoveIcon" = "Remove Icons";
+"RemoveBanner" = "Remove Banners";
+"RemoveAllArtwork" = "Remove All Artwork";
+"RemoveCoverAlert" = "Remove covers from these games? This cannot be undone.";
+"RemoveIconAlert" = "Remove icons from these games? This cannot be undone.";
+"RemoveBannerAlert" = "Remove banners from these games? This cannot be undone.";
+"RemoveAllArtworkAlert" = "Remove all covers, icons, and banners from these games? This cannot be undone.";
+"CoverScrapingComplete" = "Scraping complete.";
+"CoverScrapingStat" = "%@: %d updated, %d skipped, %d failed";
+"FetchGamesFromARMSX2" = "Import Games from ARMSX2";

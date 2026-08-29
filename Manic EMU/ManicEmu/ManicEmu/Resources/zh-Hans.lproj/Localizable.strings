@@ -1057,3 +1057,26 @@
 "DoomSaveTips" = "请使用“文件”App 打开：Manic EMU - PrBoom - doom，自行管理存档文件。";
 
 "ContinuedAlert" = "是否确认执行 %@ ，未保存的游戏进度将会失去!";
+
+"BackgroundMusic" = "背景音乐";
+"SoundEffects" = "音效";
+"BackgroundMusicDesc" = "点按下方按钮添加曲目，或将 .m4a / .aac / .mp3 / .wav 文件放入 Manic EMU - Assets 目录。\n文件请按 歌曲名(作者) 命名。";
+"AddBackgroundMusic" = "添加背景音乐";
+"CoverScraping" = "封面抓取";
+"CoverScrapingDesc" = "从 SteamGridDB 自动获取封面、图标和横幅。";
+"SkipExistingCovers" = "跳过已有素材";
+"ScrapeCover" = "抓取封面";
+"ScrapeIcon" = "抓取图标";
+"ScrapeBanner" = "抓取横幅";
+"StartScraping" = "开始抓取";
+"RemoveCover" = "移除封面";
+"RemoveIcon" = "移除图标";
+"RemoveBanner" = "移除横幅";
+"RemoveAllArtwork" = "移除全部素材";
+"RemoveCoverAlert" = "确定移除这些游戏的封面？此操作无法恢复。";
+"RemoveIconAlert" = "确定移除这些游戏的图标？此操作无法恢复。";
+"RemoveBannerAlert" = "确定移除这些游戏的横幅？此操作无法恢复。";
+"RemoveAllArtworkAlert" = "确定移除这些游戏的全部封面、图标和横幅？此操作无法恢复。";
+"CoverScrapingComplete" = "抓取完成。";
+"CoverScrapingStat" = "%@: 已更新 %d，已跳过 %d，失败 %d";
+"FetchGamesFromARMSX2" = "从 ARMSX2 导入游戏";

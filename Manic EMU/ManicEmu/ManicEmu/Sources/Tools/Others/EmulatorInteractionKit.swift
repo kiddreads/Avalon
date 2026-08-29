@@ -13,11 +13,12 @@ extension GameType {
     static let ns = GameType("public.aoshuang.game.ns")
     static let xbox360 = GameType("public.aoshuang.game.xbox360")
     static let xbox = GameType("public.aoshuang.game.xbox")
+    static let ps2 = GameType("public.aoshuang.game.ps2")
 }
 
 struct EmulatorInteractionKit {
     enum EmulatorType {
-        case meloNX, xeniOS, dukeX
+        case meloNX, xeniOS, dukeX, armsx2
     }
     
     static func isInstalled(type: EmulatorType) -> Bool {
@@ -28,6 +29,10 @@ struct EmulatorInteractionKit {
             return UIApplication.shared.canOpenURL(R.URLs.FetchXeniOSGames)
         case .dukeX:
             return UIApplication.shared.canOpenURL(R.URLs.FetchDukeXGames)
+        case .armsx2:
+            return UIApplication.shared.canOpenURL(R.URLs.FetchARMSX2Games)
+                || UIApplication.shared.canOpenURL(URL(string: "\(R.Strings.ARMSX2Scheme)-ios://library")!)
+                || UIApplication.shared.canOpenURL(URL(string: "\(R.Strings.ARMSX2Scheme)ios://library")!)
         }
     }
     
@@ -40,6 +45,8 @@ struct EmulatorInteractionKit {
                 UIApplication.shared.open(R.URLs.XeniOSGameLaunch(gameId: id))
             case .dukeX:
                 UIApplication.shared.open(R.URLs.DukeXGameLaunch(gameId: id))
+            case .armsx2:
+                UIApplication.shared.open(R.URLs.ARMSX2GameLaunch(gameId: id))
             }
         } else {
             DispatchQueue.main.asyncAfter(delay: 0.35) {
@@ -50,6 +57,8 @@ struct EmulatorInteractionKit {
                     UIView.makeToast(message: R.string.localizable.notInstall("XeniOS"))
                 case .dukeX:
                     UIView.makeToast(message: R.string.localizable.notInstall("DukeX"))
+                case .armsx2:
+                    UIView.makeToast(message: R.string.localizable.notInstall("ARMSX2"))
                 }
             }
         }
@@ -64,6 +73,8 @@ struct EmulatorInteractionKit {
                 UIApplication.shared.open(R.URLs.FetchXeniOSGames)
             case .dukeX:
                 UIApplication.shared.open(R.URLs.FetchDukeXGames)
+            case .armsx2:
+                UIApplication.shared.open(R.URLs.FetchARMSX2Games)
             }
             
         } else {
@@ -74,6 +85,8 @@ struct EmulatorInteractionKit {
                 UIView.makeToast(message: R.string.localizable.notInstall("XeniOS"))
             case .dukeX:
                 UIView.makeToast(message: R.string.localizable.notInstall("DukeX"))
+            case .armsx2:
+                UIView.makeToast(message: R.string.localizable.notInstall("ARMSX2"))
             }
         }
     }
@@ -104,6 +117,10 @@ struct EmulatorInteractionKit {
                     case .dukeX:
                         game.fileExtension = "xiso"
                         game.gameType = .xbox
+                    case .armsx2:
+                        let ext = URL(fileURLWithPath: mg.titleId).pathExtension.lowercased()
+                        game.fileExtension = ext.isEmpty ? "iso" : ext
+                        game.gameType = .ps2
                     }
                     game.id = mg.titleId
                     game.name = mg.titleName
@@ -111,7 +128,7 @@ struct EmulatorInteractionKit {
                     if let icon = mg.iconData {
                         game.gameCover = CreamAsset.create(objectID: game.id, propName: "gameCover", data: icon)
                     } else {
-                        
+                        OnlineCoverManager.shared.addCoverMatch(.init(game: game))
                     }
                     games.append(game)
                 }
@@ -128,6 +145,8 @@ struct EmulatorInteractionKit {
                         UIView.makeToast(message: R.string.localizable.biosImportSuccess("Xenios Games"))
                     case .dukeX:
                         UIView.makeToast(message: R.string.localizable.biosImportSuccess("DukeX Games"))
+                    case .armsx2:
+                        UIView.makeToast(message: R.string.localizable.biosImportSuccess("ARMSX2 Games"))
                     }
                 }
             }
@@ -146,11 +165,17 @@ struct GameScheme: Codable, Identifiable, Equatable, Hashable, Sendable {
     
     static func pullFromURL(_ url: URL) -> [GameScheme] {
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: true) {
-            if let text = components.queryItems?.first(where: { $0.name == "games" })?.value,
-                let data = GameScheme.base64URLDecode(text) {
-                if let decoded = try? JSONDecoder().decode([GameScheme].self, from: data) {
-                    return decoded
-                }
+            let items = components.queryItems ?? []
+            if let text = items.first(where: { $0.name == "games" })?.value,
+                let data = GameScheme.base64URLDecode(text),
+                let decoded = try? JSONDecoder().decode([GameScheme].self, from: data) {
+                return decoded
+            }
+            // ARMSX2 sends `payload` wrapping `{ games: [{ title, fileName, ... }] }`.
+            if let text = items.first(where: { $0.name == "payload" })?.value,
+                let data = GameScheme.base64URLDecode(text),
+                let library = try? JSONDecoder().decode(ARMSX2Library.self, from: data) {
+                return library.gameSchemes
             }
         }
         return []
@@ -164,5 +189,38 @@ struct GameScheme: Codable, Identifiable, Equatable, Hashable, Sendable {
             base64 = base64.appending("=")
         }
         return Data(base64Encoded: base64)
+    }
+}
+
+/// ARMSX2 `com.armsx2.library.v1` callback body. Launch key is `fileName`.
+private struct ARMSX2Library: Decodable {
+    let games: [ARMSX2Game]
+    
+    var gameSchemes: [GameScheme] {
+        games.compactMap(\.gameScheme)
+    }
+}
+
+private struct ARMSX2Game: Decodable {
+    let title: String?
+    let fileName: String?
+    let serial: String?
+    
+    var gameScheme: GameScheme? {
+        guard let fileName, !fileName.isEmpty else {
+            return nil
+        }
+        let trimmedTitle = title?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let titleName = trimmedTitle.isEmpty
+            ? URL(fileURLWithPath: fileName).deletingPathExtension().lastPathComponent
+            : trimmedTitle
+        return GameScheme(
+            id: fileName,
+            titleName: titleName,
+            titleId: fileName,
+            developer: serial ?? "",
+            version: "1.0",
+            iconData: nil
+        )
     }
 }

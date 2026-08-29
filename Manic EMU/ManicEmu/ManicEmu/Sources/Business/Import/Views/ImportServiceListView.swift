@@ -35,6 +35,7 @@ class ImportServiceListView: BaseView {
                     R.string.localizable.fetchGamesFromMeloNX(),
                     R.string.localizable.fetchGamesFromXeniOS(),
                     R.string.localizable.fetchGamesFromDukeX(),
+                    R.string.localizable.fetchGamesFromARMSX2(),
                 ], completion: { [weak self] index in
                     guard let self else { return }
                     if let index {
@@ -45,6 +46,8 @@ class ImportServiceListView: BaseView {
                             type = .xeniOS
                         } else if index == 2 {
                             type = .dukeX
+                        } else if index == 3 {
+                            type = .armsx2
                         }
                         if let type {
                             EmulatorInteractionKit.fetchGames(type: type)

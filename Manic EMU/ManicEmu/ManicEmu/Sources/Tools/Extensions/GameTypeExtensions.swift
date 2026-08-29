@@ -184,6 +184,8 @@ extension GameType {
             self = .pm
         } else if shortName.uppercased() == "PS1" {
             self = .ps1
+        } else if shortName.uppercased() == "PS2" {
+            self = .ps2
         } else if shortName.uppercased() == "DC" {
             self = .dc
         } else if shortName.uppercased() == "DOOM" {
@@ -253,6 +255,7 @@ extension GameType {
         case .vb: return "Virtual Boy"
         case .pm: return "Pokémon Mini"
         case .ps1: return "PlayStation"
+        case .ps2: return "PlayStation 2"
         case .dc: return "Dreamcast"
         case .doom: return "DOOM"
         case .arcade: return "Arcade"
@@ -307,6 +310,7 @@ extension GameType {
         case .vb: return NSLocalizedString("VB", comment: "")
         case .pm: return NSLocalizedString("PM", comment: "")
         case .ps1: return NSLocalizedString("PS1", comment: "")
+        case .ps2: return NSLocalizedString("PS2", comment: "")
         case .dc: return NSLocalizedString("DC", comment: "")
         case .doom: return NSLocalizedString("DOOM", comment: "")
         case .arcade: return NSLocalizedString("Arcade", comment: "")
@@ -362,6 +366,7 @@ extension GameType {
         case .vb: return 1995
         case .pm: return 2001
         case .ps1: return 1995
+        case .ps2: return 2000
         case .dc: return 1998
         case .doom: return 1993
         case .arcade: return 1971
@@ -624,7 +629,7 @@ extension GameType {
         switch self {
         case ._3ds, .ds, .gb, .gba, .gbc, .nes, .fds, .snes, .vb, .pm, .n64, .ns, .ngc, .wii:
             return .nintendo
-        case .ps1, .psp:
+        case .ps1, .ps2, .psp:
             return .sony
         case .md, .mcd, ._32x, .sg1000, .gg, .ms, .ss, .dc:
             return .sega
@@ -787,6 +792,8 @@ extension GameType {
                 image = R.image.c64_group_brand()
             } else if self == .amiga {
                 image = R.image.amiga_group_brand()
+            } else if self == .ps2 {
+                image = R.image.ps2_group_brand()
             }
             Self.brandImageCaches[key] = image
             return image
@@ -796,7 +803,8 @@ extension GameType {
     var externalType: Bool {
         if self == .ns ||
             self == .xbox360 ||
-            self == .xbox {
+            self == .xbox ||
+            self == .ps2 {
             return true
         }
         return false

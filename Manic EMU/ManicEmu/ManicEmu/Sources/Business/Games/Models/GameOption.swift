@@ -78,7 +78,8 @@ enum GameOption: Int, CaseIterable {
          rewind,
          netplay,
          symbianDevice,
-         wiiControllerMode
+         wiiControllerMode,
+         coverScraping
         
     //When adding a new option, make sure to add it at the end; otherwise, it might affect the existing Prefference configurations
     
@@ -86,7 +87,7 @@ enum GameOption: Int, CaseIterable {
         switch self {
         case .rename:
                 .symbolImage(R.image.renameRegular_iconSymbols())
-        case .cover:
+        case .cover, .coverScraping:
                 .symbolImage(R.image.cover_iconSymbols())
         case .skins:
                 .symbolImage(R.image.skin_iconSymbols())
@@ -365,6 +366,8 @@ enum GameOption: Int, CaseIterable {
             R.string.localizable.netplay()
         case .symbianDevice:
             R.string.localizable.symbianFirmwareChoosing()
+        case .coverScraping:
+            R.string.localizable.coverScraping()
         }
     }
     
@@ -446,6 +449,7 @@ enum GameOption: Int, CaseIterable {
         [
             .rename,
             .cover,
+            .coverScraping,
             .skins
         ],
         [
@@ -945,7 +949,8 @@ enum GameOption: Int, CaseIterable {
                 .simBlowing,
                 .reload,
                 .quit,
-                .gameShortcut:
+                .gameShortcut,
+                .coverScraping:
             break
         }
         return .chevron(nil)
@@ -967,7 +972,7 @@ enum GameOption: Int, CaseIterable {
                 .quit,
             ]
         case .gameInfo:
-            return disableOptionsForScene(.common) + [.rename, .genHomeMenu]
+            return disableOptionsForScene(.common) + [.rename, .genHomeMenu, .coverScraping]
             
         case .gaming:
             return [
@@ -1000,6 +1005,7 @@ enum GameOption: Int, CaseIterable {
                 .clownMDTvStandard,
                 .snesVRAM,
                 .symbianDevice,
+                .coverScraping
             ]
         }
     }
@@ -1243,7 +1249,9 @@ enum GameOption: Int, CaseIterable {
         guard games.count > 0 else { return [] }
         
         if games.count == 1 {
-            return availableOptions(game: games.first!, scene: scene)
+            var options = availableOptions(game: games.first!, scene: scene)
+            options.removeAll(where: { $0 == .coverScraping })
+            return options
             
         } else {
             guard let firstGame = games.first else { return [] }

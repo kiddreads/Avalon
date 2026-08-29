@@ -19,6 +19,7 @@ struct ImageFetcher {
         case steamGridDB(Game, preferredAssetType: SteamGridDBContentsView.AssetType)
         case editImage(UIImage)
         case editImageUrl(URL)
+        case delete
     }
     
     private static func defaultEditorConfiguration() -> EditorConfiguration {
@@ -160,6 +161,10 @@ struct ImageFetcher {
             case .editImage, .editImageUrl:
                 return ASListPage.Cell.iconTitleChevronCell(icon: .symbolImage(R.image.edit_iconSymbols()),
                                                             title: R.string.localizable.editTitle())
+            case .delete:
+                return ASListPage.Cell.iconTitleChevronCell(icon: .symbolImage(R.image.delete_iconSymbols(), colors: [R.Color.Red]),
+                                                            title: R.string.localizable.removeTitle(),
+                                                            titleColor: R.Color.Red)
             }
         })
         
@@ -230,6 +235,8 @@ struct ImageFetcher {
                         }
                     }
                 }
+            case .delete:
+                completion?(nil, .delete)
             }
         })
     }

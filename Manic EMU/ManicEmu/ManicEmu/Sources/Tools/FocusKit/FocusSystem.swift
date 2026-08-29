@@ -312,29 +312,51 @@ final class FocusSystem {
         send(key)
     }
 
-    /// 一次完整短按（没有按压相位的输入源可直接调用）
+    /// One complete tap. Input sources without press phases can call this directly.
     func send(_ key: FocusKey) {
         guard isEnabled, let context = currentContext else { return }
 
         validateFocusState(in: context)
 
-        // 命令链：焦点视图 → 容器 → 页面 → 全局，先消费先停止
-        if dispatchCommands(for: key, pressType: .tap, in: context) { return }
+        let previousFocus = focusedView ?? (focusedContainer as UIView?)
 
-        // 默认行为
+        // Command chain: focused view → container → page → global; first consumer wins.
+        if dispatchCommands(for: key, pressType: .tap, in: context) {
+            playFocusSound(for: key, previousFocus: previousFocus)
+            return
+        }
+
+        // Default behavior
         if let direction = key.direction {
             moveFocus(direction, in: context)
+            playFocusSound(for: key, previousFocus: previousFocus)
         } else if key == .a {
+            playFocusSound(for: key, previousFocus: previousFocus)
             performConfirm()
         } else if key == .b {
-            // 有焦点：先取消焦点（记忆位置，方向键可随时恢复）；无焦点才执行页面关闭
+            playFocusSound(for: key, previousFocus: previousFocus)
+            // Has focus: clear it (position remembered, D-pad can restore). Otherwise close the page.
             if focusedView != nil || focusedContainer != nil {
                 rememberAndClearCurrentFocus()
             } else {
                 context.performCancel()
             }
         }
-        // 自定义键无默认行为
+        // Custom keys have no default behavior
+    }
+
+    /// Hover only when focus actually moved; confirm/cancel fire for A/B regardless of the handler.
+    private func playFocusSound(for key: FocusKey, previousFocus: UIView?) {
+        if key.direction != nil {
+            let current = focusedView ?? (focusedContainer as UIView?)
+            if current !== previousFocus {
+                FocusSoundEffects.shared.play(.hover)
+            }
+        } else if key == .a {
+            FocusSoundEffects.shared.play(.focus)
+        } else if key == .b {
+            FocusSoundEffects.shared.play(.cancel)
+        }
     }
 
     // MARK: - 长按与连发

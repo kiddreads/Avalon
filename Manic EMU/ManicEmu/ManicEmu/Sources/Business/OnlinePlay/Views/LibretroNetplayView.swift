@@ -397,7 +397,7 @@ class LibretroNetplayView: BaseView {
             } else if let index = navigationValue.tapToolsValue {
                 if index == 0 {
                     //info
-                    let desc = EmulationCore.libretroCores.reduce("", { result, core in
+                    let desc = EmulationCore.libretroCores.filter({ $0.supportNetplay }).reduce("", { result, core in
                         var gameTypesString: String = ""
                         if let gameTypes = core.gameTypes {
                             gameTypesString = "(\(gameTypes.reduce("", { $0 + ($0.isEmpty ? "" : " ") + $1.localizedShortName })))"

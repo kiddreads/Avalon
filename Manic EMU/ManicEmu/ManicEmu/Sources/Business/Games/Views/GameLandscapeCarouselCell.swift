@@ -228,6 +228,7 @@ class GameLandscapeCarouselCell: UICollectionViewCell {
         emptyContentStack.isHidden = true
         coverView.isHidden = false
         cardView.snp.updateConstraints { make in
+            make.centerY.equalToSuperview().offset(-Self.infoPanelReserve/2)
             make.size.equalTo(cardSize.height)
         }
         coverView.setData(game: game, coverSize: cardSize, style: R.Style.GameCoverStyle)
@@ -248,6 +249,7 @@ class GameLandscapeCarouselCell: UICollectionViewCell {
         emptyCardView.isHidden = false
         emptyContentStack.isHidden = false
         cardView.snp.updateConstraints { make in
+            make.centerY.equalToSuperview().offset(-((R.Size.NavigationHeight + R.Size.ContentInsetTop)/2))
             make.size.equalTo(cardSize.height)
         }
         emptyCardView.snp.updateConstraints { make in

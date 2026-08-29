@@ -121,8 +121,17 @@ class GameCoverModifyView: BaseView {
             sources.append(.editImageUrl(url))
         }
         
-        ImageFetcher.showCommonFetcher(sources: sources) { [weak self] image, _ in
-            guard let self, let image else { return }
+        if kind.hasRemovableImage(game: game) {
+            sources.append(.delete)
+        }
+        
+        ImageFetcher.showCommonFetcher(sources: sources) { [weak self] image, source in
+            guard let self else { return }
+            if case .delete = source {
+                self.removeImage(for: kind)
+                return
+            }
+            guard let image else { return }
             self.persist(image: image, for: kind)
         }
     }
@@ -147,6 +156,26 @@ class GameCoverModifyView: BaseView {
         if kind == .boxArt {
             NotificationCenter.default.post(name: R.NotificationName.GameCoverChange, object: nil)
         }
+    }
+    
+    /// Clears the selected artwork. Box art leaves `hasCoverMatch` unchanged so auto-match will not refill it.
+    private func removeImage(for kind: CoverSlotKind) {
+        Game.change { realm in
+            switch kind {
+            case .boxArt:
+                self.game.gameCover?.deleteAndClean(realm: realm)
+                self.game.gameCover = nil
+                self.game.onlineCoverUrl = nil
+            case .icon:
+                self.game.icon?.deleteAndClean(realm: realm)
+                self.game.icon = nil
+            case .banner:
+                self.game.banner?.deleteAndClean(realm: realm)
+                self.game.banner = nil
+            }
+        }
+        slot(for: kind).reloadImage()
+        NotificationCenter.default.post(name: R.NotificationName.GameCoverChange, object: nil)
     }
     
     private func slot(for kind: CoverSlotKind) -> CoverSlotView {
@@ -198,6 +227,17 @@ private enum CoverSlotKind {
             let landscapeHeight = R.Size.WindowSize.minDimension
             let landscapeAspect = landscapeWidth / max(landscapeHeight, 1)
             return CGSize(width: width, height: width / max(landscapeAspect, 0.01))
+        }
+    }
+    
+    func hasRemovableImage(game: Game) -> Bool {
+        switch self {
+        case .boxArt:
+            return game.gameCover != nil || game.onlineCoverUrl != nil
+        case .icon:
+            return game.icon != nil
+        case .banner:
+            return game.banner != nil
         }
     }
     

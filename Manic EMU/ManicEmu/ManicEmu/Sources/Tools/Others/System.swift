@@ -11,6 +11,7 @@
 
 enum System: CaseIterable
 {
+    case ps2
     case amiga
     case c64
     case ngp
@@ -163,6 +164,7 @@ extension System {
         case .ngp: return .ngp
         case .c64: return .c64
         case .amiga: return .amiga
+        case .ps2: return .ps2
         }
     }
 }

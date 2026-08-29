@@ -237,8 +237,10 @@ extension GameOption {
                 UIPasteboard.general.string = R.URLs.MeloNXGameLaunch(gameId: firstGame.id).absoluteString
             } else if firstGame.gameType == .xbox360 {
                 UIPasteboard.general.string = R.URLs.XeniOSGameLaunch(gameId: firstGame.id).absoluteString
-            } else if firstGame.gameType == .xbox360 {
+            } else if firstGame.gameType == .xbox {
                 UIPasteboard.general.string = R.URLs.DukeXGameLaunch(gameId: firstGame.id).absoluteString
+            } else if firstGame.gameType == .ps2 {
+                UIPasteboard.general.string = R.URLs.ARMSX2GameLaunch(gameId: firstGame.id).absoluteString
             } else {
                 UIPasteboard.general.string = "manicemu://launch/\(firstGame.id)"
             }
@@ -1069,6 +1071,8 @@ extension GameOption {
         case .wiiControllerMode:
             performStringAction(with: games, accessoryChange: accessoryChange)
             
+        case .coverScraping:
+            GameCoverScrapingView.show(games: games)
         }
     }
     
@@ -1507,8 +1511,19 @@ extension GameOption {
                     })
                     if PlayViewController.isGaming {
                         let wiiController = firstGame.getExtraInt(key: ExtraKey.wiiController.rawValue) ?? 0
-                        LibretroCore.sharedInstance().setWiiRemote(wiiController != 0)
-                        WiiEmulatorBridge.shared.isWiiremoteSideways = wiiController == 2
+                        let controllerType = LibretroWiiController(rawValue: wiiController) ?? .classicPro
+                        let realm = Database.realm
+                        if let currentSkinID = PlayViewController.currentSkinID,
+                           let skin = realm.object(ofType: Skin.self, forPrimaryKey: currentSkinID) {
+                            if controllerType == .classicPro, skin.skinType != .default {
+                                PlayViewController.updateSkin()
+                            } else if controllerType != .classicPro, skin.skinType == .default {
+                                PlayViewController.updateSkin()
+                            }
+                            
+                        }
+                        LibretroCore.sharedInstance().setWiiController(controllerType)
+                        WiiEmulatorBridge.shared.controllerType = controllerType
                         resumeEmulationIfNeed()
                     }
                 }

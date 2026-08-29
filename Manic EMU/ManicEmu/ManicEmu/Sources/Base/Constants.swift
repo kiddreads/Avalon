@@ -78,6 +78,7 @@ extension _R {
                 case .dos, .win95, .win98: return 0.8
                 case .chm: return 0.7908
                 case .xbox: return 0.714
+                case .ps2: return 0.711
                 case .ngc, .wii: return 0.706
                 case .ngp, .ngpc: return 0.8594
                 case .c64: return 0.7146
@@ -529,6 +530,10 @@ extension _R {
         static let NimbusPath = Resource.appendingPathComponent("Nimbus210")
         static let Nimbus3DSPath = NimbusPath.appendingPathComponent("3ds")
         static let NimbusCiaPath = NimbusPath.appendingPathComponent("cias/nimbus.cia")
+        static let GamecubeUser = Dolphin.appendingPathComponent("/User/GC")
+        static let GamecubeUserEUR = GamecubeUser.appendingPathComponent("/EUR")
+        static let GamecubeUserJAP = GamecubeUser.appendingPathComponent("/JAP")
+        static let GamecubeUserUSA = GamecubeUser.appendingPathComponent("/USA")
     }
     
     struct _DefaultKey {
@@ -599,19 +604,21 @@ extension _R {
         static let MeloNXScheme = "atariemulator"
         static let XeniOSScheme = "xenios"
         static let DukeXScheme = "dukex"
+        static let ARMSX2Scheme = "armsx2"
         static let J2MEScreenSizes = ["96x65", "96x96", "104x80", "128x128", "132x176", "128x160", "176x208", "176x220", "208x208", "240x320", "320x240", "240x400", "352x416", "360x640", "640x360", "480x800", "800x480"]
         static let DOSKeyboardSkinID = "public.aoshuang.game.dos.standard.keyboard"
         static let AzaharArticBaseGameID = "AzaharArticBase"
         static let WiiControllers = [
             "Classic Controller Pro",
             "Wiimote",
-            R.string.localizable.wiimoteSideways()
+            R.string.localizable.wiimoteSideways(),
+            "Wiimote+Nunchuk"
         ]
         static let SymbianEdgeSkinIdentifier = "public.aoshuang.game.symbian.standard.edge"
         static let SymbianEdgeFlexSkinIdentifier = "public.aoshuang.game.symbian.edge.flex"
         static let SymbianSkinIdentifier = "public.aoshuang.game.symbian.standard"
         static let SymbianFlexSkinIdentifier = "public.aoshuang.game.symbian.flex"
-        
+        static let WiimoteSkinIdentifier = "public.aoshuang.game.wiimote"
     }
     
     enum _Config {
@@ -836,6 +843,22 @@ extension _R {
         static func XeniOSGameLaunch(gameId: String) -> URL { URL(string: "\(R.Strings.XeniOSScheme)://launch?title-id=\(gameId)")! }
         static let FetchDukeXGames = URL(string: "\(R.Strings.DukeXScheme)://gameInfo?scheme=manicemu")!
         static func DukeXGameLaunch(gameId: String) -> URL { URL(string: "\(R.Strings.DukeXScheme)://launch?titleid=\(gameId)")! }
+        static let FetchARMSX2Games: URL = {
+            var components = URLComponents()
+            components.scheme = R.Strings.ARMSX2Scheme
+            components.host = "library"
+            components.queryItems = [
+                URLQueryItem(name: "callback", value: "\(R.Strings.ManicScheme)://\(R.Strings.ARMSX2Scheme)")
+            ]
+            return components.url!
+        }()
+        static func ARMSX2GameLaunch(gameId: String) -> URL {
+            var components = URLComponents()
+            components.scheme = R.Strings.ARMSX2Scheme
+            components.host = "launch"
+            components.queryItems = [URLQueryItem(name: "game", value: gameId)]
+            return components.url!
+        }
 #if SIDE_LOAD
         static let EnableJITUrl = URL(string: "stikjit://enable-jit?bundle-id=com.aoshuang.manicemu&script-name=universal.js")!
 #endif

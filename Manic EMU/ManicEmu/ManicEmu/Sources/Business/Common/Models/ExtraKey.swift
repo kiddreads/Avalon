@@ -71,6 +71,8 @@ enum ExtraKey: String {
     case steamGridDBAPIKey
     case landscapeListStyle
     case landscapeShaderToy
+    case landscapeBackgroundMusic
+    case landscapeSoundEffects
     case gameMetadata
     case hasQueryMetadata
     case hideGameRating

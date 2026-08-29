@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case appearance, theme, quickGame, autoSaveState, skin, airPlay, iCloud, fullScreenWhenConnectController, bios, respectSilentMode, onlinePlay, rumble, skinSound, retro, triggerPro, jit, shaders, globalCoreSwitch, FAQ, feedback, qq, telegram, discord, about, shareApp, clearCache, language, userAgreement, privacyPolicy, featuredItems
+        case appearance, theme, quickGame, autoSaveState, skin, airPlay, iCloud, fullScreenWhenConnectController, bios, respectSilentMode, onlinePlay, rumble, skinSound, retro, triggerPro, jit, shaders, globalCoreSwitch, FAQ, feedback, qq, telegram, discord, about, shareApp, clearCache, language, userAgreement, privacyPolicy, featuredItems, coverScraping
     }
     
     var type: ItemType
@@ -105,7 +105,7 @@ struct SettingItem {
             [R.Color.Green]
         case .skin, .skinSound, .about:
             [R.Color.Pink]
-        case .airPlay, .qq, .telegram, .shareApp:
+        case .airPlay, .qq, .telegram, .shareApp, .coverScraping:
             [R.Color.Indigo]
         case .quickGame, .iCloud, .triggerPro, .clearCache:
             [R.Color.Yellow]
@@ -180,6 +180,8 @@ struct SettingItem {
             ASIcon.symbolImage(R.image.skin_iconSymbols(), colors: iconColors)
         case .globalCoreSwitch:
             ASIcon.symbolImage(R.image.core_iconSymbols(), colors: iconColors)
+        case .coverScraping:
+            ASIcon.symbolImage(R.image.cover_iconSymbols(), colors: iconColors)
         }
     }
     
@@ -245,6 +247,8 @@ struct SettingItem {
             R.string.localizable.skinSoundEffects()
         case .globalCoreSwitch:
             R.string.localizable.globalCoreSwitch()
+        case .coverScraping:
+            R.string.localizable.coverScraping()
         }
     }
     

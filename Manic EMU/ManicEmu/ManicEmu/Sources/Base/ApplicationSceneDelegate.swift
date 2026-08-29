@@ -28,6 +28,8 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     ThemeManager.shared.setup()
                     self.window?.rootViewController = HomeViewController()
                     self.window?.makeKeyAndVisible()
+                    BackgroundMusicKit.shared.startMonitoring()
+                    FocusSoundEffects.shared.startMonitoring()
                     if Settings.defalut.iCloudSyncEnable {
                         SyncManager.shared.startSync()
                     }
@@ -95,6 +97,8 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                         EmulatorInteractionKit.processGames(type: .xeniOS, callbackUrl: url)
                     } else if let host = url.host, host == R.Strings.DukeXScheme {
                         EmulatorInteractionKit.processGames(type: .dukeX, callbackUrl: url)
+                    } else if let host = url.host, host == R.Strings.ARMSX2Scheme {
+                        EmulatorInteractionKit.processGames(type: .armsx2, callbackUrl: url)
                     } else {
                         Self.launchGameID = url.lastPathComponent
                     }

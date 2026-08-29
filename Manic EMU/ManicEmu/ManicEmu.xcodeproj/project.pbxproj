@@ -180,6 +180,15 @@
 		576A7DAE2E3B4FD400008E35 /* mednafen.psx.hw.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576A7DAA2E3B4FBC00008E35 /* mednafen.psx.hw.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		576C46312E16D9090008D087 /* MultiDiscDescCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C46302E16D8F20008D087 /* MultiDiscDescCollectionCell.swift */; };
 		576C46352E16DA1B0008D087 /* MultiDiscItemCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C46342E16DA0D0008D087 /* MultiDiscItemCollectionCell.swift */; };
+		576C4BDD3041749100DB526E /* BackgroundMusicKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4BD83041748700DB526E /* BackgroundMusicKit.swift */; };
+		576C4BDE3041749100DB526E /* BackgroundMusicKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4BD83041748700DB526E /* BackgroundMusicKit.swift */; };
+		576C4BDF3041749100DB526E /* BackgroundMusicKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4BD83041748700DB526E /* BackgroundMusicKit.swift */; };
+		576C4BE7304174AA00DB526E /* FocusSoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4BE13041749900DB526E /* FocusSoundEffects.swift */; };
+		576C4BE8304174AA00DB526E /* FocusSoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4BE13041749900DB526E /* FocusSoundEffects.swift */; };
+		576C4BE9304174AA00DB526E /* FocusSoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4BE13041749900DB526E /* FocusSoundEffects.swift */; };
+		576C4C093041979700DB526E /* GameCoverScrapingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4C043041978C00DB526E /* GameCoverScrapingView.swift */; };
+		576C4C0A3041979700DB526E /* GameCoverScrapingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4C043041978C00DB526E /* GameCoverScrapingView.swift */; };
+		576C4C0B3041979700DB526E /* GameCoverScrapingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C4C043041978C00DB526E /* GameCoverScrapingView.swift */; };
 		576C8C683032B5B700AEB08F /* IceCream in Frameworks */ = {isa = PBXBuildFile; productRef = 576C8C673032B5B700AEB08F /* IceCream */; };
 		576C8C723032B5D800AEB08F /* IceCream in Frameworks */ = {isa = PBXBuildFile; productRef = 576C8C713032B5D800AEB08F /* IceCream */; };
 		576C8C863032C96100AEB08F /* GameOptionTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576C8C853032C95B00AEB08F /* GameOptionTypes.swift */; };
@@ -1932,6 +1941,9 @@
 		576A7DAA2E3B4FBC00008E35 /* mednafen.psx.hw.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mednafen.psx.hw.libretro.framework; path = ../Cores/mednafen.psx.hw.libretro.framework; sourceTree = SOURCE_ROOT; };
 		576C46302E16D8F20008D087 /* MultiDiscDescCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDiscDescCollectionCell.swift; sourceTree = "<group>"; };
 		576C46342E16DA0D0008D087 /* MultiDiscItemCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDiscItemCollectionCell.swift; sourceTree = "<group>"; };
+		576C4BD83041748700DB526E /* BackgroundMusicKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundMusicKit.swift; sourceTree = "<group>"; };
+		576C4BE13041749900DB526E /* FocusSoundEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSoundEffects.swift; sourceTree = "<group>"; };
+		576C4C043041978C00DB526E /* GameCoverScrapingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoverScrapingView.swift; sourceTree = "<group>"; };
 		576C8C853032C95B00AEB08F /* GameOptionTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOptionTypes.swift; sourceTree = "<group>"; };
 		576C8D6A30332B2F00AEB08F /* ShaderToyScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderToyScripts.swift; sourceTree = "<group>"; };
 		576F0DA42D85CD3900D2A1BA /* FeaturesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesCell.swift; sourceTree = "<group>"; };
@@ -7210,6 +7222,7 @@
 				576F0E042D88005800D2A1BA /* GameSavePurchaseGuideView.swift */,
 				57F1A9172D7D25B600D0CC93 /* GameInfoView.swift */,
 				57D9424F302CA8E100C06208 /* GameCoverModifyView.swift */,
+				576C4C043041978C00DB526E /* GameCoverScrapingView.swift */,
 				57913B412D5ED722004D51AA /* GameInfoCoverView.swift */,
 				57F1D4D02FFE10CC00FC5B2A /* GameInfoDetailView.swift */,
 				575A39D32DCD9C7000B28FC2 /* LibretroCoverSearchView.swift */,
@@ -12945,6 +12958,7 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				576C4BD83041748700DB526E /* BackgroundMusicKit.swift */,
 				577EC55F2F7E561900E8E3EB /* UniversalScript.swift */,
 				577EC5AA2F7E566700E8E3EB /* UniversalScript.c */,
 				57DC7FFB2F52EC38004B6FFD /* WeakScriptMessageHandler.swift */,
@@ -13082,6 +13096,7 @@
 		F0C5000000000000000000FF /* FocusKit */ = {
 			isa = PBXGroup;
 			children = (
+				576C4BE13041749900DB526E /* FocusSoundEffects.swift */,
 				57F1D4FB2FFF58B400FC5B2A /* FocusKeyObserver.swift */,
 				F0C500000000000000000101 /* FocusTypes.swift */,
 				F0C500000000000000000102 /* Focusable.swift */,
@@ -13479,6 +13494,7 @@
 				5790938F303C7D9100A53656 /* FocusContext.swift in Sources */,
 				57909390303C7D9100A53656 /* FocusEngine.swift in Sources */,
 				57909391303C7D9100A53656 /* FocusCollectionView.swift in Sources */,
+				576C4C093041979700DB526E /* GameCoverScrapingView.swift in Sources */,
 				57909392303C7D9100A53656 /* FocusSystem.swift in Sources */,
 				57909393303C7D9100A53656 /* FocusSystem+UIViewController.swift in Sources */,
 				57909394303C7D9100A53656 /* CheersView.swift in Sources */,
@@ -13486,6 +13502,7 @@
 				57909396303C7D9100A53656 /* SNES.swift in Sources */,
 				57909397303C7D9100A53656 /* GameOptionsView.swift in Sources */,
 				57909398303C7D9100A53656 /* ASButton.swift in Sources */,
+				576C4BDE3041749100DB526E /* BackgroundMusicKit.swift in Sources */,
 				57909399303C7D9100A53656 /* PurchaseButtonReusableView.swift in Sources */,
 				5790939A303C7D9100A53656 /* ControllerMapping.swift in Sources */,
 				5790939B303C7D9100A53656 /* GB.swift in Sources */,
@@ -13513,6 +13530,7 @@
 				579093B1303C7D9100A53656 /* ShaderPreviewView.swift in Sources */,
 				579093B2303C7D9100A53656 /* PretendoNetworkingView.swift in Sources */,
 				579093B3303C7D9100A53656 /* CheevosPopupView.swift in Sources */,
+				576C4BE9304174AA00DB526E /* FocusSoundEffects.swift in Sources */,
 				579093B4303C7D9100A53656 /* GlobalCoreSwitch.swift in Sources */,
 				579093B5303C7D9100A53656 /* ASListCustomCollectionCell.swift in Sources */,
 				579093B6303C7D9100A53656 /* ASSheetView.swift in Sources */,
@@ -13926,6 +13944,7 @@
 				F0C500000000000000000204 /* FocusContext.swift in Sources */,
 				F0C500000000000000000205 /* FocusEngine.swift in Sources */,
 				F0C500000000000000000206 /* FocusCollectionView.swift in Sources */,
+				576C4C0A3041979700DB526E /* GameCoverScrapingView.swift in Sources */,
 				F0C500000000000000000207 /* FocusSystem.swift in Sources */,
 				F0C500000000000000000208 /* FocusSystem+UIViewController.swift in Sources */,
 				57CDCD8C2FD5CBD3005BA4C8 /* CheersView.swift in Sources */,
@@ -13933,6 +13952,7 @@
 				57CDCD8F2FD5CBD3005BA4C8 /* SNES.swift in Sources */,
 				57F1D4A92FF630D000FC5B2A /* GameOptionsView.swift in Sources */,
 				5796DB202FE4184D0051F661 /* ASButton.swift in Sources */,
+				576C4BDD3041749100DB526E /* BackgroundMusicKit.swift in Sources */,
 				57CDCD912FD5CBD3005BA4C8 /* PurchaseButtonReusableView.swift in Sources */,
 				57CDCD922FD5CBD3005BA4C8 /* ControllerMapping.swift in Sources */,
 				57CDCD932FD5CBD3005BA4C8 /* GB.swift in Sources */,
@@ -13960,6 +13980,7 @@
 				57FD14133011C73D007F211A /* ShaderPreviewView.swift in Sources */,
 				57CDCDA32FD5CBD3005BA4C8 /* PretendoNetworkingView.swift in Sources */,
 				57CDCDA52FD5CBD3005BA4C8 /* CheevosPopupView.swift in Sources */,
+				576C4BE8304174AA00DB526E /* FocusSoundEffects.swift in Sources */,
 				57CDCDA62FD5CBD3005BA4C8 /* GlobalCoreSwitch.swift in Sources */,
 				57D482B23019D3330030A771 /* ASListCustomCollectionCell.swift in Sources */,
 				57C79DE12FE3EC49003C737F /* ASSheetView.swift in Sources */,
@@ -14336,6 +14357,7 @@
 				F0C500000000000000000304 /* FocusContext.swift in Sources */,
 				F0C500000000000000000305 /* FocusEngine.swift in Sources */,
 				F0C500000000000000000306 /* FocusCollectionView.swift in Sources */,
+				576C4C0B3041979700DB526E /* GameCoverScrapingView.swift in Sources */,
 				F0C500000000000000000307 /* FocusSystem.swift in Sources */,
 				F0C500000000000000000308 /* FocusSystem+UIViewController.swift in Sources */,
 				57E48D932D8D73AD008000A3 /* CheersView.swift in Sources */,
@@ -14343,6 +14365,7 @@
 				57C8A11A2DF2BA3E00593F82 /* SNES.swift in Sources */,
 				57F1D4A82FF630D000FC5B2A /* GameOptionsView.swift in Sources */,
 				5796DB212FE4184D0051F661 /* ASButton.swift in Sources */,
+				576C4BDF3041749100DB526E /* BackgroundMusicKit.swift in Sources */,
 				57047A1D2D85BB2200C62FF6 /* PurchaseButtonReusableView.swift in Sources */,
 				5720D1C12DB9DCBB0090C0F6 /* ControllerMapping.swift in Sources */,
 				57E8B0822E1CDB8B00F93E60 /* GB.swift in Sources */,
@@ -14370,6 +14393,7 @@
 				57FD14143011C73D007F211A /* ShaderPreviewView.swift in Sources */,
 				572D026B2F87E3F8000BD6F4 /* PretendoNetworkingView.swift in Sources */,
 				57DFBE8C2E71BC7A008C2161 /* CheevosPopupView.swift in Sources */,
+				576C4BE7304174AA00DB526E /* FocusSoundEffects.swift in Sources */,
 				578E4B592F8A2F480027E6D0 /* GlobalCoreSwitch.swift in Sources */,
 				57D482B33019D3330030A771 /* ASListCustomCollectionCell.swift in Sources */,
 				57C79DE22FE3EC49003C737F /* ASSheetView.swift in Sources */,
@@ -14988,6 +15012,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B562A0A420E00053A4C /* Config-Debug.xcconfig */;
 			buildSettings = {
+				APP_BUILD_CONDITIONS = "DEBUG SIDE_LOAD";
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -15024,7 +15049,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(APP_BUILD_CONDITIONS)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(APP_BUILD_CONDITIONS)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -15531,7 +15556,7 @@
 		};
 		57CDCF782FD5CBD3005BA4C8 /* SideloadRelease */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 575A3A422DCEE9F300B28FC2 /* Config-SideloadRelease.xcconfig */;
+			baseConfigurationReference = B2C97B562A0A420E00053A4C /* Config-Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear AppIcon_Lily AppIcon_Rainbow1 AppIcon_Rainbow2 AppIcon_Rainbow3 AppIcon_Unity";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

@@ -13,12 +13,10 @@ struct ShaderToy {
         case mellowVoronoi
         case synthwaveSunset
         case paperScroll
-        case overTheMoon
         case insideTheMatrix
         case singularity
         case floatingPlaystationShapes
         case harmonicSineWave
-        case toonCloud
         case gradientFlow
         case pS3HomeBackground
         case pSPXMB
@@ -37,8 +35,6 @@ struct ShaderToy {
             "nyri0"
         case .paperScroll:
             "Ping2_0"
-        case .overTheMoon:
-            "BigWIngs"
         case .insideTheMatrix:
             "And390"
         case .singularity:
@@ -47,8 +43,6 @@ struct ShaderToy {
             "will7007"
         case .harmonicSineWave:
             "trinketMage"
-        case .toonCloud:
-            "AntoineC"
         case .gradientFlow:
             "hahnzhu"
         case .pS3HomeBackground:
@@ -68,8 +62,6 @@ struct ShaderToy {
             return Self.MellowVoronoi
         case .synthwaveSunset:
             return Self.SynthwaveSunset
-        case .overTheMoon:
-            return Self.OverTheMoon
         case .paperScroll:
             return Self.PaperScroll
         case .insideTheMatrix:
@@ -91,8 +83,6 @@ struct ShaderToy {
                                                waveColor: UIColor(.dm,
                                                                   light: .white,
                                                                   dark: R.Color.BackgroundPrimary.forceStyle(.dark)))
-        case .toonCloud:
-            return Self.ToonCloud
         case .gradientFlow:
             return Self.gradientFlowScript(colors: R.Color.Gradient)
         case .pS3HomeBackground:
@@ -140,8 +130,6 @@ struct ShaderToy {
             return "Mellow Voronoi"
         case .synthwaveSunset:
             return "Synthwave sunset"
-        case .overTheMoon:
-            return "Over the Moon"
         case .paperScroll:
             return "Paper scroll"
         case .insideTheMatrix:
@@ -152,8 +140,6 @@ struct ShaderToy {
             return "Floating Shapes"
         case .harmonicSineWave:
             return "Harmonic Sine Wave"
-        case .toonCloud:
-            return "Toon Cloud"
         case .gradientFlow:
             return "Gradient Flow"
         case .pS3HomeBackground:
@@ -177,8 +163,6 @@ struct ShaderToy {
                 .image(R.image.mellowVoronoi(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
         case .synthwaveSunset:
                 .image(R.image.synthwaveSunset(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
-        case .overTheMoon:
-                .image(R.image.overTheMoon(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
         case .paperScroll:
                 .image(R.image.paperScroll(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
         case .insideTheMatrix:
@@ -189,8 +173,6 @@ struct ShaderToy {
                 .image(R.image.floatingPlaystationShapes(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
         case .harmonicSineWave:
                 .image(R.image.harmonicSineWave(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
-        case .toonCloud:
-                .image(R.image.toonCloud(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
         case .gradientFlow:
                 .image(R.image.gradientFlow(), cornerStyle: .radius(R.Size.CornerRadiusMicro))
         case .pS3HomeBackground:
@@ -207,8 +189,6 @@ struct ShaderToy {
         switch style {
         case .synthwaveSunset:
             return 0.55
-        case .overTheMoon:
-            return 0.45
         case .none:
             return 0.35
         default:

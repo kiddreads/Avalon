@@ -38,6 +38,8 @@ extension GameType {
     case rightThumbstickDown
     case rightThumbstickLeft
     case rightThumbstickRight
+    case c
+    case z
 
     case flex
     case menu
@@ -71,6 +73,8 @@ extension GameType {
         else if stringValue == "rightThumbstickDown" { self = .rightThumbstickDown}
         else if stringValue == "rightThumbstickLeft" { self = .rightThumbstickLeft}
         else if stringValue == "rightThumbstickRight" { self = .rightThumbstickRight}
+        else if stringValue == "c" { self = .c}
+        else if stringValue == "z" { self = .z}
         else { return nil }
     }
 }
@@ -112,7 +116,7 @@ class WiiEmulatorBridge : EmulatorBridgeBase {
     
     private var thumbstickPosition: CGPoint = .zero
     
-    var isWiiremoteSideways: Bool = false
+    var controllerType: LibretroWiiController = .classicPro
 
     override func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
@@ -140,22 +144,71 @@ Log.debug("🎮 \(objectInfo(self)) 点击了:\(gameInput)")
     }
     
     func gameInputToCoreInput(gameInput: WiiGameInput) -> LibretroButton? {
-        if gameInput == .a { return .A }
-        else if gameInput == .b { return .B }
-        else if gameInput == .x { return .X }
-        else if gameInput == .y { return .Y }
-        else if gameInput == .start { return .start }
-        else if gameInput == .select { return .select }
-        else if gameInput == .up { return isWiiremoteSideways ? .right : .up }
-        else if gameInput == .down { return isWiiremoteSideways ? .left : .down }
-        else if gameInput == .left { return isWiiremoteSideways ? .up : .left }
-        else if gameInput == .right { return isWiiremoteSideways ? .down : .right }
-        else if gameInput == .l1 { return .L1 }
-        else if gameInput == .r1 { return .R1 }
-        else if gameInput == .l2 { return .L2 }
-        else if gameInput == .r2 { return .R2 }
-        else if gameInput == .l3 { return .L3 }
-        else if gameInput == .r3 { return .R3 }
+        switch controllerType {
+        case .wiimote:
+            if gameInput == .a { return .A }
+            else if gameInput == .b { return .B }
+            else if gameInput == .x { return .Y }
+            else if gameInput == .y { return .X }
+            else if gameInput == .start { return .start }
+            else if gameInput == .select { return .select }
+            else if gameInput == .up { return .up }
+            else if gameInput == .down { return .down }
+            else if gameInput == .left { return .left }
+            else if gameInput == .right { return .right }
+            else if gameInput == .c { return .R2 } //shake
+            else if gameInput == .z { return .R3 } //home
+            
+        case .wiimoteSideways:
+            if gameInput == .a { return .X }
+            else if gameInput == .b { return .Y }
+            else if gameInput == .x { return .A }
+            else if gameInput == .y { return .B }
+            else if gameInput == .start { return .start }
+            else if gameInput == .select { return .select }
+            else if gameInput == .up { return .up }
+            else if gameInput == .down { return .down }
+            else if gameInput == .left { return .left }
+            else if gameInput == .right { return .right }
+            else if gameInput == .c { return .R2 } //shake
+            else if gameInput == .z { return .R3 } //home
+            
+        case .wiimoteNunchuk:
+            if gameInput == .a { return .A }
+            else if gameInput == .b { return .B }
+            else if gameInput == .x { return .select }
+            else if gameInput == .y { return .start }
+            else if gameInput == .start { return .L1 }
+            else if gameInput == .select { return .R1 }
+            else if gameInput == .up { return .up }
+            else if gameInput == .down { return .down }
+            else if gameInput == .left { return .left }
+            else if gameInput == .right { return .right }
+            else if gameInput == .c { return .X }
+            else if gameInput == .z { return .Y }
+            else if gameInput == .l2 { return .L2 } //Shake Nunchuk
+            else if gameInput == .r2 { return .R2 } //Shake Wiimote
+            else if gameInput == .r3 { return .R3 } //home
+            
+        default:
+            if gameInput == .a { return .A }
+            else if gameInput == .b { return .B }
+            else if gameInput == .x { return .X }
+            else if gameInput == .y { return .Y }
+            else if gameInput == .start { return .start }
+            else if gameInput == .select { return .select }
+            else if gameInput == .up { return .up }
+            else if gameInput == .down { return .down }
+            else if gameInput == .left { return .left }
+            else if gameInput == .right { return .right }
+            else if gameInput == .l1 { return .L1 }
+            else if gameInput == .r1 { return .R1 }
+            else if gameInput == .l2 { return .L2 }
+            else if gameInput == .r2 { return .R2 }
+            else if gameInput == .l3 { return .L3 }
+            else if gameInput == .r3 { return .R3 }
+        }
+        
         return nil
     }
     

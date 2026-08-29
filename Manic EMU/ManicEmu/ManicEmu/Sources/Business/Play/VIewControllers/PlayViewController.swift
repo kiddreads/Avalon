@@ -154,6 +154,9 @@ class PlayViewController: GameViewController {
         } else if game.gameType == .xbox {
             EmulatorInteractionKit.startGame(type: .dukeX, id: game.id)
             return
+        } else if game.gameType == .ps2 {
+            EmulatorInteractionKit.startGame(type: .armsx2, id: game.id)
+            return
         }
         
         game.ensurePS1BinCueSheet()
@@ -913,7 +916,7 @@ class PlayViewController: GameViewController {
             self.view.setNeedsLayout()
         }) { [weak self] _ in
             guard let self = self else { return }
-            // Preference lookup and traits are based on the post-rotation size.
+            self.updateAzaharMotionRotation()
             self.updateSkin()
             self.view.setNeedsLayout()
             self.resumeEmulationAndHandleAudio()
@@ -1800,9 +1803,10 @@ extension PlayViewController {
                     updateLibretroCoreConfigs(core: .Azahar, configs: [
                         .citra_use_cpu_jit: "disabled",
                         .citra_use_default_aes_key: manicGame.isAzaharArticBase || manicGame.isArticBaseHomeMenu || manicGame.is3DSHomeMenuGame ? "enabled" : "disabled",
-                        .citra_required_online_lle_modules: manicGame.isArticBaseHomeMenu ? "enabled" : "disabled"
+                        .citra_required_online_lle_modules: manicGame.isArticBaseHomeMenu ? "enabled" : "disabled",
+                        .citra_motion_rotation: Self.citraMotionRotationValue()
                     ], safeMode: true)
-                    //Azahar核心每次启动都不进行加速，免得闪退
+                    // Never start Azahar with fast-forward; it can crash on boot.
                     Game.change { realm in
                         self.manicGame.speed = .one
                     }
@@ -2088,9 +2092,10 @@ extension PlayViewController {
                     updateLibretroCoreConfigs(core: .Azahar, configs: [
                         .citra_use_cpu_jit: enableJIT ? "enabled" : "disabled",
                         .citra_use_default_aes_key: manicGame.isAzaharArticBase || manicGame.isArticBaseHomeMenu || manicGame.is3DSHomeMenuGame ? "enabled" : "disabled",
-                        .citra_required_online_lle_modules: enableLLE ? "enabled" : "disabled"
+                        .citra_required_online_lle_modules: enableLLE ? "enabled" : "disabled",
+                        .citra_motion_rotation: Self.citraMotionRotationValue()
                     ])
-                    //Azahar核心每次启动都不进行加速，免得闪退
+                    // Never start Azahar with fast-forward; it can crash on boot.
                     Game.change { realm in
                         self.manicGame.speed = .one
                     }
@@ -2139,25 +2144,9 @@ extension PlayViewController {
                 if enableJIT {
                     setupUniversalScript(gameType: manicGame.gameType)
                 }
-                var isNGCBiosExists = false
-                if manicGame.gameType == .ngc,
-                    let bios = manicGame.gameType.biosItems.first {
-                    let biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
-                    let biosInDoc = R.Path.BIOS.appendingPathComponent(bios.fileName)
-                    if FileManager.default.fileExists(atPath: biosInLib) {
-                        isNGCBiosExists = true
-                    } else if FileManager.default.fileExists(atPath: biosInDoc) {
-                        do {
-                            try FileManager.safeCopyItem(at: URL(fileURLWithPath: biosInDoc),
-                                                    to: URL(fileURLWithPath: biosInLib))
-                            isNGCBiosExists = true
-                        } catch {}
-                    }
-                }
                 //4: JITARM64 5: Cached Interpreter
                 updateLibretroCoreConfigs(core: .Dolphin, configs: [
                     .dolphin_cpu_core: enableJIT ? "4" : "5",
-                    .dolphin_skip_gc_bios: isNGCBiosExists ? "disabled" : "enabled",
                     .dolphin_cheats_enabled: isHardcoreMode ? "disabled" : "enabled"
                 ])
             } else if manicGame.gameType == .amiga {
@@ -2318,9 +2307,24 @@ extension PlayViewController {
                 if manicGame.supportSwapScreen {
                     controllerSkin.isSwapScreen = manicGame.swapScreen
                 }
-                controllerView.controllerSkin = controllerSkin
+                if manicGame.gameType == .wii,
+                   let controllerType = LibretroWiiController(rawValue: manicGame.getExtraInt(key: ExtraKey.wiiController.rawValue) ?? 0),
+                   controllerType != .classicPro,
+                   let wiimoteSkin = Database.realm.objects(Skin.self).where({
+                       $0.identifier == R.Strings.WiimoteSkinIdentifier }).first,
+                   let wiimoteControllerSkin = ControllerSkin(fileURL: wiimoteSkin.fileURL) {
+                    //If the user has set up a Wiimote controller and hasn't specifically picked a preferred skin, then assign the Wiimote skin to them.
+                    controllerView.controllerSkin = wiimoteControllerSkin
+                } else {
+                    controllerView.controllerSkin = controllerSkin
+                }
                 // Same dual-orientation skin may only be stored under the other orientation key.
                 controllerView.updateControllerSkin()
+                
+                if let identifier = controllerView.controllerSkin?.identifier,
+                   let skin = Database.realm.objects(Skin.self).where({ $0.identifier == identifier }).first {
+                    currentSkinID = skin.id
+                }
             }
         }
         
@@ -2374,7 +2378,33 @@ extension PlayViewController {
         }
     }
     
-    /// 按照配置开始强制旋转屏幕
+    /// Android Surface.ROTATION_* value for Azahar `citra_motion_rotation`.
+    private static func citraMotionRotationValue(
+        for orientation: UIInterfaceOrientation = UIDevice.currentOrientation
+    ) -> String {
+        switch orientation {
+        case .portrait:
+            return "0"
+        case .landscapeLeft:
+            return "1"
+        case .portraitUpsideDown:
+            return "2"
+        case .landscapeRight:
+            return "3"
+        default:
+            return "3"
+        }
+    }
+
+    private func updateAzaharMotionRotation() {
+        guard manicGame.isAzahar3DS else { return }
+        LibretroCore.sharedInstance().updateRunningCoreConfigs(
+            [SpecialCoreOption.citra_motion_rotation.rawValue: Self.citraMotionRotationValue()],
+            flush: false
+        )
+    }
+
+    /// Rotate to the orientation selected in game options.
     private func startOrientation() {
         if #available(iOS 16.0, tvOS 16.0, *) {
             self.setNeedsUpdateOfSupportedInterfaceOrientations()
@@ -2850,9 +2880,9 @@ extension PlayViewController {
                             }
                         } else if manicGame.gameType == .wii {
                             let wiiController = manicGame.getExtraInt(key: ExtraKey.wiiController.rawValue) ?? 0
-                            LibretroCore.sharedInstance().setWiiRemote(wiiController != 0)
-                            //Wiiremote Sideways
-                            WiiEmulatorBridge.shared.isWiiremoteSideways = wiiController == 2
+                            let controllerType = LibretroWiiController(rawValue: wiiController) ?? .classicPro
+                            LibretroCore.sharedInstance().setWiiController(controllerType)
+                            WiiEmulatorBridge.shared.controllerType = controllerType
                         }
                         DispatchQueue.main.asyncAfter(delay: 2.5) {
                             self.updateFastforward(speed: self.manicGame.speed)

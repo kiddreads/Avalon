@@ -602,6 +602,9 @@
 		<string>xenios</string>
 		<string>stikjit</string>
 		<string>dukex</string>
+		<string>armsx2</string>
+		<string>armsx2-ios</string>
+		<string>armsx2ios</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

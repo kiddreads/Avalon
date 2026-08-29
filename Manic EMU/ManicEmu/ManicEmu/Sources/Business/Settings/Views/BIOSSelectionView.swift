@@ -98,6 +98,8 @@ class BIOSSelectionView: BaseView {
                     }
                 } else if gameType == .symbian {
                     SymbianFirmwareView.show()
+                } else if gameType == .ngc {
+                    self.showGamecubeIPLSheet(desc: gameType.biosItems.first?.desc)
                 } else {
                     self.importBios(gameType: gameType)
                 }
@@ -190,7 +192,9 @@ class BIOSSelectionView: BaseView {
         } else {
             importTitle = R.string.localizable.tabbarTitleImport()
         }
-        if item.fileName == R.string.localizable.symbianOSFirmware() || item.fileName == "nand.zip" {
+        if item.fileName == R.string.localizable.symbianOSFirmware() ||
+            item.fileName == "nand.zip" ||
+            item.fileName == "IPL.bin" {
             styles.append(.chevron(.init()))
         } else {
             styles.append(.button(.large(title: importTitle,
@@ -224,7 +228,12 @@ class BIOSSelectionView: BaseView {
         guard var biosItems = self.biosItemMaps[gameType] else { return }
         for (index, bios) in biosItems.enumerated() {
             var biosInLib = R.Path.System.appendingPathComponent(bios.fileName)
-            if gameType == .dc {
+            if gameType == .ngc {
+                let imported = [R.Path.GamecubeUserEUR, R.Path.GamecubeUserJAP, R.Path.GamecubeUserUSA]
+                    .contains { fileManager.fileExists(atPath: $0.appendingPathComponent("IPL.bin")) }
+                biosItems[index].imported = imported
+                continue
+            } else if gameType == .dc {
                 biosInLib = R.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
             } else if gameType == .c64 {
                 biosInLib = R.Path.System.appendingPathComponent("vice/\(bios.fileName)")
@@ -249,6 +258,83 @@ class BIOSSelectionView: BaseView {
         if updateViews {
             self.listPageView.updatePage(self.getListPage())
         }
+    }
+    
+    private func showGamecubeIPLSheet(desc: String?) {
+        let iplFileName = "IPL.bin"
+        let regions: [(title: String, directory: String)] = [
+            ("EUR IPL.bin", R.Path.GamecubeUserEUR),
+            ("JAP IPL.bin", R.Path.GamecubeUserJAP),
+            ("USA IPL.bin", R.Path.GamecubeUserUSA)
+        ]
+        
+        func makeCell(title: String, directory: String) -> ASListPage.Cell {
+            let imported = FileManager.default.fileExists(atPath: directory.appendingPathComponent(iplFileName))
+            let importTitle = imported ? R.string.localizable.biosImported() : R.string.localizable.tabbarTitleImport()
+            var button = ASButton.large(title: importTitle,
+                                        titleColor: imported ? R.Color.Green : R.Color.Red,
+                                        background: .clear)
+            button.state = .disabled
+            return .normal([
+                .title(.largeText(title)),
+                .button(button)
+            ])
+        }
+        
+        var detailText: ASText? = nil
+        if let desc {
+            detailText = .smallText(desc, numberOfLines: 0)
+        }
+        
+        var sheetStyle: ASSheet.Style = .simpleList(icon: .symbolImage(R.image.bios_iconSymbols()),
+                                                    title: "GameCube BIOS",
+                                                    detail: detailText,
+                                                    options: regions.map { [makeCell(title: $0.title, directory: $0.directory)] })
+        
+        ASSheetView.show(.init(style: sheetStyle), action: { [weak self] action, updation in
+            if let indexPath = action.listPageValue?.normalItemValue?.indexPath,
+               indexPath.section < regions.count {
+                let region = regions[indexPath.section]
+                FilesImporter.shared.presentImportController(supportedTypes: UTType.binTypes, allowsMultipleSelection: false) { urls in
+                    UIView.makeLoading()
+                    DispatchQueue.global().async {
+                        // Match IPL.bin case-insensitively; always write as IPL.bin.
+                        let matched = urls.first(where: { $0.lastPathComponent.lowercased() == iplFileName.lowercased() })
+                        var success = false
+                        if let matched {
+                            let destURL = URL(fileURLWithPath: region.directory.appendingPathComponent(iplFileName))
+                            do {
+                                try FileManager.safeCopyItem(at: matched, to: destURL, shouldReplace: true)
+                                success = FileManager.default.fileExists(atPath: destURL.path)
+                            } catch {
+                                success = false
+                            }
+                        }
+                        DispatchQueue.main.async {
+                            UIView.hideLoading()
+                            if success {
+                                UIView.makeToast(message: R.string.localizable.biosImportSuccess(iplFileName))
+                                if case let .simpleList(icon, title, detail, options, cancelEnable) = sheetStyle {
+                                    var cells = options
+                                    cells[indexPath.section][0] = makeCell(title: region.title, directory: region.directory)
+                                    sheetStyle = .simpleList(icon: icon,
+                                                              title: title,
+                                                              detail: detail,
+                                                              options: cells,
+                                                              cancelEnable: cancelEnable)
+                                    updation?(sheetStyle)
+                                }
+                                self?.reloadImportState(gameType: .ngc, updateViews: false)
+                            } else {
+                                UIView.makeToast(message: R.string.localizable.biosImportFailed())
+                            }
+                        }
+                    }
+                }
+                return .none
+            }
+            return .dismiss()
+        })
     }
     
     private func importBios(gameType: GameType) {

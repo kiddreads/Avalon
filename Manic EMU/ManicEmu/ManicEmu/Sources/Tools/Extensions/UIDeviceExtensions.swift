@@ -15,6 +15,13 @@ import ARKit
 import Metal
 import Device
 
+enum PerformanceTier {
+    case low    // A10 and below (iPhone 7 / iPad 6th gen, iPhone9,x / iPad7,x)
+    case normal // A11–A14/M1 (iPhone 8–12 / iPad Air 4–Pro 2021, iPhone13,x / iPad13,x)
+    case high   // A15–A18 / M2–M3 (below iPhone 17 / iPad Pro M4)
+    case ultra  // A19 / M4 and newer (iPhone18,x / iPad16,x)
+}
+
 extension UIDevice {
     static func generateHaptic(style: HapticFeedbackStyle = .soft) {
         if supportsHaptics {
@@ -180,6 +187,73 @@ extension UIDevice {
         } else {
            return true
         }
+    }
+    
+    /// `uname` / simulator model id, e.g. `iPhone18,2`.
+    private static var machineIdentifier: String {
+        #if targetEnvironment(simulator)
+        if let id = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] {
+            return id
+        }
+        #endif
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        return withUnsafePointer(to: &systemInfo.machine) {
+            $0.withMemoryRebound(to: CChar.self, capacity: 1) {
+                String(cString: $0)
+            }
+        }
+    }
+    
+    static var performanceTier: PerformanceTier {
+        if isMac {
+            return .ultra
+        }
+        
+        let id = machineIdentifier
+        let family: String
+        let digits: Substring
+        if id.hasPrefix("iPhone") {
+            family = "iPhone"
+            digits = id.dropFirst(6)
+        } else if id.hasPrefix("iPad") {
+            family = "iPad"
+            digits = id.dropFirst(4)
+        } else if id.hasPrefix("iPod") {
+            return .low
+        } else {
+            return performanceTierFromMetal
+        }
+        
+        guard let comma = digits.firstIndex(of: ","),
+              let major = Int(digits[..<comma]) else {
+            return performanceTierFromMetal
+        }
+        
+        if family == "iPhone" {
+            if major <= 9 { return .low }
+            if major <= 13 { return .normal }
+            if major < 18 { return .high }
+            return .ultra
+        }
+        
+        // iPad16,1–2 = mini (A17 Pro); 16,3+ = M4 Pro/Air
+        if major <= 7 { return .low }
+        if major <= 13 { return .normal }
+        if major < 16 { return .high }
+        if major == 16 {
+            let minor = Int(digits[digits.index(after: comma)...]) ?? 0
+            return minor >= 3 ? .ultra : .high
+        }
+        return .ultra
+    }
+    
+    /// Used when `hw.machine` is missing or unparseable (simulator host, unknown id).
+    private static var performanceTierFromMetal: PerformanceTier {
+        guard let mtlDevice else { return .low }
+        if mtlDevice.supportsFamily(.apple8) { return .high }
+        if mtlDevice.supportsFamily(.apple4) { return .normal }
+        return .low
     }
 }
 

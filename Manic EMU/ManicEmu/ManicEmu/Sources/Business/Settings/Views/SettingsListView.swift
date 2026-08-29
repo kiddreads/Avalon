@@ -67,7 +67,8 @@ class SettingsListView: BaseView {
                                   .init(type: .theme),
                                   .init(type: .quickGame),
                                   .init(type: .autoSaveState),
-                                  .init(type: .skin)]
+                                  .init(type: .skin),
+                                  .init(type: .coverScraping)]
                 
             } else if section == .advance {
 #if SIDE_LOAD
@@ -444,6 +445,13 @@ class SettingsListView: BaseView {
                         case .skinSound:
                             let value = upateSwitchSettings(extraValue: subActions?.extraValue, cellData: cellData, indexPath: indexPath)
                             Settings.defalut.updateExtra(key: ExtraKey.skinSoundEffects.rawValue, value: value)
+                            
+                        case .coverScraping:
+                            if UIDevice.isPad {
+                                didTapDetailView?(GameCoverScrapingView(showClose: false))
+                            } else {
+                                GameCoverScrapingView.show()
+                            }
                             
                         default:
                             break

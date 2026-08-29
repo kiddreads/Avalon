@@ -156,7 +156,7 @@ class GameInfoView: BaseView {
                 if let image {
                     self.gameCoverView.updateImage(image)
                     self.navigationView.gameCover.image = image.scaled(toSize: CGSize(R.Size.ItemHeightLarge - R.Size.ContentSpaceSmall*2))
-                } else if let onlineCoverUrl = self.game.onlineCoverUrl {
+                } else if let _ = self.game.onlineCoverUrl {
                     self.game.getCoverImage(completion: { [weak self] image in
                         guard let self else { return }
                         if let image {
@@ -164,6 +164,10 @@ class GameInfoView: BaseView {
                             self.navigationView.gameCover.image = image.scaled(toSize: CGSize(R.Size.ItemHeightLarge - R.Size.ContentSpaceSmall*2))
                         }
                     })
+                } else {
+                    let placeHolder = UIImage.placeHolder(preferenceSize: self.gameCoverView.size)
+                    self.gameCoverView.updateImage(placeHolder)
+                    self.navigationView.gameCover.image = placeHolder.scaled(toSize: CGSize(R.Size.ItemHeightLarge - R.Size.ContentSpaceSmall*2))
                 }
                 
             default:

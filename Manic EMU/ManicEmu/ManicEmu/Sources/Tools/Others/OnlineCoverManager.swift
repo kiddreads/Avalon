@@ -141,6 +141,8 @@ class OnlineCoverManager {
                 boxArtUrl = host.appendingPathComponent("DOS/Named_Boxarts")
             case .xbox:
                 boxArtUrl = host.appendingPathComponent("Microsoft - Xbox/Named_Boxarts")
+            case .ps2:
+                boxArtUrl = host.appendingPathComponent("Sony - PlayStation 2/Named_Boxarts")
             case .ngc:
                 boxArtUrl = host.appendingPathComponent("Nintendo - GameCube/Named_Boxarts")
             case .wii:
@@ -355,7 +357,7 @@ class OnlineCoverManager {
                 request.addValue("Bearer \(R.Cipher.DeepSeek)", forHTTPHeaderField: "Authorization")
                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.addValue("application/json", forHTTPHeaderField: "Accept")
-                request.httpBody = ["frequency_penalty": 0.7, "max_tokens": 2048, "model": "deepseek-chat", "presence_penalty": 0.7, "stream" : false, "temperature" : 1.3, "top_p" : 0.9, "response_format" : ["type": "json_object"], "messages": [["content": "\(content)", "role":"user"]]].jsonData()
+                request.httpBody = ["frequency_penalty": 0.7, "max_tokens": 2048, "model": "deepseek-v4-flash", "presence_penalty": 0.7, "stream" : false, "temperature" : 1.3, "top_p" : 0.9, "response_format" : ["type": "json_object"], "messages": [["content": "\(content)", "role":"user"]]].jsonData()
                 let task = URLSession.shared.dataTask(with: request) { data, response, error in
                     if let _ = error {
                         completion?(name)

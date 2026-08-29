@@ -67,32 +67,12 @@ class GameListLandscapeView: BaseView {
         return view
     }()
     
-    ///主题：切换轮播样式
+    /// Theme: carousel style, background music, and sound effects
     private lazy var themeButton: ASButtonView = {
         let view = ASButtonView(.iconOnlyWithSmallSize(icon: .symbol(.paintpalette)).enableGlass(true))
         view.didTapButton = { [weak self] in
             guard let self else { return }
-            
-            ChevronSheetView.show(icon: .symbolImage(R.image.themeRegular_iconSymbols()),
-                                  title: R.string.localizable.themeSettingTitle(),
-                                  cellOptions: [
-                                    .iconTitleChevronCell(icon: .symbolImage(R.image.advance_shader_iconSymbols()),
-                                                          title: R.string.localizable.dynamicBackground(),
-                                                          chevronTitle: ShaderToy.getUsingShaderToy().title),
-                                    .iconTitleChevronCell(icon: .symbol(.squareStack),
-                                                          title: R.string.localizable.carouselStyle()),
-                                    .iconTitleChevronCell(icon: .symbolImage(R.image.themeRegular_iconSymbols()),
-                                                          title: R.string.localizable.moreSettingTitle()),
-                                  ], completion: { [weak self] index in
-                                      guard let self, let index else { return }
-                                      if index == 0 {
-                                          self.showDynamicBackgroundSheet()
-                                      } else if index == 1 {
-                                          self.showCarouselStyleSheet()
-                                      } else if index == 2 {
-                                          ThemeSettingView.show()
-                                      }
-                                  })
+            self.showThemeSheet()
         }
         return view
     }()
@@ -243,6 +223,7 @@ class GameListLandscapeView: BaseView {
         setupViews()
         setupDatas()
         setupNotifications()
+        BackgroundMusicKit.shared.setLandscapeHomeVisible(true)
     }
     
     required init?(coder: NSCoder) {
@@ -254,8 +235,9 @@ class GameListLandscapeView: BaseView {
         notificationTokens.forEach { NotificationCenter.default.removeObserver($0) }
     }
     
-    /// 横竖屏切换销毁前调用，避免 collectionView 在 bounds 动画期间仍触发异步 batch update
+    /// Call before tearing down on rotation so collectionView cannot batch-update during the bounds animation.
     func prepareForRemoval() {
+        BackgroundMusicKit.shared.setLandscapeHomeVisible(false)
         carouselView.dataSource = nil
         carouselView.delegate = nil
     }
@@ -688,6 +670,39 @@ class GameListLandscapeView: BaseView {
                                         object: background)
     }
     
+    private func showThemeSheet() {
+        ChevronSheetView.show(icon: .symbolImage(R.image.themeRegular_iconSymbols()),
+                              title: R.string.localizable.themeSettingTitle(),
+                              cellOptions: [
+                                .iconTitleChevronCell(icon: .symbolImage(R.image.advance_shader_iconSymbols()),
+                                                      title: R.string.localizable.dynamicBackground(),
+                                                      chevronTitle: ShaderToy.getUsingShaderToy().title),
+                                .iconTitleChevronCell(icon: .symbol(.squareStack),
+                                                      title: R.string.localizable.carouselStyle()),
+                                .iconTitleChevronCell(icon: .symbol(.musicNote),
+                                                      title: R.string.localizable.backgroundMusic(),
+                                                      chevronTitle: BackgroundMusicKit.shared.displayName),
+                                .iconTitleChevronCell(icon: .symbol(.speakerWave2),
+                                                      title: R.string.localizable.soundEffects(),
+                                                      chevronTitle: FocusSoundEffects.shared.displayName),
+                                .iconTitleChevronCell(icon: .symbolImage(R.image.themeRegular_iconSymbols()),
+                                                      title: R.string.localizable.moreSettingTitle()),
+                              ], completion: { [weak self] index in
+                                  guard let self, let index else { return }
+                                  if index == 0 {
+                                      self.showDynamicBackgroundSheet()
+                                  } else if index == 1 {
+                                      self.showCarouselStyleSheet()
+                                  } else if index == 2 {
+                                      self.showBackgroundMusicSheet()
+                                  } else if index == 3 {
+                                      self.showSoundEffectsSheet()
+                                  } else if index == 4 {
+                                      ThemeSettingView.show()
+                                  }
+                              })
+    }
+    
     private func showDynamicBackgroundSheet() {
         let usingShaderToy = ShaderToy.getUsingShaderToy()
         var sections = [ASListPage.Section]()
@@ -704,7 +719,7 @@ class GameListLandscapeView: BaseView {
             return .iconTitleDetailRadioCell(icon: $0.icon,
                                              iconSize: R.Size.ButtonSmall,
                                              title: $0.title,
-                                             detail: "@" + ($0.author ?? "Unknown"),
+                                             detail: $0.author == nil ? nil : "@\($0.author!)",
                                              isSelected: isSelected)
         }), header: .texts([.smallText(R.string.localizable.dynamicBackgroundDesc(), numberOfLines: 0)], pin: false)))
         
@@ -733,6 +748,12 @@ class GameListLandscapeView: BaseView {
         
         ASSheetView.show(.init(style: .listPage(listPage)), action: { [weak self] action, updation in
             guard let self else { return .dismiss() }
+            
+            if action.isTapBackground || action.listPageValue?.navigationValue?.isTapClose == true {
+                self.showThemeSheet()
+                return .dismiss()
+            }
+            
             if let indexPath = action.listPageValue?.normalItemValue?.indexPath {
                 if indexPath.section == 0 {
                     //build in
@@ -761,12 +782,117 @@ class GameListLandscapeView: BaseView {
                             try? FileManager.safeCopyItem(at: $0, to: toUrl, shouldReplace: true)
                         })
                         self.showDynamicBackgroundSheet()
+                    }, cancelHandle: { [weak self] in
+                        self?.showDynamicBackgroundSheet()
                     })
                 })
             }
             return .dismiss()
         })
         
+    }
+    
+    private func showBackgroundMusicSheet() {
+        let builtInTracks = BackgroundMusicKit.shared.builtInTracks
+        let customTracks = BackgroundMusicKit.shared.customTracks
+        let selectedTitle = BackgroundMusicKit.shared.selectedTitle
+        
+        func radioCell(for track: BackgroundMusicKit.Track) -> ASListPage.Cell {
+            .iconTitleDetailRadioCell(title: track.title,
+                                      detail: track.author.isEmpty ? nil : "@\(track.author) · CC0",
+                                      isSelected: selectedTitle == track.title)
+        }
+        
+        var sections = [ASListPage.Section]()
+        var builtInCells = [ASListPage.Cell]()
+        builtInCells.append(.iconTitleDetailRadioCell(title: R.string.localizable.off(),
+                                                      isSelected: selectedTitle == nil))
+        builtInCells.append(contentsOf: builtInTracks.map { radioCell(for: $0) })
+        sections.append(.init(cells: builtInCells,
+                              header: .texts([.smallText(R.string.localizable.backgroundMusicDesc(), numberOfLines: 0)], pin: false)))
+        if !customTracks.isEmpty {
+            sections.append(.init(cells: customTracks.map { radioCell(for: $0) }))
+        }
+        
+        let listPage = ASListPage(navigation: .defaultNavigation(title: R.string.localizable.backgroundMusic(),
+                                                                 titleIcon: .symbol(.musicNote)),
+                                  sections: sections,
+                                  bottom: .large(title: R.string.localizable.addBackgroundMusic(),
+                                                 titleColor: R.Color.LabelPrimary.forceStyle(.dark),
+                                                 titleAlignment: .center,
+                                                 background: R.Color.Main),
+                                  backgroundColor: .clear)
+        
+        ASSheetView.show(.init(style: .listPage(listPage)), action: { [weak self] action, _ in
+            guard let self else { return .dismiss() }
+            
+            if action.isTapBackground || action.listPageValue?.navigationValue?.isTapClose == true {
+                self.showThemeSheet()
+                return .dismiss()
+            }
+            
+            if let indexPath = action.listPageValue?.normalItemValue?.indexPath {
+                if indexPath.section == 0 {
+                    if indexPath.row == 0 {
+                        BackgroundMusicKit.shared.select(title: nil)
+                    } else if builtInTracks.indices.contains(indexPath.row - 1) {
+                        BackgroundMusicKit.shared.select(title: builtInTracks[indexPath.row - 1].title)
+                    }
+                } else if indexPath.section == 1, customTracks.indices.contains(indexPath.row) {
+                    BackgroundMusicKit.shared.select(title: customTracks[indexPath.row].title)
+                }
+            } else if action.listPageValue?.isBottom == true {
+                return .dismiss(completion: { [weak self] in
+                    guard let self else { return }
+                    FilesImporter.shared.presentImportController(supportedTypes: BackgroundMusicKit.importTypes, manualHandle: { [weak self] urls in
+                        guard let self else { return }
+                        try? FileManager.default.createDirectory(atPath: R.Path.Assets, withIntermediateDirectories: true)
+                        urls.forEach {
+                            let fileName = BackgroundMusicKit.resolvedImportFileName(for: $0)
+                            let toUrl = URL(fileURLWithPath: R.Path.Assets.appendingPathComponent(fileName))
+                            try? FileManager.safeCopyItem(at: $0, to: toUrl, shouldReplace: true)
+                        }
+                        self.showBackgroundMusicSheet()
+                    }, cancelHandle: { [weak self] in
+                        self?.showBackgroundMusicSheet()
+                    })
+                })
+            }
+            return .dismiss()
+        })
+    }
+    
+    private func showSoundEffectsSheet() {
+        let packs = FocusSoundEffects.shared.packs
+        let selectedName = FocusSoundEffects.shared.selectedPackName
+        var cells = [ASListPage.Cell]()
+        cells.append(.iconTitleDetailRadioCell(title: R.string.localizable.off(),
+                                               isSelected: selectedName == nil))
+        cells.append(contentsOf: packs.map { pack in
+            .iconTitleDetailRadioCell(title: pack.name,
+                                      detail: FocusSoundEffects.licenseDetail,
+                                      isSelected: selectedName == pack.name)
+        })
+        let listPage = ASListPage(navigation: .defaultNavigation(title: R.string.localizable.soundEffects(),
+                                                                 titleIcon: .symbol(.speakerWave2)),
+                                  sections: [.init(cells: cells)],
+                                  backgroundColor: .clear)
+        ASSheetView.show(.init(style: .listPage(listPage)), action: { action, _ in
+            if action.listPageValue?.navigationValue?.isTapClose == true {
+                return .dismiss()
+            }
+            guard let indexPath = action.listPageValue?.normalItemValue?.indexPath else {
+                return .dismiss()
+            }
+            if indexPath.row == 0 {
+                FocusSoundEffects.shared.select(packName: nil)
+            } else if packs.indices.contains(indexPath.row - 1) {
+                FocusSoundEffects.shared.select(packName: packs[indexPath.row - 1].name)
+            }
+            return .dismiss()
+        }, dismiss: { [weak self] in
+            self?.showThemeSheet()
+        })
     }
     
     //MARK: - 主题（轮播样式切换）
@@ -811,7 +937,8 @@ class GameListLandscapeView: BaseView {
         
         ASSheetView.show(.init(style: .listPage(listPage)), action: { [weak self] action, _ in
             guard let self else { return .dismiss() }
-            if action.listPageValue?.navigationValue?.isTapClose == true {
+            if action.listPageValue?.navigationValue?.isTapClose == true || action.isTapBackground {
+                self.showThemeSheet()
                 return .dismiss()
             }
             
@@ -923,6 +1050,8 @@ class GameListLandscapeView: BaseView {
             default:
                 return .none
             }
+        }, dismiss: { [weak self] in
+            self?.showCarouselStyleSheet()
         })
     }
     

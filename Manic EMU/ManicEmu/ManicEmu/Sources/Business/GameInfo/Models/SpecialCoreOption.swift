@@ -132,6 +132,7 @@ enum SpecialCoreOption: String {
     case citra_swap_screen_mode
     case citra_large_screen_proportion
     case citra_custom_layout_config
+    case citra_motion_rotation
     //a2600
     case stella_crop_hoverscan
     //a5200
@@ -175,6 +176,23 @@ enum SpecialCoreOption: String {
     case dolphin_skip_gc_bios
     case dolphin_cheats_enabled
     case dolphin_cheats_import
+    //gamecube
+    case dolphin_gc_sp1
+    case dolphin_enable_gamecube_mic
+    case dolphin_hotkey_activate_microphone
+    //wii
+    case dolphin_widescreen
+    case dolphin_progressive_scan
+    case dolphin_pal60
+    case dolphin_sensor_bar_position
+    case dolphin_enable_rumble
+    case dolphin_wiimote_continuous_scanning
+    case dolphin_alt_gc_ports_on_wii
+    case dolphin_wiispeak_enable
+    case dolphin_wiispeak_muted
+    case dolphin_wii_logi_microphone_enable
+    case dolphin_bluetooth_passthrough
+    
     //pce
     case pce_default_joypad_type_p1
     case pce_default_joypad_type_p2
@@ -327,6 +345,7 @@ enum SpecialCoreOption: String {
                 .citra_swap_screen_mode,
                 .citra_large_screen_proportion,
                 .citra_custom_layout_config,
+                .citra_motion_rotation,
             ]
         } else if game.gameType == .doom {
             return [.prboom_resolution]
@@ -336,11 +355,29 @@ enum SpecialCoreOption: String {
             return [.eka2l1_cpu_backend,
                     .eka2l1_device_index]
         } else if game.isDolphinCore {
-            var options: Set<Self> = [.dolphin_cheats_enabled, .dolphin_cheats_import]
-            if game.gameType == .ngc {
-                options.insert(.dolphin_skip_gc_bios)
+            var result: [SpecialCoreOption] = [.dolphin_cheats_enabled,
+                                               .dolphin_cheats_import,
+                                               .dolphin_cpu_core,
+                                               .dolphin_skip_gc_bios]
+            if game.gameType == .wii {
+                result += [.dolphin_gc_sp1,
+                           .dolphin_enable_gamecube_mic,
+                           .dolphin_hotkey_activate_microphone]
+            } else if game.gameType == .ngc {
+                result += [.dolphin_widescreen,
+                           .dolphin_progressive_scan,
+                           .dolphin_pal60,
+                           .dolphin_sensor_bar_position,
+                           .dolphin_enable_rumble,
+                           .dolphin_wiimote_continuous_scanning,
+                           .dolphin_alt_gc_ports_on_wii,
+                           .dolphin_wiispeak_enable,
+                           .dolphin_wiispeak_muted,
+                           .dolphin_wii_logi_microphone_enable,
+                           .dolphin_bluetooth_passthrough]
             }
-            return options
+            return Set(result)
+            
         } else if game.gameType == .pce {
             return [.pce_default_joypad_type_p1,
                     .pce_default_joypad_type_p2,
@@ -453,11 +490,21 @@ enum SpecialCoreOption: String {
                     .dolphin_log_core: "disabled",
                     .dolphin_log_video: "disabled",
                     .dolphin_log_common: "disabled",
-                    .dolphin_vi_skip: "disabled"
+                    .dolphin_vi_skip: "disabled",
+                    .dolphin_skip_gc_bios: "disabled",
                 ]
             } else {
+                let clockRate: String
+                switch UIDevice.performanceTier {
+                case .high:
+                    clockRate = "0.30"
+                case .ultra:
+                    clockRate = "0.50"
+                default:
+                    clockRate = "0.20"
+                }
                 result = [
-                    .dolphin_cpu_clock_rate: "0.20",
+                    .dolphin_cpu_clock_rate: clockRate,
                     .dolphin_osd_enabled: "disabled",
                     .dolphin_fast_disc_speed: "enabled",
                     .dolphin_gpu_texture_decoding: "enabled",
@@ -467,7 +514,8 @@ enum SpecialCoreOption: String {
                     .dolphin_log_core: "disabled",
                     .dolphin_log_video: "disabled",
                     .dolphin_log_common: "disabled",
-                    .dolphin_vi_skip: "enabled"
+                    .dolphin_vi_skip: "enabled",
+                    .dolphin_skip_gc_bios: "disabled",
                 ]
             }
         } else if game.gameType == .pce {
