@@ -49,6 +49,15 @@ extension GameType
         return .game(.ds)
     }
     
+    var isContinuous: Bool {
+        switch self
+        {
+        case .rightThumbstickUp, .rightThumbstickDown, .rightThumbstickLeft, .rightThumbstickRight: return true
+        case .touchScreenX, .touchScreenY: return true
+        default: return false
+        }
+    }
+    
     init?(stringValue: String) {
         if stringValue == "a" { self = .a }
         else if stringValue == "b" { self = .b }

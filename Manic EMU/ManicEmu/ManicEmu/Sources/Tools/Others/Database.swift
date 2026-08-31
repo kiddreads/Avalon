@@ -77,7 +77,7 @@ struct Database {
             
             if let systemCoreVersion = UserDefaults.standard.string(forKey: R.DefaultKey.SystemCoreVersion) {
                 // Existing version record means this is an upgrade; run data migrations.
-                let systemCoreVersionNumber = parseVersionNumber(systemCoreVersion)
+                let systemCoreVersionNumber = systemCoreVersion.parsedVersionNumber
                 
                 if systemCoreVersionNumber < 141 {
                     //调整1.4.0的gameType问题
@@ -396,11 +396,6 @@ struct Database {
         memoryConfig.fileURL = nil
         memoryConfig.inMemoryIdentifier = "ManicEmu.LaunchFallback"
         return try! Realm(configuration: memoryConfig)
-    }
-    
-    private static func parseVersionNumber(_ version: String) -> UInt64 {
-        let digits = version.replacingOccurrences(ofPattern: "\\D", withTemplate: "")
-        return UInt64(digits) ?? 0
     }
     
     private static func removeRealmFiles(_ config: Realm.Configuration) {

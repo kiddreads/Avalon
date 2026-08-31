@@ -7,134 +7,56 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import Citra
 import ProHUD
 
 struct ThreeDSKeyboardView {
-    static func showForCitra(hintText: String?,
-                             keyboardType: ThreeDSKeyboardType,
-                             maxTextSize: UInt16) {
-        
-        Alert { alert in
-            alert.config.cardCornerRadius = 0
-            alert.contentMaskView.alpha = 0
-            alert.config.backgroundViewMask { mask in
-                mask.backgroundColor = .clear
-            }
-            
-            let textfiledWidth = UIDevice.isPhone ? 300 : 380
+    static func showForCitra(config: CitraKeyboardConfig,
+                             completion: ((_ buttonPressed: Int, _ text: String?) -> Void)? = nil) {
+        let mapped = AzaharKeyboardConfig()
+        mapped.buttonConfig = AzaharButtonConfig(rawValue: config.buttonConfig.rawValue) ?? .single
+        mapped.acceptedInput = AzaharAcceptedInput(rawValue: config.acceptedInput.rawValue) ?? .anything
+        mapped.multilineMode = config.multilineMode
+        mapped.maxTextLength = Int(config.maxTextSize)
+        mapped.maxDigits = Int(config.maxDigits)
+        mapped.hintText = config.hintText
+        mapped.buttonText = config.buttonText
+        mapped.preventDigit = config.preventDigit
+        mapped.preventAt = config.preventAt
+        mapped.preventPercent = config.preventPercent
+        mapped.preventBackslash = config.preventBackslash
+        mapped.preventProfanity = config.preventProfanity
+        mapped.enableCallback = config.enableCallback
 
-            let containerView = RoundAndBorderView(roundCorner: .allCorners)
-            containerView.backgroundColor = R.Color.BackgroundPrimary
-            containerView.makeBlur()
-            //标题
-            let titleLabel = UILabel()
-            titleLabel.textAlignment = .center
-            let textTitle: String
-            if let hintText, !hintText.isEmpty {
-                textTitle = hintText
-            } else {
-                textTitle = R.string.localizable.game3DSInputTitle()
-            }
-            titleLabel.text = textTitle
-            titleLabel.font = R.Font.Headline(emphasis: true)
-            titleLabel.textColor = R.Color.LabelPrimary
-            containerView.addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(R.Size.ContentSpaceMedium)
-                make.leading.trailing.greaterThanOrEqualToSuperview().inset(R.Size.ContentSpaceMedium)
-            }
-            
-            //输入框
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: R.Size.CornerRadiusMedium, borderColor: R.Color.Border, borderWidth: 1)
-            textFieldContainer.backgroundColor = R.Color.InputBox
-            containerView.addSubview(textFieldContainer)
-            textFieldContainer.snp.makeConstraints { make in
-                make.height.equalTo(R.Size.ItemHeightMedium)
-                make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceMedium)
-                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
-                make.width.equalTo(textfiledWidth)
-            }
-            
-            let textField = UITextField()
-            if maxTextSize > 0 {
-                textField.placeholder = R.string.localizable.maxTextSizeAllowDesc("\(maxTextSize)")
-            }
-            textField.tintColor = R.Color.Main
-            textField.textColor = R.Color.LabelPrimary
-            textField.font = R.Font.Footnote()
-            textField.clearButtonMode = .whileEditing
-            textFieldContainer.addSubview(textField)
-            textField.snp.makeConstraints { make in
-                make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
-            }
-            textField.becomeFirstResponder()
-            
-            let line = UIView()
-            line.backgroundColor = R.Color.Border
-            containerView.addSubview(line)
-            line.snp.makeConstraints { make in
-                make.height.equalTo(1)
-                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceHuge)
-                make.top.equalTo(textFieldContainer.snp.bottom).offset(R.Size.ContentSpaceMedium)
-            }
-            
-            //按钮
-            /**
-             Single, /// Ok button
-             Dual,   /// Cancel | Ok buttons
-             Triple, /// Cancel | I Forgot | Ok buttons
-             None,   /// No button (returned by swkbdInputText in special cases)
-             */
-            func closeKeyboard(text: String?, buttonPressed: Int = 0) {
-                alert.pop()
-                if let text {
-                    NotificationCenter.default.post(name: .init("closeKeyboard"), object: nil, userInfo: [
-                        "buttonPressed" : buttonPressed,
-                        "keyboardText" : text
-                    ])
+        showForAzahar(config: mapped) { buttonType, text in
+            let buttonPressed: Int
+            switch buttonType {
+            case .ok:
+                switch config.buttonConfig {
+                case .dual:
+                    buttonPressed = 1
+                case .triple:
+                    buttonPressed = 2
+                case .single, .none:
+                    buttonPressed = 0
+                @unknown default:
+                    buttonPressed = 0
                 }
+            case .cancel:
+                buttonPressed = 0
+            case .forgot:
+                buttonPressed = 1
+            case .noButton:
+                buttonPressed = 0
+            @unknown default:
+                buttonPressed = 0
             }
-            
-            if keyboardType == .none {
-                textField.onReturnKeyPress {
-                    closeKeyboard(text: nil)
-                }
-            }
-            
-            let okButton = UILabel()
-            okButton.isUserInteractionEnabled = true
-            okButton.enablePressEffect = true
-            okButton.text = R.string.localizable.confirmTitle()
-            okButton.textAlignment = .center
-            okButton.font = R.Font.Headline()
-            okButton.textColor = R.Color.LabelPrimary
-            okButton.addTapGesture { gesture in
-                if let text = textField.text, !text.isEmpty {
-                    if maxTextSize > 0, text.count > maxTextSize {
-                        textFieldContainer.shake()
-                        UIView.makeToast(message: R.string.localizable.maxTextSizeAllowDesc("\(maxTextSize)"))
-                    } else {
-                        closeKeyboard(text: textField.text, buttonPressed: keyboardType == .single ? 0 : (keyboardType == .dual ? 1 : 2))
-                    }
-                } else {
-                    textFieldContainer.shake()
-                    
-                }
-            }
-            
-            containerView.addSubview(okButton)
-            okButton.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalTo(line.snp.bottom).offset(R.Size.ContentSpaceLarge)
-                make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
-                make.bottom.equalToSuperview().inset(R.Size.ContentSpaceLarge)
-            }
-            
-            alert.set(customView: containerView).snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+            // Always notify the core so Execute() cannot stay blocked.
+            NotificationCenter.default.post(name: .init("closeKeyboard"), object: nil, userInfo: [
+                "buttonPressed": buttonPressed,
+                "keyboardText": text ?? ""
+            ])
+            completion?(buttonPressed, text)
         }
     }
     
@@ -186,11 +108,10 @@ struct ThreeDSKeyboardView {
                 make.width.equalTo(textfiledWidth)
             }
             
-            // 创建输入控件 - 根据多行模式使用不同控件
             var inputText: () -> String? = { nil }
+            var bindReturnToSubmit: ((@escaping () -> Void) -> Void)?
             
             if config.multilineMode {
-                // 多行模式使用 UITextView
                 let textView = UITextView()
                 textView.backgroundColor = .clear
                 textView.tintColor = R.Color.Main
@@ -204,10 +125,8 @@ struct ThreeDSKeyboardView {
                 textView.becomeFirstResponder()
                 inputText = { textView.text }
             } else {
-                // 单行模式使用 UITextField
                 let textField = UITextField()
                 
-                // 设置placeholder - 显示最大长度限制或者固定长度要求
                 if config.acceptedInput == .fixedLength, config.maxTextLength > 0 {
                     textField.placeholder = R.string.localizable.exactlyTextSizeAllowDesc("\(config.maxTextLength)")
                 } else if config.maxTextLength > 0 {
@@ -219,9 +138,7 @@ struct ThreeDSKeyboardView {
                 textField.font = R.Font.Footnote()
                 textField.clearButtonMode = .whileEditing
                 
-                // 根据过滤器设置键盘类型
                 if config.preventDigit && config.maxDigits == 0 {
-                    // 如果完全禁止数字，可以考虑使用默认键盘
                     textField.keyboardType = .default
                 }
                 
@@ -232,6 +149,11 @@ struct ThreeDSKeyboardView {
                 }
                 textField.becomeFirstResponder()
                 inputText = { textField.text }
+                bindReturnToSubmit = { submit in
+                    textField.onReturnKeyPress {
+                        submit()
+                    }
+                }
             }
             
             let line = UIView()
@@ -243,57 +165,57 @@ struct ThreeDSKeyboardView {
                 make.top.equalTo(textFieldContainer.snp.bottom).offset(R.Size.ContentSpaceMedium)
             }
             
-            // 输入验证函数
+            // 3DS SWKBD measures length in UTF-16 code units.
+            func utf16Length(_ text: String) -> Int {
+                text.utf16.count
+            }
+
             func validateInput(_ text: String?) -> String? {
                 guard let text = text else { return nil }
-                
-                // 检查是否为空
+                let length = utf16Length(text)
+                let isBlank = text.unicodeScalars.allSatisfy { CharacterSet.whitespacesAndNewlines.contains($0) }
+
                 if config.acceptedInput == .notEmpty || config.acceptedInput == .notEmptyAndNotBlank {
                     if text.isEmpty {
                         return R.string.localizable.emptyInputNotAllowed()
                     }
                 }
-                
-                // 检查是否为空白
+
                 if config.acceptedInput == .notBlank || config.acceptedInput == .notEmptyAndNotBlank {
-                    if text.trimmingCharacters(in: .whitespaces).isEmpty && !text.isEmpty {
+                    if isBlank {
                         return R.string.localizable.blankInputNotAllowed()
                     }
                 }
-                
-                // 检查固定长度
+
                 if config.acceptedInput == .fixedLength {
-                    if text.count != config.maxTextLength {
+                    if length != config.maxTextLength {
                         return R.string.localizable.exactlyTextSize("\(config.maxTextLength)")
                     }
                 }
-                
-                // 检查最大长度
-                if config.maxTextLength > 0, text.count > config.maxTextLength {
+
+                if config.maxTextLength > 0, length > config.maxTextLength {
                     return R.string.localizable.maxTextSizeAllowDesc("\(config.maxTextLength)")
                 }
-                
-                // 检查过滤器
+
                 if config.preventAt, text.contains("@") {
                     return R.string.localizable.atSymbolNotAllowed()
                 }
-                
+
                 if config.preventPercent, text.contains("%") {
                     return R.string.localizable.percentSymbolNotAllowed()
                 }
-                
+
                 if config.preventBackslash, text.contains("\\") {
                     return R.string.localizable.backslashSymbolNotAllowed()
                 }
-                
-                // 检查数字限制
-                if config.preventDigit, config.maxDigits > 0 {
+
+                if config.preventDigit {
                     let digitCount = text.filter { $0.isNumber }.count
                     if digitCount > config.maxDigits {
                         return R.string.localizable.digitsMaximumAllowed("\(config.maxDigits)")
                     }
                 }
-                
+
                 return nil
             }
             
@@ -311,8 +233,22 @@ struct ThreeDSKeyboardView {
                 return defaultText
             }
             
-            // 创建按钮
-            // buttonText数组顺序: [0]=Cancel, [1]=Forgot, [2]=Ok
+            // buttonText order: [0]=Cancel, [1]=Forgot, [2]=Ok
+            func submitOk() {
+                let text = inputText()
+                if let errorMessage = validateInput(text) {
+                    textFieldContainer.shake()
+                    UIView.makeToast(message: errorMessage)
+                    return
+                }
+                if config.acceptedInput == .anything || (text != nil && !(text?.isEmpty ?? true)) {
+                    closeKeyboard(text: text, buttonType: .ok)
+                } else {
+                    textFieldContainer.shake()
+                }
+            }
+            bindReturnToSubmit?(submitOk)
+
             let okButton = UILabel()
             okButton.isUserInteractionEnabled = true
             okButton.enablePressEffect = true
@@ -320,22 +256,8 @@ struct ThreeDSKeyboardView {
             okButton.textAlignment = .center
             okButton.font = R.Font.Headline()
             okButton.textColor = R.Color.LabelPrimary
-            okButton.addTapGesture { gesture in
-                let text = inputText()
-                
-                // 验证输入
-                if let errorMessage = validateInput(text) {
-                    textFieldContainer.shake()
-                    UIView.makeToast(message: errorMessage)
-                    return
-                }
-                
-                // 对于 Anything 模式允许空输入
-                if config.acceptedInput == .anything || (text != nil && !text!.isEmpty) {
-                    closeKeyboard(text: text, buttonType: .ok)
-                } else {
-                    textFieldContainer.shake()
-                }
+            okButton.addTapGesture { _ in
+                submitOk()
             }
             
             let cancelButton = UILabel()
@@ -360,9 +282,7 @@ struct ThreeDSKeyboardView {
                 closeKeyboard(text: nil, buttonType: .forgot)
             }
             
-            // 根据按钮配置布局
-            if config.buttonConfig == .single {
-                // 只有确定按钮
+            if config.buttonConfig == .single || config.buttonConfig == .none {
                 containerView.addSubview(okButton)
                 okButton.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
@@ -371,7 +291,6 @@ struct ThreeDSKeyboardView {
                     make.bottom.equalToSuperview().inset(R.Size.ContentSpaceLarge)
                 }
             } else if config.buttonConfig == .dual {
-                // 取消 | 确定
                 containerView.addSubview(cancelButton)
                 containerView.addSubview(okButton)
 
@@ -396,8 +315,7 @@ struct ThreeDSKeyboardView {
                     make.centerY.equalTo(cancelButton)
                 }
 
-            } else if config.buttonConfig == .triple {
-                // 取消 | 忘记了 | 确定
+            } else {
                 containerView.addSubview(cancelButton)
                 containerView.addSubview(forgetButton)
                 containerView.addSubview(okButton)
@@ -419,16 +337,6 @@ struct ThreeDSKeyboardView {
                     make.trailing.equalToSuperview()
                     make.leading.equalTo(forgetButton.snp.trailing)
                     make.centerY.equalTo(forgetButton)
-                }
-            } else {
-                // None - 无按钮模式
-                line.isHidden = true
-                textFieldContainer.snp.remakeConstraints { make in
-                    make.height.equalTo(textFieldHeight)
-                    make.top.equalTo(titleLabel.snp.bottom).offset(R.Size.ContentSpaceMedium)
-                    make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceMedium)
-                    make.width.equalTo(textfiledWidth)
-                    make.bottom.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
                 }
             }
             

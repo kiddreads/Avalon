@@ -49,6 +49,15 @@ extension GameType {
         return .game(.c64)
     }
     
+    var isContinuous: Bool {
+        switch self
+        {
+        case .leftThumbstickUp, .leftThumbstickDown, .leftThumbstickLeft, .leftThumbstickRight: return true
+        case .rightThumbstickUp, .rightThumbstickDown, .rightThumbstickLeft, .rightThumbstickRight: return true
+        default: return false
+        }
+    }
+    
     init?(stringValue: String) {
         if stringValue == "a" { self = .a}
         else if stringValue == "b" { self = .b}

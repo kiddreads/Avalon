@@ -191,6 +191,9 @@ class GameOptionsView: BaseView {
         shortcuts = Prefference.defalut.getPrefference(kind: .gameShortcut,
                                                        storeKey: .game(gameId: game.id),
                                                        bestEfforts: true)?.gameShortcutValue ?? GameOption.defaultShortcutOptions(for: game)
+        let availableOptions = Set(GameOption.availableOptions(game: game, scene: .gaming))
+        shortcuts = shortcuts.filter({ availableOptions.contains($0) })
+        
         let tools = shortcuts.map({ $0.icon })
         let navigation = ASListPage.Navigation.defaultNavigation(title: "MENU",
                                                                  tools: tools)

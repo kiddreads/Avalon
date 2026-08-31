@@ -38,11 +38,19 @@ class SkinCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    var onPreview: (() -> Void)?
+    var onPlaycaseTap: (() -> Void)?
+    
+    private var appliedSkinIdentifier: String?
+    private var appliedTraits: ControllerSkin.Traits?
+    private var appliedRenderGeneration: Int = -1
+    
     var controllerView: ControllerView = {
         let view = ControllerView()
         view.backgroundColor = .black
         view.layerCornerRadius = R.Size.CornerRadiusMedium
         view.isUserInteractionEnabled = false
+        view.overrideControllerSkinSize = .small
         return view
     }()
     
@@ -66,7 +74,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    var playcaseButton: UIImageView = {
+    private var playcaseButton: UIImageView = {
         let view = UIImageView(image: R.image.playcase_footnote())
         view.enablePressEffect = true
         view.isFocusable = false
@@ -75,7 +83,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    var previewButton: SymbolButton = {
+    private var previewButton: SymbolButton = {
         let view = SymbolButton(image: R.image.customArrowDownLeftAndArrowUpRight()?.applySymbolConfig(),
                                 title: R.string.localizable.skinPreviewTitle(),
                                 titleFont: R.Font.Footnote(),
@@ -135,6 +143,13 @@ class SkinCollectionViewCell: UICollectionViewCell {
         playcaseButton.snp.makeConstraints { make in
             make.leading.bottom.equalToSuperview()
         }
+        
+        previewButton.addTapGesture { [weak self] _ in
+            self?.onPreview?()
+        }
+        playcaseButton.addTapGesture { [weak self] _ in
+            self?.onPlaycaseTap?()
+        }
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -148,29 +163,47 @@ class SkinCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onPreview = nil
+        onPlaycaseTap = nil
+        onFocusConfirm = nil
+    }
+    
     func setData(controllerSkin: ControllerSkin?,
                  traits: ControllerSkin.Traits,
                  subscriptTitle: String? = nil,
                  isEditMode: Bool,
                  isUsing: Bool,
-                 isEditable: Bool) {
-        let screenAspectRatio: CGFloat
-        if traits.orientation == .portrait {
-            screenAspectRatio = R.Size.WindowSize.aspectRatio
-        } else {
-            screenAspectRatio = R.Size.WindowSize.height/R.Size.WindowSize.width
-        }
-        if let aspectRatio = controllerSkin?.aspectRatio(for: traits), abs(aspectRatio.aspectRatio - screenAspectRatio) > 0.1 {
-            controllerView.snp.updateConstraints { make in
-                make.height.equalToSuperview().offset(-(height - (width/aspectRatio.aspectRatio)))
+                 isEditable: Bool,
+                 renderGeneration: Int = 0) {
+        let needsSkinUpdate = appliedSkinIdentifier != controllerSkin?.identifier
+            || appliedTraits != traits
+            || appliedRenderGeneration != renderGeneration
+        
+        if needsSkinUpdate {
+            let screenAspectRatio: CGFloat
+            if traits.orientation == .portrait {
+                screenAspectRatio = R.Size.WindowSize.aspectRatio
+            } else {
+                screenAspectRatio = R.Size.WindowSize.height/R.Size.WindowSize.width
             }
-        } else {
-            controllerView.snp.updateConstraints { make in
-                make.height.equalToSuperview()
+            if let aspectRatio = controllerSkin?.aspectRatio(for: traits), abs(aspectRatio.aspectRatio - screenAspectRatio) > 0.1 {
+                controllerView.snp.updateConstraints { make in
+                    make.height.equalToSuperview().offset(-(height - (width/aspectRatio.aspectRatio)))
+                }
+            } else {
+                controllerView.snp.updateConstraints { make in
+                    make.height.equalToSuperview()
+                }
             }
+            controllerView.overrideControllerSkinTraits = traits
+            controllerView.controllerSkin = controllerSkin
+            appliedSkinIdentifier = controllerSkin?.identifier
+            appliedTraits = traits
+            appliedRenderGeneration = renderGeneration
         }
-        controllerView.overrideControllerSkinTraits = traits
-        controllerView.controllerSkin = controllerSkin
+        
         if let subscriptTitle {
             subscriptView.isHidden = false
             subscriptView.titleLabel.text = R.string.localizable.designedFor(subscriptTitle)

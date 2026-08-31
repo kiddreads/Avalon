@@ -75,7 +75,7 @@ class PurchaseView: BaseView {
                 PurchaseManager.redeemOfferCode { [weak self] isCompleted, isMember in
                     guard let self else { return }
                     if isMember {
-                        self.needToClosePurchaseView?()
+                        self.didTapClose?()
                         CheersView.makePurchaseCheers()
                     } else if isCompleted {
                         Log.debug("兑换优惠成功")
@@ -96,8 +96,6 @@ class PurchaseView: BaseView {
         return view
     }()
     
-    var needToClosePurchaseView: (()->Void)? = nil
-    
     private var featureView = FeaturesView()
     
     private lazy var priceView: PriceView = {
@@ -113,27 +111,16 @@ class PurchaseView: BaseView {
         addSubview(backgroundGradientView)
         addSubview(navigationView)
         navigationView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalToSuperview()
             make.height.equalTo(R.Size.ItemHeightMedium)
         }
         
         addSubview(featureView)
         featureView.featuresType = featuresType
-        featureView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(navigationView.snp.bottom)
-        }
-        backgroundGradientView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
-            make.bottom.equalTo(featureView.snp.bottom)
-        }
-        
         addSubview(priceView)
-        priceView.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview()
-            make.top.equalTo(featureView.snp.bottom)
-            make.height.equalTo(447)
-        }
+        
+        updateViewsConstraits()
     }
     
     override func layoutSubviews() {
@@ -144,5 +131,47 @@ class PurchaseView: BaseView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func updateViewsConstraits() {
+        backgroundGradientView.snp.remakeConstraints { make in
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                make.top.equalToSuperview()
+                make.leading.bottom.trailing.equalTo(featureView)
+            } else {
+                make.leading.top.trailing.equalToSuperview()
+                make.bottom.equalTo(featureView.snp.bottom)
+            }
+        }
+        
+        featureView.snp.remakeConstraints { make in
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                make.top.equalToSuperview().offset(R.Size.NavigationHeight)
+                make.leading.bottom.equalToSuperview()
+                make.width.equalToSuperview().dividedBy(2)
+            } else {
+                make.leading.trailing.equalToSuperview()
+                make.top.equalTo(navigationView.snp.bottom)
+            }
+        }
+        
+        priceView.snp.remakeConstraints { make in
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                make.top.equalToSuperview().offset(R.Size.NavigationHeight)
+                make.bottom.trailing.equalToSuperview()
+                make.leading.equalTo(featureView.snp.trailing)
+            } else {
+                make.leading.bottom.trailing.equalToSuperview()
+                make.top.equalTo(featureView.snp.bottom)
+                make.height.equalTo(447)
+            }
+        }
+    }
+}
+
+extension PurchaseView: ViewTransition {
+    func viewAlongsideTransition() {
+        guard UIDevice.isPhone else { return }
+        updateViewsConstraits()
     }
 }

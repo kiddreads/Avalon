@@ -274,6 +274,7 @@ class GamesViewController: BaseViewController {
         } else {
             if gamesListView?.superview != nil {
                 removeLandscapeListIfNeeded()
+                gamesListView?.collectionView.reloadData()
                 return
             }
             
@@ -342,5 +343,10 @@ class GamesViewController: BaseViewController {
         gameListLandscapeView.prepareForRemoval()
         gameListLandscapeView.removeFromSuperview()
         self.gameListLandscapeView = nil
+    }
+    
+    func updateLandscapeBackgroundIfNeed() {
+        guard UIDevice.isLandscape else { return }
+        gameListLandscapeView?.updateFocusedGameInfo()
     }
 }

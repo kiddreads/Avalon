@@ -556,6 +556,7 @@ extension _R {
         static let HasShowFirstAnniversaryLetter = "HasShowFirstAnniversaryLetter"
         static let FoolsDayTrickCount = "FoolsDayTrickCount"
         static let HasShowDolphinCoreAlert = "HasShowDolphinCoreAlert"
+        static let HasPolishSkins = "HasPolishSkins"
     }
     
     struct _Font {
@@ -748,7 +749,7 @@ extension _R {
     
     struct _URLs {
 #if DEBUG
-        static let ManicEMU = "http://10.10.10.2:4000/"
+        static let ManicEMU = "http://10.10.10.2:4321/"
 #else
         static let ManicEMU = "https://manicemu.site/"
 #endif
@@ -758,26 +759,14 @@ extension _R {
         static let TermsOfUse = URL(string: ManicEMU + "terms-of-use")!
         static let PrivacyPolicy = URL(string: ManicEMU + "privacy-policy")!
         static let PaymentTerms = URL(string: ManicEMU + "Payment-Terms")!
-        static var FAQ: URL {
-            Locale.prefersCN ? URL(string: ManicEMU + "FAQ-CN")! : URL(string: ManicEMU + "FAQ-EN")!
-        }
-        static var GameImportGuide: URL {
-            Locale.prefersCN ? URL(string: ManicEMU + "Game-Import-Guide-CN")! : URL(string: ManicEMU + "Game-Import-Guide-EN")!
-        }
-        static var SkinUsageGuide: URL {
-            Locale.prefersCN ? URL(string: ManicEMU + "Skin-Usage-Guide-CN")! : URL(string: ManicEMU + "Skin-Usage-Guide-EN")!
-        }
-        static var ControllerUsageGuide: URL {
-            Locale.prefersCN ? URL(string: ManicEMU + "Controller-Usage-Guide-CN")! : URL(string: ManicEMU + "Controller-Usage-Guide-EN")!
-        }
-        static var CheatCodesGuide: URL {
-            Locale.prefersCN ? URL(string: ManicEMU + "Cheat-Codes-Guide-CN")! : URL(string: ManicEMU + "Cheat-Codes-Guide-EN")!
-        }
-        static var AirPlayUsageGuide: URL {
-            Locale.prefersCN ? URL(string: ManicEMU + "AirPlay-Usage-Guide-CN")! : URL(string: ManicEMU + "AirPlay-Usage-Guide-EN")!
-        }
+        static let FAQ = URL(string: ManicEMU + "guides/faq")!
+        static let GameImportGuide = URL(string: ManicEMU + "guides/import")!
+        static let SkinUsageGuide = URL(string: ManicEMU + "guides/skins")!
+        static let ControllerUsageGuide = URL(string: ManicEMU + "guides/controllers")!
+        static let CheatCodesGuide = URL(string: ManicEMU + "guides/cheats")!
+        static let AirPlayUsageGuide = URL(string: ManicEMU + "guides/airplay")!
         static func manufacturer(_ manufacturer: Manufacturer) -> URL {
-            return URL(string: ManicEMU + "Manufacturer-" + manufacturer.title + "-EN")!
+            return URL(string: ManicEMU + "Manufacturer-" + manufacturer.title)!
         }
         static var JoinQQ: URL {
             URL(string: "https://pd.qq.com/s/7i1g6jf5k")!
@@ -816,7 +805,7 @@ extension _R {
             }
         }
         static func History(gameType: GameType) -> URL {
-            return URL(string: ManicEMU + "History-" + (gameType == .gb ? GameType.gbc.localizedShortName : gameType.localizedShortName) + "-EN")!
+            return URL(string: ManicEMU + "History-" + (gameType == .gb ? GameType.gbc.localizedShortName : gameType.localizedShortName))!
         }
         static let WFC = URL(string: "https://cdn.altstore.io/file/deltaemulator/delta/wfc-servers.json")!
 #if SIDE_LOAD

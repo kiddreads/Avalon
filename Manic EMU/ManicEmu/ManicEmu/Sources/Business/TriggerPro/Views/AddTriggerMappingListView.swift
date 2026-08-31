@@ -72,7 +72,7 @@ class AddTriggerMappingListView: BaseView {
             make.center.equalToSuperview()
         }
         
-        gradientView.isHidden = triggerItem.mappings.count == 0
+        view.isHidden = triggerItem.mappings.count == 0
         return view
     }()
     

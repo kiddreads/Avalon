@@ -121,10 +121,10 @@ class SyncManager: NSObject {
             SyncObject(realmConfiguration: configuration, type: Prefference.self)
         ])
         realmSyncEngine?.setupCompletion = { error in
-            //同步设定完成之后 尝试将本地所有数据推到云端
             if let error = error {
                 Log.debug("[iCloud Sync]数据库同步初始化结束 error:\(error)")
             } else {
+                Skin.polishSkinsAfterRealmSync()
                 Log.debug("[iCloud Sync]数据库同步初始化结束")
             }
         }
@@ -332,7 +332,6 @@ class SyncManager: NSObject {
     
     static func download(to localFilePath: String, completion: ((Error?)->Void)? = nil) {
         if SyncManager.shared.downloadingFiles.contains(localFilePath) {
-            UIView.makeToast(message: R.string.localizable.filesDownloadErrorFileExist(localFilePath.deletingPathExtension.lastPathComponent))
             return
         }
         

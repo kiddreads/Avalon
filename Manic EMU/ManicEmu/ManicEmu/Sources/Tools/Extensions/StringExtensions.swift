@@ -362,6 +362,11 @@ extension String {
         }
         return self
     }
+    
+    var parsedVersionNumber: UInt64 {
+        let digits = self.replacingOccurrences(ofPattern: "\\D", withTemplate: "")
+        return UInt64(digits) ?? 0
+    }
 }
 
 // Expand the character set used for recognizing emoji.

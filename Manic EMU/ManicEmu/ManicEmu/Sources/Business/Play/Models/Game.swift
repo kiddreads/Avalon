@@ -287,7 +287,7 @@ class Game: Object, ObjectUpdatable {
                     }
                 }
             }
-            return URL(fileURLWithPath: R.Path.DOSBoxPure.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
+            return URL(fileURLWithPath: R.Path.DOSBoxPure.appendingPathComponent("\(EmulationCore.DOSBoxPure.name)/\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))
         }
         
         let localUrl = URL(fileURLWithPath: R.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveFileExtension ?? "")"))

@@ -384,7 +384,7 @@ class AddTriggerButtonStyleView: BaseView {
                 self.item.buttonWidth = style.defaultSize.width
                 self.item.buttonHeight = style.defaultSize.height
                 self.item.buttonOpacity = 1
-                self.item.buttonCornerRadiusRatio = style.defaultSize.height/2
+                self.item.buttonCornerRadiusRatio = 100
                 self.triggerButtonView.style = style
                 self.triggerButtonView.buttonSize = style.defaultSize
                 self.triggerButtonView.buttonOpacity = 1

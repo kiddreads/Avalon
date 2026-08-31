@@ -142,10 +142,15 @@ class GameInfoView: BaseView {
         addSubviews([gameCoverView, gameOptionView, navigationView, gameInfoDetailView])
         updateViewsConstraints()
         
-        gameUpdateToken = game.observe(keyPaths: [\Game.gameCover, \Game.icon, \Game.onlineCoverUrl], { [weak self] changes in
+        gameUpdateToken = game.observe(keyPaths: [\Game.gameCover, \Game.icon, \Game.onlineCoverUrl, \Game.isDeleted], { [weak self] changes in
             guard let self else { return }
             switch changes {
-            case .change:
+            case .change(_, let properties):
+                if properties.contains(where: { $0.name == "isDeleted"} ) {
+                    self.hide()
+                    return
+                }
+                
                 var image: UIImage? = nil
                 if R.Style.GameCoverForceSquare,
                    let imageData = self.game.icon?.storedData() {
@@ -169,6 +174,9 @@ class GameInfoView: BaseView {
                     self.gameCoverView.updateImage(placeHolder)
                     self.navigationView.gameCover.image = placeHolder.scaled(toSize: CGSize(R.Size.ItemHeightLarge - R.Size.ContentSpaceSmall*2))
                 }
+            
+            case .deleted:
+                self.hide()
                 
             default:
                 break

@@ -733,9 +733,7 @@ class PlayViewController: GameViewController {
                         manicGame.gameType == .gba {
                 make.top.equalTo(gameView.snp.bottom).offset(3)
             } else if manicGame.gameType.usesDOSSkinLayout {
-                if UIDevice.isPad {
-                    make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
-                } else if UIDevice.isSmallScreenPhone {
+                if UIDevice.isSmallScreenPhone {
                     make.top.equalTo(gameView.snp.bottom).offset(17)
                 } else if UIDevice.isProMaxPhone {
                     make.top.equalTo(gameView.snp.bottom).offset(22)
@@ -748,16 +746,12 @@ class PlayViewController: GameViewController {
                 make.top.equalTo(gameView.snp.bottom).offset(5)
             } else if manicGame.gameType == .pce {
                 make.top.equalTo(gameView.snp.bottom).offset(R.Size.ContentSpaceMedium)
-            } else if manicGame.gameType == .ds, UIDevice.isPad {
-                make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 25 : 18)
             } else {
                 make.top.equalTo(gameView.snp.bottom)
             }
-            if manicGame.gameType == .pm && !UIDevice.isLandscape {
-                make.leading.trailing.equalTo(gameView).inset(50)
-            } else {
-                make.leading.trailing.equalTo(gameView)
-            }
+            
+            make.leading.trailing.equalTo(gameView)
+            
             if manicGame.gameType == .j2me ||
                 manicGame.gameType.usesDOSSkinLayout ||
                 (manicGame.gameType == .symbian && UIDevice.isPhone) ||
@@ -882,7 +876,14 @@ class PlayViewController: GameViewController {
         LibretroNetplaySession.shared.clear()
     }
     
-    /// 进入默认显示的方向
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if #available(iOS 26.0, *) {
+            return AppDelegate.orientation
+        }
+        return super.supportedInterfaceOrientations
+    }
+    
+    /// Default orientation when this screen is presented.
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         if manicGame.orientation == .landscape {
             return .landscapeRight
@@ -890,6 +891,12 @@ class PlayViewController: GameViewController {
             return .portrait
         }
         return super.preferredInterfaceOrientationForPresentation
+    }
+    
+    /// iOS 26: keep the scene on the forced interface orientation even if the device is still held in portrait.
+    @available(iOS 26.0, *)
+    override var prefersInterfaceOrientationLocked: Bool {
+        manicGame.orientation != .auto
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
@@ -916,7 +923,7 @@ class PlayViewController: GameViewController {
             self.view.setNeedsLayout()
         }) { [weak self] _ in
             guard let self = self else { return }
-            self.updateAzaharMotionRotation()
+            self.update3DSMotionRotation()
             self.updateSkin()
             self.view.setNeedsLayout()
             self.resumeEmulationAndHandleAudio()
@@ -2378,7 +2385,7 @@ extension PlayViewController {
         }
     }
     
-    /// Android Surface.ROTATION_* value for Azahar `citra_motion_rotation`.
+    /// Azahar / Citra motion rotation: 0 portrait, 1 landscapeLeft, 2 upside down, 3 landscapeRight.
     private static func citraMotionRotationValue(
         for orientation: UIInterfaceOrientation = UIDevice.currentOrientation
     ) -> String {
@@ -2396,37 +2403,49 @@ extension PlayViewController {
         }
     }
 
-    private func updateAzaharMotionRotation() {
-        guard manicGame.isAzahar3DS else { return }
-        LibretroCore.sharedInstance().updateRunningCoreConfigs(
-            [SpecialCoreOption.citra_motion_rotation.rawValue: Self.citraMotionRotationValue()],
-            flush: false
-        )
+    private func update3DSMotionRotation() {
+        let value = Self.citraMotionRotationValue()
+        if manicGame.isAzahar3DS {
+            LibretroCore.sharedInstance().updateRunningCoreConfigs(
+                [SpecialCoreOption.citra_motion_rotation.rawValue: value],
+                flush: false
+            )
+        } else if manicGame.isCitra3DS {
+            citraCore?.applyCurrentMotionRotation()
+        }
     }
 
     /// Rotate to the orientation selected in game options.
     private func startOrientation() {
-        if #available(iOS 16.0, tvOS 16.0, *) {
-            self.setNeedsUpdateOfSupportedInterfaceOrientations()
-            if let scene = ApplicationSceneDelegate.applicationScene {
+        func requestForcedOrientation() {
+            if #available(iOS 16.0, tvOS 16.0, *) {
+                setNeedsUpdateOfSupportedInterfaceOrientations()
+                if let scene = ApplicationSceneDelegate.applicationScene {
+                    if manicGame.orientation == .landscape {
+                        scene.requestGeometryUpdate(UIWindowScene.GeometryPreferences.iOS.init(interfaceOrientations: .landscapeRight))
+                    } else if manicGame.orientation == .portrait {
+                        scene.requestGeometryUpdate(UIWindowScene.GeometryPreferences.iOS.init(interfaceOrientations: .portrait))
+                    }
+                }
+            } else {
                 if manicGame.orientation == .landscape {
-                    scene.requestGeometryUpdate(UIWindowScene.GeometryPreferences.iOS.init(interfaceOrientations: .landscapeRight))
+                    UIDevice.current.setValue(NSNumber(integerLiteral: UIInterfaceOrientation.landscapeRight.rawValue), forKey: "orientation")
                 } else if manicGame.orientation == .portrait {
-                    scene.requestGeometryUpdate(UIWindowScene.GeometryPreferences.iOS.init(interfaceOrientations: .portrait))
+                    UIDevice.current.setValue(NSNumber(integerLiteral: UIInterfaceOrientation.portrait.rawValue), forKey: "orientation")
                 }
             }
-        } else {
-            if manicGame.orientation == .landscape {
-                UIDevice.current.setValue(NSNumber(integerLiteral: UIInterfaceOrientation.landscapeRight.rawValue), forKey: "orientation")
-            } else if manicGame.orientation == .portrait {
-                UIDevice.current.setValue(NSNumber(integerLiteral: UIInterfaceOrientation.portrait.rawValue), forKey: "orientation")
-            }
         }
-        setOrientationConfig()
+        if #available(iOS 26.0, *) {
+            // iOS 26 requires the allowed mask to include the requested orientation first.
+            setOrientationConfig()
+            requestForcedOrientation()
+        } else {
+            requestForcedOrientation()
+            setOrientationConfig()
+        }
     }
     
-    
-    /// 设置游戏页面的旋转配置
+    /// Apply the in-game orientation lock to AppDelegate / iOS 26 scene lock.
     private func setOrientationConfig() {
         AppDelegate.orientation = {
             if manicGame.orientation == .landscape {
@@ -2437,14 +2456,20 @@ extension PlayViewController {
                 return R.Config.DefaultOrientation
             }
         }()
+        if #available(iOS 26.0, *) {
+            setNeedsUpdateOfPrefersInterfaceOrientationLocked()
+        }
     }
     
-    /// 恢复默认旋转配置
+    /// Restore the app-wide default orientation mask.
     private func resetOrientationConfig() {
         AppDelegate.orientation = R.Config.DefaultOrientation
+        if #available(iOS 26.0, *) {
+            setNeedsUpdateOfPrefersInterfaceOrientationLocked()
+        }
     }
     
-    ///固定旋转配置
+    /// Pin the allowed mask to the current interface orientation (not the physical device).
     private func fixedOrientationConfig() {
         switch UIDevice.currentOrientation {
         case .unknown: break
@@ -2524,7 +2549,7 @@ extension PlayViewController {
         }
         if let controllerSkin = controllerView.controllerSkin {
             if let skin = Database.realm.objects(Skin.self).first(where: { $0.identifier == controllerSkin.identifier }) {
-                if skin.skinType == .default || skin.isKeyboardSkin {
+                if skin.supportShortcut {
                     //当前使用的是默认皮肤 则添加功能按钮
                     var shortcuts = Prefference.defalut.getPrefference(kind: .gameShortcut,
                                                                        storeKey: .game(gameId: manicGame.id),
@@ -2666,6 +2691,14 @@ extension PlayViewController {
             shortcutsButtonContainer.snp.updateConstraints { make in
                 make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 30 : 40)
             }
+        } else if manicGame.gameType == .ds, UIDevice.isPad {
+            shortcutsButtonContainer.snp.updateConstraints { make in
+                make.top.equalTo(gameView.snp.bottom).offset(UIDevice.isLandscape ? 25 : 40)
+            }
+        } else if manicGame.gameType == .pm && !UIDevice.isLandscape {
+            shortcutsButtonContainer.snp.updateConstraints { make in
+                make.leading.trailing.equalTo(gameView).inset(UIDevice.isLandscape ? 0 : 50)
+            }
         }
     }
     
@@ -2711,8 +2744,12 @@ extension PlayViewController {
                 self.updateFastforward(speed: self.manicGame.speed)
                 self.updateAirPlay()
             }
-            citraCore?.openKeyboardAction { hintText, keyboardType, maxTextSize in
-                ThreeDSKeyboardView.showForCitra(hintText: hintText, keyboardType: keyboardType, maxTextSize: maxTextSize)
+            citraCore?.openKeyboardAction { [weak self] config in
+                guard let self else { return }
+                self.pauseEmulationIfNeed()
+                ThreeDSKeyboardView.showForCitra(config: config) { [weak self] _, _ in
+                    self?.resumeEmulationAndHandleAudio()
+                }
             }
         }
     }
@@ -2818,12 +2855,18 @@ extension PlayViewController {
                 if let corePath = self.manicGame.libretroCorePath {
                     var compltion: (([AnyHashable: Any]?)-> Void)? = nil
                     if manicGame.isAzahar3DS {
-                        //注册azahar的键盘
-                        compltion = { _ in
-                            LibretroCore.sharedInstance().registerAzaharKeyboard { config in
+                        // Register Azahar SWKBD after the core is loaded.
+                        compltion = { [weak self] _ in
+                            guard let self else { return }
+                            LibretroCore.sharedInstance().registerAzaharKeyboard { [weak self] config in
+                                guard let self else { return }
+                                self.pauseEmulationIfNeed()
                                 ThreeDSKeyboardView.showForAzahar(config: config,
-                                                                  tapAction: { buttonType, text in
+                                                                  tapAction: { [weak self] buttonType, text in
+                                    guard let self else { return }
+                                    // Finalize while paused so the next frame sees DataReady.
                                     LibretroCore.sharedInstance().inputAzaharKeyboard(text, buttonType: buttonType)
+                                    self.resumeEmulationAndHandleAudio()
                                 })
                             }
                         }
@@ -4380,5 +4423,18 @@ extension PlayViewController {
             currentPlayViewController.manicGame.forceFullSkin = hideControls
             currentPlayViewController.updateSkin()
         }
+    }
+    
+    static func updateBackground() {
+        if let currentPlayViewController {
+            currentPlayViewController.updateBackground()
+        }
+    }
+    
+    static var currentGame: Game? {
+        if let currentPlayViewController {
+            return currentPlayViewController.manicGame
+        }
+        return nil
     }
 }

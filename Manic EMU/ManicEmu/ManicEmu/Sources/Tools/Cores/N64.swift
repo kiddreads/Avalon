@@ -46,6 +46,14 @@ extension GameType
         return .game(.n64)
     }
     
+    var isContinuous: Bool {
+        switch self
+        {
+        case .analogStickUp, .analogStickDown, .analogStickLeft, .analogStickRight: return true
+        default: return false
+        }
+    }
+    
     init?(stringValue: String) {
         if stringValue == "a" { self = .a }
         else if stringValue == "b" { self = .b }

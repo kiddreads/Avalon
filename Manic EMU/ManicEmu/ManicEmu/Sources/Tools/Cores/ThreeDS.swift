@@ -57,6 +57,8 @@ extension GameType
     var isContinuous: Bool {
         switch self
         {
+        case .leftThumbstickUp, .leftThumbstickDown, .leftThumbstickLeft, .leftThumbstickRight: return true
+        case .rightThumbstickUp, .rightThumbstickDown, .rightThumbstickLeft, .rightThumbstickRight: return true
         case .touchScreenX, .touchScreenY: return true
         default: return false
         }
@@ -221,13 +223,6 @@ struct ThreeDS: DeltaCoreProtocol {
     }
 }
 
-enum ThreeDSKeyboardType: UInt {
-    case single
-    case dual
-    case triple
-    case none
-}
-
 class ThreeDSEmulatorBridge : EmulatorBridgeBase {
     
     static let shared = ThreeDSEmulatorBridge()
@@ -250,6 +245,28 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         citraCore.setSimBlowing(start: start)
     }
 
+    /// 0=portrait, 1=landscapeLeft, 2=upside down, 3=landscapeRight.
+    func setMotionRotation(_ rotation: Int) {
+        citraCore.setMotionRotation(rotation)
+    }
+
+    func applyCurrentMotionRotation(
+        _ orientation: UIInterfaceOrientation = UIDevice.currentOrientation
+    ) {
+        switch orientation {
+        case .portrait:
+            citraCore.setMotionRotation(0)
+        case .landscapeLeft:
+            citraCore.setMotionRotation(1)
+        case .portraitUpsideDown:
+            citraCore.setMotionRotation(2)
+        case .landscapeRight:
+            citraCore.setMotionRotation(3)
+        default:
+            citraCore.setMotionRotation(3)
+        }
+    }
+
     func setFrameLimit(_ limit: UInt16) {
         citraCore.setFrameLimit(limit)
     }
@@ -270,8 +287,17 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         updateConfig(["ManicEMU.resolutionFactor": resolution.rawValue])
     }
     
-    func openKeyboardAction(_ action: ((_ hintText:String?, _ keyboardType: ThreeDSKeyboardType, _ maxTextSize: UInt16) -> Void)? = nil) {
-        CitraCore.openKeyboardAction = { action?($0, ThreeDSKeyboardType(rawValue: $1.rawValue)!, $2) }
+    func openKeyboardAction(_ action: ((CitraKeyboardConfig) -> Void)? = nil) {
+        CitraCore.openKeyboardAction = { config in
+            guard let action else { return }
+            if Thread.isMainThread {
+                action(config)
+            } else {
+                DispatchQueue.main.async {
+                    action(config)
+                }
+            }
+        }
     }
     
     func start(withGameURL gameURL: URL,
@@ -333,6 +359,7 @@ class ThreeDSEmulatorBridge : EmulatorBridgeBase {
         self.metalView = metalView
         let metalLayer = metalView.layer as! CAMetalLayer
         citraCore.allocateMetalLayer(for: metalLayer, with: metalViewFrame.size, isSecondary: false)
+        applyCurrentMotionRotation()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             Thread.setThreadPriority(1.0)
             Thread.detachNewThread {

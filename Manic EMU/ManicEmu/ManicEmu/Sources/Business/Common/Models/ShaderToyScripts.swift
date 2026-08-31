@@ -427,48 +427,51 @@ extension ShaderToy {
 
             A whirling blackhole.
             Feel free to code golf!
-            
+
             FabriceNeyret2: -19
             dean_the_coder: -12
             iq: -4
+
+            Metal-safe rewrite of the golfed Image pass. The original left `w`
+            uninitialized, used log(0)/rcp(0) at the hole, and built a rotation
+            with mat2(cos(t+vec4(0,33,11,0))). iOS 26 Metal fast-math turns
+            those into NaN and the background goes black.
         */
         void mainImage(out vec4 O, vec2 F)
         {
-            //Iterator and attenuation (distance-squared)
-            float i = .2, a;
-            //Resolution for scaling and centering
-            vec2 r = iResolution.xy,
-                 //Centered ratio-corrected coordinates
-                 p = ( F+F - r ) / r.y / .7,
-                 //Diagonal vector for skewing
-                 d = vec2(-1,1),
-                 //Blackhole center
-                 b = p - i*d,
-                 //Rotate and apply perspective
-                 c = p * mat2(1, 1, d/(.1 + i/dot(b,b))),
-                 //Rotate into spiraling coordinates
-                 v = c * mat2(cos(.5*log(a=dot(c,c)) + iTime*i + vec4(0,33,11,0)))/i,
-                 //Waves cumulative total for coloring
-                 w;
-            
-            //Loop through waves
-            for(; i++<6.; w += 1.+sin(v) )
-                //Distort coordinates
-                v += .7* sin(v.yx*i+iTime) / i + .5;
-            //Acretion disk radius
-            i = length( sin(v/.3)*.4 + c*(3.+d) );
-            //Red/blue gradient
-            O = 1. - exp( -exp( c.x * vec4(.6,-.4,-1,0) )
-                           //Wave coloring
-                           /  w.xyyx
-                           //Acretion disk brightness
-                           / ( 2. + i*i/4. - i )
-                           //Center darkness
-                           / ( .5 + 1. / a )
-                           //Rim highlight
-                           / ( .03 + abs( length(p)-.7 ) )
-                     );
+            vec2 r = iResolution.xy;
+            vec2 p = (F + F - r) / r.y / 0.7;
+            vec2 d = vec2(-1.0, 1.0);
+
+            float i = 0.2;
+            vec2 b = p - i * d;
+            float b2 = max(dot(b, b), 1e-8);
+            vec2 skew = d / (0.1 + i / b2);
+            vec2 c = p * mat2(1.0, 1.0, skew.x, skew.y);
+
+            float a = max(dot(c, c), 1e-8);
+            float theta = 0.5 * log(a) + iTime * i;
+            float ct = cos(theta);
+            float st = sin(theta);
+            // Same as mat2(cos(theta + vec4(0,33,11,0))) — 33≈π/2, 11≈3π/2.
+            vec2 v = (c * mat2(ct, -st, st, ct)) / i;
+
+            vec2 w = vec2(0.0);
+            for (int n = 0; n < 6; n++) {
+                i += 1.0;
+                v += 0.7 * sin(v.yx * i + iTime) / i + 0.5;
+                w += 1.0 + sin(v);
             }
+
+            i = length(sin(v / 0.3) * 0.4 + c * (3.0 + d));
+
+            vec4 inner = clamp(c.x * vec4(0.6, -0.4, -1.0, 0.0), -40.0, 40.0);
+            vec4 den = max(w.xyyx, vec4(1e-4));
+            den *= max(2.0 + i * i * 0.25 - i, 0.25);
+            den *= 0.5 + 1.0 / a;
+            den *= 0.03 + abs(length(p) - 0.7);
+            O = 1.0 - exp(-exp(inner) / den);
+        }
 
 
 

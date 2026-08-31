@@ -620,6 +620,12 @@ extension FlexSkinSettingViewController {
                     if indexPath.section == 0 {
                         //section 0 fetch images
                         var sources: [ImageFetcher.Source] = [.capture, .library, .file]
+                        
+                        if let gameId = self.gameId,
+                           let game = Database.realm.object(ofType: Game.self, forPrimaryKey: gameId) {
+                            sources += [.libretro(game), .steamGridDB(game, preferredAssetType: .grids)]
+                        }
+                        
                         if let image = background?.image {
                             sources += [.editImage(image)]
                         }
@@ -630,6 +636,7 @@ extension FlexSkinSettingViewController {
                             } else {
                                 self.addBackground(image: image)
                             }
+                            self.updateGamingBackgroundIfNeed()
                         })
                     } else if indexPath.section == 1 {
                         //section 1 setting background
@@ -642,9 +649,11 @@ extension FlexSkinSettingViewController {
                         } else if indexPath.row == 2 {
                             self.updateBackgroundStoreLevel(.game)
                         }
+                        self.updateGamingBackgroundIfNeed()
                     } else if indexPath.section == 2 {
                         //section 2 delete
                         self.removeBackground()
+                        self.updateGamingBackgroundIfNeed()
                     }
                 })
             }
@@ -763,6 +772,14 @@ extension FlexSkinSettingViewController {
         }
     }
     
+    private func updateGamingBackgroundIfNeed() {
+        guard PlayViewController.isGaming else { return }
+        if let gameId, PlayViewController.currentGame?.id == gameId {
+            PlayViewController.updateBackground()
+        } else if self.gameType == PlayViewController.currentGameType {
+            PlayViewController.updateBackground()
+        }
+    }
 }
 
 ///Screens

@@ -13,7 +13,7 @@ class PriceItemCollectionCell: UICollectionViewCell {
     
     private var infoLabel: UILabel = {
         let view = UILabel()
-        view.numberOfLines = 0
+        view.numberOfLines = 2
         return view
     }()
     
@@ -48,6 +48,8 @@ class PriceItemCollectionCell: UICollectionViewCell {
         }
         
         roundAndBorderView.addSubview(infoLabel)
+        infoLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        infoLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         infoLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(R.Size.ContentSpaceMedium)
             make.centerY.equalToSuperview()
@@ -58,11 +60,12 @@ class PriceItemCollectionCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-R.Size.ContentSpaceMedium)
             make.height.equalTo(R.Size.IconSizeMedium.height)
-            make.width.greaterThanOrEqualTo(56)
-            make.leading.greaterThanOrEqualTo(infoLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall)
+            make.leading.equalTo(infoLabel.snp.trailing).offset(R.Size.ContentSpaceExtraSmall).priority(.high)
         }
         
         promptContainer.addSubview(promptLabel)
+        promptLabel.setContentHuggingPriority(.required, for: .horizontal)
+        promptLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         promptLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(R.Size.ContentSpaceExtraSmall)
             make.top.bottom.equalToSuperview()

@@ -1328,7 +1328,6 @@ extension GameOption {
                               detail: detail,
                               options: options,
                               selectedIndex: selectedIndex,
-                              optionType: firstGame.gameType == .fds ? .chevron : .radio,
                               groupTogether: true,
                               completion: { index in
             if let index {

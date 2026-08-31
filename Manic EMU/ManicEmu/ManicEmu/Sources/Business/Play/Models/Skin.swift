@@ -10,7 +10,10 @@
 import RealmSwift
 import IceCream
 
-extension Skin: CKRecordConvertible & CKRecordRecoverable { }
+extension Skin: CKRecordConvertible & CKRecordRecoverable {
+    /// Bundled skins follow the app package. Only imported and buildIn skins sync to iCloud.
+    var isSyncable: Bool { skinType == .import || skinType == .buildIn }
+}
 
 enum SkinType: Int, PersistableEnum {
 //    case `default`, manic, delta
@@ -96,5 +99,61 @@ class Skin: Object, ObjectUpdatable {
     
     var isKeyboardSkin: Bool {
         identifier.hasSuffix(".keyboard")
+    }
+    
+    var supportShortcut: Bool {
+        skinType == .default || isKeyboardSkin || identifier == R.Strings.WiimoteSkinIdentifier 
+    }
+    
+    /// Drop stale `.buildIn` rows iCloud restored after a bundle skin file (hash PK) changed.
+    /// Default / PlayCase are local-only (`isSyncable`); imported skins are user data. Runs once per app version.
+    static func polishSkinsAfterRealmSync() {
+        guard let systemCoreVersion = UserDefaults.standard.string(forKey: R.DefaultKey.SystemCoreVersion) else { return }
+        let flagKey = R.DefaultKey.HasPolishSkins + systemCoreVersion
+        guard !UserDefaults.standard.bool(forKey: flagKey) else { return }
+        
+        let realm = Database.realm
+        let skins = Array(realm.objects(Skin.self).where { !$0.isDeleted && $0.skinType == .buildIn })
+        
+        func identityKey(_ identifier: String, _ gameType: GameType) -> String {
+            "\(identifier)\0\(gameType.rawValue)"
+        }
+        func matchesCurrentId(_ skinId: String, hash: String) -> Bool {
+            skinId == hash || skinId.hasPrefix(hash + ".")
+        }
+        
+        var currentHashByIdentity = [String: String]()
+        for skin in skins {
+            let path = R.Path.Resource.appendingPathComponent(skin.fileName)
+            guard FileManager.default.fileExists(atPath: path),
+                  let hash = FileHashUtil.truncatedHash(url: URL(fileURLWithPath: path)) else {
+                continue
+            }
+            currentHashByIdentity[identityKey(skin.identifier, skin.gameType)] = hash
+        }
+        // Resource files not ready yet; retry on a later sync instead of locking this version.
+        guard !currentHashByIdentity.isEmpty else { return }
+        
+        let stale = skins.filter { skin in
+            guard let hash = currentHashByIdentity[identityKey(skin.identifier, skin.gameType)] else {
+                return false
+            }
+            return !matchesCurrentId(skin.id, hash: hash)
+        }
+        if !stale.isEmpty {
+            Log.debug("[Skin] polish: remove \(stale.count) stale buildIn skin(s)")
+            try? realm.write {
+                for skin in stale {
+                    if Settings.defalut.iCloudSyncEnable {
+                        skin.skinData?.deleteAndClean(realm: realm)
+                        skin.isDeleted = true
+                    } else {
+                        realm.delete(skin)
+                    }
+                }
+            }
+        }
+        // Preference remap already ran in Database.setup / addEmbedSkins on this launch.
+        UserDefaults.standard.set(object: true, forKey: flagKey)
     }
 }

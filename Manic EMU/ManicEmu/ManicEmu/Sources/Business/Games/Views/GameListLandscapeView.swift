@@ -145,7 +145,11 @@ class GameListLandscapeView: BaseView {
                                           insets: .init(inset: R.Size.ContentSpaceSmall)).enableGlass(true))
         view.didTapButton = { [weak self] in
             guard let self, let game = self.focusedGame else { return }
-            GameOptionsView.show(scene: .common, games: [game])
+            GameOptionsView.show(scene: .common,
+                                 games: [game],
+                                 shouldHide: {
+                $0 == .genHomeMenu || $0 == .delete
+            })
         }
         return view
     }()
@@ -321,6 +325,7 @@ class GameListLandscapeView: BaseView {
         gamesUpdateToken = games.observe(keyPaths: [
             \Game.gameCover,
              \Game.icon,
+             \Game.banner,
              \Game.aliasName,
              \Game.onlineCoverUrl,
              \Game.latestPlayDate,
@@ -632,7 +637,7 @@ class GameListLandscapeView: BaseView {
     
     //MARK: - 聚焦信息与背景联动
     
-    private func updateFocusedGameInfo() {
+    func updateFocusedGameInfo() {
         guard let game = focusedGame else {
             infoPanelView.isHidden = true
             NotificationCenter.default.post(name: R.NotificationName.LandscapeBackgroundChange,

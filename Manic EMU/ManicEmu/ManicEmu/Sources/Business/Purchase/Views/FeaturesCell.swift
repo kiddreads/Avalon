@@ -10,6 +10,8 @@
 import Device
 
 class FeaturesCell: UICollectionViewCell {
+    private var viewAlongsideTransitionNotification: Any? = nil
+    
     private var titleLabel: UILabel = {
         let view = UILabel()
         view.font = R.Font.Headline(emphasis: true)
@@ -28,6 +30,8 @@ class FeaturesCell: UICollectionViewCell {
         view.contentMode = .center
         if Device.size().rawValue < Size.screen5_8Inch.rawValue {
             view.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } else if UIDevice.isPad, UIDevice.isLandscape {
+            view.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
         }
         return view
     }()
@@ -71,6 +75,12 @@ class FeaturesCell: UICollectionViewCell {
             startAnimation()
         } else {
             stopAnimation()
+        }
+    }
+    
+    deinit {
+        if let viewAlongsideTransitionNotification {
+            NotificationCenter.default.removeObserver(viewAlongsideTransitionNotification)
         }
     }
     
@@ -141,6 +151,26 @@ class FeaturesCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-R.Size.ItemHeightMicro)
         }
+        
+        viewAlongsideTransitionNotification = NotificationCenter.default.addObserver(forName: R.NotificationName.ViewAlongsideTransition,
+                                                                                     object: nil,
+                                                                                     queue: .main,
+                                                                                     using: { [weak self] _ in
+            guard let self else { return }
+            if Device.size().rawValue < Size.screen5_8Inch.rawValue {
+                if UIDevice.isLandscape {
+                    self.iconImageView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                } else {
+                    self.iconImageView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+                }
+            } else if UIDevice.isPad {
+                if UIDevice.isLandscape {
+                    self.iconImageView.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
+                } else {
+                    self.iconImageView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                }
+            }
+        })
         
     }
     
@@ -215,7 +245,11 @@ class FeaturesCell: UICollectionViewCell {
         if UIDevice.isPad {
             offset = (UIDevice.isLandscape ? R.Size.WindowHeight * 0.9 * 9 / 16 : R.Size.WindowWidth * 0.6)  - iconImageView.width
         } else {
-            offset = R.Size.WindowWidth - iconImageView.width
+            if UIDevice.isLandscape {
+                offset = R.Size.WindowWidth/2 - iconImageView.width
+            } else {
+                offset = R.Size.WindowWidth - iconImageView.width
+            }
         }
         
         let defaultDistance = Device.size().rawValue < Size.screen5_8Inch.rawValue ? 80.0 : 50.0

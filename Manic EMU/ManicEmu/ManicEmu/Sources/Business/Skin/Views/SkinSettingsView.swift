@@ -103,6 +103,8 @@ class SkinSettingsView: BaseView {
     }
     
     private var isMoreGamesSetting = false
+    /// Bumped when a skin file is rewritten (flex edit) so cells rebuild the same identifier.
+    private var skinRenderGeneration = 0
     
     private var collectionViewContentInsetBottom: CGFloat {
         R.Size.ContentInsetBottom + ((UIDevice.isPad && !showClose) ? R.Size.HomeTabBarSize.height + R.Size.ContentSpaceMedium : 0)
@@ -370,6 +372,7 @@ class SkinSettingsView: BaseView {
                     vc.didCompletion = { [weak self] isModified in
                         if isModified {
                             flexSkin.controllerSkin = ControllerSkin(fileURL: flexSkin.fileURL)
+                            self?.skinRenderGeneration += 1
                             self?.collectionView.reloadData()
                         }
                     }
@@ -764,15 +767,16 @@ extension SkinSettingsView: UICollectionViewDataSource {
                          subscriptTitle: skin.gameType == gameType ? nil : skin.gameType.localizedShortName,
                          isEditMode: isEditMode,
                          isUsing: isUsing,
-                         isEditable: skin.isEditable)
-            cell.previewButton.addTapGesture { gesture in
+                         isEditable: skin.isEditable,
+                         renderGeneration: skinRenderGeneration)
+            cell.onPreview = {
                 if let controllerSkin = skin.controllerSkin {
                     topViewController()?.present(SkinPreviewViewController(skin: controllerSkin,
                                                                            traits: traits),
                                                  animated: true)
                 }
             }
-            cell.playcaseButton.addTapGesture { _ in
+            cell.onPlaycaseTap = {
                 PlayCasePromoView.show(showDontShow: false)
             }
             cell.onFocusConfirm = { [weak self] in
@@ -937,6 +941,12 @@ extension SkinSettingsView: UICollectionViewDelegate {
                                                   extra: Prefference.StoreKey.orientationExtraKey(isLandScape: true))
             Prefference.defalut.deletePrefference(kind: .skin,
                                                   level: .game,
+                                                  extra: Prefference.StoreKey.orientationExtraKey(isLandScape: false))
+            Prefference.defalut.deletePrefference(kind: .skin,
+                                                  level: .gameType,
+                                                  extra: Prefference.StoreKey.orientationExtraKey(isLandScape: true))
+            Prefference.defalut.deletePrefference(kind: .skin,
+                                                  level: .gameType,
                                                   extra: Prefference.StoreKey.orientationExtraKey(isLandScape: false))
         }
         

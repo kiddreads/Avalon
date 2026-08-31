@@ -7,7 +7,7 @@
 //
 
 ///Get screen rotation events by receiving notifications through Base View.
-protocol ViewTransition where Self: UIView {
+protocol ViewTransition where Self: BaseView {
     ///About to start rotating.
     ///The device's orientation is correct, but the window size is still using old data.
     ///belove iOS 16 orientation is not correct too!!!

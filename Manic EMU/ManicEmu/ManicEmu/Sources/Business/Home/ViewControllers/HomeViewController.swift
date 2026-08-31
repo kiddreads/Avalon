@@ -249,7 +249,7 @@ class HomeViewController: BaseViewController {
         homeTabBar.snp.makeConstraints { make in
             make.size.equalTo(R.Size.HomeTabBarSize)
             make.centerX.equalTo(self.view)
-            if UIDevice.isSmallScreenPhone {
+            if R.Size.SafeArea.top == 0 {
                 make.bottom.equalToSuperview().inset(R.Size.ContentInsetBottom)
             } else {
                 make.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -266,7 +266,9 @@ class HomeViewController: BaseViewController {
                     landscapeBackgroundView.isHidden = false
                 }
                 
-                if getSelection() != .games, !landscapeBackgroundView.isShaderMode {
+                if getSelection() == .games {
+                    gamesViewController.updateLandscapeBackgroundIfNeed()
+                } else if !landscapeBackgroundView.isShaderMode {
                     landscapeBackgroundView.setBackground(LandscapeBackgroundView.Background.shader(reload: false), animated: false)
                 }
                 
