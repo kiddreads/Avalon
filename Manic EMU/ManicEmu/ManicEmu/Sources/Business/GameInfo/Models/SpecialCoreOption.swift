@@ -494,12 +494,13 @@ enum SpecialCoreOption: String {
                     .dolphin_skip_gc_bios: "disabled",
                 ]
             } else {
+                let enableManicInterpreter = game.getExtraBool(key: ExtraKey.dolphinManicInterpreter.rawValue) ?? true
                 let clockRate: String
                 switch UIDevice.performanceTier {
                 case .high:
-                    clockRate = "0.30"
+                    clockRate = enableManicInterpreter ? "0.40" : "0.30"
                 case .ultra:
-                    clockRate = "0.50"
+                    clockRate = enableManicInterpreter ? "0.70" : "0.50"
                 default:
                     clockRate = "0.20"
                 }

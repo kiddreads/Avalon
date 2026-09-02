@@ -7,35 +7,17 @@
 //
 
 class GameInfoDetailView: BaseView {
-    lazy var titleTextField: UITextField = {
-        let textField = UITextField()
-        textField.text = game.displayName
-        textField.textColor = R.Color.LabelPrimary
-        textField.font = R.Font.Headline(emphasis: true)
-        textField.clearButtonMode = .never
-        textField.returnKeyType = .done
-        textField.onReturnKeyPress { [weak self, weak textField] in
-            guard let self = self else { return }
-            textField?.resignFirstResponder()
-            if let text = textField?.text?.trimmed {
-                if text.isEmpty {
-                    textField?.text = game.displayName
-                    UIView.makeToast(message: R.string.localizable.readyEditTitleFailed())
-                } else if text != game.aliasName {
-                    Game.change { realm in
-                        self.game.aliasName = text
-                    }
-                }
-            }
-        }
-        textField.onChange { [weak textField] text in
-            if text.count > R.Size.GameNameMaxCount {
-                if let markRange = textField?.markedTextRange, let _ = textField?.position(from: markRange.start, offset: 0) { } else {
-                    textField?.text = String(text.prefix(R.Size.GameNameMaxCount))
-                }
-            }
-        }
-        return textField
+    /// Display-only title. Avoid UITextField here: after PlayVC teardown, TextKit2
+    /// UIFieldEditor layout can EXC_BAD_ACCESS when a new text field lays out.
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = game.displayName
+        label.textColor = R.Color.LabelPrimary
+        label.font = R.Font.Headline(emphasis: true)
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return label
     }()
     
     private lazy var editTitleButton: ASButtonView = {
@@ -44,9 +26,7 @@ class GameInfoDetailView: BaseView {
                                           background: .clear))
         view.didTapButton = { [weak self] in
             guard let self = self else { return }
-            if !self.titleTextField.isFirstResponder {
-                self.titleTextField.becomeFirstResponder()
-            }
+            self.beginRename()
         }
         return view
     }()
@@ -123,15 +103,15 @@ class GameInfoDetailView: BaseView {
             make.top.equalToSuperview()
             make.width.lessThanOrEqualToSuperview().inset(R.Size.ContentSpaceMedium)
         }
-        titleContainer.addSubview(titleTextField)
-        titleTextField.snp.makeConstraints { make in
+        titleContainer.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
             make.leading.centerY.equalToSuperview()
         }
         titleContainer.addSubview(editTitleButton)
         editTitleButton.snp.makeConstraints { make in
             make.size.equalTo(R.Size.IconSizeMedium)
             make.top.trailing.bottom.equalToSuperview()
-            make.leading.equalTo(titleTextField.snp.trailing).offset(R.Size.ContentSpaceTiny)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(R.Size.ContentSpaceTiny)
         }
         
         let subtitleContainer = UIView()
@@ -173,5 +153,26 @@ class GameInfoDetailView: BaseView {
     
     @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// Present rename UI. Prefer a separate alert over inline UITextField (shared UIFieldEditor / TextKit2 crash after Play).
+    func beginRename() {
+        LimitedTextInputView.show(icon: .symbolImage(R.image.renameRegular_iconSymbols()),
+                                  title: R.string.localizable.gamesRename(),
+                                  text: game.displayName,
+                                  limitedType: .normal(maxTextSize: R.Size.GameNameMaxCount),
+                                  confirmAction: { [weak self] result in
+            guard let self, let text = (result as? String)?.trimmed else { return }
+            if text.isEmpty {
+                UIView.makeToast(message: R.string.localizable.readyEditTitleFailed())
+                return
+            }
+            if text != self.game.aliasName {
+                Game.change { _ in
+                    self.game.aliasName = text
+                }
+                self.titleLabel.text = text
+            }
+        })
     }
 }

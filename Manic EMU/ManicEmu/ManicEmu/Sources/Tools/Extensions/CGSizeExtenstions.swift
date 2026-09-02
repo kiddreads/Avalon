@@ -19,4 +19,8 @@ extension CGSize {
     func scaleBy(_ scale: CGFloat) -> CGSize {
         return CGSize(width: width * scale, height: height * scale)
     }
+    
+    var swapSide: CGSize {
+        return CGSize(width: height, height: width)
+    }
 }

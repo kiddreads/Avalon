@@ -70,10 +70,6 @@ class GameInfoView: BaseView {
         }
         view.didScroll = { [weak self] scrollView in
             guard let self else { return }
-            if self.gameInfoDetailView.titleTextField.isFirstResponder {
-                self.gameInfoDetailView.titleTextField.resignFirstResponder()
-            }
-            
             guard !UIDevice.isLandscape else { return }
             let contentOffsetY = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
             //Make the gameInfoDetailView pin to the top of the gameOptionView content.
@@ -194,7 +190,7 @@ class GameInfoView: BaseView {
         
         DispatchQueue.main.asyncAfter(delay: 0.35, execute: { [weak self] in
             if readyAction == .rename {
-                self?.gameInfoDetailView.titleTextField.becomeFirstResponder()
+                self?.gameInfoDetailView.beginRename()
             }
         })
         

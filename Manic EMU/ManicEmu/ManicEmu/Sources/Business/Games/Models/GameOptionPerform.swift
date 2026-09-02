@@ -370,7 +370,9 @@ extension GameOption {
             
             
         case .jit:
-            performSwitchAction(with: games, accessoryChange: accessoryChange)
+            performSwitchAction(with: games,
+                                accessoryChange: accessoryChange,
+                                reloadAll: reloadAll)
             
         case .citraAdvanceToggle:
             Settings.change { realm in
@@ -1073,10 +1075,16 @@ extension GameOption {
             
         case .coverScraping:
             GameCoverScrapingView.show(games: games)
+            
+        case .dolphinCpuCore:
+            performStringAction(with: games, accessoryChange: accessoryChange)
+            
         }
     }
     
-    private func performSwitchAction(with games: [Game], accessoryChange: (() -> Void)? = nil) {
+    private func performSwitchAction(with games: [Game],
+                                     accessoryChange: (() -> Void)? = nil,
+                                     reloadAll: (() -> Void)? = nil) {
         guard let firstGame = games.first else { return }
         
         var firstGameTimeConsumingValue: Bool? = nil
@@ -1093,6 +1101,9 @@ extension GameOption {
         if games.count == 1 {
             if self == .jit {
                 Game.change(action: { _ in firstGame.jit.toggle() })
+                if firstGame.isDolphinCore {
+                    reloadAll?()
+                }
             } else if self == .citraShader {
                 Game.change(action: { _ in firstGame.accurateShaders.toggle() })
                 hideSheetInGaming()
@@ -1212,6 +1223,9 @@ extension GameOption {
                         }
                     }
                     accessoryChange?()
+                    if games.allSatisfy({ $0.isDolphinCore }) {
+                        reloadAll?()
+                    }
                 }
             })
         }
@@ -1312,6 +1326,9 @@ extension GameOption {
         } else if self == .wiiControllerMode {
             options = R.Strings.WiiControllers
             detail = R.string.localizable.wiimoteDesc()
+        } else if self == .dolphinCpuCore {
+            options = R.Strings.DolphinCPUs
+            detail = R.string.localizable.dolphinCPUDesc()
         }
         
         guard options.count > 0 else { return }
@@ -1525,6 +1542,10 @@ extension GameOption {
                         WiiEmulatorBridge.shared.controllerType = controllerType
                         resumeEmulationIfNeed()
                     }
+                } else if self == .dolphinCpuCore {
+                    games.forEach({
+                        $0.updateExtra(key: ExtraKey.dolphinManicInterpreter.rawValue, value: index == 0)
+                    })
                 }
                 accessoryChange?()
             } else {

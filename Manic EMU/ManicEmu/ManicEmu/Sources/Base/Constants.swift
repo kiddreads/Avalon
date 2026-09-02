@@ -620,6 +620,10 @@ extension _R {
         static let SymbianSkinIdentifier = "public.aoshuang.game.symbian.standard"
         static let SymbianFlexSkinIdentifier = "public.aoshuang.game.symbian.flex"
         static let WiimoteSkinIdentifier = "public.aoshuang.game.wiimote"
+        static let DolphinCPUs = [
+            "Manic Interpreter (experimental)",
+            "Cached Interpreter (slower)"
+        ]
     }
     
     enum _Config {
@@ -805,7 +809,15 @@ extension _R {
             }
         }
         static func History(gameType: GameType) -> URL {
-            return URL(string: ManicEMU + "History-" + (gameType == .gb ? GameType.gbc.localizedShortName : gameType.localizedShortName))!
+            var gameTypeName = gameType.localizedShortName
+            if gameType == .gb {
+                gameTypeName = GameType.gbc.localizedShortName
+            } else if gameType == .ngpc {
+                gameTypeName = GameType.ngp.localizedShortName
+            } else if gameType == .supergrafx || gameType == .turbografx_16 || gameType == .turbografx_cd {
+                gameTypeName = GameType.pce.localizedShortName
+            }
+            return URL(string: ManicEMU + "History-" + gameTypeName)!
         }
         static let WFC = URL(string: "https://cdn.altstore.io/file/deltaemulator/delta/wfc-servers.json")!
 #if SIDE_LOAD

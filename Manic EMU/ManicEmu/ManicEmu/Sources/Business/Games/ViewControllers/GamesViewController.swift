@@ -225,8 +225,11 @@ class GamesViewController: BaseViewController {
                         game.handleTapAction(forceQuick: true)
                     })
                 } else {
-                    self.hideSideMenu()
-                    GameInfoView.show(readyAction: .default, game: game)
+                    // Wait for side menu dismiss before presenting GameInfo; overlapping
+                    // presentation can trigger UITextField/UIFieldEditor layout crashes.
+                    self.hideSideMenu(completion: {
+                        GameInfoView.show(readyAction: .default, game: game)
+                    })
                 }
             }
             containerVC.view.addSubview(view)

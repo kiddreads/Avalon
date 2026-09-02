@@ -162,6 +162,11 @@ class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         landscapeBackgroundView.setHomeVisible(true)
+        if let coordinator = transitionCoordinator {
+            let size = R.Size.WindowSize
+            viewWillTransition(to: size, with: coordinator)
+            childControllers.forEach { $0.viewWillTransition(to: size, with: coordinator) }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

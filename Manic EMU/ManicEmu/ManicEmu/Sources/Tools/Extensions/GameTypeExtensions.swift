@@ -12,7 +12,7 @@ import RealmSwift
 
 ///通过文件名后缀生成GameType
 extension GameType {
-    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip", "7z", "elf", "dol", "rvz", "wad"]
+    static var multiPlatformFileExtensions = ["chd", "iso", "bin", "cue", "m3u", "pbp", "ccd", "zip", "7z", "elf", "dol", "rvz", "wad", "prg"]
     
     static func gameTypes(multiPlatformFileExtension: String) -> [GameType] {
         let ext = multiPlatformFileExtension.lowercased()
@@ -44,6 +44,8 @@ extension GameType {
             return [.ngc, .wii]
         case "wad":
             return [.doom, .wii]
+        case "prg":
+            return [.c64, .jaguar]
         default:
             return []
         }

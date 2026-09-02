@@ -79,7 +79,8 @@ enum GameOption: Int, CaseIterable {
          netplay,
          symbianDevice,
          wiiControllerMode,
-         coverScraping
+         coverScraping,
+         dolphinCpuCore
         
     //When adding a new option, make sure to add it at the end; otherwise, it might affect the existing Prefference configurations
     
@@ -137,7 +138,7 @@ enum GameOption: Int, CaseIterable {
                 .symbolImage(R.image.advance_shader_iconSymbols())
         case .pspTexture:
                 .symbolImage(R.image.texture_iconSymbols())
-        case .ps1Bios:
+        case .ps1Bios, .dolphinCpuCore:
                 .symbolImage(R.image.bios_iconSymbols())
         case .ps1ControllerMode, .wiiControllerMode:
                 .symbolImage(R.image.controller_iconSymbols())
@@ -368,6 +369,8 @@ enum GameOption: Int, CaseIterable {
             R.string.localizable.symbianFirmwareChoosing()
         case .coverScraping:
             R.string.localizable.coverScraping()
+        case .dolphinCpuCore:
+            R.string.localizable.cpuEmulationMethod()
         }
     }
     
@@ -493,6 +496,7 @@ enum GameOption: Int, CaseIterable {
             .symbianDevice,
             .wiiControllerMode,
             .coreSettings,
+            .dolphinCpuCore,
         ],
         [
             .saveState,
@@ -923,6 +927,15 @@ enum GameOption: Int, CaseIterable {
             }) {
                 return .chevron(R.Strings.WiiControllers[firstGameValue])
             }
+        
+        case .dolphinCpuCore:
+            let extraKey = ExtraKey.dolphinManicInterpreter.rawValue
+            let firstGameValue = firstGame.getExtraBool(key: extraKey) ?? true
+            if games.allSatisfy({
+                ($0.getExtraBool(key: extraKey) ?? true) == firstGameValue
+            }) {
+                return .chevron(R.Strings.DolphinCPUs[firstGameValue ? 0 : 1])
+            }
             
         case .rename,
                 .cover,
@@ -1005,7 +1018,8 @@ enum GameOption: Int, CaseIterable {
                 .clownMDTvStandard,
                 .snesVRAM,
                 .symbianDevice,
-                .coverScraping
+                .coverScraping,
+                .dolphinCpuCore
             ]
         }
     }
@@ -1238,6 +1252,10 @@ enum GameOption: Int, CaseIterable {
         
         if game.gameType != .wii {
             allOptions.remove(.wiiControllerMode)
+        }
+        
+        if !game.isDolphinCore || game.jit {
+            allOptions.remove(.dolphinCpuCore)
         }
         
         allOptions.subtract(disableOptionsForScene(scene))

@@ -1080,3 +1080,6 @@
 "CoverScrapingComplete" = "抓取完成。";
 "CoverScrapingStat" = "%@: 已更新 %d，已跳过 %d，失败 %d";
 "FetchGamesFromARMSX2" = "从 ARMSX2 导入游戏";
+
+"CPUEmulationMethod" = "CPU 仿真方法";
+"DolphinCPUDesc" = "在无 JIT 的环境中，核心以解释器模式运行。\nCached Interpreter：官方解释器，准确度更高，但对性能要求也更高。\nManic Interpreter：Manic EMU 的解释器，采用更激进的优化，效率更高，但出错也可能更多。";

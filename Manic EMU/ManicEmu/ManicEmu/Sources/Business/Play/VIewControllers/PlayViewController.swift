@@ -806,6 +806,9 @@ class PlayViewController: GameViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         resetOrientationConfig()
+        if manicGame.safeMode {
+            manicGame.safeMode = false
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -891,12 +894,6 @@ class PlayViewController: GameViewController {
             return .portrait
         }
         return super.preferredInterfaceOrientationForPresentation
-    }
-    
-    /// iOS 26: keep the scene on the forced interface orientation even if the device is still held in portrait.
-    @available(iOS 26.0, *)
-    override var prefersInterfaceOrientationLocked: Bool {
-        manicGame.orientation != .auto
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
@@ -2147,13 +2144,17 @@ extension PlayViewController {
                 ])
                 LibretroCore.sharedInstance().setLibretroLogMonitor(true)
             } else if manicGame.isDolphinCore {
+                var enableManicInterpreter = true
                 let enableJIT = LibretroCore.jitAvailable() && manicGame.jit
                 if enableJIT {
                     setupUniversalScript(gameType: manicGame.gameType)
+                } else {
+                    enableManicInterpreter = manicGame.getExtraBool(key: ExtraKey.dolphinManicInterpreter.rawValue) ?? true
                 }
-                //4: JITARM64 5: Cached Interpreter
+                //4: JITARM64 5: Cached Interpreter 6: Manic Interpreter
+                 
                 updateLibretroCoreConfigs(core: .Dolphin, configs: [
-                    .dolphin_cpu_core: enableJIT ? "4" : "5",
+                    .dolphin_cpu_core: enableJIT ? "4" : (enableManicInterpreter ? "6" : "5"),
                     .dolphin_cheats_enabled: isHardcoreMode ? "disabled" : "enabled"
                 ])
             } else if manicGame.gameType == .amiga {
@@ -2445,7 +2446,7 @@ extension PlayViewController {
         }
     }
     
-    /// Apply the in-game orientation lock to AppDelegate / iOS 26 scene lock.
+    /// Apply the in-game orientation lock via AppDelegate.orientation.
     private func setOrientationConfig() {
         AppDelegate.orientation = {
             if manicGame.orientation == .landscape {
@@ -2456,17 +2457,11 @@ extension PlayViewController {
                 return R.Config.DefaultOrientation
             }
         }()
-        if #available(iOS 26.0, *) {
-            setNeedsUpdateOfPrefersInterfaceOrientationLocked()
-        }
     }
     
     /// Restore the app-wide default orientation mask.
     private func resetOrientationConfig() {
         AppDelegate.orientation = R.Config.DefaultOrientation
-        if #available(iOS 26.0, *) {
-            setNeedsUpdateOfPrefersInterfaceOrientationLocked()
-        }
     }
     
     /// Pin the allowed mask to the current interface orientation (not the physical device).

@@ -85,4 +85,5 @@ enum ExtraKey: String {
     case ngageFiles
     case symbianPackages
     case wiiController
+    case dolphinManicInterpreter
 }

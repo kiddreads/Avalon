@@ -1085,3 +1085,6 @@ Press the controller button to complete mapping...";
 "CoverScrapingComplete" = "Scraping complete.";
 "CoverScrapingStat" = "%@: %d updated, %d skipped, %d failed";
 "FetchGamesFromARMSX2" = "Import Games from ARMSX2";
+
+"CPUEmulationMethod" = "CPU Emulation Method";
+"DolphinCPUDesc" = "When JIT is unavailable, the core runs in interpreter mode.\nCached Interpreter: the official interpreter. It is more accurate, but more demanding on performance.\nManic Interpreter: Manic EMU's interpreter. Aggressive optimizations make it faster, but it may also produce more errors.";

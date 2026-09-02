@@ -37,10 +37,15 @@ extension UIWindow {
 }
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    //支持的旋转方向
+    // Allowed interface orientations. Rotation follows this mask, not overlay windows.
     static var orientation: UIInterfaceOrientationMask = R.Config.DefaultOrientation {
         didSet {
             UIViewController.attemptRotationToDeviceOrientation()
+            if #available(iOS 26.0, *) {
+                let root = ApplicationSceneDelegate.applicationWindow?.rootViewController
+                root?.setNeedsUpdateOfSupportedInterfaceOrientations()
+                root?.setNeedsUpdateOfPrefersInterfaceOrientationLocked()
+            }
         }
     }
     
