@@ -2559,6 +2559,7 @@ extension PlayViewController {
                         var iconColor = UIColor.white.withAlphaComponent(0.25)
                         if (manicGame.gameType == .ds && UIDevice.isPad) ||
                             manicGame.gameType == .wii ||
+                            manicGame.gameType == .ngc ||
                             (manicGame.gameType == .pce && !UIDevice.isLandscape) ||
                             manicGame.gameType.usesDOSSkinLayout {
                             iconColor = .black.withAlphaComponent(0.25)

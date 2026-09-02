@@ -495,8 +495,8 @@ enum GameOption: Int, CaseIterable {
             .snesVRAM,
             .symbianDevice,
             .wiiControllerMode,
-            .coreSettings,
             .dolphinCpuCore,
+            .coreSettings,
         ],
         [
             .saveState,
@@ -1254,7 +1254,7 @@ enum GameOption: Int, CaseIterable {
             allOptions.remove(.wiiControllerMode)
         }
         
-        if !game.isDolphinCore || game.jit {
+        if !game.isDolphinCore || (LibretroCore.jitAvailable() && game.jit) {
             allOptions.remove(.dolphinCpuCore)
         }
         
