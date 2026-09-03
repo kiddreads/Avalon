@@ -26,13 +26,16 @@ licensing in one place.
 > for the full project position.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a01.jpg" alt="Manic EMU screenshot 1" width="13%">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a02.jpg" alt="Manic EMU screenshot 2" width="13%">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a03.jpg" alt="Manic EMU screenshot 3" width="13%">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a04.jpg" alt="Manic EMU screenshot 4" width="13%">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a05.jpg" alt="Manic EMU screenshot 5" width="13%">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a06.jpg" alt="Manic EMU screenshot 6" width="13%">
-  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a07.jpg" alt="Manic EMU screenshot 7" width="13%">
+  <img src="./images_manicemu_ver5_a01.jpg" alt="Manic EMU screenshot 1" width="9.5%">
+  <img src="./images_manicemu_ver5_a02.jpg" alt="Manic EMU screenshot 2" width="9.5%">
+  <img src="./images_manicemu_ver5_a03.jpg" alt="Manic EMU screenshot 3" width="9.5%">
+  <img src="./images_manicemu_ver5_a04.jpg" alt="Manic EMU screenshot 4" width="9.5%">
+  <img src="./images_manicemu_ver5_a05.jpg" alt="Manic EMU screenshot 5" width="9.5%">
+  <img src="./images_manicemu_ver5_a06.jpg" alt="Manic EMU screenshot 6" width="9.5%">
+  <img src="./images_manicemu_ver5_a07.jpg" alt="Manic EMU screenshot 7" width="9.5%">
+  <img src="./images_manicemu_ver5_a08.jpg" alt="Manic EMU screenshot 7" width="9.5%">
+  <img src="./images_manicemu_ver5_a09.jpg" alt="Manic EMU screenshot 7" width="9.5%">
+  <img src="./images_manicemu_ver5_a10.jpg" alt="Manic EMU screenshot 7" width="9.5%">
 </p>
 
 ## At a Glance
@@ -74,15 +77,17 @@ Apple services, signing, or JIT workflows are involved.
 
 | Category | Platforms |
 | --- | --- |
-| Nintendo | Nintendo 3DS\*, Nintendo 64, Nintendo DS\*, Game Boy Advance, Game Boy Color, Game Boy, NES, Famicom Disk System, SNES, Virtual Boy, Pokemon Mini |
-| Sony | PlayStation, PlayStation Portable\* |
-| Sega | Dreamcast\*, Saturn, Master System, Game Gear, SG-1000, Genesis 32X/Super 32X, Sega CD/Mega-CD, Genesis/MegaDrive |
+| Nintendo | Nintendo Wii, Nintendo GameCube, Nintendo 3DS, Nintendo 64, Nintendo DS, Game Boy Advance, Game Boy Color, Game Boy, NES, Famicom Disk System, SNES, Virtual Boy, Pokemon Mini |
+| Sony | PlayStation, PlayStation Portable |
+| Sega | Dreamcast, Saturn, Master System, Game Gear, SG-1000, Genesis 32X/Super 32X, Sega CD/Mega-CD, Genesis/MegaDrive |
 | Atari | Jaguar, Lynx, 7800, 5200, 2600 |
 | Arcade | MAME, FBneo |
 | Microsoft | MS-DOS |
 | Sun Microsystems | J2ME |
-
-\* Marked consoles support online play. Some online functions require Third-Party Services.
+| Commodore | Commodore 64, Commodore Amiga |
+| SNK | Neo Geo Pocket/Color |
+| NEC | PC-Engine |
+| Nokia | Symbian (S60v1, N-Gage 1.0, S60v2, S60v3, N-Gage 2.0, S60v5, and Symbian^3) |
 
 More platforms are planned upstream.
 
@@ -98,6 +103,9 @@ More platforms are planned upstream.
 | Cloud import | Google Drive, Dropbox, OneDrive, Baidu Cloud, Aliyun, WebDAV, and SMB support. |
 | Controllers | Native Joy-Con, DUALSHOCK, Xbox, Bluetooth controller, keyboard, Mac, and multi-controller support. |
 | Cross-screen play | AirPlay mirroring and phone-to-TV play for big-screen sessions. |
+| Rewind | Rewind the game progress and keep tweaking the levels. |
+| Landscape Mode | Supports dynamic backgrounds, background music, a wide variety of game cover carousel styles, and full customization. |
+| Global Navigation and Focus | Fully operate the UI using a keyboard or controller. |
 
 ## Development Notes
 
@@ -110,7 +118,7 @@ More platforms are planned upstream.
 
 ### Build
 
-- macOS with Xcode 16 or newer.
+- macOS with Xcode 26 or newer.
 - iOS SDK 15 or newer.
 - Swift 5.9 or newer.
 - Git LFS for binary cores and bundled system assets.
