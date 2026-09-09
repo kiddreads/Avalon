@@ -142,4 +142,14 @@ public actor CherrySystem {
     public func setContext(context: UnsafeMutableRawPointer) {
         cherry.set_context(context)
     }
+    
+    public nonisolated func boxartURLString(for url: URL) -> String? {
+        var title: String = url.deletingPathExtension().lastPathComponent
+        title = title.replacingOccurrences(of: "&", with: "_")
+        
+        let repository: String = "https://raw.githubusercontent.com/libretro/libretro-thumbnails"
+        let path: String = "Coleco - ColecoVision/Named_Boxarts"
+        
+        return "\(repository)/refs/heads/master/\(path)/\(title).png"
+    }
 }

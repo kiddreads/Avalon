@@ -56,7 +56,19 @@
       "layers" : [
         {
           "image-name" : "app.grid.png",
-          "name" : "app.grid"
+          "name" : "app.grid",
+          "position-specializations" : [
+            {
+              "idiom" : "watchOS",
+              "value" : {
+                "scale" : 1.55,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
         }
       ],
       "position" : {

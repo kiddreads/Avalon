@@ -47,7 +47,20 @@ class GameCell : UICollectionViewCell {
         visualEffectView.top.constraint(equalTo: contentView.salg.top).isActive = true
         visualEffectView.left.constraint(equalTo: contentView.salg.left).isActive = true
         visualEffectView.right.constraint(equalTo: contentView.salg.right).isActive = true
-        visualEffectView.height.constraint(equalTo: contentView.salg.width).isActive = true
+        switch type(of: self) {
+        case is CherryCell.Type:
+            visualEffectView.height.constraint(equalTo: contentView.salg.width, multiplier: 1200 / 900).isActive = true
+        case is DurianCell.Type:
+            visualEffectView.height.constraint(equalTo: contentView.salg.width, multiplier: 742 / 512).isActive = true
+        case is LycheeCell.Type:
+            visualEffectView.height.constraint(equalTo: contentView.salg.width, multiplier: 187 / 256).isActive = true
+        case is MangoCell.Type:
+            visualEffectView.height.constraint(equalTo: contentView.salg.width, multiplier: 704 / 512).isActive = true
+        case is PlumCell.Type:
+            visualEffectView.height.constraint(equalTo: contentView.salg.width, multiplier: 2000 / 1400).isActive = true
+        default:
+            visualEffectView.height.constraint(equalTo: contentView.salg.width).isActive = true
+        }
         
         missingImageView = UIImageView(image: UIImage(systemName: "nosign"))
         guard let missingImageView: UIImageView else {

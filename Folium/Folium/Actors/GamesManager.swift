@@ -10,9 +10,13 @@ import Foundation.NSURL
 
 import Cherry
 import Cytrus
+import Durian
 import Grape
 import Kiwi
+import Lychee
 import Mandarine
+import Mango
+import Plum
 import Tomato
 
 actor GamesManager {
@@ -20,18 +24,28 @@ actor GamesManager {
     
     let cherrySystem: CherrySystem
     let cytrusSystem: CytrusSystem
+    let durianSystem: DurianSystem
     let grapeSystem: GrapeSystem
     let kiwiSystem: KiwiSystem
+    let lycheeSystem: LycheeSystem
     let mandarineSystem: MandarineSystem
+    let mangoSystem: MangoSystem
+    let plumSystem: PlumSystem
     let tomatoSystem: TomatoSystem
     
-    init(cherrySystem: CherrySystem, cytrusSystem: CytrusSystem, grapeSystem: GrapeSystem,
-         kiwiSystem: KiwiSystem, mandarineSystem: MandarineSystem, tomatoSystem: TomatoSystem) {
+    init(cherrySystem: CherrySystem, cytrusSystem: CytrusSystem, durianSystem: DurianSystem,
+         grapeSystem: GrapeSystem, kiwiSystem: KiwiSystem, lycheeSystem: LycheeSystem,
+         mandarineSystem: MandarineSystem, mangoSystem: MangoSystem, plumSystem: PlumSystem,
+         tomatoSystem: TomatoSystem) {
         self.cherrySystem = cherrySystem
         self.cytrusSystem = cytrusSystem
+        self.durianSystem = durianSystem
         self.grapeSystem = grapeSystem
         self.kiwiSystem = kiwiSystem
+        self.lycheeSystem = lycheeSystem
         self.mandarineSystem = mandarineSystem
+        self.mangoSystem = mangoSystem
+        self.plumSystem = plumSystem
         self.tomatoSystem = tomatoSystem
     }
     
@@ -66,7 +80,7 @@ actor GamesManager {
                 let game: CherryGame = CherryGame(details: Details(url: url),
                                                   cherrySystem: cherrySystem,
                                                   system: system,
-                                                  boxartURLString: nil)
+                                                  boxartURLString: cherrySystem.boxartURLString(for: url))
                 
                 if let game: T = game as? T {
                     games.append(game)
@@ -83,6 +97,19 @@ actor GamesManager {
                 
                 if let game: T = game as? T {
                     games.append(game)
+                }
+            case is DurianGame.Type:
+                let game: DurianGame = DurianGame(details: Details(url: url),
+                                                  durianSystem: durianSystem,
+                                                  system: system,
+                                                  boxartURLString: durianSystem.boxartURLString(for: url))
+                
+                if let game: T = game as? T {
+                    games.append(game)
+                }
+                
+                if reinitialisingSystem {
+                    await durianSystem.initializeSystem()
                 }
             case is GrapeGame.Type:
                 let game: GrapeGame = GrapeGame(details: Details(url: url),
@@ -110,6 +137,19 @@ actor GamesManager {
                 if reinitialisingSystem {
                     await kiwiSystem.initializeSystem()
                 }
+            case is LycheeGame.Type:
+                let game: LycheeGame = LycheeGame(details: Details(url: url),
+                                                  lycheeSystem: lycheeSystem,
+                                                  system: system,
+                                                  boxartURLString: lycheeSystem.boxartURLString(for: url))
+                
+                if let game: T = game as? T {
+                    games.append(game)
+                }
+                
+                if reinitialisingSystem {
+                    await lycheeSystem.initializeSystem()
+                }
             case is MandarineGame.Type:
                 let game: MandarineGame = MandarineGame(details: Details(url: url),
                                                         mandarineSystem: mandarineSystem,
@@ -123,6 +163,32 @@ actor GamesManager {
                 
                 if reinitialisingSystem {
                     await mandarineSystem.initializeSystem()
+                }
+            case is MangoGame.Type:
+                let game: MangoGame = MangoGame(details: Details(url: url),
+                                                mangoSystem: mangoSystem,
+                                                system: system,
+                                                boxartURLString: mangoSystem.boxartURLString(for: url))
+                
+                if let game: T = game as? T {
+                    games.append(game)
+                }
+                
+                if reinitialisingSystem {
+                    await mangoSystem.initializeSystem()
+                }
+            case is PlumGame.Type:
+                let game: PlumGame = PlumGame(details: Details(url: url),
+                                              plumSystem: plumSystem,
+                                              system: system,
+                                              boxartURLString: plumSystem.boxartURLString(for: url))
+                
+                if let game: T = game as? T {
+                    games.append(game)
+                }
+                
+                if reinitialisingSystem {
+                    await plumSystem.initializeSystem()
                 }
             case is TomatoGame.Type:
                 let game: TomatoGame = TomatoGame(details: Details(url: url),

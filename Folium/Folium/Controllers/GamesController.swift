@@ -35,7 +35,7 @@ class GamesController : UICollectionViewController {
             }
             
             if #available(iOS 26.0, *) {
-                navigationItem.largeSubtitle = selectedSnapshot.string
+                navigationItem.largeSubtitle = selectedSnapshot.system?.console ?? selectedSnapshot.string
                 navigationItem.subtitle = navigationItem.largeSubtitle
             }
             
@@ -53,6 +53,12 @@ class GamesController : UICollectionViewController {
                     }
                     
                     await dataSource.apply(cytrusSnapshot)
+                case .durian:
+                    guard let durianSnapshot else {
+                        return
+                    }
+                    
+                    await dataSource.apply(durianSnapshot)
                 case .grape:
                     guard let grapeSnapshot else {
                         return
@@ -65,12 +71,30 @@ class GamesController : UICollectionViewController {
                     }
                     
                     await dataSource.apply(kiwiSnapshot)
+                case .lychee:
+                    guard let lycheeSnapshot else {
+                        return
+                    }
+                    
+                    await dataSource.apply(lycheeSnapshot)
                 case .mandarine:
                     guard let mandarineSnapshot else {
                         return
                     }
                     
                     await dataSource.apply(mandarineSnapshot)
+                case .mango:
+                    guard let mangoSnapshot else {
+                        return
+                    }
+                    
+                    await dataSource.apply(mangoSnapshot)
+                case .plum:
+                    guard let plumSnapshot else {
+                        return
+                    }
+                    
+                    await dataSource.apply(plumSnapshot)
                 case .tomato:
                     guard let tomatoSnapshot else {
                         return
@@ -87,9 +111,13 @@ class GamesController : UICollectionViewController {
     var dataSource: UICollectionViewDiffableDataSource<String, Game>? = nil
     var cherrySnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
     var cytrusSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
+    var durianSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
     var grapeSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
     var kiwiSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
+    var lycheeSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
     var mandarineSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
+    var mangoSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
+    var plumSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
     var tomatoSnapshot: NSDiffableDataSourceSnapshot<String, Game>? = nil
     
     nonisolated(unsafe) var advertiser: MCNearbyServiceAdvertiser? = nil
@@ -111,95 +139,100 @@ class GamesController : UICollectionViewController {
         
         navigationItem.trailingItemGroups = [
             UIBarButtonItemGroup(barButtonItems: [
-                UIBarButtonItem(image: UIImage(systemName: "plus"), menu: UIMenu(children: [
-                    UIMenu(options: .displayInline, preferredElementSize: .medium, children: [
-                        UIAction(title: "Game", image: UIImage(systemName: "opticaldisc")) { action in
-                            self.importFileType = .game
-                            var types: [UTType] = []
-                            switch self.selectedSnapshot {
-                            case .cherry:
-                                if let col: UTType = .col, let rom: UTType = .rom {
-                                    types.append(contentsOf: [col, rom])
-                                }
-                            case .cytrus:
-                                if let `3ds`: UTType = .`3ds`, let cci: UTType = .cci, let cxi: UTType = .cxi {
-                                    types.append(contentsOf: [`3ds`, cci, cxi])
-                                }
-                            case .grape:
-                                if let nds: UTType = .nds {
-                                    types.append(nds)
-                                }
-                            case .kiwi:
-                                if let gb: UTType = .gb, let gbc: UTType = .gbc {
-                                    types.append(contentsOf: [gb, gbc])
-                                }
-                            case .mandarine:
-                                if let bin: UTType = .bin, let cue: UTType = .cue {
-                                    types.append(contentsOf: [bin, cue])
-                                }
-                            case .tomato:
-                                if let gba: UTType = .gba {
-                                    types.append(gba)
-                                }
-                            default:
-                                break
-                            }
-                            
-                            let documentPickerController: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: types, asCopy: true)
-                            documentPickerController.allowsMultipleSelection = [.mandarine, .tomato].contains(self.selectedSnapshot)
-                            documentPickerController.delegate = self
-                            self.present(documentPickerController, animated: true)
-                        },
-                        UIAction(title: "System File", image: UIImage(systemName: "document"), attributes: .disabled) { action in
-                            self.importFileType = .systemFile
-                            var types: [UTType] = []
-                            switch self.selectedSnapshot {
-                            case .grape,
-                                    .mandarine,
-                                    .tomato:
-                                if let bin: UTType = .bin {
-                                    types.append(bin)
-                                }
-                            default:
-                                break
-                            }
-                            
-                            let documentPickerController: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: types, asCopy: true)
-                            documentPickerController.allowsMultipleSelection = [.grape, .mandarine, .tomato].contains(self.selectedSnapshot)
-                            documentPickerController.delegate = self
-                            self.present(documentPickerController, animated: true)
+                UIBarButtonItem(image: UIImage(systemName: "plus"),
+                                primaryAction: UIAction(image: UIImage(systemName: "opticaldisc")) { action in
+                    self.importFileType = .game
+                    var types: [UTType] = []
+                    switch self.selectedSnapshot {
+                    case .cherry:
+                        if let col: UTType = .col, let rom: UTType = .rom {
+                            types.append(contentsOf: [col, rom])
                         }
-                    ])
-                ])),
+                    case .cytrus:
+                        if let `3ds`: UTType = .`3ds`, let cci: UTType = .cci, let cxi: UTType = .cxi {
+                            types.append(contentsOf: [`3ds`, cci, cxi])
+                        }
+                    case .durian:
+                        if let ws: UTType = .ws, let wsc: UTType = .wsc {
+                            types.append(contentsOf: [ws, wsc])
+                        }
+                    case .grape:
+                        if let dsi: UTType = .dsi, let nds: UTType = .nds {
+                            types.append(contentsOf: [dsi, nds])
+                        }
+                    case .kiwi:
+                        if let gb: UTType = .gb, let gbc: UTType = .gbc {
+                            types.append(contentsOf: [gb, gbc])
+                        }
+                    case .lychee:
+                        if let sfc: UTType = .sfc, let smc: UTType = .smc {
+                            types.append(contentsOf: [sfc, smc])
+                        }
+                    case .mandarine:
+                        if let bin: UTType = .bin, let cue: UTType = .cue {
+                            types.append(contentsOf: [bin, cue])
+                        }
+                    case .mango:
+                        if let nes: UTType = .nes {
+                            types.append(nes)
+                        }
+                    case .plum:
+                        if let gen: UTType = .gen, let md: UTType = .md {
+                            types.append(contentsOf: [gen, md])
+                        }
+                    case .tomato:
+                        if let gba: UTType = .gba {
+                            types.append(gba)
+                        }
+                    default:
+                        break
+                    }
+                    
+                    let documentPickerController: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: types, asCopy: true)
+                    documentPickerController.allowsMultipleSelection = [.mandarine, .tomato].contains(self.selectedSnapshot)
+                    documentPickerController.delegate = self
+                    self.present(documentPickerController, animated: true)
+                }),
                 UIBarButtonItem(image: UIImage(systemName: "ellipsis"), menu: UIMenu(children: [
+                    UIMenu(title: "Bandai", image: UIImage(systemName: "cpu"), children: [
+                        UIAction(title: "WonderSwan", subtitle: "+ WonderSwan Color") { action in
+                            self.selectedSnapshot = .durian
+                        }
+                    ]),
                     UIMenu(title: "Coleco", image: UIImage(systemName: "cpu"), children: [
-                        UIAction(title: "CV", subtitle: "ColecoVision") { action in
+                        UIAction(title: "ColecoVision") { action in
                             self.selectedSnapshot = .cherry
                         }
                     ]),
                     UIMenu(title: "Nintendo", image: UIImage(systemName: "cpu"), children: [
-                        UIAction(title: "3DS", subtitle: "Nintendo 3DS") { action in
+                        UIAction(title: "3DS", subtitle: "+ New 3DS") { action in
                             self.selectedSnapshot = .cytrus
                         },
-                        UIAction(title: "DS/DSi", subtitle: "Nintendo DS/DSi") { action in
+                        UIAction(title: "DS", subtitle: "+ DSi") { action in
                             self.selectedSnapshot = .grape
                         },
-                        UIAction(title: "GB/GBC", subtitle: "Game Boy/Game Boy Color") { action in
+                        UIAction(title: "Game Boy", subtitle: "+ Game Boy Color") { action in
                             self.selectedSnapshot = .kiwi
                         },
-                        UIAction(title: "GBA", subtitle: "Game Boy Advance") { action in
+                        UIAction(title: "Game Boy Advance") { action in
                             self.selectedSnapshot = .tomato
                         },
-                        UIAction(title: "NES", subtitle: "Nintendo Entertainment System", attributes: .disabled) { action in },
-                        UIAction(title: "SNES", subtitle: "Super Nintendo Entertainment System", attributes: .disabled) { action in }
+                        UIAction(title: "Nintendo Entertainment System") { action in
+                            self.selectedSnapshot = .mango
+                        },
+                        UIAction(title: "Super Nintendo Entertainment System") { action in
+                            self.selectedSnapshot = .lychee
+                        }
                     ]),
                     UIMenu(title: "PlayStation", image: UIImage(systemName: "cpu"), children: [
-                        UIAction(title: "PS1", subtitle: "PlayStation 1") { action in
+                        UIAction(title: "PlayStation 1") { action in
                             self.selectedSnapshot = .mandarine
                         }
                     ]),
                     UIMenu(title: "SEGA", image: UIImage(systemName: "cpu"), children: [
-                        UIAction(title: "GEN/MD", subtitle: "SEGA Genesis/Mega Drive", attributes: .disabled) { action in }
+                        UIAction(title: "Genesis", subtitle: "+ Mega Drive") { action in
+                            self.selectedSnapshot = .plum
+                        }
                     ])
                 ]))
             ], representativeItem: nil),
@@ -252,8 +285,7 @@ class GamesController : UICollectionViewController {
                         
                         completion(children)
                     }
-                ]))// ,
-                // UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"))
+                ]))
             ], representativeItem: nil)
         ]
         navigationItem.style = .browser
@@ -266,9 +298,13 @@ class GamesController : UICollectionViewController {
         
         let cherryCell: UICollectionView.CellRegistration<CherryCell, CherryGame> = CellManager.Library.cherryCell(viewController: self)
         let cytrusCell: UICollectionView.CellRegistration<CytrusCell, CytrusGame> = CellManager.Library.cytrusCell(viewController: self)
+        let durianCell: UICollectionView.CellRegistration<DurianCell, DurianGame> = CellManager.Library.durianCell(viewController: self)
         let grapeCell: UICollectionView.CellRegistration<GrapeCell, GrapeGame> = CellManager.Library.grapeCell(viewController: self)
         let kiwiCell: UICollectionView.CellRegistration<KiwiCell, KiwiGame> = CellManager.Library.kiwiCell(viewController: self)
+        let lycheeCell: UICollectionView.CellRegistration<LycheeCell, LycheeGame> = CellManager.Library.lycheeCell(viewController: self)
         let mandarineCell: UICollectionView.CellRegistration<MandarineCell, MandarineGame> = CellManager.Library.mandarineCell(viewController: self)
+        let mangoCell: UICollectionView.CellRegistration<MangoCell, MangoGame> = CellManager.Library.mangoCell(viewController: self)
+        let plumCell: UICollectionView.CellRegistration<PlumCell, PlumGame> = CellManager.Library.plumCell(viewController: self)
         let tomatoCell: UICollectionView.CellRegistration<TomatoCell, TomatoGame> = CellManager.Library.tomatoCell(viewController: self)
         
         let supplementaryCell: UICollectionView.SupplementaryRegistration<UICollectionViewListCell> = UICollectionView.SupplementaryRegistration(elementKind: .header) { supplementaryView, elementKind, indexPath in
@@ -286,12 +322,20 @@ class GamesController : UICollectionViewController {
                 collectionView.dequeueConfiguredReusableCell(using: cherryCell, for: indexPath, item: cherryGame)
             case let cytrusGame as CytrusGame:
                 collectionView.dequeueConfiguredReusableCell(using: cytrusCell, for: indexPath, item: cytrusGame)
+            case let durianGame as DurianGame:
+                collectionView.dequeueConfiguredReusableCell(using: durianCell, for: indexPath, item: durianGame)
             case let grapeGame as GrapeGame:
                 collectionView.dequeueConfiguredReusableCell(using: grapeCell, for: indexPath, item: grapeGame)
             case let kiwiGame as KiwiGame:
                 collectionView.dequeueConfiguredReusableCell(using: kiwiCell, for: indexPath, item: kiwiGame)
+            case let lycheeGame as LycheeGame:
+                collectionView.dequeueConfiguredReusableCell(using: lycheeCell, for: indexPath, item: lycheeGame)
             case let mandarineGame as MandarineGame:
                 collectionView.dequeueConfiguredReusableCell(using: mandarineCell, for: indexPath, item: mandarineGame)
+            case let mangoGame as MangoGame:
+                collectionView.dequeueConfiguredReusableCell(using: mangoCell, for: indexPath, item: mangoGame)
+            case let plumGame as PlumGame:
+                collectionView.dequeueConfiguredReusableCell(using: plumCell, for: indexPath, item: plumGame)
             case let tomatoGame as TomatoGame:
                 collectionView.dequeueConfiguredReusableCell(using: tomatoCell, for: indexPath, item: tomatoGame)
             default:
@@ -328,7 +372,7 @@ class GamesController : UICollectionViewController {
             
             let buttons: [(UIButton.Configuration, @MainActor (UIViewController) async -> Void)] = [
                 (UIButton.Configuration.configuration(.large, .capsule, nil, "Continue"), { controller in
-                    UserDefaults.standard.set(true, forKey: "folium.2.0.13.whatsNewComplete")
+                    UserDefaults.standard.set(true, forKey: "folium.2.0.28.whatsNewComplete")
                     
                     onMainThread {
                         controller.dismiss(animated: true)
@@ -343,174 +387,125 @@ class GamesController : UICollectionViewController {
             }
             
             let automaticMigrationSystemName: String = if #available(iOS 26.0, *) {
-                "arrow.forward.folder.fill"
+                "arrow.forward.folder"
             } else {
-                "folder.fill.badge.gearshape"
+                "folder.badge.gearshape"
             }
             
-            let cells: [CellConfiguration] = [
-                CellConfiguration(image: UIImage(systemName: appIconSystemName), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New App Icon"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Redesigned and changed the colour of the app icon breathing new life into it alongside the app itself")
-                )),
-                CellConfiguration(image: UIImage(systemName: "sparkles"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Onboarding"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Rewrote and significantly improved the onboarding screens for both iPad and iPhone\n\nCurrently a Work in Progress")
-                )),
-                CellConfiguration(image: UIImage(systemName: "square.grid.2x2.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Library"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Rewrote and significantly improved the library screen, refreshing the game cards, separating systems and more"),
-                )),
-                CellConfiguration(image: UIImage(systemName: "gearshape.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Settings"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Rewrote and significantly improved the settings screen, adding descriptions, separating systems and more")
-                )),
-                CellConfiguration(image: UIImage(systemName: "circle.grid.2x1.left.filled"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Tabs"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Changed how library, emulation and settings screens are handled by embedding them in tabs, allowing for real-time settings changes and more")
-                )),
-                CellConfiguration(image: UIImage(systemName: "cpu.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Grape"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Reimplemented most of Grape using direct C++ to Swift, updated sections of code to C++23 and more")
-                )),
-                CellConfiguration(image: UIImage(systemName: "cpu.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Kiwi"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Reimplemented Kiwi using direct C++ to Swift, updated sections of code to C++23 and more")
-                )),
-                CellConfiguration(image: UIImage(systemName: "cpu.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Mandarine"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Reimplemented Mandarine using direct C++ to Swift, updated sections of code to C++23 and more")
-                )),
-                CellConfiguration(image: UIImage(systemName: "cpu.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "New Tomato"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Reimplemented Tomato using direct C++ to Swift, updated sections of code to C++23 and more")
-                )),
-                CellConfiguration(image: UIImage(systemName: "xmark.bin.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "Delete"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Improved how games are deleted now allowing for all tracks, etc. to be deleted along with the folder they are nested in, if available")
-                )),
-                CellConfiguration(image: UIImage(systemName: "photo.badge.arrow.down.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "Boxart"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Improved how boxart is handled, fixing online searching, caching from online if one is found or loading from local if one is selected")
-                )),
-                CellConfiguration(image: UIImage(systemName: "playpause.fill"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "Playback"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Added and improved pause, play and stop and exit to all available systems and enabled support for changing tabs with ongoing playback")
-                )),
-                CellConfiguration(image: UIImage(systemName: "circle.grid.cross.up.filled"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "On-Screen Controls"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Improved the functionality and positioning of the on-screen controls, fixing ghost holds, etc")
-                )),
-                
-                // (13)
-                CellConfiguration(image: UIImage(systemName: "apps.iphone.badge.plus"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "iOS 18+ Support"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Added support for iOS and iPadOS 18 and above, improving device support across the board")
-                )),
-                CellConfiguration(image: UIImage(systemName: automaticMigrationSystemName), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "Automatic Migration"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Automatically renames previous folders to their new, correct names as of 2.0")
-                )),
-                CellConfiguration(image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"), labels: (
-                    LabelConfiguration(alignment: .left,
-                                       color: .label,
-                                       font: UIFont.regular(from: .headline),
-                                       text: "Grape to C++"),
-                    LabelConfiguration(alignment: .left,
-                                       color: .secondaryLabel,
-                                       font: UIFont.regular(from: .subheadline),
-                                       text: "Rewrote a large portion of Grape in C++ conforming to the new bridging system between systems and the application itself")
-                ))
+            let cells: [String : [CellConfiguration]] = [
+                "Application" : [
+                    CellConfiguration(image: UIImage(systemName: appIconSystemName), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Application Icon"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Recoloured and redesigned the application icon while still retaining the well known leaf symbol")
+                    )),
+                    CellConfiguration(image: UIImage(systemName: automaticMigrationSystemName)?
+                        .applyingSymbolConfiguration(UIImage.SymbolConfiguration(paletteColors: [.systemBlue])), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Automatic Migration"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Automatically rename previous folders to their new, correct names as of 2.0")
+                    )),
+                    CellConfiguration(image: UIImage(systemName: "arrow.up.and.down.and.arrow.left.and.right"), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Navigation"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Redesigned the navigation system allowing for all screens to be accessed at any time regardless of emulation status"),
+                    )),
+                    CellConfiguration(image: UIImage(systemName: "sparkles")?
+                        .applyingSymbolConfiguration(UIImage.SymbolConfiguration(paletteColors: [.systemYellow])), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Onboarding"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Redesigned the onboarding screens significantly improving the design and updating the layout on iPad")
+                    ))
+                ],
+                "Emulation" : [
+                    CellConfiguration(image: UIImage(systemName: "circle.grid.cross.up.filled"), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "On-Screen Controls"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Improved the functionality and positioning of the on-screen controls, fixed ghost holds, improved landscape support, etc")
+                    ))
+                ],
+                "Library" : [
+                    CellConfiguration(image: UIImage(systemName: "photo.badge.arrow.down"), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Artwork"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Improved the handling of artwork and boxart, caching from online when possible reducing network calls and using locally selected artwork, if available when no online boxart is found")
+                    ))
+                ],
+                "Systems" : [
+                    CellConfiguration(image: UIImage(systemName: "sparkles")?
+                        .applyingSymbolConfiguration(UIImage.SymbolConfiguration(paletteColors: [.systemYellow])), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Bandai"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Introduced WonderSwan building on top of the open-source MesenCE project")
+                    )),
+                    CellConfiguration(image: UIImage(systemName: "sparkles")?
+                        .applyingSymbolConfiguration(UIImage.SymbolConfiguration(paletteColors: [.systemYellow])), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Nintendo"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Reintroduced Nintendo Entertainment System and Super Nintendo Entertainment System building on top of the open-source MesenCE project")
+                    )),
+                    CellConfiguration(image: UIImage(systemName: "cpu"), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "All Systems"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Rewrote each system's bridging code improving the handling of start up and shutdown\n\nRewrote each system's bridging code in C++ reducing the amount of code requires for the same functionality")
+                    )),
+                    CellConfiguration(image: UIImage(systemName: "delete.right")?
+                        .applyingSymbolConfiguration(UIImage.SymbolConfiguration(paletteColors: [.systemRed])), labels: (
+                        LabelConfiguration(alignment: .left,
+                                           color: .label,
+                                           font: UIFont.regular(from: .headline),
+                                           text: "Delete"),
+                        LabelConfiguration(alignment: .left,
+                                           color: .secondaryLabel,
+                                           font: UIFont.regular(from: .subheadline),
+                                           text: "Improved the handling of game deletion ensuring all files and enclosing folders, where used are all deleted")
+                    ))
+                ]
             ]
             
             let configuration: OBControllerWithListConfiguration = OBControllerWithListConfiguration(image: image,
@@ -525,7 +520,7 @@ class GamesController : UICollectionViewController {
             return controller
         }
         
-        if !UserDefaults.standard.bool(forKey: "folium.2.0.13.whatsNewComplete") {
+        if !UserDefaults.standard.bool(forKey: "folium.2.0.28.whatsNewComplete") {
             present(whatsNewController, animated: true)
         }
         
@@ -560,8 +555,8 @@ class GamesController : UICollectionViewController {
         func beginImporting(systemFile: String) {
             currentlyImportingSystemFile = systemFile
             
-            let documentPickerController: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: [.item], asCopy: true)
-            // documentPickerController.allowsMultipleSelection =
+            let documentPickerController: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: [.item],
+                                                                                                          asCopy: true)
             documentPickerController.delegate = self
             present(documentPickerController, animated: true)
         }
@@ -625,6 +620,25 @@ class GamesController : UICollectionViewController {
                     tabController.switchEmulationController(with: cytrusController)
                     tabController.switchSettingsSnapshot(for: .cytrus)
                 }
+            case let durianGame as DurianGame:
+                let (result, systemFiles) = await requiresSystemFiles(for: durianGame.system)
+                if result {
+                    importFileType = .systemFile
+                    
+                    for systemFile in systemFiles {
+                        alertController.addAction(UIAlertAction(title: systemFile.title, style: .default) { action in
+                            beginImporting(systemFile: systemFile.title)
+                        })
+                    }
+                    
+                    present(alertController, animated: true)
+                } else {
+                    tabController.game = durianGame
+                    
+                    let durianController: DurianController = DurianController()
+                    tabController.switchEmulationController(with: durianController)
+                    // tabController.switchSettingsSnapshot(for: .durian)
+                }
             case let grapeGame as GrapeGame:
                 let (result, systemFiles) = await requiresSystemFiles(for: grapeGame.system)
                 if result {
@@ -663,6 +677,25 @@ class GamesController : UICollectionViewController {
                     tabController.switchEmulationController(with: kiwiController)
                     // tabController.switchSettingsSnapshot(for: .kiwi)
                 }
+            case let lycheeGame as LycheeGame:
+                let (result, systemFiles) = await requiresSystemFiles(for: lycheeGame.system)
+                if result {
+                    importFileType = .systemFile
+                    
+                    for systemFile in systemFiles {
+                        alertController.addAction(UIAlertAction(title: systemFile.title, style: .default) { action in
+                            beginImporting(systemFile: systemFile.title)
+                        })
+                    }
+                    
+                    present(alertController, animated: true)
+                } else {
+                    tabController.game = lycheeGame
+                    
+                    let lycheeController: LycheeController = LycheeController()
+                    tabController.switchEmulationController(with: lycheeController)
+                    // tabController.switchSettingsSnapshot(for: .lychee)
+                }
             case let mandarineGame as MandarineGame:
                 let (result, systemFiles) = await requiresSystemFiles(for: mandarineGame.system)
                 if result {
@@ -685,6 +718,54 @@ class GamesController : UICollectionViewController {
                     let encoder: JSONEncoder = JSONEncoder()
                     do {
                         let packet: P2P.Packet = P2P.Packet(data: Data(), dataType: .prepare(.mandarine))
+                        if let session: MCSession, session.connectedPeers.count > 0 {
+                            try session.send(encoder.encode(packet), toPeers: session.connectedPeers, with: .reliable)
+                        }
+                    } catch {
+                        print(error, error.localizedDescription)
+                    }
+                }
+            case let mangoGame as MangoGame:
+                let (result, systemFiles) = await requiresSystemFiles(for: mangoGame.system)
+                if result {
+                    importFileType = .systemFile
+                    
+                    for systemFile in systemFiles {
+                        alertController.addAction(UIAlertAction(title: systemFile.title, style: .default) { action in
+                            beginImporting(systemFile: systemFile.title)
+                        })
+                    }
+                    
+                    present(alertController, animated: true)
+                } else {
+                    tabController.game = mangoGame
+                    
+                    let mangoController: MangoController = MangoController()
+                    tabController.switchEmulationController(with: mangoController)
+                    // tabController.switchSettingsSnapshot(for: .mango)
+                }
+            case let plumGame as PlumGame:
+                let (result, systemFiles) = await requiresSystemFiles(for: plumGame.system)
+                if result {
+                    importFileType = .systemFile
+                    
+                    for systemFile in systemFiles {
+                        alertController.addAction(UIAlertAction(title: systemFile.title, style: .default) { action in
+                            beginImporting(systemFile: systemFile.title)
+                        })
+                    }
+                    
+                    present(alertController, animated: true)
+                } else {
+                    tabController.game = plumGame
+                    
+                    let plumController: PlumController = PlumController()
+                    tabController.switchEmulationController(with: plumController)
+                    // tabController.switchSettingsSnapshot(for: .plum)
+                    
+                    let encoder: JSONEncoder = JSONEncoder()
+                    do {
+                        let packet: P2P.Packet = P2P.Packet(data: Data(), dataType: .prepare(.plum))
                         if let session: MCSession, session.connectedPeers.count > 0 {
                             try session.send(encoder.encode(packet), toPeers: session.connectedPeers, with: .reliable)
                         }
@@ -739,6 +820,16 @@ class GamesController : UICollectionViewController {
                     snapshot.appendItems(games.filter { game in game.prefix == section }.sorted(), toSection: section)
                 }
             }
+        case is DurianGame.Type:
+            if let games: [DurianGame] = games as? [DurianGame] {
+                let sections: [DurianGame] = games.mapUniqueBy({ game in game }, key: { game in game.prefix })
+                let sectionsStrings: [String] = sections.map(\.prefix)
+                
+                snapshot.appendSections(sectionsStrings.sorted())
+                snapshot.sectionIdentifiers.forEach { section in
+                    snapshot.appendItems(games.filter { game in game.prefix == section }.sorted(), toSection: section)
+                }
+            }
         case is GrapeGame.Type:
             if let games: [GrapeGame] = games as? [GrapeGame] {
                 let sections: [GrapeGame] = games.mapUniqueBy({ game in game }, key: { game in game.prefix })
@@ -759,9 +850,39 @@ class GamesController : UICollectionViewController {
                     snapshot.appendItems(games.filter { game in game.prefix == section }.sorted(), toSection: section)
                 }
             }
+        case is LycheeGame.Type:
+            if let games: [LycheeGame] = games as? [LycheeGame] {
+                let sections: [LycheeGame] = games.mapUniqueBy({ game in game }, key: { game in game.prefix })
+                let sectionsStrings: [String] = sections.map(\.prefix)
+                
+                snapshot.appendSections(sectionsStrings.sorted())
+                snapshot.sectionIdentifiers.forEach { section in
+                    snapshot.appendItems(games.filter { game in game.prefix == section }.sorted(), toSection: section)
+                }
+            }
         case is MandarineGame.Type:
             if let games: [MandarineGame] = games as? [MandarineGame] {
                 let sections: [MandarineGame] = games.mapUniqueBy({ game in game }, key: { game in game.prefix })
+                let sectionsStrings: [String] = sections.map(\.prefix)
+                
+                snapshot.appendSections(sectionsStrings.sorted())
+                snapshot.sectionIdentifiers.forEach { section in
+                    snapshot.appendItems(games.filter { game in game.prefix == section }.sorted(), toSection: section)
+                }
+            }
+        case is MangoGame.Type:
+            if let games: [MangoGame] = games as? [MangoGame] {
+                let sections: [MangoGame] = games.mapUniqueBy({ game in game }, key: { game in game.prefix })
+                let sectionsStrings: [String] = sections.map(\.prefix)
+                
+                snapshot.appendSections(sectionsStrings.sorted())
+                snapshot.sectionIdentifiers.forEach { section in
+                    snapshot.appendItems(games.filter { game in game.prefix == section }.sorted(), toSection: section)
+                }
+            }
+        case is PlumGame.Type:
+            if let games: [PlumGame] = games as? [PlumGame] {
+                let sections: [PlumGame] = games.mapUniqueBy({ game in game }, key: { game in game.prefix })
                 let sectionsStrings: [String] = sections.map(\.prefix)
                 
                 snapshot.appendSections(sectionsStrings.sorted())
@@ -800,6 +921,13 @@ class GamesController : UICollectionViewController {
             generateSnapshot(for: &cytrusSnapshot, for: await tabController.gamesManager.games(for: .cytrus), type: CytrusGame.self)
             self.cytrusSnapshot = cytrusSnapshot
             
+            durianSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
+            guard var durianSnapshot else {
+                return
+            }
+            generateSnapshot(for: &durianSnapshot, for: await tabController.gamesManager.games(for: .durian), type: DurianGame.self)
+            self.durianSnapshot = durianSnapshot
+            
             grapeSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
             guard var grapeSnapshot else {
                 return
@@ -814,12 +942,33 @@ class GamesController : UICollectionViewController {
             generateSnapshot(for: &kiwiSnapshot, for: await tabController.gamesManager.games(for: .kiwi), type: KiwiGame.self)
             self.kiwiSnapshot = kiwiSnapshot
             
+            lycheeSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
+            guard var lycheeSnapshot else {
+                return
+            }
+            generateSnapshot(for: &lycheeSnapshot, for: await tabController.gamesManager.games(for: .lychee), type: LycheeGame.self)
+            self.lycheeSnapshot = lycheeSnapshot
+            
             mandarineSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
             guard var mandarineSnapshot else {
                 return
             }
             generateSnapshot(for: &mandarineSnapshot, for: await tabController.gamesManager.games(for: .mandarine), type: MandarineGame.self)
             self.mandarineSnapshot = mandarineSnapshot
+            
+            mangoSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
+            guard var mangoSnapshot else {
+                return
+            }
+            generateSnapshot(for: &mangoSnapshot, for: await tabController.gamesManager.games(for: .mango), type: MangoGame.self)
+            self.mangoSnapshot = mangoSnapshot
+            
+            plumSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
+            guard var plumSnapshot else {
+                return
+            }
+            generateSnapshot(for: &plumSnapshot, for: await tabController.gamesManager.games(for: .plum), type: PlumGame.self)
+            self.plumSnapshot = plumSnapshot
             
             tomatoSnapshot = NSDiffableDataSourceSnapshot<String, Game>()
             guard var tomatoSnapshot else {
@@ -830,7 +979,7 @@ class GamesController : UICollectionViewController {
             
             Task {
                 if #available(iOS 26.0, *) {
-                    navigationItem.largeSubtitle = selectedSnapshot.string
+                    navigationItem.largeSubtitle = selectedSnapshot.system?.console ?? selectedSnapshot.string
                     navigationItem.subtitle = navigationItem.largeSubtitle
                 }
                 
@@ -839,12 +988,20 @@ class GamesController : UICollectionViewController {
                     await dataSource.apply(cherrySnapshot)
                 case .cytrus:
                     await dataSource.apply(cytrusSnapshot)
+                case .durian:
+                    await dataSource.apply(durianSnapshot)
                 case .grape:
                     await dataSource.apply(grapeSnapshot)
                 case .kiwi:
                     await dataSource.apply(kiwiSnapshot)
+                case .lychee:
+                    await dataSource.apply(lycheeSnapshot)
                 case .mandarine:
                     await dataSource.apply(mandarineSnapshot)
+                case .mango:
+                    await dataSource.apply(mangoSnapshot)
+                case .plum:
+                    await dataSource.apply(plumSnapshot)
                 case .tomato:
                     await dataSource.apply(tomatoSnapshot)
                 default:
@@ -869,9 +1026,13 @@ extension GamesController : UIDocumentPickerDelegate, UINavigationControllerDele
         switch selectedSnapshot {
         case .cherry,
                 .cytrus,
+                .durian,
                 .grape,
                 .kiwi,
+                .lychee,
                 .mandarine,
+                .mango,
+                .plum,
                 .tomato:
             gamesDirectoryURL.append(component: selectedSnapshot.string)
         default:
@@ -982,6 +1143,14 @@ extension GamesController : MCSessionDelegate {
                     cherryController.system = .cherry
                     if let tabController: TabController = tabBarController as? TabController {
                         tabController.switchEmulationController(with: cherryController)
+                    }
+                }
+            case .prepare(.plum):
+                Task { @MainActor in
+                    let plumController: PlumMPController = PlumMPController()
+                    plumController.system = .plum
+                    if let tabController: TabController = tabBarController as? TabController {
+                        tabController.switchEmulationController(with: plumController)
                     }
                 }
             case .prepare(.mandarine):

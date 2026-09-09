@@ -23,6 +23,12 @@ struct CellManager {
             }
         }
         
+        static func durianCell(viewController: GamesController) -> UICollectionView.CellRegistration<DurianCell, DurianGame> {
+            UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+                cell.configureCell(with: itemIdentifier, controller: viewController)
+            }
+        }
+        
         static func grapeCell(viewController: GamesController) -> UICollectionView.CellRegistration<GrapeCell, GrapeGame> {
             UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
                 cell.configureCell(with: itemIdentifier, controller: viewController)
@@ -35,7 +41,25 @@ struct CellManager {
             }
         }
         
+        static func lycheeCell(viewController: GamesController) -> UICollectionView.CellRegistration<LycheeCell, LycheeGame> {
+            UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+                cell.configureCell(with: itemIdentifier, controller: viewController)
+            }
+        }
+        
         static func mandarineCell(viewController: GamesController) -> UICollectionView.CellRegistration<MandarineCell, MandarineGame> {
+            UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+                cell.configureCell(with: itemIdentifier, controller: viewController)
+            }
+        }
+        
+        static func mangoCell(viewController: GamesController) -> UICollectionView.CellRegistration<MangoCell, MangoGame> {
+            UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+                cell.configureCell(with: itemIdentifier, controller: viewController)
+            }
+        }
+        
+        static func plumCell(viewController: GamesController) -> UICollectionView.CellRegistration<PlumCell, PlumGame> {
             UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
                 cell.configureCell(with: itemIdentifier, controller: viewController)
             }

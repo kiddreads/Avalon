@@ -10,9 +10,13 @@ import Foundation
 enum System : String, CaseIterable, Codable, Hashable, Sendable {
     case cherry = "Cherry"
     case cytrus = "Cytrus"
+    case durian = "Durian"
     case grape = "Grape"
     case kiwi = "Kiwi"
+    case lychee = "Lychee"
     case mandarine = "Mandarine"
+    case mango = "Mango"
+    case plum = "Plum"
     case tomato = "Tomato"
     
     var console: String {
@@ -21,12 +25,20 @@ enum System : String, CaseIterable, Codable, Hashable, Sendable {
             "ColecoVision"
         case .cytrus:
             "Nintendo 3DS"
+        case .durian:
+            "WonderSwan"
         case .grape:
-            "Nintendo DS/DSi"
+            "Nintendo DS"
         case .kiwi:
-            "Game Boy/Game Boy Color"
+            "Game Boy"
+        case .lychee:
+            "Super Nintendo Entertainment System"
         case .mandarine:
             "PlayStation 1"
+        case .mango:
+            "Nintendo Entertainment System"
+        case .plum:
+            "SEGA Genesis"
         case .tomato:
             "Game Boy Advance"
         }
@@ -38,12 +50,20 @@ enum System : String, CaseIterable, Codable, Hashable, Sendable {
             "CV"
         case .cytrus:
             "3DS"
+        case .durian:
+            "WS"
         case .grape:
-            "DS/DSi"
+            "DS"
         case .kiwi:
-            "GB/GBC"
+            "GB"
+        case .lychee:
+            "SNES"
         case .mandarine:
             "PS1"
+        case .mango:
+            "NES"
+        case .plum:
+            "GEN"
         case .tomato:
             "GBA"
         }
@@ -52,33 +72,25 @@ enum System : String, CaseIterable, Codable, Hashable, Sendable {
     nonisolated var extensions: [Extension] {
         switch self {
         case .cherry:
-            [
-                .col,
-                .rom
-            ]
+            Extension.cherry
         case .cytrus:
-            [
-                .`3ds`,
-                .cci,
-                .cxi
-            ]
+            Extension.cytrus
+        case .durian:
+            Extension.durian
         case .grape:
-            [
-                .nds
-            ]
+            Extension.grape
         case .kiwi:
-            [
-                .gb,
-                .gbc
-            ]
+            Extension.kiwi
+        case .lychee:
+            Extension.lychee
         case .mandarine:
-            [
-                .cue
-            ]
+            Extension.mandarine
+        case .mango:
+            Extension.mango
+        case .plum:
+            Extension.plum
         case .tomato:
-            [
-                .gba
-            ]
+            Extension.tomato
         }
     }
     
@@ -86,9 +98,13 @@ enum System : String, CaseIterable, Codable, Hashable, Sendable {
         switch self {
         case  .cherry,
                 .cytrus,
+                .durian,
                 .grape,
                 .kiwi,
+                .lychee,
                 .mandarine,
+                .mango,
+                .plum,
                 .tomato:
             [
                 .gameController
@@ -99,11 +115,15 @@ enum System : String, CaseIterable, Codable, Hashable, Sendable {
     var isNintendo: Bool {
         switch self {
         case .cherry,
-                .mandarine:
+                .durian,
+                .mandarine,
+                .plum:
             false
         case .cytrus,
                 .grape,
                 .kiwi,
+                .lychee,
+                .mango,
                 .tomato:
             true
         }

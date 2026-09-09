@@ -5,6 +5,7 @@
 //  Created by Jarrod Norwell on 3/6/2026.
 //
 
+import AVFoundation
 import ColourKit
 import ExtensionsKit
 import FontKit
@@ -14,9 +15,13 @@ import UIKit
 
 import Cherry
 import Cytrus
+import Durian
 import Grape
 import Kiwi
+import Lychee
 import Mandarine
+import Mango
+import Plum
 import Tomato
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -28,9 +33,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private let cherrySystem: CherrySystem = CherrySystem()
     private let cytrusSystem: CytrusSystem = CytrusSystem()
+    private let durianSystem: DurianSystem = DurianSystem()
     private let grapeSystem: GrapeSystem = GrapeSystem()
     private let kiwiSystem: KiwiSystem = KiwiSystem()
+    private let lycheeSystem: LycheeSystem = LycheeSystem()
     private let mandarineSystem: MandarineSystem = MandarineSystem()
+    private let mangoSystem: MangoSystem = MangoSystem()
+    private let plumSystem: PlumSystem = PlumSystem()
     private let tomatoSystem: TomatoSystem = TomatoSystem()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -40,9 +49,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let gamesManager: GamesManager = GamesManager(cherrySystem: cherrySystem,
                                                       cytrusSystem: cytrusSystem,
+                                                      durianSystem: durianSystem,
                                                       grapeSystem: grapeSystem,
                                                       kiwiSystem: kiwiSystem,
+                                                      lycheeSystem: lycheeSystem,
                                                       mandarineSystem: mandarineSystem,
+                                                      mangoSystem: mangoSystem,
+                                                      plumSystem: plumSystem,
                                                       tomatoSystem: tomatoSystem)
         let onboardingModel: OnboardingModel = OnboardingModel(direcotryManager: directoryManager,
                                                                gamesManager: gamesManager)
@@ -111,7 +124,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             try moveMandarineShaderFilesIfNeeded()
         }
         
-        Task {
+        _ = Task {
             switch await task.result {
             case .success(_):
                 await cherrySystem.initializePaths()
@@ -119,15 +132,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
                 await cytrusSystem.initializeLogging()
                 
+                await durianSystem.initializePaths()
+                await durianSystem.initializeSystem()
+                
                 await grapeSystem.initializePaths()
                 await grapeSystem.initializeSystem()
                 
                 await kiwiSystem.initializePaths()
                 await kiwiSystem.initializeSystem()
                 
+                await lycheeSystem.initializePaths()
+                await lycheeSystem.initializeSystem()
+                
                 await mandarineSystem.initializePaths()
                 await mandarineSystem.initializeMemoryCards()
                 await mandarineSystem.initializeSystem()
+                
+                await mangoSystem.initializePaths()
+                await mangoSystem.initializeSystem()
+                
+                await plumSystem.initializePaths()
+                await plumSystem.initializeSystem()
                 
                 await tomatoSystem.initializeSystem()
                 await tomatoSystem.initializePaths()

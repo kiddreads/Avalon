@@ -15,10 +15,6 @@ nonisolated struct P2P : Codable {
             let data: Data
             let pressed: Bool
         }
-        
-        nonisolated struct Frame : Codable {
-            let data: Data
-        }
     }
     
     nonisolated struct Mandarine : Codable {
@@ -26,9 +22,12 @@ nonisolated struct P2P : Codable {
             let data: Data
             let pressed: Bool
         }
-        
-        nonisolated struct Frame : Codable {
+    }
+    
+    nonisolated struct Plum : Codable {
+        nonisolated struct Button : Codable {
             let data: Data
+            let pressed: Bool
         }
     }
     
@@ -36,6 +35,10 @@ nonisolated struct P2P : Codable {
         case button(System)
         case frame(System)
         case prepare(System)
+    }
+    
+    nonisolated struct Frame : Codable {
+        let data: Data
     }
 
     nonisolated struct Packet : Codable {

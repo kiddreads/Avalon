@@ -74,7 +74,7 @@ class CherryCell : GameCell {
                     var elements: [UIMenuElement] = [
                         UIAction(title: "Import", image: UIImage(systemName: "arrow.down.circle")) { action in
                             let imagePickerController: UIImagePickerController = .init()
-                            imagePickerController.allowsEditing = true
+                            //imagePickerController.allowsEditing = true
                             imagePickerController.delegate = self
                             imagePickerController.mediaTypes = [UTType.image.identifier]
                             imagePickerController.modalPresentationStyle = .fullScreen
@@ -139,7 +139,7 @@ extension CherryCell : UIImagePickerControllerDelegate, UINavigationControllerDe
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image: UIImage = info[.editedImage] as? UIImage else {
+        guard let image: UIImage = info[.originalImage] as? UIImage else {
             return
         }
         

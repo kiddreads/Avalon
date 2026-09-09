@@ -49,6 +49,17 @@ actor DirectoryManager {
                                                 title: "aes_keys.txt")
                 ]
             ],
+            .durian : [
+                "artworks" : [:],
+                "debugger" : [:],
+                "firmware" : [:],
+                "games" : [:],
+                "hd_packs" : [:],
+                "recent_games" : [:],
+                "saves" : [:],
+                "save_states" : [:],
+                "screenshots" : [:]
+            ],
             .grape : [
                 "artworks" : [:],
                 "games" : [:],
@@ -93,6 +104,17 @@ actor DirectoryManager {
                 "games" : [:],
                 "save_states" : [:]
             ],
+            .lychee : [
+                "artworks" : [:],
+                "debugger" : [:],
+                "firmware" : [:],
+                "games" : [:],
+                "hd_packs" : [:],
+                "recent_games" : [:],
+                "saves" : [:],
+                "save_states" : [:],
+                "screenshots" : [:]
+            ],
             .mandarine : [
                 "artworks" : [:],
                 "memory_cards" : [:],
@@ -105,6 +127,21 @@ actor DirectoryManager {
                                             systemFileType: .required,
                                             title: "bios.bin")
                 ]
+            ],
+            .mango : [
+                "artworks" : [:],
+                "debugger" : [:],
+                "firmware" : [:],
+                "games" : [:],
+                "hd_packs" : [:],
+                "recent_games" : [:],
+                "saves" : [:],
+                "save_states" : [:],
+                "screenshots" : [:]
+            ],
+            .plum : [
+                "artworks" : [:],
+                "games" : [:]
             ],
             .tomato : [
                 "artworks" : [:],

@@ -13,6 +13,7 @@ import UIKit
 
 import Cherry
 import Mandarine
+import Plum
 
 class ScreensController : UIViewController {
     var constraints: (pad: (portrait: [NSLayoutConstraint], landscape: [NSLayoutConstraint]),
@@ -65,6 +66,13 @@ class ScreensController : UIViewController {
         asterixButton: UIButton? = nil,
         hashtagButton: UIButton? = nil
     
+    var aButton: UIButton? = nil,
+        bButton: UIButton? = nil,
+        cButton: UIButton? = nil,
+        xButton: UIButton? = nil,
+        yButton: UIButton? = nil,
+        zButton: UIButton? = nil
+    
     var usedForMultiplayer: Bool = false
     var system: System = .cytrus
     
@@ -92,6 +100,11 @@ class ScreensController : UIViewController {
                 secondaryBackgroundRenderingView = MTKView()
                 
                 system = .cytrus
+            case is DurianGame:
+                primaryRenderingView = UIImageView()
+                primaryBackgroundRenderingView = UIImageView()
+                
+                system = .durian
             case is GrapeGame:
                 primaryRenderingView = UIImageView()
                 primaryBackgroundRenderingView = UIImageView()
@@ -105,11 +118,26 @@ class ScreensController : UIViewController {
                 primaryBackgroundRenderingView = UIImageView()
                 
                 system = .kiwi
+            case is LycheeGame:
+                primaryRenderingView = UIImageView()
+                primaryBackgroundRenderingView = UIImageView()
+                
+                system = .lychee
             case is MandarineGame:
                 primaryRenderingView = UIImageView()
                 primaryBackgroundRenderingView = UIImageView()
                 
                 system = .mandarine
+            case is MangoGame:
+                primaryRenderingView = UIImageView()
+                primaryBackgroundRenderingView = UIImageView()
+                
+                system = .mango
+            case is PlumGame:
+                primaryRenderingView = UIImageView()
+                primaryBackgroundRenderingView = UIImageView()
+                
+                system = .plum
             case is TomatoGame:
                 primaryRenderingView = UIImageView()
                 primaryBackgroundRenderingView = UIImageView()
@@ -124,6 +152,9 @@ class ScreensController : UIViewController {
                 primaryRenderingView = UIImageView()
                 primaryBackgroundRenderingView = UIImageView()
             case .mandarine:
+                primaryRenderingView = UIImageView()
+                primaryBackgroundRenderingView = UIImageView()
+            case .plum:
                 primaryRenderingView = UIImageView()
                 primaryBackgroundRenderingView = UIImageView()
             default:
@@ -302,6 +333,7 @@ class ScreensController : UIViewController {
     nonisolated func receive(frame: UIImage) {}
     nonisolated func receive(button: CherryButton, pressed: Bool) {}
     nonisolated func receive(button: MandarineButton, pressed: Bool) {}
+    nonisolated func receive(button: PlumButton, pressed: Bool) {}
     
     nonisolated func send(button: CherryButton, pressed: Bool, system: System) {
         guard let tabController: TabController = tabBarController as? TabController else {
@@ -355,6 +387,32 @@ class ScreensController : UIViewController {
         }
     }
     
+    nonisolated func send(button: PlumButton, pressed: Bool, system: System) {
+        guard let tabController: TabController = tabBarController as? TabController else {
+            return
+        }
+        
+        let encoder: JSONEncoder = JSONEncoder()
+        if #available(iOS 18.0, *) {
+            guard let navigationController: UINavigationController = tabController.tabs[.gamesController].viewController as? UINavigationController,
+                  let gamesController: GamesController = navigationController.viewControllers.first as? GamesController else {
+                return
+            }
+            
+            guard let session: MCSession = gamesController.session, session.connectedPeers.count > 0 else {
+                return
+            }
+            
+            do {
+                let button: P2P.Plum.Button = P2P.Plum.Button(data: try encoder.encode(button), pressed: pressed)
+                let packet: P2P.Packet = P2P.Packet(data: try encoder.encode(button), dataType: .button(system))
+                try session.send(encoder.encode(packet), toPeers: session.connectedPeers, with: .reliable)
+            } catch {
+                print(error, error.localizedDescription)
+            }
+        }
+    }
+    
     nonisolated func send(frame: UIImage, system: System) {
         guard let tabController: TabController = tabBarController as? TabController else {
             return
@@ -376,7 +434,7 @@ class ScreensController : UIViewController {
             }
             
             do {
-                let frame: P2P.Mandarine.Frame = P2P.Mandarine.Frame(data: data)
+                let frame: P2P.Frame = P2P.Frame(data: data)
                 let packet: P2P.Packet = P2P.Packet(data: try encoder.encode(frame), dataType: .frame(system))
                 try session.send(encoder.encode(packet), toPeers: session.connectedPeers, with: .reliable)
             } catch {
@@ -399,7 +457,7 @@ class ScreensController : UIViewController {
                 let button: P2P.Cherry.Button = try decoder.decode(P2P.Cherry.Button.self, from: packet.data)
                 self.receive(button: try decoder.decode(CherryButton.self, from: button.data), pressed: button.pressed)
             case .frame(.cherry):
-                let frame: P2P.Cherry.Frame = try decoder.decode(P2P.Cherry.Frame.self, from: packet.data)
+                let frame: P2P.Frame = try decoder.decode(P2P.Frame.self, from: packet.data)
                 guard let image: UIImage = UIImage(data: frame.data) else {
                     return
                 }
@@ -409,7 +467,17 @@ class ScreensController : UIViewController {
                 let button: P2P.Mandarine.Button = try decoder.decode(P2P.Mandarine.Button.self, from: packet.data)
                 self.receive(button: try decoder.decode(MandarineButton.self, from: button.data), pressed: button.pressed)
             case .frame(.mandarine):
-                let frame: P2P.Mandarine.Frame = try decoder.decode(P2P.Mandarine.Frame.self, from: packet.data)
+                let frame: P2P.Frame = try decoder.decode(P2P.Frame.self, from: packet.data)
+                guard let image: UIImage = UIImage(data: frame.data) else {
+                    return
+                }
+                
+                self.receive(frame: image)
+            case .button(.plum):
+                let button: P2P.Plum.Button = try decoder.decode(P2P.Plum.Button.self, from: packet.data)
+                self.receive(button: try decoder.decode(PlumButton.self, from: button.data), pressed: button.pressed)
+            case .frame(.plum):
+                let frame: P2P.Frame = try decoder.decode(P2P.Frame.self, from: packet.data)
                 guard let image: UIImage = UIImage(data: frame.data) else {
                     return
                 }
@@ -520,6 +588,46 @@ extension ScreensController {
         }
     }
     
+    func configureConstraintsForDurian() {
+        guard let primaryBackgroundRenderingView: UIView else {
+            return
+        }
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            constraints.pad.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 46.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 46.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -46.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .durian, isPortrait: true))
+            ])
+            
+            constraints.pad.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .durian, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        } else {
+            constraints.phone.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 26.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -26.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .durian, isPortrait: true))
+            ])
+            
+            constraints.phone.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .durian, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        }
+    }
+    
     func configureConstraintsForGrape() {
         guard let primaryBackgroundRenderingView: UIView,
               let secondaryBackgroundRenderingView: UIView else {
@@ -613,6 +721,46 @@ extension ScreensController {
         }
     }
     
+    func configureConstraintsForLychee() {
+        guard let primaryBackgroundRenderingView: UIView else {
+            return
+        }
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            constraints.pad.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 46.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 46.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -46.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .lychee, isPortrait: true))
+            ])
+            
+            constraints.pad.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .lychee, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        } else {
+            constraints.phone.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 26.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -26.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .lychee, isPortrait: true))
+            ])
+            
+            constraints.phone.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .lychee, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        }
+    }
+    
     func configureConstraintsForMandarine() {
         guard let primaryBackgroundRenderingView: UIView else {
             return
@@ -648,6 +796,86 @@ extension ScreensController {
                 primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
                 primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
                                                                 multiplier: calculateAspectRatio(for: .mandarine, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        }
+    }
+    
+    func configureConstraintsForMango() {
+        guard let primaryBackgroundRenderingView: UIView else {
+            return
+        }
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            constraints.pad.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 46.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 46.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -46.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .mango, isPortrait: true))
+            ])
+            
+            constraints.pad.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .mango, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        } else {
+            constraints.phone.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 26.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -26.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .mango, isPortrait: true))
+            ])
+            
+            constraints.phone.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .mango, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        }
+    }
+    
+    func configureConstraintsForPlum() {
+        guard let primaryBackgroundRenderingView: UIView else {
+            return
+        }
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            constraints.pad.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 46.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 46.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -46.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .plum, isPortrait: true))
+            ])
+            
+            constraints.pad.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .plum, isPortrait: false)),
+                primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
+            ])
+        } else {
+            constraints.phone.portrait.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.left.constraint(equalTo: view.salg.left, constant: 26.0),
+                primaryBackgroundRenderingView.right.constraint(equalTo: view.salg.right, constant: -26.0),
+                primaryBackgroundRenderingView.height.constraint(equalTo: primaryBackgroundRenderingView.salg.width,
+                                                                 multiplier: calculateAspectRatio(for: .plum, isPortrait: true))
+            ])
+            
+            constraints.phone.landscape.append(contentsOf: [
+                primaryBackgroundRenderingView.top.constraint(equalTo: view.salg.top, constant: 26.0),
+                primaryBackgroundRenderingView.bottom.constraint(equalTo: view.salg.bottom, constant: -26.0),
+                primaryBackgroundRenderingView.width.constraint(equalTo: primaryBackgroundRenderingView.salg.height,
+                                                                multiplier: calculateAspectRatio(for: .plum, isPortrait: false)),
                 primaryBackgroundRenderingView.centerX.constraint(equalTo: view.salg.centerX),
             ])
         }

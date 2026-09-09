@@ -19,7 +19,7 @@ class SettingsController : UICollectionViewController {
             }
             
             if #available(iOS 26.0, *) {
-                navigationItem.largeSubtitle = selectedSnapshot.string
+                navigationItem.largeSubtitle = selectedSnapshot.system?.console ?? selectedSnapshot.string
                 navigationItem.subtitle = navigationItem.largeSubtitle
             }
             
@@ -247,7 +247,7 @@ class SettingsController : UICollectionViewController {
         
         Task {
             if #available(iOS 26.0, *) {
-                navigationItem.largeSubtitle = selectedSnapshot.string
+                navigationItem.largeSubtitle = selectedSnapshot.system?.console ?? selectedSnapshot.string
                 navigationItem.subtitle = navigationItem.largeSubtitle
             }
             
@@ -258,12 +258,20 @@ class SettingsController : UICollectionViewController {
                 break
             case .cytrus:
                 await dataSource.apply(cytrusSnapshot)
+            case .durian:
+                break
             case .grape:
                 await dataSource.apply(grapeSnapshot)
             case .kiwi:
                 break
+            case .lychee:
+                break
             case .mandarine:
                 await dataSource.apply(mandarineSnapshot)
+            case .mango:
+                break
+            case .plum:
+                break
             case .tomato:
                 await dataSource.apply(tomatoSnapshot)
             }
@@ -429,9 +437,13 @@ extension SettingsController : SettingDelegate {
                     break
                 }
             }
+        case .durian:
+            break
         case .grape:
             break
         case .kiwi:
+            break
+        case .lychee:
             break
         case .mandarine:
             Task {
@@ -469,6 +481,10 @@ extension SettingsController : SettingDelegate {
                     break
                 }
             }
+        case .mango:
+            break
+        case .plum:
+            break
         case .tomato:
             break
         }
