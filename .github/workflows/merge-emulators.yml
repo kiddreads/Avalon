@@ -1,0 +1,103 @@
+name: Merge Emulator Repos into Avalon
+
+on:
+  workflow_dispatch:
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 3
+      fail-fast: false
+      matrix:
+        include:
+          - url: https://github.com/OatmealDome/dolphin-ios.git
+            folder: dolphin-ios
+          - url: https://github.com/MuffinFluffin/Fin.git
+            folder: Fin
+          - url: https://github.com/Provenance-Emu/iCube.git
+            folder: iCube
+          - url: https://github.com/Manic-EMU/ManicEMU.git
+            folder: Manic EMU
+          - url: https://github.com/rileytestut/Delta.git
+            folder: Delta
+          - url: https://github.com/bward-dev1/cemu-ios-muffin.git
+            folder: CEMU
+          - url: https://github.com/folium-app/Folium.git
+            folder: Folium
+          - url: https://github.com/hrydgard/ppsspp.git
+            folder: PPSSPP
+          - url: https://github.com/Thiago-Heleno/iPSX2-src.git
+            folder: iPSX2
+          - url: https://github.com/jpd002/Play-.git
+            folder: "Play!"
+          - url: https://git.ryujinx.app/projects/MeloNX.git
+            folder: MeloNX
+    steps:
+      - name: Install git-filter-repo
+        run: pip install git-filter-repo
+
+      - name: Configure git identity
+        run: |
+          git config --global user.name "kiddreads"
+          git config --global user.email "${{ github.event.repository.owner.id }}+kiddreads@users.noreply.github.com"
+
+      - name: Mirror-clone source repo (full history, all branches)
+        run: |
+          git clone --mirror "${{ matrix.url }}" source.git
+
+      - name: Rewrite history into named subdirectory
+        working-directory: source.git
+        run: |
+          git filter-repo --to-subdirectory-filter "${{ matrix.folder }}" --force
+
+      - name: Merge into Avalon with retry-on-race
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          for attempt in 1 2 3 4 5; do
+            rm -rf avalon
+            git clone "https://x-access-token:${GH_TOKEN}@github.com/kiddreads/Avalon.git" avalon
+            cd avalon
+
+            if [ -z "$(git branch -a)" ]; then
+              git checkout --orphan main
+              git rm -rf . 2>/dev/null || true
+            else
+              git checkout main
+            fi
+
+            git remote add src ../source.git
+            git fetch src
+            git merge --allow-unrelated-histories -m "Merge ${{ matrix.folder }} (full history)" src/master src/main 2>/dev/null \
+              || git merge --allow-unrelated-histories -m "Merge ${{ matrix.folder }} (full history)" $(git -C ../source.git symbolic-ref --short HEAD)
+
+            if git push origin main; then
+              echo "Push succeeded for ${{ matrix.folder }} on attempt $attempt"
+              break
+            else
+              echo "Push failed (race with another parallel job), retrying..."
+              cd ..
+              sleep $((RANDOM % 10 + 5))
+              continue
+            fi
+          done
+
+      - name: Verify folder landed on GitHub
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/kiddreads/Avalon.git" verify
+          if [ -d "verify/${{ matrix.folder }}" ]; then
+            echo "✓ Verified: ${{ matrix.folder }} exists in Avalon on GitHub"
+          else
+            echo "✗ FAILED verification for ${{ matrix.folder }}"
+            exit 1
+          fi
+
+      - name: Clean up runner disk
+        if: always()
+        run: |
+          rm -rf source.git avalon verify
+          df -h .
