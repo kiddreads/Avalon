@@ -3,6 +3,9 @@ name: Merge Emulator Repos into Avalon
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   merge:
     runs-on: ubuntu-latest
