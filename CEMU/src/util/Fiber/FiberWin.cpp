@@ -1,0 +1,45 @@
+// Dispatch header first, deliberately. Fiber.h picks the backend *declaration* by
+// platform and must agree with the .cpp CMake compiles; if it ever disagrees, the
+// two class definitions collide here and the build stops, instead of linking a
+// silent size mismatch into the PPC scheduler. #pragma once makes this free when
+// the selection is correct.
+#include "Fiber.h"
+#include "FiberWin.h"
+
+thread_local Fiber* sCurrentFiber{};
+
+Fiber::Fiber(void(*FiberEntryPoint)(void* userParam), void* userParam, void* privateData) : m_privateData(privateData)
+{
+	m_handle = CreateFiber(2 * 1024 * 1024, (LPFIBER_START_ROUTINE)FiberEntryPoint, userParam);
+}
+
+Fiber::Fiber(void* privateData) : m_privateData(privateData)
+{
+	m_handle = ConvertThreadToFiber(nullptr);
+}
+
+Fiber::~Fiber()
+{
+	DeleteFiber(m_handle);
+}
+
+Fiber* Fiber::PrepareCurrentThread(void* privateData)
+{
+	cemu_assert_debug(sCurrentFiber == nullptr); // thread already prepared
+	Fiber* currentFiber = new Fiber(privateData);
+	sCurrentFiber = currentFiber;
+	return currentFiber;
+}
+
+int Fiber::Switch(Fiber& targetFiber)
+{
+	sCurrentFiber = &targetFiber;
+	SwitchToFiber(targetFiber.m_handle);
+	// SwitchToFiber has no failure mode to report, unlike the ucontext backend.
+	return 0;
+}
+
+void* Fiber::GetFiberPrivateData()
+{
+	return sCurrentFiber->m_privateData;
+}
