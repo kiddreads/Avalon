@@ -70,8 +70,8 @@ jobs:
 
             git remote add src ../source.git
             git fetch src
-            git merge --allow-unrelated-histories -m "Merge ${{ matrix.folder }} (full history)" src/master src/main 2>/dev/null \
-              || git merge --allow-unrelated-histories -m "Merge ${{ matrix.folder }} (full history)" $(git -C ../source.git symbolic-ref --short HEAD)
+            default_branch=$(git -C ../source.git symbolic-ref --short HEAD)
+            git merge --allow-unrelated-histories -m "Merge ${{ matrix.folder }} (full history)" "src/${default_branch}"
 
             if git push origin main; then
               echo "Push succeeded for ${{ matrix.folder }} on attempt $attempt"
