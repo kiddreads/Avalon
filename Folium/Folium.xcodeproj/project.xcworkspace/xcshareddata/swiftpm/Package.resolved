@@ -1,0 +1,51 @@
+{
+  "originHash" : "2a70ef12080e4f83d1f6008f55223383242c7025507ca5985ad864d0b4c0a112",
+  "pins" : [
+    {
+      "identity" : "openssl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/OpenSSL",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4b1188ba947ddc23d03b13096b9e44b804e146c9"
+      }
+    },
+    {
+      "identity" : "plzmasdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jarrodnorwell/PLzmaSDK",
+      "state" : {
+        "branch" : "master",
+        "revision" : "c69ff6acb4df788885cc4865d46e1a442e6f50a5"
+      }
+    },
+    {
+      "identity" : "sparkle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sparkle-project/Sparkle",
+      "state" : {
+        "revision" : "ac2def288cbff5cfc7df3ffef6abdf45b72bcb0a",
+        "version" : "2.9.6"
+      }
+    },
+    {
+      "identity" : "tpcircularbuffer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jarrodnorwell/TPCircularBuffer",
+      "state" : {
+        "branch" : "master",
+        "revision" : "230a0818f91241d1b4c3b366b23def9f55837441"
+      }
+    },
+    {
+      "identity" : "zstd",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jarrodnorwell/zstd",
+      "state" : {
+        "branch" : "dev",
+        "revision" : "9baae4431585740983318801beff0a7ae4494291"
+      }
+    }
+  ],
+  "version" : 3
+}
