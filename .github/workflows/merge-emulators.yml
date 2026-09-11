@@ -2,6 +2,11 @@ name: Merge Emulator Repos into Avalon
 
 on:
   workflow_dispatch:
+    inputs:
+      only:
+        description: 'Comma-separated folder names to (re)run, or blank for all'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -37,70 +42,107 @@ jobs:
           - url: https://git.ryujinx.app/projects/MeloNX.git
             folder: MeloNX
     steps:
+      - name: Skip if not selected
+        id: gate
+        run: |
+          only="${{ github.event.inputs.only }}"
+          if [ -z "$only" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            IFS=',' read -ra items <<< "$only"
+            match=false
+            for item in "${items[@]}"; do
+              if [ "$(echo "$item" | xargs)" = "${{ matrix.folder }}" ]; then
+                match=true
+              fi
+            done
+            echo "run=$match" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install git-filter-repo
+        if: steps.gate.outputs.run == 'true'
         run: pip install git-filter-repo
 
       - name: Configure git identity
+        if: steps.gate.outputs.run == 'true'
         run: |
           git config --global user.name "kiddreads"
           git config --global user.email "${{ github.event.repository.owner.id }}+kiddreads@users.noreply.github.com"
+          git lfs install --skip-smudge --skip-repo
 
       - name: Mirror-clone source repo (full history, all branches)
+        if: steps.gate.outputs.run == 'true'
         run: |
           git clone --mirror "${{ matrix.url }}" source.git
 
       - name: Rewrite history into named subdirectory
+        if: steps.gate.outputs.run == 'true'
         working-directory: source.git
         run: |
           git filter-repo --to-subdirectory-filter "${{ matrix.folder }}" --force
 
-      - name: Merge into Avalon with retry-on-race
+      - name: Determine source default branch
+        if: steps.gate.outputs.run == 'true'
+        id: branch
+        working-directory: source.git
+        run: |
+          branch=$(git for-each-ref --format='%(refname:short)' refs/heads/ | grep -E '^(main|master)$' | head -1)
+          if [ -z "$branch" ]; then
+            branch=$(git for-each-ref --format='%(refname:short)' refs/heads/ | head -1)
+          fi
+          echo "Using branch: $branch"
+          echo "name=$branch" >> "$GITHUB_OUTPUT"
+
+      - name: Merge into Avalon (bare, no checkout, retry-on-race)
+        if: steps.gate.outputs.run == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FOLDER: ${{ matrix.folder }}
+          SRC_BRANCH: ${{ steps.branch.outputs.name }}
         run: |
           set -e
-          for attempt in 1 2 3 4 5; do
-            rm -rf avalon
-            git clone "https://x-access-token:${GH_TOKEN}@github.com/kiddreads/Avalon.git" avalon
-            cd avalon
+          git clone --bare "https://x-access-token:${GH_TOKEN}@github.com/kiddreads/Avalon.git" avalon.git
+          cd avalon.git
+          git remote add src ../source.git
+          git fetch --quiet src
+          export GIT_DIR="$(pwd)"
 
-            if [ -z "$(git branch -a)" ]; then
-              git checkout --orphan main
-              git rm -rf . 2>/dev/null || true
+          success=false
+          for attempt in $(seq 1 15); do
+            git fetch --quiet origin main:refs/remotes/origin/main 2>/dev/null || true
+            index_file=$(mktemp)
+            export GIT_INDEX_FILE="$index_file"
+
+            if git rev-parse --verify -q origin/main >/dev/null; then
+              git read-tree origin/main
+              parent_args=(-p origin/main)
             else
-              git checkout main
+              parent_args=()
             fi
 
-            git remote add src ../source.git
-            git fetch src
-            default_branch=$(git -C ../source.git symbolic-ref --short HEAD)
-            git merge --allow-unrelated-histories -m "Merge ${{ matrix.folder }} (full history)" "src/${default_branch}"
+            git read-tree --prefix="${FOLDER}/" -i "src/${SRC_BRANCH}"
+            new_tree=$(git write-tree)
+            new_commit=$(git commit-tree "$new_tree" "${parent_args[@]}" -p "src/${SRC_BRANCH}" -m "Merge ${FOLDER} (full history)")
+            rm -f "$index_file"
 
-            if git push origin main; then
-              echo "Push succeeded for ${{ matrix.folder }} on attempt $attempt"
+            if git push origin "${new_commit}:refs/heads/main"; then
+              echo "✓ Push succeeded for ${FOLDER} on attempt $attempt (commit ${new_commit})"
+              success=true
               break
             else
-              echo "Push failed (race with another parallel job), retrying..."
-              cd ..
-              sleep $((RANDOM % 10 + 5))
-              continue
+              echo "Push failed (race with another parallel job), retrying attempt $attempt..."
+              sleep $((RANDOM % 8 + 3))
             fi
           done
 
-      - name: Verify folder landed on GitHub
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/kiddreads/Avalon.git" verify
-          if [ -d "verify/${{ matrix.folder }}" ]; then
-            echo "✓ Verified: ${{ matrix.folder }} exists in Avalon on GitHub"
-          else
-            echo "✗ FAILED verification for ${{ matrix.folder }}"
+          if [ "$success" != "true" ]; then
+            echo "::error::Exhausted retries pushing ${FOLDER}"
             exit 1
           fi
 
       - name: Clean up runner disk
         if: always()
+        continue-on-error: true
         run: |
-          rm -rf source.git avalon verify
-          df -h .
+          rm -rf source.git avalon.git 2>/dev/null || true
+          df -h . || true
