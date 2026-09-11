@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v \"//.*SDL\\\\|//.*present\")",
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Bash(git config *)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(python3 *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'Remove stray .tmp files from failed awk attempt *)",
+      "Bash(git commit *)",
+      "Bash(xargs grep *)",
+      "Bash(git -C \"C:/Users/tibis/OneDrive/Desktop/iPSX2-src-main\" status)",
+      "Bash(git -C \"C:/Users/tibis/OneDrive/Desktop/iPSX2-src-main\" diff)",
+      "Bash(git -C \"C:/Users/tibis/OneDrive/Desktop/iPSX2-src-main\" log --oneline -5)",
+      "Bash(git -C \"C:/Users/tibis/OneDrive/Desktop/iPSX2-src-main\" branch -a)",
+      "Bash(git *)",
+      "Skill(update-config)",
+      "Bash(grep -v \"extern\\\\|\\\\\\\\&jitA64Cpu\\\\|Cpu == &jitA64Cpu\\\\|jitA64Cpu\\\\\\\\.\")"
+    ]
+  }
+}
